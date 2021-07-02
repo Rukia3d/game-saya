@@ -2,6 +2,7 @@ import React from "react";
 import "./Human.scss";
 
 // Human: https://codepen.io/rukia3d/pen/WNjNzBB
+// Temp human from codepen so we have some images
 export const Human = () => {
   return (
     <div id="human">
