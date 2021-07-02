@@ -27,6 +27,7 @@ export interface Spell {
   strength: number;
   character: null | string;
   power: null | string;
+  owner: "hero" | "enemy";
 }
 
 export interface FightState {
@@ -55,6 +56,7 @@ const generateDeck = (characters: string[], playerCards: Card[]): Spell[] => {
         strength: c.strength,
         character: c.character,
         power: c.power,
+        owner: "hero",
       });
     }
   });
@@ -70,6 +72,7 @@ const generateEnemyDeck = (enemy: Enemy): Spell[] => {
         strength: c.strength,
         character: c.character,
         power: c.power,
+        owner: "enemy",
       });
     }
   });
@@ -118,6 +121,18 @@ const enemyAttack = (
     heroHand: newHeroHand,
     hero: heroNewHealth,
   };
+};
+
+const BigCard = ({ card }: { card: Spell }) => {
+  return (
+    <div className={card.owner === "enemy" ? "EnemyCard" : "HeroCard"}>
+      <p>{card.name}</p>
+      <p>Belongs to {card.owner}</p>
+      <p>
+        <button onClick={() => console.log("Checking Info")}>Info</button>
+      </p>
+    </div>
+  );
 };
 
 export const Fight = ({
@@ -183,8 +198,8 @@ export const Fight = ({
     <div className="Fight">
       <SettingsButton onClick={() => setSettingsOpen(!settingsOpen)} />
       {settingsOpen ? <Settings /> : null}
-      {enemyCard ? <div className="EnemyCard">{enemyCard.name}</div> : null}
-      {heroCard ? <div className="HeroCard">{heroCard.name}</div> : null}
+      {enemyCard ? <BigCard card={enemyCard} /> : null}
+      {heroCard ? <BigCard card={heroCard} /> : null}
       {result ? (
         <div className="ResultCard">
           <p>{result}</p>

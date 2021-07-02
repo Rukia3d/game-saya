@@ -23,6 +23,12 @@
 
 .Spell {
   width: 100px;
-  height: 100px;
+  height: 130px;
   border: 1px solid green;
+}
+
+.SpellCard {
+  background-color: mediumslateblue;
+  width: 100px;
+  height: 100px;
 }
