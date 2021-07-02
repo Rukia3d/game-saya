@@ -1,0 +1,286 @@
+$skin: #ffdfad;
+$hat: #222;
+$hair: #383838;
+$shirt: #111;
+$pants: #000;
+
+$size: 3;
+
+@function calc-change($s) {
+  @return ($s/$size);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+#human {
+  position: absolute;
+  top: 15%;
+  left: 10%;
+  z-index: 40;
+}
+
+.lemmy {
+  width: 100%;
+  height: 700px;
+  margin: 0 auto;
+  padding: 50px 0;
+  position: relative;
+}
+
+.hat {
+  width: calc-change(280px);
+  height: calc-change(120px);
+  margin: 0 auto;
+  padding: calc-change(30px) 0 0;
+  background-color: $hat;
+  border-radius: calc-change(5px) calc-change(5px) 0 0;
+  position: relative;
+  display: block;
+  &:before,
+  &:after {
+    content: "";
+    position: absolute;
+    left: calc-change(-40px);
+    bottom: 0;
+    width: calc-change(40px);
+    height: calc-change(70px);
+    display: block;
+    box-shadow: inset calc-change(15px) calc-change(-5px) 0px calc-change(3px)
+      $hat;
+    border-radius: calc-change(20px) 0 calc-change(2px) calc-change(30px);
+  }
+  &:after {
+    transform: scaleX(-1);
+    left: auto;
+    right: calc-change(-40px);
+  }
+}
+.swords {
+  width: calc-change(100px);
+  margin: 0 auto;
+  position: relative;
+  padding-top: calc-change(40px);
+}
+.sword {
+  width: calc-change(100px);
+  height: calc-change(4px);
+  margin: 0 auto;
+  background-color: gold;
+  transform: rotate(20deg);
+  position: absolute;
+  border-radius: calc-change(4px);
+  &:before {
+    content: "";
+    border-radius: calc-change(8px) calc-change(8px) 0 0;
+    width: calc-change(15px);
+    height: calc-change(10px);
+    border: calc-change(2px) solid gold;
+    position: absolute;
+    top: calc-change(-10px);
+    right: 0;
+  }
+}
+.sword-right {
+  transform: rotate(-20deg);
+  &:before {
+    left: 0;
+    right: auto;
+  }
+}
+.head {
+  background-color: $skin;
+  width: calc-change(270px);
+  height: calc-change(150px);
+  border-radius: 0 0 calc-change(50px) calc-change(50px);
+  margin: 0 auto;
+  box-shadow: inset 0px calc-change(-10px) 0 calc-change(10px) $hair;
+  position: relative;
+}
+
+.eyes {
+  width: calc-change(180px);
+  padding: calc-change(10px) 0;
+  margin: 0 auto;
+}
+.eye {
+  background: #000;
+  width: calc-change(50px);
+  height: calc-change(50px);
+  border-radius: calc-change(50px);
+  float: left;
+  position: relative;
+  &:after {
+    content: "";
+    background-color: #ddd;
+    width: calc-change(5px);
+    height: calc-change(5px);
+    border-radius: calc-change(5px);
+    position: absolute;
+    top: calc-change(10px);
+    left: calc-change(15px);
+  }
+}
+.eye-right {
+  float: right;
+}
+
+.beard {
+  background-color: $skin;
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: calc-change(80px);
+  height: calc-change(60px);
+  margin-left: calc-change(-40px);
+  border-radius: calc-change(30px) calc-change(30px) 0 0;
+  box-shadow: inset 0px calc-change(10px) 0 calc-change(10px) $hair;
+  border-bottom: 1px solid #000;
+  &:before {
+    content: "";
+    width: calc-change(15px);
+    height: calc-change(10px);
+    border-bottom: calc-change(2px) solid #444;
+    border-radius: calc-change(8px);
+    display: block;
+    position: relative;
+    margin: 0 auto;
+    top: calc-change(-20px);
+  }
+  &:after {
+    content: "";
+    width: calc-change(25px);
+    height: calc-change(10px);
+    border-top: calc-change(2px) solid #444;
+    border-radius: calc-change(4px);
+    display: block;
+    position: relative;
+    margin: calc-change(20px) auto;
+  }
+}
+.warts {
+  position: absolute;
+  bottom: calc-change(45px);
+  right: calc-change(30px);
+  width: calc-change(14px);
+  height: calc-change(14px);
+  border-radius: calc-change(14px);
+  box-shadow: inset 0px calc-change(3px) 0 calc-change(2px) rgba(0, 0, 0, 0.6);
+  transform: rotate(20deg);
+  &:after {
+    content: "";
+    position: absolute;
+    top: calc-change(13px);
+    right: calc-change(-5px);
+    width: calc-change(12px);
+    height: calc-change(12px);
+    border-radius: calc-change(12px);
+    box-shadow: inset 0px calc-change(2px) 0 calc-change(2px) rgba(0, 0, 0, 0.6);
+    transform: rotate(20deg);
+  }
+}
+
+.body {
+  background-color: $shirt;
+  width: calc-change(130px);
+  height: calc-change(150px);
+  margin: 0 auto;
+  position: relative;
+  &:before,
+  &:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: calc-change(15px);
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: calc-change(80px) calc-change(50px) 0 calc-change(50px);
+    border-color: $skin transparent transparent transparent;
+  }
+}
+.arm {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: calc-change(50px);
+  height: calc-change(80px);
+  background-color: $shirt;
+  transform: rotate(40deg);
+  transform-origin: 0 0;
+  &:before {
+    content: "";
+    display: block;
+    position: absolute;
+    bottom: calc-change(-50px);
+    width: calc-change(40px);
+    height: calc-change(50px);
+    margin: 0 calc-change(5px);
+    background-color: $skin;
+  }
+  &:after {
+    content: "";
+    display: block;
+    position: absolute;
+    bottom: calc-change(-80px);
+    width: calc-change(50px);
+    height: calc-change(50px);
+    border-radius: calc-change(50px);
+    background-color: $skin;
+  }
+}
+.arm-right {
+  left: auto;
+  right: 0;
+  transform: rotate(-40deg);
+  transform-origin: calc-change(50px) 0;
+}
+
+.legs {
+  width: calc-change(130px);
+  margin: 0 auto;
+  position: relative;
+}
+.leg {
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: calc-change(100px) calc-change(32px) 0 calc-change(32px);
+  border-color: $pants transparent transparent transparent;
+  float: left;
+  &:before {
+    content: "";
+    display: block;
+    width: calc-change(40px);
+    height: calc-change(60px);
+    background-color: $pants;
+    position: absolute;
+    left: calc-change(12px);
+    top: calc-change(40px);
+  }
+  &:after {
+    content: "";
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 0 calc-change(20px) calc-change(20px);
+    border-color: transparent transparent $pants transparent;
+    position: absolute;
+    left: calc-change(-7px);
+    top: calc-change(80px);
+  }
+}
+.leg-right {
+  float: right;
+  &:before {
+    left: auto;
+    right: calc-change(12px);
+  }
+  &:after {
+    left: auto;
+    right: calc-change(-7px);
+    border-width: calc-change(20px) 0 0 calc-change(20px);
+    border-color: transparent transparent transparent $pants;
+  }
+}

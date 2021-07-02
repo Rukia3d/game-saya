@@ -1,0 +1,36 @@
+body,
+html,
+#root {
+  width: 100%;
+  height: 100%;
+}
+.App {
+  text-align: center;
+  width: 100%;
+  height: 100%;
+}
+
+.CloseButton {
+  position: absolute;
+  background-color: red;
+  top: 1em;
+  right: 1em;
+  width: 3em;
+  height: 3em;
+  z-index: 100;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

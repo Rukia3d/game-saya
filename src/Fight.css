@@ -1,0 +1,45 @@
+.Fight {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: row;
+  border: 5px solid red;
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  z-index: 100;
+}
+
+.ResultCard {
+  position: absolute;
+  top: 2em;
+  left: 2em;
+  padding: 3em;
+  width: 80%;
+  height: 80%;
+  background-color: gold;
+  z-index: 100;
+}
+
+.EnemyCard {
+  position: absolute;
+  top: 2em;
+  left: 2em;
+  padding: 3em;
+  width: 30%;
+  height: 80%;
+  background-color: hotpink;
+  z-index: 100;
+}
+
+.HeroCard {
+  position: absolute;
+  top: 3em;
+  left: 8em;
+  padding: 3em;
+  width: 30%;
+  height: 80%;
+  background-color: cyan;
+  z-index: 100;
+}

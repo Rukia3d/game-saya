@@ -1,0 +1,16 @@
+.CharacterBox {
+  border: 1px solid yellow;
+  width: 60%;
+}
+
+.Stats {
+  width: 100%;
+  border: 1px solid black;
+  height: 10%;
+}
+
+.Human {
+  width: 100%;
+  border: 1px solid black;
+  height: 80%;
+}

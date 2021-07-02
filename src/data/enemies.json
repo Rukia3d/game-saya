@@ -1,0 +1,33 @@
+[
+  {
+    "id": "dude",
+    "name": "Dude",
+    "element": "Earth",
+    "cards": [
+      {
+        "id": "base_hit1",
+        "name": "Base Hit 1",
+        "strength": 1,
+        "quantity": 1,
+        "character": null,
+        "power": null
+      },
+      {
+        "id": "base_hit2",
+        "name": "Base Hit 2",
+        "strength": 2,
+        "quantity": 1,
+        "character": null,
+        "power": null
+      },
+      {
+        "id": "base_hit3",
+        "name": "Base Hit 3",
+        "strength": 3,
+        "quantity": 1,
+        "character": null,
+        "power": null
+      }
+    ]
+  }
+]
