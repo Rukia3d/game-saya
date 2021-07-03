@@ -21,6 +21,7 @@ export interface Enemy {
   name: string;
   element: string;
   cards: Card[];
+  life: number;
 }
 
 export interface Spell {
@@ -78,7 +79,7 @@ const generateEnemyDeck = (enemy: Enemy): Spell[] => {
       });
     }
   });
-  return enemySpells;
+  return enemySpells.splice(0, enemy.life);
 };
 
 const updateHeroDeck = (fightState: FightState, heroCard: Spell) => {

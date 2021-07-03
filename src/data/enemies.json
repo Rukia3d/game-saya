@@ -3,6 +3,7 @@
     "id": "dude",
     "name": "Dude",
     "element": "Earth",
+    "life": 3,
     "cards": [
       {
         "id": "base_hit1",

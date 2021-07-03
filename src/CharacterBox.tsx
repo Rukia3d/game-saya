@@ -20,13 +20,16 @@ export const CharacterBox = ({
     <div className="CharacterBox">
       <div className="Stats" onClick={() => setInfo(fightState.enemy)}>
         cards:
-        {fightState.enemyDeck.length}, drop: {fightState.enemyDrop.length}
+        <span data-testid="enemy_life">{fightState.enemyDeck.length}</span>,
+        drop: {fightState.enemyDrop.length}
       </div>
       <div className="Human" onClick={enemyAct}>
         <Human />
       </div>
       <div className="Stats">
-        hero health: {fightState.hero.currentHealth}, cards:
+        hero health:{" "}
+        <span data-testid="hero_life">{fightState.hero.currentHealth}</span>,
+        cards:
         {fightState.heroDeck.length}+{fightState.heroHand.length}, drop:{" "}
         {fightState.heroDrop.length}
       </div>
