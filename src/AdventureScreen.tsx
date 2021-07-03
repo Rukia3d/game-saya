@@ -21,16 +21,19 @@ export const AdventureScreen = ({
   return (
     <div className="Stories">
       <CloseButton onClick={clearScreen} />
-      {adventure.stories.map((s: Story, i: number) => (
-        <div key={i} onClick={() => loadStory(s)}>
-          <img
-            src={s.image}
-            alt="story"
-            className="Story"
-            style={{ opacity: s.state === "closed" ? 0.5 : 1 }}
-          />
-        </div>
-      ))}
+      <h2>{adventure.name}</h2>
+      <div className="StoriesList">
+        {adventure.stories.map((s: Story, i: number) => (
+          <div key={i} onClick={() => loadStory(s)}>
+            <img
+              src={s.image}
+              alt="story"
+              className="Story"
+              style={{ opacity: s.state === "closed" ? 0.5 : 1 }}
+            />
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

@@ -3,12 +3,17 @@
   top: 0;
   left: 0;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
   background-color: white;
   border: 5px solid orange;
   width: 100%;
   height: 100%;
+}
+
+.StoriesList {
+  display: flex;
+  flex-direction: row;
 }
 
 .Story {

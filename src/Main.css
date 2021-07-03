@@ -6,6 +6,10 @@
   height: 100%;
 }
 
+h2 {
+  margin: 0;
+}
+
 .Spells {
   display: flex;
   flex-direction: row;
@@ -16,10 +20,14 @@
 
 .Adventures {
   display: flex;
-  flex-direction: row;
-  border: 5px solid red;
+  flex-direction: column;
   width: 100%;
   height: 100%;
+}
+
+.AdventuresList {
+  display: flex;
+  flex-direction: row;
 }
 
 .Adventure {
@@ -29,11 +37,16 @@
 
 .Heroes {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
   border: 5px solid green;
   width: 100%;
   height: 100%;
+}
+
+.HeroesList {
+  display: flex;
+  flex-direction: row;
 }
 
 .Hero {

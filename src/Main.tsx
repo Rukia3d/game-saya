@@ -8,11 +8,14 @@ type mainScreenState = "heroes" | "adventures" | "spells";
 const Heroes = ({ characters }: { characters: Character[] }) => {
   return (
     <div className="Heroes">
-      {characters.map((c: Character, i: number) => (
-        <div key={i} onClick={() => console.log("hero clicked")}>
-          <img className="Hero" src={c.image} alt="hero" />
-        </div>
-      ))}
+      <h2>Your Heroes</h2>
+      <div className="HeroesList">
+        {characters.map((c: Character, i: number) => (
+          <div key={i} onClick={() => console.log("hero clicked")}>
+            <img className="Hero" src={c.image} alt={`hero_${c.id}`} />
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
@@ -24,18 +27,26 @@ const Adventures = ({
   adventures: Adventure[];
   setAdventure: (a: Adventure) => void;
 }) => {
+  const selectAdventure = (a: Adventure) => {
+    if (a.state === "open") {
+      setAdventure(a);
+    }
+  };
   return (
     <div className="Adventures">
-      {adventures.map((a: Adventure, i: number) => (
-        <div key={i} onClick={() => setAdventure(a)}>
-          <img
-            className="Adventure"
-            style={{ opacity: a.state === "closed" ? 0.5 : 1 }}
-            src={a.image}
-            alt="adventure"
-          />
-        </div>
-      ))}
+      <h2>Your Adventures</h2>
+      <div className="AdventuresList">
+        {adventures.map((a: Adventure, i: number) => (
+          <div key={i} onClick={() => selectAdventure(a)}>
+            <img
+              className="Adventure"
+              style={{ opacity: a.state === "closed" ? 0.5 : 1 }}
+              src={a.image}
+              alt={`adventure_${a.id}`}
+            />
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

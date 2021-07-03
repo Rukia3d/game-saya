@@ -28,6 +28,7 @@ export interface Character {
 
 export interface Adventure {
   id: string;
+  name: string;
   image: string;
   state: "open" | "closed";
   stories: Story[];
@@ -53,7 +54,11 @@ export type screenState = "start" | "opening" | "main" | "dialogue";
 
 export const SettingsButton = ({ onClick }: { onClick: (a: any) => void }) => {
   return (
-    <div className="CloseButton" onClick={onClick}>
+    <div
+      className="CloseButton"
+      onClick={onClick}
+      data-testid="settings_button"
+    >
       G
     </div>
   );
@@ -61,7 +66,7 @@ export const SettingsButton = ({ onClick }: { onClick: (a: any) => void }) => {
 
 export const CloseButton = ({ onClick }: { onClick: (a: any) => void }) => {
   return (
-    <div className="CloseButton" onClick={onClick}>
+    <div className="CloseButton" onClick={onClick} data-testid="close_button">
       X
     </div>
   );
@@ -77,6 +82,7 @@ function App() {
     adventures: [
       {
         id: "story",
+        name: "Act 1",
         image: "../img/storyline.png",
         state: "open",
         stories: [
@@ -114,6 +120,7 @@ function App() {
       },
       {
         id: "arena",
+        name: "Arena",
         image: "../img/devastation.png",
         state: "closed",
         stories: [],
