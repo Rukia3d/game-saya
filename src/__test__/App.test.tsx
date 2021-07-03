@@ -18,7 +18,7 @@ test("Renders App Start Screen", async () => {
   expect(await screen.findByText("PLAY")).toBeInTheDocument();
 });
 
-test("Settings screen switches on and oww", async () => {
+test("Settings screen switches on and off", async () => {
   render(<App />);
   expect(await screen.findByText("PLAY")).toBeInTheDocument();
   userEvent.click(screen.getByRole("button", { name: "PLAY" }));

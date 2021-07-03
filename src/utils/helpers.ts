@@ -18,11 +18,4 @@ export const removeFromArray = (arrArg: any[], item: any) => {
 export const generateInt = (max: number) =>
   Math.floor(Math.random() * Math.floor(max));
 
-export const exists = (characters: any, { x, y }: { x: number; y: number }) => {
-  const result = characters.some(
-    (c: any) => c.position.x === x && c.position.y === y
-  );
-  return result;
-};
-
 export const shuffle = (array: any) => array.sort(() => Math.random() - 0.5);

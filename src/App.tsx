@@ -61,7 +61,8 @@ function App() {
         <Fight
           clearScreen={backToStory}
           story={story}
-          player={gameState.player}
+          gameState={gameState}
+          setGameState={setGameState}
         />
       ) : null}
     </div>

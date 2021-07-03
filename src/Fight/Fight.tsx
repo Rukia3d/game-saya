@@ -7,7 +7,7 @@ import { SettingsButton } from "../UI/SettingsButton";
 import { CharacterBox } from "./CharacterBox";
 import { HeroBlock } from "./HeroBlock";
 
-import { Spell, Enemy, FightState, Story, Player } from "../utils/types";
+import { Spell, Enemy, FightState, Story, GameState } from "../utils/types";
 import { removeFromArray } from "../utils/helpers";
 import {
   generateDeck,
@@ -86,18 +86,20 @@ const Result = ({
 };
 export const Fight = ({
   story,
-  player,
+  gameState,
+  setGameState,
   clearScreen,
 }: {
   story: Story;
-  player: Player;
+  gameState: GameState;
+  setGameState: (s: GameState) => void;
   clearScreen: () => void;
 }) => {
   if (!story.enemy) {
     throw "No enemy for this fight, something went very wrong";
   }
   const enemy: Enemy = enemies.find((e: any) => e.id === story.enemy);
-  const heroDeck = generateDeck(story.characters, player.cards); //shuffle(generateDeck());
+  const heroDeck = generateDeck(story.characters, gameState.player.cards); //shuffle(generateDeck());
   const enemyDeck = generateEnemyDeck(enemy); //shuffle(generateEnemyDeck());
   const enemyHealt = enemyDeck.length;
   const [fightState, setfightState] = useState<FightState>({
@@ -140,7 +142,20 @@ export const Fight = ({
   };
 
   const finishFight = () => {
-    console.log("fight Finished");
+    let updatedPlayer = gameState.player;
+    if (result === "Won") {
+      updatedPlayer = {
+        ...gameState.player,
+        experience: gameState.player.experience + enemy.exp,
+      };
+    }
+    if (result === "Lost") {
+      updatedPlayer = {
+        ...gameState.player,
+        lifes: gameState.player.lifes - 1,
+      };
+    }
+    setGameState({ ...gameState, player: updatedPlayer });
     clearScreen();
   };
 

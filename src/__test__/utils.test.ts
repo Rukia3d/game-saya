@@ -51,6 +51,7 @@ const enemy = {
   id: "dude",
   name: "Dude",
   element: "Earth",
+  exp: 10,
   life: 2,
   cards: cards,
 };

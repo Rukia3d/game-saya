@@ -4,6 +4,7 @@
     "name": "Dude",
     "element": "Earth",
     "life": 3,
+    "exp": 10,
     "cards": [
       {
         "id": "base_hit1",

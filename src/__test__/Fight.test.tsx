@@ -13,13 +13,25 @@ const story = {
   state: "open" as "open",
   characters: ["maya", "tara"],
 };
-const player = { id: 1, cards: playerCards };
 const enemyData = enemies.find((e: any) => e.id === story.enemy);
+const gameState = {
+  sceneCharacters: [],
+  player: { id: 1, cards: playerCards, experience: 300, lifes: 3 },
+  adventures: [],
+  heroes: [],
+};
 
 test("Renders Fight screen", () => {
   const backToStory = jest.fn();
-
-  render(<Fight clearScreen={backToStory} story={story} player={player} />);
+  const setGameState = jest.fn();
+  render(
+    <Fight
+      gameState={gameState}
+      clearScreen={backToStory}
+      story={story}
+      setGameState={setGameState}
+    />
+  );
   expect(screen.getByText(/Your opponent/)).toBeInTheDocument();
   // TODO check the correct element was assigned
   expect(screen.getByText(/Current element/)).toBeInTheDocument();
@@ -44,9 +56,36 @@ test("Renders Fight screen", () => {
 
 test("Fight works enemy attacks and hero defends", () => {
   const backToStory = jest.fn();
-  render(<Fight clearScreen={backToStory} story={story} player={player} />);
+  const setGameState = jest.fn();
+  render(
+    <Fight
+      gameState={gameState}
+      clearScreen={backToStory}
+      story={story}
+      setGameState={setGameState}
+    />
+  );
   userEvent.click(screen.getByLabelText("opponent"));
   expect(screen.getAllByLabelText("display_card").length).toEqual(1);
   userEvent.click(screen.getAllByLabelText("spell_card")[0]);
   expect(screen.getAllByLabelText("display_card").length).toEqual(2);
+});
+
+test("Settings screen switches on and off", async () => {
+  const backToStory = jest.fn();
+  const setGameState = jest.fn();
+  render(
+    <Fight
+      gameState={gameState}
+      clearScreen={backToStory}
+      story={story}
+      setGameState={setGameState}
+    />
+  );
+  expect(screen.queryByLabelText("settings_screen")).not.toBeInTheDocument();
+  expect(screen.getByTestId("settings_button")).toBeInTheDocument();
+  userEvent.click(screen.getByTestId("settings_button"));
+  expect(screen.getByLabelText("settings_screen")).toBeInTheDocument();
+  userEvent.click(screen.getByTestId("settings_button"));
+  expect(screen.queryByLabelText("settings_screen")).not.toBeInTheDocument();
 });

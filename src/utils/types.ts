@@ -10,6 +10,8 @@ export interface Card {
 export interface Player {
   id: number;
   cards: Card[];
+  experience: number;
+  lifes: number;
 }
 
 export interface Character {
@@ -37,7 +39,7 @@ export interface Story {
 
 export interface GameState {
   sceneCharacters: Character[];
-  player: { id: number; cards: Card[]; experience: number };
+  player: Player;
   adventures: Adventure[];
   heroes: string[];
 }
@@ -54,6 +56,7 @@ export interface Enemy {
   id: string;
   name: string;
   element: string;
+  exp: number;
   cards: Card[];
   life: number;
 }
