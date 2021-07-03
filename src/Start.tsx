@@ -5,12 +5,14 @@ import "./Start.css";
 export const Start = ({
   gameState,
   setShowStart,
+  inactive = false,
 }: {
-  gameState: GameState;
+  gameState: GameState | null;
   setShowStart: (b: boolean) => void;
+  inactive?: boolean;
 }) => {
   const startGame = () => {
-    if (gameState.player) {
+    if (gameState && gameState.player) {
       setShowStart(false);
     }
     // if no progres exisits show opening
@@ -18,9 +20,11 @@ export const Start = ({
   return (
     <div className="Start">
       <h1>Start</h1>
-      <button className="PlayButton" onClick={startGame}>
-        PLAY
-      </button>
+      {!inactive ? (
+        <button className="PlayButton" onClick={startGame}>
+          PLAY
+        </button>
+      ) : null}
     </div>
   );
 };

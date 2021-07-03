@@ -21,6 +21,9 @@ jobs:
       - name: Install packages
         run: npm install
 
+      - name: Start backend API
+        run: node api/scripts.js &
+
       - name: Run tests and build a report
         run: |
           curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter

@@ -3,16 +3,24 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import App from "../App";
 
+import { cache } from "swr";
+
+afterEach(() => {
+  cache.clear();
+});
+
 const mainMenuActiveColor = "aquamarine";
 const mainMenuInActiveColor = "grey";
 
-test("Renders App Start Screen", () => {
+test("Renders App Start Screen", async () => {
   render(<App />);
   expect(screen.getByText("Start")).toBeInTheDocument();
+  expect(await screen.findByText("PLAY")).toBeInTheDocument();
 });
 
-test("Main Menu buttons switch works", () => {
+test("Main Menu buttons switch works", async () => {
   render(<App />);
+  expect(await screen.findByText("PLAY")).toBeInTheDocument();
   userEvent.click(screen.getByRole("button", { name: "PLAY" }));
   expect(screen.getByText("Your Heroes")).toBeInTheDocument();
   expect(screen.getByRole("button", { name: "Heroes" })).toHaveAttribute(
@@ -21,8 +29,9 @@ test("Main Menu buttons switch works", () => {
   );
 });
 
-test("Renders Main screen for existing player with Hero menu active", () => {
+test("Renders Main screen for existing player with Hero menu active", async () => {
   render(<App />);
+  expect(await screen.findByText("PLAY")).toBeInTheDocument();
   userEvent.click(screen.getByRole("button", { name: "PLAY" }));
   expect(screen.getByText("Heroes")).toBeInTheDocument();
   expect(screen.getByText("Your Heroes")).toBeInTheDocument();
@@ -61,8 +70,9 @@ test("Renders Main screen for existing player with Hero menu active", () => {
   );
 });
 
-test("Renders Adventures screen with all available adventures", () => {
+test("Renders Adventures screen with all available adventures", async () => {
   render(<App />);
+  expect(await screen.findByText("PLAY")).toBeInTheDocument();
   userEvent.click(screen.getByRole("button", { name: "PLAY" }));
   userEvent.click(screen.getByRole("button", { name: "Adventures" }));
   expect(screen.getByText("Your Adventures")).toBeInTheDocument();
@@ -100,8 +110,9 @@ test("Renders Adventures screen with all available adventures", () => {
   expect(screen.queryByText("Arena")).not.toBeInTheDocument();
 });
 
-test("Renders Story screen and loads the story", () => {
+test("Renders Story screen and loads the story", async () => {
   render(<App />);
+  expect(await screen.findByText("Start")).toBeInTheDocument();
   userEvent.click(screen.getByRole("button", { name: "PLAY" }));
   userEvent.click(screen.getByRole("button", { name: "Adventures" }));
   userEvent.click(screen.getByAltText("adventure_story"));

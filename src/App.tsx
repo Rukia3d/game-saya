@@ -1,10 +1,12 @@
-import React, { useState } from "react";
-import { AdventureScreen } from "./AdventureScreen";
+import React, { useEffect, useState } from "react";
+import useSWR from "swr";
 import "./App.css";
+
+import { AdventureScreen } from "./AdventureScreen";
 import { Fight } from "./Fight";
 import { Main } from "./Main";
 import { Start } from "./Start";
-const playerCards = require("./data/heroCards.json");
+import { fetcher } from "./utils/helpers";
 
 export interface Card {
   id: string;
@@ -45,7 +47,7 @@ export interface Story {
 
 export interface GameState {
   sceneCharacters: Character[];
-  player: { id: number; cards: Card[] };
+  player: { id: number; cards: Card[]; experience: number };
   adventures: Adventure[];
   heroes: string[];
 }
@@ -71,63 +73,17 @@ export const CloseButton = ({ onClick }: { onClick: (a: any) => void }) => {
     </div>
   );
 };
-
 function App() {
+  const { data, error } = useSWR("/api/player/", fetcher);
+
   const [showStart, setShowStart] = useState(true);
   const [adventure, setAdventure] = useState<null | Adventure>(null);
   const [story, setStory] = useState<null | Story>(null);
-  const [gameState, setGameState] = useState<GameState>({
-    sceneCharacters: [{ id: "maya", image: "../img/maya.png", state: "dial1" }],
-    player: { id: 1, cards: playerCards },
-    adventures: [
-      {
-        id: "story",
-        name: "Act 1",
-        image: "../img/storyline.png",
-        state: "open",
-        stories: [
-          {
-            id: "fight1",
-            type: "fight",
-            image: "../img/arena_1.png",
-            enemy: "dude",
-            state: "open",
-            characters: ["maya", "tara"],
-          },
-          {
-            id: "dial1",
-            type: "dialogue",
-            image: "../img/dialogue_1.png",
-            state: "open",
-            characters: ["maya"],
-          },
-          {
-            id: "fight2",
-            type: "fight",
-            image: "../img/arena_1.png",
-            enemy: "dude",
-            state: "closed",
-            characters: ["maya", "tara"],
-          },
-          {
-            id: "dial2",
-            type: "dialogue",
-            image: "../img/dialogue_1.png",
-            state: "closed",
-            characters: ["maya"],
-          },
-        ],
-      },
-      {
-        id: "arena",
-        name: "Arena",
-        image: "../img/devastation.png",
-        state: "closed",
-        stories: [],
-      },
-    ],
-    heroes: ["maya"],
-  });
+  const [gameState, setGameState] = useState<GameState>(data);
+
+  useEffect(() => {
+    setGameState(data);
+  }, [data]);
 
   const backToAdventure = () => {
     setAdventure(null);
@@ -137,6 +93,18 @@ function App() {
   const backToStory = () => {
     setStory(null);
   };
+
+  if (error || !data) {
+    return (
+      <div className="App">
+        <Start
+          gameState={null}
+          setShowStart={() => setShowStart(false)}
+          inactive
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="App">

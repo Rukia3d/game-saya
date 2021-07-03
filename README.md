@@ -2,4 +2,12 @@
 
 ## To run locally
 
-run `npm install` and then `npm run start`
+To run the app open 2 terminal windows
+Run `npm install` in any of them.
+First one will run backend with `node api/scripts.js`
+Second one will run frontend with `npm run start`
+
+## To test
+
+Run `npm run test` to test locally
+Run `npm run coverage` to see the coverage file. You will find index.html inside `coverage/icov-report` folder. Open it in the browser
