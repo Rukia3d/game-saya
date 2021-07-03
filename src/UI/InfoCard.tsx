@@ -1,5 +1,5 @@
-import React, { Children } from "react";
-import { Enemy, Spell } from "./Fight";
+import React from "react";
+import { Enemy, Spell } from "../utils/types";
 import "./InfoCard.css";
 
 export const InfoCard = ({

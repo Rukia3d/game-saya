@@ -18,6 +18,18 @@ test("Renders App Start Screen", async () => {
   expect(await screen.findByText("PLAY")).toBeInTheDocument();
 });
 
+test("Settings screen switches on and oww", async () => {
+  render(<App />);
+  expect(await screen.findByText("PLAY")).toBeInTheDocument();
+  userEvent.click(screen.getByRole("button", { name: "PLAY" }));
+  expect(screen.queryByLabelText("settings_screen")).not.toBeInTheDocument();
+  expect(screen.getByTestId("settings_button")).toBeInTheDocument();
+  userEvent.click(screen.getByTestId("settings_button"));
+  expect(screen.getByLabelText("settings_screen")).toBeInTheDocument();
+  userEvent.click(screen.getByTestId("settings_button"));
+  expect(screen.queryByLabelText("settings_screen")).not.toBeInTheDocument();
+});
+
 test("Main Menu buttons switch works", async () => {
   render(<App />);
   expect(await screen.findByText("PLAY")).toBeInTheDocument();

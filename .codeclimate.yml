@@ -27,3 +27,4 @@ ratings:
 exclude_patterns:
   - "src/index.js"
   - "src/reportWebVitals.ts"
+  - "src/utils/types.ts"
