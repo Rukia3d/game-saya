@@ -1,7 +1,7 @@
 import React from "react";
-import { Enemy, FightState, Spell } from "./Fight";
 import "./HeroBlock.css";
 
+import { Enemy, FightState, Spell } from "../utils/types";
 const HeroSpell = ({
   card,
   selectCard,

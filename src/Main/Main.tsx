@@ -1,7 +1,10 @@
 import React, { useState } from "react";
-import { Adventure, Character, GameState, SettingsButton } from "./App";
 import "./Main.css";
-import { Settings } from "./Settings";
+
+import { Settings } from "../UI/Settings";
+import { SettingsButton } from "../UI/SettingsButton";
+
+import { Adventure, Character, GameState } from "../utils/types";
 
 type mainScreenState = "heroes" | "adventures" | "spells";
 

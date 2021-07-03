@@ -1,7 +1,10 @@
 import React from "react";
-import { Enemy, FightState, Spell } from "./Fight";
-import { Human } from "./Human";
 import "./CharacterBox.css";
+
+import { Human } from "./Human";
+
+import { Enemy, FightState, Spell } from "../utils/types";
+
 export const CharacterBox = ({
   fightState,
   setEnemyCard,

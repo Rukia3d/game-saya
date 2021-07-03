@@ -2,77 +2,14 @@ import React, { useEffect, useState } from "react";
 import useSWR from "swr";
 import "./App.css";
 
-import { AdventureScreen } from "./AdventureScreen";
-import { Fight } from "./Fight";
-import { Main } from "./Main";
-import { Start } from "./Start";
+import { Fight } from "./Fight/Fight";
+import { Main } from "./Main/Main";
+import { Start } from "./Main/Start";
+import { AdventureScreen } from "./Main/AdventureScreen";
+
 import { fetcher } from "./utils/helpers";
+import { Adventure, GameState, Story } from "./utils/types";
 
-export interface Card {
-  id: string;
-  name: string;
-  quantity: number;
-  strength: number;
-  character: null | string;
-  element: null | string;
-}
-
-export interface Player {
-  id: number;
-  cards: Card[];
-}
-
-export interface Character {
-  id: string;
-  image: string;
-  state: string;
-}
-
-export interface Adventure {
-  id: string;
-  name: string;
-  image: string;
-  state: "open" | "closed";
-  stories: Story[];
-}
-
-export interface Story {
-  type: "dialogue" | "fight";
-  id: string;
-  image: string;
-  state: "open" | "closed";
-  enemy?: string;
-  characters: string[];
-}
-
-export interface GameState {
-  sceneCharacters: Character[];
-  player: { id: number; cards: Card[]; experience: number };
-  adventures: Adventure[];
-  heroes: string[];
-}
-
-export type screenState = "start" | "opening" | "main" | "dialogue";
-
-export const SettingsButton = ({ onClick }: { onClick: (a: any) => void }) => {
-  return (
-    <div
-      className="CloseButton"
-      onClick={onClick}
-      data-testid="settings_button"
-    >
-      G
-    </div>
-  );
-};
-
-export const CloseButton = ({ onClick }: { onClick: (a: any) => void }) => {
-  return (
-    <div className="CloseButton" onClick={onClick} data-testid="close_button">
-      X
-    </div>
-  );
-};
 function App() {
   const { data, error } = useSWR("/api/player/", fetcher);
 
@@ -98,7 +35,7 @@ function App() {
     return (
       <div className="App">
         <Start
-          gameState={null}
+          gameState={gameState}
           setShowStart={() => setShowStart(false)}
           inactive
         />

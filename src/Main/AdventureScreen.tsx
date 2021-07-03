@@ -1,6 +1,10 @@
 import React from "react";
-import { Adventure, CloseButton, Story } from "./App";
 import "./AdventureScreen.css";
+
+import { CloseButton } from "../UI/CloseButton";
+
+import { Adventure, Story } from "../utils/types";
+
 export const AdventureScreen = ({
   adventure,
   clearScreen,

@@ -1,50 +1,16 @@
 import React, { useState } from "react";
-import { Player, SettingsButton, Story } from "./App";
-import { CharacterBox } from "./CharacterBox";
 import "./Fight.css";
+
+import { InfoCard } from "../UI/InfoCard";
+import { Settings } from "../UI/Settings";
+import { SettingsButton } from "../UI/SettingsButton";
+import { CharacterBox } from "./CharacterBox";
 import { HeroBlock } from "./HeroBlock";
-import { InfoCard } from "./InfoCard";
-import { Settings } from "./Settings";
-import { removeFromArray } from "./utils/helpers";
-const enemies = require("./data/enemies.json");
 
-interface Card {
-  id: string;
-  name: string;
-  strength: number;
-  quantity: number;
-  character: null | string;
-  element: null | string;
-}
-export interface Enemy {
-  id: string;
-  name: string;
-  element: string;
-  cards: Card[];
-  life: number;
-}
+import { Card, Spell, Enemy, FightState, Story, Player } from "../utils/types";
+import { removeFromArray } from "../utils/helpers";
 
-export interface Spell {
-  id: string;
-  name: string;
-  strength: number;
-  character: null | string;
-  element: null | string;
-  owner: "hero" | "enemy";
-}
-
-export interface FightState {
-  hero: {
-    health: number;
-    currentHealth: number;
-  };
-  enemy: Enemy;
-  heroDeck: Spell[];
-  heroDrop: Spell[];
-  heroHand: Spell[];
-  enemyDeck: Spell[];
-  enemyDrop: Spell[];
-}
+const enemies = require("../data/enemies.json");
 
 const generateDeck = (characters: string[], playerCards: Card[]): Spell[] => {
   const heroSpells: Spell[] = [];

@@ -1,13 +1,14 @@
 import React from "react";
-import { GameState } from "./App";
 import "./Start.css";
+
+import { GameState } from "../utils/types";
 
 export const Start = ({
   gameState,
   setShowStart,
   inactive = false,
 }: {
-  gameState: GameState | null;
+  gameState: GameState;
   setShowStart: (b: boolean) => void;
   inactive?: boolean;
 }) => {
