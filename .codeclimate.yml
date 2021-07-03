@@ -26,3 +26,4 @@ ratings:
     - "**.tsx"
 exclude_patterns:
   - "src/index.js"
+  - "src/reportWebVitals.ts"
