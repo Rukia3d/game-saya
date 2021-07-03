@@ -113,6 +113,20 @@ const BigCard = ({
   );
 };
 
+const Result = ({
+  result,
+  finishFight,
+}: {
+  result: String;
+  finishFight: () => void;
+}) => {
+  return (
+    <div className="ResultCard">
+      <p>{result}</p>
+      <button onClick={finishFight}>exit</button>
+    </div>
+  );
+};
 export const Fight = ({
   story,
   player,
@@ -172,7 +186,7 @@ export const Fight = ({
     console.log("fight Finished");
     clearScreen();
   };
-  //console.log("gso", JSON.parse(JSON.stringify(fightState)));
+
   return (
     <div className="Fight">
       <SettingsButton onClick={() => setSettingsOpen(!settingsOpen)} />
@@ -180,12 +194,7 @@ export const Fight = ({
       {enemyCard ? <BigCard card={enemyCard} setInfo={setInfo} /> : null}
       {heroCard ? <BigCard card={heroCard} setInfo={setInfo} /> : null}
       {info ? <InfoCard item={info} setInfo={setInfo} /> : null}
-      {result ? (
-        <div className="ResultCard">
-          <p>{result}</p>
-          <button onClick={finishFight}>exit</button>
-        </div>
-      ) : null}
+      {result ? <Result finishFight={finishFight} result={result} /> : null}
       <CharacterBox
         fightState={fightState}
         setEnemyCard={setEnemyCard}

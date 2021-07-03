@@ -1,7 +1,7 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { Fight } from "../Fight";
+import { Fight } from "../Fight/Fight";
 const playerCards = require("../data/heroCards.json");
 const enemies = require("../data/enemies.json");
 const heroHealth = "15";
