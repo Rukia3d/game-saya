@@ -3,7 +3,7 @@ on:
   push:
 jobs:
   build:
-    name: Test
+    name: Test Coverage
     runs-on: ubuntu-latest
     env:
       CC_TEST_REPORTER_ID: 67301b3a7155ee78ac7470780698b55db6195c68d3018f76aac67115eb421c15
@@ -19,7 +19,7 @@ jobs:
           node-version: 14.15.1
 
       - name: Install packages
-        run: cd frontend && npm install
+        run: npm install
 
       - name: Run tests and build a report
         run: |
