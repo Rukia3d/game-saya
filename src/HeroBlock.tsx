@@ -11,7 +11,11 @@ const HeroSpell = ({
 }) => {
   return (
     <div className="Spell">
-      <div className="SpellCard" onClick={() => selectCard(card)}>
+      <div
+        className="SpellCard"
+        aria-label="spell_card"
+        onClick={() => selectCard(card)}
+      >
         {card.name}
       </div>
     </div>
@@ -36,10 +40,12 @@ export const HeroBlock = ({
         </p>
         <p>Current element is SOME</p>
       </div>
-      <div className="Deck">
+      <div className="Deck" aria-label="Deck">
         {fightState.heroHand.map((d: Spell, i: number) => (
           <div key={i}>
-            <button onClick={() => setInfo(d)}>Info</button>
+            <button onClick={() => setInfo(d)} data-testid="hero_card_info">
+              Info
+            </button>
             <HeroSpell card={d} selectCard={selectCard} />
           </div>
         ))}

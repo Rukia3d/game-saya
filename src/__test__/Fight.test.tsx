@@ -27,11 +27,26 @@ test("Renders Fight screen", () => {
   expect(screen.getByTestId("enemy_life").innerHTML).toMatch(
     enemyData.life.toString()
   );
-  // correct hero health
+  // Correct hero and enemy data
   expect(screen.getByTestId("hero_life").innerHTML).toMatch(heroHealth);
-  // correct number of cards in hand
-  // info on card is correct
-  // info on opponent is correct
-  // info on attacking card is correct
-  // info on defending card is correct
+  expect(screen.getByLabelText("Deck").childElementCount).toEqual(5);
+
+  // Info popup shows correct informatioj
+  const firstCardName = screen.getAllByLabelText("spell_card")[0].innerHTML;
+
+  userEvent.click(screen.getAllByTestId("hero_card_info")[0]);
+  expect(screen.getByLabelText("item_name").innerHTML).toEqual(firstCardName);
+  userEvent.click(screen.getByLabelText("info_card"));
+  // TODO info on opponent is correct
+  // TODO info on attacking card is correct
+  // TODO info on defending card is correct
+});
+
+test("Fight works enemy attacks and hero defends", () => {
+  const backToStory = jest.fn();
+  render(<Fight clearScreen={backToStory} story={story} player={player} />);
+  userEvent.click(screen.getByLabelText("opponent"));
+  expect(screen.getAllByLabelText("display_card").length).toEqual(1);
+  userEvent.click(screen.getAllByLabelText("spell_card")[0]);
+  expect(screen.getAllByLabelText("display_card").length).toEqual(2);
 });

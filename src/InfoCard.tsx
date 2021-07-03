@@ -10,8 +10,12 @@ export const InfoCard = ({
   setInfo: (s: Spell | Enemy | null) => void;
 }) => {
   return (
-    <div className="InfoCard" onClick={() => setInfo(null)}>
-      <h1>{item?.name}</h1>
+    <div
+      className="InfoCard"
+      aria-label="info_card"
+      onClick={() => setInfo(null)}
+    >
+      <h1 aria-label="item_name">{item?.name}</h1>
     </div>
   );
 };

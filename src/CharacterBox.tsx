@@ -23,7 +23,7 @@ export const CharacterBox = ({
         <span data-testid="enemy_life">{fightState.enemyDeck.length}</span>,
         drop: {fightState.enemyDrop.length}
       </div>
-      <div className="Human" onClick={enemyAct}>
+      <div className="Human" onClick={enemyAct} aria-label="opponent">
         <Human />
       </div>
       <div className="Stats">

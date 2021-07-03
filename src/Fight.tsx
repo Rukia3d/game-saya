@@ -134,7 +134,10 @@ const BigCard = ({
   setInfo: (s: Spell | Enemy | null) => void;
 }) => {
   return (
-    <div className={card.owner === "enemy" ? "EnemyCard" : "HeroCard"}>
+    <div
+      className={card.owner === "enemy" ? "EnemyCard" : "HeroCard"}
+      aria-label="display_card"
+    >
       <p>{card.name}</p>
       <p>Belongs to {card.owner}</p>
       <p>

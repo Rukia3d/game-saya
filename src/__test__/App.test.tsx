@@ -99,3 +99,25 @@ test("Renders Adventures screen with all available adventures", () => {
   userEvent.click(screen.getByAltText("adventure_arena"));
   expect(screen.queryByText("Arena")).not.toBeInTheDocument();
 });
+
+test("Renders Story screen and loads the story", () => {
+  render(<App />);
+  userEvent.click(screen.getByRole("button", { name: "PLAY" }));
+  userEvent.click(screen.getByRole("button", { name: "Adventures" }));
+  userEvent.click(screen.getByAltText("adventure_story"));
+  expect(screen.getByText("Act 1")).toBeInTheDocument();
+  expect(screen.getByAltText("story_fight1")).toHaveAttribute(
+    "src",
+    expect.stringContaining("arena_1.png")
+  );
+  expect(screen.getByAltText("story_dial1")).toHaveAttribute(
+    "src",
+    expect.stringContaining("dialogue_1.png")
+  );
+
+  // Click on inactive panel doesn't have an effect
+  userEvent.click(screen.getByAltText("story_fight2"));
+  expect(screen.queryByText(/Your opponent/)).not.toBeInTheDocument();
+  userEvent.click(screen.getByAltText("story_fight1"));
+  expect(screen.queryByText(/Your opponent/)).toBeInTheDocument();
+});

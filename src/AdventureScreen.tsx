@@ -11,6 +11,7 @@ export const AdventureScreen = ({
   setStory: (s: Story) => void;
 }) => {
   const loadStory = (s: Story) => {
+    if (s.state === "closed") return;
     if (s.type === "dialogue") {
       console.log("Loading dialogue");
     } else {
@@ -27,7 +28,7 @@ export const AdventureScreen = ({
           <div key={i} onClick={() => loadStory(s)}>
             <img
               src={s.image}
-              alt="story"
+              alt={`story_${s.id}`}
               className="Story"
               style={{ opacity: s.state === "closed" ? 0.5 : 1 }}
             />
