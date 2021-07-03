@@ -1,0 +1,28 @@
+checks:
+  method-lines:
+    config:
+      threshold: 50
+engines:
+  csslint:
+    enabled: true
+  file-lines:
+    enabled: true
+  duplication:
+    enabled: true
+    exclude_paths:
+      - "src/__tests__/"
+      - "src/data/"
+    config:
+      languages:
+        - javascript
+        - typescript
+  eslint:
+    enabled: true
+ratings:
+  paths:
+    - "**.js"
+    - "**.jsx"
+    - "**.ts"
+    - "**.tsx"
+exclude_patterns:
+  - "src/index.js"
