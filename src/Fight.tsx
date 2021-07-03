@@ -3,6 +3,7 @@ import { Player, SettingsButton, Story } from "./App";
 import { CharacterBox } from "./CharacterBox";
 import "./Fight.css";
 import { HeroBlock } from "./HeroBlock";
+import { InfoCard } from "./InfoCard";
 import { Settings } from "./Settings";
 import { removeFromArray } from "./utils/helpers";
 const enemies = require("./data/enemies.json");
@@ -13,7 +14,7 @@ interface Card {
   strength: number;
   quantity: number;
   character: null | string;
-  power: null | string;
+  element: null | string;
 }
 export interface Enemy {
   id: string;
@@ -21,12 +22,13 @@ export interface Enemy {
   element: string;
   cards: Card[];
 }
+
 export interface Spell {
   id: string;
   name: string;
   strength: number;
   character: null | string;
-  power: null | string;
+  element: null | string;
   owner: "hero" | "enemy";
 }
 
@@ -55,7 +57,7 @@ const generateDeck = (characters: string[], playerCards: Card[]): Spell[] => {
         name: c.name,
         strength: c.strength,
         character: c.character,
-        power: c.power,
+        element: c.element,
         owner: "hero",
       });
     }
@@ -71,7 +73,7 @@ const generateEnemyDeck = (enemy: Enemy): Spell[] => {
         name: c.name,
         strength: c.strength,
         character: c.character,
-        power: c.power,
+        element: c.element,
         owner: "enemy",
       });
     }
@@ -123,13 +125,19 @@ const enemyAttack = (
   };
 };
 
-const BigCard = ({ card }: { card: Spell }) => {
+const BigCard = ({
+  card,
+  setInfo,
+}: {
+  card: Spell;
+  setInfo: (s: Spell | Enemy | null) => void;
+}) => {
   return (
     <div className={card.owner === "enemy" ? "EnemyCard" : "HeroCard"}>
       <p>{card.name}</p>
       <p>Belongs to {card.owner}</p>
       <p>
-        <button onClick={() => console.log("Checking Info")}>Info</button>
+        <button onClick={() => setInfo(card)}>Info</button>
       </p>
     </div>
   );
@@ -167,6 +175,7 @@ export const Fight = ({
   const [heroCard, setHeroCard] = useState<null | Spell>(null);
   const [result, setResult] = useState<null | String>(null);
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [info, setInfo] = useState<null | Spell | Enemy>(null);
 
   const selectCard = (c: Spell) => {
     if (!enemyCard) {
@@ -198,16 +207,25 @@ export const Fight = ({
     <div className="Fight">
       <SettingsButton onClick={() => setSettingsOpen(!settingsOpen)} />
       {settingsOpen ? <Settings /> : null}
-      {enemyCard ? <BigCard card={enemyCard} /> : null}
-      {heroCard ? <BigCard card={heroCard} /> : null}
+      {enemyCard ? <BigCard card={enemyCard} setInfo={setInfo} /> : null}
+      {heroCard ? <BigCard card={heroCard} setInfo={setInfo} /> : null}
+      {info ? <InfoCard item={info} setInfo={setInfo} /> : null}
       {result ? (
         <div className="ResultCard">
           <p>{result}</p>
           <button onClick={finishFight}>exit</button>
         </div>
       ) : null}
-      <CharacterBox fightState={fightState} setEnemyCard={setEnemyCard} />
-      <HeroBlock fightState={fightState} selectCard={selectCard} />
+      <CharacterBox
+        fightState={fightState}
+        setEnemyCard={setEnemyCard}
+        setInfo={setInfo}
+      />
+      <HeroBlock
+        fightState={fightState}
+        selectCard={selectCard}
+        setInfo={setInfo}
+      />
     </div>
   );
 };

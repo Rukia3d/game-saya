@@ -1,33 +1,19 @@
-import React, { useState } from "react";
-import { FightState, Spell } from "./Fight";
+import React from "react";
+import { Enemy, FightState, Spell } from "./Fight";
 import "./HeroBlock.css";
 
 const HeroSpell = ({
-  selectedCard,
   card,
   selectCard,
-  setSelectedCard,
 }: {
-  selectedCard: Spell | null;
   card: Spell;
   selectCard: (s: Spell) => void;
-  setSelectedCard: (s: Spell | null) => void;
 }) => {
-  const showCardInfo = () => {
-    if (!selectedCard) {
-      setSelectedCard(card);
-    } else if (selectedCard !== card) {
-      setSelectedCard(card);
-    } else {
-      setSelectedCard(null);
-    }
-  };
   return (
     <div className="Spell">
       <div className="SpellCard" onClick={() => selectCard(card)}>
         {card.name}
       </div>
-      <button onClick={showCardInfo}>Info</button>
     </div>
   );
 };
@@ -35,11 +21,12 @@ const HeroSpell = ({
 export const HeroBlock = ({
   fightState,
   selectCard,
+  setInfo,
 }: {
   fightState: FightState;
   selectCard: (s: Spell) => void;
+  setInfo: (s: Spell | Enemy | null) => void;
 }) => {
-  const [selectedCard, setSelectedCard] = useState<Spell | null>(null);
   return (
     <div className="HeroBlock">
       <div className="Info">
@@ -51,21 +38,12 @@ export const HeroBlock = ({
       </div>
       <div className="Deck">
         {fightState.heroHand.map((d: Spell, i: number) => (
-          <HeroSpell
-            key={i}
-            selectedCard={selectedCard}
-            card={d}
-            selectCard={selectCard}
-            setSelectedCard={setSelectedCard}
-          />
+          <div key={i}>
+            <button onClick={() => setInfo(d)}>Info</button>
+            <HeroSpell card={d} selectCard={selectCard} />
+          </div>
         ))}
       </div>
-      {selectedCard ? (
-        <div className="Card">
-          <p>{selectedCard.name}</p>
-          <p>Belongs to {selectedCard.owner}</p>
-        </div>
-      ) : null}
     </div>
   );
 };

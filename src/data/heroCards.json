@@ -5,7 +5,7 @@
     "strength": 1,
     "quantity": 3,
     "character": null,
-    "power": null
+    "element": null
   },
   {
     "id": "base_hit2",
@@ -13,7 +13,7 @@
     "strength": 2,
     "quantity": 2,
     "character": null,
-    "power": null
+    "element": null
   },
   {
     "id": "base_hit3",
@@ -21,7 +21,7 @@
     "strength": 3,
     "quantity": 1,
     "character": null,
-    "power": null
+    "element": null
   },
   {
     "id": "base_hit1_tara",
@@ -29,7 +29,7 @@
     "strength": 1,
     "quantity": 1,
     "character": "tara",
-    "power": "metal"
+    "element": "metal"
   },
   {
     "id": "base_hit2_tara",
@@ -37,7 +37,7 @@
     "strength": 2,
     "quantity": 1,
     "character": "tara",
-    "power": "metal"
+    "element": "metal"
   },
   {
     "id": "base_hit3_tara",
@@ -45,6 +45,6 @@
     "strength": 3,
     "quantity": 1,
     "character": "tara",
-    "power": "metal"
+    "element": "metal"
   }
 ]

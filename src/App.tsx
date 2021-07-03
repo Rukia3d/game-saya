@@ -12,7 +12,7 @@ export interface Card {
   quantity: number;
   strength: number;
   character: null | string;
-  power: null | string;
+  element: null | string;
 }
 
 export interface Player {

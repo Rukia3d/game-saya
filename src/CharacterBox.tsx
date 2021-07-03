@@ -1,24 +1,24 @@
-import React, { useState } from "react";
-import { FightState, Spell } from "./Fight";
+import React from "react";
+import { Enemy, FightState, Spell } from "./Fight";
 import { Human } from "./Human";
 import "./CharacterBox.css";
 export const CharacterBox = ({
   fightState,
   setEnemyCard,
+  setInfo,
 }: {
   fightState: FightState;
   setEnemyCard: (s: Spell | null) => void;
+  setInfo: (i: Spell | Enemy | null) => void;
 }) => {
-  const [selectedCard, setSelectedCard] = useState<null | Spell>(null);
   const enemyAct = () => {
     const spell = fightState.enemyDeck.shift() || null;
-    setSelectedCard(spell);
     setEnemyCard(spell);
   };
 
   return (
     <div className="CharacterBox">
-      <div className="Stats">
+      <div className="Stats" onClick={() => setInfo(fightState.enemy)}>
         cards:
         {fightState.enemyDeck.length}, drop: {fightState.enemyDrop.length}
       </div>

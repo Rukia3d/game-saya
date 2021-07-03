@@ -1,0 +1,31 @@
+name: Code Climate
+on:
+  push:
+jobs:
+  build:
+    name: Test
+    runs-on: ubuntu-latest
+    env:
+      CC_TEST_REPORTER_ID: 67301b3a7155ee78ac7470780698b55db6195c68d3018f76aac67115eb421c15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Use Node.js 14.15.1
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.15.1
+
+      - name: Install packages
+        run: cd frontend && npm install
+
+      - name: Run tests and build a report
+        run: |
+          curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+          chmod +x ./cc-test-reporter
+          ./cc-test-reporter before-build
+          npm run coverage
+          ./cc-test-reporter format-coverage -t lcov -o cc.coverage ./coverage/lcov.info
+          ./cc-test-reporter -i cc.coverage upload-coverage
