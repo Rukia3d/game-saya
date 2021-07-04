@@ -16,7 +16,15 @@ const story = {
 const enemyData = enemies.find((e: any) => e.id === story.enemy);
 const gameState = {
   sceneCharacters: [],
-  player: { id: 1, cards: playerCards, experience: 300, lifes: 3 },
+  player: {
+    id: 1,
+    cards: playerCards,
+    experience: 300,
+    lifes: 3,
+    resources: [
+      { id: "iron", name: "Iron", image: "../", commonality: 5, quantity: 1 },
+    ],
+  },
   adventures: [],
   heroes: [],
 };

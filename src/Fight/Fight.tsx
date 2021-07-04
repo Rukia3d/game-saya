@@ -7,13 +7,23 @@ import { SettingsButton } from "../UI/SettingsButton";
 import { CharacterBox } from "./CharacterBox";
 import { HeroBlock } from "./HeroBlock";
 
-import { Spell, Enemy, FightState, Story, GameState } from "../utils/types";
+import {
+  Spell,
+  Enemy,
+  FightState,
+  Story,
+  GameState,
+  Resource,
+} from "../utils/types";
 import { removeFromArray } from "../utils/helpers";
 import {
   generateDeck,
   generateEnemyDeck,
   updateHeroDeck,
+  updateLostPlayer,
+  updateWinPlayer,
 } from "../utils/gamelogic";
+import { FightResult } from "./FightResult";
 
 const enemies = require("../data/enemies.json");
 
@@ -70,20 +80,6 @@ const BigCard = ({
   );
 };
 
-const Result = ({
-  result,
-  finishFight,
-}: {
-  result: String;
-  finishFight: () => void;
-}) => {
-  return (
-    <div className="ResultCard">
-      <p>{result}</p>
-      <button onClick={finishFight}>exit</button>
-    </div>
-  );
-};
 export const Fight = ({
   story,
   gameState,
@@ -138,27 +134,26 @@ export const Fight = ({
       if (fightState.enemyDrop.length === enemyHealt - 1) {
         setResult("Won");
       }
-    }, 3000);
+    }, 100);
   };
 
-  const finishFight = () => {
-    let updatedPlayer = gameState.player;
+  const finishFight = (resource: Resource[]) => {
+    // TODO finidh fight when the result is detected, not onClick
+    console.log("Fight is finished");
     if (result === "Won") {
-      updatedPlayer = {
-        ...gameState.player,
-        experience: gameState.player.experience + enemy.exp,
-      };
+      setGameState({
+        ...gameState,
+        player: updateWinPlayer(gameState.player, enemy, resource),
+      });
     }
     if (result === "Lost") {
-      updatedPlayer = {
-        ...gameState.player,
-        lifes: gameState.player.lifes - 1,
-      };
+      setGameState({
+        ...gameState,
+        player: updateLostPlayer(gameState.player),
+      });
     }
-    setGameState({ ...gameState, player: updatedPlayer });
     clearScreen();
   };
-
   return (
     <div className="Fight">
       <SettingsButton onClick={() => setSettingsOpen(!settingsOpen)} />
@@ -166,7 +161,13 @@ export const Fight = ({
       {enemyCard ? <BigCard card={enemyCard} setInfo={setInfo} /> : null}
       {heroCard ? <BigCard card={heroCard} setInfo={setInfo} /> : null}
       {info ? <InfoCard item={info} setInfo={setInfo} /> : null}
-      {result ? <Result finishFight={finishFight} result={result} /> : null}
+      {result ? (
+        <FightResult
+          finishFight={finishFight}
+          result={result}
+          enemy={fightState.enemy}
+        />
+      ) : null}
       <CharacterBox
         fightState={fightState}
         setEnemyCard={setEnemyCard}

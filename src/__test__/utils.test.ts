@@ -3,6 +3,7 @@ import {
   generateDeck,
   generateEnemyDeck,
   updateHeroDeck,
+  updateWinPlayer,
 } from "../utils/gamelogic";
 test("Unique function returns correctly", () => {
   const array1 = [1, 2, 3, 4];
@@ -51,7 +52,7 @@ const enemy = {
   id: "dude",
   name: "Dude",
   element: "Earth",
-  exp: 10,
+  experience: "novice" as "novice",
   life: 2,
   cards: cards,
 };
@@ -84,4 +85,56 @@ test("updateHeroDeck shuffles if there are no cards left", () => {
   const [newDeck, newDrop] = updateHeroDeck(fightState, deckForTwo[0]);
   expect(newDeck.length).toEqual(4);
   expect(newDrop.length).toEqual(1);
+});
+
+test.only("updateWinPlayer assigns rewards correctly", () => {
+  const player = {
+    id: 1,
+    cards: [],
+    experience: 300,
+    lifes: 3,
+    resources: [
+      { id: "gold", name: "Gold", image: "../", commonality: 2, quantity: 0 },
+      { id: "iron", name: "Iron", image: "../", commonality: 5, quantity: 0 },
+      {
+        id: "dimond",
+        name: "Dimonds",
+        image: "../",
+        commonality: 1,
+        quantity: 0,
+      },
+      { id: "silk", name: "Silk", image: "../", commonality: 2, quantity: 0 },
+      {
+        id: "rdust",
+        name: "Red dust",
+        image: "../",
+        commonality: 3,
+        quantity: 2,
+      },
+      {
+        id: "rflower",
+        name: "Red flower",
+        image: "../",
+        commonality: 4,
+        quantity: 0,
+      },
+    ],
+  };
+  const resource = [
+    { id: "iron", name: "Iron", image: "../", commonality: 5 },
+    { id: "iron", name: "Iron", image: "../", commonality: 5 },
+    { id: "silk", name: "Silk", image: "../", commonality: 2, quantity: 0 },
+    {
+      id: "rdust",
+      name: "Red dust",
+      image: "../",
+      commonality: 3,
+      quantity: 0,
+    },
+  ];
+  const updatedPlayer = updateWinPlayer(player, enemy, resource);
+  expect(updatedPlayer.resources[1].quantity).toEqual(2);
+  expect(updatedPlayer.resources[3].quantity).toEqual(1);
+  expect(updatedPlayer.resources[4].quantity).toEqual(3);
+  expect(updatedPlayer.experience).toEqual(325);
 });

@@ -11,17 +11,6 @@
   z-index: 100;
 }
 
-.ResultCard {
-  position: absolute;
-  top: 2em;
-  left: 2em;
-  padding: 3em;
-  width: 80%;
-  height: 80%;
-  background-color: gold;
-  z-index: 100;
-}
-
 .EnemyCard {
   position: absolute;
   top: 2em;

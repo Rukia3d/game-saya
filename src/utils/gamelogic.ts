@@ -1,4 +1,16 @@
-import { Card, Enemy, FightState, Spell } from "./types";
+import { ENOTEMPTY } from "constants";
+import { shuffle } from "./helpers";
+import {
+  Card,
+  Enemy,
+  FightState,
+  GameState,
+  OwnedResource,
+  Player,
+  Resource,
+  Spell,
+} from "./types";
+const rewardData = require("../data/rewards.json");
 
 export const generateDeck = (
   characters: string[],
@@ -50,4 +62,73 @@ export const updateHeroDeck = (fightState: FightState, heroCard: Spell) => {
     newDrop.push(heroCard);
   }
   return [newDeck, newDrop];
+};
+
+export const generateReward = (enemy: Enemy) => {
+  const allRewards: Resource[] = [];
+  rewardData.resources.forEach((r: Resource) => {
+    for (let i = 0; i < r.commonality; i++) {
+      allRewards.push({
+        id: r.id,
+        name: r.name,
+        image: r.image,
+        commonality: r.commonality,
+      });
+    }
+  });
+  return shuffle(allRewards).splice(0, enemyToNumber(enemy));
+};
+
+export const enemyToNumber = (enemy: Enemy) => {
+  switch (enemy.experience) {
+    case "apprentice":
+      return 6;
+    case "practitioner":
+      return 7;
+    case "master":
+      return 8;
+    case "grandmaster":
+      return 9;
+    default:
+      return 5;
+  }
+};
+
+export const updateLostPlayer = (player: Player) => {
+  return {
+    ...player,
+    lifes: player.lifes - 1,
+  };
+};
+
+const givePlayerExperience = (player: Player, enemy: Enemy) => {
+  return {
+    ...player,
+    experience: player.experience + enemyToNumber(enemy) * 5,
+  };
+};
+
+const givePlayerResources = (player: Player, resources: Resource[]) => {
+  const existingResources = player.resources;
+  resources.forEach((r: Resource) => {
+    const playerRes = player.resources.find(
+      (o: OwnedResource) => o.id === r.id
+    );
+    if (!playerRes) throw "Can't find resource you want to give me";
+    const playerResIndex = existingResources.indexOf(playerRes);
+    existingResources[playerResIndex].quantity++;
+  });
+  return existingResources;
+};
+
+export const updateWinPlayer = (
+  player: Player,
+  enemy: Enemy,
+  resources: Resource[]
+) => {
+  const updatedPlayer = givePlayerExperience(player, enemy);
+  return {
+    ...updatedPlayer,
+    resources: givePlayerResources(player, resources),
+  };
 };

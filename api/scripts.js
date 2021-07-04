@@ -9,7 +9,20 @@ app.get("/api/player/", (req, res) => {
     console.log("Requesting player game data");
     const gameState = {
         sceneCharacters: [{ id: "maya", image: "../img/maya.png", state: "dial1" }],
-        player: { id: 1, cards: playerCards, experience: 300, lifes: 3 },
+        player: { 
+          id: 1, 
+          cards: playerCards, 
+          experience: 300, 
+          lifes: 3, 
+          resources: [
+          { id: "gold", name: "Gold", image: "../", commonality: 2, quantity: 0 },
+          { id: "iron", name: "Iron", image: "../", commonality: 5, quantity: 0 },
+          { id: "dimond", name: "Dimonds", image: "../", commonality: 1, quantity: 0 },
+          { id: "silk", name: "Silk", image: "../", commonality: 2, quantity: 0 },
+          { id: "rdust", name: "Red dust", image: "../", commonality: 3, quantity: 0 },
+          { id: "rflower", name: "Red flower", image: "../", commonality: 4, quantity: 0 }
+          ] 
+        },
         adventures: [
           {
             id: "story",

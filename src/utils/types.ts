@@ -7,11 +7,13 @@ export interface Card {
   element: null | string;
 }
 
+export type OwnedResource = Resource & { quantity: number };
 export interface Player {
   id: number;
   cards: Card[];
   experience: number;
   lifes: number;
+  resources: OwnedResource[];
 }
 
 export interface Character {
@@ -56,8 +58,10 @@ export interface Enemy {
   id: string;
   name: string;
   element: string;
-  exp: number;
+  // exp defines how hard this enemy to kill
+  experience: enemyExpLevel;
   cards: Card[];
+  // defines how many cards enemy is given
   life: number;
 }
 
@@ -83,4 +87,17 @@ export interface FightState {
   enemyDrop: Spell[];
 }
 
+export interface Resource {
+  id: string;
+  name: string;
+  image: string;
+  commonality: number;
+}
+
 export type screenState = "start" | "opening" | "main" | "dialogue";
+export type enemyExpLevel =
+  | "novice"
+  | "apprentice"
+  | "practitioner"
+  | "master"
+  | "grandmaster";
