@@ -25,6 +25,6 @@ ratings:
     - "**.ts"
     - "**.tsx"
 exclude_patterns:
-  - "src/index.js"
+  - "src/index.tsx"
   - "src/reportWebVitals.ts"
   - "src/utils/types.ts"
