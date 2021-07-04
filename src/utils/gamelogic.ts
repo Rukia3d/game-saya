@@ -1,10 +1,8 @@
-import { ENOTEMPTY } from "constants";
 import { shuffle } from "./helpers";
 import {
   Card,
   Enemy,
   FightState,
-  GameState,
   OwnedResource,
   Player,
   Resource,
@@ -122,7 +120,7 @@ const givePlayerResources = (player: Player, resources: Resource[]) => {
     const playerRes = player.resources.find(
       (o: OwnedResource) => o.id === r.id
     );
-    if (!playerRes) throw "Can't find resource you want to give me";
+    if (!playerRes) throw new Error("Can't find resource you want to give me");
     const playerResIndex = existingResources.indexOf(playerRes);
     existingResources[playerResIndex].quantity++;
   });
