@@ -1,10 +1,10 @@
 {
   "resources": [
     { "id": "gold", "name": "Gold", "image": "../", "commonality": 2 },
-    { "id": "iron", "name": "Iron", "image": "../", "commonality": 5 },
+    { "id": "iron", "name": "Iron", "image": "../", "commonality": 10 },
     { "id": "dimond", "name": "Dimonds", "image": "../", "commonality": 1 },
-    { "id": "silk", "name": "Silk", "image": "../", "commonality": 2 },
-    { "id": "rdust", "name": "Red dust", "image": "../", "commonality": 3 },
-    { "id": "rflower", "name": "Red flower", "image": "../", "commonality": 4 }
+    { "id": "silk", "name": "Silk", "image": "../", "commonality": 3 },
+    { "id": "rdust", "name": "Red dust", "image": "../", "commonality": 5 },
+    { "id": "rflower", "name": "Red flower", "image": "../", "commonality": 7 }
   ]
 }

@@ -64,7 +64,7 @@ export const updateHeroDeck = (fightState: FightState, heroCard: Spell) => {
   return [newDeck, newDrop];
 };
 
-export const generateReward = (enemy: Enemy) => {
+const generateSingleRewards = () => {
   const allRewards: Resource[] = [];
   rewardData.resources.forEach((r: Resource) => {
     for (let i = 0; i < r.commonality; i++) {
@@ -76,7 +76,15 @@ export const generateReward = (enemy: Enemy) => {
       });
     }
   });
-  return shuffle(allRewards).splice(0, enemyToNumber(enemy));
+  return shuffle(allRewards)[0];
+};
+export const generateReward = (enemy: Enemy) => {
+  const rewards = [];
+  const max = enemyToNumber(enemy);
+  for (let i = 0; i < max; i++) {
+    rewards.push(generateSingleRewards());
+  }
+  return rewards;
 };
 
 export const enemyToNumber = (enemy: Enemy) => {
