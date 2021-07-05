@@ -31,5 +31,22 @@
         "element": null
       }
     ]
+  },
+  {
+    "id": "test-dude",
+    "name": "Dude",
+    "element": "Earth",
+    "life": 1,
+    "exp": 10,
+    "cards": [
+      {
+        "id": "base_hit1",
+        "name": "Base Hit 1",
+        "strength": 1,
+        "quantity": 1,
+        "character": null,
+        "element": null
+      }
+    ]
   }
 ]

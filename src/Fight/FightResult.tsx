@@ -1,14 +1,27 @@
 import React, { useState } from "react";
 import { generateReward } from "../utils/gamelogic";
 import { Enemy, Resource } from "../utils/types";
+import { Chest } from "./Chest";
 import "./FightResult.css";
+
+const Rewards = ({ resource }: { resource: Resource[] }) => {
+  return (
+    <div aria-label="rewards_list">
+      <h2>Your prize</h2>
+    </div>
+  );
+};
 
 const ResourceChest = ({ resource }: { resource: Resource[] }) => {
   const [open, setOpen] = useState(false);
+  const delayOpening = () => {
+    console.log("opening");
+    setTimeout(() => setOpen(true), 1000);
+  };
   return (
     <div className="ResourceChest">
-      <div onClick={() => setOpen(true)}>
-        {open ? <h1>I am open chest</h1> : <h1>I am chest</h1>}
+      <div onClick={delayOpening}>
+        {!open ? <Chest /> : <Rewards resource={resource} />}
       </div>
     </div>
   );
@@ -31,8 +44,6 @@ export const FightResult = ({
   finishFight: (r: Resource[]) => void;
 }) => {
   const rewards = generateReward(enemy);
-  console.log("You get rewards:");
-  rewards.map((r: Resource) => console.log(r.name));
   return (
     <div className="FightResult">
       <p>You {result}</p>

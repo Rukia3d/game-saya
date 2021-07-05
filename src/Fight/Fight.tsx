@@ -122,12 +122,10 @@ export const Fight = ({
       return;
     }
     setHeroCard(c);
-    const res = enemyAttack(fightState, c, enemyCard);
-    setfightState(res);
+    setfightState(enemyAttack(fightState, c, enemyCard));
     setTimeout(() => {
       setHeroCard(null);
       setEnemyCard(null);
-      console.log(fightState.enemyDrop.length);
       if (fightState.hero.currentHealth <= 0) {
         setResult("Lost");
       }

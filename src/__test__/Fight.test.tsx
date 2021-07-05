@@ -9,7 +9,7 @@ const story = {
   id: "fight1",
   type: "fight" as "fight",
   image: "../img/arena_1.png",
-  enemy: "dude",
+  enemy: "test-dude",
   state: "open" as "open",
   characters: ["maya", "tara"],
 };
@@ -96,4 +96,25 @@ test("Settings screen switches on and off", async () => {
   expect(screen.getByLabelText("settings_screen")).toBeInTheDocument();
   userEvent.click(screen.getByTestId("settings_button"));
   expect(screen.queryByLabelText("settings_screen")).not.toBeInTheDocument();
+});
+
+test("Fight finish shows the end screen", async () => {
+  const backToStory = jest.fn();
+  const setGameState = jest.fn();
+  render(
+    <Fight
+      gameState={gameState}
+      clearScreen={backToStory}
+      story={story}
+      setGameState={setGameState}
+    />
+  );
+  userEvent.click(screen.getByLabelText("opponent"));
+  expect(screen.getByLabelText("display_card")).toBeInTheDocument();
+  userEvent.click(screen.getAllByLabelText("spell_card")[0]);
+  expect(screen.getAllByLabelText("display_card").length).toEqual(2);
+  expect(await screen.findByText("You Won")).toBeInTheDocument();
+  expect(screen.getByLabelText("chest_animation")).toBeInTheDocument();
+  userEvent.click(screen.getByLabelText("chest_animation"));
+  expect(await screen.findByText("Your prize")).toBeInTheDocument();
 });
