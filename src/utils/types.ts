@@ -14,12 +14,14 @@ export interface Player {
   experience: number;
   lifes: number;
   resources: OwnedResource[];
+  heroes: Character[];
 }
 
 export interface Character {
   id: string;
+  name: string;
   image: string;
-  state: string;
+  state?: string;
 }
 
 export interface Adventure {

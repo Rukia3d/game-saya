@@ -4,9 +4,15 @@ import "./Main.css";
 import { Settings } from "../UI/Settings";
 import { SettingsButton } from "../UI/SettingsButton";
 
-import { Adventure, Character, GameState } from "../utils/types";
+import {
+  Adventure,
+  Card,
+  Character,
+  GameState,
+  Resource,
+} from "../utils/types";
 
-type mainScreenState = "heroes" | "adventures" | "spells";
+type mainScreenState = "heroes" | "adventures" | "spells" | "college";
 
 const Heroes = ({ characters }: { characters: Character[] }) => {
   return (
@@ -54,10 +60,48 @@ const Adventures = ({
   );
 };
 
-const Spells = () => {
+const SpellPanel = ({ character }: { character: Character | null }) => {
+  return (
+    <div className="SpellPanel">{character ? character.name : "Base"}</div>
+  );
+};
+
+const Spells = ({
+  spells,
+  heroes,
+}: {
+  spells: Card[];
+  heroes: Character[];
+}) => {
+  const characters = spells
+    .map((s: Card) => s.character)
+    .filter((v: any, i: any, a: any) => a.indexOf(v) === i && v);
   return (
     <div className="Spells">
-      <h1>Spells</h1>
+      <h2>Your Spells</h2>
+      <div className="SpellsList">
+        <SpellPanel character={null} />
+        {characters.sort().map((s: string | null, i: number) => (
+          <SpellPanel
+            key={i}
+            character={heroes.find((h: Character) => h.id === s) || null}
+          />
+        ))}
+      </div>
+    </div>
+  );
+};
+
+const College = ({
+  spells,
+  resources,
+}: {
+  spells: Card[];
+  resources: Resource[];
+}) => {
+  return (
+    <div className="College">
+      <h1>College</h1>
     </div>
   );
 };
@@ -95,6 +139,14 @@ const MainMenu = ({
       >
         Spells
       </button>
+      <button
+        style={{
+          backgroundColor: selected === "college" ? "aquamarine" : "grey",
+        }}
+        onClick={() => setSelected("college")}
+      >
+        College
+      </button>
     </div>
   );
 };
@@ -125,7 +177,18 @@ export const Main = ({
           setAdventure={setAdventure}
         />
       ) : null}
-      {selected === "spells" ? <Spells /> : null}
+      {selected === "spells" ? (
+        <Spells
+          heroes={gameState.player.heroes}
+          spells={gameState.player.cards}
+        />
+      ) : null}
+      {selected === "college" ? (
+        <College
+          spells={gameState.player.cards}
+          resources={gameState.player.resources}
+        />
+      ) : null}
       <MainMenu selected={selected} setSelected={changeScreen} />
     </div>
   );

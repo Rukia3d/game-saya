@@ -15,6 +15,9 @@ export const removeFromArray = (arrArg: any[], item: any) => {
   return arrArg;
 };
 
+export const sortByKey = (array: any) => {
+  return array.sort((a: any, b: any) => (a.character > b.character ? 1 : -1));
+};
 export const generateInt = (max: number) =>
   Math.floor(Math.random() * Math.floor(max));
 

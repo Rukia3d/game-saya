@@ -14,6 +14,18 @@ app.get("/api/player/", (req, res) => {
           cards: playerCards, 
           experience: 300, 
           lifes: 3, 
+          heroes: [
+            {  
+              id: "maya",
+              name: "Maya",
+              image: "../img/maya.png",
+            }, 
+            {  
+              id: "tara",
+              name: "Tara",
+              image: "../img/maya.png",
+            }
+          ],
           resources: [
           { id: "gold", name: "Gold", image: "../", commonality: 2, quantity: 0 },
           { id: "iron", name: "Iron", image: "../", commonality: 5, quantity: 0 },
@@ -69,8 +81,7 @@ app.get("/api/player/", (req, res) => {
             state: "closed",
             stories: [],
           },
-        ],
-        heroes: ["maya"],
+        ]
       }
     res.send(gameState);
 });

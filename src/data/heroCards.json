@@ -1,11 +1,43 @@
 [
   {
+    "id": "base_hit1_maya",
+    "name": "Maya Hit 1",
+    "strength": 1,
+    "quantity": 1,
+    "character": "maya",
+    "element": "earth"
+  },
+  {
+    "id": "base_hit2",
+    "name": "Base Hit 2",
+    "strength": 2,
+    "quantity": 2,
+    "character": null,
+    "element": null
+  },
+  {
+    "id": "base_hit3_maya",
+    "name": "Maya Hit 3",
+    "strength": 3,
+    "quantity": 1,
+    "character": "maya",
+    "element": "earth"
+  },
+  {
     "id": "base_hit1",
     "name": "Base Hit 1",
     "strength": 1,
     "quantity": 3,
     "character": null,
     "element": null
+  },
+  {
+    "id": "base_hit2_maya",
+    "name": "Maya Hit 2",
+    "strength": 2,
+    "quantity": 1,
+    "character": "maya",
+    "element": "earth"
   },
   {
     "id": "base_hit2",
