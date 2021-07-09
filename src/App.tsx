@@ -10,6 +10,20 @@ import { AdventureScreen } from "./Main/AdventureScreen";
 import { fetcher } from "./utils/helpers";
 import { Adventure, GameState, Story } from "./utils/types";
 
+interface GameContextType {
+  adventure: Adventure | null;
+  setAdventure: (a: Adventure) => void;
+  story: Story | null;
+  setStory: (s: Story) => void;
+  gameState: GameState | null;
+  setGameState: (g: GameState) => void;
+  backToMain: () => void;
+  backToStory: () => void;
+}
+export const GameContext = React.createContext<undefined | GameContextType>(
+  undefined
+);
+
 function App() {
   const { data, error } = useSWR("/api/player/", fetcher);
 
@@ -22,7 +36,7 @@ function App() {
     setGameState(data);
   }, [data]);
 
-  const backToAdventure = () => {
+  const backToMain = () => {
     setAdventure(null);
     setStory(null);
   };
@@ -31,41 +45,34 @@ function App() {
     setStory(null);
   };
 
+  const context = {
+    adventure: adventure,
+    setAdventure: setAdventure,
+    story: story,
+    setStory: setStory,
+    gameState: gameState,
+    setGameState: setGameState,
+    backToMain: backToMain,
+    backToStory: backToStory,
+  };
+
   if (error || !data) {
     return (
-      <div className="App">
-        <Start
-          gameState={gameState}
-          setShowStart={() => setShowStart(false)}
-          inactive
-        />
-      </div>
+      <GameContext.Provider value={context}>
+        <div className="App">
+          <Start setShowStart={setShowStart} />
+        </div>
+      </GameContext.Provider>
     );
   }
-
   return (
-    <div className="App">
-      {showStart ? (
-        <Start gameState={gameState} setShowStart={() => setShowStart(false)} />
-      ) : (
-        <Main gameState={gameState} setAdventure={setAdventure} />
-      )}
-      {adventure ? (
-        <AdventureScreen
-          adventure={adventure}
-          clearScreen={backToAdventure}
-          setStory={setStory}
-        />
-      ) : null}
-      {story ? (
-        <Fight
-          clearScreen={backToStory}
-          story={story}
-          gameState={gameState}
-          setGameState={setGameState}
-        />
-      ) : null}
-    </div>
+    <GameContext.Provider value={context}>
+      <div className="App">
+        {showStart ? <Start setShowStart={setShowStart} /> : <Main />}
+        {adventure ? <AdventureScreen /> : null}
+        {story ? <Fight /> : null}
+      </div>
+    </GameContext.Provider>
   );
 }
 

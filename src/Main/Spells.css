@@ -6,6 +6,13 @@
   height: 100%;
 }
 
+.CharacterSpells {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
 .SpellsList {
   position: absolute;
   display: flex;
@@ -41,4 +48,11 @@
   display: block;
   height: 100%;
   width: auto;
+}
+
+.AllCharacterSpells {
+  display: flex;
+  flex-direction: row;
+  background-color: orange;
+  width: 100%;
 }

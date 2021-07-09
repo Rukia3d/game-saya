@@ -2,6 +2,26 @@ import React from "react";
 import "./HeroBlock.css";
 
 import { Enemy, FightState, Spell } from "../utils/types";
+
+export const HeroSpellWithInfo = ({
+  card,
+  selectCard,
+  setInfo,
+}: {
+  card: Spell;
+  selectCard: (s: Spell) => void;
+  setInfo: (s: any) => void;
+}) => {
+  return (
+    <div>
+      <button onClick={() => setInfo(card)} data-testid="hero_card_info">
+        Info
+      </button>
+      <HeroSpell card={card} selectCard={selectCard} />
+    </div>
+  );
+};
+
 const HeroSpell = ({
   card,
   selectCard,
@@ -43,12 +63,12 @@ export const HeroBlock = ({
       </div>
       <div className="Deck" aria-label="Deck">
         {fightState.heroHand.map((d: Spell, i: number) => (
-          <div key={i}>
-            <button onClick={() => setInfo(d)} data-testid="hero_card_info">
-              Info
-            </button>
-            <HeroSpell card={d} selectCard={selectCard} />
-          </div>
+          <HeroSpellWithInfo
+            card={d}
+            selectCard={selectCard}
+            setInfo={setInfo}
+            key={i}
+          />
         ))}
       </div>
     </div>

@@ -3,14 +3,14 @@ import "./AdventureScreen.css";
 
 import { CloseButton } from "../UI/CloseButton";
 
-import { Card, Character } from "../utils/types";
+import { Character, Spell } from "../utils/types";
 
 export const SpellsScreen = ({
   spells,
   character,
   clearScreen,
 }: {
-  spells: Card[];
+  spells: Spell[];
   character: Character | null;
   clearScreen: () => void;
 }) => {
@@ -19,7 +19,7 @@ export const SpellsScreen = ({
       <CloseButton onClick={clearScreen} />
       <h2>{character ? character.name : "Base spells"}</h2>
       <div className="SpellsList">
-        {spells.map((s: Card, i: number) => (
+        {spells.map((s: Spell, i: number) => (
           <div key={i} onClick={() => {}}>
             <img
               src={s.image}

@@ -2,6 +2,7 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Fight } from "../Fight/Fight";
+import { GameContext } from "../App";
 const playerCards = require("../data/heroCards.json");
 const enemies = require("../data/enemies.json");
 const heroHealth = "15";
@@ -15,13 +16,21 @@ const story = {
 };
 const enemyData = enemies.find((e: any) => e.id === story.enemy);
 const gameState = {
-  sceneCharacters: [],
+  sceneCharacters: [
+    { id: "maya", name: "Maya", image: "../img/maya.png", state: "story" },
+  ],
   player: {
     id: 1,
     cards: playerCards,
     experience: 300,
     lifes: 3,
-    heroes: [],
+    heroes: [
+      {
+        id: "maya",
+        name: "Maya",
+        image: "../img/maya_spells.png",
+      },
+    ],
     resources: [
       { id: "iron", name: "Iron", image: "../", commonality: 5, quantity: 1 },
     ],
@@ -30,16 +39,22 @@ const gameState = {
   heroes: [],
 };
 
+const context = {
+  adventure: null,
+  setAdventure: jest.fn(),
+  story: story,
+  setStory: jest.fn(),
+  gameState: gameState,
+  setGameState: jest.fn(),
+  backToMain: jest.fn(),
+  backToStory: jest.fn(),
+};
+
 test("Renders Fight screen", () => {
-  const backToStory = jest.fn();
-  const setGameState = jest.fn();
   render(
-    <Fight
-      gameState={gameState}
-      clearScreen={backToStory}
-      story={story}
-      setGameState={setGameState}
-    />
+    <GameContext.Provider value={context}>
+      <Fight />
+    </GameContext.Provider>
   );
   expect(screen.getByText(/Your opponent/)).toBeInTheDocument();
   // TODO check the correct element was assigned
@@ -64,15 +79,10 @@ test("Renders Fight screen", () => {
 });
 
 test("Fight works enemy attacks and hero defends", () => {
-  const backToStory = jest.fn();
-  const setGameState = jest.fn();
   render(
-    <Fight
-      gameState={gameState}
-      clearScreen={backToStory}
-      story={story}
-      setGameState={setGameState}
-    />
+    <GameContext.Provider value={context}>
+      <Fight />
+    </GameContext.Provider>
   );
   userEvent.click(screen.getByLabelText("opponent"));
   expect(screen.getAllByLabelText("display_card").length).toEqual(1);
@@ -81,15 +91,10 @@ test("Fight works enemy attacks and hero defends", () => {
 });
 
 test("Settings screen switches on and off", async () => {
-  const backToStory = jest.fn();
-  const setGameState = jest.fn();
   render(
-    <Fight
-      gameState={gameState}
-      clearScreen={backToStory}
-      story={story}
-      setGameState={setGameState}
-    />
+    <GameContext.Provider value={context}>
+      <Fight />
+    </GameContext.Provider>
   );
   expect(screen.queryByLabelText("settings_screen")).not.toBeInTheDocument();
   expect(screen.getByTestId("settings_button")).toBeInTheDocument();
@@ -100,15 +105,10 @@ test("Settings screen switches on and off", async () => {
 });
 
 test("Fight finish shows the end screen", async () => {
-  const backToStory = jest.fn();
-  const setGameState = jest.fn();
   render(
-    <Fight
-      gameState={gameState}
-      clearScreen={backToStory}
-      story={story}
-      setGameState={setGameState}
-    />
+    <GameContext.Provider value={context}>
+      <Fight />
+    </GameContext.Provider>
   );
   userEvent.click(screen.getByLabelText("opponent"));
   expect(screen.getByLabelText("display_card")).toBeInTheDocument();

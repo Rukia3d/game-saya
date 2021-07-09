@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useContext } from "react";
+import { GameContext } from "../App";
 import { Adventure } from "../utils/types";
 import "./Adventures.css";
 
@@ -12,16 +13,15 @@ const AdventureImage = ({ adventure }: { adventure: Adventure }) => {
     />
   );
 };
-export const Adventures = ({
-  adventures,
-  setAdventure,
-}: {
-  adventures: Adventure[];
-  setAdventure: (a: Adventure) => void;
-}) => {
+export const Adventures = () => {
+  const context = useContext(GameContext);
+  if (!context || !context.gameState || !context.gameState.adventures) {
+    throw new Error("No data");
+  }
+  const adventures = context.gameState.adventures;
   const selectAdventure = (a: Adventure) => {
     if (a.state === "open") {
-      setAdventure(a);
+      context.setAdventure(a);
     }
   };
   return (

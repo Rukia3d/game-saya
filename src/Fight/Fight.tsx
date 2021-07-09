@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import "./Fight.css";
 
 import { InfoCard } from "../UI/InfoCard";
@@ -24,6 +24,7 @@ import {
   updateWinPlayer,
 } from "../utils/gamelogic";
 import { FightResult } from "./FightResult";
+import { GameContext } from "../App";
 
 const enemies = require("../data/enemies.json");
 
@@ -87,22 +88,32 @@ const BigCard = ({
   );
 };
 
-export const Fight = ({
-  story,
-  gameState,
-  setGameState,
-  clearScreen,
-}: {
-  story: Story;
-  gameState: GameState;
-  setGameState: (s: GameState) => void;
-  clearScreen: () => void;
-}) => {
-  if (!story.enemy) {
-    throw "No enemy for this fight, something went very wrong";
+export const Fight = () => {
+  const context = useContext(GameContext);
+  if (
+    !context ||
+    !context.story ||
+    !context.gameState ||
+    !context.setGameState ||
+    !context.backToMain
+  ) {
+    throw new Error("No data");
   }
-  const enemy: Enemy = enemies.find((e: any) => e.id === story.enemy);
-  const heroDeck = generateDeck(story.characters, gameState.player.cards); //shuffle(generateDeck());
+
+  if (!context.story) {
+    throw new Error("No story for this fight");
+  }
+
+  const enemyId = context.story.enemy;
+  if (!enemyId) {
+    throw new Error("No enemy for this fight, something went very wrong");
+  }
+
+  const enemy: Enemy = enemies.find((e: any) => e.id === enemyId);
+  const heroDeck = generateDeck(
+    context.story.characters,
+    context.gameState.player.cards
+  ); //shuffle(generateDeck());
   const enemyDeck = generateEnemyDeck(enemy); //shuffle(generateEnemyDeck());
   const enemyHealt = enemyDeck.length;
   const [fightState, setfightState] = useState<FightState>({
@@ -145,19 +156,23 @@ export const Fight = ({
   const finishFight = (resource: Resource[]) => {
     // TODO finidh fight when the result is detected, not onClick
     console.log("Fight is finished");
+    const gameState = context.gameState;
+
+    if (!gameState) throw new Error("Can't update the fight results");
+
     if (result === "Won") {
-      setGameState({
+      context.setGameState({
         ...gameState,
         player: updateWinPlayer(gameState.player, enemy, resource),
       });
     }
     if (result === "Lost") {
-      setGameState({
+      context.setGameState({
         ...gameState,
         player: updateLostPlayer(gameState.player),
       });
     }
-    clearScreen();
+    context.backToMain();
   };
   return (
     <div className="Fight">

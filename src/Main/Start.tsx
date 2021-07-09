@@ -1,28 +1,18 @@
-import React from "react";
+import React, { useContext } from "react";
+import { GameContext } from "../App";
 import "./Start.css";
 
-import { GameState } from "../utils/types";
-
 export const Start = ({
-  gameState,
   setShowStart,
-  inactive = false,
 }: {
-  gameState: GameState;
   setShowStart: (b: boolean) => void;
-  inactive?: boolean;
 }) => {
-  const startGame = () => {
-    if (gameState && gameState.player) {
-      setShowStart(false);
-    }
-    // if no progres exisits show opening
-  };
+  const context = useContext(GameContext);
   return (
     <div className="Start">
       <h1>Start</h1>
-      {!inactive ? (
-        <button className="PlayButton" onClick={startGame}>
+      {context?.gameState?.player ? (
+        <button className="PlayButton" onClick={() => setShowStart(false)}>
           PLAY
         </button>
       ) : null}

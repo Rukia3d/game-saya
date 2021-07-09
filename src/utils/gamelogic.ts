@@ -1,6 +1,5 @@
 import { shuffle } from "./helpers";
 import {
-  Card,
   Enemy,
   FightState,
   OwnedResource,
@@ -12,10 +11,11 @@ const rewardData = require("../data/rewards.json");
 
 export const generateDeck = (
   characters: string[],
-  playerCards: Card[]
+  playerCards: Spell[]
 ): Spell[] => {
   const heroSpells: Spell[] = [];
-  playerCards.forEach((c: Card) => {
+  playerCards.forEach((c: Spell) => {
+    if (!c.selected) return;
     for (let i = 0; i < c.quantity; i++) {
       if (c.character && characters.indexOf(c.character) === -1) {
         return;
@@ -24,10 +24,12 @@ export const generateDeck = (
         id: c.id,
         image: c.image,
         name: c.name,
+        quantity: c.quantity,
         strength: c.strength,
         character: c.character,
         element: c.element,
         owner: "hero",
+        selected: c.selected,
       });
     }
   });
@@ -36,7 +38,7 @@ export const generateDeck = (
 
 export const generateEnemyDeck = (enemy: Enemy): Spell[] => {
   const enemySpells: Spell[] = [];
-  enemy.cards.forEach((c: Card) => {
+  enemy.cards.forEach((c: Spell) => {
     for (let i = 0; i < c.quantity; i++) {
       enemySpells.push({
         id: c.id,
@@ -46,6 +48,8 @@ export const generateEnemyDeck = (enemy: Enemy): Spell[] => {
         character: c.character,
         element: c.element,
         owner: "enemy",
+        quantity: c.quantity,
+        selected: true,
       });
     }
   });

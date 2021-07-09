@@ -32,6 +32,7 @@ const cards = [
     element: null,
     image: "../img/Spells/spell2.jpg",
     selected: true,
+    owner: "hero" as "hero",
   },
   {
     id: "base_hit1_tara",
@@ -42,6 +43,7 @@ const cards = [
     element: "metal",
     image: "../img/Spells/spell2.jpg",
     selected: true,
+    owner: "hero" as "hero",
   },
   {
     id: "base_hit1_tara",
@@ -52,6 +54,7 @@ const cards = [
     element: "earrth",
     image: "../img/Spells/spell2.jpg",
     selected: true,
+    owner: "hero" as "hero",
   },
 ];
 const enemy = {
@@ -61,6 +64,7 @@ const enemy = {
   experience: "novice" as "novice",
   life: 2,
   cards: cards,
+  owner: "enemy" as "enemy",
 };
 
 test("generateDeck function returns correct character cards", () => {

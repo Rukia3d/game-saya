@@ -1,11 +1,7 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import { Spells } from "../Main/Spells";
-
-const heroes = [
-  { id: "maya", name: "Maya", image: "../img/maya.png", state: "story" },
-  { id: "tara", name: "Tara", image: "../img/tara.png", state: "story" },
-];
+import { GameContext } from "../App";
 
 const spells = [
   {
@@ -17,6 +13,7 @@ const spells = [
     element: "earth",
     image: "../img/Spells/spell1.jpg",
     selected: true,
+    owner: "hero" as "hero",
   },
   {
     id: "base_hit2",
@@ -27,6 +24,7 @@ const spells = [
     element: null,
     image: "../img/Spells/spell2.jpg",
     selected: true,
+    owner: "hero" as "hero",
   },
   {
     id: "base_hit3_maya",
@@ -37,6 +35,7 @@ const spells = [
     element: "earth",
     image: "../img/Spells/spell3.jpg",
     selected: true,
+    owner: "hero" as "hero",
   },
   {
     id: "base_hit1_tara",
@@ -45,13 +44,58 @@ const spells = [
     quantity: 1,
     character: "tara",
     element: "metal",
+    owner: "hero" as "hero",
     image: "../img/Spells/spell8.jpg",
     selected: true,
   },
 ];
+const gameState = {
+  sceneCharacters: [
+    { id: "maya", name: "Maya", image: "../img/maya.png", state: "story" },
+    { id: "tara", name: "Tara", image: "../img/tara.png", state: "story" },
+  ],
+  player: {
+    id: 1,
+    cards: spells,
+    experience: 300,
+    lifes: 3,
+    heroes: [
+      {
+        id: "maya",
+        name: "Maya",
+        image: "../img/maya_spells.png",
+      },
+      {
+        id: "tara",
+        name: "Tara",
+        image: "../img/tara_spells.png",
+      },
+    ],
+    resources: [
+      { id: "iron", name: "Iron", image: "../", commonality: 5, quantity: 1 },
+    ],
+  },
+  adventures: [],
+  heroes: [],
+};
+
+const context = {
+  adventure: null,
+  setAdventure: jest.fn(),
+  story: null,
+  setStory: jest.fn(),
+  gameState: gameState,
+  setGameState: jest.fn(),
+  backToMain: jest.fn(),
+  backToStory: jest.fn(),
+};
 
 test("Renders Heroes screen with characters ready for a dialogue", () => {
-  render(<Spells heroes={heroes} spells={spells} />);
+  render(
+    <GameContext.Provider value={context}>
+      <Spells />
+    </GameContext.Provider>
+  );
   expect(screen.getByAltText("image_base_spells")).toBeInTheDocument();
   expect(screen.getByAltText("image_maya_spells")).toBeInTheDocument();
   expect(screen.getByAltText("image_tara_spells")).toBeInTheDocument();

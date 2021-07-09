@@ -16,7 +16,8 @@
     "quantity": 2,
     "character": null,
     "element": null,
-    "image": "../img/Spells/spell2.jpg"
+    "image": "../img/Spells/spell2.jpg",
+    "selected": true
   },
   {
     "id": "base_hit3_maya",
@@ -25,7 +26,8 @@
     "quantity": 1,
     "character": "maya",
     "element": "earth",
-    "image": "../img/Spells/spell3.jpg"
+    "image": "../img/Spells/spell3.jpg",
+    "selected": true
   },
   {
     "id": "base_hit1",
@@ -43,7 +45,8 @@
     "quantity": 1,
     "character": "maya",
     "element": "earth",
-    "image": "../img/Spells/spell5.jpg"
+    "image": "../img/Spells/spell5.jpg",
+    "selected": true
   },
   {
     "id": "base_hit2",
@@ -81,7 +84,8 @@
     "quantity": 1,
     "character": "tara",
     "element": "metal",
-    "image": "../img/Spells/spell9.jpg"
+    "image": "../img/Spells/spell9.jpg",
+    "selected": true
   },
   {
     "id": "base_hit3_tara",
@@ -90,6 +94,7 @@
     "quantity": 1,
     "character": "tara",
     "element": "metal",
-    "image": "../img/Spells/spell10.jpg"
+    "image": "../img/Spells/spell10.jpg",
+    "selected": true
   }
 ]

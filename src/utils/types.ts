@@ -1,20 +1,11 @@
-export interface Card {
-  id: string;
-  image: string;
-  name: string;
-  strength: number;
-  quantity: number;
-  character: null | string;
-  element: null | string;
-  selected: boolean;
-}
-
 export interface Spell {
   id: string;
   image: string;
   name: string;
   strength: number;
   character: null | string;
+  quantity: number;
+  selected: boolean;
   element: null | string;
   owner: "hero" | "enemy";
 }
@@ -22,7 +13,7 @@ export interface Spell {
 export type OwnedResource = Resource & { quantity: number };
 export interface Player {
   id: number;
-  cards: Card[];
+  cards: Spell[];
   experience: number;
   lifes: number;
   resources: OwnedResource[];
@@ -67,7 +58,7 @@ export interface Enemy {
   element: string;
   // exp defines how hard this enemy to kill
   experience: enemyExpLevel;
-  cards: Card[];
+  cards: Spell[];
   // defines how many cards enemy is given
   life: number;
 }

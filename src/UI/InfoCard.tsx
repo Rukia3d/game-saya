@@ -1,13 +1,12 @@
 import React from "react";
-import { Enemy, Spell } from "../utils/types";
 import "./InfoCard.css";
 
 export const InfoCard = ({
   item,
   setInfo,
 }: {
-  item: null | Spell | Enemy;
-  setInfo: (s: Spell | Enemy | null) => void;
+  item: any;
+  setInfo: (s: any) => void;
 }) => {
   return (
     <div

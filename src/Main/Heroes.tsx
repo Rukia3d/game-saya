@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useContext } from "react";
 import "./Heroes.css";
 import { Character } from "../utils/types";
+import { GameContext } from "../App";
 
 const HeroIcon = ({ hero }: { hero: Character }) => {
   const stateToImage = `../img/${hero.id}_${hero.state}.jpg`;
@@ -14,7 +15,12 @@ const HeroIcon = ({ hero }: { hero: Character }) => {
   );
 };
 
-export const Heroes = ({ characters }: { characters: Character[] }) => {
+export const Heroes = () => {
+  const context = useContext(GameContext);
+  if (!context || !context.gameState) {
+    throw new Error("No data");
+  }
+  const characters = context.gameState.sceneCharacters;
   const activeHeroes = characters.filter((c: Character) => c.state);
   return (
     <div className="Heroes">
