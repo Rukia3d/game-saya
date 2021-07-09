@@ -13,7 +13,7 @@ const SpellPanel = ({
     <div className={image ? "SpellPanel" : "SpellPanel_basic"}>
       <img
         src={image ? image : "../img/base_spells.png"}
-        alt={`image_${character?.id}`}
+        alt={`image_${character ? character.id : "base"}_spells`}
       />
     </div>
   );
