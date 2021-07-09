@@ -8,7 +8,10 @@ const playerCards = require("../src/data/heroCards.json");
 app.get("/api/player/", (req, res) => {
     console.log("Requesting player game data");
     const gameState = {
-        sceneCharacters: [{ id: "maya", image: "../img/maya.png", state: "dial1" }],
+        sceneCharacters: [
+          { id: "maya", name: "Maya", image: "../img/maya.png", state: "story" },
+          {id: "tara", name: "Tara", image:"../img/tara.png", state: "story"}
+        ],
         player: { 
           id: 1, 
           cards: playerCards, 

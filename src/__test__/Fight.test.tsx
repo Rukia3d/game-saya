@@ -21,6 +21,7 @@ const gameState = {
     cards: playerCards,
     experience: 300,
     lifes: 3,
+    heroes: [],
     resources: [
       { id: "iron", name: "Iron", image: "../", commonality: 5, quantity: 1 },
     ],

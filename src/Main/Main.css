@@ -65,24 +65,6 @@ h2 {
   background-repeat: no-repeat;
 }
 
-.Heroes {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  border: 5px solid green;
-  width: 100%;
-  height: 100%;
-}
-
-.HeroesList {
-  display: flex;
-  flex-direction: row;
-}
-
-.Hero {
-  height: 300px;
-}
-
 .MainMenu {
   position: absolute;
   bottom: 0;

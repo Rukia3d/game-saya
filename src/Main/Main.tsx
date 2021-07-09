@@ -11,23 +11,9 @@ import {
   GameState,
   Resource,
 } from "../utils/types";
+import { Heroes } from "./Heroes";
 
 type mainScreenState = "heroes" | "adventures" | "spells" | "college";
-
-const Heroes = ({ characters }: { characters: Character[] }) => {
-  return (
-    <div className="Heroes">
-      <h2>Your Heroes</h2>
-      <div className="HeroesList">
-        {characters.map((c: Character, i: number) => (
-          <div key={i} onClick={() => console.log("hero clicked")}>
-            <img className="Hero" src={c.image} alt={`hero_${c.id}`} />
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-};
 
 const Adventures = ({
   adventures,
