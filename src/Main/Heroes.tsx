@@ -21,9 +21,12 @@ export const Heroes = ({ characters }: { characters: Character[] }) => {
       <h2>Your Heroes</h2>
       <div className="HeroesPresent">
         {characters.map((c: Character, i: number) => (
-          <div key={i}>
-            <img className="HeroImage" src={c.image} alt={`hero_${c.id}`} />
-          </div>
+          <img
+            className="HeroImage"
+            src={c.image}
+            alt={`hero_${c.id}`}
+            key={i}
+          />
         ))}
         <div className="HeroesActive">
           {activeHeroes.length > 0

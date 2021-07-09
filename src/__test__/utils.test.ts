@@ -30,6 +30,8 @@ const cards = [
     quantity: 2,
     character: null,
     element: null,
+    image: "../img/Spells/spell2.jpg",
+    selected: true,
   },
   {
     id: "base_hit1_tara",
@@ -38,6 +40,8 @@ const cards = [
     quantity: 1,
     character: "tara",
     element: "metal",
+    image: "../img/Spells/spell2.jpg",
+    selected: true,
   },
   {
     id: "base_hit1_tara",
@@ -46,6 +50,8 @@ const cards = [
     quantity: 1,
     character: "maya",
     element: "earrth",
+    image: "../img/Spells/spell2.jpg",
+    selected: true,
   },
 ];
 const enemy = {
@@ -87,12 +93,13 @@ test("updateHeroDeck shuffles if there are no cards left", () => {
   expect(newDrop.length).toEqual(1);
 });
 
-test.only("updateWinPlayer assigns rewards correctly", () => {
+test("updateWinPlayer assigns rewards correctly", () => {
   const player = {
     id: 1,
     cards: [],
     experience: 300,
     lifes: 3,
+    heroes: [],
     resources: [
       { id: "gold", name: "Gold", image: "../", commonality: 2, quantity: 0 },
       { id: "iron", name: "Iron", image: "../", commonality: 5, quantity: 0 },

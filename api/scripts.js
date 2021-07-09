@@ -40,10 +40,19 @@ app.get("/api/player/", (req, res) => {
         },
         adventures: [
           {
+            id: "character",
+            name: "Character",
+            image: "character.jpg",
+            state: "closed",
+            form: "character",
+            stories: [],
+          },
+          {
             id: "story",
             name: "Act 1",
-            image: "../img/storyline.png",
+            image: "story.jpg",
             state: "open",
+            form: "story",
             stories: [
               {
                 id: "fight1",
@@ -80,8 +89,25 @@ app.get("/api/player/", (req, res) => {
           {
             id: "arena",
             name: "Arena",
-            image: "../img/devastation.png",
+            image: "arena.jpg",
             state: "closed",
+            form: "arena",
+            stories: [],
+          },
+          {
+            id: "torunament",
+            name: "Tournament",
+            image: "tournament.jpg",
+            state: "closed",
+            form: "torunament",
+            stories: [],
+          },
+          {
+            id: "event",
+            name: "Event",
+            image: "event.jpg",
+            state: "closed",
+            form: "event",
             stories: [],
           },
         ]

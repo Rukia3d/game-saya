@@ -4,88 +4,12 @@ import "./Main.css";
 import { Settings } from "../UI/Settings";
 import { SettingsButton } from "../UI/SettingsButton";
 
-import {
-  Adventure,
-  Card,
-  Character,
-  GameState,
-  Resource,
-} from "../utils/types";
+import { Adventure, Card, GameState, Resource } from "../utils/types";
 import { Heroes } from "./Heroes";
+import { Adventures } from "./Adventures";
+import { Spells } from "./Spells";
 
 type mainScreenState = "heroes" | "adventures" | "spells" | "college";
-
-const Adventures = ({
-  adventures,
-  setAdventure,
-}: {
-  adventures: Adventure[];
-  setAdventure: (a: Adventure) => void;
-}) => {
-  const selectAdventure = (a: Adventure) => {
-    if (a.state === "open") {
-      setAdventure(a);
-    }
-  };
-  return (
-    <div className="Adventures">
-      <h2>Your Adventures</h2>
-      <div className="AdventuresList">
-        {adventures.map((a: Adventure, i: number) => (
-          <div key={i} onClick={() => selectAdventure(a)}>
-            <img
-              className="Adventure"
-              style={{ opacity: a.state === "closed" ? 0.5 : 1 }}
-              src={a.image}
-              alt={`adventure_${a.id}`}
-            />
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-};
-
-const SpellPanel = ({
-  character,
-  image,
-}: {
-  character: Character | null;
-  image: string | null;
-}) => {
-  return (
-    <div className="SpellPanel" style={{ backgroundImage: `url("${image}")` }}>
-      {character ? character.name : "Base"}
-    </div>
-  );
-};
-
-const Spells = ({
-  spells,
-  heroes,
-}: {
-  spells: Card[];
-  heroes: Character[];
-}) => {
-  const characters = spells
-    .map((s: Card) => s.character)
-    .filter((v: any, i: any, a: any) => a.indexOf(v) === i && v);
-  return (
-    <div className="Spells">
-      <h2>Your Spells</h2>
-      <div className="SpellsList">
-        <SpellPanel character={null} image={"../img/base_spells.png"} />
-        {characters.sort().map((s: string | null, i: number) => (
-          <SpellPanel
-            key={i}
-            character={heroes.find((h: Character) => h.id === s) || null}
-            image={heroes.find((h: Character) => h.id === s)?.image || null}
-          />
-        ))}
-      </div>
-    </div>
-  );
-};
 
 const College = ({
   spells,

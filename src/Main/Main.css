@@ -10,14 +10,6 @@ h2 {
   margin: 0;
 }
 
-.Spells {
-  display: flex;
-  flex-direction: row;
-  border: 5px solid yellow;
-  width: 100%;
-  height: 100%;
-}
-
 .College {
   display: flex;
   flex-direction: row;
@@ -26,46 +18,8 @@ h2 {
   height: 100%;
 }
 
-.Adventures {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 100%;
-}
-
-.AdventuresList {
-  display: flex;
-  flex-direction: row;
-}
-
-.Adventure {
-  height: 300px;
-  padding: 1em;
-}
-
-.Spells {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 100%;
-}
-
-.SpellsList {
-  display: flex;
-  flex-direction: row;
-}
-
-.SpellPanel {
-  margin-right: 1em;
-  margin-left: 1em;
-  color: white;
-  height: 300px;
-  padding: 1em;
-  background-position: center;
-  background-repeat: no-repeat;
-}
-
 .MainMenu {
   position: absolute;
   bottom: 0;
+  z-index: 50;
 }

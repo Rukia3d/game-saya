@@ -99,7 +99,7 @@ test("Renders Adventures screen with all available adventures", async () => {
   // Active and inactive adventures have different opacity
   expect(screen.getByAltText("adventure_story")).toHaveAttribute(
     "src",
-    expect.stringContaining("storyline.png")
+    expect.stringContaining("story")
   );
   expect(screen.getByAltText("adventure_story")).toHaveAttribute(
     "style",
@@ -107,7 +107,7 @@ test("Renders Adventures screen with all available adventures", async () => {
   );
   expect(screen.getByAltText("adventure_arena")).toHaveAttribute(
     "src",
-    expect.stringContaining("devastation.png")
+    expect.stringContaining("arena")
   );
   expect(screen.getByAltText("adventure_arena")).toHaveAttribute(
     "style",

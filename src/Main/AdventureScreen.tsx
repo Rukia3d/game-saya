@@ -23,6 +23,9 @@ export const AdventureScreen = ({
       setStory(s);
     }
   };
+  if (!adventure.stories) {
+    return <div>No stories</div>;
+  }
   return (
     <div className="Stories">
       <CloseButton onClick={clearScreen} />

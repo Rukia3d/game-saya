@@ -38,10 +38,11 @@ export interface Character {
 
 export interface Adventure {
   id: string;
+  form: string;
   name: string;
   image: string;
   state: "open" | "closed";
-  stories: Story[];
+  stories?: Story[];
 }
 
 export interface Story {
