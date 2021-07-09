@@ -56,8 +56,13 @@ h2 {
 }
 
 .SpellPanel {
+  margin-right: 1em;
+  margin-left: 1em;
+  color: white;
   height: 300px;
   padding: 1em;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 .Heroes {

@@ -5,7 +5,9 @@
     "strength": 1,
     "quantity": 1,
     "character": "maya",
-    "element": "earth"
+    "element": "earth",
+    "image": "../img/Spells/spell1.jpg",
+    "selected": true
   },
   {
     "id": "base_hit2",
@@ -13,7 +15,8 @@
     "strength": 2,
     "quantity": 2,
     "character": null,
-    "element": null
+    "element": null,
+    "image": "../img/Spells/spell2.jpg"
   },
   {
     "id": "base_hit3_maya",
@@ -21,7 +24,8 @@
     "strength": 3,
     "quantity": 1,
     "character": "maya",
-    "element": "earth"
+    "element": "earth",
+    "image": "../img/Spells/spell3.jpg"
   },
   {
     "id": "base_hit1",
@@ -29,7 +33,8 @@
     "strength": 1,
     "quantity": 3,
     "character": null,
-    "element": null
+    "element": null,
+    "image": "../img/Spells/spell4.jpg"
   },
   {
     "id": "base_hit2_maya",
@@ -37,7 +42,8 @@
     "strength": 2,
     "quantity": 1,
     "character": "maya",
-    "element": "earth"
+    "element": "earth",
+    "image": "../img/Spells/spell5.jpg"
   },
   {
     "id": "base_hit2",
@@ -45,7 +51,8 @@
     "strength": 2,
     "quantity": 2,
     "character": null,
-    "element": null
+    "element": null,
+    "image": "../img/Spells/spell6.jpg"
   },
   {
     "id": "base_hit3",
@@ -53,7 +60,9 @@
     "strength": 3,
     "quantity": 1,
     "character": null,
-    "element": null
+    "element": null,
+    "image": "../img/Spells/spell7.jpg",
+    "selected": true
   },
   {
     "id": "base_hit1_tara",
@@ -61,7 +70,9 @@
     "strength": 1,
     "quantity": 1,
     "character": "tara",
-    "element": "metal"
+    "element": "metal",
+    "image": "../img/Spells/spell8.jpg",
+    "selected": true
   },
   {
     "id": "base_hit2_tara",
@@ -69,7 +80,8 @@
     "strength": 2,
     "quantity": 1,
     "character": "tara",
-    "element": "metal"
+    "element": "metal",
+    "image": "../img/Spells/spell9.jpg"
   },
   {
     "id": "base_hit3_tara",
@@ -77,6 +89,7 @@
     "strength": 3,
     "quantity": 1,
     "character": "tara",
-    "element": "metal"
+    "element": "metal",
+    "image": "../img/Spells/spell10.jpg"
   }
 ]

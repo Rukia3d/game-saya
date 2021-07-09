@@ -74,6 +74,13 @@ const BigCard = ({
       <p>{card.name}</p>
       <p>Belongs to {card.owner}</p>
       <p>
+        <img
+          className="BigCardImage"
+          src={card.image}
+          alt={`spellimage_${card.id}`}
+        />
+      </p>
+      <p>
         <button onClick={() => setInfo(card)}>Info</button>
       </p>
     </div>

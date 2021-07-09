@@ -12,7 +12,8 @@
         "strength": 1,
         "quantity": 1,
         "character": null,
-        "element": null
+        "element": null,
+        "image": "../img/Spells/spell11.jpg"
       },
       {
         "id": "base_hit2",
@@ -20,7 +21,8 @@
         "strength": 2,
         "quantity": 1,
         "character": null,
-        "element": null
+        "element": null,
+        "image": "../img/Spells/spell13.jpg"
       },
       {
         "id": "base_hit3",
@@ -28,7 +30,8 @@
         "strength": 3,
         "quantity": 1,
         "character": null,
-        "element": null
+        "element": null,
+        "image": "../img/Spells/spell12.jpg"
       }
     ]
   },
@@ -45,7 +48,8 @@
         "strength": 1,
         "quantity": 1,
         "character": null,
-        "element": null
+        "element": null,
+        "image": "../img/Spells/spell11.jpg"
       }
     ]
   }

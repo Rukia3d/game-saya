@@ -18,12 +18,12 @@ app.get("/api/player/", (req, res) => {
             {  
               id: "maya",
               name: "Maya",
-              image: "../img/maya.png",
+              image: "../img/maya_spells.png",
             }, 
             {  
               id: "tara",
               name: "Tara",
-              image: "../img/maya.png",
+              image: "../img/tara_spells.png",
             }
           ],
           resources: [

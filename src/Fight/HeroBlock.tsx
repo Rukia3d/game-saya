@@ -16,7 +16,12 @@ const HeroSpell = ({
         aria-label="spell_card"
         onClick={() => selectCard(card)}
       >
-        {card.name}
+        <p>{card.name}</p>
+        <img
+          className="SmallCardImage"
+          src={card.image}
+          alt={`spellimage_${card.id}`}
+        />
       </div>
     </div>
   );

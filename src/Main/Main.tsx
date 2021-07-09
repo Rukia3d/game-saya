@@ -60,9 +60,17 @@ const Adventures = ({
   );
 };
 
-const SpellPanel = ({ character }: { character: Character | null }) => {
+const SpellPanel = ({
+  character,
+  image,
+}: {
+  character: Character | null;
+  image: string | null;
+}) => {
   return (
-    <div className="SpellPanel">{character ? character.name : "Base"}</div>
+    <div className="SpellPanel" style={{ backgroundImage: `url("${image}")` }}>
+      {character ? character.name : "Base"}
+    </div>
   );
 };
 
@@ -80,11 +88,12 @@ const Spells = ({
     <div className="Spells">
       <h2>Your Spells</h2>
       <div className="SpellsList">
-        <SpellPanel character={null} />
+        <SpellPanel character={null} image={"../img/base_spells.png"} />
         {characters.sort().map((s: string | null, i: number) => (
           <SpellPanel
             key={i}
             character={heroes.find((h: Character) => h.id === s) || null}
+            image={heroes.find((h: Character) => h.id === s)?.image || null}
           />
         ))}
       </div>

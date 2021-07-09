@@ -22,6 +22,7 @@ export const generateDeck = (
       }
       heroSpells.push({
         id: c.id,
+        image: c.image,
         name: c.name,
         strength: c.strength,
         character: c.character,
@@ -39,6 +40,7 @@ export const generateEnemyDeck = (enemy: Enemy): Spell[] => {
     for (let i = 0; i < c.quantity; i++) {
       enemySpells.push({
         id: c.id,
+        image: c.image,
         name: c.name,
         strength: c.strength,
         character: c.character,
