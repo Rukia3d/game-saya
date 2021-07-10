@@ -5,7 +5,7 @@ import "./App.css";
 import { Fight } from "./Fight/Fight";
 import { Main } from "./Main/Main";
 import { Start } from "./Main/Start";
-import { AdventureScreen } from "./Main/AdventureScreen";
+import { Stories } from "./Main/Stories";
 
 import { fetcher } from "./utils/helpers";
 import { Adventure, GameState, Story } from "./utils/types";
@@ -69,7 +69,7 @@ function App() {
     <GameContext.Provider value={context}>
       <div className="App">
         {showStart ? <Start setShowStart={setShowStart} /> : <Main />}
-        {adventure ? <AdventureScreen /> : null}
+        {adventure ? <Stories /> : null}
         {story ? <Fight /> : null}
       </div>
     </GameContext.Provider>

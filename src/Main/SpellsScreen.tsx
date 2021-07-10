@@ -1,5 +1,5 @@
 import React from "react";
-import "./AdventureScreen.css";
+import "./SpellsScreen.css";
 
 import { CloseButton } from "../UI/CloseButton";
 

@@ -1,12 +1,12 @@
 import React, { useContext } from "react";
-import "./AdventureScreen.css";
+import "./Stories.css";
 
 import { CloseButton } from "../UI/CloseButton";
 
 import { GameContext } from "../App";
 import { Story } from "../utils/types";
 
-export const AdventureScreen = () => {
+export const Stories = () => {
   const context = useContext(GameContext);
   if (
     !context ||
