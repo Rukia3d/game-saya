@@ -5,13 +5,15 @@ import "./Adventures.css";
 
 const AdventureImage = ({ adventure }: { adventure: Adventure }) => {
   return (
-    <div className={`Adventure_${adventure.form}`}>
-      <div className="AdventureName">{adventure.name}</div>
-      <img
-        style={{ opacity: adventure.state === "closed" ? 0.5 : 1 }}
-        src={`../img/Adventures/${adventure.image}`}
-        alt={`adventure_${adventure.id}`}
-      ></img>
+    <div className={`Adventure_${adventure.form}_border`}>
+      <div className={`Adventure_${adventure.form}`}>
+        <div className="AdventureName">{adventure.name}</div>
+        <img
+          style={{ opacity: adventure.state === "closed" ? 0.5 : 1 }}
+          src={`../img/Adventures/${adventure.image}`}
+          alt={`adventure_${adventure.id}`}
+        ></img>
+      </div>
     </div>
   );
 };

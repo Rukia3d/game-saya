@@ -51,10 +51,11 @@ export interface Adventure {
 export interface Story {
   type: "dialogue" | "fight";
   id: string;
+  name?: string;
   image: string;
   state: "open" | "closed";
   enemy?: string;
-  characters: string[];
+  characters?: string[];
 }
 
 export interface GameState {

@@ -133,18 +133,18 @@ test("Renders Story screen and loads the story", async () => {
   userEvent.click(screen.getByRole("button", { name: "PLAY" }));
   userEvent.click(screen.getByText("ADVENTURES"));
   userEvent.click(screen.getByAltText("adventure_story"));
-  expect(screen.getByAltText("story_fight1")).toHaveAttribute(
-    "src",
-    expect.stringContaining("arena_1.png")
-  );
-  expect(screen.getByAltText("story_dial1")).toHaveAttribute(
+  expect(screen.getByAltText("story_c1_dialogue1")).toHaveAttribute(
     "src",
     expect.stringContaining("dialogue_1.png")
   );
+  expect(screen.getByAltText("story_c1_f_gates")).toHaveAttribute(
+    "src",
+    expect.stringContaining("arena_1.png")
+  );
 
   // Click on inactive panel doesn't have an effect
-  userEvent.click(screen.getByAltText("story_fight2"));
+  userEvent.click(screen.getByAltText("story_c1_dialogue1"));
   expect(screen.queryByText(/Your opponent/)).not.toBeInTheDocument();
-  userEvent.click(screen.getByAltText("story_fight1"));
+  userEvent.click(screen.getByAltText("story_c1_f_gates"));
   expect(screen.queryByText(/Your opponent/)).toBeInTheDocument();
 });

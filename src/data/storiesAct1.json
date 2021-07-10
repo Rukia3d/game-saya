@@ -1,0 +1,128 @@
+[
+  {
+    "id": "c1_dialogue1",
+    "type": "dialogue",
+    "image": "../img/dialogue_1.png",
+    "state": "open"
+  },
+  {
+    "id": "c1_dialogue2",
+    "type": "dialogue",
+    "image": "../img/dialogue_1.png",
+    "state": "open"
+  },
+  {
+    "id": "c1_f_gates",
+    "type": "fight",
+    "image": "../img/arena_1.png",
+    "enemy": "dude",
+    "state": "open",
+    "characters": ["maya", "tara"],
+    "name": "Ormron Gates"
+  },
+  {
+    "id": "c1_dialogue3",
+    "type": "dialogue",
+    "state": "open",
+    "image": "../img/dialogue_1.png"
+  },
+  {
+    "id": "c1_f_road",
+    "type": "fight",
+    "image": "../img/arena_1.png",
+    "enemy": "dude",
+    "state": "open",
+    "characters": ["maya", "tara"],
+    "name": "Old Road"
+  },
+  {
+    "id": "c1_f_bridge",
+    "type": "fight",
+    "image": "../img/arena_1.png",
+    "enemy": "dude",
+    "state": "open",
+    "characters": ["maya", "tara"],
+    "name": "Broken Bridge"
+  },
+  {
+    "id": "c1_dialogue4",
+    "type": "dialogue",
+    "image": "../img/dialogue_1.png",
+    "state": "closed"
+  },
+  {
+    "name": "To the Desert",
+    "type": "fight",
+    "image": "../img/arena_1.png",
+    "enemy": "dude",
+    "state": "closed",
+    "characters": ["maya", "tara"],
+    "id": "c1_f_desert"
+  },
+  {
+    "name": "Stone Plateau",
+    "type": "fight",
+    "image": "../img/arena_1.png",
+    "enemy": "dude",
+    "state": "closed",
+    "characters": ["maya", "tara"],
+    "id": "c1_f_plateau"
+  },
+  {
+    "name": "To the Waterhole",
+    "type": "fight",
+    "image": "../img/arena_1.png",
+    "enemy": "dude",
+    "state": "closed",
+    "characters": ["maya", "tara"],
+    "id": "c1_f_water"
+  },
+  {
+    "id": "c1_dialogue5",
+    "type": "dialogue",
+    "image": "../img/dialogue_1.png",
+    "state": "closed"
+  },
+  {
+    "name": "Elders road",
+    "type": "fight",
+    "image": "../img/arena_1.png",
+    "enemy": "dude",
+    "state": "closed",
+    "characters": ["maya", "tara"],
+    "id": "c1_f_elders"
+  },
+  {
+    "id": "c1_dialogue6",
+    "type": "dialogue",
+    "image": "../img/dialogue_1.png",
+    "state": "closed"
+  },
+  {
+    "name": "Limestone Path",
+    "type": "fight",
+    "image": "../img/arena_1.png",
+    "enemy": "dude",
+    "state": "closed",
+    "characters": ["maya", "tara"],
+    "id": "c1_f_limestone"
+  },
+  {
+    "name": "Salt Caves",
+    "type": "fight",
+    "image": "../img/arena_1.png",
+    "enemy": "dude",
+    "state": "closed",
+    "characters": ["maya", "tara"],
+    "id": "c1_f_salt"
+  },
+  {
+    "name": "Rose Lake (Dried)",
+    "type": "fight",
+    "image": "../img/arena_1.png",
+    "enemy": "dude",
+    "state": "closed",
+    "characters": ["maya", "tara"],
+    "id": "c1_f_lake1"
+  }
+]

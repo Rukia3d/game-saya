@@ -5,6 +5,7 @@ const port = 3001;
 app.use(cors());
 const playerCards = require("../src/data/heroCards.json");
 const dialogues = require("../src/data/dialogues.json");
+const stories = require("../src/data/storiesAct1.json");
 
 app.get("/api/player/", (req, res) => {
     console.log("Requesting player game data");
@@ -55,38 +56,7 @@ app.get("/api/player/", (req, res) => {
             image: "story.jpg",
             state: "open",
             form: "story",
-            stories: [
-              {
-                id: "fight1",
-                type: "fight",
-                image: "../img/arena_1.png",
-                enemy: "dude",
-                state: "open",
-                characters: ["maya", "tara"],
-              },
-              {
-                id: "dial1",
-                type: "dialogue",
-                image: "../img/dialogue_1.png",
-                state: "open",
-                characters: ["maya"],
-              },
-              {
-                id: "fight2",
-                type: "fight",
-                image: "../img/arena_1.png",
-                enemy: "dude",
-                state: "closed",
-                characters: ["maya", "tara"],
-              },
-              {
-                id: "dial2",
-                type: "dialogue",
-                image: "../img/dialogue_1.png",
-                state: "closed",
-                characters: ["maya"],
-              },
-            ],
+            stories: stories
           },
           {
             id: "arena",

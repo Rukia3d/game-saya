@@ -19,7 +19,7 @@
   left: 1em;
   height: 50%;
   width: 20%;
-  border: 1px solid black;
+  border: 5px solid black;
   z-index: 1;
 }
 
@@ -29,7 +29,7 @@
   width: 100%;
 }
 
-img {
+.Adventures img {
   width: 100%;
   height: 100%;
   z-index: 1;
@@ -37,41 +37,52 @@ img {
 }
 
 .Adventure_story {
+  object-fit: cover;
+  height: 100%;
+}
+.Adventure_arena {
+  object-fit: cover;
+  height: 100%;
+}
+
+.Adventure_story_border {
   position: absolute;
-  top: 2em;
+  padding: 0.5em;
+  top: 10%;
   width: 70%;
   height: 35%;
   clip-path: polygon(0 0, 100% 0, 100% 45%, 0% 100%);
-  border: 1px solid black;
-  object-fit: cover;
+  background-color: black;
 }
 
-.Adventure_story .AdventureName {
+.Adventure_arena_border {
   position: absolute;
-  width: 50%;
-  top: 0;
-  right: 0;
-}
-
-.Adventure_arena {
-  position: absolute;
+  padding: 0.5em;
+  padding-top: 0;
   top: 30%;
-  border: 1px solid black;
   width: 70%;
   height: 30%;
   clip-path: polygon(0 65%, 100% 0, 100% 100%, 0% 100%);
-  object-fit: cover;
+  background-color: black;
 }
 
 .Adventure_arena .AdventureName {
   position: absolute;
+  padding: 1em;
   width: 50%;
   bottom: 0;
   right: 0;
 }
 
+.Adventure_story .AdventureName {
+  padding: 1em;
+  position: absolute;
+  width: 50%;
+  top: 0;
+  right: 0;
+}
 .Adventure_torunament {
-  border: 1px solid black;
+  border: 0.5em solid black;
   position: absolute;
   top: 65%;
   bottom: 0;
@@ -85,7 +96,7 @@ img {
   top: 2em;
   right: 1em;
   height: 90%;
-  border: 1px solid black;
+  border: 0.5em solid black;
   width: 25%;
   object-fit: cover;
 }
