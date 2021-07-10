@@ -109,9 +109,13 @@ export const Fight = () => {
     throw new Error("No enemy for this fight, something went very wrong");
   }
 
+  const storyCharacters = context.story.characters;
+  if (!storyCharacters) {
+    throw new Error("No characters for this fight, something went very wrong");
+  }
   const enemy: Enemy = enemies.find((e: any) => e.id === enemyId);
   const heroDeck = generateDeck(
-    context.story.characters,
+    storyCharacters,
     context.gameState.player.cards
   ); //shuffle(generateDeck());
   const enemyDeck = generateEnemyDeck(enemy); //shuffle(generateEnemyDeck());

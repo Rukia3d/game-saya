@@ -45,7 +45,12 @@ export interface Adventure {
   name: string;
   image: string;
   state: "open" | "closed";
-  stories?: Story[];
+  stories?: StoryGroup[];
+}
+
+export interface StoryGroup {
+  stories: Story[];
+  group: number;
 }
 
 export interface Story {

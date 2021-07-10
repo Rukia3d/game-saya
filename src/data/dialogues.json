@@ -4,7 +4,16 @@
     "lines": [
       {
         "character": "maya",
-        "text": "I need to find a teammate for the finals!"
+        "text": "I need to talk to Olija about the finals! It will al be a big adventure!"
+      }
+    ]
+  },
+  {
+    "id": "tara_replic1",
+    "lines": [
+      {
+        "character": "tara",
+        "text": "What do you need?"
       }
     ]
   },

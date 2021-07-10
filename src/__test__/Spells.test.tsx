@@ -87,6 +87,8 @@ const context = {
   setStory: jest.fn(),
   gameState: gameState,
   setGameState: jest.fn(),
+  dialogue: null,
+  setDialogue: jest.fn(),
   backToMain: jest.fn(),
   backToStory: jest.fn(),
 };

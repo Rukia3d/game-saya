@@ -2,21 +2,87 @@
   position: absolute;
   top: 0;
   left: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   background-color: white;
   width: 100%;
   height: 100%;
   z-index: 100;
+  overflow: hidden;
 }
 
 .StoriesList {
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: row;
+  overflow: hidden;
 }
 
-.Story {
-  height: 300px;
-  padding: 1em;
+.StoriesList img {
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  object-fit: cover;
+}
+
+.StoryGroup_1,
+.StoryGroup_2 {
+  width: 50%;
+  height: 85%;
+  position: relative;
+  margin-right: 0.5em;
+  margin-left: 0.5em;
+}
+
+.StoryGroup_1 .Story1 {
+  background-color: red;
+  position: absolute;
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 50%);
+  width: 100%;
+  height: 60%;
+}
+
+.StoryGroup_1 .Story2 {
+  background-color: blue;
+  position: absolute;
+  bottom: 0;
+  clip-path: polygon(0 0, 100% 20%, 100% 100%, 0 100%);
+  width: 40%;
+  height: 65%;
+}
+
+.StoryGroup_1 .Story3 {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  background-color: green;
+  clip-path: polygon(0 0, 100% 30%, 100% 100%, 0 100%);
+  width: 55%;
+  height: 50%;
+}
+
+.StoryGroup_2 .Story1 {
+  background-color: yellow;
+  position: absolute;
+  height: 100%;
+  width: 40%;
+  clip-path: polygon(0 0, 100% 0, 100% 55%, 0 100%);
+}
+
+.StoryGroup_2 .Story2 {
+  background-color: aqua;
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 55%;
+  width: 55%;
+}
+
+.StoryGroup_2 .Story3 {
+  background-color: pink;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  height: 40%;
+  width: 95%;
+  clip-path: polygon(40% 0, 100% 0, 100% 100%, 0 100%);
 }

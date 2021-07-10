@@ -3,12 +3,13 @@ import useSWR from "swr";
 import "./App.css";
 
 import { Fight } from "./Fight/Fight";
+import { Dialogues } from "./Main/Dialogues";
 import { Main } from "./Main/Main";
 import { Start } from "./Main/Start";
 import { Stories } from "./Main/Stories";
 
 import { fetcher } from "./utils/helpers";
-import { Adventure, GameState, Story } from "./utils/types";
+import { Adventure, Dialogue, GameState, Story } from "./utils/types";
 
 interface GameContextType {
   adventure: Adventure | null;
@@ -17,6 +18,8 @@ interface GameContextType {
   setStory: (s: Story) => void;
   gameState: GameState | null;
   setGameState: (g: GameState) => void;
+  dialogue: Dialogue | null;
+  setDialogue: (d: Dialogue) => void;
   backToMain: () => void;
   backToStory: () => void;
 }
@@ -31,6 +34,7 @@ function App() {
   const [adventure, setAdventure] = useState<null | Adventure>(null);
   const [story, setStory] = useState<null | Story>(null);
   const [gameState, setGameState] = useState<GameState>(data);
+  const [dialogue, setDialogue] = useState<null | Dialogue>(null);
 
   useEffect(() => {
     setGameState(data);
@@ -52,6 +56,8 @@ function App() {
     setStory: setStory,
     gameState: gameState,
     setGameState: setGameState,
+    dialogue: dialogue,
+    setDialogue: setDialogue,
     backToMain: backToMain,
     backToStory: backToStory,
   };
@@ -71,6 +77,7 @@ function App() {
         {showStart ? <Start setShowStart={setShowStart} /> : <Main />}
         {adventure ? <Stories /> : null}
         {story ? <Fight /> : null}
+        {dialogue ? <Dialogues /> : null}
       </div>
     </GameContext.Provider>
   );

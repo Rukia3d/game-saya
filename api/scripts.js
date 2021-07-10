@@ -11,8 +11,8 @@ app.get("/api/player/", (req, res) => {
     console.log("Requesting player game data");
     const gameState = {
         sceneCharacters: [
-          { id: "maya", name: "Maya", image: "../img/maya.png", state: "story", dial: "" },
-          {id: "tara", name: "Tara", image:"../img/tara.png", state: "story", dial: ""}
+          { id: "maya", name: "Maya", image: "../img/maya.png", state: "story", dial: "maya_replic1" },
+          {id: "tara", name: "Tara", image:"../img/tara.png", state: "story", dial: "tara_replic1"}
         ],
         dialogues: dialogues,
         player: { 

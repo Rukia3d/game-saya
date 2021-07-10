@@ -16,22 +16,14 @@ const story = {
 };
 const enemyData = enemies.find((e: any) => e.id === story.enemy);
 const gameState = {
-  sceneCharacters: [
-    { id: "maya", name: "Maya", image: "../img/maya.png", state: "story" },
-  ],
+  sceneCharacters: [],
   dialogues: [],
   player: {
     id: 1,
     cards: playerCards,
     experience: 300,
     lifes: 3,
-    heroes: [
-      {
-        id: "maya",
-        name: "Maya",
-        image: "../img/maya_spells.png",
-      },
-    ],
+    heroes: [],
     resources: [
       { id: "iron", name: "Iron", image: "../", commonality: 5, quantity: 1 },
     ],
@@ -47,6 +39,8 @@ const context = {
   setStory: jest.fn(),
   gameState: gameState,
   setGameState: jest.fn(),
+  dialogue: null,
+  setDialogue: jest.fn(),
   backToMain: jest.fn(),
   backToStory: jest.fn(),
 };

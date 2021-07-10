@@ -4,7 +4,49 @@ import "./Stories.css";
 import { CloseButton } from "../UI/CloseButton";
 
 import { GameContext } from "../App";
-import { Story } from "../utils/types";
+import { Story, StoryGroup } from "../utils/types";
+
+const StoryPanel = ({
+  group,
+  loadStory,
+}: {
+  group: StoryGroup;
+  loadStory: (s: Story) => void;
+}) => {
+  if (group.stories.length !== 3)
+    throw new Error("Number of stories in this panel is incorrect");
+  const story1 = group.stories[0];
+  const story2 = group.stories[1];
+  const story3 = group.stories[2];
+  return (
+    <div className={`StoryGroup_${group.group}`}>
+      <div className="Story1" onClick={() => loadStory(story1)}>
+        <img
+          src={story1.image}
+          alt={`story_${story1.id}`}
+          className="Story"
+          style={{ opacity: story1.state === "closed" ? 0.5 : 1 }}
+        />
+      </div>
+      <div className="Story2" onClick={() => loadStory(story2)}>
+        <img
+          src={story2.image}
+          alt={`story_${story2.id}`}
+          className="Story"
+          style={{ opacity: story2.state === "closed" ? 0.5 : 1 }}
+        />
+      </div>
+      <div className="Story3" onClick={() => loadStory(story3)}>
+        <img
+          src={story3.image}
+          alt={`story_${story3.id}`}
+          className="Story"
+          style={{ opacity: story3.state === "closed" ? 0.5 : 1 }}
+        />
+      </div>
+    </div>
+  );
+};
 
 export const Stories = () => {
   const context = useContext(GameContext);
@@ -34,15 +76,8 @@ export const Stories = () => {
       <CloseButton onClick={context.backToMain} />
       <h2>{context.adventure.name}</h2>
       <div className="StoriesList">
-        {context.adventure.stories.map((s: Story, i: number) => (
-          <div key={i} onClick={() => loadStory(s)}>
-            <img
-              src={s.image}
-              alt={`story_${s.id}`}
-              className="Story"
-              style={{ opacity: s.state === "closed" ? 0.5 : 1 }}
-            />
-          </div>
+        {context.adventure.stories.map((s: StoryGroup, i: number) => (
+          <StoryPanel group={s} loadStory={loadStory} />
         ))}
       </div>
     </div>
