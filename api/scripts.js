@@ -4,14 +4,16 @@ const app = express();
 const port = 3001;
 app.use(cors());
 const playerCards = require("../src/data/heroCards.json");
+const dialogues = require("../src/data/dialogues.json");
 
 app.get("/api/player/", (req, res) => {
     console.log("Requesting player game data");
     const gameState = {
         sceneCharacters: [
-          { id: "maya", name: "Maya", image: "../img/maya.png", state: "story" },
-          {id: "tara", name: "Tara", image:"../img/tara.png", state: "story"}
+          { id: "maya", name: "Maya", image: "../img/maya.png", state: "story", dial: "" },
+          {id: "tara", name: "Tara", image:"../img/tara.png", state: "story", dial: ""}
         ],
+        dialogues: dialogues,
         player: { 
           id: 1, 
           cards: playerCards, 

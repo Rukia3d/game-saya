@@ -24,7 +24,11 @@ export const Heroes = () => {
   const activeHeroes = characters.filter((c: Character) => c.state);
   return (
     <div className="Heroes">
-      <h2>Your Heroes</h2>
+      <img
+        className="HeroesBackground"
+        src="../img/main_hall_background.png"
+        alt="heroes_background"
+      />
       <div className="HeroesPresent">
         {characters.map((c: Character, i: number) => (
           <img

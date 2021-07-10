@@ -10,13 +10,36 @@ html,
   height: 100%;
 }
 
-.CloseButton {
+.SettingsButton {
   position: absolute;
-  background-color: red;
   top: 1em;
   right: 1em;
-  width: 3em;
-  height: 3em;
+  width: 46px;
+  height: 46px;
+  z-index: 50;
+}
+
+.CloseButton {
+  position: absolute;
+  background-color: black;
+  top: 1em;
+  right: 1em;
+  width: 46px;
+  height: 46px;
+  clip-path: polygon(
+    20% 0%,
+    0% 20%,
+    30% 50%,
+    0% 80%,
+    20% 100%,
+    50% 70%,
+    80% 100%,
+    100% 80%,
+    70% 50%,
+    100% 20%,
+    80% 0%,
+    50% 30%
+  );
   z-index: 100;
 }
 

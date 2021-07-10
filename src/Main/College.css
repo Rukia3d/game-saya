@@ -1,0 +1,7 @@
+.College {
+  display: flex;
+  flex-direction: row;
+  border: 5px solid pink;
+  width: 100%;
+  height: 100%;
+}

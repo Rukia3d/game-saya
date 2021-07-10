@@ -45,7 +45,7 @@ test("Renders Heroes screen with characters ready for a dialogue", () => {
       <Heroes />
     </GameContext.Provider>
   );
-  expect(screen.getByText(/Your Heroes/)).toBeInTheDocument();
+  expect(screen.getByAltText("heroes_background")).toBeInTheDocument();
   expect(screen.getByAltText("maya_story")).toBeInTheDocument();
   expect(screen.getByAltText("tara_story")).toBeInTheDocument();
 });

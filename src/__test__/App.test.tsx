@@ -9,8 +9,10 @@ afterEach(() => {
   cache.clear();
 });
 
-const mainMenuActiveColor = "aquamarine";
-const mainMenuInActiveColor = "grey";
+const mainMenuActiveStyle =
+  "background-color: aquamarine; border: 2px solid white;";
+const mainMenuInActiveStyle =
+  "background-color: lightgrey; border: 1px solid black;";
 
 test("Renders App Start Screen", async () => {
   render(<App />);
@@ -34,10 +36,10 @@ test("Main Menu buttons switch works", async () => {
   render(<App />);
   expect(await screen.findByText("PLAY")).toBeInTheDocument();
   userEvent.click(screen.getByRole("button", { name: "PLAY" }));
-  expect(screen.getByText("Your Heroes")).toBeInTheDocument();
-  expect(screen.getByRole("button", { name: "Heroes" })).toHaveAttribute(
+  expect(screen.getByAltText("heroes_background")).toBeInTheDocument();
+  expect(screen.getByText("HEROES")).toHaveAttribute(
     "style",
-    `background-color: ${mainMenuActiveColor};`
+    mainMenuActiveStyle
   );
 });
 
@@ -45,40 +47,45 @@ test("Renders Main screen for existing player with Hero menu active", async () =
   render(<App />);
   expect(await screen.findByText("PLAY")).toBeInTheDocument();
   userEvent.click(screen.getByRole("button", { name: "PLAY" }));
-  expect(screen.getByText("Heroes")).toBeInTheDocument();
-  expect(screen.getByText("Your Heroes")).toBeInTheDocument();
-  expect(screen.getByText("Adventures")).toBeInTheDocument();
-  expect(screen.getByText("Spells")).toBeInTheDocument();
+  expect(screen.getByText("HEROES")).toBeInTheDocument();
+  expect(screen.getByAltText("heroes_background")).toBeInTheDocument();
+  expect(screen.getByText("ADVENTURES")).toBeInTheDocument();
+  expect(screen.getByText("SPELLS")).toBeInTheDocument();
+  expect(screen.getByText("COLLEGE")).toBeInTheDocument();
   expect(screen.getByAltText("hero_maya")).toHaveAttribute(
     "src",
     expect.stringContaining("maya.png")
   );
   // Correct button is highlighted
-  expect(screen.getByRole("button", { name: "Heroes" })).toHaveAttribute(
+  expect(screen.getByText("HEROES")).toHaveAttribute(
     "style",
-    `background-color: ${mainMenuActiveColor};`
+    mainMenuActiveStyle
   );
-  expect(screen.getByRole("button", { name: "Adventures" })).toHaveAttribute(
+  expect(screen.getByText("ADVENTURES")).toHaveAttribute(
     "style",
-    `background-color: ${mainMenuInActiveColor};`
+    mainMenuInActiveStyle
   );
-  expect(screen.getByRole("button", { name: "Spells" })).toHaveAttribute(
+  expect(screen.getByText("SPELLS")).toHaveAttribute(
     "style",
-    `background-color: ${mainMenuInActiveColor};`
+    mainMenuInActiveStyle
+  );
+  expect(screen.getByText("COLLEGE")).toHaveAttribute(
+    "style",
+    mainMenuInActiveStyle
   );
   // Switch the screen - correct button is highlighted
-  userEvent.click(screen.getByRole("button", { name: "Adventures" }));
-  expect(screen.getByRole("button", { name: "Heroes" })).toHaveAttribute(
+  userEvent.click(screen.getByText("ADVENTURES"));
+  expect(screen.getByText("HEROES")).toHaveAttribute(
     "style",
-    `background-color: ${mainMenuInActiveColor};`
+    mainMenuInActiveStyle
   );
-  expect(screen.getByRole("button", { name: "Adventures" })).toHaveAttribute(
+  expect(screen.getByText("ADVENTURES")).toHaveAttribute(
     "style",
-    `background-color: ${mainMenuActiveColor};`
+    mainMenuActiveStyle
   );
-  expect(screen.getByRole("button", { name: "Spells" })).toHaveAttribute(
+  expect(screen.getByText("SPELLS")).toHaveAttribute(
     "style",
-    `background-color: ${mainMenuInActiveColor};`
+    mainMenuInActiveStyle
   );
 });
 
@@ -86,14 +93,14 @@ test("Renders Adventures screen with all available adventures", async () => {
   render(<App />);
   expect(await screen.findByText("PLAY")).toBeInTheDocument();
   userEvent.click(screen.getByRole("button", { name: "PLAY" }));
-  userEvent.click(screen.getByRole("button", { name: "Adventures" }));
+  userEvent.click(screen.getByText("ADVENTURES"));
   expect(screen.getByText("Your Adventures")).toBeInTheDocument();
-  expect(screen.getByText("Adventures")).toBeInTheDocument();
+  expect(screen.getByText("ADVENTURES")).toBeInTheDocument();
 
   // Correct button is highlighted
-  expect(screen.getByRole("button", { name: "Adventures" })).toHaveAttribute(
+  expect(screen.getByText("ADVENTURES")).toHaveAttribute(
     "style",
-    `background-color: ${mainMenuActiveColor};`
+    mainMenuActiveStyle
   );
 
   // Active and inactive adventures have different opacity
@@ -126,7 +133,7 @@ test("Renders Story screen and loads the story", async () => {
   render(<App />);
   expect(await screen.findByText("Start")).toBeInTheDocument();
   userEvent.click(screen.getByRole("button", { name: "PLAY" }));
-  userEvent.click(screen.getByRole("button", { name: "Adventures" }));
+  userEvent.click(screen.getByText("ADVENTURES"));
   userEvent.click(screen.getByAltText("adventure_story"));
   expect(screen.getByText("Act 1")).toBeInTheDocument();
   expect(screen.getByAltText("story_fight1")).toHaveAttribute(

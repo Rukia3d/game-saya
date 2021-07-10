@@ -1,7 +1,6 @@
 .Main {
   display: flex;
   flex-direction: row;
-  border: 5px solid blue;
   width: 100%;
   height: 100%;
 }
@@ -10,16 +9,18 @@ h2 {
   margin: 0;
 }
 
-.College {
-  display: flex;
-  flex-direction: row;
-  border: 5px solid pink;
-  width: 100%;
-  height: 100%;
-}
-
 .MainMenu {
   position: absolute;
   bottom: 0;
   z-index: 50;
+  display: flex;
+  flex-direction: row;
+}
+
+.MenuButton {
+  clip-path: polygon(0 15%, 100% 0, 100% 92%, 0% 100%);
+  padding: 1em;
+  margin-left: 0.5em;
+  margin-right: 0.5em;
+  border: 1px solid black;
 }

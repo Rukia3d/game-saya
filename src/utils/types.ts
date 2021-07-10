@@ -20,11 +20,23 @@ export interface Player {
   heroes: Character[];
 }
 
+export interface DialogueLine {
+  character: string;
+  image?: string;
+  pos?: "L" | "R" | "M";
+  text: string;
+}
+export interface Dialogue {
+  id: string;
+  lines: DialogueLine[];
+}
+
 export interface Character {
   id: string;
   name: string;
   image: string;
   state?: string;
+  dial?: string;
 }
 
 export interface Adventure {
@@ -50,6 +62,7 @@ export interface GameState {
   player: Player;
   adventures: Adventure[];
   heroes: string[];
+  dialogues: Dialogue[];
 }
 
 export interface Enemy {

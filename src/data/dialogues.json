@@ -1,0 +1,58 @@
+[
+  {
+    "id": "maya_replic1",
+    "lines": [
+      {
+        "character": "maya",
+        "text": "I need to find a teammate for the finals!"
+      }
+    ]
+  },
+  {
+    "id": "olija_dialogue1",
+    "lines": [
+      {
+        "character": "maya",
+        "image": "excited",
+        "pos": "L",
+        "text": "Good day, headmaster! I am here to..."
+      },
+      {
+        "character": "olija",
+        "image": "serious",
+        "pos": "R",
+        "text": "Are you here for your final tests? Good. As I can see you haven't got your team yet. You need to fix it."
+      },
+      {
+        "character": "maya",
+        "image": "sad",
+        "pos": "L",
+        "text": "But... I thought you will assign me a team, isn't that how things work?"
+      },
+      {
+        "character": "olija",
+        "image": "serious",
+        "pos": "R",
+        "text": "No, it's not. You can choose who you pass your exams with. All people have their strength and weaknesses."
+      },
+      {
+        "character": "olija",
+        "image": "serious",
+        "pos": "R",
+        "text": "It's up you to to figure out what works best. Do you understand?"
+      },
+      {
+        "character": "maya",
+        "image": "serious",
+        "pos": "L",
+        "text": "I guess so. So what should I do?"
+      },
+      {
+        "character": "olija",
+        "image": "serious",
+        "pos": "R",
+        "text": "Check out the garden. It's a popular place for students to rest and socialise. Get back to me when you have a team of 4."
+      }
+    ]
+  }
+]
