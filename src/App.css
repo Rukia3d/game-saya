@@ -16,7 +16,7 @@ html,
   right: 1em;
   width: 46px;
   height: 46px;
-  z-index: 50;
+  z-index: 99;
 }
 
 .CloseButton {

@@ -30,7 +30,7 @@ export const AdventureScreen = () => {
     return <div>No stories</div>;
   }
   return (
-    <div className="Stories">
+    <div className="Stories" aria-label="story_background">
       <CloseButton onClick={context.backToMain} />
       <h2>{context.adventure.name}</h2>
       <div className="StoriesList">

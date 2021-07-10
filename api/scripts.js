@@ -45,7 +45,7 @@ app.get("/api/player/", (req, res) => {
             id: "character",
             name: "Character",
             image: "character.jpg",
-            state: "closed",
+            state: "open",
             form: "character",
             stories: [],
           },

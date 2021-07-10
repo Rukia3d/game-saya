@@ -7,10 +7,12 @@ const HeroIcon = ({ hero }: { hero: Character }) => {
   const stateToImage = `../img/${hero.id}_${hero.state}.jpg`;
   return (
     <div
-      className="HeroIcon"
+      className="HeroIconBorder"
       onClick={() => console.log("clicked a character")}
     >
-      <img src={stateToImage} alt={`${hero.id}_${hero.state}`} />
+      <div className="HeroIcon">
+        <img src={stateToImage} alt={`${hero.id}_${hero.state}`} />
+      </div>
     </div>
   );
 };
@@ -24,11 +26,13 @@ export const Heroes = () => {
   const activeHeroes = characters.filter((c: Character) => c.state);
   return (
     <div className="Heroes">
-      <img
-        className="HeroesBackground"
-        src="../img/main_hall_background.png"
-        alt="heroes_background"
-      />
+      <div className="HeroesBackgroundBorder">
+        <img
+          className="HeroesBackground"
+          src="../img/main_hall_background.png"
+          alt="heroes_background"
+        />
+      </div>
       <div className="HeroesPresent">
         {characters.map((c: Character, i: number) => (
           <img

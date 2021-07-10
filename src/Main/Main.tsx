@@ -31,15 +31,15 @@ const MainMenuButton = ({
   setSelected: (s: mainScreenState) => void;
 }) => {
   return (
-    <div
-      className="MenuButton"
-      style={{
-        backgroundColor: selected ? "aquamarine" : "lightgrey",
-        border: selected ? "2px solid white" : "1px solid black",
-      }}
-      onClick={() => setSelected(screen)}
-    >
-      {screen.toUpperCase()}
+    <div className="MenuButtonBorder" onClick={() => setSelected(screen)}>
+      <div
+        className="MenuButton"
+        style={{
+          backgroundColor: selected ? "aquamarine" : "lightgrey",
+        }}
+      >
+        {screen.toUpperCase()}
+      </div>
     </div>
   );
 };

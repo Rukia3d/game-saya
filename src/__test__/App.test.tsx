@@ -9,10 +9,8 @@ afterEach(() => {
   cache.clear();
 });
 
-const mainMenuActiveStyle =
-  "background-color: aquamarine; border: 2px solid white;";
-const mainMenuInActiveStyle =
-  "background-color: lightgrey; border: 1px solid black;";
+const mainMenuActiveStyle = "background-color: aquamarine;";
+const mainMenuInActiveStyle = "background-color: lightgrey;";
 
 test("Renders App Start Screen", async () => {
   render(<App />);
@@ -94,8 +92,8 @@ test("Renders Adventures screen with all available adventures", async () => {
   expect(await screen.findByText("PLAY")).toBeInTheDocument();
   userEvent.click(screen.getByRole("button", { name: "PLAY" }));
   userEvent.click(screen.getByText("ADVENTURES"));
-  expect(screen.getByText("Your Adventures")).toBeInTheDocument();
   expect(screen.getByText("ADVENTURES")).toBeInTheDocument();
+  expect(screen.getByLabelText("adventures_background")).toBeInTheDocument();
 
   // Correct button is highlighted
   expect(screen.getByText("ADVENTURES")).toHaveAttribute(
@@ -123,10 +121,10 @@ test("Renders Adventures screen with all available adventures", async () => {
 
   // Only active adventure shows a popup
   userEvent.click(screen.getByAltText("adventure_story"));
-  expect(screen.getByText("Act 1")).toBeInTheDocument();
+  expect(screen.getByLabelText("story_background")).toBeInTheDocument();
   userEvent.click(screen.getByTestId("close_button"));
   userEvent.click(screen.getByAltText("adventure_arena"));
-  expect(screen.queryByText("Arena")).not.toBeInTheDocument();
+  // TODO add check that the correct adventure is on the screen
 });
 
 test("Renders Story screen and loads the story", async () => {
@@ -135,7 +133,6 @@ test("Renders Story screen and loads the story", async () => {
   userEvent.click(screen.getByRole("button", { name: "PLAY" }));
   userEvent.click(screen.getByText("ADVENTURES"));
   userEvent.click(screen.getByAltText("adventure_story"));
-  expect(screen.getByText("Act 1")).toBeInTheDocument();
   expect(screen.getByAltText("story_fight1")).toHaveAttribute(
     "src",
     expect.stringContaining("arena_1.png")

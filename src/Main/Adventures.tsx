@@ -5,12 +5,14 @@ import "./Adventures.css";
 
 const AdventureImage = ({ adventure }: { adventure: Adventure }) => {
   return (
-    <img
-      className={`Adventure_${adventure.form}`}
-      style={{ opacity: adventure.state === "closed" ? 0.5 : 1 }}
-      src={`../img/Adventures/${adventure.image}`}
-      alt={`adventure_${adventure.id}`}
-    />
+    <div className={`Adventure_${adventure.form}`}>
+      <div className="AdventureName">{adventure.name}</div>
+      <img
+        style={{ opacity: adventure.state === "closed" ? 0.5 : 1 }}
+        src={`../img/Adventures/${adventure.image}`}
+        alt={`adventure_${adventure.id}`}
+      ></img>
+    </div>
   );
 };
 export const Adventures = () => {
@@ -25,8 +27,7 @@ export const Adventures = () => {
     }
   };
   return (
-    <div className="Adventures">
-      <h2>Your Adventures</h2>
+    <div className="Adventures" aria-label="adventures_background">
       <div className="AdventuresList">
         {adventures.map((a: Adventure, i: number) => (
           <div key={i} onClick={() => (a.stories ? selectAdventure(a) : null)}>

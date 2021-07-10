@@ -7,16 +7,27 @@
   overflow: hidden;
 }
 
-.Heroes .HeroesBackground {
+.HeroesBackground {
   object-fit: cover;
   width: 100%;
   height: 100%;
+  padding: 1em;
   z-index: 1;
   position: absolute;
   top: 0;
   left: 0;
   overflow: hidden;
   clip-path: polygon(0 0, 94% 9%, 100% 100%, 8% 95%);
+}
+
+.HeroesBackgroundBorder {
+  clip-path: polygon(0 0, 94% 9%, 100% 100%, 8% 95%);
+  background-color: black;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
 }
 
 .HeroesPresent {
@@ -43,7 +54,16 @@
 
 .HeroIcon {
   width: 200px;
+  margin-top: 3px;
+  margin-left: 3px;
   clip-path: polygon(12% 5%, 100% 5%, 84% 100%, 0% 100%);
+  z-index: 10;
+}
+
+.HeroIconBorder {
+  width: 206px;
+  clip-path: polygon(12% 5%, 100% 5%, 84% 100%, 0% 100%);
+  background-color: black;
   z-index: 10;
 }
 
