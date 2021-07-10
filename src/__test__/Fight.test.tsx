@@ -19,6 +19,7 @@ const gameState = {
   sceneCharacters: [
     { id: "maya", name: "Maya", image: "../img/maya.png", state: "story" },
   ],
+  dialogues: [],
   player: {
     id: 1,
     cards: playerCards,

@@ -8,6 +8,7 @@ const gameState = {
     { id: "maya", name: "Maya", image: "../img/maya.png", state: "story" },
     { id: "tara", name: "Tara", image: "../img/tara.png", state: "story" },
   ],
+  dialogues: [],
   player: {
     id: 1,
     cards: [],
