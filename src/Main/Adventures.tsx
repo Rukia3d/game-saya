@@ -9,7 +9,7 @@ const AdventureImage = ({ adventure }: { adventure: Adventure }) => {
       <div className={`Adventure_${adventure.form}`}>
         <div className="AdventureName">{adventure.name}</div>
         <img
-          style={{ opacity: adventure.state === "closed" ? 0.5 : 1 }}
+          style={{ opacity: adventure.open ? 1 : 0.3 }}
           src={`../img/Adventures/${adventure.image}`}
           alt={`adventure_${adventure.id}`}
         ></img>
@@ -24,7 +24,7 @@ export const Adventures = () => {
   }
   const adventures = context.gameState.adventures;
   const selectAdventure = (a: Adventure) => {
-    if (a.state === "open") {
+    if (a.open) {
       context.setAdventure(a);
     }
   };

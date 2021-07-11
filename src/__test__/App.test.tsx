@@ -116,7 +116,7 @@ test("Renders Adventures screen with all available adventures", async () => {
   );
   expect(screen.getByAltText("adventure_arena")).toHaveAttribute(
     "style",
-    "opacity: 0.5;"
+    "opacity: 0.3;"
   );
 
   // Only active adventure shows a popup
@@ -143,8 +143,8 @@ test("Renders Story screen and loads the story", async () => {
   );
 
   // Click on inactive panel doesn't have an effect
-  userEvent.click(screen.getByAltText("story_c1_dialogue1"));
+  userEvent.click(screen.getByAltText("story_olija_dialogue1"));
   expect(screen.queryByText(/Your opponent/)).not.toBeInTheDocument();
-  userEvent.click(screen.getByAltText("story_c1_f_gates"));
+  userEvent.click(screen.getByAltText("story_t_f_arena"));
   expect(screen.queryByText(/Your opponent/)).toBeInTheDocument();
 });

@@ -2,17 +2,18 @@ import React, { useContext } from "react";
 import "./Heroes.css";
 import { Character, Dialogue } from "../utils/types";
 import { GameContext } from "../App";
+import { findDialogue } from "../utils/helpers";
 
 const HeroIcon = ({ hero }: { hero: Character }) => {
   const context = useContext(GameContext);
   if (!context || !context.setDialogue || !context.gameState) {
     throw new Error("No data");
   }
-  const dialogue = context.gameState.dialogues.find(
-    (d: Dialogue) => d.id === hero.dial
-  );
 
-  if (!dialogue) throw new Error("No data");
+  if (!hero.dial)
+    throw new Error("Loading diaglogue for hero with no dialogue id");
+  const dialogue = findDialogue(context.gameState.dialogues, hero.dial);
+
   const stateToImage = `../img/${hero.id}_${hero.state}.jpg`;
   return (
     <div

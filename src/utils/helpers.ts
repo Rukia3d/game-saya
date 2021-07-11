@@ -1,3 +1,5 @@
+import { Dialogue, Story, StoryGroup } from "./types";
+
 //@ts-ignore
 export const fetcher = (...args) => fetch(...args).then((res) => res.json());
 
@@ -18,7 +20,21 @@ export const removeFromArray = (arrArg: any[], item: any) => {
 export const sortByKey = (array: any) => {
   return array.sort((a: any, b: any) => (a.character > b.character ? 1 : -1));
 };
+
 export const generateInt = (max: number) =>
   Math.floor(Math.random() * Math.floor(max));
+
+export const findLastOpenStory = (storyGroup: StoryGroup[]) => {
+  const res = storyGroup.findIndex((g: StoryGroup, i: number) => {
+    return g.stories.some((s: Story) => s.open === false);
+  });
+  return res;
+};
+
+export const findDialogue = (dialogues: Dialogue[], dialId: string) => {
+  const res = dialogues.find((d: Dialogue) => d.id === dialId);
+  if (!res) throw new Error(`Couldn't find a dialogue ${dialId}`);
+  return res;
+};
 
 export const shuffle = (array: any) => array.sort(() => Math.random() - 0.5);

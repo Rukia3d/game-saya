@@ -44,7 +44,7 @@ export interface Adventure {
   form: string;
   name: string;
   image: string;
-  state: "open" | "closed";
+  open: boolean;
   stories?: StoryGroup[];
 }
 
@@ -58,7 +58,7 @@ export interface Story {
   id: string;
   name?: string;
   image: string;
-  state: "open" | "closed";
+  open: boolean;
   enemy?: string;
   characters?: string[];
 }

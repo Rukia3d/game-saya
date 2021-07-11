@@ -63,5 +63,104 @@
         "text": "Check out the garden. It's a popular place for students to rest and socialise. Get back to me when you have a team of 4."
       }
     ]
+  },
+  {
+    "id": "nell_dialogue_1",
+    "lines": [
+      {
+        "character": "maya",
+        "image": "excited",
+        "pos": "L",
+        "text": "test"
+      }
+    ]
+  },
+  {
+    "id": "tara_dialogue_1",
+    "lines": [
+      {
+        "character": "maya",
+        "image": "excited",
+        "pos": "L",
+        "text": "test"
+      }
+    ]
+  },
+  {
+    "id": "grey_dialogue1",
+    "lines": [
+      {
+        "character": "maya",
+        "image": "excited",
+        "pos": "L",
+        "text": "test"
+      }
+    ]
+  },
+  {
+    "id": "c1_dialogue1",
+    "lines": [
+      {
+        "character": "maya",
+        "image": "excited",
+        "pos": "L",
+        "text": "test"
+      }
+    ]
+  },
+  {
+    "id": "c1_dialogue2",
+    "lines": [
+      {
+        "character": "maya",
+        "image": "excited",
+        "pos": "L",
+        "text": "test"
+      }
+    ]
+  },
+  {
+    "id": "c1_dialogue3",
+    "lines": [
+      {
+        "character": "maya",
+        "image": "excited",
+        "pos": "L",
+        "text": "test"
+      }
+    ]
+  },
+  {
+    "id": "c1_dialogue4",
+    "lines": [
+      {
+        "character": "maya",
+        "image": "excited",
+        "pos": "L",
+        "text": "test"
+      }
+    ]
+  },
+  {
+    "id": "c1_dialogue5",
+    "lines": [
+      {
+        "character": "maya",
+        "image": "excited",
+        "pos": "L",
+        "text": "test"
+      }
+    ]
+  },
+  {
+    "id": "c1_dialogue6",
+    "lines": [
+      {
+        "character": "maya",
+        "image": "excited",
+        "pos": "L",
+        "text": "test"
+      }
+    ]
   }
 ]

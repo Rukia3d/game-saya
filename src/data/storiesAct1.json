@@ -3,25 +3,25 @@
     "group": 1,
     "stories": [
       {
-        "id": "c1_dialogue1",
+        "id": "olija_dialogue1",
         "type": "dialogue",
         "image": "../img/dialogue_1.png",
-        "state": "open"
+        "open": true
       },
       {
-        "id": "c1_dialogue2",
+        "id": "nell_dialogue_1",
         "type": "dialogue",
         "image": "../img/dialogue_1.png",
-        "state": "open"
+        "open": true
       },
       {
-        "id": "c1_f_gates",
+        "id": "t_f_arena",
         "type": "fight",
         "image": "../img/arena_1.png",
         "enemy": "dude",
-        "state": "open",
+        "open": true,
         "characters": ["maya", "tara"],
-        "name": "Ormron Gates"
+        "name": "Arena"
       }
     ]
   },
@@ -29,9 +29,61 @@
     "group": 2,
     "stories": [
       {
+        "id": "tara_dialogue_1",
+        "type": "dialogue",
+        "image": "../img/dialogue_1.png",
+        "open": true
+      },
+      {
+        "id": "t_f_arena2",
+        "type": "fight",
+        "image": "../img/arena_1.png",
+        "enemy": "dude",
+        "open": true,
+        "characters": ["maya", "nell"],
+        "name": "Arena"
+      },
+      {
+        "id": "grey_dialogue1",
+        "type": "dialogue",
+        "image": "../img/dialogue_1.png",
+        "open": true
+      }
+    ]
+  },
+  {
+    "group": 3,
+    "stories": [
+      {
+        "id": "c1_dialogue1",
+        "type": "dialogue",
+        "image": "../img/dialogue_1.png",
+        "open": true
+      },
+      {
+        "id": "c1_dialogue2",
+        "type": "dialogue",
+        "image": "../img/dialogue_1.png",
+        "open": true
+      },
+      {
+        "id": "c1_f_gates",
+        "type": "fight",
+        "image": "../img/arena_1.png",
+        "enemy": "dude",
+        "open": false,
+        "characters": ["maya", "tara"],
+        "name": "Ormron Gates"
+      }
+    ]
+  },
+  {
+    "group": 1,
+    "stories": [
+      {
         "id": "c1_dialogue3",
         "type": "dialogue",
-        "state": "open",
+        "open": false,
         "image": "../img/dialogue_1.png"
       },
       {
@@ -39,7 +91,7 @@
         "type": "fight",
         "image": "../img/arena_1.png",
         "enemy": "dude",
-        "state": "open",
+        "open": false,
         "characters": ["maya", "tara"],
         "name": "Old Road"
       },
@@ -48,27 +100,27 @@
         "type": "fight",
         "image": "../img/arena_1.png",
         "enemy": "dude",
-        "state": "open",
+        "open": false,
         "characters": ["maya", "tara"],
         "name": "Broken Bridge"
       }
     ]
   },
   {
-    "group": 3,
+    "group": 2,
     "stories": [
       {
         "id": "c1_dialogue4",
         "type": "dialogue",
         "image": "../img/dialogue_1.png",
-        "state": "closed"
+        "open": false
       },
       {
         "name": "To the Desert",
         "type": "fight",
         "image": "../img/arena_1.png",
         "enemy": "dude",
-        "state": "closed",
+        "open": false,
         "characters": ["maya", "tara"],
         "id": "c1_f_desert"
       },
@@ -77,21 +129,21 @@
         "type": "fight",
         "image": "../img/arena_1.png",
         "enemy": "dude",
-        "state": "closed",
+        "open": false,
         "characters": ["maya", "tara"],
         "id": "c1_f_plateau"
       }
     ]
   },
   {
-    "group": 4,
+    "group": 3,
     "stories": [
       {
         "name": "To the Waterhole",
         "type": "fight",
         "image": "../img/arena_1.png",
         "enemy": "dude",
-        "state": "closed",
+        "open": false,
         "characters": ["maya", "tara"],
         "id": "c1_f_water"
       },
@@ -99,34 +151,34 @@
         "id": "c1_dialogue5",
         "type": "dialogue",
         "image": "../img/dialogue_1.png",
-        "state": "closed"
+        "open": false
       },
       {
         "name": "Elders road",
         "type": "fight",
         "image": "../img/arena_1.png",
         "enemy": "dude",
-        "state": "closed",
+        "open": false,
         "characters": ["maya", "tara"],
         "id": "c1_f_elders"
       }
     ]
   },
   {
-    "group": 5,
+    "group": 4,
     "stories": [
       {
         "id": "c1_dialogue6",
         "type": "dialogue",
         "image": "../img/dialogue_1.png",
-        "state": "closed"
+        "open": false
       },
       {
         "name": "Limestone Path",
         "type": "fight",
         "image": "../img/arena_1.png",
         "enemy": "dude",
-        "state": "closed",
+        "open": false,
         "characters": ["maya", "tara"],
         "id": "c1_f_limestone"
       },
@@ -135,7 +187,7 @@
         "type": "fight",
         "image": "../img/arena_1.png",
         "enemy": "dude",
-        "state": "closed",
+        "open": false,
         "characters": ["maya", "tara"],
         "id": "c1_f_salt"
       }

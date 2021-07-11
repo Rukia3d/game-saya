@@ -1,10 +1,16 @@
-import { unique, removeFromArray, shuffle } from "../utils/helpers";
+import {
+  unique,
+  removeFromArray,
+  shuffle,
+  findLastOpenStory,
+} from "../utils/helpers";
 import {
   generateDeck,
   generateEnemyDeck,
   updateHeroDeck,
   updateWinPlayer,
 } from "../utils/gamelogic";
+import { Story, StoryGroup } from "../utils/types";
 test("Unique function returns correctly", () => {
   const array1 = [1, 2, 3, 4];
   const array2 = [1, 2, 2, 3, 4];
@@ -148,4 +154,24 @@ test("updateWinPlayer assigns rewards correctly", () => {
   expect(updatedPlayer.resources[3].quantity).toEqual(1);
   expect(updatedPlayer.resources[4].quantity).toEqual(3);
   expect(updatedPlayer.experience).toEqual(325);
+});
+
+test("Find the correct next open story in group", () => {
+  const storyExample = { id: "", type: "fight" as "fight", image: "" };
+  const groups: StoryGroup[] = [];
+  [1, 2, 3, 4].forEach((i: number) =>
+    groups.push({
+      group: i,
+      stories: [
+        { ...storyExample, open: true },
+        { ...storyExample, open: true },
+        { ...storyExample, open: true },
+      ],
+    })
+  );
+  groups[3].stories[2].open = false;
+  expect(findLastOpenStory(groups)).toEqual(3);
+  groups[3].stories[2].open = true;
+  groups[1].stories[1].open = false;
+  expect(findLastOpenStory(groups)).toEqual(1);
 });
