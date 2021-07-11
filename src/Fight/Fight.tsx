@@ -142,7 +142,7 @@ export const Fight = () => {
         player: updateLostPlayer(gameState.player),
       });
     }
-    context.backToMain();
+    context.backToStory();
   };
   return (
     <div className="Fight">

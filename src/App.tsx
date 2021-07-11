@@ -46,7 +46,9 @@ function App() {
   };
 
   const backToStory = () => {
+    console.log("backToStory");
     setStory(null);
+    setDialogue(null);
   };
 
   const context = {
