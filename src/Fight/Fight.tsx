@@ -7,14 +7,7 @@ import { SettingsButton } from "../UI/SettingsButton";
 import { CharacterBox } from "./CharacterBox";
 import { HeroBlock } from "./HeroBlock";
 
-import {
-  Spell,
-  Enemy,
-  FightState,
-  Story,
-  GameState,
-  Resource,
-} from "../utils/types";
+import { Spell, Enemy, FightState, Resource } from "../utils/types";
 import { removeFromArray } from "../utils/helpers";
 import {
   generateDeck,
@@ -25,6 +18,7 @@ import {
 } from "../utils/gamelogic";
 import { FightResult } from "./FightResult";
 import { GameContext } from "../App";
+import { BigCard } from "./BigCard";
 
 const enemies = require("../data/enemies.json");
 
@@ -58,34 +52,6 @@ const enemyAttack = (
     heroHand: newHeroHand,
     hero: heroNewHealth,
   };
-};
-
-const BigCard = ({
-  card,
-  setInfo,
-}: {
-  card: Spell;
-  setInfo: (s: Spell | Enemy | null) => void;
-}) => {
-  return (
-    <div
-      className={card.owner === "enemy" ? "EnemyCard" : "HeroCard"}
-      aria-label="display_card"
-    >
-      <p>{card.name}</p>
-      <p>Belongs to {card.owner}</p>
-      <p>
-        <img
-          className="BigCardImage"
-          src={card.image}
-          alt={`spellimage_${card.id}`}
-        />
-      </p>
-      <p>
-        <button onClick={() => setInfo(card)}>Info</button>
-      </p>
-    </div>
-  );
 };
 
 export const Fight = () => {
