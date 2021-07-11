@@ -1,38 +1,8 @@
 import React, { useContext, useState } from "react";
 import { GameContext } from "../App";
-import { HeroSpellWithInfo } from "../Fight/HeroBlock";
-import { CloseButton } from "../UI/CloseButton";
-import { InfoCard } from "../UI/InfoCard";
 import { Character, Spell } from "../utils/types";
+import { CharacterSpells } from "./CharacterSpells";
 import "./Spells.css";
-
-const CharacterSpells = ({
-  spells,
-  setHero,
-}: {
-  spells: Spell[];
-  setHero: (s: Character | null | "Base") => void;
-}) => {
-  const [info, setInfo] = useState<null | Spell>(null);
-  const selectCard = (s: Spell) => {};
-  return (
-    <div className="CharacterSpells">
-      <h1>hero spells</h1>
-      <CloseButton onClick={() => setHero(null)} />
-      {info ? <InfoCard item={info} setInfo={setInfo} /> : null}
-      <div className="AllCharacterSpells">
-        {spells.map((c: Spell, i: number) => (
-          <HeroSpellWithInfo
-            key={i}
-            selectCard={selectCard}
-            setInfo={setInfo}
-            card={c}
-          />
-        ))}
-      </div>
-    </div>
-  );
-};
 
 const SpellPanel = ({
   character,
@@ -74,6 +44,7 @@ export const Spells = () => {
       <div className="Spells">
         <CharacterSpells
           setHero={setHero}
+          hero={hero}
           spells={
             hero === "Base"
               ? spells.filter((s: Spell) => s.character === null)

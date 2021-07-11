@@ -2,6 +2,7 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import { Spells } from "../Main/Spells";
 import { GameContext } from "../App";
+import userEvent from "@testing-library/user-event";
 
 const spells = [
   {
@@ -102,4 +103,10 @@ test("Renders Heroes screen with characters ready for a dialogue", () => {
   expect(screen.getByAltText("image_base_spells")).toBeInTheDocument();
   expect(screen.getByAltText("image_maya_spells")).toBeInTheDocument();
   expect(screen.getByAltText("image_tara_spells")).toBeInTheDocument();
+  userEvent.click(screen.getByAltText("image_base_spells"));
+  expect(screen.getByText("Basic spells")).toBeInTheDocument();
+  expect(screen.getByLabelText("character_spells").children.length).toEqual(1);
+  const firstCardName = screen.getAllByLabelText("spell_card")[0].innerHTML;
+  userEvent.click(screen.getAllByTestId("hero_card_info")[0]);
+  expect(screen.getByLabelText("item_name").innerHTML).toEqual(firstCardName);
 });
