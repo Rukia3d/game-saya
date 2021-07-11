@@ -32,7 +32,11 @@ export const Adventures = () => {
     <div className="Adventures" aria-label="adventures_background">
       <div className="AdventuresList">
         {adventures.map((a: Adventure, i: number) => (
-          <div key={i} onClick={() => (a.stories ? selectAdventure(a) : null)}>
+          <div
+            aria-label={`adventure_border_${a.id}`}
+            key={i}
+            onClick={() => (a.stories ? selectAdventure(a) : null)}
+          >
             <AdventureImage adventure={a} />
           </div>
         ))}

@@ -10,7 +10,8 @@ import {
   updateHeroDeck,
   updateWinPlayer,
 } from "../utils/gamelogic";
-import { Story, StoryGroup } from "../utils/types";
+import { StoryGroup } from "../utils/types";
+
 test("Unique function returns correctly", () => {
   const array1 = [1, 2, 3, 4];
   const array2 = [1, 2, 2, 3, 4];

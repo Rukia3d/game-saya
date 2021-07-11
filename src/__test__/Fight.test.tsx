@@ -11,7 +11,7 @@ const story = {
   type: "fight" as "fight",
   image: "../img/arena_1.png",
   enemy: "test-dude",
-  state: "open" as "open",
+  open: true,
   characters: ["maya", "tara"],
 };
 const enemyData = enemies.find((e: any) => e.id === story.enemy);

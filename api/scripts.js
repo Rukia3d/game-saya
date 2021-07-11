@@ -52,7 +52,7 @@ app.get("/api/player/", (req, res) => {
           },
           {
             id: "story",
-            name: "Act 1",
+            name: "Water Problems",
             image: "story.jpg",
             open: true,
             form: "story",

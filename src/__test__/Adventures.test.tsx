@@ -3,6 +3,8 @@ import { render, screen } from "@testing-library/react";
 import { Adventures } from "../Main/Adventures";
 import { GameContext } from "../App";
 import { debug } from "console";
+import userEvent from "@testing-library/user-event";
+const stories = require("../data/storiesAct1.json");
 
 const gameState = {
   sceneCharacters: [],
@@ -20,23 +22,23 @@ const gameState = {
       id: "character",
       name: "Character",
       image: "character.jpg",
-      state: "open" as "open",
+      open: true,
       form: "character",
       stories: [],
     },
     {
       id: "story",
-      name: "Act 1",
+      name: "Water Problems",
       image: "story.jpg",
-      state: "open" as "open",
+      open: true,
       form: "story",
-      stories: [],
+      stories: stories,
     },
     {
       id: "arena",
       name: "Arena",
       image: "arena.jpg",
-      state: "closed" as "closed",
+      open: false,
       form: "arena",
       stories: [],
     },
@@ -44,7 +46,7 @@ const gameState = {
       id: "torunament",
       name: "Tournament",
       image: "tournament.jpg",
-      state: "closed" as "closed",
+      open: false,
       form: "torunament",
       stories: [],
     },
@@ -52,7 +54,7 @@ const gameState = {
       id: "event",
       name: "Event",
       image: "event.jpg",
-      state: "closed" as "closed",
+      open: false,
       form: "event",
       stories: [],
     },
@@ -73,7 +75,7 @@ const context = {
   backToStory: jest.fn(),
 };
 
-test("Renders Heroes screen with characters ready for a dialogue", () => {
+test("Renders Adventures with character quest and correct state", () => {
   render(
     <GameContext.Provider value={context}>
       <Adventures />
@@ -82,7 +84,44 @@ test("Renders Heroes screen with characters ready for a dialogue", () => {
   expect(screen.getByLabelText("adventures_background")).toBeInTheDocument();
   debug();
   expect(screen.getByAltText("adventure_character")).toBeInTheDocument();
+  expect(screen.getByAltText("adventure_character")).toHaveAttribute(
+    "style",
+    "opacity: 1;"
+  );
   expect(screen.getByAltText("adventure_arena")).toBeInTheDocument();
+  expect(screen.getByAltText("adventure_arena")).toHaveAttribute(
+    "style",
+    "opacity: 0.3;"
+  );
   expect(screen.getByAltText("adventure_story")).toBeInTheDocument();
   expect(screen.getByAltText("adventure_event")).toBeInTheDocument();
+});
+
+test("Renders Adventures with no character quest and correct state", () => {
+  context.gameState.adventures.shift();
+  render(
+    <GameContext.Provider value={context}>
+      <Adventures />
+    </GameContext.Provider>
+  );
+  expect(screen.getByLabelText("adventures_background")).toBeInTheDocument();
+  expect(screen.queryByAltText("adventure_character")).not.toBeInTheDocument();
+  expect(screen.getByAltText("adventure_arena")).toBeInTheDocument();
+  expect(screen.getByAltText("adventure_arena")).toHaveAttribute(
+    "style",
+    "opacity: 0.3;"
+  );
+  expect(screen.getByAltText("adventure_story")).toBeInTheDocument();
+  expect(screen.getByAltText("adventure_event")).toBeInTheDocument();
+});
+
+test("Renders StoryPanels for adventure", async () => {
+  render(
+    <GameContext.Provider value={context}>
+      <Adventures />
+    </GameContext.Provider>
+  );
+  expect(screen.getByAltText("adventure_story")).toBeInTheDocument();
+  userEvent.click(screen.getByLabelText("adventure_border_story"));
+  expect(context.setAdventure.mock.calls.length).toBe(1);
 });
