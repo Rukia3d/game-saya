@@ -75,7 +75,7 @@ export const Stories = () => {
     <div className="Stories" aria-label="story_background">
       <CloseButton onClick={context.backToMain} />
       <h2>{context.adventure.name}</h2>
-      <div className="StoriesList">
+      <div className="StoriesList" aria-label="stories_list">
         {page !== 0 ? (
           <ScrollButton onClick={() => setPage(page - 1)} direction="l" />
         ) : null}
