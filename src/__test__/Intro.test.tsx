@@ -1,14 +1,27 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import { Heroes } from "../Main/Heroes";
+import { Intro } from "../Main/Intro";
 import { GameContext } from "../App";
+const dialogues = require("../data/dialogues.json");
 
 const gameState = {
   sceneCharacters: [
-    { id: "maya", name: "Maya", image: "../img/maya.png", state: "story" },
-    { id: "tara", name: "Tara", image: "../img/tara.png", state: "story" },
+    {
+      id: "maya",
+      name: "Maya",
+      image: "../img/maya.png",
+      state: "story",
+      dial: "maya_replic1",
+    },
+    {
+      id: "tara",
+      name: "Tara",
+      image: "../img/tara.png",
+      state: "story",
+      dial: "tara_replic1",
+    },
   ],
-  dialogues: [],
+  dialogues: dialogues,
   player: {
     id: 1,
     cards: [],
@@ -26,7 +39,6 @@ const gameState = {
     ],
   },
   adventures: [],
-  heroes: [],
 };
 
 const context = {
@@ -45,10 +57,13 @@ const context = {
 test("Renders Heroes screen with characters ready for a dialogue", () => {
   render(
     <GameContext.Provider value={context}>
-      <Heroes />
+      <Intro />
     </GameContext.Provider>
   );
-  expect(screen.getByAltText("heroes_background")).toBeInTheDocument();
+  expect(screen.getByAltText("intro_background")).toBeInTheDocument();
   expect(screen.getByAltText("hero_maya")).toBeInTheDocument();
   expect(screen.getByAltText("hero_tara")).toBeInTheDocument();
+  screen.debug();
+  expect(screen.getByAltText("maya_story")).toBeInTheDocument();
+  expect(screen.getByAltText("tara_story")).toBeInTheDocument();
 });

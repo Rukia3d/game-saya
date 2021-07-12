@@ -10,7 +10,7 @@ const SpellPanel = ({
   setHero,
 }: {
   character: Character | null;
-  image: string | null;
+  image: boolean;
   setHero: (s: Character | null | "Base") => void;
 }) => {
   return (
@@ -19,7 +19,11 @@ const SpellPanel = ({
       onClick={() => setHero(character ? character : "Base")}
     >
       <img
-        src={image ? image : "../img/base_spells.png"}
+        src={
+          character
+            ? `../img/${character.id}_spells.png`
+            : "../img/base_spells.png"
+        }
         alt={`image_${character ? character.id : "base"}_spells`}
       />
     </div>
@@ -56,13 +60,13 @@ export const Spells = () => {
   }
   return (
     <div className="Spells">
-      <SpellPanel character={null} image={null} setHero={setHero} />
+      <SpellPanel character={null} image={false} setHero={setHero} />
       <div className="SpellsList">
         {characters.sort().map((s: string | null, i: number) => (
           <SpellPanel
             key={i}
             character={heroes.find((h: Character) => h.id === s) || null}
-            image={heroes.find((h: Character) => h.id === s)?.image || null}
+            image
             setHero={setHero}
           />
         ))}

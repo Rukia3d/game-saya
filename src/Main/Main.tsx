@@ -1,20 +1,22 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import "./Main.css";
 
 import { Settings } from "../UI/Settings";
 import { SettingsButton } from "../UI/SettingsButton";
 
+import { Intro } from "./Intro";
 import { Heroes } from "./Heroes";
 import { Adventures } from "./Adventures";
 import { Spells } from "./Spells";
 import { College } from "./College";
 
-type mainScreenState = "heroes" | "adventures" | "spells" | "college";
+type mainScreenState = "intro" | "heroes" | "adventures" | "spells" | "college";
 
 type MainScreensType = {
   [key in mainScreenState]: React.FC;
 };
 const mainScreens: MainScreensType = {
+  intro: Intro,
   heroes: Heroes,
   adventures: Adventures,
   spells: Spells,
@@ -54,6 +56,7 @@ const MainMenu = ({
   return (
     <div className="MainMenu">
       {[
+        "intro" as "intro",
         "heroes" as "heroes",
         "adventures" as "adventures",
         "spells" as "spells",
@@ -71,7 +74,7 @@ const MainMenu = ({
 };
 
 export const Main = () => {
-  const [selected, setSelected] = useState<mainScreenState>("heroes");
+  const [selected, setSelected] = useState<mainScreenState>("intro");
   const [settingsOpen, setSettingsOpen] = useState(false);
 
   const changeScreen = (screen: mainScreenState) => {

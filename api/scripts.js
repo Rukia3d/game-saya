@@ -12,7 +12,7 @@ app.get("/api/player/", (req, res) => {
     const gameState = {
         sceneCharacters: [
           { id: "maya", name: "Maya", image: "../img/maya.png", state: "story", dial: "maya_replic1" },
-          {id: "tara", name: "Tara", image:"../img/tara.png", state: "story", dial: "tara_replic1"}
+          { id: "tara", name: "Tara", image:"../img/tara.png", state: "story", dial: "tara_replic1"}
         ],
         dialogues: dialogues,
         player: { 
@@ -24,13 +24,35 @@ app.get("/api/player/", (req, res) => {
             {  
               id: "maya",
               name: "Maya",
-              image: "../img/maya_spells.png",
+              image: "../img/maya.png",
+              selected: true
             }, 
             {  
               id: "tara",
               name: "Tara",
-              image: "../img/tara_spells.png",
-            }
+              image: "../img/tara.png",
+              selected: true
+            },
+            {  
+              id: "nell",
+              name: "Nell",
+              image: "../img/nell.png",
+              selected: false
+            }, 
+            {  
+              id: "dart",
+              name: "Dart",
+              image: "../img/dart.png",
+              state: "unselected",
+              selected: false
+            }, 
+            {  
+              id: "grey",
+              name: "Grey",
+              image: "../img/grey.png",
+              state: "unselected",
+              selected: false
+            }, 
           ],
           resources: [
           { id: "gold", name: "Gold", image: "../", commonality: 2, quantity: 0 },

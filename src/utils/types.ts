@@ -35,6 +35,7 @@ export interface Character {
   id: string;
   name: string;
   image: string;
+  selected?: boolean;
   state?: string;
   dial?: string;
 }
@@ -67,7 +68,6 @@ export interface GameState {
   sceneCharacters: Character[];
   player: Player;
   adventures: Adventure[];
-  heroes: string[];
   dialogues: Dialogue[];
 }
 

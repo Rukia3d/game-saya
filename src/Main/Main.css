@@ -18,7 +18,8 @@ h2 {
 }
 
 .MenuButton {
-  width: 10em;
+  font-size: 1em;
+  width: 8.5em;
   height: 3em;
   clip-path: polygon(0 15%, 100% 0, 100% 85%, 0% 100%);
   padding: 1em;
@@ -29,11 +30,11 @@ h2 {
 
 .MenuButtonBorder {
   vertical-align: baseline;
-  width: 11em;
+  width: 9.5em;
   height: 4em;
   clip-path: polygon(0 15%, 100% 0, 100% 85%, 0% 100%);
   background-color: black;
-  margin-left: 0.5em;
-  margin-right: 0.5em;
+  margin-left: 0.25em;
+  margin-right: 0.25em;
   z-index: 10;
 }
