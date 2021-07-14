@@ -37,6 +37,25 @@ export const findDialogue = (dialogues: Dialogue[], dialId: string) => {
   return res;
 };
 
+export const findActiveCharacters = (heroes: Character[]) => {
+  if (heroes.length < 3) {
+    throw new Error("Issues with heroes");
+  }
+  const active = heroes.filter((c: Character) => c.selected === true);
+  let i = 0;
+  while (active.length < 3) {
+    if (!heroes[i].selected) {
+      active.push(heroes[i]);
+    }
+    i++;
+  }
+  console.log(
+    "Your active characters",
+    active.map((c: Character) => c.id)
+  );
+  return active.map((c: Character) => c.id);
+};
+
 export const findCharacter = (characters: Character[], charId: string) => {
   const res = characters.find((c: Character) => c.id === charId);
   if (!res) throw new Error(`Couldn't find a character ${charId}`);

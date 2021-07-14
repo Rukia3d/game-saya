@@ -7,8 +7,8 @@ import { SettingsButton } from "../UI/SettingsButton";
 import { CharacterBox } from "./CharacterBox";
 import { HeroBlock } from "./HeroBlock";
 
-import { Spell, Enemy, FightState, Resource } from "../utils/types";
-import { removeFromArray } from "../utils/helpers";
+import { Spell, Enemy, FightState, Resource, Character } from "../utils/types";
+import { findActiveCharacters, removeFromArray } from "../utils/helpers";
 import {
   generateDeck,
   generateEnemyDeck,
@@ -74,11 +74,9 @@ export const Fight = () => {
   if (!enemyId) {
     throw new Error("No enemy for this fight, something went very wrong");
   }
-
-  const storyCharacters = context.story.characters;
-  if (!storyCharacters) {
-    throw new Error("No characters for this fight, something went very wrong");
-  }
+  const storyCharacters = context.story.characters
+    ? context.story.characters
+    : findActiveCharacters(context.gameState.player.heroes);
   const enemy: Enemy = enemies.find((e: any) => e.id === enemyId);
   const heroDeck = generateDeck(
     storyCharacters,

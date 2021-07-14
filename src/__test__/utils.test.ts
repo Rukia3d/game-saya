@@ -3,6 +3,7 @@ import {
   removeFromArray,
   shuffle,
   findLastOpenStory,
+  findActiveCharacters,
 } from "../utils/helpers";
 import {
   generateDeck,
@@ -10,7 +11,7 @@ import {
   updateHeroDeck,
   updateWinPlayer,
 } from "../utils/gamelogic";
-import { StoryGroup } from "../utils/types";
+import { Character, StoryGroup } from "../utils/types";
 
 test("Unique function returns correctly", () => {
   const array1 = [1, 2, 3, 4];
@@ -175,4 +176,112 @@ test("Find the correct next open story in group", () => {
   groups[3].stories[2].open = true;
   groups[1].stories[1].open = false;
   expect(findLastOpenStory(groups)).toEqual(1);
+});
+
+test("Finds correct characters to be active", () => {
+  const heroes3active: Character[] = [
+    {
+      id: "maya",
+      name: "Maya",
+      image: "../img/maya_spells.png",
+      selected: true,
+    },
+    {
+      id: "tara",
+      name: "Tara",
+      image: "../img/tara_spells.png",
+      selected: true,
+    },
+    {
+      id: "nell",
+      name: "Nell",
+      image: "../img/tara_spells.png",
+      selected: true,
+    },
+    {
+      id: "dart",
+      name: "Dart",
+      image: "../img/tara_spells.png",
+      selected: false,
+    },
+    {
+      id: "grey",
+      name: "Grey",
+      image: "../img/tara_spells.png",
+      selected: false,
+    },
+  ];
+  expect(findActiveCharacters(heroes3active)).toEqual(["maya", "tara", "nell"]);
+
+  const heroes2active: Character[] = [
+    {
+      id: "maya",
+      name: "Maya",
+      image: "../img/maya_spells.png",
+      selected: false,
+    },
+    {
+      id: "tara",
+      name: "Tara",
+      image: "../img/tara_spells.png",
+      selected: true,
+    },
+    {
+      id: "nell",
+      name: "Nell",
+      image: "../img/tara_spells.png",
+      selected: true,
+    },
+    {
+      id: "dart",
+      name: "Dart",
+      image: "../img/tara_spells.png",
+      selected: false,
+    },
+    {
+      id: "grey",
+      name: "Grey",
+      image: "../img/tara_spells.png",
+      selected: false,
+    },
+  ];
+  expect(findActiveCharacters(heroes2active)).toEqual(["tara", "nell", "maya"]);
+
+  const heroesNoactive: Character[] = [
+    {
+      id: "maya",
+      name: "Maya",
+      image: "../img/maya_spells.png",
+      selected: false,
+    },
+    {
+      id: "tara",
+      name: "Tara",
+      image: "../img/tara_spells.png",
+      selected: false,
+    },
+    {
+      id: "nell",
+      name: "Nell",
+      image: "../img/tara_spells.png",
+      selected: false,
+    },
+    {
+      id: "dart",
+      name: "Dart",
+      image: "../img/tara_spells.png",
+      selected: false,
+    },
+    {
+      id: "grey",
+      name: "Grey",
+      image: "../img/tara_spells.png",
+      selected: false,
+    },
+  ];
+  expect(findActiveCharacters(heroesNoactive)).toEqual([
+    "maya",
+    "tara",
+    "nell",
+  ]);
 });
