@@ -31,7 +31,11 @@ const HeroSpell = ({
 }) => {
   return (
     <div className="Spell">
-      <div className="SpellCard" onClick={() => selectCard(card)}>
+      <div
+        className={`SpellCard ${card.selected ? "active" : "inactive"}`}
+        aria-label="spell_card_border"
+        onClick={() => selectCard(card)}
+      >
         <p aria-label="spell_card">{card.name}</p>
         <img
           className="SmallCardImage"

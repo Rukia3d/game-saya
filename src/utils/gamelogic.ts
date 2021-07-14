@@ -9,6 +9,27 @@ import {
 } from "./types";
 const rewardData = require("../data/rewards.json");
 
+export const changeCardsInDeck = (playerCards: Spell[], s: Spell) => {
+  const playerCard = playerCards.find((c: Spell) => s.id === c.id);
+  if (!playerCard) {
+    throw new Error(
+      "Can't find the card you're trying to select in player's cards"
+    );
+  }
+  const cardIndex = playerCards.indexOf(playerCard);
+  const currentlySelected = playerCards.filter((c: Spell) => c.selected);
+
+  if (currentlySelected.length >= 15) {
+    const firstSelectedIndex = playerCards.indexOf(currentlySelected[0]);
+    playerCards[firstSelectedIndex] = {
+      ...playerCards[firstSelectedIndex],
+      selected: false,
+    };
+  }
+  playerCards[cardIndex] = { ...s, selected: !s.selected };
+  return playerCards;
+};
+
 export const generateDeck = (
   characters: string[],
   playerCards: Spell[]

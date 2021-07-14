@@ -43,11 +43,11 @@
   margin: 1em;
 }
 
-.inactive {
+.HeroImage.inactive {
   height: 30%;
 }
 
-.active {
+.HeroImage.active {
   height: 50%;
   z-index: 10;
   margin: 1em;

@@ -6,6 +6,7 @@ import {
   findActiveCharacters,
 } from "../utils/helpers";
 import {
+  changeCardsInDeck,
   generateDeck,
   generateEnemyDeck,
   updateHeroDeck,
@@ -284,4 +285,81 @@ test("Finds correct characters to be active", () => {
     "tara",
     "nell",
   ]);
+});
+
+test.only("Correctly adds Card to Player's deck", () => {
+  const spellsUnselected = new Array(15).fill(0).map((x, n) => ({
+    id: "base_hit" + n,
+    name: "Base Hit " + n,
+    strength: 1,
+    quantity: 1,
+    character: null,
+    element: null,
+    image: "",
+    selected: false,
+    owner: "hero" as "hero",
+  }));
+
+  const spellsSelected = new Array(15).fill(0).map((x, n) => ({
+    id: "base_hit" + n,
+    name: "Base Hit " + n,
+    strength: 1,
+    quantity: 1,
+    character: null,
+    element: null,
+    image: "",
+    selected: true,
+    owner: "hero" as "hero",
+  }));
+
+  const spellsMore = spellsSelected.concat([
+    {
+      id: "base_hit16",
+      name: "Base Hit 16",
+      strength: 1,
+      quantity: 1,
+      character: null,
+      element: null,
+      image: "",
+      selected: false,
+      owner: "hero" as "hero",
+    },
+    {
+      id: "base_hit17",
+      name: "Base Hit 17",
+      strength: 1,
+      quantity: 1,
+      character: null,
+      element: null,
+      image: "",
+      selected: false,
+      owner: "hero" as "hero",
+    },
+  ]);
+  const addingFirst = changeCardsInDeck(spellsUnselected, spellsUnselected[0]);
+  expect(addingFirst.length).toEqual(15);
+  expect(addingFirst[0].selected).toBeTruthy();
+
+  const addingThird = changeCardsInDeck(spellsUnselected, spellsUnselected[3]);
+  expect(addingThird.length).toEqual(15);
+  expect(addingThird[3].selected).toBeTruthy();
+
+  const chaingingFirstTaken = changeCardsInDeck(
+    spellsSelected,
+    spellsSelected[0]
+  );
+  expect(chaingingFirstTaken.length).toEqual(15);
+  expect(chaingingFirstTaken[0].selected).not.toBeTruthy();
+
+  const changingThirdTaken = changeCardsInDeck(
+    spellsSelected,
+    spellsSelected[3]
+  );
+  expect(changingThirdTaken.length).toEqual(15);
+  expect(changingThirdTaken[3].selected).not.toBeTruthy();
+
+  const addingWhenAllSelected = changeCardsInDeck(spellsMore, spellsMore[15]);
+  expect(addingWhenAllSelected.length).toEqual(17);
+  expect(addingWhenAllSelected[0].selected).not.toBeTruthy();
+  expect(addingWhenAllSelected[15].selected).toBeTruthy();
 });
