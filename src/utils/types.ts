@@ -15,7 +15,8 @@ export interface Player {
   id: number;
   cards: Spell[];
   experience: number;
-  lifes: number;
+  hearts: number;
+  maxHearts: number;
   resources: OwnedResource[];
   heroes: Character[];
 }

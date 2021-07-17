@@ -7,7 +7,7 @@ import { SettingsButton } from "../UI/SettingsButton";
 import { CharacterBox } from "./CharacterBox";
 import { HeroBlock } from "./HeroBlock";
 
-import { Spell, Enemy, FightState, Resource, Character } from "../utils/types";
+import { Spell, Enemy, FightState, Resource } from "../utils/types";
 import { findActiveCharacters, removeFromArray } from "../utils/helpers";
 import {
   generateDeck,

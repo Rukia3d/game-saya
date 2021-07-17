@@ -130,7 +130,7 @@ export const enemyToNumber = (enemy: Enemy) => {
 export const updateLostPlayer = (player: Player) => {
   return {
     ...player,
-    lifes: player.lifes - 1,
+    hearts: player.hearts - 1,
   };
 };
 

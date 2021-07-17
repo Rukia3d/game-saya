@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import "./Heroes.css";
 import { Character } from "../utils/types";
 import { GameContext } from "../App";
+import { TopMenu } from "../UI/TopMenu";
 
 export const Heroes = () => {
   const context = useContext(GameContext);
@@ -43,6 +44,7 @@ export const Heroes = () => {
           alt="heroes_background"
         />
       </div>
+      <TopMenu />
       <div className="HeroesPresent">
         {heroes.map((c: Character, i: number) => (
           <img

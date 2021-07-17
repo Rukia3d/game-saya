@@ -60,7 +60,8 @@ const gameState = {
     id: 1,
     cards: spells,
     experience: 300,
-    lifes: 3,
+    hearts: 3,
+    maxHearts: 5,
     heroes: [
       {
         id: "maya",

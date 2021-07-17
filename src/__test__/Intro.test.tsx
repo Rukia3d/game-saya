@@ -26,7 +26,7 @@ const gameState = {
     id: 1,
     cards: [],
     experience: 300,
-    lifes: 3,
+    hearts: 3,
     heroes: [
       {
         id: "maya",

@@ -86,7 +86,8 @@ test("updateWinPlayer assigns rewards correctly", () => {
     id: 1,
     cards: [],
     experience: 300,
-    lifes: 3,
+    hearts: 3,
+    maxHearts: 5,
     heroes: [],
     resources: [
       { id: "gold", name: "Gold", image: "../", commonality: 2, quantity: 0 },
