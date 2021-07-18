@@ -4,7 +4,6 @@ export interface Spell {
   name: string;
   strength: number;
   character: null | string;
-  quantity: number;
   selected: boolean;
   element: null | element;
   owner: "hero" | "enemy";

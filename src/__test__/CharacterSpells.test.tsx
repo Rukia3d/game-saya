@@ -9,7 +9,6 @@ const baseCards: Spell[] = new Array(7).fill(0).map((x, n) => ({
   id: "base_hit" + n,
   name: "Base Hit " + n,
   strength: 1,
-  quantity: 1,
   character: null,
   element: null,
   image: "",

@@ -4,7 +4,6 @@ const cards = [
     id: "base_hit1",
     name: "Base Hit 1",
     strength: 1,
-    quantity: 2,
     character: null,
     element: null,
     image: "../img/Spells/spell2.jpg",
@@ -15,7 +14,6 @@ const cards = [
     id: "base_hit1_tara",
     name: "Tara Hit 1",
     strength: 1,
-    quantity: 1,
     character: "tara",
     element: "metal" as "metal",
     image: "../img/Spells/spell2.jpg",
@@ -26,7 +24,6 @@ const cards = [
     id: "base_hit1_tara",
     name: "Tara Hit 1",
     strength: 1,
-    quantity: 1,
     character: "maya",
     element: "earth" as "earth",
     image: "../img/Spells/spell2.jpg",
@@ -47,7 +44,6 @@ const heroCard = {
   id: "base_hit1",
   name: "Base Hit 1",
   strength: 1,
-  quantity: 1,
   character: null,
   element: null,
   image: "",
@@ -58,7 +54,6 @@ const enemyCard = {
   id: "base_hit1",
   name: "Base Hit 1",
   strength: 1,
-  quantity: 1,
   character: null,
   element: null,
   image: "",
@@ -100,7 +95,6 @@ test("Enemy Attacks with a trump card, no protection from a simple card", () => 
       id: "base_hit1",
       name: "Base Hit 1",
       strength: 1,
-      quantity: 1,
       character: null,
       element: null,
       image: "",
@@ -111,7 +105,6 @@ test("Enemy Attacks with a trump card, no protection from a simple card", () => 
       id: "base_hit1",
       name: "Base Hit 1",
       strength: 3,
-      quantity: 1,
       character: null,
       element: "fire" as "fire",
       image: "",
@@ -119,7 +112,6 @@ test("Enemy Attacks with a trump card, no protection from a simple card", () => 
       owner: "enemy" as "enemy",
     }
   );
-  console.log(enemyAttackRes);
   expect(enemyAttackRes.hero.currentHealth).toBe(12);
 });
 
@@ -130,7 +122,6 @@ test("Enemy Attacks with a trump card, hero has a smaller trump card", () => {
       id: "base_hit1",
       name: "Base Hit 1",
       strength: 2,
-      quantity: 1,
       character: null,
       element: "fire" as "fire",
       image: "",
@@ -141,7 +132,6 @@ test("Enemy Attacks with a trump card, hero has a smaller trump card", () => {
       id: "base_hit1",
       name: "Base Hit 1",
       strength: 3,
-      quantity: 1,
       character: null,
       element: "fire" as "fire",
       image: "",
@@ -149,7 +139,6 @@ test("Enemy Attacks with a trump card, hero has a smaller trump card", () => {
       owner: "enemy" as "enemy",
     }
   );
-  console.log(enemyAttackRes);
   expect(enemyAttackRes.hero.currentHealth).toBe(14);
 });
 
@@ -160,7 +149,6 @@ test("Enemy Attacks with a simple card, hero has a trump card", () => {
       id: "base_hit1",
       name: "Base Hit 1",
       strength: 2,
-      quantity: 1,
       character: null,
       element: "fire" as "fire",
       image: "",
@@ -171,7 +159,6 @@ test("Enemy Attacks with a simple card, hero has a trump card", () => {
       id: "base_hit1",
       name: "Base Hit 1",
       strength: 3,
-      quantity: 1,
       character: null,
       element: "earth" as "earth",
       image: "",

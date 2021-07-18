@@ -11,7 +11,6 @@ const cards = [
     id: "base_hit1",
     name: "Base Hit 1",
     strength: 1,
-    quantity: 2,
     character: null,
     element: null,
     image: "../img/Spells/spell2.jpg",
@@ -22,7 +21,6 @@ const cards = [
     id: "base_hit1_tara",
     name: "Tara Hit 1",
     strength: 1,
-    quantity: 1,
     character: "tara",
     element: "metal" as "metal",
     image: "../img/Spells/spell2.jpg",
@@ -33,7 +31,6 @@ const cards = [
     id: "base_hit1_tara",
     name: "Tara Hit 1",
     strength: 1,
-    quantity: 1,
     character: "maya",
     element: "earth" as "earth",
     image: "../img/Spells/spell2.jpg",
@@ -81,7 +78,7 @@ test("updateHeroDeck shuffles if there are no cards left", () => {
     element: "fire" as "fire",
   };
   const [newDeck, newDrop] = updateHeroDeck(fightState, deckForTwo[0]);
-  expect(newDeck.length).toEqual(4);
+  expect(newDeck.length).toEqual(3);
   expect(newDrop.length).toEqual(1);
 });
 
@@ -144,7 +141,6 @@ test("Correctly adds Card to Player's deck", () => {
     id: "base_hit" + n,
     name: "Base Hit " + n,
     strength: 1,
-    quantity: 1,
     character: null,
     element: null,
     image: "",
@@ -156,7 +152,6 @@ test("Correctly adds Card to Player's deck", () => {
     id: "base_hit" + n,
     name: "Base Hit " + n,
     strength: 1,
-    quantity: 1,
     character: null,
     element: null,
     image: "",
@@ -169,7 +164,6 @@ test("Correctly adds Card to Player's deck", () => {
       id: "base_hit16",
       name: "Base Hit 16",
       strength: 1,
-      quantity: 1,
       character: null,
       element: null,
       image: "",
@@ -180,7 +174,6 @@ test("Correctly adds Card to Player's deck", () => {
       id: "base_hit17",
       name: "Base Hit 17",
       strength: 1,
-      quantity: 1,
       character: null,
       element: null,
       image: "",

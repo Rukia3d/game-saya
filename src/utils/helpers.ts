@@ -49,10 +49,6 @@ export const findActiveCharacters = (heroes: Character[]) => {
     }
     i++;
   }
-  console.log(
-    "Your active characters",
-    active.map((c: Character) => c.id)
-  );
   return active.map((c: Character) => c.id);
 };
 

@@ -38,22 +38,16 @@ export const generateDeck = (
   const heroSpells: Spell[] = [];
   playerCards.forEach((c: Spell) => {
     if (!c.selected) return;
-    for (let i = 0; i < c.quantity; i++) {
-      if (c.character && characters.indexOf(c.character) === -1) {
-        return;
-      }
-      heroSpells.push({
-        id: c.id,
-        image: c.image,
-        name: c.name,
-        quantity: c.quantity,
-        strength: c.strength,
-        character: c.character,
-        element: c.element,
-        owner: "hero",
-        selected: c.selected,
-      });
-    }
+    heroSpells.push({
+      id: c.id,
+      image: c.image,
+      name: c.name,
+      strength: c.strength,
+      character: c.character,
+      element: c.element,
+      owner: "hero",
+      selected: c.selected,
+    });
   });
   return heroSpells;
 };
@@ -61,19 +55,16 @@ export const generateDeck = (
 export const generateEnemyDeck = (enemy: Enemy): Spell[] => {
   const enemySpells: Spell[] = [];
   enemy.cards.forEach((c: Spell) => {
-    for (let i = 0; i < c.quantity; i++) {
-      enemySpells.push({
-        id: c.id,
-        image: c.image,
-        name: c.name,
-        strength: c.strength,
-        character: c.character,
-        element: c.element,
-        owner: "enemy",
-        quantity: c.quantity,
-        selected: true,
-      });
-    }
+    enemySpells.push({
+      id: c.id,
+      image: c.image,
+      name: c.name,
+      strength: c.strength,
+      character: c.character,
+      element: c.element,
+      owner: "enemy",
+      selected: true,
+    });
   });
   return enemySpells.splice(0, enemy.life);
 };

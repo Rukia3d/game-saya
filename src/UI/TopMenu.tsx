@@ -34,7 +34,6 @@ const Mana = ({ max, current }: { max: number; current: number }) => {
     }
     return "green";
   };
-  console.log("current", current);
   return (
     <div className="Mana">
       <div className="Lightning"></div>
@@ -51,7 +50,6 @@ export const TopMenu = () => {
     throw new Error("No data");
   }
   const player = context.gameState.player;
-  console.log("Top Menu", context.gameState.player);
   return (
     <div className="TopMenu" aria-label="top_menu">
       <Mana max={player.maxMana} current={player.mana} />

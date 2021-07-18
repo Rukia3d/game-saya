@@ -15,8 +15,8 @@ const gameState = {
     id: 1,
     cards: [],
     experience: 300,
-    hearts: 3,
-    maxHearts: 5,
+    mana: 3,
+    maxMana: 5,
     heroes: ["maya", "tara", "nell", "dart", "grey"].map((s: string) => ({
       id: s,
       selected: false,

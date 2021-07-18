@@ -66,8 +66,9 @@ export const HeroBlock = ({
         </p>
         <p>
           Elements:
-          {fightState.elements.map((s: element) => (
+          {fightState.elements.map((s: element, i: number) => (
             <span
+              key={i}
               style={{ color: s === fightState.element ? "green" : "black" }}
             >
               {" "}

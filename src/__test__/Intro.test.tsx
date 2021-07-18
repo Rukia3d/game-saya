@@ -26,7 +26,8 @@ const gameState = {
     id: 1,
     cards: [],
     experience: 300,
-    hearts: 3,
+    mana: 3,
+    maxMana: 5,
     heroes: [
       {
         id: "maya",
@@ -63,7 +64,6 @@ test("Renders Heroes screen with characters ready for a dialogue", () => {
   expect(screen.getByAltText("intro_background")).toBeInTheDocument();
   expect(screen.getByAltText("hero_maya")).toBeInTheDocument();
   expect(screen.getByAltText("hero_tara")).toBeInTheDocument();
-  screen.debug();
   expect(screen.getByAltText("maya_story")).toBeInTheDocument();
   expect(screen.getByAltText("tara_story")).toBeInTheDocument();
 });
