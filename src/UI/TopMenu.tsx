@@ -36,8 +36,12 @@ const Mana = ({ max, current }: { max: number; current: number }) => {
   };
   return (
     <div className="Mana">
-      <div className="Lightning"></div>
-      <div className="ManaValue" style={{ color: manaColor() }}>
+      <div className="Lightning" aria-label="mana_icon"></div>
+      <div
+        className="ManaValue"
+        aria-label="mana_value"
+        style={{ color: manaColor() }}
+      >
         {current}
       </div>
     </div>

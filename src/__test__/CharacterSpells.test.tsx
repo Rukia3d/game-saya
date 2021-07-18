@@ -12,6 +12,7 @@ const baseCards: Spell[] = new Array(7).fill(0).map((x, n) => ({
   character: null,
   element: null,
   image: "",
+  mana: 0,
   selected: true,
   owner: "hero" as "hero",
 }));
@@ -54,7 +55,7 @@ test("CharacterSpells renders correctly for Base character", async () => {
   expect(screen.getByText("Basic spells")).toBeInTheDocument();
   expect(screen.getAllByLabelText("spell_card").length).toEqual(7);
   expect(screen.getAllByLabelText("spell_card_border")[0]).toHaveClass(
-    "active"
+    "SpellCard"
   );
   userEvent.click(screen.getAllByLabelText("spell_card_border")[0]);
   expect(
