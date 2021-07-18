@@ -7,18 +7,13 @@ import { Enemy, FightState, Spell } from "../utils/types";
 
 export const CharacterBox = ({
   fightState,
-  setEnemyCard,
+  enemyAct,
   setInfo,
 }: {
   fightState: FightState;
-  setEnemyCard: (s: Spell | null) => void;
+  enemyAct: () => void;
   setInfo: (i: Spell | Enemy | null) => void;
 }) => {
-  const enemyAct = () => {
-    const spell = fightState.enemyDeck.shift() || null;
-    setEnemyCard(spell);
-  };
-
   return (
     <div className="CharacterBox">
       <div className="Stats" onClick={() => setInfo(fightState.enemy)}>

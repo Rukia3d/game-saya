@@ -215,7 +215,3 @@ test("Correctly adds Card to Player's deck", () => {
   expect(addingWhenAllSelected[0].selected).not.toBeTruthy();
   expect(addingWhenAllSelected[15].selected).toBeTruthy();
 });
-
-test("Enemy Attack simple card", () => {});
-
-test("Enemy Attack character card", () => {});

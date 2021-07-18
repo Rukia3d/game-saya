@@ -176,9 +176,30 @@ const getNextElement = (
   if (index === -1)
     throw new Error("Can't find the element to give you the next one");
   if (index === elements.length - 1) {
-    return element[0] as element;
+    return elements[0];
   }
-  return element[index + 1] as element;
+  return elements[index + 1];
+};
+
+const trumpAttack = (
+  baseHealth: number,
+  element: element,
+  heroCard: Spell,
+  enemyCard: Spell
+): number => {
+  // Trump logic
+  if (element === enemyCard.element && element !== heroCard.element) {
+    // enemy has the trump, hero doesn't - all damage applies
+    return baseHealth - enemyCard.strength;
+  }
+  if (element === enemyCard.element && element === heroCard.element) {
+    // enemy has the trump, hero has the trump, the damage negates for the strength of hero card (same as non-trump)
+    if (heroCard.strength <= enemyCard.strength) {
+      return baseHealth - enemyCard.strength + heroCard.strength;
+    }
+  }
+  // enemy doesn't have the trump, hero has, all damage negates
+  return baseHealth;
 };
 
 export const enemyAttack = (
@@ -186,31 +207,47 @@ export const enemyAttack = (
   heroCard: Spell,
   enemyCard: Spell
 ) => {
+  // Update cards state
   const [newDeck, newDrop] = updateHeroDeck(fightState, heroCard);
   const newHeroHand = removeFromArray(fightState.heroHand, heroCard);
   const newCard = newDeck.shift();
   newHeroHand.push(newCard);
-  let newHealth = fightState.hero.currentHealth;
-  if (heroCard.character) {
-    // hero card is a special one
+  const enemyDrop = fightState.enemyDrop.concat([enemyCard]);
+  const enemyDeck = fightState.enemyDeck.splice(1);
+  let newHeroHealth = fightState.hero.currentHealth;
+
+  if (
+    fightState.element &&
+    (fightState.element === heroCard.element ||
+      fightState.element === enemyCard.element)
+  ) {
+    // Trump logic
+    newHeroHealth = trumpAttack(
+      newHeroHealth,
+      fightState.element,
+      heroCard,
+      enemyCard
+    );
   } else {
     if (heroCard.strength <= enemyCard.strength) {
-      newHealth = newHealth - enemyCard.strength;
+      newHeroHealth = newHeroHealth - enemyCard.strength;
     }
   }
 
-  const heroNewHealth = {
+  const heroNew = {
     ...fightState.hero,
-    currentHealth: newHealth,
+    currentHealth: newHeroHealth,
   };
   const nextElement = getNextElement(fightState.elements, fightState.element);
+
   return {
     ...fightState,
     heroDeck: newDeck,
     heroDrop: newDrop,
-    enemyDrop: fightState.enemyDrop.concat([enemyCard]),
+    enemyDeck: enemyDeck,
+    enemyDrop: enemyDrop,
     heroHand: newHeroHand,
-    hero: heroNewHealth,
+    hero: heroNew,
     element: nextElement,
   };
 };

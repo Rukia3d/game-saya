@@ -34,10 +34,6 @@ export const Fight = () => {
     throw new Error("No data");
   }
 
-  if (!context.story) {
-    throw new Error("No story for this fight");
-  }
-
   const enemyId = context.story.enemy;
   if (!enemyId) {
     throw new Error("No enemy for this fight, something went very wrong");
@@ -80,6 +76,11 @@ export const Fight = () => {
   const [result, setResult] = useState<null | String>(null);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [info, setInfo] = useState<null | Spell | Enemy>(null);
+
+  const enemyAct = () => {
+    const spell = fightState.enemyDeck[0] || null;
+    setEnemyCard(spell);
+  };
 
   const selectCard = (c: Spell) => {
     if (!enemyCard) {
@@ -137,7 +138,7 @@ export const Fight = () => {
       ) : null}
       <CharacterBox
         fightState={fightState}
-        setEnemyCard={setEnemyCard}
+        enemyAct={enemyAct}
         setInfo={setInfo}
       />
       <HeroBlock
