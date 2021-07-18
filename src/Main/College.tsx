@@ -4,7 +4,11 @@ import "./College.css";
 export const College = () => {
   return (
     <div className="College">
-      <h1>College</h1>
+      <img
+        className="CollegeBackground"
+        src="../img/lab_background.png"
+        alt="college_background"
+      />
     </div>
   );
 };
