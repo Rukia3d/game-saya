@@ -44,6 +44,18 @@
   height: 100%;
 }
 
+.SpellCard.trump {
+  border: 1px solid violet;
+  width: 100%;
+  height: 100%;
+}
+
+.SpellCard.standard {
+  border: 1px solid black;
+  width: 100%;
+  height: 100%;
+}
+
 .SmallCardImage {
   width: 50px;
 }

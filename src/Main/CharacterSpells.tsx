@@ -50,6 +50,7 @@ export const CharacterSpells = ({
             key={i}
             selectCard={selectCard}
             setInfo={setInfo}
+            element={null}
             card={c}
           />
         ))}

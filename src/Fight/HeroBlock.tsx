@@ -2,38 +2,43 @@ import React from "react";
 import "./HeroBlock.css";
 
 import { element, Enemy, FightState, Spell } from "../utils/types";
-import { shuffle } from "../utils/helpers";
 
 export const HeroSpellWithInfo = ({
   card,
+  element,
   selectCard,
   setInfo,
 }: {
   card: Spell;
+  element: element | null;
   selectCard: (s: Spell) => void;
   setInfo: (s: any) => void;
 }) => {
   return (
-    <div>
+    <div className={`SpellCard ${card.selected ? "active" : "inactive"}`}>
       <button onClick={() => setInfo(card)} data-testid="hero_card_info">
         Info
       </button>
-      <HeroSpell card={card} selectCard={selectCard} />
+      <HeroSpell card={card} selectCard={selectCard} element={element} />
     </div>
   );
 };
 
 const HeroSpell = ({
+  element,
   card,
   selectCard,
 }: {
+  element: element | null;
   card: Spell;
   selectCard: (s: Spell) => void;
 }) => {
   return (
     <div className="Spell">
       <div
-        className={`SpellCard ${card.selected ? "active" : "inactive"}`}
+        className={`SpellCard ${
+          card.element === element ? "trump" : "standard"
+        }`}
         aria-label="spell_card_border"
         onClick={() => selectCard(card)}
       >
@@ -83,6 +88,7 @@ export const HeroBlock = ({
             card={d}
             selectCard={selectCard}
             setInfo={setInfo}
+            element={fightState.element}
             key={i}
           />
         ))}
