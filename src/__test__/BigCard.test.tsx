@@ -11,6 +11,7 @@ const card = {
   element: "earth" as "earth",
   image: "../img/Spells/spell1.jpg",
   selected: true,
+  mana: 0,
   owner: "hero" as "hero",
 };
 

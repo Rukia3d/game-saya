@@ -16,7 +16,11 @@ export const CharacterBox = ({
 }) => {
   return (
     <div className="CharacterBox">
-      <div className="Stats" onClick={() => setInfo(fightState.enemy)}>
+      <div
+        className="Stats"
+        aria-label="opponent_info"
+        onClick={() => setInfo(fightState.enemy)}
+      >
         cards:
         <span data-testid="enemy_life">{fightState.enemyDeck.length}</span>,
         drop: {fightState.enemyDrop.length}
