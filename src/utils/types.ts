@@ -15,8 +15,8 @@ export interface Player {
   id: number;
   cards: Spell[];
   experience: number;
-  hearts: number;
-  maxHearts: number;
+  mana: number;
+  maxMana: number;
   resources: OwnedResource[];
   heroes: Character[];
 }
@@ -87,6 +87,8 @@ export interface FightState {
   hero: {
     health: number;
     currentHealth: number;
+    mana: number;
+    currentMana: number;
   };
   enemy: Enemy;
   heroDeck: Spell[];

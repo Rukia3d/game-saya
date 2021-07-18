@@ -9,14 +9,20 @@
   left: 0;
 }
 
-.heart {
-  margin: 0.1em;
+.Mana {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 
-.filled {
-  fill: red;
+.Lightning {
+  width: 2em;
+  height: 2em;
+  background-color: blueviolet;
+  clip-path: polygon(62% 0, 57% 43%, 81% 43%, 25% 100%, 35% 59%, 12% 59%);
 }
 
-.empty {
-  fill: grey;
+.ManaValue {
+  width: 3em;
+  height: 1em;
 }

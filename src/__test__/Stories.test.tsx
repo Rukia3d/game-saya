@@ -10,10 +10,10 @@ const gameState = {
   dialogues: [],
   player: {
     id: 1,
-    maxHearts: 5,
+    maxMana: 5,
     cards: [],
     experience: 300,
-    hearts: 3,
+    mana: 3,
     heroes: [],
     resources: [],
   },

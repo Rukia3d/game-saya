@@ -20,26 +20,17 @@ const StoryPanel = ({
     !context ||
     !context.gameState ||
     !context.gameState.player ||
-    !context.gameState.player.hearts
+    !context.gameState.player.mana
   ) {
     throw new Error("No data");
   }
-  const canPlay = context.gameState.player.hearts > 0;
-
-  const load = (s: Story) => {
-    if (canPlay) {
-      loadStory(s);
-    } else {
-      console.warn("No lived you can't play");
-    }
-  };
 
   if (group.stories.length !== 3)
     throw new Error("Number of stories in this panel is incorrect");
   return (
     <div className={`StoryGroup_${group.group}`}>
       {group.stories.map((s: Story, i: number) => (
-        <div className={`Story${i + 1}`} onClick={() => load(s)} key={i}>
+        <div className={`Story${i + 1}`} onClick={() => loadStory(s)} key={i}>
           <img
             src={s.image}
             alt={`story_${s.id}`}

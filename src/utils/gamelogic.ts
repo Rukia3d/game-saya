@@ -1,4 +1,4 @@
-import { shuffle } from "./helpers";
+import { removeFromArray, shuffle } from "./helpers";
 import {
   Enemy,
   FightState,
@@ -130,7 +130,7 @@ export const enemyToNumber = (enemy: Enemy) => {
 export const updateLostPlayer = (player: Player) => {
   return {
     ...player,
-    hearts: player.hearts - 1,
+    mana: player.mana - 1,
   };
 };
 
@@ -163,5 +163,37 @@ export const updateWinPlayer = (
   return {
     ...updatedPlayer,
     resources: givePlayerResources(player, resources),
+  };
+};
+
+export const enemyAttack = (
+  fightState: FightState,
+  heroCard: Spell,
+  enemyCard: Spell
+) => {
+  const [newDeck, newDrop] = updateHeroDeck(fightState, heroCard);
+  const newHeroHand = removeFromArray(fightState.heroHand, heroCard);
+  const newCard = newDeck.shift();
+  newHeroHand.push(newCard);
+  let newHealth = fightState.hero.currentHealth;
+  if (heroCard.character) {
+    // hero card is a special one
+  } else {
+    if (heroCard.strength <= enemyCard.strength) {
+      newHealth = newHealth - enemyCard.strength;
+    }
+  }
+
+  const heroNewHealth = {
+    ...fightState.hero,
+    currentHealth: newHealth,
+  };
+  return {
+    ...fightState,
+    heroDeck: newDeck,
+    heroDrop: newDrop,
+    enemyDrop: fightState.enemyDrop.concat([enemyCard]),
+    heroHand: newHeroHand,
+    hero: heroNewHealth,
   };
 };

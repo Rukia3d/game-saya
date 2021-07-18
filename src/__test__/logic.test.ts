@@ -68,6 +68,8 @@ test("updateHeroDeck shuffles if there are no cards left", () => {
     hero: {
       health: 15,
       currentHealth: 15,
+      mana: 15,
+      currentMana: 10,
     },
     enemy: enemy,
     heroDeck: [],
@@ -86,8 +88,8 @@ test("updateWinPlayer assigns rewards correctly", () => {
     id: 1,
     cards: [],
     experience: 300,
-    hearts: 3,
-    maxHearts: 5,
+    maxMana: 5,
+    mana: 3,
     heroes: [],
     resources: [
       { id: "gold", name: "Gold", image: "../", commonality: 2, quantity: 0 },
@@ -211,3 +213,7 @@ test("Correctly adds Card to Player's deck", () => {
   expect(addingWhenAllSelected[0].selected).not.toBeTruthy();
   expect(addingWhenAllSelected[15].selected).toBeTruthy();
 });
+
+test("Enemy Attack simple card", () => {});
+
+test("Enemy Attack character card", () => {});

@@ -23,24 +23,26 @@ const Life = ({
   );
 };
 
-const Lifes = ({
-  max,
-  current,
-}: {
-  max: number;
-  current: number;
-}): JSX.Element => {
-  console.log("max", max);
-  console.log("current", current);
-  const lifes: JSX.Element[] = [];
-  for (let i = 0; i < max; i++) {
-    if (i < current) {
-      lifes.push(<Life fill />);
-    } else {
-      lifes.push(<Life />);
+const Mana = ({ max, current }: { max: number; current: number }) => {
+  const manaColor = (): string => {
+    const third = Math.ceil(max / 3);
+    if (current <= third) {
+      return "red";
     }
-  }
-  return <>{lifes}</>;
+    if (current <= third * 2) {
+      return "orange";
+    }
+    return "green";
+  };
+  console.log("current", current);
+  return (
+    <div className="Mana">
+      <div className="Lightning"></div>
+      <div className="ManaValue" style={{ color: manaColor() }}>
+        {current}
+      </div>
+    </div>
+  );
 };
 
 export const TopMenu = () => {
@@ -52,7 +54,7 @@ export const TopMenu = () => {
   console.log("Top Menu", context.gameState.player);
   return (
     <div className="TopMenu" aria-label="top_menu">
-      <Lifes max={player.maxHearts} current={player.hearts} />
+      <Mana max={player.maxMana} current={player.mana} />
     </div>
   );
 };

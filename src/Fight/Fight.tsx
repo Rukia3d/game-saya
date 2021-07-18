@@ -8,11 +8,11 @@ import { CharacterBox } from "./CharacterBox";
 import { HeroBlock } from "./HeroBlock";
 
 import { Spell, Enemy, FightState, Resource } from "../utils/types";
-import { findActiveCharacters, removeFromArray } from "../utils/helpers";
+import { findActiveCharacters } from "../utils/helpers";
 import {
+  enemyAttack,
   generateDeck,
   generateEnemyDeck,
-  updateHeroDeck,
   updateLostPlayer,
   updateWinPlayer,
 } from "../utils/gamelogic";
@@ -21,38 +21,6 @@ import { GameContext } from "../App";
 import { BigCard } from "./BigCard";
 
 const enemies = require("../data/enemies.json");
-
-const enemyAttack = (
-  fightState: FightState,
-  heroCard: Spell,
-  enemyCard: Spell
-) => {
-  const [newDeck, newDrop] = updateHeroDeck(fightState, heroCard);
-  const newHeroHand = removeFromArray(fightState.heroHand, heroCard);
-  const newCard = newDeck.shift();
-  newHeroHand.push(newCard);
-  let newHealth = fightState.hero.currentHealth;
-  if (heroCard.character) {
-    // hero card is a special one
-  } else {
-    if (heroCard.strength <= enemyCard.strength) {
-      newHealth = newHealth - enemyCard.strength;
-    }
-  }
-
-  const heroNewHealth = {
-    ...fightState.hero,
-    currentHealth: newHealth,
-  };
-  return {
-    ...fightState,
-    heroDeck: newDeck,
-    heroDrop: newDrop,
-    enemyDrop: fightState.enemyDrop.concat([enemyCard]),
-    heroHand: newHeroHand,
-    hero: heroNewHealth,
-  };
-};
 
 export const Fight = () => {
   const context = useContext(GameContext);
@@ -88,6 +56,8 @@ export const Fight = () => {
     hero: {
       health: 15,
       currentHealth: 15,
+      mana: 15,
+      currentMana: 10,
     },
     enemy: enemy,
     heroDeck: heroDeck,
