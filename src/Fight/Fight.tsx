@@ -10,12 +10,12 @@ import { HeroBlock } from "./HeroBlock";
 import { Spell, Enemy, FightState, Resource, element } from "../utils/types";
 import { findActiveCharacters, shuffle } from "../utils/helpers";
 import {
-  enemyAttack,
   generateDeck,
   generateEnemyDeck,
   updateLostPlayer,
   updateWinPlayer,
 } from "../utils/gamelogic";
+import { enemyAttack } from "../utils/fightlogic";
 import { FightResult } from "./FightResult";
 import { GameContext } from "../App";
 import { BigCard } from "./BigCard";

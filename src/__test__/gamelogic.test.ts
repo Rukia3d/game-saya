@@ -13,6 +13,7 @@ const cards = [
     strength: 1,
     character: null,
     element: null,
+    mana: 0,
     image: "../img/Spells/spell2.jpg",
     selected: true,
     owner: "hero" as "hero",
@@ -26,6 +27,7 @@ const cards = [
     image: "../img/Spells/spell2.jpg",
     selected: true,
     owner: "hero" as "hero",
+    mana: 0,
   },
   {
     id: "base_hit1_tara",
@@ -36,6 +38,7 @@ const cards = [
     image: "../img/Spells/spell2.jpg",
     selected: true,
     owner: "hero" as "hero",
+    mana: 0,
   },
 ];
 const enemy = {
@@ -146,6 +149,7 @@ test("Correctly adds Card to Player's deck", () => {
     image: "",
     selected: false,
     owner: "hero" as "hero",
+    mana: 0,
   }));
 
   const spellsSelected = new Array(15).fill(0).map((x, n) => ({
@@ -157,6 +161,7 @@ test("Correctly adds Card to Player's deck", () => {
     image: "",
     selected: true,
     owner: "hero" as "hero",
+    mana: 0,
   }));
 
   const spellsMore = spellsSelected.concat([
@@ -169,6 +174,7 @@ test("Correctly adds Card to Player's deck", () => {
       image: "",
       selected: false,
       owner: "hero" as "hero",
+      mana: 0,
     },
     {
       id: "base_hit17",
@@ -179,6 +185,7 @@ test("Correctly adds Card to Player's deck", () => {
       image: "",
       selected: false,
       owner: "hero" as "hero",
+      mana: 0,
     },
   ]);
   const addingFirst = changeCardsInDeck(spellsUnselected, spellsUnselected[0]);

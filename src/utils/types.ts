@@ -3,11 +3,16 @@ export interface Spell {
   image: string;
   name: string;
   strength: number;
+  mana: number;
+  effect?: [effectValue, number];
+  trump?: [trumpValue, number];
   character: null | string;
   selected: boolean;
   element: null | element;
   owner: "hero" | "enemy";
 }
+export type trumpValue = "strength";
+export type effectValue = "heal" | "remove";
 
 export type OwnedResource = Resource & { quantity: number };
 export interface Player {

@@ -1,4 +1,4 @@
-import { removeFromArray, shuffle } from "./helpers";
+import { shuffle } from "./helpers";
 import {
   Enemy,
   FightState,
@@ -6,7 +6,6 @@ import {
   Player,
   Resource,
   Spell,
-  element,
 } from "./types";
 const rewardData = require("../data/rewards.json");
 
@@ -42,6 +41,9 @@ export const generateDeck = (
       id: c.id,
       image: c.image,
       name: c.name,
+      mana: c.mana,
+      trump: c.trump,
+      effect: c.effect,
       strength: c.strength,
       character: c.character,
       element: c.element,
@@ -59,6 +61,9 @@ export const generateEnemyDeck = (enemy: Enemy): Spell[] => {
       id: c.id,
       image: c.image,
       name: c.name,
+      mana: c.mana,
+      trump: c.trump,
+      effect: c.effect,
       strength: c.strength,
       character: c.character,
       element: c.element,
@@ -155,90 +160,5 @@ export const updateWinPlayer = (
   return {
     ...updatedPlayer,
     resources: givePlayerResources(player, resources),
-  };
-};
-
-const getNextElement = (
-  elements: element[],
-  element: element | null
-): element | null => {
-  if (element == null) return null;
-  const index = elements.indexOf(element);
-  if (index === -1)
-    throw new Error("Can't find the element to give you the next one");
-  if (index === elements.length - 1) {
-    return elements[0];
-  }
-  return elements[index + 1];
-};
-
-const trumpAttack = (
-  baseHealth: number,
-  element: element,
-  heroCard: Spell,
-  enemyCard: Spell
-): number => {
-  // Trump logic
-  if (element === enemyCard.element && element !== heroCard.element) {
-    // enemy has the trump, hero doesn't - all damage applies
-    return baseHealth - enemyCard.strength;
-  }
-  if (element === enemyCard.element && element === heroCard.element) {
-    // enemy has the trump, hero has the trump, the damage negates for the strength of hero card (same as non-trump)
-    if (heroCard.strength <= enemyCard.strength) {
-      return baseHealth - enemyCard.strength + heroCard.strength;
-    }
-  }
-  // enemy doesn't have the trump, hero has, all damage negates
-  return baseHealth;
-};
-
-export const enemyAttack = (
-  fightState: FightState,
-  heroCard: Spell,
-  enemyCard: Spell
-) => {
-  // Update cards state
-  const [newDeck, newDrop] = updateHeroDeck(fightState, heroCard);
-  const newHeroHand = removeFromArray(fightState.heroHand, heroCard);
-  const newCard = newDeck.shift();
-  newHeroHand.push(newCard);
-  const enemyDrop = fightState.enemyDrop.concat([enemyCard]);
-  const enemyDeck = fightState.enemyDeck.splice(1);
-  let newHeroHealth = fightState.hero.currentHealth;
-
-  if (
-    fightState.element &&
-    (fightState.element === heroCard.element ||
-      fightState.element === enemyCard.element)
-  ) {
-    // Trump logic
-    newHeroHealth = trumpAttack(
-      newHeroHealth,
-      fightState.element,
-      heroCard,
-      enemyCard
-    );
-  } else {
-    if (heroCard.strength <= enemyCard.strength) {
-      newHeroHealth = newHeroHealth - enemyCard.strength;
-    }
-  }
-
-  const heroNew = {
-    ...fightState.hero,
-    currentHealth: newHeroHealth,
-  };
-  const nextElement = getNextElement(fightState.elements, fightState.element);
-
-  return {
-    ...fightState,
-    heroDeck: newDeck,
-    heroDrop: newDrop,
-    enemyDeck: enemyDeck,
-    enemyDrop: enemyDrop,
-    heroHand: newHeroHand,
-    hero: heroNew,
-    element: nextElement,
   };
 };

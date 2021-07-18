@@ -10,10 +10,9 @@ export const unique = (arrArg: any[]) =>
 
 export const removeFromArray = (arrArg: any[], item: any) => {
   const index = arrArg.indexOf(item);
-  if (!item) console.warn("Array does not contain the element");
-  if (index > -1) {
-    arrArg.splice(index, 1);
-  }
+  if (!item || index === -1)
+    throw new Error("Can't find the item to remove from array");
+  arrArg.splice(index, 1);
   return arrArg;
 };
 

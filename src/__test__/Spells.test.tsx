@@ -14,6 +14,7 @@ const spells = [
     image: "../img/Spells/spell1.jpg",
     selected: true,
     owner: "hero" as "hero",
+    mana: 0,
   },
   {
     id: "base_hit2",
@@ -24,6 +25,7 @@ const spells = [
     image: "../img/Spells/spell2.jpg",
     selected: true,
     owner: "hero" as "hero",
+    mana: 0,
   },
   {
     id: "base_hit3_maya",
@@ -34,6 +36,7 @@ const spells = [
     image: "../img/Spells/spell3.jpg",
     selected: true,
     owner: "hero" as "hero",
+    mana: 0,
   },
   {
     id: "base_hit1_tara",
@@ -44,6 +47,7 @@ const spells = [
     owner: "hero" as "hero",
     image: "../img/Spells/spell8.jpg",
     selected: true,
+    mana: 0,
   },
 ];
 const gameState = {
