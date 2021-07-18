@@ -54,7 +54,7 @@ test("Renders Fight screen", () => {
   );
   expect(screen.getByText(/Your opponent/)).toBeInTheDocument();
   // TODO check the correct element was assigned
-  expect(screen.getByText(/Current element/)).toBeInTheDocument();
+  expect(screen.getByText(/Elements:/)).toBeInTheDocument();
   // correct number of enemy life
   expect(screen.getByTestId("enemy_life").innerHTML).toMatch(
     enemyData.life.toString()

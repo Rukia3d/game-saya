@@ -6,6 +6,7 @@ import {
   Player,
   Resource,
   Spell,
+  element,
 } from "./types";
 const rewardData = require("../data/rewards.json");
 
@@ -166,6 +167,20 @@ export const updateWinPlayer = (
   };
 };
 
+const getNextElement = (
+  elements: element[],
+  element: element | null
+): element | null => {
+  if (element == null) return null;
+  const index = elements.indexOf(element);
+  if (index === -1)
+    throw new Error("Can't find the element to give you the next one");
+  if (index === elements.length - 1) {
+    return element[0] as element;
+  }
+  return element[index + 1] as element;
+};
+
 export const enemyAttack = (
   fightState: FightState,
   heroCard: Spell,
@@ -188,6 +203,7 @@ export const enemyAttack = (
     ...fightState.hero,
     currentHealth: newHealth,
   };
+  const nextElement = getNextElement(fightState.elements, fightState.element);
   return {
     ...fightState,
     heroDeck: newDeck,
@@ -195,5 +211,6 @@ export const enemyAttack = (
     enemyDrop: fightState.enemyDrop.concat([enemyCard]),
     heroHand: newHeroHand,
     hero: heroNewHealth,
+    element: nextElement,
   };
 };

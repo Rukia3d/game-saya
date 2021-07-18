@@ -7,8 +7,8 @@ import { SettingsButton } from "../UI/SettingsButton";
 import { CharacterBox } from "./CharacterBox";
 import { HeroBlock } from "./HeroBlock";
 
-import { Spell, Enemy, FightState, Resource } from "../utils/types";
-import { findActiveCharacters } from "../utils/helpers";
+import { Spell, Enemy, FightState, Resource, element } from "../utils/types";
+import { findActiveCharacters, shuffle } from "../utils/helpers";
 import {
   enemyAttack,
   generateDeck,
@@ -52,6 +52,13 @@ export const Fight = () => {
   ); //shuffle(generateDeck());
   const enemyDeck = generateEnemyDeck(enemy); //shuffle(generateEnemyDeck());
   const enemyHealt = enemyDeck.length;
+  const elements: element[] = shuffle([
+    "fire",
+    "earth",
+    "metal",
+    "water",
+    "air",
+  ]);
   const [fightState, setfightState] = useState<FightState>({
     hero: {
       health: 15,
@@ -65,6 +72,8 @@ export const Fight = () => {
     heroDrop: [],
     enemyDeck: enemyDeck,
     enemyDrop: [],
+    elements: elements,
+    element: elements[0],
   });
   const [enemyCard, setEnemyCard] = useState<null | Spell>(null);
   const [heroCard, setHeroCard] = useState<null | Spell>(null);
@@ -88,7 +97,7 @@ export const Fight = () => {
       if (fightState.enemyDrop.length === enemyHealt - 1) {
         setResult("Won");
       }
-    }, 100);
+    }, 1000);
   };
 
   const finishFight = (resource: Resource[]) => {

@@ -24,7 +24,7 @@ const cards = [
     strength: 1,
     quantity: 1,
     character: "tara",
-    element: "metal",
+    element: "metal" as "metal",
     image: "../img/Spells/spell2.jpg",
     selected: true,
     owner: "hero" as "hero",
@@ -35,7 +35,7 @@ const cards = [
     strength: 1,
     quantity: 1,
     character: "maya",
-    element: "earrth",
+    element: "earth" as "earth",
     image: "../img/Spells/spell2.jpg",
     selected: true,
     owner: "hero" as "hero",
@@ -77,6 +77,8 @@ test("updateHeroDeck shuffles if there are no cards left", () => {
     heroDrop: deckForTwo,
     enemyDeck: deckForEnemy,
     enemyDrop: [],
+    elements: ["fire" as "fire", "earth" as "earth"],
+    element: "fire" as "fire",
   };
   const [newDeck, newDrop] = updateHeroDeck(fightState, deckForTwo[0]);
   expect(newDeck.length).toEqual(4);

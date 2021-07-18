@@ -6,7 +6,7 @@ export interface Spell {
   character: null | string;
   quantity: number;
   selected: boolean;
-  element: null | string;
+  element: null | element;
   owner: "hero" | "enemy";
 }
 
@@ -96,6 +96,8 @@ export interface FightState {
   heroHand: Spell[];
   enemyDeck: Spell[];
   enemyDrop: Spell[];
+  element: element | null;
+  elements: element[];
 }
 
 export interface Resource {
@@ -112,3 +114,4 @@ export type enemyExpLevel =
   | "practitioner"
   | "master"
   | "grandmaster";
+export type element = "fire" | "earth" | "metal" | "water" | "air";

@@ -1,7 +1,8 @@
 import React from "react";
 import "./HeroBlock.css";
 
-import { Enemy, FightState, Spell } from "../utils/types";
+import { element, Enemy, FightState, Spell } from "../utils/types";
+import { shuffle } from "../utils/helpers";
 
 export const HeroSpellWithInfo = ({
   card,
@@ -63,7 +64,17 @@ export const HeroBlock = ({
           Your opponent: {fightState.enemy.name} with power of{" "}
           {fightState.enemy.element}
         </p>
-        <p>Current element is SOME</p>
+        <p>
+          Elements:
+          {fightState.elements.map((s: element) => (
+            <span
+              style={{ color: s === fightState.element ? "green" : "black" }}
+            >
+              {" "}
+              {s.toUpperCase()}
+            </span>
+          ))}
+        </p>
       </div>
       <div className="Deck" aria-label="Deck">
         {fightState.heroHand.map((d: Spell, i: number) => (
