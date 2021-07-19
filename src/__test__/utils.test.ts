@@ -46,109 +46,48 @@ test("Find the correct next open story in group", () => {
 });
 
 test("Finds correct characters to be active", () => {
-  const heroes3active: Character[] = [
-    {
-      id: "maya",
-      name: "Maya",
-      image: "../img/maya_spells.png",
-      selected: true,
-    },
-    {
-      id: "tara",
-      name: "Tara",
-      image: "../img/tara_spells.png",
-      selected: true,
-    },
-    {
-      id: "nell",
-      name: "Nell",
-      image: "../img/tara_spells.png",
-      selected: true,
-    },
-    {
-      id: "dart",
-      name: "Dart",
-      image: "../img/tara_spells.png",
-      selected: false,
-    },
-    {
-      id: "grey",
-      name: "Grey",
-      image: "../img/tara_spells.png",
-      selected: false,
-    },
-  ];
-  expect(findActiveCharacters(heroes3active)).toEqual(["maya", "tara", "nell"]);
+  const heroes3active: Character[] = [];
+  [true, true, true, false, false].map((b: boolean, i: number) =>
+    heroes3active.push({
+      id: "hero" + i,
+      name: "hero" + i,
+      image: "",
+      selected: b,
+    })
+  );
+  expect(findActiveCharacters(heroes3active)).toEqual([
+    "hero0",
+    "hero1",
+    "hero2",
+  ]);
 
-  const heroes2active: Character[] = [
-    {
-      id: "maya",
-      name: "Maya",
-      image: "../img/maya_spells.png",
-      selected: false,
-    },
-    {
-      id: "tara",
-      name: "Tara",
-      image: "../img/tara_spells.png",
-      selected: true,
-    },
-    {
-      id: "nell",
-      name: "Nell",
-      image: "../img/tara_spells.png",
-      selected: true,
-    },
-    {
-      id: "dart",
-      name: "Dart",
-      image: "../img/tara_spells.png",
-      selected: false,
-    },
-    {
-      id: "grey",
-      name: "Grey",
-      image: "../img/tara_spells.png",
-      selected: false,
-    },
-  ];
-  expect(findActiveCharacters(heroes2active)).toEqual(["tara", "nell", "maya"]);
+  const heroes2active: Character[] = [];
+  [false, true, true, false, false].map((b: boolean, i: number) =>
+    heroes2active.push({
+      id: "hero" + i,
+      name: "hero" + i,
+      image: "",
+      selected: b,
+    })
+  );
+  expect(findActiveCharacters(heroes2active)).toEqual([
+    "hero1",
+    "hero2",
+    "hero0",
+  ]);
 
-  const heroesNoactive: Character[] = [
-    {
-      id: "maya",
-      name: "Maya",
-      image: "../img/maya_spells.png",
-      selected: false,
-    },
-    {
-      id: "tara",
-      name: "Tara",
-      image: "../img/tara_spells.png",
-      selected: false,
-    },
-    {
-      id: "nell",
-      name: "Nell",
-      image: "../img/tara_spells.png",
-      selected: false,
-    },
-    {
-      id: "dart",
-      name: "Dart",
-      image: "../img/tara_spells.png",
-      selected: false,
-    },
-    {
-      id: "grey",
-      name: "Grey",
-      image: "../img/tara_spells.png",
-      selected: false,
-    },
-  ];
+  const heroesNoactive: Character[] = [];
+  [false, false, false, false, false].map((b: boolean, i: number) =>
+    heroesNoactive.push({
+      id: "hero" + i,
+      name: "hero" + i,
+      image: "",
+      selected: b,
+    })
+  );
   expect(findActiveCharacters(heroesNoactive)).toEqual([
-    "maya",
-    "tara",
-    "nell",
+    "hero0",
+    "hero1",
+    "hero2",
   ]);
 });

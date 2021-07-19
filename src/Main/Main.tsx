@@ -8,9 +8,9 @@ import { Intro } from "./Intro";
 import { Heroes } from "./Heroes";
 import { Adventures } from "./Adventures";
 import { Spells } from "./Spells";
-import { College } from "./College";
+import { Shop } from "./Shop";
 
-type mainScreenState = "intro" | "heroes" | "adventures" | "spells" | "college";
+type mainScreenState = "intro" | "heroes" | "adventures" | "spells" | "shop";
 
 type MainScreensType = {
   [key in mainScreenState]: React.FC;
@@ -20,7 +20,7 @@ const mainScreens: MainScreensType = {
   heroes: Heroes,
   adventures: Adventures,
   spells: Spells,
-  college: College,
+  shop: Shop,
 };
 
 const MainMenuButton = ({
@@ -60,7 +60,7 @@ const MainMenu = ({
         "heroes" as "heroes",
         "adventures" as "adventures",
         "spells" as "spells",
-        "college" as "college",
+        "shop" as "shop",
       ].map((s: mainScreenState, i: number) => (
         <MainMenuButton
           key={i}

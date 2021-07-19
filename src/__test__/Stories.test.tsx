@@ -3,64 +3,7 @@ import { render, screen } from "@testing-library/react";
 import { Stories } from "../Main/Stories";
 import { GameContext } from "../App";
 import userEvent from "@testing-library/user-event";
-const stories = require("../data/storiesAct1.json");
-
-const gameState = {
-  sceneCharacters: [],
-  dialogues: [],
-  player: {
-    id: 1,
-    maxMana: 5,
-    cards: [],
-    experience: 300,
-    mana: 3,
-    heroes: [],
-    resources: [],
-  },
-  adventures: [
-    {
-      id: "character",
-      name: "Character",
-      image: "character.jpg",
-      open: true,
-      form: "character",
-      stories: [],
-    },
-    {
-      id: "story",
-      name: "Water Problems",
-      image: "story.jpg",
-      open: true,
-      form: "story",
-      stories: stories,
-    },
-    {
-      id: "arena",
-      name: "Arena",
-      image: "arena.jpg",
-      open: false,
-      form: "arena",
-      stories: [],
-    },
-    {
-      id: "torunament",
-      name: "Tournament",
-      image: "tournament.jpg",
-      open: false,
-      form: "torunament",
-      stories: [],
-    },
-    {
-      id: "event",
-      name: "Event",
-      image: "event.jpg",
-      open: false,
-      form: "event",
-      stories: [],
-    },
-  ],
-  heroes: [],
-};
+import { gameState } from "../utils/testobjects";
 
 const context = {
   adventure: gameState.adventures[1],

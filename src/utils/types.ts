@@ -10,6 +10,7 @@ export interface Spell {
   selected: boolean;
   element: null | element;
   owner: "hero" | "enemy";
+  type: string;
 }
 export type trumpValue = "strength";
 export type effectValue = "heal" | "remove";

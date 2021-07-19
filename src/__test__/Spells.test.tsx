@@ -3,83 +3,37 @@ import { render, screen } from "@testing-library/react";
 import { Spells } from "../Main/Spells";
 import { GameContext } from "../App";
 import userEvent from "@testing-library/user-event";
+import { gameState, baseCards15 } from "../utils/testobjects";
+import { Spell } from "../utils/types";
 
-const spells = [
-  {
-    id: "base_hit1_maya",
-    name: "Maya Hit 1",
-    strength: 1,
-    character: "maya",
-    element: "earth" as "earth",
-    image: "../img/Spells/spell1.jpg",
-    selected: true,
-    owner: "hero" as "hero",
-    mana: 0,
-  },
-  {
-    id: "base_hit2",
-    name: "Base Hit 2",
-    strength: 2,
-    character: null,
-    element: null,
-    image: "../img/Spells/spell2.jpg",
-    selected: true,
-    owner: "hero" as "hero",
-    mana: 0,
-  },
-  {
-    id: "base_hit3_maya",
-    name: "Maya Hit 3",
-    strength: 3,
-    character: "maya",
-    element: "earth" as "earth",
-    image: "../img/Spells/spell3.jpg",
-    selected: true,
-    owner: "hero" as "hero",
-    mana: 0,
-  },
-  {
-    id: "base_hit1_tara",
-    name: "Tara Hit 1",
-    strength: 1,
-    character: "tara",
-    element: "metal" as "metal",
-    owner: "hero" as "hero",
-    image: "../img/Spells/spell8.jpg",
-    selected: true,
-    mana: 0,
-  },
-];
-const gameState = {
-  sceneCharacters: [
-    { id: "maya", name: "Maya", image: "../img/maya.png", state: "story" },
-    { id: "tara", name: "Tara", image: "../img/tara.png", state: "story" },
-  ],
-  dialogues: [],
-  player: {
-    id: 1,
-    cards: spells,
-    experience: 300,
-    mana: 3,
-    maxMana: 5,
-    heroes: [
-      {
-        id: "maya",
-        name: "Maya",
-        image: "../img/maya_spells.png",
-      },
-      {
-        id: "tara",
-        name: "Tara",
-        image: "../img/tara_spells.png",
-      },
-    ],
-    resources: [
-      { id: "iron", name: "Iron", image: "../", commonality: 5, quantity: 1 },
-    ],
-  },
-  adventures: [],
-  heroes: [],
+const mayaSpells: Spell[] = new Array(3).fill(0).map((x, n) => ({
+  ...baseCards15[0],
+  id: "base_hit" + n,
+  name: "Base Hit " + n,
+  character: "maya",
+  element: "earth",
+}));
+
+const taraSpells: Spell[] = new Array(3).fill(0).map((x, n) => ({
+  ...baseCards15[0],
+  id: "base_hit" + n,
+  name: "Base Hit " + n,
+  character: "tara",
+  element: "metal",
+}));
+
+const baseSpells: Spell[] = new Array(3).fill(0).map((x, n) => ({
+  ...baseCards15[0],
+  id: "base_hit" + n,
+  name: "Base Hit " + n,
+  character: null,
+  element: null,
+}));
+const newCards = mayaSpells.concat(taraSpells);
+
+const newGameState = {
+  ...JSON.parse(JSON.stringify(gameState)),
+  player: { ...gameState.player, cards: newCards.concat(baseSpells) },
 };
 
 const context = {
@@ -87,7 +41,7 @@ const context = {
   setAdventure: jest.fn(),
   story: null,
   setStory: jest.fn(),
-  gameState: gameState,
+  gameState: newGameState,
   setGameState: jest.fn(),
   dialogue: null,
   setDialogue: jest.fn(),
@@ -106,7 +60,7 @@ test("Renders Heroes screen with characters ready for a dialogue", () => {
   expect(screen.getByAltText("image_tara_spells")).toBeInTheDocument();
   userEvent.click(screen.getByAltText("image_base_spells"));
   expect(screen.getByText("Basic spells")).toBeInTheDocument();
-  expect(screen.getByLabelText("character_spells").children.length).toEqual(1);
+  expect(screen.getByLabelText("character_spells").children.length).toEqual(3);
   const firstCardName = screen.getAllByLabelText("spell_card")[0].innerHTML;
   userEvent.click(screen.getAllByTestId("hero_card_info")[0]);
   expect(screen.getByLabelText("item_name").innerHTML).toEqual(firstCardName);

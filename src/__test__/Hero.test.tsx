@@ -4,32 +4,7 @@ import { Heroes } from "../Main/Heroes";
 import { GameContext } from "../App";
 import userEvent from "@testing-library/user-event";
 import { GameState } from "../utils/types";
-
-const gameState = {
-  sceneCharacters: [
-    { id: "maya", name: "Maya", image: "../img/maya.png", state: "story" },
-    { id: "tara", name: "Tara", image: "../img/tara.png", state: "story" },
-  ],
-  dialogues: [],
-  player: {
-    id: 1,
-    cards: [],
-    experience: 300,
-    mana: 3,
-    maxMana: 5,
-    heroes: ["maya", "tara", "nell", "dart", "grey"].map((s: string) => ({
-      id: s,
-      selected: false,
-      name: "",
-      image: "",
-    })),
-    resources: [
-      { id: "iron", name: "Iron", image: "../", commonality: 5, quantity: 1 },
-    ],
-  },
-  adventures: [],
-  heroes: [],
-};
+import { gameState } from "../utils/testobjects";
 
 const context = {
   adventure: null,

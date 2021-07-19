@@ -2,45 +2,7 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import { Intro } from "../Main/Intro";
 import { GameContext } from "../App";
-const dialogues = require("../data/dialogues.json");
-
-const gameState = {
-  sceneCharacters: [
-    {
-      id: "maya",
-      name: "Maya",
-      image: "../img/maya.png",
-      state: "story",
-      dial: "maya_replic1",
-    },
-    {
-      id: "tara",
-      name: "Tara",
-      image: "../img/tara.png",
-      state: "story",
-      dial: "tara_replic1",
-    },
-  ],
-  dialogues: dialogues,
-  player: {
-    id: 1,
-    cards: [],
-    experience: 300,
-    mana: 3,
-    maxMana: 5,
-    heroes: [
-      {
-        id: "maya",
-        name: "Maya",
-        image: "../img/maya_spells.png",
-      },
-    ],
-    resources: [
-      { id: "iron", name: "Iron", image: "../", commonality: 5, quantity: 1 },
-    ],
-  },
-  adventures: [],
-};
+import { gameState } from "../utils/testobjects";
 
 const context = {
   adventure: null,

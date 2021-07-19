@@ -4,13 +4,17 @@ import "./HeroBlock.css";
 import { element, Enemy, FightState, Spell } from "../utils/types";
 
 export const HeroSpellWithInfo = ({
+  forge = false,
   card,
   element,
+  setForge = () => {},
   selectCard,
   setInfo,
 }: {
+  forge?: boolean;
   card: Spell;
   element: element | null;
+  setForge?: (s: Spell) => void;
   selectCard: (s: Spell) => void;
   setInfo: (s: any) => void;
 }) => {
@@ -20,6 +24,7 @@ export const HeroSpellWithInfo = ({
         Info
       </button>
       <HeroSpell card={card} selectCard={selectCard} element={element} />
+      {forge ? <button onClick={() => setForge(card)}>forge</button> : null}
     </div>
   );
 };

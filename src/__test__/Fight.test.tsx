@@ -3,35 +3,8 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Fight } from "../Fight/Fight";
 import { GameContext } from "../App";
-const playerCards = require("../data/heroCards.json");
-const enemies = require("../data/enemies.json");
+import { story, gameState, enemy } from "../utils/testobjects";
 const heroHealth = "15";
-const story = {
-  id: "fight1",
-  type: "fight" as "fight",
-  image: "../img/arena_1.png",
-  enemy: "test-dude",
-  open: true,
-  characters: ["maya", "tara"],
-};
-const enemyData = enemies.find((e: any) => e.id === story.enemy);
-const gameState = {
-  sceneCharacters: [],
-  dialogues: [],
-  player: {
-    id: 1,
-    cards: playerCards,
-    experience: 300,
-    maxMana: 5,
-    mana: 3,
-    heroes: [],
-    resources: [
-      { id: "iron", name: "Iron", image: "../", commonality: 5, quantity: 1 },
-    ],
-  },
-  adventures: [],
-  heroes: [],
-};
 
 const context = {
   adventure: null,
@@ -57,7 +30,7 @@ test("Renders Fight screen", () => {
   expect(screen.getByText(/Elements:/)).toBeInTheDocument();
   // correct number of enemy life
   expect(screen.getByTestId("enemy_life").innerHTML).toMatch(
-    enemyData.life.toString()
+    (enemy.life - 1).toString()
   );
   // Correct hero and enemy data
   expect(screen.getByTestId("hero_life").innerHTML).toMatch(heroHealth);

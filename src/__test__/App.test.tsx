@@ -49,7 +49,7 @@ test("Renders Main screen for existing player with Hero menu active", async () =
   expect(screen.getByAltText("intro_background")).toBeInTheDocument();
   expect(screen.getByText("ADVENTURES")).toBeInTheDocument();
   expect(screen.getByText("SPELLS")).toBeInTheDocument();
-  expect(screen.getByText("COLLEGE")).toBeInTheDocument();
+  expect(screen.getByText("SHOP")).toBeInTheDocument();
   expect(screen.getByAltText("hero_maya")).toHaveAttribute(
     "src",
     expect.stringContaining("maya.png")
@@ -67,7 +67,7 @@ test("Renders Main screen for existing player with Hero menu active", async () =
     "style",
     mainMenuInActiveStyle
   );
-  expect(screen.getByText("COLLEGE")).toHaveAttribute(
+  expect(screen.getByText("SHOP")).toHaveAttribute(
     "style",
     mainMenuInActiveStyle
   );

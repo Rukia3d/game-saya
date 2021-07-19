@@ -49,6 +49,7 @@ export const generateDeck = (
       element: c.element,
       owner: "hero",
       selected: c.selected,
+      type: c.type,
     });
   });
   return heroSpells;
@@ -69,6 +70,7 @@ export const generateEnemyDeck = (enemy: Enemy): Spell[] => {
       element: c.element,
       owner: "enemy",
       selected: true,
+      type: c.type,
     });
   });
   return enemySpells.splice(0, enemy.life);

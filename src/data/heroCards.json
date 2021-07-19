@@ -7,47 +7,52 @@
     "strength": 1,
     "mana": 0,
     "image": "../img/Spells/spell1.jpg",
-    "selected": true
+    "selected": true,
+    "spellType": "base_hit1"
   },
   {
-    "id": "base_hit1_1",
+    "id": "base_hit1_2",
     "character": null,
     "name": "Slap",
     "element": null,
     "strength": 1,
     "mana": 0,
     "image": "../img/Spells/spell2.jpg",
-    "selected": true
+    "selected": true,
+    "spellType": "base_hit1"
   },
   {
-    "id": "base_hit1_1",
+    "id": "base_hit1_3",
     "character": null,
     "name": "Slap",
     "element": null,
     "strength": 1,
     "mana": 0,
     "image": "../img/Spells/spell3.jpg",
-    "selected": true
+    "selected": true,
+    "spellType": "base_hit1"
   },
   {
-    "id": "base_hit2",
+    "id": "base_hit2_1",
     "character": null,
     "name": "Punch",
     "element": null,
     "strength": 2,
     "mana": 0,
     "image": "../img/Spells/spell4.jpg",
-    "selected": true
+    "selected": true,
+    "spellType": "base_hit2"
   },
   {
-    "id": "base_hit2",
+    "id": "base_hit2_2",
     "character": null,
     "name": "Punch",
     "element": null,
     "strength": 2,
     "mana": 0,
     "image": "../img/Spells/spell5.jpg",
-    "selected": true
+    "selected": true,
+    "spellType": "base_hit2"
   },
   {
     "id": "base_hit3",
@@ -57,7 +62,8 @@
     "strength": 3,
     "mana": 0,
     "image": "../img/Spells/spell6.jpg",
-    "selected": true
+    "selected": true,
+    "spellType": "base_hit3"
   },
   {
     "id": "base_hit1_tara",
@@ -67,7 +73,8 @@
     "strength": 1,
     "mana": 0,
     "image": "../img/Spells/spell7.jpg",
-    "selected": false
+    "selected": false,
+    "spellType": "base_hit1_tara"
   },
   {
     "id": "base_hit2_tara",
@@ -77,7 +84,8 @@
     "strength": 2,
     "mana": 0,
     "image": "../img/Spells/spell8.jpg",
-    "selected": true
+    "selected": true,
+    "spellType": "base_hit2_tara"
   },
   {
     "id": "base_hit3_tara",
@@ -87,7 +95,8 @@
     "strength": 3,
     "mana": 0,
     "image": "../img/Spells/spell9.jpg",
-    "selected": true
+    "selected": true,
+    "spellType": "base_hit3_tara"
   },
   {
     "id": "base_hit1_maya",
@@ -97,7 +106,8 @@
     "strength": 1,
     "mana": 0,
     "image": "../img/Spells/spell10.jpg",
-    "selected": true
+    "selected": true,
+    "spellType": "base_hit1_maya"
   },
   {
     "id": "base_hit2_maya",
@@ -107,7 +117,8 @@
     "strength": 2,
     "mana": 0,
     "image": "../img/Spells/spell11.jpg",
-    "selected": true
+    "selected": true,
+    "spellType": "base_hit2_maya"
   },
   {
     "id": "base_hit3_maya",
@@ -117,7 +128,8 @@
     "strength": 3,
     "mana": 0,
     "image": "../img/Spells/spell12.jpg",
-    "selected": true
+    "selected": true,
+    "spellType": "base_hit3_maya"
   },
   {
     "id": "heal_1_maya",
@@ -129,7 +141,8 @@
     "trump": ["strength", 1],
     "effect": ["heal", 1],
     "image": "../img/Spells/spell13.jpg",
-    "selected": true
+    "selected": true,
+    "spellType": "heal_1_maya"
   },
   {
     "id": "heal_2_maya",
@@ -141,7 +154,8 @@
     "trump": ["strength", 1],
     "effect": ["heal", 2],
     "image": "../img/Spells/spell14.jpg",
-    "selected": true
+    "selected": true,
+    "spellType": "heal_2_maya"
   },
   {
     "id": "push_1_tara",
@@ -153,7 +167,8 @@
     "trump": ["strength", 1],
     "effect": ["remove", 1],
     "image": "../img/Spells/spell15.jpg",
-    "selected": true
+    "selected": true,
+    "spellType": "push_1_tara"
   },
   {
     "id": "push_2_tara",
@@ -165,6 +180,7 @@
     "trump": ["strength", 1],
     "effect": ["remove", 2],
     "image": "../img/Spells/spell16.jpg",
-    "selected": true
+    "selected": true,
+    "spellType": "push_2_tara"
   }
 ]
