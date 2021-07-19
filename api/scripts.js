@@ -68,14 +68,14 @@ app.get("/api/player/", (req, res) => {
         },
       ],
       resources: [
-        { id: "gold", name: "Gold", image: "../", commonality: 2, quantity: 0 },
-        { id: "iron", name: "Iron", image: "../", commonality: 5, quantity: 0 },
+        { id: "gold", name: "Gold", image: "../", commonality: 2, quantity: 2 },
+        { id: "iron", name: "Iron", image: "../", commonality: 5, quantity: 10 },
         {
           id: "dimond",
           name: "Dimonds",
           image: "../",
           commonality: 1,
-          quantity: 0,
+          quantity: 3,
         },
         { id: "silk", name: "Silk", image: "../", commonality: 2, quantity: 0 },
         {

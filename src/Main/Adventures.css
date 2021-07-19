@@ -7,6 +7,7 @@
 }
 
 .AdventuresList {
+  margin-top: 1em;
   display: flex;
   flex-direction: row;
   margin: 0.5em;
@@ -15,8 +16,8 @@
 .Adventure_character {
   position: absolute;
   display: flex;
-  top: 1em;
-  left: 1em;
+  top: 3em;
+  right: 17em;
   height: 50%;
   width: 20%;
   border: 5px solid black;
@@ -71,7 +72,8 @@
   padding: 1em;
   width: 50%;
   bottom: 0;
-  right: 0;
+  left: 0;
+  color: white;
 }
 
 .Adventure_story .AdventureName {
@@ -79,7 +81,7 @@
   position: absolute;
   width: 50%;
   top: 0;
-  right: 0;
+  left: 0;
 }
 .Adventure_torunament {
   border: 0.5em solid black;

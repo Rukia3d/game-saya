@@ -6,7 +6,17 @@
   margin-top: 0.5em;
   position: absolute;
   top: 0;
+  display: flex;
   left: 0;
+}
+
+.Resources {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.Resource {
+  margin: 0.5em;
 }
 
 .Mana {

@@ -21,7 +21,16 @@ const gameState = {
       },
     ],
     resources: [
-      { id: "iron", name: "Iron", image: "../", commonality: 5, quantity: 1 },
+      { id: "gold", name: "Gold", image: "../", commonality: 2, quantity: 2 },
+      { id: "iron", name: "Iron", image: "../", commonality: 5, quantity: 10 },
+      {
+        id: "dimond",
+        name: "Dimonds",
+        image: "../",
+        commonality: 1,
+        quantity: 3,
+      },
+      { id: "silk", name: "Silk", image: "../", commonality: 2, quantity: 0 },
     ],
   },
   adventures: [],
@@ -109,4 +118,30 @@ test("Renders Top menu with low mana", () => {
     "style",
     "color: red;"
   );
+});
+
+test("Renders Top menu with resources", () => {
+  render(
+    <GameContext.Provider
+      value={{
+        adventure: null,
+        setAdventure: jest.fn(),
+        story: null,
+        setStory: jest.fn(),
+        gameState: { ...gameState, player: { ...gameState.player, mana: 1 } },
+        dialogue: null,
+        setDialogue: jest.fn(),
+        setGameState: jest.fn(),
+        backToMain: jest.fn(),
+        backToStory: jest.fn(),
+      }}
+    >
+      <TopMenu />
+    </GameContext.Provider>
+  );
+  expect(screen.getByLabelText("top_resources")).toBeInTheDocument();
+  expect(screen.getAllByLabelText("top_resource").length).toEqual(3);
+  expect(screen.getByText(/Gold/)).toBeInTheDocument();
+  expect(screen.getByText(/Dimonds/)).toBeInTheDocument();
+  expect(screen.getByText(/Iron/)).toBeInTheDocument();
 });

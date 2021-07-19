@@ -1,5 +1,6 @@
 import React, { useContext, useState } from "react";
 import { GameContext } from "../App";
+import { TopMenu } from "../UI/TopMenu";
 import { Character, Spell } from "../utils/types";
 import { CharacterSpells } from "./CharacterSpells";
 import "./Spells.css";
@@ -60,6 +61,7 @@ export const Spells = () => {
   }
   return (
     <div className="Spells">
+      <TopMenu />
       <SpellPanel character={null} image={false} setHero={setHero} />
       <div className="SpellsList">
         {characters.sort().map((s: string | null, i: number) => (

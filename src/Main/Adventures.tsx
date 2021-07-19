@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import { GameContext } from "../App";
+import { TopMenu } from "../UI/TopMenu";
 import { Adventure } from "../utils/types";
 import "./Adventures.css";
 
@@ -30,6 +31,7 @@ export const Adventures = () => {
   };
   return (
     <div className="Adventures" aria-label="adventures_background">
+      <TopMenu />
       <div className="AdventuresList">
         {adventures.map((a: Adventure, i: number) => (
           <div
