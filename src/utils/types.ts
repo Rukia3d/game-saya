@@ -77,6 +77,13 @@ export interface GameState {
   dialogues: Dialogue[];
 }
 
+export interface ForgeReq {
+  itemType: string;
+  lv1: [string, number][];
+  lv2: [string, number][];
+  lv3: [string, number][];
+}
+
 export interface Enemy {
   id: string;
   name: string;

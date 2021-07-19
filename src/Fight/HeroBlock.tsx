@@ -29,14 +29,14 @@ export const HeroSpellWithInfo = ({
   );
 };
 
-const HeroSpell = ({
+export const HeroSpell = ({
   element,
   card,
   selectCard,
 }: {
   element: element | null;
   card: Spell;
-  selectCard: (s: Spell) => void;
+  selectCard?: (s: Spell) => void;
 }) => {
   return (
     <div className="Spell">
@@ -45,7 +45,7 @@ const HeroSpell = ({
           card.element === element ? "trump" : "standard"
         }`}
         aria-label="spell_card_border"
-        onClick={() => selectCard(card)}
+        onClick={() => (selectCard ? selectCard(card) : null)}
       >
         <p aria-label="spell_card">{card.name}</p>
         <img

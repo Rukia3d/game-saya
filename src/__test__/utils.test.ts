@@ -4,9 +4,11 @@ import {
   shuffle,
   findLastOpenStory,
   findActiveCharacters,
+  findCardRequirements,
 } from "../utils/helpers";
+import { baseCards15 } from "../utils/testobjects";
 
-import { Character, StoryGroup } from "../utils/types";
+import { Character, ForgeReq, StoryGroup } from "../utils/types";
 
 test("Unique function returns correctly", () => {
   const array1 = [1, 2, 3, 4];
@@ -23,6 +25,28 @@ test("Remove from array function returns correctly", () => {
 test("Shuffle function returns correctly", () => {
   const array1 = [1, 2, 3, 4];
   expect(shuffle(array1)).not.toEqual([2, 3, 4]);
+});
+
+test("Find the correct requirements for forgin a card", () => {
+  const req: ForgeReq[] = [];
+  [1, 2, 3, 4].forEach((i: number) =>
+    req.push({
+      itemType: "base_hit" + i,
+      lv1: [["gold", 1]],
+      lv2: [
+        ["gold", 5],
+        ["silk", 3],
+      ],
+      lv3: [
+        ["gold", 5],
+        ["silk", 3],
+        ["dimonds", 1],
+      ],
+    })
+  );
+  const card = { ...baseCards15[0], type: "base_hit1" };
+  const res = findCardRequirements(req, card);
+  expect(res.itemType).toEqual("base_hit1");
 });
 
 test("Find the correct next open story in group", () => {
