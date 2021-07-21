@@ -1,20 +1,262 @@
 [
   {
     "itemType": "base_hit1",
-    "lv1": [
-      ["gold", 1],
-      ["iron", 5],
-      ["silk", 2]
-    ],
-    "lv2": [
-      ["gold", 10],
-      ["iron", 50],
-      ["silk", 20]
-    ],
-    "lv3": [
-      ["gold", 100],
-      ["iron", 500],
-      ["silk", 100]
+    "updates": [
+      [
+        ["gold", 1],
+        ["iron", 5],
+        ["silk", 2]
+      ],
+      [
+        ["gold", 10],
+        ["iron", 50],
+        ["silk", 20]
+      ],
+      [
+        ["gold", 100],
+        ["iron", 500],
+        ["silk", 100]
+      ]
+    ]
+  },
+  {
+    "itemType": "base_hit2",
+    "updates": [
+      [
+        ["gold", 1],
+        ["iron", 5],
+        ["silk", 2]
+      ],
+      [
+        ["gold", 10],
+        ["iron", 50],
+        ["silk", 20]
+      ],
+      [
+        ["gold", 100],
+        ["iron", 500],
+        ["silk", 100]
+      ]
+    ]
+  },
+  {
+    "itemType": "base_hit3",
+    "updates": [
+      [
+        ["gold", 1],
+        ["iron", 5],
+        ["silk", 2]
+      ],
+      [
+        ["gold", 10],
+        ["iron", 50],
+        ["silk", 20]
+      ],
+      [
+        ["gold", 100],
+        ["iron", 500],
+        ["silk", 100]
+      ]
+    ]
+  },
+  {
+    "itemType": "base_hit1_tara",
+    "updates": [
+      [
+        ["gold", 1],
+        ["iron", 5],
+        ["silk", 2]
+      ],
+      [
+        ["gold", 10],
+        ["iron", 50],
+        ["silk", 20]
+      ],
+      [
+        ["gold", 100],
+        ["iron", 500],
+        ["silk", 100]
+      ]
+    ]
+  },
+  {
+    "itemType": "base_hit2_tara",
+    "updates": [
+      [
+        ["gold", 1],
+        ["iron", 5],
+        ["silk", 2]
+      ],
+      [
+        ["gold", 10],
+        ["iron", 50],
+        ["silk", 20]
+      ],
+      [
+        ["gold", 100],
+        ["iron", 500],
+        ["silk", 100]
+      ]
+    ]
+  },
+  {
+    "itemType": "base_hit3_tara",
+    "updates": [
+      [
+        ["gold", 1],
+        ["iron", 5],
+        ["silk", 2]
+      ],
+      [
+        ["gold", 10],
+        ["iron", 50],
+        ["silk", 20]
+      ],
+      [
+        ["gold", 100],
+        ["iron", 500],
+        ["silk", 100]
+      ]
+    ]
+  },
+  {
+    "itemType": "base_hit1_maya",
+    "updates": [
+      [
+        ["gold", 1],
+        ["iron", 5],
+        ["silk", 2]
+      ],
+      [
+        ["gold", 10],
+        ["iron", 50],
+        ["silk", 20]
+      ],
+      [
+        ["gold", 100],
+        ["iron", 500],
+        ["silk", 100]
+      ]
+    ]
+  },
+  {
+    "itemType": "base_hit2_maya",
+    "updates": [
+      [
+        ["gold", 1],
+        ["iron", 5],
+        ["silk", 2]
+      ],
+      [
+        ["gold", 10],
+        ["iron", 50],
+        ["silk", 20]
+      ],
+      [
+        ["gold", 100],
+        ["iron", 500],
+        ["silk", 100]
+      ]
+    ]
+  },
+  {
+    "itemType": "base_hit3_maya",
+    "updates": [
+      [
+        ["gold", 1],
+        ["iron", 5],
+        ["silk", 2]
+      ],
+      [
+        ["gold", 10],
+        ["iron", 50],
+        ["silk", 20]
+      ],
+      [
+        ["gold", 100],
+        ["iron", 500],
+        ["silk", 100]
+      ]
+    ]
+  },
+  {
+    "itemType": "heal_1_maya",
+    "updates": [
+      [
+        ["gold", 1],
+        ["iron", 5],
+        ["silk", 2]
+      ],
+      [
+        ["gold", 10],
+        ["iron", 50],
+        ["silk", 20]
+      ],
+      [
+        ["gold", 100],
+        ["iron", 500],
+        ["silk", 100]
+      ]
+    ]
+  },
+  {
+    "itemType": "heal_2_maya",
+    "updates": [
+      [
+        ["gold", 1],
+        ["iron", 5],
+        ["silk", 2]
+      ],
+      [
+        ["gold", 10],
+        ["iron", 50],
+        ["silk", 20]
+      ],
+      [
+        ["gold", 100],
+        ["iron", 500],
+        ["silk", 100]
+      ]
+    ]
+  },
+  {
+    "itemType": "push_1_tara",
+    "updates": [
+      [
+        ["gold", 1],
+        ["iron", 5],
+        ["silk", 2]
+      ],
+      [
+        ["gold", 10],
+        ["iron", 50],
+        ["silk", 20]
+      ],
+      [
+        ["gold", 100],
+        ["iron", 500],
+        ["silk", 100]
+      ]
+    ]
+  },
+  {
+    "itemType": "push_2_tara",
+    "updates": [
+      [
+        ["gold", 1],
+        ["iron", 5],
+        ["silk", 2]
+      ],
+      [
+        ["gold", 10],
+        ["iron", 50],
+        ["silk", 20]
+      ],
+      [
+        ["gold", 100],
+        ["iron", 500],
+        ["silk", 100]
+      ]
     ]
   }
 ]

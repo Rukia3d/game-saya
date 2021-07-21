@@ -50,6 +50,8 @@ export const generateDeck = (
       owner: "hero",
       selected: c.selected,
       type: c.type,
+      level: c.level,
+      description: c.description,
     });
   });
   return heroSpells;
@@ -71,6 +73,8 @@ export const generateEnemyDeck = (enemy: Enemy): Spell[] => {
       owner: "enemy",
       selected: true,
       type: c.type,
+      level: c.level,
+      description: c.description,
     });
   });
   return enemySpells.splice(0, enemy.life);

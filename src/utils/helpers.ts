@@ -65,6 +65,7 @@ export const findCharacter = (characters: Character[], charId: string) => {
 };
 
 export const findCardRequirements = (forge: ForgeReq[], card: Spell) => {
+  console.log("Looking for", card);
   const res = forge.find((f: ForgeReq) => f.itemType === card.type);
   if (!res) throw new Error(`Couldn't find a resource for ${card.type}`);
   return res;

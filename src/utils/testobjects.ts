@@ -22,6 +22,8 @@ export const mayaCard: Spell = {
   mana: 0,
   owner: "hero" as "hero",
   type: "",
+  level: 0,
+  description: "",
 };
 
 export const enemyCard: Spell = {
@@ -35,6 +37,8 @@ export const enemyCard: Spell = {
   owner: "enemy" as "enemy",
   mana: 0,
   type: "",
+  level: 0,
+  description: "",
 };
 
 export const enemy: Enemy = {
@@ -57,6 +61,8 @@ export const baseCards15: Spell[] = new Array(15).fill(0).map((x, n) => ({
   selected: true,
   owner: "hero" as "hero",
   type: "",
+  level: 0,
+  description: "",
 }));
 
 export const fightState: FightState = {

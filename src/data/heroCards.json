@@ -8,7 +8,9 @@
     "mana": 0,
     "image": "../img/Spells/spell1.jpg",
     "selected": true,
-    "spellType": "base_hit1"
+    "type": "base_hit1",
+    "level": 1,
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
   },
   {
     "id": "base_hit1_2",
@@ -19,7 +21,9 @@
     "mana": 0,
     "image": "../img/Spells/spell2.jpg",
     "selected": true,
-    "spellType": "base_hit1"
+    "type": "base_hit1",
+    "level": 2,
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
   },
   {
     "id": "base_hit1_3",
@@ -30,7 +34,9 @@
     "mana": 0,
     "image": "../img/Spells/spell3.jpg",
     "selected": true,
-    "spellType": "base_hit1"
+    "type": "base_hit1",
+    "level": 0,
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
   },
   {
     "id": "base_hit2_1",
@@ -41,7 +47,9 @@
     "mana": 0,
     "image": "../img/Spells/spell4.jpg",
     "selected": true,
-    "spellType": "base_hit2"
+    "type": "base_hit2",
+    "level": 0,
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
   },
   {
     "id": "base_hit2_2",
@@ -52,7 +60,9 @@
     "mana": 0,
     "image": "../img/Spells/spell5.jpg",
     "selected": true,
-    "spellType": "base_hit2"
+    "type": "base_hit2",
+    "level": 0,
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
   },
   {
     "id": "base_hit3",
@@ -63,7 +73,9 @@
     "mana": 0,
     "image": "../img/Spells/spell6.jpg",
     "selected": true,
-    "spellType": "base_hit3"
+    "type": "base_hit3",
+    "level": 0,
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
   },
   {
     "id": "base_hit1_tara",
@@ -74,7 +86,9 @@
     "mana": 0,
     "image": "../img/Spells/spell7.jpg",
     "selected": false,
-    "spellType": "base_hit1_tara"
+    "type": "base_hit1_tara",
+    "level": 0,
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
   },
   {
     "id": "base_hit2_tara",
@@ -85,7 +99,9 @@
     "mana": 0,
     "image": "../img/Spells/spell8.jpg",
     "selected": true,
-    "spellType": "base_hit2_tara"
+    "type": "base_hit2_tara",
+    "level": 0,
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
   },
   {
     "id": "base_hit3_tara",
@@ -96,7 +112,9 @@
     "mana": 0,
     "image": "../img/Spells/spell9.jpg",
     "selected": true,
-    "spellType": "base_hit3_tara"
+    "type": "base_hit3_tara",
+    "level": 0,
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
   },
   {
     "id": "base_hit1_maya",
@@ -107,7 +125,9 @@
     "mana": 0,
     "image": "../img/Spells/spell10.jpg",
     "selected": true,
-    "spellType": "base_hit1_maya"
+    "type": "base_hit1_maya",
+    "level": 0,
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
   },
   {
     "id": "base_hit2_maya",
@@ -118,7 +138,9 @@
     "mana": 0,
     "image": "../img/Spells/spell11.jpg",
     "selected": true,
-    "spellType": "base_hit2_maya"
+    "type": "base_hit2_maya",
+    "level": 0,
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
   },
   {
     "id": "base_hit3_maya",
@@ -129,7 +151,9 @@
     "mana": 0,
     "image": "../img/Spells/spell12.jpg",
     "selected": true,
-    "spellType": "base_hit3_maya"
+    "type": "base_hit3_maya",
+    "level": 0,
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
   },
   {
     "id": "heal_1_maya",
@@ -142,7 +166,9 @@
     "effect": ["heal", 1],
     "image": "../img/Spells/spell13.jpg",
     "selected": true,
-    "spellType": "heal_1_maya"
+    "type": "heal_1_maya",
+    "level": 0,
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
   },
   {
     "id": "heal_2_maya",
@@ -155,7 +181,9 @@
     "effect": ["heal", 2],
     "image": "../img/Spells/spell14.jpg",
     "selected": true,
-    "spellType": "heal_2_maya"
+    "type": "heal_2_maya",
+    "level": 0,
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
   },
   {
     "id": "push_1_tara",
@@ -168,7 +196,9 @@
     "effect": ["remove", 1],
     "image": "../img/Spells/spell15.jpg",
     "selected": true,
-    "spellType": "push_1_tara"
+    "type": "push_1_tara",
+    "level": 0,
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
   },
   {
     "id": "push_2_tara",
@@ -181,6 +211,8 @@
     "effect": ["remove", 2],
     "image": "../img/Spells/spell16.jpg",
     "selected": true,
-    "spellType": "push_2_tara"
+    "type": "push_2_tara",
+    "level": 0,
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
   }
 ]

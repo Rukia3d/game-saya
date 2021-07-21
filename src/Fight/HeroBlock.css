@@ -59,3 +59,8 @@
 .SmallCardImage {
   width: 50px;
 }
+
+.SmallCardFrame {
+  width: 50px;
+  position: absolute;
+}

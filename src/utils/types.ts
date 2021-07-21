@@ -11,6 +11,8 @@ export interface Spell {
   element: null | element;
   owner: "hero" | "enemy";
   type: string;
+  level: number;
+  description: string;
 }
 export type trumpValue = "strength";
 export type effectValue = "heal" | "remove";
@@ -79,9 +81,7 @@ export interface GameState {
 
 export interface ForgeReq {
   itemType: string;
-  lv1: [string, number][];
-  lv2: [string, number][];
-  lv3: [string, number][];
+  updates: [string, number][][];
 }
 
 export interface Enemy {

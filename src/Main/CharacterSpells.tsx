@@ -5,7 +5,7 @@ import { CloseButton } from "../UI/CloseButton";
 
 import { Character, Spell } from "../utils/types";
 import { InfoCard } from "../UI/InfoCard";
-import { HeroSpellWithInfo } from "../Fight/HeroBlock";
+import { HeroSpellWithInfo } from "../Fight/HeroSpellWithInfo";
 import { GameContext } from "../App";
 import { changeCardsInDeck } from "../utils/gamelogic";
 import { ForgeCard } from "../UI/ForgeCard";
