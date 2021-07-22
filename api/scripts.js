@@ -6,6 +6,7 @@ app.use(cors());
 const playerCards = require("../src/data/heroCards.json");
 const dialogues = require("../src/data/dialogues.json");
 const stories = require("../src/data/storiesAct1.json");
+const spellUpdates = require("../src/data/forge.json");
 
 app.get("/api/player/", (req, res) => {
   console.log("Requesting player game data");
@@ -30,6 +31,7 @@ app.get("/api/player/", (req, res) => {
     player: {
       id: 1,
       cards: playerCards,
+      cardUpdates: spellUpdates,
       experience: 300,
       mana: 15,
       maxMana: 15,
@@ -77,7 +79,7 @@ app.get("/api/player/", (req, res) => {
           commonality: 1,
           quantity: 3,
         },
-        { id: "silk", name: "Silk", image: "../", commonality: 2, quantity: 0 },
+        { id: "silk", name: "Silk", image: "../", commonality: 2, quantity: 2 },
         {
           id: "rdust",
           name: "Red dust",

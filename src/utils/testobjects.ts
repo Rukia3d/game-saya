@@ -1,6 +1,7 @@
 import { Enemy, FightState, GameState, Spell } from "./types";
 const stories = require("../data/storiesAct1.json");
 const dialogues = require("../data/dialogues.json");
+const spellUpdates = require("../data/forge.json");
 
 export const story = {
   id: "fight1",
@@ -103,6 +104,7 @@ export const gameState: GameState = {
   player: {
     id: 1,
     cards: baseCards15,
+    cardUpdates: spellUpdates,
     experience: 300,
     mana: 3,
     maxMana: 5,

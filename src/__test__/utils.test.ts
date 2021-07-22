@@ -5,8 +5,9 @@ import {
   findLastOpenStory,
   findActiveCharacters,
   findCardRequirements,
+  achievedUpdate,
 } from "../utils/helpers";
-import { baseCards15 } from "../utils/testobjects";
+import { baseCards15, gameState } from "../utils/testobjects";
 
 import { Character, ForgeReq, StoryGroup } from "../utils/types";
 
@@ -32,21 +33,31 @@ test("Find the correct requirements for forgin a card", () => {
   [1, 2, 3, 4].forEach((i: number) =>
     req.push({
       itemType: "base_hit" + i,
-      lv1: [["gold", 1]],
-      lv2: [
+      updates: [
         ["gold", 5],
         ["silk", 3],
-      ],
-      lv3: [
-        ["gold", 5],
-        ["silk", 3],
-        ["dimonds", 1],
       ],
     })
   );
   const card = { ...baseCards15[0], type: "base_hit1" };
   const res = findCardRequirements(req, card);
   expect(res.itemType).toEqual("base_hit1");
+});
+
+test("Find if this card is ready for an update", () => {
+  const ownedResources = gameState.player.resources;
+  const requiredResources: [string, number][] = [
+    ["gold", 2],
+    ["iron", 5],
+  ];
+  const requiredResources2: [string, number][] = [
+    ["gold", 5],
+    ["iron", 5],
+  ];
+  const res1 = achievedUpdate(ownedResources, requiredResources);
+  const res2 = achievedUpdate(ownedResources, requiredResources2);
+  expect(res1).toBeTruthy();
+  expect(res2).not.toBeTruthy();
 });
 
 test("Find the correct next open story in group", () => {

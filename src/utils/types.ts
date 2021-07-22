@@ -18,11 +18,13 @@ export type trumpValue = "strength";
 export type effectValue = "heal" | "remove";
 
 export type OwnedResource = Resource & { quantity: number };
+
 export interface Player {
   id: number;
   cards: Spell[];
   experience: number;
   mana: number;
+  cardUpdates: ForgeReq[];
   maxMana: number;
   resources: OwnedResource[];
   heroes: Character[];
@@ -81,7 +83,7 @@ export interface GameState {
 
 export interface ForgeReq {
   itemType: string;
-  updates: [string, number][][];
+  updates: [string, number][];
 }
 
 export interface Enemy {

@@ -1,41 +1,30 @@
 import React, { useContext } from "react";
 import "./ForgeCard.css";
-import { OwnedResource, Spell } from "../utils/types";
+import { Spell } from "../utils/types";
 import { CloseButton } from "./CloseButton";
 import { HeroSpell } from "../Fight/HeroSpellWithInfo";
-import { findCardRequirements } from "../utils/helpers";
+import {
+  achievedResource,
+  achievedUpdate,
+  findCardRequirements,
+} from "../utils/helpers";
 import { GameContext } from "../App";
-const forge = require("../data/forge.json");
 const TOPLEVEL = 3;
 
-const achievedUpdate = (
-  resources: OwnedResource[],
-  required: [string, number][]
-) => {
-  const all = required.filter((e: [string, number]) =>
-    achievedResource(resources, e)
-  );
-  return all.length === required.length;
-};
-
-const achievedResource = (resources: OwnedResource[], e: [string, number]) => {
-  const resource = resources.find((o: OwnedResource) => o.id === e[0]);
-  if (!resource || resource?.quantity < e[1]) {
-    return false;
-  } else {
-    return true;
+const HeroSpellRequirements = ({ card }: { card: Spell }) => {
+  const context = useContext(GameContext);
+  if (
+    !context ||
+    !context.gameState ||
+    !context.gameState.player ||
+    !context.gameState.player.resources
+  ) {
+    throw new Error("No data");
   }
-};
-
-const HeroSpellRequirements = ({
-  card,
-  resources,
-}: {
-  card: Spell;
-  resources: OwnedResource[];
-}) => {
-  const cardRequirements = findCardRequirements(forge, card);
-  const nextLevel = cardRequirements.updates[card.level];
+  const resources = context.gameState.player.resources;
+  const updates = context.gameState.player.cardUpdates;
+  const cardRequirements = findCardRequirements(updates, card);
+  const nextLevel = cardRequirements.updates;
   return (
     <div>
       <h3>Requirements</h3>
@@ -65,13 +54,24 @@ const HeroSpellDescription = ({ card }: { card: Spell }) => {
 
 const HeroSpellUpdate = ({
   card,
-  resources,
+  forge,
 }: {
   card: Spell;
-  resources: OwnedResource[];
+  forge: (s: Spell) => void;
 }) => {
   const nextLevelCard = { ...card, level: card.level + 1 };
-  const cardRequirements = findCardRequirements(forge, card);
+  const context = useContext(GameContext);
+  if (
+    !context ||
+    !context.gameState ||
+    !context.gameState.player ||
+    !context.gameState.player.resources
+  ) {
+    throw new Error("No data");
+  }
+  const resources = context.gameState.player.resources;
+  const updates = context.gameState.player.cardUpdates;
+  const cardRequirements = findCardRequirements(updates, card);
   if (card.level >= TOPLEVEL) {
     return (
       <div className="SpellNoUpdate">
@@ -79,19 +79,26 @@ const HeroSpellUpdate = ({
       </div>
     );
   }
+  const canUpdate = achievedUpdate(resources, cardRequirements.updates);
   return (
     <div className="SpellUpdate">
-      <HeroSpell card={card} selectCard={forge} element={card.element} />
-      <div className="SpellsBetween">
-        {achievedUpdate(resources, cardRequirements.updates[card.level]) ? (
-          <div className="Arrow" aria-label="spell_update_arrow" />
-        ) : null}
+      <div className="SpellUpdateStart">
+        <HeroSpell card={card} selectCard={forge} element={card.element} />
       </div>
-      <HeroSpell
-        card={nextLevelCard}
-        selectCard={() => {}}
-        element={card.element}
-      />
+      <div className="SpellsBetween">
+        {canUpdate ? (
+          <div className="Arrow" aria-label="spell_update_arrow" />
+        ) : (
+          <div className="Cross" aria-label="spell_update_cross" />
+        )}
+      </div>
+      <div className={canUpdate ? "SpellUpdateEnd" : "SpellUpdateClosed"}>
+        <HeroSpell
+          card={nextLevelCard}
+          selectCard={() => {}}
+          element={card.element}
+        />
+      </div>
     </div>
   );
 };
@@ -108,18 +115,20 @@ export const ForgeCard = ({
     !context ||
     !context.gameState ||
     !context.gameState.player ||
-    !context.gameState.player.resources
+    !context.gameState.player.cardUpdates
   ) {
     throw new Error("No data");
   }
-  const resources = context.gameState.player.resources;
-  const forge = () => {};
+  const updates = context.gameState.player.cardUpdates;
+  const forge = (s: Spell) => {
+    const cardRequirements = findCardRequirements(updates, s);
+  };
   return (
     <div className="ForgeCard">
       <CloseButton onClick={() => setForge(null)} />
       <HeroSpellDescription card={item} />
-      <HeroSpellRequirements card={item} resources={resources} />
-      <HeroSpellUpdate card={item} resources={resources} />
+      <HeroSpellRequirements card={item} />
+      <HeroSpellUpdate card={item} forge={forge} />
     </div>
   );
 };
