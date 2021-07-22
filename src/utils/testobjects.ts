@@ -1,7 +1,7 @@
 import { Enemy, FightState, GameState, Spell } from "./types";
 const stories = require("../data/storiesAct1.json");
 const dialogues = require("../data/dialogues.json");
-const spellUpdates = require("../data/forge.json");
+const spellUpdates = require("../data/spellUpdates.json");
 
 export const story = {
   id: "fight1",

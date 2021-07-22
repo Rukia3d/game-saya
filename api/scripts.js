@@ -6,7 +6,7 @@ app.use(cors());
 const playerCards = require("../src/data/heroCards.json");
 const dialogues = require("../src/data/dialogues.json");
 const stories = require("../src/data/storiesAct1.json");
-const spellUpdates = require("../src/data/forge.json");
+const spellUpdates = require("../src/data/spellUpdates.json");
 
 app.get("/api/player/", (req, res) => {
   console.log("Requesting player game data");

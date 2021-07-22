@@ -84,6 +84,13 @@ export interface GameState {
 export interface ForgeReq {
   itemType: string;
   updates: [string, number][];
+  effect: string;
+}
+
+export interface ForgeEffect {
+  id: string;
+  parameter: "strength" | "mana";
+  change: number;
 }
 
 export interface Enemy {

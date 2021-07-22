@@ -1,13 +1,15 @@
-import { shuffle } from "./helpers";
+import { givePlayerResources } from "./resourceLogic";
 import {
   Enemy,
   FightState,
-  OwnedResource,
+  ForgeEffect,
+  ForgeReq,
   Player,
   Resource,
   Spell,
 } from "./types";
-const rewardData = require("../data/rewards.json");
+const forgeData = require("../data/forge.json");
+const resouceData = require("../data/rewards.json");
 
 export const changeCardsInDeck = (playerCards: Spell[], s: Spell) => {
   const playerCard = playerCards.find((c: Spell) => s.id === c.id);
@@ -92,29 +94,6 @@ export const updateHeroDeck = (fightState: FightState, heroCard: Spell) => {
   return [newDeck, newDrop];
 };
 
-const generateSingleRewards = () => {
-  const allRewards: Resource[] = [];
-  rewardData.resources.forEach((r: Resource) => {
-    for (let i = 0; i < r.commonality; i++) {
-      allRewards.push({
-        id: r.id,
-        name: r.name,
-        image: r.image,
-        commonality: r.commonality,
-      });
-    }
-  });
-  return shuffle(allRewards)[0];
-};
-export const generateReward = (enemy: Enemy) => {
-  const rewards = [];
-  const max = enemyToNumber(enemy);
-  for (let i = 0; i < max; i++) {
-    rewards.push(generateSingleRewards());
-  }
-  return rewards;
-};
-
 export const enemyToNumber = (enemy: Enemy) => {
   switch (enemy.experience) {
     case "apprentice":
@@ -144,17 +123,50 @@ const givePlayerExperience = (player: Player, enemy: Enemy) => {
   };
 };
 
-const givePlayerResources = (player: Player, resources: Resource[]) => {
-  const existingResources = player.resources;
-  resources.forEach((r: Resource) => {
-    const playerRes = player.resources.find(
-      (o: OwnedResource) => o.id === r.id
-    );
-    if (!playerRes) throw new Error("Can't find resource you want to give me");
-    const playerResIndex = existingResources.indexOf(playerRes);
-    existingResources[playerResIndex].quantity++;
-  });
-  return existingResources;
+const updateCardParameter = (spell: Spell, effect: ForgeEffect): Spell => {
+  spell[effect.parameter] = spell[effect.parameter] + effect.change;
+  return spell;
+};
+
+const findUpdateEffect = (effect: string) => {
+  const updateEffect = forgeData.find((f: ForgeEffect) => f.id === effect);
+  if (!updateEffect) {
+    throw new Error(`Can't find update effect ${effect}`);
+  }
+  return updateEffect;
+};
+export const updatedCards = (
+  s: Spell,
+  req: ForgeReq,
+  all: Spell[]
+): Spell[] => {
+  const index = all.indexOf(s);
+  if (index === -1) throw new Error(`Can't find spell ${s.id} to update`);
+  const updateEffect = findUpdateEffect(req.effect);
+  const newCard = updateCardParameter(s, updateEffect);
+
+  all[index] = newCard;
+  return all;
+};
+
+const raiseUpdate = (s: [string, number]): [string, number] => {
+  const multiplier = resouceData.resources.find((r: Resource) => r.id === s[0]);
+  if (!multiplier) throw new Error(`Can't find multiplier for ${s[0]}`);
+  return [s[0], s[1] * multiplier];
+};
+
+export const cardUpdateRaise = (
+  type: string,
+  cardUpdates: ForgeReq[]
+): ForgeReq[] => {
+  const toUpdate = cardUpdates.find((f: ForgeReq) => f.itemType === type);
+  if (!toUpdate) throw new Error(`Can't find spell type ${type} to update`);
+  const index = cardUpdates.indexOf(toUpdate);
+  const newUpdates = toUpdate.updates.map((s: [string, number]) =>
+    raiseUpdate(s)
+  );
+  cardUpdates[index] = { ...toUpdate, updates: newUpdates };
+  return cardUpdates;
 };
 
 export const updateWinPlayer = (
