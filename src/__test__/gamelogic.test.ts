@@ -2,6 +2,7 @@ import {
   changeCardsInDeck,
   generateDeck,
   generateEnemyDeck,
+  updatedCards,
   updateHeroDeck,
   updateWinPlayer,
 } from "../utils/gamelogic";
@@ -13,7 +14,7 @@ import {
   gameState,
   mayaCard,
 } from "../utils/testobjects";
-import { Spell } from "../utils/types";
+import { ForgeReq, Spell } from "../utils/types";
 
 test("generateDeck function returns correct character cards", () => {
   const deckForOne = generateDeck(["maya"], baseCards15);
@@ -107,4 +108,21 @@ test("Correctly adds Card to Player's deck", () => {
   expect(addingWhenAllSelected.length).toEqual(17);
   expect(addingWhenAllSelected[0].selected).not.toBeTruthy();
   expect(addingWhenAllSelected[15].selected).toBeTruthy();
+});
+
+test("Correctly updates Crds", () => {
+  const card = { ...JSON.parse(JSON.stringify(mayaCard)) };
+  const req: ForgeReq = {
+    itemType: "base_hit_maya",
+    updates: [
+      ["gold", 5],
+      ["silk", 3],
+    ],
+    effect: "strengthen",
+  };
+  const spels = baseCards15.concat(card);
+  const res = updatedCards(card, req, spels);
+  expect(res[15].id).toEqual(mayaCard.id);
+  expect(res[15].strength).toEqual(mayaCard.strength + 1);
+  expect(res[15].level).toEqual(mayaCard.level + 1);
 });

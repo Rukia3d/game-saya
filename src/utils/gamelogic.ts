@@ -144,7 +144,7 @@ export const updatedCards = (
   if (index === -1) throw new Error(`Can't find spell ${s.id} to update`);
   const updateEffect = findUpdateEffect(req.effect);
   const newCard = updateCardParameter(s, updateEffect);
-
+  newCard.level = newCard.level + 1;
   all[index] = newCard;
   return all;
 };

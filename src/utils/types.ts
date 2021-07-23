@@ -84,7 +84,7 @@ export interface GameState {
 export interface ForgeReq {
   itemType: string;
   updates: [string, number][];
-  effect: string;
+  effect: "strengthen";
 }
 
 export interface ForgeEffect {

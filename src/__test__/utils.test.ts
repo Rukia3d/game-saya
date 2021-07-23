@@ -37,6 +37,7 @@ test("Find the correct requirements for forgin a card", () => {
         ["gold", 5],
         ["silk", 3],
       ],
+      effect: "strenghten" as "strengthen",
     })
   );
   const card = { ...baseCards15[0], type: "base_hit1" };

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { generateReward } from "../utils/gamelogic";
+import { generateReward } from "../utils/resourceLogic";
 import { Enemy, Resource } from "../utils/types";
 import { Chest } from "./Chest";
 import "./FightResult.css";
