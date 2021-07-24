@@ -3,9 +3,11 @@ import { render, screen } from "@testing-library/react";
 import { ForgeCard } from "../UI/ForgeCard";
 import userEvent from "@testing-library/user-event";
 
-import { gameState, mayaCard } from "../utils/testobjects";
-import { GameState } from "../utils/types";
+import { gameState, mayaCard, spellUpdates } from "../utils/testobjects";
+import { GameState, Resource } from "../utils/types";
 import { GameContext } from "../App";
+
+const resouceData = require("../data/rewards.json");
 
 const context = {
   adventure: null,
@@ -43,10 +45,11 @@ test("Renders Forge Card screen", async () => {
 
 test("Renders Forge Card screen with partially achieved update", async () => {
   context.gameState.player.resources = [
-    { id: "gold", name: "Gold", image: "../", commonality: 2, quantity: 2 },
+    { id: "gold", name: "Gold", image: "../", commonality: 2, quantity: 5 },
     { id: "iron", name: "Iron", image: "../", commonality: 5, quantity: 10 },
+    { id: "silk", name: "Silk", image: "../", commonality: 3, quantity: 0 },
   ];
-  const newCard = { ...mayaCard, type: "base_hit1", level: 0 };
+  const newCard = { ...mayaCard, type: "base_hit_maya", level: 0 };
   const setForge = jest.fn();
   render(
     <GameContext.Provider value={context}>
@@ -57,14 +60,13 @@ test("Renders Forge Card screen with partially achieved update", async () => {
     "Maya Hit 1"
   );
   expect(screen.getByText(/gold/)).toHaveAttribute("style", "color: green;");
-  expect(screen.getByText(/iron/)).toHaveAttribute("style", "color: green;");
   expect(screen.getByText(/silk/)).toHaveAttribute("style", "color: red;");
   expect(screen.queryByLabelText("spell_update_arrow")).not.toBeInTheDocument();
 });
 
 test("Renders Forge Card screen with fully achieved update", async () => {
   context.gameState.player.resources = [
-    { id: "gold", name: "Gold", image: "../", commonality: 1, quantity: 2 },
+    { id: "gold", name: "Gold", image: "../", commonality: 1, quantity: 10 },
     { id: "iron", name: "Iron", image: "../", commonality: 1, quantity: 10 },
     { id: "silk", name: "Iron", image: "../", commonality: 1, quantity: 10 },
   ];
@@ -82,4 +84,60 @@ test("Renders Forge Card screen with fully achieved update", async () => {
   expect(screen.getByText(/iron/)).toHaveAttribute("style", "color: green;");
   expect(screen.getByText(/silk/)).toHaveAttribute("style", "color: green;");
   expect(screen.getByLabelText("spell_update_arrow")).toBeInTheDocument();
+});
+
+test("Updates Forge Card", async () => {
+  const newCard = { ...mayaCard, type: "base_hit1", level: 0 };
+  context.gameState.player.cards = [newCard];
+  context.gameState.player.resources = [
+    { id: "gold", name: "Gold", image: "../", commonality: 1, quantity: 10 },
+    { id: "iron", name: "Iron", image: "../", commonality: 1, quantity: 10 },
+    { id: "silk", name: "Iron", image: "../", commonality: 1, quantity: 10 },
+  ];
+
+  const requirementsForCard = spellUpdates[1];
+  const setForge = jest.fn();
+  render(
+    <GameContext.Provider value={context}>
+      <ForgeCard item={newCard} setForge={setForge} />
+    </GameContext.Provider>
+  );
+  expect(screen.getByLabelText("card_name_header").innerHTML).toEqual(
+    "Maya Hit 1"
+  );
+  expect(screen.getByText(/gold/)).toHaveAttribute("style", "color: green;");
+  expect(screen.getByText(/iron/)).toHaveAttribute("style", "color: green;");
+  expect(screen.getByText(/silk/)).toHaveAttribute("style", "color: green;");
+  expect(screen.getByLabelText("resource_iron_value").innerHTML).toEqual(
+    requirementsForCard.updates[0][1].toString()
+  );
+  expect(screen.getByLabelText("resource_gold_value").innerHTML).toEqual(
+    requirementsForCard.updates[1][1].toString()
+  );
+  expect(screen.getByLabelText("resource_silk_value").innerHTML).toEqual(
+    requirementsForCard.updates[2][1].toString()
+  );
+  expect(screen.getByLabelText("spell_update_arrow")).toBeInTheDocument();
+  userEvent.click(screen.getAllByLabelText("spell_card_border")[0]);
+  expect(context.setGameState.mock.calls.length).toBe(1);
+  const newUpdates =
+    context.setGameState.mock.calls[0][0].player.cardUpdates[1];
+
+  // Iron updated
+  expect(newUpdates.updates[0][0]).toEqual("iron");
+  const multiplierForIron = resouceData.resources.find(
+    (r: Resource) => r.id === "iron"
+  ).commonality;
+  expect(newUpdates.updates[0][1]).toEqual(
+    requirementsForCard.updates[0][1] * multiplierForIron
+  );
+
+  // Gold updated
+  expect(newUpdates.updates[1][0]).toEqual("gold");
+  const multiplierForGold = resouceData.resources.find(
+    (r: Resource) => r.id === "gold"
+  ).commonality;
+  expect(newUpdates.updates[1][1]).toEqual(
+    requirementsForCard.updates[1][1] * multiplierForGold
+  );
 });

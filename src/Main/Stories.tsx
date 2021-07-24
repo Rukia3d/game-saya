@@ -67,10 +67,8 @@ export const Stories = () => {
   const loadStory = (s: Story) => {
     if (!s.open) return;
     if (s.type === "dialogue" && context.gameState?.dialogues) {
-      console.log("Loading dialogue");
       context.setDialogue(findDialogue(context.gameState?.dialogues, s.id));
     } else {
-      console.log("Loading fight");
       context.setStory(s);
     }
   };

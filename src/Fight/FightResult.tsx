@@ -15,7 +15,6 @@ const Rewards = ({ resource }: { resource: Resource[] }) => {
 const ResourceChest = ({ resource }: { resource: Resource[] }) => {
   const [open, setOpen] = useState(false);
   const delayOpening = () => {
-    console.log("opening");
     setTimeout(() => setOpen(true), 1000);
   };
   return (

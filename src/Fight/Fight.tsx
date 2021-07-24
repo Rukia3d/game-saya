@@ -84,7 +84,7 @@ export const Fight = () => {
 
   const selectCard = (c: Spell) => {
     if (!enemyCard) {
-      console.log("You are acting first");
+      console.warn("You are acting first");
       return;
     }
     setHeroCard(c);
@@ -103,7 +103,7 @@ export const Fight = () => {
 
   const finishFight = (resource: Resource[]) => {
     // TODO finidh fight when the result is detected, not onClick
-    console.log("Fight is finished");
+    console.warn("Fight is finished");
     const gameState = context.gameState;
 
     if (!gameState) throw new Error("Can't update the fight results");

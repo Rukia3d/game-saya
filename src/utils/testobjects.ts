@@ -1,7 +1,6 @@
-import { Enemy, FightState, GameState, Spell } from "./types";
+import { Enemy, FightState, ForgeReq, GameState, Spell } from "./types";
 const stories = require("../data/storiesAct1.json");
 const dialogues = require("../data/dialogues.json");
-const spellUpdates = require("../data/spellUpdates.json");
 
 export const story = {
   id: "fight1",
@@ -65,6 +64,26 @@ export const baseCards15: Spell[] = new Array(15).fill(0).map((x, n) => ({
   level: 0,
   description: "",
 }));
+
+export const spellUpdates: ForgeReq[] = [
+  {
+    itemType: "base_hit_maya",
+    updates: [
+      ["gold", 5],
+      ["silk", 3],
+    ],
+    effect: "strengthen",
+  },
+  {
+    itemType: "base_hit1",
+    updates: [
+      ["iron", 1],
+      ["gold", 5],
+      ["silk", 2],
+    ],
+    effect: "strengthen",
+  },
+];
 
 export const fightState: FightState = {
   hero: {

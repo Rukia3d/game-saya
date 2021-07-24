@@ -1,6 +1,13 @@
 import { enemyToNumber } from "./gamelogic";
 import { shuffle } from "./helpers";
-import { Enemy, ForgeReq, OwnedResource, Player, Resource } from "./types";
+import {
+  Enemy,
+  ForgeReq,
+  OwnedResource,
+  Player,
+  Resource,
+  resourceType,
+} from "./types";
 const rewardData = require("../data/rewards.json");
 
 export const givePlayerResources = (player: Player, resources: Resource[]) => {
@@ -40,9 +47,13 @@ export const generateReward = (enemy: Enemy) => {
   return rewards;
 };
 
-const removeResource = (r: OwnedResource, toRemove: [string, number][]) => {
-  const removable = toRemove.find((t: [string, number]) => t[0] == r.id);
-  if (!removable) throw new Error("Cant remove non existant resource");
+const removeResource = (
+  r: OwnedResource,
+  toRemove: [resourceType, number][]
+) => {
+  const removable = toRemove.find((t: [resourceType, number]) => t[0] === r.id);
+  if (!removable) return { ...r };
+
   const newQuantity = r.quantity - removable[1];
   if (newQuantity < 0) throw new Error("Cant have negative resource");
   return { ...r, quantity: r.quantity - removable[1] };
@@ -52,7 +63,8 @@ export const removeResources = (
   cardRequirements: ForgeReq,
   resources: OwnedResource[]
 ): OwnedResource[] => {
-  return resources.map((r: OwnedResource) =>
+  const newRes = resources.map((r: OwnedResource) =>
     removeResource(r, cardRequirements.updates)
   );
+  return newRes;
 };

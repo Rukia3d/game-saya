@@ -1,6 +1,6 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "./ForgeCard.css";
-import { Spell } from "../utils/types";
+import { ForgeReq, resourceType, Spell } from "../utils/types";
 import { CloseButton } from "./CloseButton";
 import { HeroSpell } from "../Fight/HeroSpellWithInfo";
 import {
@@ -19,25 +19,32 @@ const HeroSpellRequirements = ({ card }: { card: Spell }) => {
     !context ||
     !context.gameState ||
     !context.gameState.player ||
-    !context.gameState.player.resources
+    !context.gameState.player.resources ||
+    !context.gameState.player.cardUpdates
   ) {
     throw new Error("No data");
   }
   const resources = context.gameState.player.resources;
   const updates = context.gameState.player.cardUpdates;
-  const cardRequirements = findCardRequirements(updates, card);
-  const nextLevel = cardRequirements.updates;
+  const [cardRequirements, setCardRequirements] = useState<null | ForgeReq>(
+    null
+  );
+
+  useEffect(() => {
+    setCardRequirements(findCardRequirements(updates, card));
+  }, [card, updates, context]);
   return (
     <div>
       <h3>Requirements</h3>
-      {nextLevel.map((e: [string, number], i: number) => (
-        <span
-          key={i}
-          style={{ color: achievedResource(resources, e) ? "green" : "red" }}
-        >
-          {e[0]}: {e[1]}{" "}
-        </span>
-      ))}
+      {cardRequirements &&
+        cardRequirements.updates.map((e: [resourceType, number], i: number) => (
+          <span
+            key={i}
+            style={{ color: achievedResource(resources, e) ? "green" : "red" }}
+          >
+            {e[0]}: <span aria-label={`resource_${e[0]}_value`}>{e[1]}</span>{" "}
+          </span>
+        ))}
     </div>
   );
 };
@@ -84,7 +91,7 @@ const HeroSpellUpdate = ({
   const canUpdate = achievedUpdate(resources, cardRequirements.updates);
   return (
     <div className="SpellUpdate">
-      <div className="SpellUpdateStart">
+      <div className="SpellUpdateStart" aria-label="card_to_update">
         <HeroSpell card={card} selectCard={forge} element={card.element} />
       </div>
       <div className="SpellsBetween">
@@ -126,6 +133,7 @@ export const ForgeCard = ({
   const player = context.gameState.player;
   const gameState = context.gameState;
   const forge = (s: Spell) => {
+    console.log("Called forge card");
     const cardRequirements = findCardRequirements(updates, s);
     if (!achievedUpdate(resources, cardRequirements.updates)) {
       console.warn("This spell is not ready to be updated");

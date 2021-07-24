@@ -41,26 +41,6 @@ test("updateHeroDeck shuffles if there are no cards left", () => {
   expect(newDrop.length).toEqual(1);
 });
 
-test("updateWinPlayer assigns rewards correctly", () => {
-  const resource = [
-    { id: "iron", name: "Iron", image: "../", commonality: 5 },
-    { id: "iron", name: "Iron", image: "../", commonality: 5 },
-    { id: "silk", name: "Silk", image: "../", commonality: 2, quantity: 0 },
-    {
-      id: "rdust",
-      name: "Red dust",
-      image: "../",
-      commonality: 3,
-      quantity: 0,
-    },
-  ];
-  const updatedPlayer = updateWinPlayer(gameState.player, enemy, resource);
-  expect(updatedPlayer.resources[1].quantity).toEqual(12);
-  expect(updatedPlayer.resources[3].quantity).toEqual(1);
-  expect(updatedPlayer.resources[4].quantity).toEqual(1);
-  expect(updatedPlayer.experience).toEqual(325);
-});
-
 test("Correctly adds Card to Player's deck", () => {
   const spellsUnselected = new Array(15).fill(0).map((x, n) => ({
     ...mayaCard,
@@ -108,21 +88,4 @@ test("Correctly adds Card to Player's deck", () => {
   expect(addingWhenAllSelected.length).toEqual(17);
   expect(addingWhenAllSelected[0].selected).not.toBeTruthy();
   expect(addingWhenAllSelected[15].selected).toBeTruthy();
-});
-
-test("Correctly updates Crds", () => {
-  const card = { ...JSON.parse(JSON.stringify(mayaCard)) };
-  const req: ForgeReq = {
-    itemType: "base_hit_maya",
-    updates: [
-      ["gold", 5],
-      ["silk", 3],
-    ],
-    effect: "strengthen",
-  };
-  const spels = baseCards15.concat(card);
-  const res = updatedCards(card, req, spels);
-  expect(res[15].id).toEqual(mayaCard.id);
-  expect(res[15].strength).toEqual(mayaCard.strength + 1);
-  expect(res[15].level).toEqual(mayaCard.level + 1);
 });

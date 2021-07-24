@@ -6,6 +6,7 @@ import {
   ForgeReq,
   Player,
   Resource,
+  resourceType,
   Spell,
 } from "./types";
 const forgeData = require("../data/forge.json");
@@ -149,10 +150,13 @@ export const updatedCards = (
   return all;
 };
 
-const raiseUpdate = (s: [string, number]): [string, number] => {
-  const multiplier = resouceData.resources.find((r: Resource) => r.id === s[0]);
+const raiseUpdate = (s: [resourceType, number]): [resourceType, number] => {
+  const multiplier: Resource = resouceData.resources.find(
+    (r: Resource) => r.id === s[0]
+  );
   if (!multiplier) throw new Error(`Can't find multiplier for ${s[0]}`);
-  return [s[0], s[1] * multiplier];
+  const res: [resourceType, number] = [s[0], s[1] * multiplier.commonality];
+  return res;
 };
 
 export const cardUpdateRaise = (
@@ -162,8 +166,8 @@ export const cardUpdateRaise = (
   const toUpdate = cardUpdates.find((f: ForgeReq) => f.itemType === type);
   if (!toUpdate) throw new Error(`Can't find spell type ${type} to update`);
   const index = cardUpdates.indexOf(toUpdate);
-  const newUpdates = toUpdate.updates.map((s: [string, number]) =>
-    raiseUpdate(s)
+  const newUpdates: [resourceType, number][] = toUpdate.updates.map(
+    (s: [resourceType, number]) => raiseUpdate(s)
   );
   cardUpdates[index] = { ...toUpdate, updates: newUpdates };
   return cardUpdates;

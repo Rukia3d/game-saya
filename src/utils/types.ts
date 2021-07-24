@@ -83,7 +83,7 @@ export interface GameState {
 
 export interface ForgeReq {
   itemType: string;
-  updates: [string, number][];
+  updates: [resourceType, number][];
   effect: "strengthen";
 }
 
@@ -122,7 +122,7 @@ export interface FightState {
 }
 
 export interface Resource {
-  id: string;
+  id: resourceType;
   name: string;
   image: string;
   commonality: number;
@@ -136,3 +136,10 @@ export type enemyExpLevel =
   | "master"
   | "grandmaster";
 export type element = "fire" | "earth" | "metal" | "water" | "air";
+export type resourceType =
+  | "gold"
+  | "iron"
+  | "dimond"
+  | "silk"
+  | "rdust"
+  | "rflower";
