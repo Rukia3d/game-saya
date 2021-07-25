@@ -73,7 +73,7 @@ test("Settings screen switches on and off", async () => {
   expect(screen.queryByLabelText("settings_screen")).not.toBeInTheDocument();
 });
 
-test("Fight finish shows the end screen", async () => {
+test("Fight finish shows the end screen for win", async () => {
   render(
     <GameContext.Provider value={context}>
       <Fight />

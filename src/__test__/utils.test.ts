@@ -6,6 +6,7 @@ import {
   findActiveCharacters,
   findCardRequirements,
   achievedUpdate,
+  findCharacter,
 } from "../utils/helpers";
 import { baseCards15, gameState } from "../utils/testobjects";
 
@@ -126,4 +127,12 @@ test("Finds correct characters to be active", () => {
     "hero1",
     "hero2",
   ]);
+});
+
+test("Finds a character", () => {
+  const characters = [1, 2, 3].map((i: number) => {
+    return { id: "char" + i, name: "Char" + i, image: "" };
+  });
+  const res = findCharacter(characters, "char1");
+  expect(res.id).toEqual("char1");
 });
