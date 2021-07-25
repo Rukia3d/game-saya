@@ -87,4 +87,6 @@ test("Fight finish shows the end screen for win", async () => {
   expect(screen.getByLabelText("chest_animation")).toBeInTheDocument();
   userEvent.click(screen.getByLabelText("chest_animation"));
   expect(await screen.findByText("Your prize")).toBeInTheDocument();
+  userEvent.click(screen.getByTestId("exit_fight"));
+  expect(context.backToStory.mock.calls.length).toEqual(1);
 });

@@ -47,7 +47,9 @@ export const FightResult = ({
     <div className="FightResult">
       <p>You {result}</p>
       {result === "Won" ? <ResourceChest resource={rewards} /> : <LifeLost />}
-      <button onClick={() => finishFight(rewards)}>exit</button>
+      <button data-testid="exit_fight" onClick={() => finishFight(rewards)}>
+        exit
+      </button>
     </div>
   );
 };
