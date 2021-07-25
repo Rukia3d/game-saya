@@ -1,5 +1,6 @@
 import {
   changeCardsInDeck,
+  enemyToNumber,
   generateDeck,
   generateEnemyDeck,
   updatedCards,
@@ -88,4 +89,12 @@ test("Correctly adds Card to Player's deck", () => {
   expect(addingWhenAllSelected.length).toEqual(17);
   expect(addingWhenAllSelected[0].selected).not.toBeTruthy();
   expect(addingWhenAllSelected[15].selected).toBeTruthy();
+});
+
+test("Returns correct number for enemy experience", () => {
+  expect(enemyToNumber(enemy)).toEqual(5);
+  expect(enemyToNumber({ ...enemy, experience: "apprentice" })).toEqual(6);
+  expect(enemyToNumber({ ...enemy, experience: "practitioner" })).toEqual(7);
+  expect(enemyToNumber({ ...enemy, experience: "master" })).toEqual(8);
+  expect(enemyToNumber({ ...enemy, experience: "grandmaster" })).toEqual(9);
 });
