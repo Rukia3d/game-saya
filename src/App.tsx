@@ -11,7 +11,7 @@ import { Stories } from "./Main/Stories";
 import { fetcher } from "./utils/helpers";
 import { Adventure, Dialogue, GameState, Story } from "./utils/types";
 
-interface GameContextType {
+export interface GameContextType {
   adventure: Adventure | null;
   setAdventure: (a: Adventure) => void;
   story: Story | null;
@@ -19,7 +19,7 @@ interface GameContextType {
   gameState: GameState | null;
   setGameState: (g: GameState) => void;
   dialogue: Dialogue | null;
-  setDialogue: (d: Dialogue) => void;
+  setDialogue: (d: Dialogue | null) => void;
   backToMain: () => void;
   backToStory: () => void;
 }

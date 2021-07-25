@@ -20,12 +20,19 @@ app.get("/api/player/", (req, res) => {
         dial: "maya_replic1",
       },
       {
-        id: "tara",
+        id: "olija",
         name: "Tara",
-        image: "../img/tara.png",
+        image: "../img/olija.png",
         state: "story",
-        dial: "tara_replic1",
+        dial: "olija_replic1",
       },
+      // {
+      //   id: "tara",
+      //   name: "Tara",
+      //   image: "../img/tara.png",
+      //   state: "story",
+      //   dial: "tara_replic1",
+      // },
     ],
     dialogues: dialogues,
     player: {

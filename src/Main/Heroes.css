@@ -40,15 +40,14 @@
 .HeroImage {
   height: 40%;
   z-index: 10;
-  margin: 1em;
 }
 
 .HeroImage.inactive {
-  height: 30%;
+  height: 25%;
 }
 
 .HeroImage.active {
-  height: 50%;
+  height: 40%;
   z-index: 10;
   margin: 1em;
 }

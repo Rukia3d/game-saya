@@ -1,4 +1,11 @@
-import { Enemy, FightState, ForgeReq, GameState, Spell } from "./types";
+import {
+  Dialogue,
+  Enemy,
+  FightState,
+  ForgeReq,
+  GameState,
+  Spell,
+} from "./types";
 const stories = require("../data/storiesAct1.json");
 const dialogues = require("../data/dialogues.json");
 
@@ -202,4 +209,22 @@ export const gameState: GameState = {
       stories: [],
     },
   ],
+};
+
+export const dialogue: Dialogue = {
+  id: "olija_replic1",
+  lines: [
+    {
+      character: "olija",
+      text: "Line one",
+      image: "serious",
+    },
+    {
+      character: "maya",
+      image: "sad",
+      pos: "L",
+      text: "Line two",
+    },
+  ],
+  background: "backg_0.png",
 };

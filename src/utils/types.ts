@@ -39,6 +39,7 @@ export interface DialogueLine {
 export interface Dialogue {
   id: string;
   lines: DialogueLine[];
+  background?: string;
 }
 
 export interface Character {

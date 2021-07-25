@@ -4,18 +4,33 @@
     "lines": [
       {
         "character": "maya",
-        "text": "I need to talk to Olija about the finals! It will al be a big adventure!"
+        "text": "I need to talk to Olija about the finals! It will al be a big adventure!",
+        "image": "happy"
       }
-    ]
+    ],
+    "background": "backg_0.png"
+  },
+  {
+    "id": "olija_replic1",
+    "lines": [
+      {
+        "character": "olija",
+        "text": "Final exams are in progress. Find a team to join and I'll get you your first task",
+        "image": "serious"
+      }
+    ],
+    "background": "backg_0.png"
   },
   {
     "id": "tara_replic1",
     "lines": [
       {
         "character": "tara",
-        "text": "What do you need?"
+        "text": "What do you need?",
+        "image": "huh"
       }
-    ]
+    ],
+    "background": "backg_0.png"
   },
   {
     "id": "olija_dialogue1",
@@ -62,40 +77,44 @@
         "pos": "R",
         "text": "Check out the garden. It's a popular place for students to rest and socialise. Get back to me when you have a team of 4."
       }
-    ]
+    ],
+    "background": "backg_1.jpg"
   },
   {
     "id": "nell_dialogue_1",
     "lines": [
       {
-        "character": "maya",
+        "character": "nell",
         "image": "excited",
         "pos": "L",
         "text": "test"
       }
-    ]
+    ],
+    "background": "backg_1.jpg"
   },
   {
     "id": "tara_dialogue_1",
     "lines": [
       {
-        "character": "maya",
-        "image": "excited",
+        "character": "tara",
+        "image": "huh",
         "pos": "L",
         "text": "test"
       }
-    ]
+    ],
+    "background": "backg_1.jpg"
   },
   {
     "id": "grey_dialogue1",
     "lines": [
       {
-        "character": "maya",
-        "image": "excited",
+        "character": "grey",
+        "image": "huh",
         "pos": "L",
         "text": "test"
       }
-    ]
+    ],
+    "background": "backg_1.jpg"
   },
   {
     "id": "c1_dialogue1",
