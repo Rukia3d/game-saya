@@ -12,14 +12,14 @@
         "id": "nell_dialogue_1",
         "type": "dialogue",
         "image": "../img/dialogue_1.png",
-        "open": true
+        "open": false
       },
       {
         "id": "t_f_arena",
         "type": "fight",
         "image": "../img/arena_1.png",
         "enemy": "dude",
-        "open": true,
+        "open": false,
         "characters": ["maya", "tara"],
         "name": "Arena"
       }
@@ -32,14 +32,14 @@
         "id": "tara_dialogue_1",
         "type": "dialogue",
         "image": "../img/dialogue_1.png",
-        "open": true
+        "open": false
       },
       {
         "id": "t_f_arena2",
         "type": "fight",
         "image": "../img/arena_1.png",
         "enemy": "dude",
-        "open": true,
+        "open": false,
         "characters": ["maya", "nell"],
         "name": "Arena"
       },
@@ -47,7 +47,7 @@
         "id": "grey_dialogue1",
         "type": "dialogue",
         "image": "../img/dialogue_1.png",
-        "open": true
+        "open": false
       }
     ]
   },
@@ -58,13 +58,13 @@
         "id": "c1_dialogue1",
         "type": "dialogue",
         "image": "../img/dialogue_1.png",
-        "open": true
+        "open": false
       },
       {
         "id": "c1_dialogue2",
         "type": "dialogue",
         "image": "../img/dialogue_1.png",
-        "open": true
+        "open": false
       },
       {
         "id": "c1_f_gates",

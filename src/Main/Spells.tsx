@@ -59,6 +59,7 @@ export const Spells = () => {
       </div>
     );
   }
+
   return (
     <div className="Spells">
       <TopMenu />

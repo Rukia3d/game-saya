@@ -5,7 +5,7 @@ const cors = require("cors");
 const app = express();
 const port = 3001;
 app.use(cors());
-const playerCards = require("../src/data/heroCards.json");
+const cards = require("../src/data/heroCards.json");
 const dialogues = require("../src/data/dialogues.json");
 const stories = require("../src/data/storiesAct1.json");
 const spellUpdates = require("../src/data/spellUpdates.json");
@@ -23,6 +23,7 @@ app.get("/api/player/", (req: any, res: any) => {
   const playerCharacters = [sceneCharacters[0]];
   const playerHeroes = [heroes[0]];
   playerHeroes[0].selected = true;
+  const playerCards = cards.base;
 
   const gameState = {
     sceneCharacters: playerCharacters,

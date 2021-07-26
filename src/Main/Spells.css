@@ -32,7 +32,6 @@
   top: 3em;
   left: 2em;
   height: 90%;
-  width: 30%;
   clip-path: polygon(0 0, 100% 0, 100% 12%, 0% 100%);
 }
 
