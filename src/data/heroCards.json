@@ -9,7 +9,7 @@
     "image": "../img/Spells/spell1.jpg",
     "selected": true,
     "type": "base_hit1",
-    "level": 1,
+    "level": 0,
     "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
   },
   {
@@ -22,7 +22,7 @@
     "image": "../img/Spells/spell2.jpg",
     "selected": true,
     "type": "base_hit1",
-    "level": 2,
+    "level": 0,
     "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
   },
   {

@@ -4,7 +4,7 @@
 
 To run the app open 2 terminal windows
 Run `npm install` in any of them.
-First one will run backend with `node api/scripts.js`
+First one will run backend with `npm run backend`
 Second one will run frontend with `npm run start`
 
 ## To test

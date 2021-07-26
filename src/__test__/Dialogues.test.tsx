@@ -35,6 +35,5 @@ test("Renders dialogue page", async () => {
   expect(screen.getByAltText("character_image_maya")).toBeInTheDocument();
   expect(screen.getByLabelText("dialogue_line_1")).toBeInTheDocument();
   userEvent.click(screen.getByLabelText("dialogue_line_1"));
-  screen.debug();
   expect(context.setDialogue.mock.calls.length).toBe(1);
 });

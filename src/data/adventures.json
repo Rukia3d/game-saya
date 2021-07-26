@@ -1,0 +1,42 @@
+[
+  {
+    "id": "story",
+    "name": "Water Problems",
+    "image": "story.jpg",
+    "open": false,
+    "form": "story",
+    "stories": []
+  },
+  {
+    "id": "character",
+    "name": "Character",
+    "image": "character.jpg",
+    "open": false,
+    "form": "character",
+    "stories": []
+  },
+  {
+    "id": "arena",
+    "name": "Arena",
+    "image": "arena.jpg",
+    "open": false,
+    "form": "arena",
+    "stories": []
+  },
+  {
+    "id": "torunament",
+    "name": "Tournament",
+    "image": "tournament.jpg",
+    "open": false,
+    "form": "torunament",
+    "stories": []
+  },
+  {
+    "id": "event",
+    "name": "Event",
+    "image": "event.jpg",
+    "open": false,
+    "form": "event",
+    "stories": []
+  }
+]

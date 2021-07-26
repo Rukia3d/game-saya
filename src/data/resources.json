@@ -1,0 +1,44 @@
+[
+  {
+    "id": "gold",
+    "name": "Gold",
+    "image": "../",
+    "commonality": 2,
+    "quantity": 0
+  },
+  {
+    "id": "iron",
+    "name": "Iron",
+    "image": "../",
+    "commonality": 5,
+    "quantity": 0
+  },
+  {
+    "id": "dimond",
+    "name": "Dimonds",
+    "image": "../",
+    "commonality": 1,
+    "quantity": 0
+  },
+  {
+    "id": "silk",
+    "name": "Silk",
+    "image": "../",
+    "commonality": 2,
+    "quantity": 0
+  },
+  {
+    "id": "rdust",
+    "name": "Red dust",
+    "image": "../",
+    "commonality": 3,
+    "quantity": 0
+  },
+  {
+    "id": "rflower",
+    "name": "Red flower",
+    "image": "../",
+    "commonality": 4,
+    "quantity": 0
+  }
+]
