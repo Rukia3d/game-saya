@@ -1,4 +1,4 @@
-import { Adventure } from "../src/utils/types";
+import { Adventure, GameState } from "../src/utils/types";
 
 const express = require("express");
 const cors = require("cors");
@@ -11,8 +11,11 @@ const stories = require("../src/data/storiesAct1.json");
 const spellUpdates = require("../src/data/spellUpdates.json");
 const sceneCharacters = require("../src/data/sceneCharacters.json");
 const heroes = require("../src/data/heroes.json");
-const resources = require("../src/data/resources.json");
+const playerResources = require("../src/data/resources.json");
 const adventures = require("../src/data/adventures.json");
+const enemies = require("../src/data/enemies.json");
+const forge = require("../src/data/forge.json");
+const rewards = require("../src/data/rewards.json");
 
 app.get("/api/player/", (req: any, res: any) => {
   console.log("Requesting new player game data");
@@ -25,9 +28,10 @@ app.get("/api/player/", (req: any, res: any) => {
   playerHeroes[0].selected = true;
   const playerCards = cards.base;
 
-  const gameState = {
+  const gameState: GameState = {
     sceneCharacters: playerCharacters,
     dialogues: dialogues,
+    enemies: enemies,
     player: {
       id: 1,
       cards: playerCards,
@@ -36,9 +40,11 @@ app.get("/api/player/", (req: any, res: any) => {
       mana: 15,
       maxMana: 15,
       heroes: playerHeroes,
-      resources: resources,
+      resources: playerResources,
     },
     adventures: adventures,
+    forgeEffects: forge,
+    resources: rewards.resources,
   };
   res.send(gameState);
 });

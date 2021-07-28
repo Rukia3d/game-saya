@@ -1,5 +1,6 @@
 import { enemyToNumber } from "./gamelogic";
 import { shuffle } from "./helpers";
+import { gameState } from "./testobjects";
 import {
   Enemy,
   ForgeReq,
@@ -8,7 +9,6 @@ import {
   Resource,
   resourceType,
 } from "./types";
-const rewardData = require("../data/rewards.json");
 
 export const givePlayerResources = (player: Player, resources: Resource[]) => {
   const existingResources = player.resources;
@@ -25,7 +25,7 @@ export const givePlayerResources = (player: Player, resources: Resource[]) => {
 
 const generateSingleRewards = () => {
   const allRewards: Resource[] = [];
-  rewardData.resources.forEach((r: Resource) => {
+  gameState.resources.forEach((r: Resource) => {
     for (let i = 0; i < r.commonality; i++) {
       allRewards.push({
         id: r.id,

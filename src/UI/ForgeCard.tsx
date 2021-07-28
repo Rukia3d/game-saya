@@ -124,24 +124,32 @@ export const ForgeCard = ({
     !context ||
     !context.gameState ||
     !context.gameState.player ||
-    !context.gameState.player.cardUpdates
+    !context.gameState.player.cardUpdates ||
+    !context.gameState.forgeEffects ||
+    !context.gameState.resources
   ) {
     throw new Error("No data");
   }
   const updates = context.gameState.player.cardUpdates;
-  const resources = context.gameState.player.resources;
+  const ownedResources = context.gameState.player.resources;
   const player = context.gameState.player;
   const gameState = context.gameState;
+  const forgeEffects = context.gameState.forgeEffects;
+  const resources = context.gameState.resources;
   const forge = (s: Spell) => {
-    console.log("Called forge card");
     const cardRequirements = findCardRequirements(updates, s);
-    if (!achievedUpdate(resources, cardRequirements.updates)) {
+    if (!achievedUpdate(ownedResources, cardRequirements.updates)) {
       console.warn("This spell is not ready to be updated");
       return;
     }
-    const newCards = updatedCards(s, cardRequirements, player.cards);
+    const newCards = updatedCards(
+      forgeEffects,
+      s,
+      cardRequirements,
+      player.cards
+    );
     const newResources = removeResources(cardRequirements, player.resources);
-    const newUpdates = cardUpdateRaise(s.type, player.cardUpdates);
+    const newUpdates = cardUpdateRaise(resources, s.type, player.cardUpdates);
     const newPlayer = {
       ...player,
       cards: newCards,

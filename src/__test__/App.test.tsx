@@ -145,6 +145,5 @@ test("Renders Story screen and loads the story", async () => {
   // Click on inactive panel doesn't have an effect
   userEvent.click(screen.getByAltText("story_olija_dialogue1"));
   expect(screen.queryByText(/Your opponent/)).not.toBeInTheDocument();
-  userEvent.click(screen.getByAltText("story_t_f_arena"));
-  expect(screen.queryByText(/Your opponent/)).toBeInTheDocument();
+  expect(screen.getByAltText("character_image_maya")).toBeInTheDocument();
 });

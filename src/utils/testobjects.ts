@@ -1,13 +1,75 @@
 import {
+  Adventure,
   Dialogue,
   Enemy,
   FightState,
   ForgeReq,
   GameState,
   Spell,
+  Story,
 } from "./types";
-const stories = require("../data/storiesAct1.json");
-const dialogues = require("../data/dialogues.json");
+const dialogues: Dialogue[] = [];
+[1, 2, 3].forEach((i: number) =>
+  dialogues.push({
+    id: "c1_dialogue" + i,
+    lines: [
+      {
+        character: "maya",
+        image: "excited",
+        pos: "L",
+        text: "test",
+      },
+    ],
+  })
+);
+const stories: { group: number; stories: Story[] }[] = [];
+[1, 2, 3, 4].forEach((i: number) =>
+  stories.push({
+    group: i,
+    stories: [
+      {
+        id: "dialogue" + i,
+        type: "dialogue",
+        image: "",
+        open: true,
+      },
+      {
+        id: "dialogue1" + i,
+        type: "dialogue",
+        image: "",
+        open: true,
+      },
+      {
+        id: "arena" + i,
+        type: "fight",
+        image: "",
+        enemy: "dude",
+        open: false,
+        characters: ["maya", "tara"],
+        name: "Arena",
+      },
+    ],
+  })
+);
+
+const adventures: Adventure[] = [];
+const advFormat: [string, boolean][] = [
+  ["character", true],
+  ["story", true],
+  ["arena", false],
+  ["torunament", false],
+  ["event", false],
+];
+advFormat.forEach((obj: [string, boolean]) =>
+  adventures.push({
+    id: obj[0],
+    name: obj[0],
+    image: "",
+    open: obj[1],
+    form: obj[0],
+    stories: stories,
+  })
+);
 
 export const story = {
   id: "fight1",
@@ -49,7 +111,7 @@ export const enemyCard: Spell = {
 };
 
 export const enemy: Enemy = {
-  id: "dude",
+  id: "test-dude",
   name: "Dude",
   element: "earth" as "earth",
   experience: "novice" as "novice",
@@ -116,14 +178,14 @@ export const gameState: GameState = {
       name: "Maya",
       image: "../img/maya.png",
       state: "story",
-      dial: "maya_replic1",
+      dial: "c1_dialogue1",
     },
     {
       id: "tara",
       name: "Tara",
       image: "../img/tara.png",
       state: "story",
-      dial: "maya_replic1",
+      dial: "c1_dialogue2",
     },
   ],
   dialogues: dialogues,
@@ -167,46 +229,19 @@ export const gameState: GameState = {
       },
     ],
   },
-  adventures: [
+  adventures: adventures,
+  enemies: [enemy],
+  resources: [
+    { id: "gold", name: "Gold", image: "../", commonality: 2 },
+    { id: "iron", name: "Iron", image: "../", commonality: 10 },
+    { id: "dimond", name: "Dimonds", image: "../", commonality: 1 },
+    { id: "silk", name: "Silk", image: "../", commonality: 3 },
+  ],
+  forgeEffects: [
     {
-      id: "character",
-      name: "Character",
-      image: "character.jpg",
-      open: true,
-      form: "character",
-      stories: [],
-    },
-    {
-      id: "story",
-      name: "Water Problems",
-      image: "story.jpg",
-      open: true,
-      form: "story",
-      stories: stories,
-    },
-    {
-      id: "arena",
-      name: "Arena",
-      image: "arena.jpg",
-      open: false,
-      form: "arena",
-      stories: [],
-    },
-    {
-      id: "torunament",
-      name: "Tournament",
-      image: "tournament.jpg",
-      open: false,
-      form: "torunament",
-      stories: [],
-    },
-    {
-      id: "event",
-      name: "Event",
-      image: "event.jpg",
-      open: false,
-      form: "event",
-      stories: [],
+      id: "strengthen" as "strengthen",
+      parameter: "strength",
+      change: 1,
     },
   ],
 };

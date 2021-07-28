@@ -47,14 +47,18 @@ test("Correctly updates Cards", () => {
   const card = { ...JSON.parse(JSON.stringify(mayaCard)) };
   const req: ForgeReq = spellUpdates[0];
   const spels = baseCards15.concat(card);
-  const res = updatedCards(card, req, spels);
+  const res = updatedCards(gameState.forgeEffects, card, req, spels);
   expect(res[15].id).toEqual(mayaCard.id);
   expect(res[15].strength).toEqual(mayaCard.strength + 1);
   expect(res[15].level).toEqual(mayaCard.level + 1);
 });
 
 test("Correctly raises update requirements after card is updated", () => {
-  const res = cardUpdateRaise("base_hit_maya", spellUpdates);
+  const res = cardUpdateRaise(
+    gameState.resources,
+    "base_hit_maya",
+    spellUpdates
+  );
   expect(res[0].updates[0]).toEqual(["gold", 10]);
   expect(res[0].updates[1]).toEqual(["silk", 9]);
 });

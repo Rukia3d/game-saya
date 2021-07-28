@@ -20,8 +20,6 @@ import { FightResult } from "./FightResult";
 import { GameContext } from "../App";
 import { BigCard } from "./BigCard";
 
-const enemies = require("../data/enemies.json");
-
 export const Fight = () => {
   const context = useContext(GameContext);
   if (
@@ -29,19 +27,26 @@ export const Fight = () => {
     !context.story ||
     !context.gameState ||
     !context.setGameState ||
-    !context.backToMain
+    !context.backToMain ||
+    !context.gameState.enemies
   ) {
     throw new Error("No data");
   }
 
   const enemyId = context.story.enemy;
+  const enemies = context.gameState.enemies;
   if (!enemyId) {
     throw new Error("No enemy for this fight, something went very wrong");
   }
   const storyCharacters = context.story.characters
     ? context.story.characters
     : findActiveCharacters(context.gameState.player.heroes);
-  const enemy: Enemy = enemies.find((e: any) => e.id === enemyId);
+  const enemy: Enemy | null =
+    enemies.find((e: any) => e.id === enemyId) || null;
+  if (!enemy) {
+    console.log(enemies);
+    throw new Error(`Can't find the enemy ${enemyId}`);
+  }
   const heroDeck = generateDeck(
     storyCharacters,
     context.gameState.player.cards

@@ -30,7 +30,7 @@ test("Renders Fight screen", () => {
   expect(screen.getByText(/Elements:/)).toBeInTheDocument();
   // correct number of enemy life
   expect(screen.getByTestId("enemy_life").innerHTML).toMatch(
-    (enemy.life - 1).toString()
+    enemy.life.toString()
   );
   // Correct hero and enemy data
   expect(screen.getByTestId("hero_life").innerHTML).toMatch(heroHealth);
@@ -81,6 +81,8 @@ test("Fight finish shows the end screen for win", async () => {
   );
   userEvent.click(screen.getByLabelText("opponent"));
   expect(screen.getByLabelText("display_card")).toBeInTheDocument();
+  userEvent.click(screen.getAllByLabelText("spell_card")[0]);
+  userEvent.click(screen.getByLabelText("opponent"));
   userEvent.click(screen.getAllByLabelText("spell_card")[0]);
   expect(screen.getAllByLabelText("display_card").length).toEqual(2);
   expect(await screen.findByText("You Won")).toBeInTheDocument();

@@ -9,8 +9,6 @@ import {
   resourceType,
   Spell,
 } from "./types";
-const forgeData = require("../data/forge.json");
-const resouceData = require("../data/rewards.json");
 
 export const changeCardsInDeck = (playerCards: Spell[], s: Spell) => {
   const playerCard = playerCards.find((c: Spell) => s.id === c.id);
@@ -129,37 +127,41 @@ const updateCardParameter = (spell: Spell, effect: ForgeEffect): Spell => {
   return spell;
 };
 
-const findUpdateEffect = (effect: string) => {
-  const updateEffect = forgeData.find((f: ForgeEffect) => f.id === effect);
+const findUpdateEffect = (forgeEffects: ForgeEffect[], effect: string) => {
+  const updateEffect = forgeEffects.find((f: ForgeEffect) => f.id === effect);
   if (!updateEffect) {
     throw new Error(`Can't find update effect ${effect}`);
   }
   return updateEffect;
 };
 export const updatedCards = (
+  forgeEffects: ForgeEffect[],
   s: Spell,
   req: ForgeReq,
   all: Spell[]
 ): Spell[] => {
   const index = all.indexOf(s);
   if (index === -1) throw new Error(`Can't find spell ${s.id} to update`);
-  const updateEffect = findUpdateEffect(req.effect);
+  const updateEffect = findUpdateEffect(forgeEffects, req.effect);
   const newCard = updateCardParameter(s, updateEffect);
   newCard.level = newCard.level + 1;
   all[index] = newCard;
   return all;
 };
 
-const raiseUpdate = (s: [resourceType, number]): [resourceType, number] => {
-  const multiplier: Resource = resouceData.resources.find(
-    (r: Resource) => r.id === s[0]
-  );
+const raiseUpdate = (
+  resouceData: Resource[],
+  s: [resourceType, number]
+): [resourceType, number] => {
+  const multiplier: Resource | null =
+    resouceData.find((r: Resource) => r.id === s[0]) || null;
   if (!multiplier) throw new Error(`Can't find multiplier for ${s[0]}`);
   const res: [resourceType, number] = [s[0], s[1] * multiplier.commonality];
   return res;
 };
 
 export const cardUpdateRaise = (
+  resouceData: Resource[],
   type: string,
   cardUpdates: ForgeReq[]
 ): ForgeReq[] => {
@@ -167,7 +169,7 @@ export const cardUpdateRaise = (
   if (!toUpdate) throw new Error(`Can't find spell type ${type} to update`);
   const index = cardUpdates.indexOf(toUpdate);
   const newUpdates: [resourceType, number][] = toUpdate.updates.map(
-    (s: [resourceType, number]) => raiseUpdate(s)
+    (s: [resourceType, number]) => raiseUpdate(resouceData, s)
   );
   cardUpdates[index] = { ...toUpdate, updates: newUpdates };
   return cardUpdates;

@@ -3,11 +3,9 @@ import { render, screen } from "@testing-library/react";
 import { ForgeCard } from "../UI/ForgeCard";
 import userEvent from "@testing-library/user-event";
 
-import { gameState, mayaCard, spellUpdates } from "../utils/testobjects";
+import { enemy, gameState, mayaCard, spellUpdates } from "../utils/testobjects";
 import { GameState, Resource } from "../utils/types";
 import { GameContext } from "../App";
-
-const resouceData = require("../data/rewards.json");
 
 const context = {
   adventure: null,
@@ -20,6 +18,7 @@ const context = {
   setGameState: jest.fn((s: GameState) => s),
   backToMain: jest.fn(),
   backToStory: jest.fn(),
+  enemies: [enemy],
 };
 
 test("Renders Forge Card screen", async () => {
@@ -125,18 +124,20 @@ test("Updates Forge Card", async () => {
 
   // Iron updated
   expect(newUpdates.updates[0][0]).toEqual("iron");
-  const multiplierForIron = resouceData.resources.find(
-    (r: Resource) => r.id === "iron"
-  ).commonality;
+  const resource1: Resource | null =
+    gameState.resources.find((r: Resource) => r.id === "iron") || null;
+  expect(resource1).not.toBeNull();
+  const multiplierForIron = resource1?.commonality || 0;
   expect(newUpdates.updates[0][1]).toEqual(
     requirementsForCard.updates[0][1] * multiplierForIron
   );
 
   // Gold updated
   expect(newUpdates.updates[1][0]).toEqual("gold");
-  const multiplierForGold = resouceData.resources.find(
-    (r: Resource) => r.id === "gold"
-  ).commonality;
+  const resource2: Resource | null =
+    gameState.resources.find((r: Resource) => r.id === "gold") || null;
+  expect(resource2).not.toBeNull();
+  const multiplierForGold = resource2?.commonality || 0;
   expect(newUpdates.updates[1][1]).toEqual(
     requirementsForCard.updates[1][1] * multiplierForGold
   );

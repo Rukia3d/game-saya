@@ -80,6 +80,9 @@ export interface GameState {
   player: Player;
   adventures: Adventure[];
   dialogues: Dialogue[];
+  enemies: Enemy[];
+  forgeEffects: ForgeEffect[];
+  resources: Resource[];
 }
 
 export interface ForgeReq {
