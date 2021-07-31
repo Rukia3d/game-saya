@@ -13,16 +13,16 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Use Node.js 14.15.1
+      - name: Use Node.js 16
         uses: actions/setup-node@v1
         with:
-          node-version: 14.15.1
+          node-version: 16
 
       - name: Install packages
         run: npm install
 
       - name: Start backend API
-        run: node api/scripts.js &
+        run: npx ts-node --project tsconfig-node.json api/scripts.ts &
 
       - name: Run tests and build a report
         run: |
