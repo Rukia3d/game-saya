@@ -154,23 +154,6 @@ export const spellUpdates: ForgeReq[] = [
   },
 ];
 
-export const fightState: FightState = {
-  hero: {
-    health: 15,
-    currentHealth: 15,
-    mana: 15,
-    currentMana: 10,
-  },
-  enemy: enemy,
-  heroDeck: [mayaCard, mayaCard],
-  heroHand: [mayaCard, mayaCard],
-  heroDrop: [mayaCard],
-  enemyDeck: [enemyCard, enemyCard],
-  enemyDrop: [enemyCard],
-  elements: ["fire" as "fire", "earth" as "earth"],
-  element: "fire" as "fire",
-};
-
 export const gameState: GameState = {
   dialogues: dialogues,
   player: {
@@ -252,6 +235,23 @@ export const gameState: GameState = {
       change: 1,
     },
   ],
+};
+
+export const fightState: FightState = {
+  hero: {
+    life: gameState.player.data.life,
+    mana: gameState.player.data.mana,
+    maxLife: gameState.player.data.maxLife,
+    maxMana: gameState.player.data.maxMana,
+  },
+  enemy: enemy,
+  heroDeck: [mayaCard, mayaCard],
+  heroHand: [mayaCard, mayaCard],
+  heroDrop: [mayaCard],
+  enemyDeck: [enemyCard, enemyCard],
+  enemyDrop: [enemyCard],
+  elements: ["fire" as "fire", "earth" as "earth"],
+  element: "fire" as "fire",
 };
 
 export const dialogue: Dialogue = {

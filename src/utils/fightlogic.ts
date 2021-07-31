@@ -30,7 +30,7 @@ export const enemyAttack = (
   fightState: FightState,
   heroCard: Spell,
   enemyCard: Spell
-) => {
+): FightState => {
   // Update cards state
   const [newDeck, newDrop] = updateHeroDeck(fightState, heroCard);
   const newHeroHand = removeFromArray(fightState.heroHand, heroCard);
@@ -38,8 +38,8 @@ export const enemyAttack = (
   newHeroHand.push(newCard);
   const enemyDrop = fightState.enemyDrop.concat([enemyCard]);
   const enemyDeck = fightState.enemyDeck.splice(1);
-  let newHeroHealth = fightState.hero.currentHealth;
-  let newHeroMana = fightState.hero.currentMana;
+  let newHeroHealth = fightState.hero.life;
+  let newHeroMana = fightState.hero.mana;
 
   if (
     fightState.element &&
@@ -65,17 +65,17 @@ export const enemyAttack = (
   if (
     heroCard.effect &&
     heroCard.mana > 0 &&
-    fightState.hero.currentMana >= heroCard.mana
+    fightState.hero.mana >= heroCard.mana
   ) {
     // additional effects apply
-    newHeroMana = fightState.hero.currentMana - heroCard.mana;
+    newHeroMana = fightState.hero.mana - heroCard.mana;
     const effectType = heroCard.effect[0];
     const effectValue = heroCard.effect[1];
     switch (effectType) {
       case "heal":
         newHeroHealth = newHeroHealth + effectValue;
-        if (newHeroHealth > fightState.hero.health)
-          newHeroHealth = fightState.hero.health;
+        if (newHeroHealth > fightState.hero.life)
+          newHeroHealth = fightState.hero.life;
         break;
       default:
         throw new Error("Unknown effect");
@@ -84,8 +84,8 @@ export const enemyAttack = (
 
   const heroNew = {
     ...fightState.hero,
-    currentHealth: newHeroHealth,
-    currentMana: newHeroMana,
+    life: newHeroHealth,
+    mana: newHeroMana,
   };
   const nextElement = getNextElement(fightState.elements, fightState.element);
 

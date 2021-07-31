@@ -28,13 +28,14 @@ export const Fight = () => {
     !context.gameState ||
     !context.setGameState ||
     !context.backToMain ||
-    !context.gameState.enemies
+    !context.gameState.player.enemies
   ) {
     throw new Error("No data");
   }
 
   const enemyId = context.story.enemy;
-  const enemies = context.gameState.enemies;
+  const enemies = context.gameState.player.enemies;
+  const player = context.gameState.player.data;
   if (!enemyId) {
     throw new Error("No enemy for this fight, something went very wrong");
   }
@@ -62,10 +63,10 @@ export const Fight = () => {
   ]);
   const [fightState, setfightState] = useState<FightState>({
     hero: {
-      health: 15,
-      currentHealth: 15,
-      mana: 15,
-      currentMana: 10,
+      maxLife: player.maxLife,
+      life: player.life,
+      maxMana: player.maxMana,
+      mana: player.mana,
     },
     enemy: enemy,
     heroDeck: heroDeck,
@@ -97,7 +98,7 @@ export const Fight = () => {
     setTimeout(() => {
       setHeroCard(null);
       setEnemyCard(null);
-      if (fightState.hero.currentHealth <= 0) {
+      if (fightState.hero.life <= 0) {
         setResult("Lost");
       }
       if (fightState.enemyDrop.length === enemyHealt - 1) {

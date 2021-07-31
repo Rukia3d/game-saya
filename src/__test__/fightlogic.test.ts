@@ -5,7 +5,7 @@ test("Simple attack: enemy attacks for 3 and hero counters with attack 1", () =>
   const newFightState = {
     ...JSON.parse(JSON.stringify(fightState)),
     heroHand: fightState.heroHand.concat({ ...mayaCard, strength: 1 }),
-    enemyDeck: fightState.enemyDeck.concat({ ...enemyCard, strength: 3 }),
+    enemyDeck: fightState.enemyDeck.concat({ ...enemyCard, strength: 2 }),
   };
   const enemyAttackRes = enemyAttack(
     newFightState,
@@ -13,7 +13,7 @@ test("Simple attack: enemy attacks for 3 and hero counters with attack 1", () =>
     newFightState.enemyDeck[2]
   );
   expect(enemyAttackRes.element).toEqual("earth");
-  expect(enemyAttackRes.hero.currentHealth).toBe(12);
+  expect(enemyAttackRes.hero.life).toBe(fightState.hero.life - 2);
   expect(enemyAttackRes.heroDrop.length).toBe(2);
   expect(enemyAttackRes.enemyDrop.length).toBe(2);
   expect(enemyAttackRes.enemyDeck.length).toBe(2);
@@ -33,7 +33,7 @@ test("Simple attack: enemy attacks for 2 and hero counters with attack 2", () =>
     newFightState.enemyDeck[2]
   );
   expect(enemyAttackRes.element).toEqual("earth");
-  expect(enemyAttackRes.hero.currentHealth).toBe(15);
+  expect(enemyAttackRes.hero.life).toBe(fightState.hero.life);
 });
 
 test("Simple attack: enemy attacks for 1 and hero counters with attack 3", () => {
@@ -48,7 +48,7 @@ test("Simple attack: enemy attacks for 1 and hero counters with attack 3", () =>
     newFightState.enemyDeck[2]
   );
   expect(enemyAttackRes.element).toEqual("earth");
-  expect(enemyAttackRes.hero.currentHealth).toBe(15);
+  expect(enemyAttackRes.hero.life).toBe(fightState.hero.life);
 });
 
 test("Simple attack: enemy attacks for 3 and hero counters with attack 1 trump", () => {
@@ -68,7 +68,7 @@ test("Simple attack: enemy attacks for 3 and hero counters with attack 1 trump",
     newFightState.enemyDeck[2]
   );
   expect(enemyAttackRes.element).toEqual("fire");
-  expect(enemyAttackRes.hero.currentHealth).toBe(15);
+  expect(enemyAttackRes.hero.life).toBe(fightState.hero.life);
 });
 
 test("Simple attack: enemy attacks for 2 and hero counters with attack 2 trump", () => {
@@ -88,7 +88,7 @@ test("Simple attack: enemy attacks for 2 and hero counters with attack 2 trump",
     newFightState.enemyDeck[2]
   );
   expect(enemyAttackRes.element).toEqual("fire");
-  expect(enemyAttackRes.hero.currentHealth).toBe(15);
+  expect(enemyAttackRes.hero.life).toBe(fightState.hero.life);
 });
 
 test("Simple attack: enemy attacks for 1 and hero counters with attack 3 trump", () => {
@@ -108,7 +108,7 @@ test("Simple attack: enemy attacks for 1 and hero counters with attack 3 trump",
     newFightState.enemyDeck[2]
   );
   expect(enemyAttackRes.element).toEqual("fire");
-  expect(enemyAttackRes.hero.currentHealth).toBe(15);
+  expect(enemyAttackRes.hero.life).toBe(fightState.hero.life);
 });
 
 test("Simple attack: enemy attacks for 3 with trump and hero counters with attack 1", () => {
@@ -117,7 +117,7 @@ test("Simple attack: enemy attacks for 3 with trump and hero counters with attac
     element: "earth" as "earth",
     enemyDeck: fightState.enemyDeck.concat({
       ...enemyCard,
-      strength: 3,
+      strength: 2,
       element: "earth" as "earth",
     }),
     heroHand: fightState.heroHand.concat({
@@ -131,7 +131,7 @@ test("Simple attack: enemy attacks for 3 with trump and hero counters with attac
     newFightState.enemyDeck[2]
   );
   expect(enemyAttackRes.element).toEqual("fire");
-  expect(enemyAttackRes.hero.currentHealth).toBe(12);
+  expect(enemyAttackRes.hero.life).toBe(fightState.hero.life - 2);
 });
 
 test("Simple attack: enemy attacks for 2 with trump and hero counters with attack 2", () => {
@@ -154,7 +154,7 @@ test("Simple attack: enemy attacks for 2 with trump and hero counters with attac
     newFightState.enemyDeck[2]
   );
   expect(enemyAttackRes.element).toEqual("fire");
-  expect(enemyAttackRes.hero.currentHealth).toBe(13);
+  expect(enemyAttackRes.hero.life).toBe(fightState.hero.life - 2);
 });
 
 test("Simple attack: enemy attacks for 1 with trump and hero counters with attack 3", () => {
@@ -177,7 +177,7 @@ test("Simple attack: enemy attacks for 1 with trump and hero counters with attac
     newFightState.enemyDeck[2]
   );
   expect(enemyAttackRes.element).toEqual("fire");
-  expect(enemyAttackRes.hero.currentHealth).toBe(14);
+  expect(enemyAttackRes.hero.life).toBe(fightState.hero.life - 1);
 });
 
 test("Hero special card, attack for 3, counter for 1, no trump", () => {
@@ -197,11 +197,11 @@ test("Hero special card, attack for 3, counter for 1, no trump", () => {
     newFightState.heroHand[2],
     newFightState.enemyDeck[2]
   );
-  expect(enemyAttackRes.hero.currentHealth).toBe(14);
-  expect(enemyAttackRes.hero.currentMana).toBe(8);
+  expect(enemyAttackRes.hero.life).toBe(fightState.hero.life - 1);
+  expect(enemyAttackRes.hero.mana).toBe(fightState.hero.mana - 2);
 });
 
-test("Hero special card with max, attack for 1, counter for 3, no trump", () => {
+test("Hero special card with mana, attack for 1, counter for 3, no trump", () => {
   const newFightState = {
     ...JSON.parse(JSON.stringify(fightState)),
     heroHand: fightState.heroHand.concat({
@@ -211,10 +211,10 @@ test("Hero special card with max, attack for 1, counter for 3, no trump", () => 
       mana: 2,
     }),
     hero: {
-      health: 15,
-      currentHealth: 15,
-      mana: 15,
-      currentMana: 10,
+      maxlife: 15,
+      life: 15,
+      maxMana: 15,
+      mana: 10,
     },
     enemyDeck: fightState.enemyDeck.concat({ ...enemyCard, strength: 1 }),
   };
@@ -223,8 +223,8 @@ test("Hero special card with max, attack for 1, counter for 3, no trump", () => 
     newFightState.heroHand[2],
     newFightState.enemyDeck[2]
   );
-  expect(enemyAttackRes.hero.currentHealth).toBe(15);
-  expect(enemyAttackRes.hero.currentMana).toBe(8);
+  expect(enemyAttackRes.hero.life).toBe(15);
+  expect(enemyAttackRes.hero.mana).toBe(8);
 });
 
 test("Hero special card, attack for 3, counter for 1, no mana", () => {
@@ -237,10 +237,10 @@ test("Hero special card, attack for 3, counter for 1, no mana", () => {
       mana: 2,
     }),
     hero: {
-      health: 15,
-      currentHealth: 15,
-      mana: 15,
-      currentMana: 0,
+      maxlife: 15,
+      life: 15,
+      maxMana: 15,
+      mana: 0,
     },
     enemyDeck: fightState.enemyDeck.concat({ ...enemyCard, strength: 3 }),
   };
@@ -249,6 +249,6 @@ test("Hero special card, attack for 3, counter for 1, no mana", () => {
     newFightState.heroHand[2],
     newFightState.enemyDeck[2]
   );
-  expect(enemyAttackRes.hero.currentHealth).toBe(12);
-  expect(enemyAttackRes.hero.currentMana).toBe(0);
+  expect(enemyAttackRes.hero.life).toBe(12);
+  expect(enemyAttackRes.hero.mana).toBe(0);
 });

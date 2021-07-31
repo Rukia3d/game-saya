@@ -4,7 +4,6 @@ import userEvent from "@testing-library/user-event";
 import { Fight } from "../Fight/Fight";
 import { GameContext } from "../App";
 import { story, gameState, enemy } from "../utils/testobjects";
-const heroHealth = "15";
 
 const context = {
   adventure: null,
@@ -33,7 +32,12 @@ test("Renders Fight screen", () => {
     enemy.life.toString()
   );
   // Correct hero and enemy data
-  expect(screen.getByTestId("hero_life").innerHTML).toMatch(heroHealth);
+  expect(screen.getByTestId("hero_life").innerHTML).toMatch(
+    gameState.player.data.life.toString()
+  );
+  expect(screen.getByTestId("hero_mana").innerHTML).toMatch(
+    gameState.player.data.mana.toString()
+  );
   expect(screen.getByLabelText("Deck").childElementCount).toEqual(5);
 
   // Info popup shows correct informatioj

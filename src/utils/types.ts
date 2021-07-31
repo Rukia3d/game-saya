@@ -118,10 +118,10 @@ export interface Enemy {
 
 export interface FightState {
   hero: {
-    health: number;
-    currentHealth: number;
+    life: number;
+    maxLife: number;
     mana: number;
-    currentMana: number;
+    maxMana: number;
   };
   enemy: Enemy;
   heroDeck: Spell[];

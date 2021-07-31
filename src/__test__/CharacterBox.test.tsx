@@ -2,7 +2,7 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import { CharacterBox } from "../Fight/CharacterBox";
 import userEvent from "@testing-library/user-event";
-import { fightState } from "../utils/testobjects";
+import { gameState, fightState } from "../utils/testobjects";
 
 test("Renders Character Box", async () => {
   const setInfo = jest.fn();
@@ -14,8 +14,16 @@ test("Renders Character Box", async () => {
       setInfo={setInfo}
     />
   );
-  expect(screen.getByTestId("enemy_life").innerHTML).toEqual("2");
-  expect(screen.getByTestId("hero_life").innerHTML).toEqual("15");
+  const player = gameState.player.data;
+  expect(screen.getByTestId("enemy_life").innerHTML).toEqual(
+    fightState.enemyDeck.length.toString()
+  );
+  expect(screen.getByTestId("hero_life").innerHTML).toEqual(
+    player.life.toString()
+  );
+  expect(screen.getByTestId("hero_mana").innerHTML).toEqual(
+    player.mana.toString()
+  );
   userEvent.click(screen.getByLabelText("opponent_info"));
   expect(setInfo.mock.calls.length).toBe(1);
   userEvent.click(screen.getByLabelText("opponent"));
