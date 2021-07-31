@@ -31,4 +31,6 @@ test("Stories renders StoryPanels for adventure", async () => {
   userEvent.click(screen.getByTestId("scroll_button"));
   expect(screen.getByLabelText("stories_list").children.length).toEqual(2);
   expect(screen.getAllByTestId("scroll_button").length).toEqual(1);
+  userEvent.click(screen.getByTestId("scroll_button"));
+  expect(screen.getByLabelText("stories_list").children.length).toEqual(4);
 });
