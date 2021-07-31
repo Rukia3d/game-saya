@@ -19,10 +19,8 @@
   margin: 0.5em;
 }
 
-.Stats {
+.TopMenu .Stats {
   display: flex;
-  flex-direction: row;
-  align-items: center;
 }
 
 .Lightning {
