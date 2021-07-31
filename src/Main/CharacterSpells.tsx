@@ -31,14 +31,13 @@ export const CharacterSpells = ({
   }
   const player = context.gameState.player;
   const playerCards = context.gameState.player.cards;
+  const gameState = context.gameState;
   const [info, setInfo] = useState<null | Spell>(null);
   const [forge, setForge] = useState<null | Spell>(null);
 
   const selectCard = (s: Spell) => {
     const newPlayerCards = changeCardsInDeck(playerCards, s);
     const newPlayer = { ...player, cards: newPlayerCards };
-    const gameState = context.gameState;
-    if (!gameState) throw new Error("Can't update the fight results");
     context.setGameState({ ...gameState, player: newPlayer });
   };
   return (
