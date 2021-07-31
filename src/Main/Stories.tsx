@@ -16,21 +16,25 @@ const StoryPanel = ({
   loadStory: (s: Story) => void;
 }) => {
   const context = useContext(GameContext);
-  if (
-    !context ||
-    !context.gameState ||
-    !context.gameState.player ||
-    !context.gameState.player.mana
-  ) {
+  if (!context || !context.gameState || !context.gameState.player) {
     throw new Error("No data");
   }
+
+  const activateStory = (s: Story) => {
+    // TODO Open the next story
+    loadStory(s);
+  };
 
   if (group.stories.length !== 3)
     throw new Error("Number of stories in this panel is incorrect");
   return (
     <div className={`StoryGroup_${group.group}`}>
       {group.stories.map((s: Story, i: number) => (
-        <div className={`Story${i + 1}`} onClick={() => loadStory(s)} key={i}>
+        <div
+          className={`Story${i + 1}`}
+          onClick={() => activateStory(s)}
+          key={i}
+        >
           <img
             src={s.image}
             alt={`story_${s.id}`}

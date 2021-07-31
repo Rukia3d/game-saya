@@ -1,7 +1,18 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { GameContext } from "../App";
-import { OwnedResource } from "../utils/types";
+import { Character, OwnedResource } from "../utils/types";
 import "./TopMenu.css";
+
+const valueColor = (max: number, current: number): string => {
+  const third = Math.ceil(max / 3);
+  if (current <= third) {
+    return "red";
+  }
+  if (current <= third * 2) {
+    return "orange";
+  }
+  return "green";
+};
 
 const Resource = ({ resource }: { resource: OwnedResource }) => {
   return (
@@ -17,7 +28,8 @@ const Resources = () => {
     !context ||
     !context.gameState ||
     !context.gameState.player ||
-    !context.gameState.player.resources
+    !context.gameState.player.resources ||
+    !context.gameState.player.heroes
   ) {
     throw new Error("No resources to load");
   }
@@ -33,24 +45,29 @@ const Resources = () => {
   );
 };
 
-const Mana = ({ max, current }: { max: number; current: number }) => {
-  const manaColor = (): string => {
-    const third = Math.ceil(max / 3);
-    if (current <= third) {
-      return "red";
-    }
-    if (current <= third * 2) {
-      return "orange";
-    }
-    return "green";
-  };
+const Life = ({ max, current }: { max: number; current: number }) => {
   return (
-    <div className="Mana">
+    <div className="Stats">
+      <div className="Heart" aria-label="life_icon"></div>
+      <div
+        className="StatsValue"
+        aria-label="life_value"
+        style={{ color: valueColor(max, current) }}
+      >
+        {current}
+      </div>
+    </div>
+  );
+};
+
+const Mana = ({ max, current }: { max: number; current: number }) => {
+  return (
+    <div className="Stats">
       <div className="Lightning" aria-label="mana_icon"></div>
       <div
-        className="ManaValue"
+        className="StatsValue"
         aria-label="mana_value"
-        style={{ color: manaColor() }}
+        style={{ color: valueColor(max, current) }}
       >
         {current}
       </div>
@@ -63,10 +80,12 @@ export const TopMenu = () => {
   if (!context || !context.gameState || !context.gameState.player) {
     throw new Error("No data");
   }
-  const player = context.gameState.player;
+  const player = context.gameState.player.data;
+
   return (
     <div className="TopMenu" aria-label="top_menu">
       <Mana max={player.maxMana} current={player.mana} />
+      <Life max={player.maxLife} current={player.life} />
       <Resources />
     </div>
   );

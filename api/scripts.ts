@@ -1,4 +1,4 @@
-import { Adventure, GameState } from "../src/utils/types";
+import { GameState } from "../src/utils/types";
 
 const express = require("express");
 const cors = require("cors");
@@ -7,7 +7,6 @@ const port = 3001;
 app.use(cors());
 const cards = require("../src/data/heroCards.json");
 const dialogues = require("../src/data/dialogues.json");
-const stories = require("../src/data/storiesAct1.json");
 const spellUpdates = require("../src/data/spellUpdates.json");
 const sceneCharacters = require("../src/data/sceneCharacters.json");
 const heroes = require("../src/data/heroes.json");
@@ -22,29 +21,37 @@ app.get("/api/player/", (req: any, res: any) => {
 
   const playerAdventures = adventures;
   playerAdventures[0].open = true;
-  playerAdventures[0].stories = stories;
-  const playerCharacters = [sceneCharacters[0]];
+  const npcs = [sceneCharacters[0]];
   const playerHeroes = [heroes[0]];
   playerHeroes[0].selected = true;
   const playerCards = cards.base;
+  const playerEnemies = enemies;
 
   const gameState: GameState = {
-    sceneCharacters: playerCharacters,
-    dialogues: dialogues,
-    enemies: enemies,
     player: {
-      id: 1,
+      data: {
+        id: 1,
+        experience: 300,
+        life: 3,
+        maxLife: 7,
+        mana: 10,
+        maxMana: 15,
+      },
+      npcs: npcs,
+      heroes: playerHeroes,
       cards: playerCards,
       cardUpdates: spellUpdates,
-      experience: 300,
-      mana: 15,
-      maxMana: 15,
-      heroes: playerHeroes,
+      adventures: playerAdventures,
       resources: playerResources,
+      enemies: playerEnemies,
     },
-    adventures: adventures,
+    dialogues: dialogues,
     forgeEffects: forge,
+    adventures: adventures,
+    enemies: enemies,
     resources: rewards.resources,
+    cards: cards.base.concat(cards.tara).concat(cards.maya),
+    cardUpdates: spellUpdates,
   };
   res.send(gameState);
 });

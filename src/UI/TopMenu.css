@@ -19,7 +19,7 @@
   margin: 0.5em;
 }
 
-.Mana {
+.Stats {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -32,7 +32,25 @@
   clip-path: polygon(62% 0, 57% 43%, 81% 43%, 25% 100%, 35% 59%, 12% 59%);
 }
 
-.ManaValue {
+.Heart {
+  width: 2em;
+  height: 2em;
+  background-color: palevioletred;
+  clip-path: polygon(
+    50% 31%,
+    80% 10%,
+    100% 24%,
+    100% 47%,
+    75% 76%,
+    50% 100%,
+    23% 74%,
+    0 47%,
+    0 23%,
+    20% 10%
+  );
+}
+
+.StatsValue {
   width: 3em;
   height: 1em;
 }

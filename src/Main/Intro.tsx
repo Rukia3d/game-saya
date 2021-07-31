@@ -29,10 +29,10 @@ const CharacterIcon = ({ hero }: { hero: Character }) => {
 
 export const Intro = () => {
   const context = useContext(GameContext);
-  if (!context || !context.gameState) {
+  if (!context || !context.gameState || !context.gameState.player.npcs) {
     throw new Error("No data");
   }
-  const characters = context.gameState.sceneCharacters;
+  const characters = context.gameState.player.npcs;
   const activeHeroes = characters.filter((c: Character) => c.dial);
   return (
     <div className="Intro">

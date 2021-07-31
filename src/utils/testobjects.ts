@@ -172,36 +172,42 @@ export const fightState: FightState = {
 };
 
 export const gameState: GameState = {
-  sceneCharacters: [
-    {
-      id: "maya",
-      name: "Maya",
-      image: "../img/maya.png",
-      state: "story",
-      dial: "c1_dialogue1",
-    },
-    {
-      id: "tara",
-      name: "Tara",
-      image: "../img/tara.png",
-      state: "story",
-      dial: "c1_dialogue2",
-    },
-  ],
   dialogues: dialogues,
   player: {
-    id: 1,
+    data: {
+      id: 1,
+      experience: 300,
+      life: 3,
+      maxLife: 7,
+      mana: 10,
+      maxMana: 15,
+    },
+    npcs: [
+      {
+        id: "maya",
+        name: "Maya",
+        image: "../img/maya.png",
+        state: "story",
+        dial: "c1_dialogue1",
+      },
+      {
+        id: "tara",
+        name: "Tara",
+        image: "../img/tara.png",
+        state: "story",
+        dial: "c1_dialogue2",
+      },
+    ],
     cards: baseCards15,
     cardUpdates: spellUpdates,
-    experience: 300,
-    mana: 3,
-    maxMana: 5,
     heroes: ["maya", "tara", "nell", "dart", "grey"].map((s: string) => ({
       id: s,
       selected: false,
       name: "",
       image: "",
     })),
+    adventures: adventures,
+    enemies: [enemy],
     resources: [
       { id: "gold", name: "Gold", image: "../", commonality: 2, quantity: 2 },
       { id: "iron", name: "Iron", image: "../", commonality: 5, quantity: 10 },
@@ -237,6 +243,8 @@ export const gameState: GameState = {
     { id: "dimond", name: "Dimonds", image: "../", commonality: 1 },
     { id: "silk", name: "Silk", image: "../", commonality: 3 },
   ],
+  cards: baseCards15,
+  cardUpdates: spellUpdates,
   forgeEffects: [
     {
       id: "strengthen" as "strengthen",

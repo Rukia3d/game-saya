@@ -36,11 +36,12 @@ test("updateWinPlayer assigns rewards correctly", () => {
       quantity: 0,
     },
   ];
+
   const updatedPlayer = updateWinPlayer(gameState.player, enemy, resource);
   expect(updatedPlayer.resources[1].quantity).toEqual(11);
   expect(updatedPlayer.resources[3].quantity).toEqual(1);
   expect(updatedPlayer.resources[4].quantity).toEqual(1);
-  expect(updatedPlayer.experience).toEqual(325);
+  expect(updatedPlayer.data.experience).toEqual(325);
 });
 
 test("Correctly updates Cards", () => {

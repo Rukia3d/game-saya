@@ -20,14 +20,32 @@ export type effectValue = "heal" | "remove";
 export type OwnedResource = Resource & { quantity: number };
 
 export interface Player {
-  id: number;
-  cards: Spell[];
-  experience: number;
-  mana: number;
-  cardUpdates: ForgeReq[];
-  maxMana: number;
-  resources: OwnedResource[];
+  data: {
+    id: number;
+    experience: number;
+    life: number;
+    maxLife: number;
+    mana: number;
+    maxMana: number;
+  };
+  npcs: Character[];
   heroes: Character[];
+  cards: Spell[];
+  cardUpdates: ForgeReq[];
+  adventures: Adventure[];
+  enemies: Enemy[];
+  resources: OwnedResource[];
+}
+
+export interface GameState {
+  player: Player;
+  dialogues: Dialogue[];
+  enemies: Enemy[];
+  resources: Resource[];
+  cards: Spell[];
+  forgeEffects: ForgeEffect[];
+  cardUpdates: ForgeReq[];
+  adventures: Adventure[];
 }
 
 export interface DialogueLine {
@@ -73,16 +91,6 @@ export interface Story {
   open: boolean;
   enemy?: string;
   characters?: string[];
-}
-
-export interface GameState {
-  sceneCharacters: Character[];
-  player: Player;
-  adventures: Adventure[];
-  dialogues: Dialogue[];
-  enemies: Enemy[];
-  forgeEffects: ForgeEffect[];
-  resources: Resource[];
 }
 
 export interface ForgeReq {

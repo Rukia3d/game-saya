@@ -111,14 +111,16 @@ export const enemyToNumber = (enemy: Enemy) => {
 export const updateLostPlayer = (player: Player) => {
   return {
     ...player,
-    mana: player.mana - 1,
+    mana: player.data.mana - 1,
   };
 };
 
-const givePlayerExperience = (player: Player, enemy: Enemy) => {
+const givePlayerExperience = (player: Player, enemy: Enemy): Player => {
+  const newExp = player.data.experience + enemyToNumber(enemy) * 5;
+  const newData = { ...player.data, experience: newExp };
   return {
     ...player,
-    experience: player.experience + enemyToNumber(enemy) * 5,
+    data: newData,
   };
 };
 
@@ -179,10 +181,11 @@ export const updateWinPlayer = (
   player: Player,
   enemy: Enemy,
   resources: Resource[]
-) => {
-  const updatedPlayer = givePlayerExperience(player, enemy);
+): Player => {
+  const updatedPlayerData: Player = givePlayerExperience(player, enemy);
+
   return {
-    ...updatedPlayer,
+    ...updatedPlayerData,
     resources: givePlayerResources(player, resources),
   };
 };
