@@ -1,6 +1,6 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { GameContext } from "../App";
-import { Character, OwnedResource } from "../utils/types";
+import { OwnedResource } from "../utils/types";
 import "./TopMenu.css";
 
 const valueColor = (max: number, current: number): string => {
@@ -22,20 +22,8 @@ const Resource = ({ resource }: { resource: OwnedResource }) => {
   );
 };
 
-const Resources = () => {
-  const context = useContext(GameContext);
-  if (
-    !context ||
-    !context.gameState ||
-    !context.gameState.player ||
-    !context.gameState.player.resources ||
-    !context.gameState.player.heroes
-  ) {
-    throw new Error("No resources to load");
-  }
-  const existing = context.gameState.player.resources.filter(
-    (r: OwnedResource) => r.quantity > 0
-  );
+const Resources = ({ resources }: { resources: OwnedResource[] }) => {
+  const existing = resources.filter((r: OwnedResource) => r.quantity > 0);
   return (
     <div className="Resources" aria-label="top_resources">
       {existing.map((r: OwnedResource, i: number) => (
@@ -86,7 +74,7 @@ export const TopMenu = () => {
     <div className="TopMenu" aria-label="top_menu">
       <Mana max={player.maxMana} current={player.mana} />
       <Life max={player.maxLife} current={player.life} />
-      <Resources />
+      <Resources resources={context.gameState.player.resources} />
     </div>
   );
 };
