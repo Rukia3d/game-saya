@@ -1,5 +1,6 @@
 import {
   Adventure,
+  adventureType,
   Dialogue,
   Enemy,
   FightState,
@@ -62,7 +63,7 @@ const advFormat: [string, boolean][] = [
 ];
 advFormat.forEach((obj: [string, boolean]) =>
   adventures.push({
-    id: obj[0],
+    id: obj[0] as adventureType,
     name: obj[0],
     image: "",
     open: obj[1],
@@ -189,7 +190,7 @@ export const gameState: GameState = {
       name: "",
       image: "",
     })),
-    adventures: adventures,
+    adventures: ["story", "character"],
     enemies: [enemy],
     resources: [
       { id: "gold", name: "Gold", image: "../", commonality: 2, quantity: 2 },

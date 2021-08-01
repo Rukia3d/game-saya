@@ -2,9 +2,9 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import { Adventures } from "../Main/Adventures";
 import { GameContext } from "../App";
-import { debug } from "console";
 import userEvent from "@testing-library/user-event";
 import { gameState } from "../utils/testobjects";
+import { adventureType, Player } from "../utils/types";
 
 const context = {
   adventure: null,
@@ -26,35 +26,28 @@ test("Renders Adventures with character quest and correct state", () => {
     </GameContext.Provider>
   );
   expect(screen.getByLabelText("adventures_background")).toBeInTheDocument();
-  debug();
   expect(screen.getByAltText("adventure_character")).toBeInTheDocument();
-  expect(screen.getByAltText("adventure_character")).toHaveAttribute(
-    "style",
-    "opacity: 1;"
-  );
+  expect(screen.getAllByTestId("locked").length).toBe(3);
   expect(screen.getByAltText("adventure_arena")).toBeInTheDocument();
-  expect(screen.getByAltText("adventure_arena")).toHaveAttribute(
-    "style",
-    "opacity: 0.3;"
-  );
   expect(screen.getByAltText("adventure_story")).toBeInTheDocument();
   expect(screen.getByAltText("adventure_event")).toBeInTheDocument();
 });
 
 test("Renders Adventures with no character quest and correct state", () => {
-  context.gameState.adventures.shift();
+  const newPlayer: Player = {
+    ...JSON.parse(JSON.stringify(gameState.player)),
+    adventures: ["story" as adventureType],
+  };
+  context.gameState.player = newPlayer;
   render(
     <GameContext.Provider value={context}>
       <Adventures />
     </GameContext.Provider>
   );
   expect(screen.getByLabelText("adventures_background")).toBeInTheDocument();
-  expect(screen.queryByAltText("adventure_character")).not.toBeInTheDocument();
+  expect(screen.getByAltText("adventure_character")).toBeInTheDocument();
+  expect(screen.getAllByTestId("locked").length).toBe(4);
   expect(screen.getByAltText("adventure_arena")).toBeInTheDocument();
-  expect(screen.getByAltText("adventure_arena")).toHaveAttribute(
-    "style",
-    "opacity: 0.3;"
-  );
   expect(screen.getByAltText("adventure_story")).toBeInTheDocument();
   expect(screen.getByAltText("adventure_event")).toBeInTheDocument();
 });

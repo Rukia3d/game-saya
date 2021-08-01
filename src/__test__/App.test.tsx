@@ -106,17 +106,9 @@ test("Renders Adventures screen with all available adventures", async () => {
     "src",
     expect.stringContaining("story")
   );
-  expect(screen.getByAltText("adventure_story")).toHaveAttribute(
-    "style",
-    "opacity: 1;"
-  );
   expect(screen.getByAltText("adventure_arena")).toHaveAttribute(
     "src",
     expect.stringContaining("arena")
-  );
-  expect(screen.getByAltText("adventure_arena")).toHaveAttribute(
-    "style",
-    "opacity: 0.3;"
   );
 
   // Only active adventure shows a popup

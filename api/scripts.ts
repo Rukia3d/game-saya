@@ -41,7 +41,7 @@ app.get("/api/player/", (req: any, res: any) => {
       heroes: playerHeroes,
       cards: playerCards,
       cardUpdates: spellUpdates,
-      adventures: playerAdventures,
+      adventures: ["story"],
       resources: playerResources,
       enemies: playerEnemies,
     },

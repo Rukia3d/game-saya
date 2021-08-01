@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import { GameContext } from "../App";
+import { Lock } from "../UI/Lock";
 import { TopMenu } from "../UI/TopMenu";
 import { Adventure } from "../utils/types";
 import "./Adventures.css";
@@ -9,11 +10,11 @@ const AdventureImage = ({ adventure }: { adventure: Adventure }) => {
     <div className={`Adventure_${adventure.form}_border`}>
       <div className={`Adventure_${adventure.form}`}>
         <div className="AdventureName">{adventure.name}</div>
+        {!adventure.open ? <Lock /> : null}
         <img
-          style={{ opacity: adventure.open ? 1 : 0.3 }}
           src={`../img/Adventures/${adventure.image}`}
           alt={`adventure_${adventure.id}`}
-        ></img>
+        />
       </div>
     </div>
   );
@@ -23,7 +24,13 @@ export const Adventures = () => {
   if (!context || !context.gameState || !context.gameState.adventures) {
     throw new Error("No data");
   }
-  const adventures = context.gameState.adventures;
+
+  const allAdventures = context.gameState.adventures;
+  const openAdventuresNames = context.gameState.player.adventures;
+  const adventures: Adventure[] = allAdventures.map((a: Adventure) => {
+    return { ...a, open: openAdventuresNames.indexOf(a.id) !== -1 };
+  });
+
   const selectAdventure = (a: Adventure) => {
     if (a.open) {
       context.setAdventure(a);

@@ -32,7 +32,7 @@ export interface Player {
   heroes: Character[];
   cards: Spell[];
   cardUpdates: ForgeReq[];
-  adventures: Adventure[];
+  adventures: adventureType[];
   enemies: Enemy[];
   resources: OwnedResource[];
 }
@@ -70,7 +70,7 @@ export interface Character {
 }
 
 export interface Adventure {
-  id: string;
+  id: adventureType;
   form: string;
   name: string;
   image: string;
@@ -140,6 +140,12 @@ export interface Resource {
   commonality: number;
 }
 
+export type adventureType =
+  | "character"
+  | "story"
+  | "arena"
+  | "torunament"
+  | "event";
 export type screenState = "start" | "opening" | "main" | "dialogue";
 export type enemyExpLevel =
   | "novice"
