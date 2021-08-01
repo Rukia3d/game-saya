@@ -3,14 +3,12 @@
     "id": "maya",
     "name": "Maya",
     "image": "../img/maya.png",
-    "state": "story",
     "dial": "maya_replic1"
   },
   {
     "id": "olija",
     "name": "Tara",
     "image": "../img/olija.png",
-    "state": "story",
     "dial": "olija_replic1"
   }
 ]

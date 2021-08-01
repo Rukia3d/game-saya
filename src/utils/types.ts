@@ -18,6 +18,7 @@ export type trumpValue = "strength";
 export type effectValue = "heal" | "remove";
 
 export type OwnedResource = Resource & { quantity: number };
+export type CharacterNPC = Character & { dial: string };
 
 export interface Player {
   data: {
@@ -28,7 +29,7 @@ export interface Player {
     mana: number;
     maxMana: number;
   };
-  npcs: Character[];
+  npcs: CharacterNPC[];
   heroes: Character[];
   cards: Spell[];
   cardUpdates: ForgeReq[];
@@ -58,6 +59,13 @@ export interface Dialogue {
   id: string;
   lines: DialogueLine[];
   background?: string;
+  action?: DialogueAction[];
+}
+
+export interface DialogueAction {
+  type: "removeNPC" | "clearNPCState" | "addNPCState";
+  charId: string;
+  data: string;
 }
 
 export interface Character {
@@ -65,8 +73,6 @@ export interface Character {
   name: string;
   image: string;
   selected?: boolean;
-  state?: string;
-  dial?: string;
 }
 
 export interface Adventure {

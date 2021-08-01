@@ -78,7 +78,8 @@
         "text": "Check out the garden. It's a popular place for students to rest and socialise. Get back to me when you have a team of 4."
       }
     ],
-    "background": "backg_1.jpg"
+    "background": "backg_1.jpg",
+    "action": [{ "type": "addNPCState", "charID": "olija" }]
   },
   {
     "id": "nell_dialogue_1",

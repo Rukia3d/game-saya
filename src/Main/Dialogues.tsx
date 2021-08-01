@@ -51,6 +51,10 @@ export const Dialogues = () => {
     throw new Error("No data");
   }
   const dialogue = context.dialogue;
+  const finishDialogue = () => {
+    console.log("Action", dialogue.action);
+    context.setDialogue(null);
+  };
   return (
     <div className="Dialogues" aria-label="dialogue_background">
       <CloseButton onClick={context.backToStory} />
@@ -61,10 +65,7 @@ export const Dialogues = () => {
           alt="dialogue_background"
         />
       ) : null}
-      <DialogueLines
-        lines={dialogue.lines}
-        close={() => context.setDialogue(null)}
-      />
+      <DialogueLines lines={dialogue.lines} close={finishDialogue} />
     </div>
   );
 };
