@@ -1,6 +1,7 @@
 import {
   changeCardsInDeck,
   enemyToNumber,
+  finishStory,
   generateDeck,
   generateEnemyDeck,
   updatedCards,
@@ -98,3 +99,23 @@ test("Returns correct number for enemy experience", () => {
   expect(enemyToNumber({ ...enemy, experience: "master" })).toEqual(8);
   expect(enemyToNumber({ ...enemy, experience: "grandmaster" })).toEqual(9);
 });
+
+test("Opens next story if dialogue is open", () => {
+  const action = [
+    {
+      type: "setNpcState" as "setNpcState",
+      id: "olija",
+      data: "c1_dialogue2",
+    },
+    {
+      type: "openStory" as "openStory",
+      id: "arena1",
+    },
+  ];
+  const newGameState = JSON.parse(JSON.stringify(gameState));
+  const res = finishStory(newGameState, action);
+  const stories = res.adventures[0].stories || null;
+  expect(stories).not.toBeNull();
+});
+
+test.skip("Open next story if the fight is won", () => {});

@@ -188,7 +188,7 @@ export const gameState: GameState = {
       name: "",
       image: "",
     })),
-    adventures: ["story", "character"],
+    adventures: adventures,
     enemies: [enemy],
     resources: [
       { id: "gold", name: "Gold", image: "../", commonality: 2, quantity: 2 },

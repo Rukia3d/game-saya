@@ -13,22 +13,57 @@
             "id": "olija_dialogue1",
             "type": "dialogue",
             "image": "../img/dialogue_1.png",
-            "open": true
+            "open": true,
+            "action": [
+              {
+                "type": "setNpcState",
+                "id": "olija",
+                "data": "olija_replic1"
+              },
+              {
+                "type": "setNpcState",
+                "id": "maya",
+                "data": "maya_replic2"
+              },
+              {
+                "type": "openStory",
+                "id": "nell_dialogue_1"
+              }
+            ]
           },
           {
             "id": "nell_dialogue_1",
             "type": "dialogue",
             "image": "../img/dialogue_1.png",
-            "open": false
+            "open": false,
+            "action": [
+              {
+                "type": "setNpcState",
+                "charID": "nell",
+                "data": "nell_replic1"
+              },
+              {
+                "type": "openStory",
+                "id": "dario_dialogue1"
+              }
+            ]
           },
           {
-            "id": "t_f_arena",
-            "type": "fight",
-            "image": "../img/arena_1.png",
-            "enemy": "dude",
+            "id": "dario_dialogue1",
+            "type": "dialogue",
+            "image": "../img/dialogue_1.png",
             "open": false,
-            "characters": ["maya", "tara"],
-            "name": "Arena"
+            "action": [
+              {
+                "type": "setNpcState",
+                "charID": "dario",
+                "data": "dario_replic1"
+              },
+              {
+                "type": "openStory",
+                "id": "t_f_arena"
+              }
+            ]
           }
         ]
       },
@@ -36,19 +71,19 @@
         "group": 2,
         "stories": [
           {
-            "id": "tara_dialogue_1",
-            "type": "dialogue",
-            "image": "../img/dialogue_1.png",
-            "open": false
-          },
-          {
-            "id": "t_f_arena2",
+            "id": "t_f_arena",
             "type": "fight",
             "image": "../img/arena_1.png",
             "enemy": "dude",
             "open": false,
             "characters": ["maya", "nell"],
             "name": "Arena"
+          },
+          {
+            "id": "grey_dialogue1",
+            "type": "dialogue",
+            "image": "../img/dialogue_1.png",
+            "open": false
           },
           {
             "id": "grey_dialogue1",

@@ -20,8 +20,11 @@ const context = {
 };
 
 test("Renders Adventures with character quest and correct state", () => {
+  const newContext = JSON.parse(JSON.stringify(context));
+  newContext.gameState.player.adventures[0].open = true;
+  newContext.gameState.player.adventures[1].open = true;
   render(
-    <GameContext.Provider value={context}>
+    <GameContext.Provider value={newContext}>
       <Adventures />
     </GameContext.Provider>
   );
@@ -34,13 +37,11 @@ test("Renders Adventures with character quest and correct state", () => {
 });
 
 test("Renders Adventures with no character quest and correct state", () => {
-  const newPlayer: Player = {
-    ...JSON.parse(JSON.stringify(gameState.player)),
-    adventures: ["story" as adventureType],
-  };
-  context.gameState.player = newPlayer;
+  const newContext = JSON.parse(JSON.stringify(context));
+  newContext.gameState.player.adventures[0].open = true;
+  newContext.gameState.player.adventures[1].open = false;
   render(
-    <GameContext.Provider value={context}>
+    <GameContext.Provider value={newContext}>
       <Adventures />
     </GameContext.Provider>
   );

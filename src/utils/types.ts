@@ -33,7 +33,7 @@ export interface Player {
   heroes: Character[];
   cards: Spell[];
   cardUpdates: ForgeReq[];
-  adventures: adventureType[];
+  adventures: Adventure[];
   enemies: Enemy[];
   resources: OwnedResource[];
 }
@@ -59,13 +59,13 @@ export interface Dialogue {
   id: string;
   lines: DialogueLine[];
   background?: string;
-  action?: DialogueAction[];
+  action?: StoryAction[];
 }
 
-export interface DialogueAction {
-  type: "removeNPC" | "clearNPCState" | "addNPCState";
-  charId: string;
-  data: string;
+export interface StoryAction {
+  type: "setNpcState" | "setAdventure" | "openStory";
+  id: string;
+  data?: string;
 }
 
 export interface Character {
@@ -97,6 +97,7 @@ export interface Story {
   open: boolean;
   enemy?: string;
   characters?: string[];
+  action?: StoryAction[];
 }
 
 export interface ForgeReq {

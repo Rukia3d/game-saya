@@ -1,6 +1,7 @@
 import React, { useContext, useState } from "react";
 import { GameContext } from "../App";
 import { CloseButton } from "../UI/CloseButton";
+import { finishStory } from "../utils/gamelogic";
 import { DialogueLine } from "../utils/types";
 import "./Dialogues.css";
 
@@ -52,7 +53,10 @@ export const Dialogues = () => {
   }
   const dialogue = context.dialogue;
   const finishDialogue = () => {
-    console.log("Action", dialogue.action);
+    if (context.gameState && context.dialogue?.action)
+      context.setGameState(
+        finishStory(context.gameState, context.dialogue?.action)
+      );
     context.setDialogue(null);
   };
   return (

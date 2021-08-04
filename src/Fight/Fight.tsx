@@ -10,6 +10,7 @@ import { HeroBlock } from "./HeroBlock";
 import { Spell, Enemy, FightState, Resource, element } from "../utils/types";
 import { findActiveCharacters, shuffle } from "../utils/helpers";
 import {
+  finishStory,
   generateDeck,
   generateEnemyDeck,
   updateLostPlayer,
@@ -115,6 +116,11 @@ export const Fight = () => {
     if (!gameState) throw new Error("Can't update the fight results");
 
     if (result === "Won") {
+      if (context.gameState && context.story?.action)
+        context.setGameState(
+          finishStory(context.gameState, context.story?.action)
+        );
+
       context.setGameState({
         ...gameState,
         player: updateWinPlayer(gameState.player, enemy, resource),
@@ -126,6 +132,7 @@ export const Fight = () => {
         player: updateLostPlayer(gameState.player),
       });
     }
+
     context.backToStory();
   };
   return (

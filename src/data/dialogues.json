@@ -11,12 +11,45 @@
     "background": "backg_0.png"
   },
   {
+    "id": "maya_replic2",
+    "lines": [
+      {
+        "character": "maya",
+        "text": "I need to talk to other students to form my team. And I think most of my friends are already in different teams...",
+        "image": "huh"
+      }
+    ],
+    "background": "backg_0.png"
+  },
+  {
     "id": "olija_replic1",
     "lines": [
       {
         "character": "olija",
         "text": "Final exams are in progress. Find a team to join and I'll get you your first task",
         "image": "serious"
+      }
+    ],
+    "background": "backg_0.png"
+  },
+  {
+    "id": "dario_replic1",
+    "lines": [
+      {
+        "character": "dario",
+        "text": "Training fights between students are educational. And fun!",
+        "image": "happy"
+      }
+    ],
+    "background": "backg_0.png"
+  },
+  {
+    "id": "nell_replic1",
+    "lines": [
+      {
+        "character": "nell",
+        "text": "We're on the same team, lady Maya! This is so cool!",
+        "image": "happy"
       }
     ],
     "background": "backg_0.png"
@@ -78,8 +111,7 @@
         "text": "Check out the garden. It's a popular place for students to rest and socialise. Get back to me when you have a team of 4."
       }
     ],
-    "background": "backg_1.jpg",
-    "action": [{ "type": "addNPCState", "charID": "olija" }]
+    "background": "backg_1.jpg"
   },
   {
     "id": "nell_dialogue_1",

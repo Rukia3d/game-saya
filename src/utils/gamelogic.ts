@@ -1,13 +1,17 @@
+import { GameContextType } from "../App";
 import { givePlayerResources } from "./resourceLogic";
 import {
+  CharacterNPC,
   Enemy,
   FightState,
   ForgeEffect,
   ForgeReq,
+  GameState,
   Player,
   Resource,
   resourceType,
   Spell,
+  StoryAction,
 } from "./types";
 
 export const changeCardsInDeck = (playerCards: Spell[], s: Spell) => {
@@ -188,4 +192,15 @@ export const updateWinPlayer = (
     ...updatedPlayerData,
     resources: givePlayerResources(player, resources),
   };
+};
+
+export const finishStory = (
+  gameState: GameState,
+  action: StoryAction[]
+): GameState => {
+  // Character added/removed/changed in intro
+  // Next panel opens
+  // Potential adventure opens
+  console.log("Action", action);
+  return gameState;
 };

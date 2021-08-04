@@ -21,15 +21,9 @@ const AdventureImage = ({ adventure }: { adventure: Adventure }) => {
 };
 export const Adventures = () => {
   const context = useContext(GameContext);
-  if (!context || !context.gameState || !context.gameState.adventures) {
+  if (!context || !context.gameState || !context.gameState.player.adventures) {
     throw new Error("No data");
   }
-
-  const allAdventures = context.gameState.adventures;
-  const openAdventuresNames = context.gameState.player.adventures;
-  const adventures: Adventure[] = allAdventures.map((a: Adventure) => {
-    return { ...a, open: openAdventuresNames.indexOf(a.id) !== -1 };
-  });
 
   const selectAdventure = (a: Adventure) => {
     if (a.open) {
@@ -40,7 +34,7 @@ export const Adventures = () => {
     <div className="Adventures" aria-label="adventures_background">
       <TopMenu />
       <div className="AdventuresList">
-        {adventures.map((a: Adventure, i: number) => (
+        {context.gameState.player.adventures.map((a: Adventure, i: number) => (
           <div
             aria-label={`adventure_border_${a.id}`}
             key={i}
