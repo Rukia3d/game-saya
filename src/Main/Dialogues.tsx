@@ -53,10 +53,15 @@ export const Dialogues = () => {
   }
   const dialogue = context.dialogue;
   const finishDialogue = () => {
-    if (context.gameState && context.dialogue?.action)
-      context.setGameState(
-        finishStory(context.gameState, context.dialogue?.action)
-      );
+    if (
+      context.gameState &&
+      context.gameState.player &&
+      context.dialogue?.action
+    )
+      context.setGameState({
+        ...context.gameState,
+        player: finishStory(context.gameState.player, context.dialogue?.action),
+      });
     context.setDialogue(null);
   };
   return (

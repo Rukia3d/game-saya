@@ -23,32 +23,28 @@ import { BigCard } from "./BigCard";
 
 export const Fight = () => {
   const context = useContext(GameContext);
-  if (
-    !context ||
-    !context.story ||
-    !context.gameState ||
-    !context.setGameState ||
-    !context.backToMain ||
-    !context.gameState.player.enemies
-  ) {
-    throw new Error("No data");
+  if (!context || !context.story || !context.gameState) {
+    throw new Error("No data in context");
   }
 
   const enemyId = context.story.enemy;
   const enemies = context.gameState.player.enemies;
   const player = context.gameState.player.data;
+
   if (!enemyId) {
     throw new Error("No enemy for this fight, something went very wrong");
   }
+
   const storyCharacters = context.story.characters
     ? context.story.characters
     : findActiveCharacters(context.gameState.player.heroes);
   const enemy: Enemy | null =
     enemies.find((e: any) => e.id === enemyId) || null;
+
   if (!enemy) {
-    console.log(enemies);
     throw new Error(`Can't find the enemy ${enemyId}`);
   }
+
   const heroDeck = generateDeck(
     storyCharacters,
     context.gameState.player.cards

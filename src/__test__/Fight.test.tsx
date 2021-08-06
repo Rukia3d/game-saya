@@ -96,3 +96,47 @@ test("Fight finish shows the end screen for win", async () => {
   userEvent.click(screen.getByTestId("exit_fight"));
   expect(context.backToStory.mock.calls.length).toEqual(1);
 });
+
+test("Throws error if no data provided in context", () => {
+  jest.spyOn(console, "error").mockImplementation(() => jest.fn());
+  const context1 = { ...context, story: null };
+  const context2 = { ...context, gameState: null };
+  const context3 = {
+    ...context,
+    story: { ...context.story, enemy: undefined },
+  };
+  const context4 = {
+    ...context,
+    story: { ...context.story, enemy: "some" },
+  };
+  expect(() =>
+    render(
+      <GameContext.Provider value={context1}>
+        <Fight />
+      </GameContext.Provider>
+    )
+  ).toThrow("No data in context");
+  expect(() =>
+    render(
+      <GameContext.Provider value={context2}>
+        <Fight />
+      </GameContext.Provider>
+    )
+  ).toThrow("No data in context");
+  expect(() =>
+    render(
+      <GameContext.Provider value={context3}>
+        <Fight />
+      </GameContext.Provider>
+    )
+  ).toThrow("No enemy for this fight, something went very wrong");
+  expect(() =>
+    render(
+      <GameContext.Provider value={context4}>
+        <Fight />
+      </GameContext.Provider>
+    )
+  ).toThrow("Can't find the enemy some");
+
+  jest.restoreAllMocks();
+});
