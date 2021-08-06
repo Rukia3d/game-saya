@@ -34,3 +34,28 @@ test("Stories renders StoryPanels for adventure", async () => {
   userEvent.click(screen.getByTestId("scroll_button"));
   expect(screen.getByLabelText("stories_list").children.length).toEqual(4);
 });
+
+test("Throws error if no data provided in context", () => {
+  jest.spyOn(console, "error").mockImplementation(() => jest.fn());
+  const context1 = { ...context, gameState: null };
+  const context2 = {
+    ...context,
+    adventure: null,
+  };
+  expect(() =>
+    render(
+      <GameContext.Provider value={context1}>
+        <Stories />
+      </GameContext.Provider>
+    )
+  ).toThrow("No data in context");
+  expect(() =>
+    render(
+      <GameContext.Provider value={context2}>
+        <Stories />
+      </GameContext.Provider>
+    )
+  ).toThrow("No data in context");
+
+  jest.restoreAllMocks();
+});

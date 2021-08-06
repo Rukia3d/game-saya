@@ -23,7 +23,7 @@ const dialogues: Dialogue[] = [];
     ],
   })
 );
-const stories: { group: number; stories: Story[] }[] = [];
+export const stories: { group: number; stories: Story[] }[] = [];
 [1, 2, 3, 4].forEach((i: number) =>
   stories.push({
     group: i,

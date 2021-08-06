@@ -8,7 +8,7 @@ import { Story, StoryGroup } from "../utils/types";
 import { ScrollButton } from "../UI/ScrollButton";
 import { findDialogue, findLastOpenStory } from "../utils/helpers";
 
-const StoryPanel = ({
+export const StoryPanel = ({
   group,
   loadStory,
 }: {
@@ -16,12 +16,11 @@ const StoryPanel = ({
   loadStory: (s: Story) => void;
 }) => {
   const context = useContext(GameContext);
-  if (!context || !context.gameState || !context.gameState.player) {
-    throw new Error("No data");
+  if (!context || !context.gameState) {
+    throw new Error("No data in context");
   }
 
   const activateStory = (s: Story) => {
-    // TODO Open the next story
     loadStory(s);
   };
 
@@ -50,14 +49,8 @@ const StoryPanel = ({
 export const Stories = () => {
   const context = useContext(GameContext);
   const STORIESPERPAGE = 3;
-  if (
-    !context ||
-    !context.gameState ||
-    !context.gameState.player ||
-    !context.setStory ||
-    !context.adventure
-  ) {
-    throw new Error("No data");
+  if (!context || !context.gameState || !context.adventure) {
+    throw new Error("No data in context");
   }
 
   const startingPage = context.adventure.stories
