@@ -4,6 +4,7 @@ import { Intro } from "../Main/Intro";
 import { GameContext } from "../App";
 import { gameState } from "../utils/testobjects";
 import userEvent from "@testing-library/user-event";
+import { CharacterNPC } from "../utils/types";
 
 const context = {
   adventure: null,
@@ -40,4 +41,18 @@ test("Dialogue is triggered when clicking on panel and closes correctly", () => 
   expect(screen.getByAltText("intro_background")).toBeInTheDocument();
   userEvent.click(screen.getByAltText("maya_story"));
   expect(context.setDialogue.mock.calls.length).toBe(1);
+});
+
+test("Throws error if no data provided in context", () => {
+  jest.spyOn(console, "error").mockImplementation(() => jest.fn());
+  const context1 = { ...context, gameState: null };
+  expect(() =>
+    render(
+      <GameContext.Provider value={context1}>
+        <Intro />
+      </GameContext.Provider>
+    )
+  ).toThrow("No data in context");
+
+  jest.restoreAllMocks();
 });

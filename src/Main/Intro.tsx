@@ -6,14 +6,10 @@ import { findDialogue } from "../utils/helpers";
 
 const CharacterIcon = ({ hero }: { hero: CharacterNPC }) => {
   const context = useContext(GameContext);
-  if (!context || !context.setDialogue || !context.gameState) {
-    throw new Error("No data");
+  if (!context || !context.gameState) {
+    throw new Error("No data in context");
   }
-
-  if (!hero.dial)
-    throw new Error("Loading diaglogue for hero with no dialogue id");
   const dialogue = findDialogue(context.gameState.dialogues, hero.dial);
-
   const stateToImage = `../img/${hero.id}_story.jpg`;
   return (
     <div
@@ -29,8 +25,8 @@ const CharacterIcon = ({ hero }: { hero: CharacterNPC }) => {
 
 export const Intro = () => {
   const context = useContext(GameContext);
-  if (!context || !context.gameState || !context.gameState.player.npcs) {
-    throw new Error("No data");
+  if (!context || !context.gameState) {
+    throw new Error("No data in context");
   }
   const characters = context.gameState.player.npcs;
   const activeHeroes = characters.filter((c: CharacterNPC) => c.dial);
