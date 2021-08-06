@@ -1,16 +1,16 @@
-import { GameContextType } from "../App";
 import { givePlayerResources } from "./resourceLogic";
 import {
+  Adventure,
   CharacterNPC,
   Enemy,
   FightState,
   ForgeEffect,
   ForgeReq,
-  GameState,
   Player,
   Resource,
   resourceType,
   Spell,
+  Story,
   StoryAction,
 } from "./types";
 
@@ -194,13 +194,81 @@ export const updateWinPlayer = (
   };
 };
 
+const updatePlayerNpcs = (
+  npcs: CharacterNPC[],
+  action: StoryAction
+): CharacterNPC[] => {
+  const npc = npcs.find((n: CharacterNPC) => action.id === n.id);
+  if (!npc || !action.data) throw new Error("No npc to change");
+  const i = npcs.indexOf(npc);
+  npcs[i] = { ...npcs[i], dial: action.data };
+  return npcs;
+};
+
+const updatePlayerStory = (
+  adventures: Adventure[],
+  action: StoryAction
+): Adventure[] => {
+  const adventuresection = adventures.find(
+    (a: Adventure) => action.id === a.id
+  );
+  if (!adventuresection || !adventuresection.stories || !action.data)
+    throw new Error("No adventure to change");
+  const [x, y] = findStoryToUpdate(adventuresection, action.data);
+  const n = adventures.indexOf(adventuresection);
+  if (!adventures[n].stories) throw new Error("No adventure to change");
+  //@ts-ignore
+  adventures[n].stories[x].stories[y].open = true;
+  return adventures;
+};
+
+const updatePlayerAdventures = (
+  adventures: Adventure[],
+  action: StoryAction
+): Adventure[] => {
+  const adventure = adventures.find((a: Adventure) => action.id === a.id);
+  if (!adventure) throw new Error("No adventure to change");
+  const j = adventures.indexOf(adventure);
+  adventures[j] = { ...adventures[j], open: true };
+  return adventures;
+};
+const findStoryToUpdate = (
+  adventuresection: Adventure,
+  id: string
+): number[] => {
+  if (!adventuresection.stories)
+    throw new Error("No stories in this adventure");
+  let res: number | null = null;
+  let x = 0;
+  for (x = 0; x < adventuresection.stories.length; x++) {
+    const storyGroup = adventuresection.stories[x].stories;
+    res = storyGroup.findIndex((s: Story) => s.id === id);
+    if (res) break;
+  }
+  if (res == null || res === -1) throw new Error("No story to update");
+  return [x, res];
+};
+
 export const finishStory = (
-  gameState: GameState,
-  action: StoryAction[]
-): GameState => {
-  // Character added/removed/changed in intro
-  // Next panel opens
-  // Potential adventure opens
-  console.log("Action", action);
-  return gameState;
+  playerData: Player,
+  actions: StoryAction[]
+): Player => {
+  let player = playerData;
+  for (let i = 0; i < actions.length; i++) {
+    const action = actions[i];
+    switch (action.type) {
+      case "setNpcState":
+        player.npcs = updatePlayerNpcs(player.npcs, action);
+        break;
+      case "setAdventure":
+        player.adventures = updatePlayerAdventures(player.adventures, action);
+        break;
+      case "openStory":
+        player.adventures = updatePlayerStory(player.adventures, action);
+        break;
+      default:
+        break;
+    }
+  }
+  return player;
 };

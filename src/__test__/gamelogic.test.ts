@@ -104,18 +104,25 @@ test("Opens next story if dialogue is open", () => {
   const action = [
     {
       type: "setNpcState" as "setNpcState",
-      id: "olija",
+      id: "maya",
       data: "c1_dialogue2",
     },
     {
+      type: "setAdventure" as "setAdventure",
+      id: "arena",
+    },
+    {
       type: "openStory" as "openStory",
-      id: "arena1",
+      id: "arena",
+      data: "arena1",
     },
   ];
-  const newGameState = JSON.parse(JSON.stringify(gameState));
-  const res = finishStory(newGameState, action);
+  const newPlayer = JSON.parse(JSON.stringify(gameState.player));
+  const res = finishStory(newPlayer, action);
   const stories = res.adventures[0].stories || null;
   expect(stories).not.toBeNull();
+  expect(res.npcs[0].dial).toBe(action[0].data);
+  expect(res.adventures[2].open).toBeTruthy();
+  //@ts-ignore
+  expect(res.adventures[2].stories[0].stories[2].open).toBeTruthy();
 });
-
-test.skip("Open next story if the fight is won", () => {});

@@ -63,7 +63,7 @@ export interface Dialogue {
 }
 
 export interface StoryAction {
-  type: "setNpcState" | "setAdventure" | "openStory";
+  type: storyChangeType;
   id: string;
   data?: string;
 }
@@ -168,3 +168,5 @@ export type resourceType =
   | "silk"
   | "rdust"
   | "rflower";
+
+export type storyChangeType = "setNpcState" | "setAdventure" | "openStory";

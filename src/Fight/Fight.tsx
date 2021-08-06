@@ -116,10 +116,15 @@ export const Fight = () => {
     if (!gameState) throw new Error("Can't update the fight results");
 
     if (result === "Won") {
-      if (context.gameState && context.story?.action)
-        context.setGameState(
-          finishStory(context.gameState, context.story?.action)
-        );
+      if (
+        context.gameState &&
+        context.gameState.player &&
+        context.story?.action
+      )
+        context.setGameState({
+          ...gameState,
+          player: finishStory(context.gameState.player, context.story?.action),
+        });
 
       context.setGameState({
         ...gameState,
