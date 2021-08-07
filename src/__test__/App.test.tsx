@@ -12,7 +12,7 @@ afterEach(() => {
 const mainMenuActiveStyle = "background-color: aquamarine;";
 const mainMenuInActiveStyle = "background-color: lightgrey;";
 
-test.only("Renders App Start Screen", async () => {
+test("Renders App Start Screen", async () => {
   render(<App />);
   expect(screen.getByText("Start")).toBeInTheDocument();
   expect(await screen.findByText("PLAY")).toBeInTheDocument();
