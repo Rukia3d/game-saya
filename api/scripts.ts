@@ -8,7 +8,7 @@ app.use(cors());
 const cards = require("../src/data/heroCards.json");
 const dialogues = require("../src/data/dialogues.json");
 const spellUpdates = require("../src/data/spellUpdates.json");
-const sceneCharacters = require("../src/data/sceneCharacters.json");
+const npcs = require("../src/data/npcs.json");
 const heroes = require("../src/data/heroes.json");
 const playerResources = require("../src/data/resources.json");
 const adventures = require("../src/data/adventures.json");
@@ -18,10 +18,14 @@ const rewards = require("../src/data/rewards.json");
 
 app.get("/api/player/", (req: any, res: any) => {
   console.log("Requesting new player game data");
-
+  // TODO: Cut the second page of stories, add them if open is called at the end of a dialogue
   const playerAdventures = adventures;
+  playerAdventures[0] = {
+    ...adventures[0],
+    stories: adventures[0].stories.slice(0, 3),
+  };
   playerAdventures[0].open = true;
-  const npcs = [sceneCharacters[0]];
+  const playerNpcs = [npcs[0]];
   const playerHeroes = [heroes[0]];
   playerHeroes[0].selected = true;
   const playerCards = cards.base;
@@ -37,7 +41,7 @@ app.get("/api/player/", (req: any, res: any) => {
         mana: 10,
         maxMana: 15,
       },
-      npcs: npcs,
+      npcs: playerNpcs,
       heroes: playerHeroes,
       cards: playerCards,
       cardUpdates: spellUpdates,
@@ -46,6 +50,7 @@ app.get("/api/player/", (req: any, res: any) => {
       enemies: playerEnemies,
     },
     dialogues: dialogues,
+    npcs: npcs,
     forgeEffects: forge,
     adventures: adventures,
     enemies: enemies,

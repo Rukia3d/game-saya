@@ -1,3 +1,4 @@
+import { STORIES_PER_PANEL } from "../Main/Stories";
 import { givePlayerResources } from "./resourceLogic";
 import {
   Adventure,
@@ -198,8 +199,13 @@ const updatePlayerNpcs = (
   npcs: CharacterNPC[],
   action: StoryAction
 ): CharacterNPC[] => {
+  if (!action.data) {
+    throw new Error(`WIP - remove npc`);
+  }
   const npc = npcs.find((n: CharacterNPC) => action.id === n.id);
-  if (!npc || !action.data) throw new Error("No npc to change");
+  if (!npc) {
+    throw new Error(`WIP - add npc`);
+  }
   const i = npcs.indexOf(npc);
   npcs[i] = { ...npcs[i], dial: action.data };
   return npcs;
@@ -215,6 +221,11 @@ const updatePlayerStory = (
   if (!adventuresection || !adventuresection.stories || !action.data)
     throw new Error("No adventure to change");
   const [x, y] = findStoryToUpdate(adventuresection, action.data);
+  if (x > STORIES_PER_PANEL) {
+    throw new Error(
+      "WIP - add next panel from adventures to user story in adventures"
+    );
+  }
   const n = adventures.indexOf(adventuresection);
   if (!adventures[n].stories) throw new Error("No adventure to change");
   //@ts-ignore

@@ -7,7 +7,7 @@ import { GameContext } from "../App";
 import { Story, StoryGroup } from "../utils/types";
 import { ScrollButton } from "../UI/ScrollButton";
 import { findDialogue, findLastOpenStory } from "../utils/helpers";
-
+export const STORIES_PER_PANEL = 3;
 export const StoryPanel = ({
   group,
   loadStory,
@@ -24,7 +24,7 @@ export const StoryPanel = ({
     loadStory(s);
   };
 
-  if (group.stories.length !== 3)
+  if (group.stories.length !== STORIES_PER_PANEL)
     throw new Error("Number of stories in this panel is incorrect");
   return (
     <div className={`StoryGroup_${group.group}`}>

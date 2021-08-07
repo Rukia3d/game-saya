@@ -154,7 +154,20 @@ export const spellUpdates: ForgeReq[] = [
     effect: "strengthen",
   },
 ];
-
+const playerNpcs = [
+  {
+    id: "maya",
+    name: "Maya",
+    image: "../img/maya.png",
+    dial: "c1_dialogue1",
+  },
+  {
+    id: "tara",
+    name: "Tara",
+    image: "../img/tara.png",
+    dial: "c1_dialogue2",
+  },
+];
 export const gameState: GameState = {
   dialogues: dialogues,
   player: {
@@ -166,20 +179,7 @@ export const gameState: GameState = {
       mana: 10,
       maxMana: 15,
     },
-    npcs: [
-      {
-        id: "maya",
-        name: "Maya",
-        image: "../img/maya.png",
-        dial: "c1_dialogue1",
-      },
-      {
-        id: "tara",
-        name: "Tara",
-        image: "../img/tara.png",
-        dial: "c1_dialogue2",
-      },
-    ],
+    npcs: playerNpcs,
     cards: baseCards15,
     cardUpdates: spellUpdates,
     heroes: ["maya", "tara", "nell", "dart", "grey"].map((s: string) => ({
@@ -219,6 +219,14 @@ export const gameState: GameState = {
   },
   adventures: adventures,
   enemies: [enemy],
+  npcs: playerNpcs.concat([
+    {
+      id: "olija",
+      name: "Tara",
+      image: "../img/olija.png",
+      dial: "olija_replic1",
+    },
+  ]),
   resources: [
     { id: "gold", name: "Gold", image: "../", commonality: 2 },
     { id: "iron", name: "Iron", image: "../", commonality: 10 },

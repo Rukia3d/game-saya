@@ -47,6 +47,7 @@ export interface GameState {
   forgeEffects: ForgeEffect[];
   cardUpdates: ForgeReq[];
   adventures: Adventure[];
+  npcs: CharacterNPC[];
 }
 
 export interface DialogueLine {
