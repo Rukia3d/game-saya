@@ -8,6 +8,7 @@ import {
   GameState,
   Spell,
   Story,
+  StoryGroup,
 } from "./types";
 const dialogues: Dialogue[] = [];
 [1, 2, 3].forEach((i: number) =>
@@ -23,9 +24,10 @@ const dialogues: Dialogue[] = [];
     ],
   })
 );
-export const stories: { group: number; stories: Story[] }[] = [];
+export const stories: StoryGroup[] = [];
 [1, 2, 3, 4].forEach((i: number) =>
   stories.push({
+    name: "name" + i,
     group: i,
     stories: [
       {

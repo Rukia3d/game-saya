@@ -1,13 +1,14 @@
 [
   {
     "id": "story",
-    "name": "Water Problems",
+    "name": "Story",
     "image": "story.jpg",
     "open": false,
     "form": "story",
     "stories": [
       {
         "group": 1,
+        "name": "Page 1",
         "stories": [
           {
             "id": "olija_dialogue1",
@@ -70,6 +71,7 @@
       },
       {
         "group": 2,
+        "name": "Page 2",
         "stories": [
           {
             "id": "t_f_arena",
@@ -96,6 +98,7 @@
       },
       {
         "group": 3,
+        "name": "Page 3",
         "stories": [
           {
             "id": "c1_dialogue1",
@@ -122,6 +125,7 @@
       },
       {
         "group": 1,
+        "name": "Page 4",
         "stories": [
           {
             "id": "c1_dialogue3",
@@ -151,6 +155,7 @@
       },
       {
         "group": 2,
+        "name": "Page 5",
         "stories": [
           {
             "id": "c1_dialogue4",
@@ -180,6 +185,7 @@
       },
       {
         "group": 3,
+        "name": "Page 6",
         "stories": [
           {
             "name": "To the Waterhole",
@@ -209,6 +215,7 @@
       },
       {
         "group": 4,
+        "name": "Page 7",
         "stories": [
           {
             "id": "c1_dialogue6",

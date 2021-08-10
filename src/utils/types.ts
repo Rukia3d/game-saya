@@ -86,6 +86,7 @@ export interface Adventure {
 }
 
 export interface StoryGroup {
+  name: string;
   stories: Story[];
   group: number;
 }

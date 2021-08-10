@@ -8,6 +8,7 @@ import { Story, StoryGroup } from "../utils/types";
 import { ScrollButton } from "../UI/ScrollButton";
 import { findDialogue, findLastOpenStory } from "../utils/helpers";
 export const STORIES_PER_PANEL = 3;
+
 export const StoryPanel = ({
   group,
   loadStory,
