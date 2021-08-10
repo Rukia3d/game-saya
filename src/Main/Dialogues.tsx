@@ -60,7 +60,7 @@ export const Dialogues = () => {
     )
       context.setGameState({
         ...context.gameState,
-        player: finishStory(context.gameState.player, context.dialogue?.action),
+        player: finishStory(context.gameState, context.dialogue?.action),
       });
     context.setDialogue(null);
   };

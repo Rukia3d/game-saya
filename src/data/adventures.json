@@ -27,7 +27,8 @@
               },
               {
                 "type": "openStory",
-                "id": "nell_dialogue_1"
+                "id": "story",
+                "data": "nell_dialogue_1"
               }
             ]
           },

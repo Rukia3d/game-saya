@@ -117,12 +117,40 @@ test("Opens next story if dialogue is open", () => {
       data: "arena1",
     },
   ];
-  const newPlayer = JSON.parse(JSON.stringify(gameState.player));
-  const res = finishStory(newPlayer, action);
+  const game = JSON.parse(JSON.stringify(gameState));
+  const res = finishStory(game, action);
   const stories = res.adventures[0].stories || null;
   expect(stories).not.toBeNull();
   expect(res.npcs[0].dial).toBe(action[0].data);
   expect(res.adventures[2].open).toBeTruthy();
   //@ts-ignore
   expect(res.adventures[2].stories[0].stories[2].open).toBeTruthy();
+});
+
+test("Removes npc correctly if no dial data provided", () => {
+  const action = [
+    {
+      type: "setNpcState" as "setNpcState",
+      id: "maya",
+      data: null,
+    },
+  ];
+  const game = JSON.parse(JSON.stringify(gameState));
+  const res = finishStory(game, action);
+  expect(res.npcs.length).toBe(1);
+  expect(res.npcs[0].id).toBe("tara");
+});
+
+test("Adds npc correctly if it's not present", () => {
+  const action = [
+    {
+      type: "setNpcState" as "setNpcState",
+      id: "olija",
+      data: "olija_replic1",
+    },
+  ];
+  const game = JSON.parse(JSON.stringify(gameState));
+  const res = finishStory(game, action);
+  expect(res.npcs.length).toBe(3);
+  expect(res.npcs[2].id).toBe("olija");
 });

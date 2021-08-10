@@ -7,6 +7,7 @@ import {
   FightState,
   ForgeEffect,
   ForgeReq,
+  GameState,
   Player,
   Resource,
   resourceType,
@@ -197,17 +198,26 @@ export const updateWinPlayer = (
 
 const updatePlayerNpcs = (
   npcs: CharacterNPC[],
+  allNpcs: CharacterNPC[],
   action: StoryAction
 ): CharacterNPC[] => {
-  if (!action.data) {
-    throw new Error(`WIP - remove npc`);
-  }
   const npc = npcs.find((n: CharacterNPC) => action.id === n.id);
+
   if (!npc) {
-    throw new Error(`WIP - add npc`);
+    const npcToAdd = allNpcs.find((n: CharacterNPC) => action.id === n.id);
+    if (!npcToAdd || !action.data)
+      throw new Error("Can't find npc to add to the Intro screen");
+    const newNpc = { ...npcToAdd, dial: action.data };
+    npcs.push(newNpc);
+  } else {
+    const i = npcs.indexOf(npc);
+    if (!action.data) {
+      npcs.splice(i, 1);
+    } else {
+      npcs[i] = { ...npcs[i], dial: action.data };
+    }
   }
-  const i = npcs.indexOf(npc);
-  npcs[i] = { ...npcs[i], dial: action.data };
+
   return npcs;
 };
 
@@ -261,15 +271,15 @@ const findStoryToUpdate = (
 };
 
 export const finishStory = (
-  playerData: Player,
+  game: GameState,
   actions: StoryAction[]
 ): Player => {
-  let player = playerData;
+  let player = game.player;
   for (let i = 0; i < actions.length; i++) {
     const action = actions[i];
     switch (action.type) {
       case "setNpcState":
-        player.npcs = updatePlayerNpcs(player.npcs, action);
+        player.npcs = updatePlayerNpcs(player.npcs, game.npcs, action);
         break;
       case "setAdventure":
         player.adventures = updatePlayerAdventures(player.adventures, action);
@@ -278,7 +288,7 @@ export const finishStory = (
         player.adventures = updatePlayerStory(player.adventures, action);
         break;
       default:
-        break;
+        throw new Error("Unknown action is called in finishing story");
     }
   }
   return player;

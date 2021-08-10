@@ -66,7 +66,7 @@ export interface Dialogue {
 export interface StoryAction {
   type: storyChangeType;
   id: string;
-  data?: string;
+  data?: string | null;
 }
 
 export interface Character {

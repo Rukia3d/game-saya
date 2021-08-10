@@ -119,7 +119,7 @@ export const Fight = () => {
       )
         context.setGameState({
           ...gameState,
-          player: finishStory(context.gameState.player, context.story?.action),
+          player: finishStory(context.gameState, context.story?.action),
         });
 
       context.setGameState({
