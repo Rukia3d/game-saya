@@ -3,9 +3,8 @@
 ## To run locally
 
 To run the app open 2 terminal windows
-Run `npm install` in any of them.
-First one will run backend with `npm run backend`
-Second one will run frontend with `npm run start`
+Run `npm install` from root then `npm run start` to run frontend
+Run `npm install` from `api/` folder and then `npm run start` to run backend
 
 ## To test
 
