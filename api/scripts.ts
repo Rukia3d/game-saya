@@ -1,4 +1,5 @@
 import { GameState } from "../src/utils/types";
+import { readDialogues, readAdventures } from "./dataload";
 
 const express = require("express");
 const cors = require("cors");
@@ -6,25 +7,25 @@ const app = express();
 const port = 3001;
 app.use(cors());
 const cards = require("../src/data/heroCards.json");
-const dialogues = require("../src/data/dialogues.json");
 const spellUpdates = require("../src/data/spellUpdates.json");
 const npcs = require("../src/data/npcs.json");
 const heroes = require("../src/data/heroes.json");
 const playerResources = require("../src/data/resources.json");
-const adventures = require("../src/data/adventures.json");
 const enemies = require("../src/data/enemies.json");
 const forge = require("../src/data/forge.json");
 const rewards = require("../src/data/rewards.json");
+
+const dialogues = readDialogues();
+const adventures = readAdventures();
+console.log("adventures", adventures);
 
 app.get("/api/player/", (req: any, res: any) => {
   console.log("Requesting new player game data");
   // TODO: Cut the second page of stories, add them if open is called at the end of a dialogue
   const playerAdventures = adventures;
-  playerAdventures[0] = {
-    ...adventures[0],
-    stories: adventures[0].stories.slice(0, 3),
-  };
   playerAdventures[0].open = true;
+  //@ts-ignore
+  playerAdventures[0].stories[0].stories[0].open = true;
   const playerNpcs = [npcs[0]];
   const playerHeroes = [heroes[0]];
   playerHeroes[0].selected = true;
