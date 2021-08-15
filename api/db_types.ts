@@ -36,3 +36,44 @@ export interface StoryDB {
   characters: string;
   actions: string;
 }
+export interface EnemyDB {
+  id: string;
+  name: string;
+  element: string;
+  life: string;
+  exp: string;
+  cards: string;
+}
+export interface EnemyCardDB {
+  id: string;
+  name: string;
+  strength: string;
+  character: string;
+  element: string;
+  image: string;
+  description: string;
+}
+export interface HeroDB {
+  id: string;
+  name: string;
+  image: string;
+}
+export interface SpellDB {
+  owner: string;
+  id: string;
+  name: string;
+  effect: string;
+  trump: string;
+  character: string;
+  element: string;
+  strength: string;
+  mana: string;
+  image: string;
+  type: string;
+  description: string;
+}
+export interface NpcDB {
+  id: string;
+  name: string;
+  image: string;
+}

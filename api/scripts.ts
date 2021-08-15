@@ -1,23 +1,29 @@
-import { GameState } from "../src/utils/types";
-import { readDialogues, readAdventures } from "./dataload";
+import { GameState, Spell } from "../src/utils/types";
+import {
+  readDialogues,
+  readAdventures,
+  readEnemies,
+  readHeroes,
+  readSpells,
+  readNpcs,
+} from "./dataload";
 
 const express = require("express");
 const cors = require("cors");
 const app = express();
 const port = 3001;
 app.use(cors());
-const cards = require("../src/data/heroCards.json");
 const spellUpdates = require("../src/data/spellUpdates.json");
-const npcs = require("../src/data/npcs.json");
-const heroes = require("../src/data/heroes.json");
 const playerResources = require("../src/data/resources.json");
-const enemies = require("../src/data/enemies.json");
 const forge = require("../src/data/forge.json");
 const rewards = require("../src/data/rewards.json");
 
 const dialogues = readDialogues();
 const adventures = readAdventures();
-console.log("adventures", adventures);
+const enemies = readEnemies();
+const heroes = readHeroes();
+const spells = readSpells();
+const npcs = readNpcs();
 
 app.get("/api/player/", (req: any, res: any) => {
   console.log("Requesting new player game data");
@@ -26,10 +32,12 @@ app.get("/api/player/", (req: any, res: any) => {
   playerAdventures[0].open = true;
   //@ts-ignore
   playerAdventures[0].stories[0].stories[0].open = true;
-  const playerNpcs = [npcs[0]];
+  const playerNpcs = [{ ...npcs[0], dial: "maya_replic1" }];
   const playerHeroes = [heroes[0]];
   playerHeroes[0].selected = true;
-  const playerCards = cards.base;
+  const playerCards = spells.filter(
+    (s: Spell) => s.type === "base" || s.type === "maya"
+  );
   const playerEnemies = enemies;
 
   const gameState: GameState = {
@@ -52,11 +60,12 @@ app.get("/api/player/", (req: any, res: any) => {
     },
     dialogues: dialogues,
     npcs: npcs,
+    heroes: heroes,
     forgeEffects: forge,
     adventures: adventures,
     enemies: enemies,
     resources: rewards.resources,
-    cards: cards.base.concat(cards.tara).concat(cards.maya),
+    cards: spells,
     cardUpdates: spellUpdates,
   };
   res.send(gameState);

@@ -125,13 +125,13 @@ test("Renders Story screen and loads the story", async () => {
   userEvent.click(screen.getByRole("button", { name: "PLAY" }));
   userEvent.click(screen.getByText("ADVENTURES"));
   userEvent.click(screen.getByAltText("adventure_story"));
-  expect(screen.getByAltText("story_c1_dialogue1")).toHaveAttribute(
+  expect(screen.getByAltText("story_olija_dialogue1")).toHaveAttribute(
     "src",
-    expect.stringContaining("dialogue_1.png")
+    expect.stringContaining("dialogue_1.jpg")
   );
-  expect(screen.getByAltText("story_c1_f_gates")).toHaveAttribute(
+  expect(screen.getByAltText("story_t_f_arena")).toHaveAttribute(
     "src",
-    expect.stringContaining("arena_1.png")
+    expect.stringContaining("arena_1.jpg")
   );
 
   // Click on inactive panel doesn't have an effect

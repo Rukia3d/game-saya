@@ -1,16 +1,27 @@
-import { getLineAndCharacterOfPosition } from "typescript";
 import {
   Adventure,
   adventureType,
+  Character,
   Dialogue,
   DialogueLine,
+  effectValue,
+  element,
+  Enemy,
+  enemyExpLevel,
+  Spell,
   Story,
   StoryGroup,
+  trumpValue,
 } from "../src/utils/types";
 import {
   AdventureDB,
   DialogueDB,
+  EnemyCardDB,
+  EnemyDB,
+  HeroDB,
   LineDB,
+  NpcDB,
+  SpellDB,
   StoryDB,
   StoryGroupDB,
 } from "./db_types";
@@ -31,6 +42,16 @@ const getStoryActions = (actions: string) => {
   // Actions in DB are separated by coma and a new line
   const act = actions.split(",\n");
   return act.map((a: any) => JSON.parse(a));
+};
+
+const getSpellEffect = (effect: string): [effectValue, number] => {
+  const eff = effect.split(",");
+  return [eff[0] as effectValue, parseInt(eff[1])];
+};
+
+const getSpellTrump = (trump: string): [trumpValue, number] => {
+  const tr = trump.split(",");
+  return [tr[0] as trumpValue, parseInt(tr[1])];
 };
 
 const getDialogueLines = (data: DialogueDB): DialogueLine[] => {
@@ -87,7 +108,7 @@ const getGroupStories = (currentGroup: StoryGroupDB): Story[] => {
   return story;
 };
 
-const getStoryGroups = (a: AdventureDB) => {
+const getStoryGroups = (a: AdventureDB): StoryGroup[] => {
   const inputSG = fs.readFileSync(path + "Story Data - DB_StoryGroups.csv");
   const sgroupDB: StoryGroupDB[] = parse(inputSG, options);
   const groupList = a.storyGroups.split(", ");
@@ -109,6 +130,35 @@ const getStoryGroups = (a: AdventureDB) => {
   return storyGroups;
 };
 
+const getEnemySpells = (e: EnemyDB) => {
+  const spell: Spell[] = [];
+  const inputECards = fs.readFileSync(path + "Story Data - DB_EnemyCards.csv");
+  const enemyCardDB: EnemyCardDB[] = parse(inputECards, options);
+  const spellList = e.cards.split(", ");
+  const spells = spellList.map((l: string) =>
+    enemyCardDB.find((spell: EnemyCardDB) => spell.id === l)
+  );
+  for (let x = 0; x < spells.length; x++) {
+    const currentSpell = spells[x];
+    if (!currentSpell) throw new Error(`Can't find a spell for ${e.id}`);
+    spell[x] = {
+      id: currentSpell.id,
+      image: currentSpell.image,
+      name: currentSpell.name,
+      strength: parseInt(currentSpell.strength),
+      mana: 0,
+      character: null,
+      selected: false,
+      element: currentSpell.element ? (currentSpell.element as element) : null,
+      owner: "enemy" as "enemy",
+      type: currentSpell.name,
+      level: 0,
+      description: currentSpell.description,
+    };
+  }
+  return spell;
+};
+
 export const readDialogues = (): Dialogue[] => {
   const dialogues: Dialogue[] = [];
   const inputDial = fs.readFileSync(path + "Story Data - DB_Dialogues.csv");
@@ -120,7 +170,6 @@ export const readDialogues = (): Dialogue[] => {
       id: dialogueDB[i].id,
       lines: dialLines,
       background: dialogueDB[i].background,
-      action: undefined,
     };
   }
   return dialogues;
@@ -145,4 +194,76 @@ export const readAdventures = (): Adventure[] => {
   if (adventures.length < 5)
     throw new Error("Reading from DB returned less than 5 adventures");
   return adventures;
+};
+
+export const readEnemies = (): Enemy[] => {
+  const enemies: Enemy[] = [];
+  const inputEnemies = fs.readFileSync(path + "Story Data - DB_Enemies.csv");
+  const enemyDB: EnemyDB[] = parse(inputEnemies, options);
+  for (let i = 0; i < enemyDB.length; i++) {
+    const enemyCards = getEnemySpells(enemyDB[i]);
+    enemies[i] = {
+      id: enemyDB[i].id,
+      name: enemyDB[i].name,
+      element: enemyDB[i].element,
+      experience: enemyDB[i].exp as enemyExpLevel,
+      cards: enemyCards,
+      life: parseInt(enemyDB[i].life),
+    };
+  }
+  return enemies;
+};
+
+export const readHeroes = (): Character[] => {
+  const heroes: Character[] = [];
+  const inputHeroes = fs.readFileSync(path + "Story Data - DB_Heroes.csv");
+  const heroDB: HeroDB[] = parse(inputHeroes, options);
+  for (let i = 0; i < heroDB.length; i++) {
+    heroes[i] = {
+      id: heroDB[i].id,
+      name: heroDB[i].name,
+      image: heroDB[i].image,
+      selected: false,
+    };
+  }
+  return heroes;
+};
+
+export const readSpells = (): Spell[] => {
+  const spells: Spell[] = [];
+  const inputSpells = fs.readFileSync(path + "Story Data - DB_HeroCards.csv");
+  const spellDB: SpellDB[] = parse(inputSpells, options);
+  for (let i = 0; i < spellDB.length; i++) {
+    spells[i] = {
+      id: spellDB[i].id,
+      image: spellDB[i].image,
+      name: spellDB[i].name,
+      strength: parseInt(spellDB[i].strength),
+      mana: parseInt(spellDB[i].mana),
+      effect: spellDB[i].effect ? getSpellEffect(spellDB[i].effect) : undefined,
+      trump: spellDB[i].trump ? getSpellTrump(spellDB[i].trump) : undefined,
+      character: spellDB[i].character ? spellDB[i].character : null,
+      selected: false,
+      element: spellDB[i].element ? (spellDB[i].element as element) : null,
+      owner: "hero",
+      type: spellDB[i].type,
+      level: 0,
+      description: spellDB[i].description,
+    };
+  }
+  return spells;
+};
+
+export const readNpcs = (): Character[] => {
+  const npcs: Character[] = [];
+  const inputNpcs = fs.readFileSync(path + "Story Data - DB_NPCs.csv");
+  const npcDB: NpcDB[] = parse(inputNpcs, options);
+  for (let i = 0; i < npcDB.length; i++) {
+    npcs[i] = {
+      id: npcDB[i].id,
+      name: npcDB[i].name,
+      image: npcDB[i].image,
+    };
+  }
+  return npcs;
 };

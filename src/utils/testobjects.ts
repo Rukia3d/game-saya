@@ -7,7 +7,6 @@ import {
   ForgeReq,
   GameState,
   Spell,
-  Story,
   StoryGroup,
 } from "./types";
 const dialogues: Dialogue[] = [];
@@ -16,6 +15,7 @@ const dialogues: Dialogue[] = [];
     id: "c1_dialogue" + i,
     lines: [
       {
+        id: "id" + i,
         character: "maya",
         image: "excited",
         pos: "L",
@@ -27,6 +27,7 @@ const dialogues: Dialogue[] = [];
 export const stories: StoryGroup[] = [];
 [1, 2, 3, 4].forEach((i: number) =>
   stories.push({
+    id: "name" + i,
     name: "name" + i,
     group: i,
     stories: [
@@ -170,6 +171,12 @@ const playerNpcs = [
     dial: "c1_dialogue2",
   },
 ];
+const heroes = ["maya", "tara", "nell", "dart", "grey"].map((s: string) => ({
+  id: s,
+  selected: false,
+  name: "",
+  image: "",
+}));
 export const gameState: GameState = {
   dialogues: dialogues,
   player: {
@@ -184,12 +191,7 @@ export const gameState: GameState = {
     npcs: playerNpcs,
     cards: baseCards15,
     cardUpdates: spellUpdates,
-    heroes: ["maya", "tara", "nell", "dart", "grey"].map((s: string) => ({
-      id: s,
-      selected: false,
-      name: "",
-      image: "",
-    })),
+    heroes: heroes,
     adventures: adventures,
     enemies: [enemy],
     resources: [
@@ -221,6 +223,7 @@ export const gameState: GameState = {
   },
   adventures: adventures,
   enemies: [enemy],
+  heroes: heroes,
   npcs: playerNpcs.concat([
     {
       id: "olija",
@@ -267,12 +270,14 @@ export const dialogue: Dialogue = {
   id: "olija_replic1",
   lines: [
     {
+      id: "1",
       character: "olija",
       text: "Line one",
       image: "serious",
     },
     {
       character: "maya",
+      id: "2",
       image: "sad",
       pos: "L",
       text: "Line two",

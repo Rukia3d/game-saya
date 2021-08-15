@@ -44,13 +44,15 @@ export interface GameState {
   enemies: Enemy[];
   resources: Resource[];
   cards: Spell[];
+  heroes: Character[];
   forgeEffects: ForgeEffect[];
   cardUpdates: ForgeReq[];
   adventures: Adventure[];
-  npcs: CharacterNPC[];
+  npcs: Character[];
 }
 
 export interface DialogueLine {
+  id: string;
   character: string;
   image?: string;
   pos?: "L" | "R" | "M";
@@ -86,6 +88,7 @@ export interface Adventure {
 }
 
 export interface StoryGroup {
+  id: string;
   name: string;
   stories: Story[];
   group: number;

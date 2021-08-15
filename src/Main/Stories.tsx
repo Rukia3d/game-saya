@@ -22,6 +22,7 @@ export const StoryPanel = ({
   }
 
   const activateStory = (s: Story) => {
+    console.log("Activate");
     loadStory(s);
   };
 
@@ -36,7 +37,7 @@ export const StoryPanel = ({
           key={i}
         >
           <img
-            src={s.image}
+            src={`../img/Stories/${s.image}.jpg`}
             alt={`story_${s.id}`}
             className="Story"
             style={{ opacity: s.open ? 1 : 0.3 }}

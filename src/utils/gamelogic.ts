@@ -2,6 +2,7 @@ import { STORIES_PER_PANEL } from "../Main/Stories";
 import { givePlayerResources } from "./resourceLogic";
 import {
   Adventure,
+  Character,
   CharacterNPC,
   Enemy,
   FightState,
@@ -198,13 +199,13 @@ export const updateWinPlayer = (
 
 const updatePlayerNpcs = (
   npcs: CharacterNPC[],
-  allNpcs: CharacterNPC[],
+  allNpcs: Character[],
   action: StoryAction
 ): CharacterNPC[] => {
   const npc = npcs.find((n: CharacterNPC) => action.id === n.id);
 
   if (!npc) {
-    const npcToAdd = allNpcs.find((n: CharacterNPC) => action.id === n.id);
+    const npcToAdd = allNpcs.find((n: Character) => action.id === n.id);
     if (!npcToAdd || !action.data)
       throw new Error("Can't find npc to add to the Intro screen");
     const newNpc = { ...npcToAdd, dial: action.data };

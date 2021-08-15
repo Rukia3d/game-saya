@@ -67,6 +67,8 @@ test("Find the correct next open story in group", () => {
   const groups: StoryGroup[] = [];
   [1, 2, 3, 4].forEach((i: number) =>
     groups.push({
+      id: "name" + 1,
+      name: "name" + 1,
       group: i,
       stories: [
         { ...storyExample, open: true },
