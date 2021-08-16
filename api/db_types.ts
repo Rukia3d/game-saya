@@ -67,6 +67,7 @@ export interface SpellDB {
   character: string;
   element: string;
   strength: string;
+  default: string;
   mana: string;
   image: string;
   type: string;

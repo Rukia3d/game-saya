@@ -29,7 +29,7 @@ export const Intro = () => {
     throw new Error("No data in context");
   }
   const characters = context.gameState.player.npcs;
-  const activeHeroes = characters.filter((c: CharacterNPC) => c.dial);
+  const activeHeroes = characters.filter((c: CharacterNPC) => c.dial !== null);
   return (
     <div className="Intro">
       <div className="IntroBackgroundBorder">

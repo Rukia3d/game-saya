@@ -38,7 +38,9 @@ export const findLastOpenStory = (storyGroup: StoryGroup[]) => {
   return res;
 };
 
-export const findDialogue = (dialogues: Dialogue[], dialId: string) => {
+export const findDialogue = (dialogues: Dialogue[], dialId: string | null) => {
+  if (dialId == null)
+    throw new Error(`Trying to find a dialogue for inactive character`);
   const res = dialogues.find((d: Dialogue) => d.id === dialId);
   if (!res) throw new Error(`Couldn't find a dialogue ${dialId}`);
   return res;

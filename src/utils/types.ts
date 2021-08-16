@@ -11,6 +11,7 @@ export interface Spell {
   element: null | element;
   owner: "hero" | "enemy";
   type: string;
+  default?: "default";
   level: number;
   description: string;
 }
@@ -18,7 +19,7 @@ export type trumpValue = "strength";
 export type effectValue = "heal" | "remove";
 
 export type OwnedResource = Resource & { quantity: number };
-export type CharacterNPC = Character & { dial: string };
+export type CharacterNPC = Character & { dial: string | null };
 
 export interface Player {
   data: {
@@ -174,4 +175,8 @@ export type resourceType =
   | "rdust"
   | "rflower";
 
-export type storyChangeType = "setNpcState" | "setAdventure" | "openStory";
+export type storyChangeType =
+  | "addNpc"
+  | "setAdventure"
+  | "openStory"
+  | "addHero";

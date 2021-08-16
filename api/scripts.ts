@@ -36,8 +36,9 @@ app.get("/api/player/", (req: any, res: any) => {
   const playerHeroes = [heroes[0]];
   playerHeroes[0].selected = true;
   const playerCards = spells.filter(
-    (s: Spell) => s.type === "base" || s.type === "maya"
+    (s: Spell) => s.character === null || s.character === "maya"
   );
+  playerCards.map((s: Spell) => (s.selected = true));
   const playerEnemies = enemies;
 
   const gameState: GameState = {

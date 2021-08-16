@@ -15,6 +15,7 @@ import {
   Spell,
   Story,
   StoryAction,
+  StoryGroup,
 } from "./types";
 
 export const changeCardsInDeck = (playerCards: Spell[], s: Spell) => {
@@ -203,16 +204,19 @@ const updatePlayerNpcs = (
   action: StoryAction
 ): CharacterNPC[] => {
   const npc = npcs.find((n: CharacterNPC) => action.id === n.id);
-
+  if (action.data === undefined) {
+    throw new Error("NPC dialogue data to change is invalid");
+  }
   if (!npc) {
     const npcToAdd = allNpcs.find((n: Character) => action.id === n.id);
-    if (!npcToAdd || !action.data)
+    if (!npcToAdd) {
       throw new Error("Can't find npc to add to the Intro screen");
+    }
     const newNpc = { ...npcToAdd, dial: action.data };
     npcs.push(newNpc);
   } else {
     const i = npcs.indexOf(npc);
-    if (!action.data) {
+    if (action.data === "remove") {
       npcs.splice(i, 1);
     } else {
       npcs[i] = { ...npcs[i], dial: action.data };
@@ -254,6 +258,32 @@ const updatePlayerAdventures = (
   adventures[j] = { ...adventures[j], open: true };
   return adventures;
 };
+
+const updatePlayerHeroes = (
+  heroes: Character[],
+  allHeroes: Character[],
+  action: StoryAction
+) => {
+  const hero = allHeroes.find((h: Character) => action.id === h.id);
+  if (!hero || heroes.indexOf(hero) !== -1) {
+    throw new Error(`Can't add a hero ${action.id}`);
+  }
+  heroes.push(hero);
+  return heroes;
+};
+
+const updatePlayerCards = (
+  spells: Spell[],
+  allSpells: Spell[],
+  action: StoryAction
+) => {
+  const spellsToAdd = allSpells.filter(
+    (s: Spell) => s.character === action.id && s.default
+  );
+  const newSpells = spells.concat(spellsToAdd);
+  return newSpells;
+};
+
 const findStoryToUpdate = (
   adventuresection: Adventure,
   id: string
@@ -261,14 +291,18 @@ const findStoryToUpdate = (
   if (!adventuresection.stories)
     throw new Error("No stories in this adventure");
   let res: number | null = null;
-  let x = 0;
-  for (x = 0; x < adventuresection.stories.length; x++) {
-    const storyGroup = adventuresection.stories[x].stories;
-    res = storyGroup.findIndex((s: Story) => s.id === id);
-    if (res) break;
+  let storyGroup = 0;
+  for (
+    storyGroup = 0;
+    storyGroup < adventuresection.stories.length;
+    storyGroup++
+  ) {
+    const currentSG = adventuresection.stories[storyGroup];
+    res = currentSG.stories.findIndex((s: Story) => s.id === id);
+    if (res >= 0) break;
   }
-  if (res == null || res === -1) throw new Error("No story to update");
-  return [x, res];
+  if (res == null || res === -1) throw new Error(`No story to update ${res}`);
+  return [storyGroup, res];
 };
 
 export const finishStory = (
@@ -278,8 +312,9 @@ export const finishStory = (
   let player = game.player;
   for (let i = 0; i < actions.length; i++) {
     const action = actions[i];
+    console.log(actions[i]);
     switch (action.type) {
-      case "setNpcState":
+      case "addNpc":
         player.npcs = updatePlayerNpcs(player.npcs, game.npcs, action);
         break;
       case "setAdventure":
@@ -287,6 +322,10 @@ export const finishStory = (
         break;
       case "openStory":
         player.adventures = updatePlayerStory(player.adventures, action);
+        break;
+      case "addHero":
+        player.heroes = updatePlayerHeroes(player.heroes, game.heroes, action);
+        player.cards = updatePlayerCards(player.cards, game.cards, action);
         break;
       default:
         throw new Error("Unknown action is called in finishing story");

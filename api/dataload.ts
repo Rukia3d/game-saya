@@ -229,6 +229,7 @@ export const readSpells = (): Spell[] => {
       selected: false,
       element: spellDB[i].element ? (spellDB[i].element as element) : null,
       owner: "hero",
+      default: spellDB[i].default ? "default" : undefined,
       type: spellDB[i].type,
       level: 0,
       description: spellDB[i].description,

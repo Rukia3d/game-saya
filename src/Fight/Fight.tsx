@@ -29,7 +29,7 @@ export const Fight = () => {
 
   const enemyId = context.story.enemy;
   const enemies = context.gameState.player.enemies;
-  const player = context.gameState.player.data;
+  const player = context.gameState.player;
 
   if (!enemyId) {
     throw new Error("No enemy for this fight, something went very wrong");
@@ -37,20 +37,22 @@ export const Fight = () => {
 
   const storyCharacters = context.story.characters
     ? context.story.characters
-    : findActiveCharacters(context.gameState.player.heroes);
+    : findActiveCharacters(player.heroes);
   const enemy: Enemy | null =
     enemies.find((e: any) => e.id === enemyId) || null;
 
   if (!enemy) {
     throw new Error(`Can't find the enemy ${enemyId}`);
   }
-
-  const heroDeck = generateDeck(
-    storyCharacters,
-    context.gameState.player.cards
-  ); //shuffle(generateDeck());
+  const heroDeck = generateDeck(storyCharacters, player.cards); //shuffle(generateDeck());
+  if (heroDeck.length < 10) {
+    throw new Error(`Couldn't generate cards for player`);
+  }
   const enemyDeck = generateEnemyDeck(enemy); //shuffle(generateEnemyDeck());
   const enemyHealt = enemyDeck.length;
+  if (enemyHealt < 1) {
+    throw new Error(`Couldn't generate cards for enemy`);
+  }
   const elements: element[] = shuffle([
     "fire",
     "earth",
@@ -60,10 +62,10 @@ export const Fight = () => {
   ]);
   const [fightState, setfightState] = useState<FightState>({
     hero: {
-      maxLife: player.maxLife,
-      life: player.life,
-      maxMana: player.maxMana,
-      mana: player.mana,
+      maxLife: player.data.maxLife,
+      life: player.data.life,
+      maxMana: player.data.maxMana,
+      mana: player.data.mana,
     },
     enemy: enemy,
     heroDeck: heroDeck,

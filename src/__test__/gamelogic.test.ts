@@ -4,9 +4,7 @@ import {
   finishStory,
   generateDeck,
   generateEnemyDeck,
-  updatedCards,
   updateHeroDeck,
-  updateWinPlayer,
 } from "../utils/gamelogic";
 import {
   baseCards15,
@@ -16,7 +14,7 @@ import {
   gameState,
   mayaCard,
 } from "../utils/testobjects";
-import { ForgeReq, Spell } from "../utils/types";
+import { Spell } from "../utils/types";
 
 test("generateDeck function returns correct character cards", () => {
   const deckForOne = generateDeck(["maya"], baseCards15);
@@ -103,7 +101,7 @@ test("Returns correct number for enemy experience", () => {
 test("Opens next story if dialogue is open", () => {
   const action = [
     {
-      type: "setNpcState" as "setNpcState",
+      type: "addNpc" as "addNpc",
       id: "maya",
       data: "c1_dialogue2",
     },
@@ -127,12 +125,12 @@ test("Opens next story if dialogue is open", () => {
   expect(res.adventures[2].stories[0].stories[2].open).toBeTruthy();
 });
 
-test("Removes npc correctly if no dial data provided", () => {
+test("Removes npc correctly if data says remove", () => {
   const action = [
     {
-      type: "setNpcState" as "setNpcState",
+      type: "addNpc" as "addNpc",
       id: "maya",
-      data: null,
+      data: "remove",
     },
   ];
   const game = JSON.parse(JSON.stringify(gameState));
@@ -144,7 +142,7 @@ test("Removes npc correctly if no dial data provided", () => {
 test("Adds npc correctly if it's not present", () => {
   const action = [
     {
-      type: "setNpcState" as "setNpcState",
+      type: "addNpc" as "addNpc",
       id: "olija",
       data: "olija_replic1",
     },
@@ -153,4 +151,48 @@ test("Adds npc correctly if it's not present", () => {
   const res = finishStory(game, action);
   expect(res.npcs.length).toBe(3);
   expect(res.npcs[2].id).toBe("olija");
+});
+
+test("Adds npc correctly if it's not present and doesn't have a dialogue", () => {
+  const action = [
+    {
+      type: "addNpc" as "addNpc",
+      id: "olija",
+      data: null,
+    },
+  ];
+  const game = JSON.parse(JSON.stringify(gameState));
+  const res = finishStory(game, action);
+  expect(res.npcs.length).toBe(3);
+  expect(res.npcs[2].id).toBe("olija");
+});
+
+test("Adds hero correctly if actions requires it", () => {
+  const action = [
+    {
+      type: "addHero" as "addHero",
+      id: "nell",
+    },
+  ];
+  const game = JSON.parse(JSON.stringify(gameState));
+  const nellCards = new Array(3).fill(0).map((x, n) => ({
+    id: "base_hit" + n,
+    name: "Base Hit " + n,
+    strength: 1,
+    character: "nell",
+    default: n > 0 ? "default" : undefined,
+    element: null,
+    image: "",
+    mana: 0,
+    selected: true,
+    owner: "hero" as "hero",
+    type: "",
+    level: 0,
+    description: "",
+  }));
+  game.cards = game.cards.concat(nellCards);
+  const newPlayer = { ...game.player, heroes: game.heroes.slice(0, 2) };
+  const res = finishStory({ ...game, player: newPlayer }, action);
+  expect(res.heroes.length).toBe(3);
+  expect(res.cards.length).toBe(17);
 });
