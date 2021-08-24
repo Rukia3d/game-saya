@@ -7,7 +7,13 @@ import { SettingsButton } from "../UI/SettingsButton";
 import { CharacterBox } from "./CharacterBox";
 import { HeroBlock } from "./HeroBlock";
 
-import { Spell, Enemy, FightState, Resource, element } from "../utils/types";
+import {
+  Spell,
+  Enemy,
+  FightState,
+  Resource,
+  elementType,
+} from "../utils/types";
 import { findActiveCharacters, shuffle } from "../utils/helpers";
 import {
   finishStory,
@@ -53,7 +59,7 @@ export const Fight = () => {
   if (enemyHealt < 1) {
     throw new Error(`Couldn't generate cards for enemy`);
   }
-  const elements: element[] = shuffle([
+  const elements: elementType[] = shuffle([
     "fire",
     "earth",
     "metal",

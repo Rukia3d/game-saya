@@ -4,18 +4,19 @@ export interface Spell {
   name: string;
   strength: number;
   mana: number;
-  effect?: [effectValue, number];
-  trump?: [trumpValue, number];
-  character: null | string;
+  effects?: SpellEffect[];
   selected: boolean;
-  element: null | element;
+  element: elementType;
   owner: "hero" | "enemy";
   type: string;
-  default?: "default";
   level: number;
   description: string;
 }
-export type trumpValue = "strength";
+
+export interface SpellEffect {
+  effect: effectValue;
+  strength: number;
+}
 export type effectValue = "heal" | "remove";
 
 export type OwnedResource = Resource & { quantity: number };
@@ -77,6 +78,7 @@ export interface Character {
   name: string;
   image: string;
   selected?: boolean;
+  element?: elementType;
 }
 
 export interface Adventure {
@@ -121,7 +123,7 @@ export interface ForgeEffect {
 export interface Enemy {
   id: string;
   name: string;
-  element: string;
+  element: elementType;
   // exp defines how hard this enemy to kill
   experience: enemyExpLevel;
   cards: Spell[];
@@ -142,8 +144,8 @@ export interface FightState {
   heroHand: Spell[];
   enemyDeck: Spell[];
   enemyDrop: Spell[];
-  element: element | null;
-  elements: element[];
+  element: elementType;
+  elements: elementType[];
 }
 
 export interface Resource {
@@ -166,7 +168,7 @@ export type enemyExpLevel =
   | "practitioner"
   | "master"
   | "grandmaster";
-export type element = "fire" | "earth" | "metal" | "water" | "air";
+export type elementType = "fire" | "earth" | "metal" | "water" | "air";
 export type resourceType =
   | "gold"
   | "iron"

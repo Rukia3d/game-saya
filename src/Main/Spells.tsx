@@ -1,31 +1,24 @@
 import React, { useContext, useState } from "react";
 import { GameContext } from "../App";
 import { TopMenu } from "../UI/TopMenu";
-import { Character, Spell } from "../utils/types";
-import { CharacterSpells } from "./CharacterSpells";
+import { elementType, Spell } from "../utils/types";
+import { ElementSpells } from "./ElementSpells";
 import "./Spells.css";
 
 const SpellPanel = ({
-  character,
+  element,
   image,
-  setHero,
+  setElement,
 }: {
-  character: Character | null;
+  element: elementType;
   image: boolean;
-  setHero: (s: Character | null | "Base") => void;
+  setElement: (s: elementType) => void;
 }) => {
   return (
-    <div
-      className={image ? "SpellPanel" : "SpellPanel_basic"}
-      onClick={() => setHero(character ? character : "Base")}
-    >
+    <div className="SpellPanel" onClick={() => setElement(element)}>
       <img
-        src={
-          character
-            ? `../img/${character.id}_spells.png`
-            : "../img/base_spells.png"
-        }
-        alt={`image_${character ? character.id : "base"}_spells`}
+        src={`../img/${element}_spells.png`}
+        alt={`image_${element}_spells`}
       />
     </div>
   );
@@ -37,24 +30,20 @@ export const Spells = () => {
     throw new Error("No data");
   }
   const spells = context.gameState.player.cards;
-  const heroes = context.gameState.player.heroes;
 
-  const [hero, setHero] = useState<null | Character | "Base">(null);
-  const characters = spells
-    .map((s: Spell) => s.character)
+  const [element, setElement] = useState<elementType | null>(null);
+  const elements = spells
+    .map((s: Spell) => s.element)
     .filter((v: any, i: any, a: any) => a.indexOf(v) === i && v);
 
-  if (hero) {
+  if (element) {
     return (
       <div className="Spells">
-        <CharacterSpells
-          setHero={setHero}
-          hero={hero}
-          spells={
-            hero === "Base"
-              ? spells.filter((s: Spell) => s.character === null)
-              : spells.filter((s: Spell) => s.character === hero.id)
-          }
+        <TopMenu />
+        <ElementSpells
+          element={element}
+          setElement={setElement}
+          spells={spells.filter((s: Spell) => s.element === element)}
         />
       </div>
     );
@@ -63,15 +52,9 @@ export const Spells = () => {
   return (
     <div className="Spells">
       <TopMenu />
-      <SpellPanel character={null} image={false} setHero={setHero} />
       <div className="SpellsList">
-        {characters.sort().map((s: string | null, i: number) => (
-          <SpellPanel
-            key={i}
-            character={heroes.find((h: Character) => h.id === s) || null}
-            image
-            setHero={setHero}
-          />
+        {elements.sort().map((s: elementType, i: number) => (
+          <SpellPanel key={i} element={s} image setElement={setElement} />
         ))}
       </div>
     </div>

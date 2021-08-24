@@ -1,7 +1,7 @@
 import React from "react";
 import "./HeroBlock.css";
 
-import { element, Enemy, FightState, Spell } from "../utils/types";
+import { elementType, Enemy, FightState, Spell } from "../utils/types";
 import { HeroSpellWithInfo } from "./HeroSpellWithInfo";
 
 export const HeroBlock = ({
@@ -22,7 +22,7 @@ export const HeroBlock = ({
         </p>
         <p>
           Elements:
-          {fightState.elements.map((s: element, i: number) => (
+          {fightState.elements.map((s: elementType, i: number) => (
             <span
               key={i}
               style={{ color: s === fightState.element ? "green" : "black" }}

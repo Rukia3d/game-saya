@@ -10,7 +10,6 @@ const mayaSpells: Spell[] = new Array(3).fill(0).map((x, n) => ({
   ...baseCards15[0],
   id: "base_hit" + n,
   name: "Base Hit " + n,
-  character: "maya",
   element: "earth",
 }));
 
@@ -18,22 +17,12 @@ const taraSpells: Spell[] = new Array(3).fill(0).map((x, n) => ({
   ...baseCards15[0],
   id: "base_hit" + n,
   name: "Base Hit " + n,
-  character: "tara",
   element: "metal",
 }));
 
-const baseSpells: Spell[] = new Array(3).fill(0).map((x, n) => ({
-  ...baseCards15[0],
-  id: "base_hit" + n,
-  name: "Base Hit " + n,
-  character: null,
-  element: null,
-}));
-const newCards = mayaSpells.concat(taraSpells);
-
 const newGameState = {
   ...JSON.parse(JSON.stringify(gameState)),
-  player: { ...gameState.player, cards: newCards.concat(baseSpells) },
+  player: { ...gameState.player, cards: mayaSpells.concat(taraSpells) },
 };
 
 const context = {
@@ -49,17 +38,16 @@ const context = {
   backToStory: jest.fn(),
 };
 
-test("Renders Heroes screen with characters ready for a dialogue", () => {
+test("Renders Hero Spells", () => {
   render(
     <GameContext.Provider value={context}>
       <Spells />
     </GameContext.Provider>
   );
-  expect(screen.getByAltText("image_base_spells")).toBeInTheDocument();
-  expect(screen.getByAltText("image_maya_spells")).toBeInTheDocument();
-  expect(screen.getByAltText("image_tara_spells")).toBeInTheDocument();
-  userEvent.click(screen.getByAltText("image_base_spells"));
-  expect(screen.getByText("Basic spells")).toBeInTheDocument();
+  expect(screen.getByAltText("image_earth_spells")).toBeInTheDocument();
+  expect(screen.getByAltText("image_metal_spells")).toBeInTheDocument();
+  userEvent.click(screen.getByAltText("image_earth_spells"));
+  expect(screen.getByText("Earth spells")).toBeInTheDocument();
   expect(screen.getByLabelText("character_spells").children.length).toEqual(3);
   const firstCardName = screen.getAllByLabelText("spell_card")[0].innerHTML;
   userEvent.click(screen.getAllByTestId("hero_card_info")[0]);

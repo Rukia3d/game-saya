@@ -51,10 +51,8 @@ export const generateDeck = (
       image: c.image,
       name: c.name,
       mana: c.mana,
-      trump: c.trump,
-      effect: c.effect,
+      effects: c.effects,
       strength: c.strength,
-      character: c.character,
       element: c.element,
       owner: "hero",
       selected: c.selected,
@@ -74,10 +72,8 @@ export const generateEnemyDeck = (enemy: Enemy): Spell[] => {
       image: c.image,
       name: c.name,
       mana: c.mana,
-      trump: c.trump,
-      effect: c.effect,
+      effects: c.effects,
       strength: c.strength,
-      character: c.character,
       element: c.element,
       owner: "enemy",
       selected: true,
@@ -277,9 +273,7 @@ const updatePlayerCards = (
   allSpells: Spell[],
   action: StoryAction
 ) => {
-  const spellsToAdd = allSpells.filter(
-    (s: Spell) => s.character === action.id && s.default
-  );
+  const spellsToAdd = allSpells.filter((s: Spell) => s.element === action.id);
   const newSpells = spells.concat(spellsToAdd);
   return newSpells;
 };
@@ -312,7 +306,6 @@ export const finishStory = (
   let player = game.player;
   for (let i = 0; i < actions.length; i++) {
     const action = actions[i];
-    console.log(actions[i]);
     switch (action.type) {
       case "addNpc":
         player.npcs = updatePlayerNpcs(player.npcs, game.npcs, action);

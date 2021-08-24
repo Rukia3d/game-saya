@@ -1,4 +1,4 @@
-import { effectValue, storyChangeType, trumpValue } from "../src/utils/types";
+import { effectValue, storyChangeType } from "../src/utils/types";
 
 export const getStoryCharacters = (characters: string) => {
   // Characters in DB are two names separated by coma
@@ -22,9 +22,4 @@ export const getStoryActions = (actions: string) => {
 export const getSpellEffect = (effect: string): [effectValue, number] => {
   const eff = effect.split(",");
   return [eff[0] as effectValue, parseInt(eff[1])];
-};
-
-export const getSpellTrump = (trump: string): [trumpValue, number] => {
-  const tr = trump.split(",");
-  return [tr[0] as trumpValue, parseInt(tr[1])];
 };

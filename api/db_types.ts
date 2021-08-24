@@ -48,7 +48,6 @@ export interface EnemyCardDB {
   id: string;
   name: string;
   strength: string;
-  character: string;
   element: string;
   image: string;
   description: string;

@@ -1,23 +1,23 @@
 import React, { useContext, useState } from "react";
-import "./CharacterSpells.css";
+import "./ElementSpells.css";
 
 import { CloseButton } from "../UI/CloseButton";
 
-import { Character, Spell } from "../utils/types";
+import { elementType, Spell } from "../utils/types";
 import { InfoCard } from "../UI/InfoCard";
 import { HeroSpellWithInfo } from "../Fight/HeroSpellWithInfo";
 import { GameContext } from "../App";
 import { changeCardsInDeck } from "../utils/gamelogic";
 import { ForgeCard } from "../UI/ForgeCard";
 
-export const CharacterSpells = ({
-  hero,
+export const ElementSpells = ({
+  element,
   spells,
-  setHero,
+  setElement,
 }: {
-  hero: Character | "Base";
+  element: elementType;
   spells: Spell[];
-  setHero: (s: Character | null | "Base") => void;
+  setElement: (s: elementType | null) => void;
 }) => {
   const context = useContext(GameContext);
   if (
@@ -42,8 +42,8 @@ export const CharacterSpells = ({
   };
   return (
     <div className="CharacterSpells">
-      <h1>{`${hero !== "Base" ? hero.name : "Basic"} spells`}</h1>
-      <CloseButton onClick={() => setHero(null)} />
+      <h1>{`${element.charAt(0).toUpperCase() + element.slice(1)} spells`}</h1>
+      <CloseButton onClick={() => setElement(null)} />
       {info ? <InfoCard item={info} setInfo={setInfo} /> : null}
       {forge ? <ForgeCard item={forge} setForge={setForge} /> : null}
       <div className="AllCharacterSpells" aria-label="character_spells">
@@ -53,7 +53,7 @@ export const CharacterSpells = ({
             key={i}
             selectCard={selectCard}
             setInfo={setInfo}
-            element={null}
+            element={c.element}
             card={c}
             setForge={setForge}
           />

@@ -1,7 +1,7 @@
 import React from "react";
 import "./HeroBlock.css";
 
-import { element, Spell } from "../utils/types";
+import { elementType, Spell } from "../utils/types";
 
 export const HeroCardLevelFrame = ({ card }: { card: Spell }) => {
   let frame: JSX.Element | null = null;
@@ -49,7 +49,7 @@ export const HeroSpellWithInfo = ({
 }: {
   forge?: boolean;
   card: Spell;
-  element: element | null;
+  element: elementType;
   setForge?: (s: Spell) => void;
   selectCard: (s: Spell) => void;
   setInfo: (s: any) => void;
@@ -70,7 +70,7 @@ export const HeroSpell = ({
   card,
   selectCard,
 }: {
-  element: element | null;
+  element: elementType;
   card: Spell;
   selectCard?: (s: Spell) => void;
 }) => {

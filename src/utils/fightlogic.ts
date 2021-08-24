@@ -1,11 +1,10 @@
 import { updateHeroDeck } from "./gamelogic";
 import { removeFromArray } from "./helpers";
-import { FightState, Spell, element } from "./types";
+import { FightState, Spell, elementType } from "./types";
 const getNextElement = (
-  elements: element[],
-  element: element | null
-): element | null => {
-  if (element == null) return null;
+  elements: elementType[],
+  element: elementType
+): elementType => {
   const index = elements.indexOf(element);
   if (index === -1)
     throw new Error("Can't find the element to give you the next one");
@@ -62,24 +61,9 @@ export const enemyAttack = (
     );
   }
 
-  if (
-    heroCard.effect &&
-    heroCard.mana > 0 &&
-    fightState.hero.mana >= heroCard.mana
-  ) {
+  if (heroCard.mana > 0 && fightState.hero.mana >= heroCard.mana) {
     // additional effects apply
     newHeroMana = fightState.hero.mana - heroCard.mana;
-    const effectType = heroCard.effect[0];
-    const effectValue = heroCard.effect[1];
-    switch (effectType) {
-      case "heal":
-        newHeroHealth = newHeroHealth + effectValue;
-        if (newHeroHealth > fightState.hero.life)
-          newHeroHealth = fightState.hero.life;
-        break;
-      default:
-        throw new Error("Unknown effect");
-    }
   }
 
   const heroNew = {

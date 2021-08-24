@@ -167,7 +167,7 @@ test("Adds npc correctly if it's not present and doesn't have a dialogue", () =>
   expect(res.npcs[2].id).toBe("olija");
 });
 
-test("Adds hero correctly if actions requires it", () => {
+test.skip("Adds hero correctly if actions requires it", () => {
   const action = [
     {
       type: "addHero" as "addHero",

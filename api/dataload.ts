@@ -4,7 +4,7 @@ import {
   Character,
   Dialogue,
   DialogueLine,
-  element,
+  elementType,
   Enemy,
   enemyExpLevel,
   Spell,
@@ -23,12 +23,7 @@ import {
   StoryDB,
   StoryGroupDB,
 } from "./db_types";
-import {
-  getSpellEffect,
-  getSpellTrump,
-  getStoryActions,
-  getStoryCharacters,
-} from "./helpers";
+import { getStoryActions, getStoryCharacters } from "./helpers";
 const parse = require("csv-parse/lib/sync");
 const fs = require("fs");
 const path = "../src/data/";
@@ -130,9 +125,8 @@ const getEnemySpells = (e: EnemyDB) => {
       name: currentSpell.name,
       strength: parseInt(currentSpell.strength),
       mana: 0,
-      character: null,
       selected: false,
-      element: currentSpell.element ? (currentSpell.element as element) : null,
+      element: currentSpell.element as elementType,
       owner: "enemy" as "enemy",
       type: currentSpell.name,
       level: 0,
@@ -188,7 +182,7 @@ export const readEnemies = (): Enemy[] => {
     enemies[i] = {
       id: enemyDB[i].id,
       name: enemyDB[i].name,
-      element: enemyDB[i].element,
+      element: enemyDB[i].element as elementType,
       experience: enemyDB[i].exp as enemyExpLevel,
       cards: enemyCards,
       life: parseInt(enemyDB[i].life),
@@ -223,13 +217,9 @@ export const readSpells = (): Spell[] => {
       name: spellDB[i].name,
       strength: parseInt(spellDB[i].strength),
       mana: parseInt(spellDB[i].mana),
-      effect: spellDB[i].effect ? getSpellEffect(spellDB[i].effect) : undefined,
-      trump: spellDB[i].trump ? getSpellTrump(spellDB[i].trump) : undefined,
-      character: spellDB[i].character ? spellDB[i].character : null,
       selected: false,
-      element: spellDB[i].element ? (spellDB[i].element as element) : null,
+      element: spellDB[i].element as elementType,
       owner: "hero",
-      default: spellDB[i].default ? "default" : undefined,
       type: spellDB[i].type,
       level: 0,
       description: spellDB[i].description,
