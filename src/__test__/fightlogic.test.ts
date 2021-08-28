@@ -1,183 +1,244 @@
 import { enemyAttack } from "../utils/fightlogic";
 import { fightState, mayaCard, enemyCard } from "../utils/testobjects";
+const testHeroLife = { ...fightState.hero, life: 10 };
 
-test("Simple attack: enemy attacks for 3 and hero counters with attack 1", () => {
+// Base to Base attacks
+test("Enemy attacks base card 3, hero defends base card 5", () => {
   const newFightState = {
     ...JSON.parse(JSON.stringify(fightState)),
-    heroHand: fightState.heroHand.concat({ ...mayaCard, strength: 1 }),
-    enemyDeck: fightState.enemyDeck.concat({ ...enemyCard, strength: 2 }),
+    heroHand: fightState.heroHand.concat({ ...mayaCard, strength: 5 }),
+    enemyDeck: fightState.enemyDeck.concat({ ...enemyCard, strength: 3 }),
+    hero: testHeroLife,
   };
   const enemyAttackRes = enemyAttack(
     newFightState,
     newFightState.heroHand[2],
     newFightState.enemyDeck[2]
   );
-  expect(enemyAttackRes.element).toEqual("earth");
-  expect(enemyAttackRes.hero.life).toBe(fightState.hero.life - 2);
-  expect(enemyAttackRes.heroDrop.length).toBe(2);
-  expect(enemyAttackRes.enemyDrop.length).toBe(2);
-  expect(enemyAttackRes.enemyDeck.length).toBe(2);
-  expect(enemyAttackRes.heroDeck.length).toBe(1);
-  expect(enemyAttackRes.heroHand.length).toBe(3);
+  expect(enemyAttackRes.hero.life).toBe(testHeroLife.life);
 });
 
-test("Simple attack: enemy attacks for 2 and hero counters with attack 2", () => {
-  const newFightState = {
-    ...JSON.parse(JSON.stringify(fightState)),
-    heroHand: fightState.heroHand.concat({ ...mayaCard, strength: 2 }),
-    enemyDeck: fightState.enemyDeck.concat({ ...enemyCard, strength: 2 }),
-  };
-  const enemyAttackRes = enemyAttack(
-    newFightState,
-    newFightState.heroHand[2],
-    newFightState.enemyDeck[2]
-  );
-  expect(enemyAttackRes.element).toEqual("earth");
-  expect(enemyAttackRes.hero.life).toBe(fightState.hero.life);
-});
-
-test("Simple attack: enemy attacks for 1 and hero counters with attack 3", () => {
+test("Enemy attacks base card 3, hero defends base card 3", () => {
   const newFightState = {
     ...JSON.parse(JSON.stringify(fightState)),
     heroHand: fightState.heroHand.concat({ ...mayaCard, strength: 3 }),
-    enemyDeck: fightState.enemyDeck.concat({ ...enemyCard, strength: 1 }),
-  };
-  const enemyAttackRes = enemyAttack(
-    newFightState,
-    newFightState.heroHand[2],
-    newFightState.enemyDeck[2]
-  );
-  expect(enemyAttackRes.element).toEqual("earth");
-  expect(enemyAttackRes.hero.life).toBe(fightState.hero.life);
-});
-
-test.skip("Simple attack: enemy attacks for 3 and hero counters with attack 1 trump", () => {
-  const newFightState = {
-    ...JSON.parse(JSON.stringify(fightState)),
-    element: "earth" as "earth",
     enemyDeck: fightState.enemyDeck.concat({ ...enemyCard, strength: 3 }),
-    heroHand: fightState.heroHand.concat({
-      ...mayaCard,
-      strength: 1,
-      element: "earth" as "earth",
-    }),
+    hero: testHeroLife,
   };
   const enemyAttackRes = enemyAttack(
     newFightState,
     newFightState.heroHand[2],
     newFightState.enemyDeck[2]
   );
-  expect(enemyAttackRes.element).toEqual("fire");
-  expect(enemyAttackRes.hero.life).toBe(fightState.hero.life);
+  expect(enemyAttackRes.hero.life).toBe(testHeroLife.life);
 });
 
-test.skip("Simple attack: enemy attacks for 2 and hero counters with attack 2 trump", () => {
+test("Enemy attacks base card 5, hero defends base card 3", () => {
   const newFightState = {
     ...JSON.parse(JSON.stringify(fightState)),
-    element: "earth" as "earth",
-    enemyDeck: fightState.enemyDeck.concat({ ...enemyCard, strength: 2 }),
-    heroHand: fightState.heroHand.concat({
-      ...mayaCard,
-      strength: 2,
-      element: "earth" as "earth",
-    }),
+    heroHand: fightState.heroHand.concat({ ...mayaCard, strength: 3 }),
+    enemyDeck: fightState.enemyDeck.concat({ ...enemyCard, strength: 5 }),
+    hero: testHeroLife,
   };
   const enemyAttackRes = enemyAttack(
     newFightState,
     newFightState.heroHand[2],
     newFightState.enemyDeck[2]
   );
-  expect(enemyAttackRes.element).toEqual("fire");
-  expect(enemyAttackRes.hero.life).toBe(fightState.hero.life);
+  expect(enemyAttackRes.hero.life).toBe(testHeroLife.life - 2);
 });
 
-test.skip("Simple attack: enemy attacks for 1 and hero counters with attack 3 trump", () => {
+// Base to defence Trump
+test("Enemy attacks base card 3, hero defends trump card 5", () => {
   const newFightState = {
     ...JSON.parse(JSON.stringify(fightState)),
-    element: "earth" as "earth",
-    enemyDeck: fightState.enemyDeck.concat({ ...enemyCard, strength: 1 }),
+    heroHand: fightState.heroHand.concat({
+      ...mayaCard,
+      strength: 5,
+      element: "fire",
+    }),
+    enemyDeck: fightState.enemyDeck.concat({ ...enemyCard, strength: 3 }),
+    hero: testHeroLife,
+  };
+  const enemyAttackRes = enemyAttack(
+    newFightState,
+    newFightState.heroHand[2],
+    newFightState.enemyDeck[2]
+  );
+  expect(enemyAttackRes.hero.life).toBe(testHeroLife.life);
+});
+
+test("Enemy attacks base card 3, hero defends trump card 3", () => {
+  const newFightState = {
+    ...JSON.parse(JSON.stringify(fightState)),
     heroHand: fightState.heroHand.concat({
       ...mayaCard,
       strength: 3,
-      element: "earth" as "earth",
+      element: "fire",
     }),
+    enemyDeck: fightState.enemyDeck.concat({ ...enemyCard, strength: 3 }),
+    hero: testHeroLife,
   };
   const enemyAttackRes = enemyAttack(
     newFightState,
     newFightState.heroHand[2],
     newFightState.enemyDeck[2]
   );
-  expect(enemyAttackRes.element).toEqual("fire");
-  expect(enemyAttackRes.hero.life).toBe(fightState.hero.life);
+  expect(enemyAttackRes.hero.life).toBe(testHeroLife.life);
 });
 
-test.skip("Simple attack: enemy attacks for 3 with trump and hero counters with attack 1", () => {
+test("Enemy attacks base card 5, hero defends trump card 3", () => {
   const newFightState = {
     ...JSON.parse(JSON.stringify(fightState)),
-    element: "earth" as "earth",
-    enemyDeck: fightState.enemyDeck.concat({
-      ...enemyCard,
-      strength: 2,
-      element: "earth" as "earth",
-    }),
     heroHand: fightState.heroHand.concat({
       ...mayaCard,
-      strength: 1,
+      strength: 3,
+      element: "fire",
     }),
+    enemyDeck: fightState.enemyDeck.concat({ ...enemyCard, strength: 5 }),
+    hero: testHeroLife,
   };
   const enemyAttackRes = enemyAttack(
     newFightState,
     newFightState.heroHand[2],
     newFightState.enemyDeck[2]
   );
-  expect(enemyAttackRes.element).toEqual("fire");
-  expect(enemyAttackRes.hero.life).toBe(fightState.hero.life - 2);
+  expect(enemyAttackRes.hero.life).toBe(testHeroLife.life);
 });
 
-test.skip("Simple attack: enemy attacks for 2 with trump and hero counters with attack 2", () => {
+// Trump to base defence
+test("Enemy attacks trump card 3, hero defends base card 5", () => {
   const newFightState = {
     ...JSON.parse(JSON.stringify(fightState)),
-    element: "earth" as "earth",
     heroHand: fightState.heroHand.concat({
       ...mayaCard,
-      strength: 2,
+      strength: 5,
     }),
     enemyDeck: fightState.enemyDeck.concat({
       ...enemyCard,
-      strength: 2,
-      element: "earth" as "earth",
+      strength: 3,
+      element: "fire",
     }),
+    hero: testHeroLife,
   };
   const enemyAttackRes = enemyAttack(
     newFightState,
     newFightState.heroHand[2],
     newFightState.enemyDeck[2]
   );
-  expect(enemyAttackRes.element).toEqual("fire");
-  expect(enemyAttackRes.hero.life).toBe(fightState.hero.life - 2);
+  expect(enemyAttackRes.hero.life).toBe(testHeroLife.life - 3);
 });
 
-test.skip("Simple attack: enemy attacks for 1 with trump and hero counters with attack 3", () => {
+test("Enemy attacks trump card 3, hero defends base card 3", () => {
   const newFightState = {
     ...JSON.parse(JSON.stringify(fightState)),
-    element: "earth" as "earth",
     heroHand: fightState.heroHand.concat({
       ...mayaCard,
       strength: 3,
     }),
     enemyDeck: fightState.enemyDeck.concat({
       ...enemyCard,
-      strength: 1,
-      element: "earth" as "earth",
+      strength: 3,
+      element: "fire",
     }),
+    hero: testHeroLife,
   };
   const enemyAttackRes = enemyAttack(
     newFightState,
     newFightState.heroHand[2],
     newFightState.enemyDeck[2]
   );
-  expect(enemyAttackRes.element).toEqual("fire");
-  expect(enemyAttackRes.hero.life).toBe(fightState.hero.life - 1);
+  expect(enemyAttackRes.hero.life).toBe(testHeroLife.life - 3);
+});
+
+test("Enemy attacks trump card 5, hero defends base card 3", () => {
+  const newFightState = {
+    ...JSON.parse(JSON.stringify(fightState)),
+    heroHand: fightState.heroHand.concat({
+      ...mayaCard,
+      strength: 3,
+    }),
+    enemyDeck: fightState.enemyDeck.concat({
+      ...enemyCard,
+      strength: 5,
+      element: "fire",
+    }),
+    hero: testHeroLife,
+  };
+  const enemyAttackRes = enemyAttack(
+    newFightState,
+    newFightState.heroHand[2],
+    newFightState.enemyDeck[2]
+  );
+  expect(enemyAttackRes.hero.life).toBe(testHeroLife.life - 5);
+});
+
+test("Enemy attacks trump card 3, hero defends trump card 5", () => {
+  const newFightState = {
+    ...JSON.parse(JSON.stringify(fightState)),
+    heroHand: fightState.heroHand.concat({
+      ...mayaCard,
+      strength: 5,
+      element: "fire",
+    }),
+    enemyDeck: fightState.enemyDeck.concat({
+      ...enemyCard,
+      strength: 3,
+      element: "fire",
+    }),
+    hero: testHeroLife,
+  };
+  const enemyAttackRes = enemyAttack(
+    newFightState,
+    newFightState.heroHand[2],
+    newFightState.enemyDeck[2]
+  );
+  expect(enemyAttackRes.hero.life).toBe(testHeroLife.life);
+});
+
+test("Enemy attacks trump card 3, hero defends trump card 3", () => {
+  const newFightState = {
+    ...JSON.parse(JSON.stringify(fightState)),
+    heroHand: fightState.heroHand.concat({
+      ...mayaCard,
+      strength: 3,
+      element: "fire",
+    }),
+    enemyDeck: fightState.enemyDeck.concat({
+      ...enemyCard,
+      strength: 3,
+      element: "fire",
+    }),
+    hero: testHeroLife,
+  };
+  const enemyAttackRes = enemyAttack(
+    newFightState,
+    newFightState.heroHand[2],
+    newFightState.enemyDeck[2]
+  );
+  expect(enemyAttackRes.hero.life).toBe(testHeroLife.life);
+});
+test("Enemy attacks trump card 5, hero defends trump card 3", () => {
+  const newFightState = {
+    ...JSON.parse(JSON.stringify(fightState)),
+    heroHand: fightState.heroHand.concat({
+      ...mayaCard,
+      strength: 3,
+      element: "fire",
+    }),
+    enemyDeck: fightState.enemyDeck.concat({
+      ...enemyCard,
+      strength: 5,
+      element: "fire",
+    }),
+    hero: testHeroLife,
+  };
+  const enemyAttackRes = enemyAttack(
+    newFightState,
+    newFightState.heroHand[2],
+    newFightState.enemyDeck[2]
+  );
+  expect(enemyAttackRes.hero.life).toBe(testHeroLife.life - 2);
 });
 
 test.skip("Hero special card, attack for 3, counter for 1, no trump", () => {
@@ -224,7 +285,7 @@ test.skip("Hero special card with mana, attack for 1, counter for 3, no trump", 
   expect(enemyAttackRes.hero.mana).toBe(8);
 });
 
-test("Hero special card, attack for 3, counter for 1, no mana", () => {
+test.skip("Hero special card, attack for 3, counter for 1, no mana", () => {
   const newFightState = {
     ...JSON.parse(JSON.stringify(fightState)),
     heroHand: fightState.heroHand.concat({

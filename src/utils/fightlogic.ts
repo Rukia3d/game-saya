@@ -19,9 +19,11 @@ const simpleDamage = (
   heroStrength: number,
   enemyStrength: number
 ) => {
+  console.log(health, heroStrength, enemyStrength);
   if (heroStrength < enemyStrength) {
-    health = health - enemyStrength;
+    health = health - (enemyStrength - heroStrength);
   }
+  console.log("new health", health);
   return health;
 };
 
@@ -45,15 +47,26 @@ export const enemyAttack = (
     (fightState.element === heroCard.element ||
       fightState.element === enemyCard.element)
   ) {
-    // do nothing if hero has a trump  - they can't be damaged
-    // if enemy has a trump but hero doesn't
-    if (fightState.element === enemyCard.element) {
+    console.log("special attack");
+    if (
+      fightState.element === enemyCard.element &&
+      fightState.element !== heroCard.element
+    ) {
+      console.log("special attack enemy trump");
       newHeroHealth = newHeroHealth - enemyCard.strength;
     }
 
-    // This is a trump attack for simple cards
+    if (
+      fightState.element === enemyCard.element &&
+      fightState.element === heroCard.element &&
+      enemyCard.strength > heroCard.strength
+    ) {
+      console.log("special attack both trump");
+      newHeroHealth = newHeroHealth - (enemyCard.strength - heroCard.strength);
+    }
   } else {
     // This is a simple attack with no trump
+    console.log("simple attack");
     newHeroHealth = simpleDamage(
       newHeroHealth,
       heroCard.strength,
