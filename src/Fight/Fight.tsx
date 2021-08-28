@@ -51,7 +51,7 @@ export const Fight = () => {
     throw new Error(`Can't find the enemy ${enemyId}`);
   }
   const heroDeck = generateDeck(storyCharacters, player.cards); //shuffle(generateDeck());
-  if (heroDeck.length < 10) {
+  if (heroDeck.length === 0) {
     throw new Error(`Couldn't generate cards for player`);
   }
   const enemyDeck = generateEnemyDeck(enemy); //shuffle(generateEnemyDeck());
@@ -148,8 +148,20 @@ export const Fight = () => {
     <div className="Fight">
       <SettingsButton onClick={() => setSettingsOpen(!settingsOpen)} />
       {settingsOpen ? <Settings /> : null}
-      {enemyCard ? <BigCard card={enemyCard} setInfo={setInfo} /> : null}
-      {heroCard ? <BigCard card={heroCard} setInfo={setInfo} /> : null}
+      {enemyCard ? (
+        <BigCard
+          card={enemyCard}
+          setInfo={setInfo}
+          element={fightState.element}
+        />
+      ) : null}
+      {heroCard ? (
+        <BigCard
+          card={heroCard}
+          setInfo={setInfo}
+          element={fightState.element}
+        />
+      ) : null}
       {info ? <InfoCard item={info} setInfo={setInfo} /> : null}
       {result ? (
         <FightResult

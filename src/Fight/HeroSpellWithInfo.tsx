@@ -32,7 +32,7 @@ export const HeroCardLevelFrame = ({ card }: { card: Spell }) => {
       {frame ? frame : null}
       <img
         className="SmallCardImage"
-        src={card.image}
+        src={`../img/Spells/${card.image}.jpg`}
         alt={`spellimage_${card.id}`}
       />
     </>

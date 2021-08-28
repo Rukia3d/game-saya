@@ -1,8 +1,6 @@
 import React from "react";
 import "./CharacterBox.css";
 
-import { Human } from "./Human";
-
 import { Enemy, FightState, Spell } from "../utils/types";
 
 export const CharacterBox = ({
@@ -25,8 +23,11 @@ export const CharacterBox = ({
         <span data-testid="enemy_life">{fightState.enemyDeck.length}</span>,
         drop: {fightState.enemyDrop.length}
       </div>
-      <div className="Human" onClick={enemyAct} aria-label="opponent">
-        <Human />
+      <div className="Enemy" onClick={enemyAct} aria-label="opponent">
+        <img
+          src={`../img/Enemies/${fightState.enemy.id}`}
+          alt={fightState.enemy.name}
+        />
       </div>
       <div className="Stats">
         hero health: <span data-testid="hero_life">{fightState.hero.life}</span>

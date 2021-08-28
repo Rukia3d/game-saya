@@ -45,7 +45,7 @@ export const generateDeck = (
 ): Spell[] => {
   const heroSpells: Spell[] = [];
   playerCards.forEach((c: Spell) => {
-    if (!c.selected) return;
+    //    if (!c.selected) return;
     heroSpells.push({
       id: c.id,
       image: c.image,
@@ -273,7 +273,7 @@ const updatePlayerCards = (
   allSpells: Spell[],
   action: StoryAction
 ) => {
-  const spellsToAdd = allSpells.filter((s: Spell) => s.element === action.id);
+  const spellsToAdd = allSpells.filter((s: Spell) => s.element === action.data);
   const newSpells = spells.concat(spellsToAdd);
   return newSpells;
 };

@@ -44,7 +44,7 @@ app.get("/api/player/", (req: any, res: any) => {
       data: {
         id: 1,
         experience: 300,
-        life: 3,
+        life: 7,
         maxLife: 7,
         mana: 10,
         maxMana: 15,

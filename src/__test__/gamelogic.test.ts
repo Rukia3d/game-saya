@@ -167,11 +167,12 @@ test("Adds npc correctly if it's not present and doesn't have a dialogue", () =>
   expect(res.npcs[2].id).toBe("olija");
 });
 
-test.skip("Adds hero correctly if actions requires it", () => {
+test("Adds hero correctly if actions requires it", () => {
   const action = [
     {
       type: "addHero" as "addHero",
       id: "nell",
+      data: "fire",
     },
   ];
   const game = JSON.parse(JSON.stringify(gameState));
@@ -179,9 +180,7 @@ test.skip("Adds hero correctly if actions requires it", () => {
     id: "base_hit" + n,
     name: "Base Hit " + n,
     strength: 1,
-    character: "nell",
-    default: n > 0 ? "default" : undefined,
-    element: null,
+    element: "fire",
     image: "",
     mana: 0,
     selected: true,
@@ -194,5 +193,5 @@ test.skip("Adds hero correctly if actions requires it", () => {
   const newPlayer = { ...game.player, heroes: game.heroes.slice(0, 2) };
   const res = finishStory({ ...game, player: newPlayer }, action);
   expect(res.heroes.length).toBe(3);
-  expect(res.cards.length).toBe(17);
+  expect(res.cards.length).toBe(18);
 });

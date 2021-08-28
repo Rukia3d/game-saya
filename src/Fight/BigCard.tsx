@@ -1,25 +1,30 @@
 import React from "react";
 import "./Fight.css";
-import { Enemy, Spell } from "../utils/types";
+import { elementType, Enemy, Spell } from "../utils/types";
 
 export const BigCard = ({
+  element,
   card,
   setInfo,
 }: {
+  element: elementType;
   card: Spell;
   setInfo: (s: Spell | Enemy | null) => void;
 }) => {
+  const baseClass = card.owner === "enemy" ? "EnemyCard" : "HeroCard";
   return (
     <div
-      className={card.owner === "enemy" ? "EnemyCard" : "HeroCard"}
+      className={`${baseClass} ${card.element === element ? "trump" : null}`}
       aria-label="display_card"
     >
       <p>{card.name}</p>
-      <p>Belongs to {card.owner}</p>
+      <p>
+        Element {card.element}, Strength {card.strength}
+      </p>
       <p>
         <img
           className="BigCardImage"
-          src={card.image}
+          src={`../img/Spells/${card.image}.jpg`}
           alt={`spellimage_${card.id}`}
         />
       </p>

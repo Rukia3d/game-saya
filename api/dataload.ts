@@ -122,9 +122,10 @@ const heroInitialSpellSet = (db: SpellDB[]) => {
   const spells = [];
   for (let x = 0; x < db.length; x++) {
     const card = db[x];
-    if (parseInt(card.strength) <= 2) {
-      spells.push(card);
-      spells.push(card);
+    if (parseInt(card.strength) === 1) {
+      [0, 1, 2].map((i: number) => spells.push(card));
+    } else if (parseInt(card.strength) === 2) {
+      [0, 1].map((j: number) => spells.push(card));
     } else {
       spells.push(card);
     }
