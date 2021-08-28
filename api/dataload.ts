@@ -24,6 +24,7 @@ import {
   StoryGroupDB,
 } from "./db_types";
 import { getStoryActions, getStoryCharacters } from "./helpers";
+import { generateInt } from "../src/utils/helpers";
 const parse = require("csv-parse/lib/sync");
 const fs = require("fs");
 const path = "../src/data/";
@@ -108,14 +109,37 @@ const getStoryGroups = (a: AdventureDB): StoryGroup[] => {
   return storyGroups;
 };
 
+const fillSpellSet = (set: EnemyCardDB[], life: number) => {
+  const spells = [];
+  for (let x = 0; x < life; x++) {
+    const card = set[generateInt(set.length)];
+    spells.push(card);
+  }
+  return spells;
+};
+
+const heroInitialSpellSet = (db: SpellDB[]) => {
+  const spells = [];
+  for (let x = 0; x < db.length; x++) {
+    const card = db[x];
+    if (parseInt(card.strength) <= 2) {
+      spells.push(card);
+      spells.push(card);
+    } else {
+      spells.push(card);
+    }
+  }
+  return spells;
+};
+
 const getEnemySpells = (e: EnemyDB) => {
   const spell: Spell[] = [];
-  const inputECards = fs.readFileSync(path + "Story Data - DB_EnemyCards.csv");
+  const inputECards = fs.readFileSync(path + "Story Data - DB_Cards.csv");
   const enemyCardDB: EnemyCardDB[] = parse(inputECards, options);
-  const spellList = e.cards.split(", ");
-  const spells = spellList.map((l: string) =>
-    enemyCardDB.find((spell: EnemyCardDB) => spell.id === l)
+  const spellSet = enemyCardDB.filter(
+    (c: EnemyCardDB) => c.element === e.element
   );
+  const spells = fillSpellSet(spellSet, parseInt(e.life));
   for (let x = 0; x < spells.length; x++) {
     const currentSpell = spells[x];
     if (!currentSpell) throw new Error(`Can't find a spell for ${e.id}`);
@@ -208,21 +232,22 @@ export const readHeroes = (): Character[] => {
 
 export const readSpells = (): Spell[] => {
   const spells: Spell[] = [];
-  const inputSpells = fs.readFileSync(path + "Story Data - DB_HeroCards.csv");
+  const inputSpells = fs.readFileSync(path + "Story Data - DB_Cards.csv");
   const spellDB: SpellDB[] = parse(inputSpells, options);
-  for (let i = 0; i < spellDB.length; i++) {
+  const parsedSpells = heroInitialSpellSet(spellDB);
+  for (let i = 0; i < parsedSpells.length; i++) {
     spells[i] = {
-      id: spellDB[i].id,
-      image: spellDB[i].image,
-      name: spellDB[i].name,
-      strength: parseInt(spellDB[i].strength),
-      mana: parseInt(spellDB[i].mana),
+      id: parsedSpells[i].id,
+      image: parsedSpells[i].image,
+      name: parsedSpells[i].name,
+      strength: parseInt(parsedSpells[i].strength),
+      mana: 0,
       selected: false,
-      element: spellDB[i].element as elementType,
+      element: parsedSpells[i].element as elementType,
       owner: "hero",
-      type: spellDB[i].type,
+      type: "base",
       level: 0,
-      description: spellDB[i].description,
+      description: parsedSpells[i].description,
     };
   }
   return spells;

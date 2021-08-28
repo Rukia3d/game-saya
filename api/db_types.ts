@@ -42,7 +42,6 @@ export interface EnemyDB {
   element: string;
   life: string;
   exp: string;
-  cards: string;
 }
 export interface EnemyCardDB {
   id: string;
