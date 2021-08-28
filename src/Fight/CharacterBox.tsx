@@ -25,7 +25,7 @@ export const CharacterBox = ({
       </div>
       <div className="Enemy" onClick={enemyAct} aria-label="opponent">
         <img
-          src={`../img/Enemies/${fightState.enemy.id}`}
+          src={`../img/Enemies/${fightState.enemy.id}.png`}
           alt={fightState.enemy.name}
         />
       </div>

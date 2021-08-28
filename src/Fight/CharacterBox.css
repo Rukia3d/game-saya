@@ -13,3 +13,7 @@
   border: 1px solid black;
   height: 80%;
 }
+
+.Enemy img {
+  height: 100%;
+}

@@ -50,11 +50,11 @@ export const Fight = () => {
   if (!enemy) {
     throw new Error(`Can't find the enemy ${enemyId}`);
   }
-  const heroDeck = generateDeck(storyCharacters, player.cards); //shuffle(generateDeck());
+  const heroDeck = shuffle(generateDeck(storyCharacters, player.cards));
   if (heroDeck.length === 0) {
     throw new Error(`Couldn't generate cards for player`);
   }
-  const enemyDeck = generateEnemyDeck(enemy); //shuffle(generateEnemyDeck());
+  const enemyDeck = shuffle(generateEnemyDeck(enemy)); //shuffle(generateEnemyDeck());
   const enemyHealt = enemyDeck.length;
   if (enemyHealt < 1) {
     throw new Error(`Couldn't generate cards for enemy`);

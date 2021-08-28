@@ -22,7 +22,7 @@ export const StoryPanel = ({
   }
 
   const activateStory = (s: Story) => {
-    console.log("Activate");
+    console.log("Activating", s);
     loadStory(s);
   };
 
