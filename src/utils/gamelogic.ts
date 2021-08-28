@@ -303,7 +303,7 @@ export const finishStory = (
   game: GameState,
   actions: StoryAction[]
 ): Player => {
-  actions.map((a: StoryAction) => console.log("Action", a));
+  //actions.map((a: StoryAction) => console.log("Action", a));
   let player = game.player;
   for (let i = 0; i < actions.length; i++) {
     const action = actions[i];
