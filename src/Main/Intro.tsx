@@ -5,6 +5,7 @@ import { GameContext } from "../App";
 import { findDialogue } from "../utils/helpers";
 
 const CharacterIcon = ({ hero }: { hero: CharacterNPC }) => {
+  console.log("Draw Ci for", hero);
   const context = useContext(GameContext);
   if (!context || !context.gameState) {
     throw new Error("No data in context");
@@ -29,7 +30,10 @@ export const Intro = () => {
     throw new Error("No data in context");
   }
   const characters = context.gameState.player.npcs;
-  const activeHeroes = characters.filter((c: CharacterNPC) => c.dial !== null);
+  const activeHeroes = characters.filter(
+    (c: CharacterNPC) => c.dial !== "null"
+  );
+  console.log("activeHeroes", activeHeroes);
   return (
     <div className="Intro">
       <div className="IntroBackgroundBorder">
@@ -49,11 +53,9 @@ export const Intro = () => {
           />
         ))}
         <div className="IntroActive">
-          {activeHeroes.length > 0
-            ? activeHeroes.map((c: CharacterNPC, i: number) => (
-                <CharacterIcon key={i} hero={c} />
-              ))
-            : null}
+          {activeHeroes.map((c: CharacterNPC, i: number) => (
+            <CharacterIcon key={i} hero={c} />
+          ))}
         </div>
       </div>
     </div>

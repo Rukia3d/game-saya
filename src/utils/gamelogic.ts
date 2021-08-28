@@ -226,7 +226,6 @@ const updatePlayerStory = (
   adventures: Adventure[],
   action: StoryAction
 ): Adventure[] => {
-  console.log("updatePlayerStory");
   const adventuresection = adventures.find(
     (a: Adventure) => action.id === a.id
   );
@@ -326,6 +325,5 @@ export const finishStory = (
         throw new Error("Unknown action is called in finishing story");
     }
   }
-  console.log(player.adventures[0]);
   return player;
 };
