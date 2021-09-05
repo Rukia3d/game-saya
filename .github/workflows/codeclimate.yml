@@ -21,12 +21,6 @@ jobs:
       - name: Install packages frontend
         run: npm install
 
-      - name: Install packages backend
-        run: cd api && npm install
-
-      - name: Start backend API
-        run: cd api && npx ts-node --project tsconfig-node.json scripts.ts
-
       - name: Run tests and build a report
         run: |
           curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter

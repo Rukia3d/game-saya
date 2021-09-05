@@ -2,9 +2,25 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import App from "../App";
+import { gameState } from "../utils/testobjects";
 
 const mainMenuActiveStyle = "background-color: aquamarine;";
 const mainMenuInActiveStyle = "background-color: lightgrey;";
+
+// This is the section where we mock `fetch`
+const unmockedFetch = global.fetch;
+
+beforeAll(() => {
+  global.fetch = () =>
+    //@ts-ignore
+    Promise.resolve({
+      json: () => Promise.resolve(gameState),
+    });
+});
+
+afterAll(() => {
+  global.fetch = unmockedFetch;
+});
 
 test("Renders App Start Screen", async () => {
   render(<App />);
@@ -118,18 +134,13 @@ test("Renders Story screen and loads the story", async () => {
   expect(await screen.findByText("Start")).toBeInTheDocument();
   userEvent.click(screen.getByRole("button", { name: "PLAY" }));
   userEvent.click(screen.getByText("ADVENTURES"));
-  userEvent.click(screen.getByAltText("adventure_story"));
-  expect(screen.getByAltText("story_olija_dialogue1")).toHaveAttribute(
+  userEvent.click(screen.getByLabelText("adventure_border_story"));
+  expect(screen.getByAltText("story_dialogue1")).toHaveAttribute(
     "src",
-    expect.stringContaining("dialogue_1.jpg")
+    expect.stringContaining("dialogue1.jpg")
   );
-  expect(screen.getByAltText("story_t_f_arena")).toHaveAttribute(
+  expect(screen.getByAltText("story_arena1")).toHaveAttribute(
     "src",
-    expect.stringContaining("arena_1.jpg")
+    expect.stringContaining("arena1.jpg")
   );
-
-  // Click on inactive panel doesn't have an effect
-  userEvent.click(screen.getByAltText("story_olija_dialogue1"));
-  expect(screen.queryByText(/Your opponent/)).not.toBeInTheDocument();
-  expect(screen.getByAltText("character_image_maya")).toBeInTheDocument();
 });

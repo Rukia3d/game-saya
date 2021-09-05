@@ -34,21 +34,21 @@ export const stories: StoryGroup[] = [];
       {
         id: "dialogue" + i,
         type: "dialogue",
-        image: "",
+        image: "dialogue" + i,
         open: true,
         action: [],
       },
       {
         id: "dialogue1" + i,
         type: "dialogue",
-        image: "",
+        image: "dialogue1" + i,
         open: true,
         action: [],
       },
       {
         id: "arena" + i,
         type: "fight",
-        image: "",
+        image: "arena" + i,
         enemy: "dude",
         open: false,
         characters: ["maya", "tara"],
@@ -71,7 +71,7 @@ advFormat.forEach((obj: [string, boolean]) =>
   adventures.push({
     id: obj[0] as adventureType,
     name: obj[0],
-    image: "",
+    image: `${obj[0]}.jpg`,
     open: obj[1],
     form: obj[0],
     stories: stories,
