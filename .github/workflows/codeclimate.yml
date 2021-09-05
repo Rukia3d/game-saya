@@ -22,7 +22,7 @@ jobs:
         run: npm install
 
       - name: Start backend API
-        run: npx ts-node --project tsconfig-node.json api/scripts.ts &
+        run: cd api && npx ts-node --project tsconfig-node.json scripts.ts &
 
       - name: Run tests and build a report
         run: |
