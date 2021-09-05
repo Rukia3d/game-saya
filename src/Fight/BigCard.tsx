@@ -17,20 +17,21 @@ export const BigCard = ({
       className={`${baseClass} ${card.element === element ? "trump" : null}`}
       aria-label="display_card"
     >
-      <p>{card.name}</p>
-      <p>
+      <div>{card.name}</div>
+      <div>
         Element {card.element}, Strength {card.strength}
-      </p>
-      <p>
-        <img
-          className="BigCardImage"
-          src={`../img/Spells/${card.image}.jpg`}
-          alt={`spellimage_${card.id}`}
-        />
-      </p>
-      <p>
+      </div>
+      {/* <div className="CardElement">
+        <CardElement size="m" element={card.element} />
+      </div> */}
+      <img
+        className="BigCardImage"
+        src={`../img/Spells/${card.image}.jpg`}
+        alt={`spellimage_${card.id}`}
+      />
+      <div>
         <button onClick={() => setInfo(card)}>Info</button>
-      </p>
+      </div>
     </div>
   );
 };

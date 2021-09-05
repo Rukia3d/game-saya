@@ -3,12 +3,6 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import App from "../App";
 
-import { cache } from "swr";
-
-afterEach(() => {
-  cache.clear();
-});
-
 const mainMenuActiveStyle = "background-color: aquamarine;";
 const mainMenuInActiveStyle = "background-color: lightgrey;";
 
@@ -35,7 +29,7 @@ test("Main Menu buttons switch works", async () => {
   expect(await screen.findByText("PLAY")).toBeInTheDocument();
   userEvent.click(screen.getByRole("button", { name: "PLAY" }));
   expect(screen.getByAltText("intro_background")).toBeInTheDocument();
-  expect(screen.getByText("INTRO")).toHaveAttribute(
+  expect(screen.getByText("CITY")).toHaveAttribute(
     "style",
     mainMenuActiveStyle
   );
@@ -45,17 +39,17 @@ test("Renders Main screen for existing player with Hero menu active", async () =
   render(<App />);
   expect(await screen.findByText("PLAY")).toBeInTheDocument();
   userEvent.click(screen.getByRole("button", { name: "PLAY" }));
-  expect(screen.getByText("INTRO")).toBeInTheDocument();
+  expect(screen.getByText("CITY")).toBeInTheDocument();
   expect(screen.getByAltText("intro_background")).toBeInTheDocument();
   expect(screen.getByText("ADVENTURES")).toBeInTheDocument();
-  expect(screen.getByText("SPELLS")).toBeInTheDocument();
+  expect(screen.getByText("LIBRARY")).toBeInTheDocument();
   expect(screen.getByText("SHOP")).toBeInTheDocument();
   expect(screen.getByAltText("hero_maya")).toHaveAttribute(
     "src",
     expect.stringContaining("maya.png")
   );
   // Correct button is highlighted
-  expect(screen.getByText("INTRO")).toHaveAttribute(
+  expect(screen.getByText("CITY")).toHaveAttribute(
     "style",
     mainMenuActiveStyle
   );
@@ -63,7 +57,7 @@ test("Renders Main screen for existing player with Hero menu active", async () =
     "style",
     mainMenuInActiveStyle
   );
-  expect(screen.getByText("SPELLS")).toHaveAttribute(
+  expect(screen.getByText("LIBRARY")).toHaveAttribute(
     "style",
     mainMenuInActiveStyle
   );
@@ -73,7 +67,7 @@ test("Renders Main screen for existing player with Hero menu active", async () =
   );
   // Switch the screen - correct button is highlighted
   userEvent.click(screen.getByText("ADVENTURES"));
-  expect(screen.getByText("INTRO")).toHaveAttribute(
+  expect(screen.getByText("CITY")).toHaveAttribute(
     "style",
     mainMenuInActiveStyle
   );
@@ -81,7 +75,7 @@ test("Renders Main screen for existing player with Hero menu active", async () =
     "style",
     mainMenuActiveStyle
   );
-  expect(screen.getByText("SPELLS")).toHaveAttribute(
+  expect(screen.getByText("LIBRARY")).toHaveAttribute(
     "style",
     mainMenuInActiveStyle
   );

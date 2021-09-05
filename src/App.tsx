@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import useSWR from "swr";
+import useSWRImmutable from "swr/immutable";
 import "./App.css";
 
 import { Fight } from "./Fight/Fight";
@@ -28,13 +28,24 @@ export const GameContext = React.createContext<undefined | GameContextType>(
 );
 
 function App() {
-  const { data, error } = useSWR("/api/player/", fetcher);
+  const { data, error } = useSWRImmutable("/api/player/", fetcher);
 
   const [showStart, setShowStart] = useState(true);
   const [adventure, setAdventure] = useState<null | Adventure>(null);
   const [story, setStory] = useState<null | Story>(null);
-  const [gameState, setGameState] = useState<GameState>(data);
+  const [gameState, setGameStateOrigin] = useState<GameState>(data);
   const [dialogue, setDialogue] = useState<null | Dialogue>(null);
+
+  const setGameState = (state: GameState) => {
+    console.log("DEBUG");
+    if (state) {
+      // console.log(
+      //   //@ts-ignore
+      //   JSON.parse(JSON.stringify(state.player.adventures[0].stories[0]))
+      // );
+      setGameStateOrigin(state);
+    }
+  };
 
   useEffect(() => {
     setGameState(data);

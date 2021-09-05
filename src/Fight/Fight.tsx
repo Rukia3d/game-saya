@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "./Fight.css";
 
 import { InfoCard } from "../UI/InfoCard";
@@ -26,6 +26,7 @@ import { enemyAttack } from "../utils/fightlogic";
 import { FightResult } from "./FightResult";
 import { GameContext } from "../App";
 import { BigCard } from "./BigCard";
+import { generateReward } from "../utils/resourceLogic";
 
 export const Fight = () => {
   const context = useContext(GameContext);
@@ -88,6 +89,37 @@ export const Fight = () => {
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [info, setInfo] = useState<null | Spell | Enemy>(null);
 
+  useEffect(() => {
+    const gameState = context.gameState;
+    const rewards = generateReward(enemy);
+
+    if (!gameState) throw new Error("Can't update the fight results");
+
+    if (result === "Won" && rewards) {
+      if (
+        context.gameState &&
+        context.gameState.player &&
+        context.story?.action
+      )
+        context.setGameState({
+          ...gameState,
+          player: finishStory(context.gameState, context.story?.action),
+        });
+
+      context.setGameState({
+        ...gameState,
+        player: updateWinPlayer(gameState.player, enemy, rewards),
+      });
+    }
+
+    if (result === "Lost") {
+      context.setGameState({
+        ...gameState,
+        player: updateLostPlayer(gameState.player),
+      });
+    }
+  }, [result, context, enemy]);
+
   const enemyAct = () => {
     const spell = fightState.enemyDeck[0] || null;
     setEnemyCard(spell);
@@ -112,38 +144,14 @@ export const Fight = () => {
     }, 1000);
   };
 
-  const finishFight = (resource: Resource[]) => {
-    // TODO finidh fight when the result is detected, not onClick
+  const finishFight = () => {
     console.warn("Fight is finished");
-    const gameState = context.gameState;
-
-    if (!gameState) throw new Error("Can't update the fight results");
-
-    if (result === "Won") {
-      if (
-        context.gameState &&
-        context.gameState.player &&
-        context.story?.action
-      )
-        context.setGameState({
-          ...gameState,
-          player: finishStory(context.gameState, context.story?.action),
-        });
-
-      context.setGameState({
-        ...gameState,
-        player: updateWinPlayer(gameState.player, enemy, resource),
-      });
-    }
-    if (result === "Lost") {
-      context.setGameState({
-        ...gameState,
-        player: updateLostPlayer(gameState.player),
-      });
-    }
-
     context.backToStory();
   };
+  // console.log(
+  //   "game state FIGHT",
+  //   JSON.parse(JSON.stringify(context.gameState?.adventures[0].stories))
+  // );
   return (
     <div className="Fight">
       <SettingsButton onClick={() => setSettingsOpen(!settingsOpen)} />

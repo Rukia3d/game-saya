@@ -35,7 +35,7 @@ const Resources = ({ resources }: { resources: OwnedResource[] }) => {
 
 const Life = ({ max, current }: { max: number; current: number }) => {
   return (
-    <div className="Stats">
+    <div className="HeroStats">
       <div className="Heart" aria-label="life_icon"></div>
       <div
         className="StatsValue"
@@ -50,7 +50,7 @@ const Life = ({ max, current }: { max: number; current: number }) => {
 
 const Mana = ({ max, current }: { max: number; current: number }) => {
   return (
-    <div className="Stats">
+    <div className="HeroStats">
       <div className="Lightning" aria-label="mana_icon"></div>
       <div
         className="StatsValue"

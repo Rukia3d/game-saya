@@ -64,6 +64,11 @@ export const Dialogues = () => {
       });
     context.setDialogue(null);
   };
+  // console.log(
+  //   "game state DIALOGUE",
+  //   //@ts-ignore
+  //   JSON.parse(JSON.stringify(context.gameState?.adventures[0].stories[0]))
+  // );
   return (
     <div className="Dialogues" aria-label="dialogue_background">
       <CloseButton onClick={context.backToStory} />

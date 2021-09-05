@@ -30,6 +30,9 @@ export const HeroCardLevelFrame = ({ card }: { card: Spell }) => {
   return (
     <>
       {frame ? frame : null}
+      {/* <div className="CardElement">
+        <CardElement size="s" element={card.element} />
+      </div> */}
       <img
         className="SmallCardImage"
         src={`../img/Spells/${card.image}.jpg`}

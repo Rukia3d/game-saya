@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "./Stories.css";
 
 import { CloseButton } from "../UI/CloseButton";
@@ -50,6 +50,7 @@ export const StoryPanel = ({
 export const Stories = () => {
   const context = useContext(GameContext);
   const STORIESPERPAGE = 3;
+
   if (!context || !context.gameState || !context.adventure) {
     throw new Error("No data in context");
   }
@@ -81,6 +82,11 @@ export const Stories = () => {
   const numberOfPages = Math.ceil(
     context.adventure.stories.length / STORIESPERPAGE
   );
+  // console.log(
+  //   "game state STORIES",
+  //   //@ts-ignore
+  //   JSON.parse(JSON.stringify(context.gameState?.adventures[0].stories[0]))
+  // );
   return (
     <div className="Stories" aria-label="story_background">
       <CloseButton onClick={context.backToMain} />

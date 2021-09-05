@@ -1,8 +1,5 @@
 import React from "react";
-import "./Chest.scss";
 
-// Letter: https://codepen.io/jakegilesphillips/pen/MveNLe
-// Temp chest from codepen so we have some images
 export const Chest = () => {
   return (
     <div className="letter-image" aria-label="chest_animation">

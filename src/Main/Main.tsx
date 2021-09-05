@@ -10,16 +10,16 @@ import { Adventures } from "./Adventures";
 import { Spells } from "./Spells";
 import { Shop } from "./Shop";
 
-type mainScreenState = "intro" | "heroes" | "adventures" | "spells" | "shop";
+type mainScreenState = "city" | "heroes" | "adventures" | "library" | "shop";
 
 type MainScreensType = {
   [key in mainScreenState]: React.FC;
 };
 const mainScreens: MainScreensType = {
-  intro: Intro,
+  city: Intro,
   heroes: Heroes,
   adventures: Adventures,
-  spells: Spells,
+  library: Spells,
   shop: Shop,
 };
 
@@ -56,10 +56,10 @@ const MainMenu = ({
   return (
     <div className="MainMenu">
       {[
-        "intro" as "intro",
+        "city" as "city",
         "heroes" as "heroes",
         "adventures" as "adventures",
-        "spells" as "spells",
+        "library" as "library",
         "shop" as "shop",
       ].map((s: mainScreenState, i: number) => (
         <MainMenuButton
@@ -74,7 +74,7 @@ const MainMenu = ({
 };
 
 export const Main = () => {
-  const [selected, setSelected] = useState<mainScreenState>("intro");
+  const [selected, setSelected] = useState<mainScreenState>("city");
   const [settingsOpen, setSettingsOpen] = useState(false);
 
   const changeScreen = (screen: mainScreenState) => {

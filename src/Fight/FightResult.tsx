@@ -40,14 +40,14 @@ export const FightResult = ({
 }: {
   enemy: Enemy;
   result: String;
-  finishFight: (r: Resource[]) => void;
+  finishFight: () => void;
 }) => {
   const rewards = generateReward(enemy);
   return (
     <div className="FightResult">
       <p>You {result}</p>
       {result === "Won" ? <ResourceChest resource={rewards} /> : <LifeLost />}
-      <button data-testid="exit_fight" onClick={() => finishFight(rewards)}>
+      <button data-testid="exit_fight" onClick={finishFight}>
         exit
       </button>
     </div>
