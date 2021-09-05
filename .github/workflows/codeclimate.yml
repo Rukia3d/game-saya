@@ -25,7 +25,7 @@ jobs:
         run: cd api && npm install
 
       - name: Start backend API
-        run: cd api && npx ts-node --project tsconfig-node.json scripts.ts &
+        run: cd api && npx ts-node --project tsconfig-node.json scripts.ts
 
       - name: Run tests and build a report
         run: |
