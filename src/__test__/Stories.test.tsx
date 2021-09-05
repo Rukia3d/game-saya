@@ -5,6 +5,7 @@ import { GameContext } from "../App";
 import userEvent from "@testing-library/user-event";
 import { gameState } from "../utils/testobjects";
 
+const setDialogue = jest.fn();
 const context = {
   adventure: gameState.adventures[1],
   setAdventure: jest.fn(),
@@ -12,13 +13,14 @@ const context = {
   setStory: jest.fn(),
   gameState: gameState,
   dialogue: null,
-  setDialogue: jest.fn(),
+  setDialogue: setDialogue,
   setGameState: jest.fn(),
   backToMain: jest.fn(),
   backToStory: jest.fn(),
 };
 
 test("Stories renders StoryPanels for adventure", async () => {
+  gameState.dialogues[0].id = "dialogue1";
   render(
     <GameContext.Provider value={context}>
       <Stories />
@@ -33,6 +35,8 @@ test("Stories renders StoryPanels for adventure", async () => {
   expect(screen.getAllByTestId("scroll_button").length).toEqual(1);
   userEvent.click(screen.getByTestId("scroll_button"));
   expect(screen.getByLabelText("stories_list").children.length).toEqual(4);
+  userEvent.click(screen.getByAltText("story_dialogue1"));
+  expect(setDialogue.mock.calls.length).toBe(1);
 });
 
 test("Throws error if no data provided in context", () => {
