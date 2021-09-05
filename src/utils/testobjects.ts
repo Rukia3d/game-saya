@@ -36,12 +36,14 @@ export const stories: StoryGroup[] = [];
         type: "dialogue",
         image: "",
         open: true,
+        action: [],
       },
       {
         id: "dialogue1" + i,
         type: "dialogue",
         image: "",
         open: true,
+        action: [],
       },
       {
         id: "arena" + i,
@@ -51,6 +53,7 @@ export const stories: StoryGroup[] = [];
         open: false,
         characters: ["maya", "tara"],
         name: "Arena",
+        action: [],
       },
     ],
   })
@@ -82,6 +85,7 @@ export const story = {
   enemy: "test-dude",
   open: true,
   characters: ["maya", "tara"],
+  action: [],
 };
 
 export const mayaCard: Spell = {

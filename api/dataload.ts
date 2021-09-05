@@ -80,7 +80,7 @@ const getGroupStories = (currentGroup: StoryGroupDB): Story[] => {
           : undefined,
         action: currentStory.actions
           ? getStoryActions(currentStory.actions)
-          : undefined,
+          : [],
       };
     }
   }

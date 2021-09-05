@@ -17,7 +17,7 @@ const SpellPanel = ({
   return (
     <div className="SpellPanel" onClick={() => setElement(element)}>
       <img
-        src={`../img/${element}_spells.png`}
+        src={`../img/Spells/${element}_spellsAll.png`}
         alt={`image_${element}_spells`}
       />
     </div>

@@ -105,7 +105,7 @@ export interface Story {
   open: boolean;
   enemy?: string;
   characters?: string[];
-  action?: StoryAction[];
+  action: StoryAction[];
 }
 
 export interface ForgeReq {

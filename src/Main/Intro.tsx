@@ -10,7 +10,7 @@ const CharacterIcon = ({ hero }: { hero: CharacterNPC }) => {
     throw new Error("No data in context");
   }
   const dialogue = findDialogue(context.gameState.dialogues, hero.dial);
-  const stateToImage = `../img/${hero.id}_story.jpg`;
+  const stateToImage = `../img/NPCs/${hero.id}_story.jpg`;
   return (
     <div
       className="IntroIconBorder"
@@ -45,7 +45,7 @@ export const Intro = () => {
         {characters.map((c: CharacterNPC, i: number) => (
           <img
             className="IntroImage"
-            src={c.image}
+            src={`../img/NPCs/${c.image}.png`}
             alt={`hero_${c.id}`}
             key={i}
           />

@@ -49,7 +49,7 @@ export const Heroes = () => {
         {heroes.map((c: Character, i: number) => (
           <img
             className={`HeroImage ${c.selected ? "active" : "inactive"}`}
-            src={c.image}
+            src={`../img/Heroes/${c.image}.png`}
             alt={`hero_${c.id}`}
             key={i}
             onClick={() => characterSelection(c)}

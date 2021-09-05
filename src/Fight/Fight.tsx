@@ -88,37 +88,30 @@ export const Fight = () => {
   const [result, setResult] = useState<null | String>(null);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [info, setInfo] = useState<null | Spell | Enemy>(null);
+  const [rewards, setRewards] = useState<null | Resource[]>(null);
 
-  useEffect(() => {
-    const gameState = context.gameState;
-    const rewards = generateReward(enemy);
+  // useEffect(() => {
+  //   console.log("Use effect");
+  //   const gameState = context.gameState;
+  //   const story = context.story;
+  //   if (!gameState || !story) throw new Error("Can't update the fight results");
+  //   const actions = story.action;
 
-    if (!gameState) throw new Error("Can't update the fight results");
+  //   if (result === "Won" && rewards) {
+  //     const player = finishStory(gameState, actions);
+  //     context.setGameState({
+  //       ...gameState,
+  //       player: updateWinPlayer(player, enemy, rewards),
+  //     });
+  //   }
 
-    if (result === "Won" && rewards) {
-      if (
-        context.gameState &&
-        context.gameState.player &&
-        context.story?.action
-      )
-        context.setGameState({
-          ...gameState,
-          player: finishStory(context.gameState, context.story?.action),
-        });
-
-      context.setGameState({
-        ...gameState,
-        player: updateWinPlayer(gameState.player, enemy, rewards),
-      });
-    }
-
-    if (result === "Lost") {
-      context.setGameState({
-        ...gameState,
-        player: updateLostPlayer(gameState.player),
-      });
-    }
-  }, [result, context, enemy]);
+  //   if (result === "Lost") {
+  //     context.setGameState({
+  //       ...gameState,
+  //       player: updateLostPlayer(gameState.player),
+  //     });
+  //   }
+  // }, [result, context, enemy, rewards]);
 
   const enemyAct = () => {
     const spell = fightState.enemyDeck[0] || null;
@@ -139,6 +132,9 @@ export const Fight = () => {
         setResult("Lost");
       }
       if (fightState.enemyDrop.length === enemyHealt - 1) {
+        console.log("Generate rewards");
+        const rewards = generateReward(enemy);
+        setRewards(rewards);
         setResult("Won");
       }
     }, 1000);
@@ -146,6 +142,25 @@ export const Fight = () => {
 
   const finishFight = () => {
     console.warn("Fight is finished");
+    const gameState = context.gameState;
+    const story = context.story;
+    if (!gameState || !story) throw new Error("Can't update the fight results");
+    const actions = story.action;
+
+    if (result === "Won" && rewards) {
+      const player = finishStory(gameState, actions);
+      context.setGameState({
+        ...gameState,
+        player: updateWinPlayer(player, enemy, rewards),
+      });
+    }
+
+    if (result === "Lost") {
+      context.setGameState({
+        ...gameState,
+        player: updateLostPlayer(gameState.player),
+      });
+    }
     context.backToStory();
   };
   // console.log(
@@ -175,7 +190,7 @@ export const Fight = () => {
         <FightResult
           finishFight={finishFight}
           result={result}
-          enemy={fightState.enemy}
+          rewards={rewards}
         />
       ) : null}
       <CharacterBox

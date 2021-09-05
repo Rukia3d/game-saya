@@ -16,10 +16,8 @@
 }
 
 .SpellPanel {
-  border: 1px solid black;
   height: 90%;
   margin-left: 1em;
-  width: 100px;
   top: 3em;
   z-index: 1;
   overflow: hidden;
