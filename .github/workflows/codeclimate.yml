@@ -18,8 +18,11 @@ jobs:
         with:
           node-version: 16
 
-      - name: Install packages
+      - name: Install packages frontend
         run: npm install
+
+      - name: Install packages backend
+        run: cd api && npm install
 
       - name: Start backend API
         run: cd api && npx ts-node --project tsconfig-node.json scripts.ts &
