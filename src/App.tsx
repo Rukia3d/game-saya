@@ -37,7 +37,7 @@ function App() {
   const [dialogue, setDialogue] = useState<null | Dialogue>(null);
 
   const setGameState = (state: GameState) => {
-    console.log("DEBUG");
+    console.log("DEBUG", state);
     if (state) {
       // console.log(
       //   //@ts-ignore
