@@ -7,7 +7,10 @@ import {
   elementType,
   Enemy,
   enemyExpLevel,
+  Resource,
   Spell,
+  spellEffectType,
+  SpellUpdate,
   Story,
   StoryGroup,
 } from "../src/utils/types";
@@ -22,9 +25,15 @@ import {
   SpellDB,
   StoryDB,
   StoryGroupDB,
+  ResourceDB,
+  UpdateSpellDB,
 } from "./db_types";
-import { getStoryActions, getStoryCharacters } from "./helpers";
-import { generateInt } from "../src/utils/helpers";
+import {
+  getResourceSet,
+  getSpellSet,
+  getStoryActions,
+  getStoryCharacters,
+} from "./helpers";
 const parse = require("csv-parse/lib/sync");
 const fs = require("fs");
 const path = "../src/data/";
@@ -109,15 +118,6 @@ const getStoryGroups = (a: AdventureDB): StoryGroup[] => {
   return storyGroups;
 };
 
-const fillSpellSet = (set: EnemyCardDB[], life: number) => {
-  const spells = [];
-  for (let x = 0; x < life; x++) {
-    const card = set[generateInt(set.length)];
-    spells.push(card);
-  }
-  return spells;
-};
-
 const heroInitialSpellSet = (db: SpellDB[]) => {
   const spells = [];
   for (let x = 0; x < db.length; x++) {
@@ -140,7 +140,7 @@ const getEnemySpells = (e: EnemyDB) => {
   const spellSet = enemyCardDB.filter(
     (c: EnemyCardDB) => c.element === e.element
   );
-  const spells = fillSpellSet(spellSet, parseInt(e.life));
+  const spells = getSpellSet(spellSet, parseInt(e.life));
   for (let x = 0; x < spells.length; x++) {
     const currentSpell = spells[x];
     if (!currentSpell) throw new Error(`Can't find a spell for ${e.id}`);
@@ -177,6 +177,42 @@ export const readDialogues = (): Dialogue[] => {
   return dialogues;
 };
 
+export const readResources = (): Resource[] => {
+  const resources: Resource[] = [];
+  const inputResource = fs.readFileSync(path + "Story Data - DB_Resources.csv");
+  const resourceDB: ResourceDB[] = parse(inputResource, options);
+  for (let i = 0; i < resourceDB.length; i++) {
+    // Transform data from DB into game Dialogue format
+    resources[i] = {
+      id: resourceDB[i].id,
+      name: resourceDB[i].name,
+      commonality: parseInt(resourceDB[i].commonality),
+      image: resourceDB[i].image,
+    };
+  }
+  return resources;
+};
+
+export const readSpellUpdates = (): SpellUpdate[] => {
+  const updates: SpellUpdate[] = [];
+  const inputSpellUpdate = fs.readFileSync(
+    path + "Story Data - DB_Library.csv"
+  );
+  const updateSpellDB: UpdateSpellDB[] = parse(inputSpellUpdate, options);
+  for (let i = 0; i < updateSpellDB.length; i++) {
+    // Transform data from DB into game Dialogue format
+    updates[i] = {
+      element: updateSpellDB[i].element as elementType,
+      mana: parseInt(updateSpellDB[i].mana),
+      resource_base: getResourceSet(updateSpellDB[i].resource_base),
+      effect: updateSpellDB[i].effect as spellEffectType,
+      action: updateSpellDB[i].action,
+      price: updateSpellDB[i].price,
+    };
+  }
+  return updates;
+};
+
 export const readAdventures = (): Adventure[] => {
   const adventures: Adventure[] = [];
   const inputAdv = fs.readFileSync(path + "Story Data - DB_Adventures.csv");
@@ -209,7 +245,7 @@ export const readEnemies = (): Enemy[] => {
       name: enemyDB[i].name,
       element: enemyDB[i].element as elementType,
       experience: enemyDB[i].exp as enemyExpLevel,
-      cards: enemyCards,
+      spells: enemyCards,
       life: parseInt(enemyDB[i].life),
     };
   }

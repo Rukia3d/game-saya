@@ -4,6 +4,23 @@ export interface DialogueDB {
   linesList: string;
   action: string;
 }
+
+export interface ResourceDB {
+  id: string;
+  name: string;
+  commonality: string;
+  image: string;
+}
+
+export interface UpdateSpellDB {
+  element: string;
+  mana: string;
+  resource_base: string;
+  effect: string;
+  action: string;
+  price: string;
+}
+
 export interface LineDB {
   dialogueId: string;
   id: string;

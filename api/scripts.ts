@@ -1,4 +1,4 @@
-import { GameState, Spell } from "../src/utils/types";
+import { GameState, Spell, SpellUpdate } from "../src/utils/types";
 import {
   readDialogues,
   readAdventures,
@@ -6,6 +6,8 @@ import {
   readHeroes,
   readSpells,
   readNpcs,
+  readResources,
+  readSpellUpdates,
 } from "./dataload";
 
 const express = require("express");
@@ -13,17 +15,14 @@ const cors = require("cors");
 const app = express();
 const port = 3001;
 app.use(cors());
-const spellUpdates = require("../src/data/spellUpdates.json");
-const playerResources = require("../src/data/resources.json");
-const forge = require("../src/data/forge.json");
-const rewards = require("../src/data/rewards.json");
-
 const dialogues = readDialogues();
 const adventures = readAdventures();
 const enemies = readEnemies();
 const heroes = readHeroes();
 const spells = readSpells();
 const npcs = readNpcs();
+const resources = readResources();
+const spellUpdates = readSpellUpdates();
 
 app.get("/api/player/", (req: any, res: any) => {
   console.log("Requesting new player game data");
@@ -51,21 +50,22 @@ app.get("/api/player/", (req: any, res: any) => {
       },
       npcs: playerNpcs,
       heroes: playerHeroes,
-      cards: playerCards,
-      cardUpdates: spellUpdates,
+      spells: playerCards,
+      spellUpdates: spellUpdates.filter(
+        (s: SpellUpdate) => s.element === "earth"
+      ),
       adventures: playerAdventures,
-      resources: playerResources,
+      resources: [],
       enemies: playerEnemies,
     },
     dialogues: dialogues,
     npcs: npcs,
     heroes: heroes,
-    forgeEffects: forge,
     adventures: adventures,
     enemies: enemies,
-    resources: rewards.resources,
-    cards: spells,
-    cardUpdates: spellUpdates,
+    resources: resources,
+    spells: spells,
+    spellUpdates: spellUpdates,
   };
   res.send(gameState);
 });

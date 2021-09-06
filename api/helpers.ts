@@ -1,4 +1,6 @@
-import { effectValue, storyChangeType } from "../src/utils/types";
+import { generateInt } from "../src/utils/helpers";
+import { SpellUpdateResource, storyChangeType } from "../src/utils/types";
+import { EnemyCardDB } from "./db_types";
 
 export const getStoryCharacters = (characters: string) => {
   // Characters in DB are two names separated by coma
@@ -19,7 +21,21 @@ export const getStoryActions = (actions: string) => {
   return res;
 };
 
-export const getSpellEffect = (effect: string): [effectValue, number] => {
-  const eff = effect.split(",");
-  return [eff[0] as effectValue, parseInt(eff[1])];
+export const getResourceSet = (data: string): SpellUpdateResource[] => {
+  const res: SpellUpdateResource[] = [];
+  const allResources = data.split(", ");
+  allResources.forEach((resource: string) => {
+    const price = resource.split(": ");
+    res.push([price[0], parseInt(price[1])]);
+  });
+  return res;
+};
+
+export const getSpellSet = (set: EnemyCardDB[], life: number) => {
+  const spells = [];
+  for (let x = 0; x < life; x++) {
+    const card = set[generateInt(set.length)];
+    spells.push(card);
+  }
+  return spells;
 };
