@@ -1,8 +1,8 @@
-import { STORIES_PER_PANEL } from "../Main/Stories";
+import { STORIES_PER_PANEL } from "../Stories/Stories";
 import { givePlayerResources } from "./resourceLogic";
 import {
   Adventure,
-  Character,
+  Hero,
   CharacterNPC,
   Enemy,
   FightState,
@@ -190,7 +190,7 @@ export const updateWinPlayer = (
 
 const updatePlayerNpcs = (
   npcs: CharacterNPC[],
-  allNpcs: Character[],
+  allNpcs: Hero[],
   action: StoryAction
 ): CharacterNPC[] => {
   const npc = npcs.find((n: CharacterNPC) => action.id === n.id);
@@ -198,7 +198,7 @@ const updatePlayerNpcs = (
     throw new Error("NPC dialogue data to change is invalid");
   }
   if (!npc) {
-    const npcToAdd = allNpcs.find((n: Character) => action.id === n.id);
+    const npcToAdd = allNpcs.find((n: Hero) => action.id === n.id);
     if (!npcToAdd) {
       throw new Error("Can't find npc to add to the Intro screen");
     }
@@ -250,11 +250,11 @@ const updatePlayerAdventures = (
 };
 
 const updatePlayerHeroes = (
-  heroes: Character[],
-  allHeroes: Character[],
+  heroes: Hero[],
+  allHeroes: Hero[],
   action: StoryAction
 ) => {
-  const hero = allHeroes.find((h: Character) => action.id === h.id);
+  const hero = allHeroes.find((h: Hero) => action.id === h.id);
   if (!hero || heroes.indexOf(hero) !== -1) {
     throw new Error(`Can't add a hero ${action.id}`);
   }

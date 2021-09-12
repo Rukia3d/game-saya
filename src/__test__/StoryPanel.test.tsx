@@ -1,8 +1,8 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import { StoryPanel } from "../Main/Stories";
 import { gameState, stories } from "../utils/testobjects";
 import { GameContext } from "../App";
+import { StoryPanel } from "../Stories/Stories";
 
 const context = {
   adventure: gameState.adventures[1],
@@ -11,6 +11,8 @@ const context = {
   setStory: jest.fn(),
   gameState: gameState,
   dialogue: null,
+  character: null,
+  setCharacter: jest.fn(),
   setDialogue: jest.fn(),
   setGameState: jest.fn(),
   backToMain: jest.fn(),

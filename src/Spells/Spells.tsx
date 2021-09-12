@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { CloseButton } from "./CloseButton";
-import "./Library.css";
+import "./Spells.css";
 import { HeroSpell } from "../Fight/HeroSpellWithInfo";
 import {
   achievedResource,
@@ -11,6 +10,7 @@ import { GameContext } from "../App";
 import { cardUpdateRaise, updatedCards } from "../utils/gamelogic";
 import { removeResources } from "../utils/resourceLogic";
 import { elementType, Spell, SpellUpdate } from "../utils/types";
+import { CloseButton } from "../UI/CloseButton";
 const MAXUPGRADES = 5;
 
 // const HeroSpellRequirements = ({ card }: { card: Spell }) => {
@@ -126,7 +126,7 @@ const HeroSpellOptions = ({
 //   );
 // };
 
-export const Library = ({
+export const Spells = ({
   item,
   setForge,
 }: {

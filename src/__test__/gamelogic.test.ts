@@ -189,7 +189,7 @@ test("Adds hero correctly if actions requires it", () => {
     level: 0,
     description: "",
   }));
-  game.cards = game.cards.concat(nellCards);
+  game.spells = game.spells.concat(nellCards);
   const newPlayer = { ...game.player, heroes: game.heroes.slice(0, 2) };
   const res = finishStory({ ...game, player: newPlayer }, action);
   expect(res.heroes.length).toBe(3);

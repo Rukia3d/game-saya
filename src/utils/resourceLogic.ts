@@ -40,7 +40,7 @@ export const generateReward = (enemy: Enemy, resources: Resource[]) => {
   for (let i = 0; i < max; i++) {
     rewards.push(generateSingleRewards(resources));
   }
-  console.log("generateReward", rewards);
+  //console.log("generateReward", rewards);
   return rewards;
 };
 

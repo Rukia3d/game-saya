@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import "./Heroes.css";
-import { Character } from "../utils/types";
+import { Hero } from "../utils/types";
 import { GameContext } from "../App";
 import { TopMenu } from "../UI/TopMenu";
 
@@ -11,11 +11,11 @@ export const Heroes = () => {
   }
   const heroes = context.gameState.player.heroes;
 
-  const characterSelection = (c: Character) => {
+  const characterSelection = (c: Hero) => {
     const i = heroes.indexOf(c);
-    const currentlySelected = heroes.filter((c: Character) => c.selected);
+    const currentlySelected = heroes.filter((c: Hero) => c.selected);
     if (currentlySelected.length > 2) {
-      const firstSelected = heroes.find((c: Character) => c.selected);
+      const firstSelected = heroes.find((c: Hero) => c.selected);
       if (!firstSelected)
         throw new Error("Can't find another selected character");
       const j = heroes.indexOf(firstSelected);
@@ -25,7 +25,7 @@ export const Heroes = () => {
     saveCharacterChanges(heroes);
   };
 
-  const saveCharacterChanges = (heroes: Character[]) => {
+  const saveCharacterChanges = (heroes: Hero[]) => {
     const newPlayer = context.gameState && {
       ...context.gameState.player,
       heroes: heroes,
@@ -46,7 +46,7 @@ export const Heroes = () => {
       </div>
       <TopMenu />
       <div className="HeroesPresent">
-        {heroes.map((c: Character, i: number) => (
+        {heroes.map((c: Hero, i: number) => (
           <img
             className={`HeroImage ${c.selected ? "active" : "inactive"}`}
             src={`../img/Heroes/${c.image}.png`}

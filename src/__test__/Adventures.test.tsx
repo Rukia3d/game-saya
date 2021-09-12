@@ -13,6 +13,8 @@ const context = {
   setStory: jest.fn(),
   gameState: gameState,
   dialogue: null,
+  character: null,
+  setCharacter: jest.fn(),
   setDialogue: jest.fn(),
   setGameState: jest.fn(),
   backToMain: jest.fn(),

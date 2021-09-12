@@ -8,7 +8,7 @@ import { InfoCard } from "../UI/InfoCard";
 import { HeroSpellWithInfo } from "../Fight/HeroSpellWithInfo";
 import { GameContext } from "../App";
 import { changeCardsInDeck } from "../utils/gamelogic";
-import { Library } from "../UI/Library";
+import { Spells } from "./Spells";
 
 export const ElementSpells = ({
   element,
@@ -45,7 +45,7 @@ export const ElementSpells = ({
       <h1>{`${element.charAt(0).toUpperCase() + element.slice(1)} spells`}</h1>
       <CloseButton onClick={() => setElement(null)} />
       {info ? <InfoCard item={info} setInfo={setInfo} /> : null}
-      {forge ? <Library item={forge} setForge={setForge} /> : null}
+      {forge ? <Spells item={forge} setForge={setForge} /> : null}
       <div className="AllCharacterSpells" aria-label="character_spells">
         {spells.map((c: Spell, i: number) => (
           <HeroSpellWithInfo

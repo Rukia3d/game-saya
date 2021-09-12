@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from "react";
 import useSWRImmutable from "swr/immutable";
 import "./App.css";
+import { Character } from "./Characters/Character";
+import { Dialogues } from "./Dialogues/Dialogues";
 
 import { Fight } from "./Fight/Fight";
-import { Dialogues } from "./Main/Dialogues";
 import { Main } from "./Main/Main";
 import { Start } from "./Main/Start";
-import { Stories } from "./Main/Stories";
+import { Stories } from "./Stories/Stories";
 
 import { fetcher } from "./utils/helpers";
-import { Adventure, Dialogue, GameState, Story } from "./utils/types";
+import { Adventure, Hero, Dialogue, GameState, Story } from "./utils/types";
 
 export interface GameContextType {
   adventure: Adventure | null;
@@ -20,6 +21,8 @@ export interface GameContextType {
   setGameState: (g: GameState) => void;
   dialogue: Dialogue | null;
   setDialogue: (d: Dialogue | null) => void;
+  character: Hero | null;
+  setCharacter: (c: Hero | null) => void;
   backToMain: () => void;
   backToStory: () => void;
 }
@@ -35,6 +38,7 @@ function App() {
   const [story, setStory] = useState<null | Story>(null);
   const [gameState, setGameStateOrigin] = useState<GameState>(data);
   const [dialogue, setDialogue] = useState<null | Dialogue>(null);
+  const [character, setCharacter] = useState<null | Hero>(null);
 
   const setGameState = (state: GameState) => {
     console.log("DEBUG");
@@ -61,7 +65,7 @@ function App() {
     setDialogue(null);
   };
 
-  const context = {
+  const context: GameContextType = {
     adventure: adventure,
     setAdventure: setAdventure,
     story: story,
@@ -70,6 +74,8 @@ function App() {
     setGameState: setGameState,
     dialogue: dialogue,
     setDialogue: setDialogue,
+    character: character,
+    setCharacter: setCharacter,
     backToMain: backToMain,
     backToStory: backToStory,
   };
@@ -90,6 +96,7 @@ function App() {
         {adventure ? <Stories /> : null}
         {story ? <Fight /> : null}
         {dialogue ? <Dialogues /> : null}
+        {character ? <Character /> : null}
       </div>
     </GameContext.Provider>
   );

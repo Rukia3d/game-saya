@@ -16,6 +16,8 @@ test("Renders Top menu with high mana and life", () => {
         setStory: jest.fn(),
         gameState: { ...gameState, player: newPlayer },
         dialogue: null,
+        character: null,
+        setCharacter: jest.fn(),
         setDialogue: jest.fn(),
         setGameState: jest.fn(),
         backToMain: jest.fn(),
@@ -51,6 +53,8 @@ test("Renders Top menu with medium mana", () => {
         setStory: jest.fn(),
         gameState: gameState,
         dialogue: null,
+        character: null,
+        setCharacter: jest.fn(),
         setDialogue: jest.fn(),
         setGameState: jest.fn(),
         backToMain: jest.fn(),
@@ -81,6 +85,8 @@ test("Renders Top menu with low mana", () => {
         setStory: jest.fn(),
         gameState: { ...gameState, player: newPlayer },
         dialogue: null,
+        character: null,
+        setCharacter: jest.fn(),
         setDialogue: jest.fn(),
         setGameState: jest.fn(),
         backToMain: jest.fn(),
@@ -100,6 +106,18 @@ test("Renders Top menu with low mana", () => {
 });
 
 test("Renders Top menu with resources", () => {
+  const resources = [
+    { id: "ash", name: "Ash", image: "ash", commonality: 10, quantity: 5 },
+    {
+      id: "lava_r",
+      name: "Lava Rock",
+      image: "lava_r",
+      commonality: 7,
+      quantity: 3,
+    },
+  ];
+  const newPlayerResources = { ...gameState.player, resources: resources };
+  const newGameState = { ...gameState, player: newPlayerResources };
   render(
     <GameContext.Provider
       value={{
@@ -107,8 +125,10 @@ test("Renders Top menu with resources", () => {
         setAdventure: jest.fn(),
         story: null,
         setStory: jest.fn(),
-        gameState: gameState,
+        gameState: newGameState,
         dialogue: null,
+        character: null,
+        setCharacter: jest.fn(),
         setDialogue: jest.fn(),
         setGameState: jest.fn(),
         backToMain: jest.fn(),
@@ -119,8 +139,7 @@ test("Renders Top menu with resources", () => {
     </GameContext.Provider>
   );
   expect(screen.getByLabelText("top_resources")).toBeInTheDocument();
-  expect(screen.getAllByLabelText("top_resource").length).toEqual(3);
-  expect(screen.getByText(/Gold/)).toBeInTheDocument();
-  expect(screen.getByText(/Dimonds/)).toBeInTheDocument();
-  expect(screen.getByText(/Iron/)).toBeInTheDocument();
+  expect(screen.getAllByLabelText("top_resource").length).toEqual(2);
+  expect(screen.getByText(/Ash/)).toBeInTheDocument();
+  expect(screen.getByText(/Lava Rock/)).toBeInTheDocument();
 });

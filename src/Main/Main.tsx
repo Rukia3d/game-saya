@@ -4,10 +4,10 @@ import "./Main.css";
 import { Settings } from "../UI/Settings";
 import { SettingsButton } from "../UI/SettingsButton";
 
-import { Intro } from "./Intro";
+import { City } from "./City";
 import { Heroes } from "./Heroes";
 import { Adventures } from "./Adventures";
-import { Spells } from "./Spells";
+import { Library } from "./Library";
 import { Shop } from "./Shop";
 
 type mainScreenState = "city" | "heroes" | "adventures" | "library" | "shop";
@@ -16,10 +16,10 @@ type MainScreensType = {
   [key in mainScreenState]: React.FC;
 };
 const mainScreens: MainScreensType = {
-  city: Intro,
+  city: City,
   heroes: Heroes,
   adventures: Adventures,
-  library: Spells,
+  library: Library,
   shop: Shop,
 };
 

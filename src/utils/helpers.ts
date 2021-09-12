@@ -1,10 +1,10 @@
 import {
-  Character,
   Dialogue,
   OwnedResource,
   Spell,
   Story,
   StoryGroup,
+  Hero,
 } from "./types";
 
 //@ts-ignore
@@ -45,11 +45,11 @@ export const findDialogue = (dialogues: Dialogue[], dialId: string | null) => {
   return res;
 };
 
-export const findActiveCharacters = (heroes: Character[]) => {
+export const findActiveCharacters = (heroes: Hero[]) => {
   if (heroes.length < 3) {
     throw new Error("Issues with heroes");
   }
-  const active = heroes.filter((c: Character) => c.selected === true);
+  const active = heroes.filter((c: Hero) => c.selected === true);
   let i = 0;
   while (active.length < 3) {
     if (!heroes[i].selected) {
@@ -57,11 +57,11 @@ export const findActiveCharacters = (heroes: Character[]) => {
     }
     i++;
   }
-  return active.map((c: Character) => c.id);
+  return active.map((c: Hero) => c.id);
 };
 
-export const findCharacter = (characters: Character[], charId: string) => {
-  const res = characters.find((c: Character) => c.id === charId);
+export const findCharacter = (characters: Hero[], charId: string) => {
+  const res = characters.find((c: Hero) => c.id === charId);
   if (!res) throw new Error(`Couldn't find a character ${charId}`);
   return res;
 };

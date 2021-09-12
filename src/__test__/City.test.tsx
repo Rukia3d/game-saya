@@ -1,10 +1,9 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import { Intro } from "../Main/Intro";
+import { City } from "../Main/City";
 import { GameContext } from "../App";
 import { gameState } from "../utils/testobjects";
 import userEvent from "@testing-library/user-event";
-import { CharacterNPC } from "../utils/types";
 
 const context = {
   adventure: null,
@@ -13,6 +12,8 @@ const context = {
   setStory: jest.fn(),
   gameState: gameState,
   dialogue: null,
+  character: null,
+  setCharacter: jest.fn(),
   setDialogue: jest.fn(),
   setGameState: jest.fn(),
   backToMain: jest.fn(),
@@ -22,7 +23,7 @@ const context = {
 test("Renders Heroes screen with characters ready for a dialogue", () => {
   render(
     <GameContext.Provider value={context}>
-      <Intro />
+      <City />
     </GameContext.Provider>
   );
   expect(screen.getByAltText("intro_background")).toBeInTheDocument();
@@ -35,7 +36,7 @@ test("Renders Heroes screen with characters ready for a dialogue", () => {
 test("Dialogue is triggered when clicking on panel and closes correctly", () => {
   render(
     <GameContext.Provider value={context}>
-      <Intro />
+      <City />
     </GameContext.Provider>
   );
   expect(screen.getByAltText("intro_background")).toBeInTheDocument();
@@ -49,7 +50,7 @@ test("Throws error if no data provided in context", () => {
   expect(() =>
     render(
       <GameContext.Provider value={context1}>
-        <Intro />
+        <City />
       </GameContext.Provider>
     )
   ).toThrow("No data in context");

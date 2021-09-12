@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import "./Intro.css";
+import "./City.css";
 import { CharacterNPC } from "../utils/types";
 import { GameContext } from "../App";
 import { findDialogue } from "../utils/helpers";
@@ -23,7 +23,7 @@ const CharacterIcon = ({ hero }: { hero: CharacterNPC }) => {
   );
 };
 
-export const Intro = () => {
+export const City = () => {
   const context = useContext(GameContext);
   if (!context || !context.gameState) {
     throw new Error("No data in context");

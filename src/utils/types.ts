@@ -13,7 +13,7 @@ export interface Spell {
 }
 
 export type OwnedResource = Resource & { quantity: number };
-export type CharacterNPC = Character & { dial: string | null };
+export type CharacterNPC = Hero & { dial: string | null };
 
 export type SpellUpdateResource = [string, number];
 
@@ -37,7 +37,7 @@ export interface Player {
     maxMana: number;
   };
   npcs: CharacterNPC[];
-  heroes: Character[];
+  heroes: Hero[];
   spells: Spell[];
   spellUpdates: SpellUpdate[];
   adventures: Adventure[];
@@ -51,10 +51,10 @@ export interface GameState {
   enemies: Enemy[];
   resources: Resource[];
   spells: Spell[];
-  heroes: Character[];
+  heroes: Hero[];
   spellUpdates: SpellUpdate[];
   adventures: Adventure[];
-  npcs: Character[];
+  npcs: Hero[];
 }
 
 export interface DialogueLine {
@@ -77,7 +77,7 @@ export interface StoryAction {
   data?: string | null;
 }
 
-export interface Character {
+export interface Hero {
   id: string;
   name: string;
   image: string;

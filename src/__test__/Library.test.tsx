@@ -1,10 +1,10 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import { Spells } from "../Main/Spells";
+import { Library } from "../Main/Library";
 import { GameContext } from "../App";
 import userEvent from "@testing-library/user-event";
 import { gameState, baseCards15 } from "../utils/testobjects";
-import { Spell } from "../utils/types";
+import { GameState, Spell } from "../utils/types";
 
 const mayaSpells: Spell[] = new Array(3).fill(0).map((x, n) => ({
   ...baseCards15[0],
@@ -15,14 +15,14 @@ const mayaSpells: Spell[] = new Array(3).fill(0).map((x, n) => ({
 
 const taraSpells: Spell[] = new Array(3).fill(0).map((x, n) => ({
   ...baseCards15[0],
-  id: "base_hit" + n,
-  name: "Base Hit " + n,
+  id: "some" + n,
+  name: "Some Hit " + n,
   element: "metal",
 }));
-
-const newGameState = {
+const newSpells = mayaSpells.concat(taraSpells);
+const newGameState: GameState = {
   ...JSON.parse(JSON.stringify(gameState)),
-  player: { ...gameState.player, cards: mayaSpells.concat(taraSpells) },
+  player: { ...gameState.player, spells: newSpells },
 };
 
 const context = {
@@ -33,6 +33,8 @@ const context = {
   gameState: newGameState,
   setGameState: jest.fn(),
   dialogue: null,
+  character: null,
+  setCharacter: jest.fn(),
   setDialogue: jest.fn(),
   backToMain: jest.fn(),
   backToStory: jest.fn(),
@@ -41,7 +43,7 @@ const context = {
 test("Renders Hero Spells", () => {
   render(
     <GameContext.Provider value={context}>
-      <Spells />
+      <Library />
     </GameContext.Provider>
   );
   expect(screen.getByAltText("image_earth_spells")).toBeInTheDocument();

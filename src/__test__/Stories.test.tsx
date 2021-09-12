@@ -1,9 +1,9 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import { Stories } from "../Main/Stories";
 import { GameContext } from "../App";
 import userEvent from "@testing-library/user-event";
 import { gameState } from "../utils/testobjects";
+import { Stories } from "../Stories/Stories";
 
 const setDialogue = jest.fn();
 const context = {
@@ -13,6 +13,8 @@ const context = {
   setStory: jest.fn(),
   gameState: gameState,
   dialogue: null,
+  character: null,
+  setCharacter: jest.fn(),
   setDialogue: setDialogue,
   setGameState: jest.fn(),
   backToMain: jest.fn(),

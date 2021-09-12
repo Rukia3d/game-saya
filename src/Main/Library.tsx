@@ -1,11 +1,11 @@
 import React, { useContext, useState } from "react";
 import { GameContext } from "../App";
+import { ElementSpells } from "../Spells/ElementSpells";
 import { TopMenu } from "../UI/TopMenu";
 import { elementType, Spell } from "../utils/types";
-import { ElementSpells } from "./ElementSpells";
-import "./Spells.css";
+import "./Library.css";
 
-const SpellPanel = ({
+const LibraryPanel = ({
   element,
   image,
   setElement,
@@ -24,7 +24,7 @@ const SpellPanel = ({
   );
 };
 
-export const Spells = () => {
+export const Library = () => {
   const context = useContext(GameContext);
   if (!context || !context.gameState) {
     throw new Error("No data");
@@ -54,7 +54,7 @@ export const Spells = () => {
       <TopMenu />
       <div className="SpellsList">
         {elements.sort().map((s: elementType, i: number) => (
-          <SpellPanel key={i} element={s} image setElement={setElement} />
+          <LibraryPanel key={i} element={s} image setElement={setElement} />
         ))}
       </div>
     </div>
