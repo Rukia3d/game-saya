@@ -1,7 +1,7 @@
 import {
   Adventure,
   adventureType,
-  Character,
+  Hero,
   Dialogue,
   DialogueLine,
   elementType,
@@ -253,8 +253,8 @@ export const readEnemies = (): Enemy[] => {
   return enemies;
 };
 
-export const readHeroes = (): Character[] => {
-  const heroes: Character[] = [];
+export const readHeroes = (): Hero[] => {
+  const heroes: Hero[] = [];
   const inputHeroes = fs.readFileSync(path + "Story Data - DB_Heroes.csv");
   const heroDB: HeroDB[] = parse(inputHeroes, options);
   for (let i = 0; i < heroDB.length; i++) {
@@ -263,6 +263,7 @@ export const readHeroes = (): Character[] => {
       name: heroDB[i].name,
       image: heroDB[i].image,
       selected: false,
+      element: heroDB[i].element as elementType,
     };
   }
   return heroes;
@@ -291,8 +292,8 @@ export const readSpells = (): Spell[] => {
   return spells;
 };
 
-export const readNpcs = (): Character[] => {
-  const npcs: Character[] = [];
+export const readNpcs = (): Hero[] => {
+  const npcs: Hero[] = [];
   const inputNpcs = fs.readFileSync(path + "Story Data - DB_NPCs.csv");
   const npcDB: NpcDB[] = parse(inputNpcs, options);
   for (let i = 0; i < npcDB.length; i++) {

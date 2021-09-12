@@ -13,6 +13,7 @@ import {
   FightState,
   Resource,
   elementType,
+  StoryAction,
 } from "../utils/types";
 import { findActiveCharacters, shuffle } from "../utils/helpers";
 import {
@@ -147,7 +148,6 @@ export const Fight = () => {
     const story = context.story;
     if (!gameState || !story) throw new Error("Can't update the fight results");
     const actions = story.action;
-
     if (result === "Won" && rewards) {
       const player = finishStory(gameState, actions);
       context.setGameState({

@@ -2,7 +2,8 @@ import React, { useContext, useState } from "react";
 import { GameContext } from "../App";
 import { CloseButton } from "../UI/CloseButton";
 import { finishStory } from "../utils/gamelogic";
-import { DialogueLine } from "../utils/types";
+import { findCharacter } from "../utils/helpers";
+import { DialogueLine, Hero, StoryAction } from "../utils/types";
 import "./Dialogues.css";
 
 const DialogueLines = ({
@@ -47,21 +48,40 @@ export const Dialogues = () => {
     !context ||
     !context.gameState ||
     !context.dialogue ||
-    !context.setDialogue
+    !context.setDialogue ||
+    !context.gameState.heroes
   ) {
     throw new Error("No data");
   }
   const dialogue = context.dialogue;
+  const allHeroes = context.gameState.heroes;
+
+  const addHero = (actions: StoryAction[]) => {
+    const addingHero = actions.filter((a: StoryAction) => a.type === "addHero");
+    if (addingHero.length > 1)
+      throw new Error("Trying to add more than 1 hero");
+    if (addingHero.length === 1) {
+      const action = addingHero[0];
+      console.log("This action requires us to add a Hero");
+      const hero = findCharacter(allHeroes, action.id);
+      console.log("Hero", hero);
+      context.setCharacter(hero);
+    }
+  };
+
   const finishDialogue = () => {
     if (
       context.gameState &&
       context.gameState.player &&
       context.dialogue?.action
-    )
+    ) {
       context.setGameState({
         ...context.gameState,
         player: finishStory(context.gameState, context.dialogue?.action),
       });
+      addHero(context.dialogue?.action);
+    }
+
     context.setDialogue(null);
   };
   // console.log(

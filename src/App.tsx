@@ -64,7 +64,6 @@ function App() {
     setStory(null);
     setDialogue(null);
   };
-
   const context: GameContextType = {
     adventure: adventure,
     setAdventure: setAdventure,

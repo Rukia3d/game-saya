@@ -1,0 +1,22 @@
+.CharacterFull {
+  position: absolute;
+  top: 1em;
+  left: 1em;
+  border: 5px solid palevioletred;
+  background-color: pink;
+  width: 95%;
+  height: 95%;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  align-items: center;
+}
+
+.CharacterFullSpells {
+  display: flex;
+}
+
+.CharacterFullUpdates {
+  display: flex;
+}

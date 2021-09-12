@@ -73,6 +73,7 @@ export interface HeroDB {
   id: string;
   name: string;
   image: string;
+  element: string;
 }
 export interface SpellDB {
   owner: string;

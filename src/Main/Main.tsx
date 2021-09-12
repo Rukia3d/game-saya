@@ -83,7 +83,6 @@ export const Main = () => {
   };
 
   const CurrentScreen = mainScreens[selected];
-
   return (
     <div className="Main">
       <SettingsButton onClick={() => setSettingsOpen(!settingsOpen)} />

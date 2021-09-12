@@ -61,7 +61,7 @@ const HeroSpellDescription = ({ card }: { card: Spell }) => {
   );
 };
 
-const HeroSpellOptions = ({
+const HeroSpellUpdates = ({
   spellUpgrades,
 }: {
   spellUpgrades: SpellUpdate[];
@@ -69,9 +69,15 @@ const HeroSpellOptions = ({
   return (
     <div>
       {spellUpgrades.map((s: SpellUpdate) => (
-        <p>{s.name + " " + s.element + " " + s.resource_base}</p>
+        <HeroSpellUpdate update={s} />
       ))}
     </div>
+  );
+};
+
+export const HeroSpellUpdate = ({ update }: { update: SpellUpdate }) => {
+  return (
+    <div>{update.name + " " + update.element + " " + update.resource_base}</div>
   );
 };
 
@@ -159,7 +165,7 @@ export const Spells = ({
     <div className="ForgeCard">
       <CloseButton onClick={() => setForge(null)} />
       <HeroSpellDescription card={item} />
-      <HeroSpellOptions spellUpgrades={applicableUpdates} />
+      <HeroSpellUpdates spellUpgrades={applicableUpdates} />
       {/*       <HeroSpellRequirements card={item} />
       <HeroSpellUpdate card={item} forge={forge} /> */}
     </div>

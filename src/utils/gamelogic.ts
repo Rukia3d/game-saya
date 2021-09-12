@@ -1,4 +1,5 @@
 import { STORIES_PER_PANEL } from "../Stories/Stories";
+import { findCharacter } from "./helpers";
 import { givePlayerResources } from "./resourceLogic";
 import {
   Adventure,
@@ -12,6 +13,7 @@ import {
   Spell,
   Story,
   StoryAction,
+  SpellUpdate,
 } from "./types";
 
 export const changeCardsInDeck = (playerCards: Spell[], s: Spell) => {
@@ -254,10 +256,7 @@ const updatePlayerHeroes = (
   allHeroes: Hero[],
   action: StoryAction
 ) => {
-  const hero = allHeroes.find((h: Hero) => action.id === h.id);
-  if (!hero || heroes.indexOf(hero) !== -1) {
-    throw new Error(`Can't add a hero ${action.id}`);
-  }
+  const hero = findCharacter(allHeroes, action.id);
   heroes.push(hero);
   return heroes;
 };
@@ -270,6 +269,20 @@ const updatePlayerCards = (
   const spellsToAdd = allSpells.filter((s: Spell) => s.element === action.data);
   const newSpells = spells.concat(spellsToAdd);
   return newSpells;
+};
+
+const updatePlayerSpellUpdates = (
+  updates: SpellUpdate[],
+  allUpdates: SpellUpdate[],
+  action: StoryAction
+) => {
+  console.log("Old updates:", updates);
+  const updatesToAdd = allUpdates.filter(
+    (s: SpellUpdate) => s.element === action.data
+  );
+  const newUpdates = updates.concat(updatesToAdd);
+  console.log("New updates:", newUpdates);
+  return newUpdates;
 };
 
 const findStoryToUpdate = (
@@ -315,6 +328,11 @@ export const finishStory = (
       case "addHero":
         player.heroes = updatePlayerHeroes(player.heroes, game.heroes, action);
         player.spells = updatePlayerCards(player.spells, game.spells, action);
+        player.spellUpdates = updatePlayerSpellUpdates(
+          player.spellUpdates,
+          game.spellUpdates,
+          action
+        );
         break;
       default:
         throw new Error("Unknown action is called in finishing story");
