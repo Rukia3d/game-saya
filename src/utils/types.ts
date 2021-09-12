@@ -4,7 +4,6 @@ export interface Spell {
   name: string;
   strength: number;
   mana: number;
-  effects?: SpellEffect[];
   selected: boolean;
   element: elementType;
   owner: "hero" | "enemy";
@@ -13,14 +12,20 @@ export interface Spell {
   description: string;
 }
 
-export interface SpellEffect {
-  effect: effectValue;
-  strength: number;
-}
-export type effectValue = "heal" | "remove";
-
 export type OwnedResource = Resource & { quantity: number };
 export type CharacterNPC = Character & { dial: string | null };
+
+export type SpellUpdateResource = [string, number];
+
+export interface SpellUpdate {
+  element: elementType;
+  mana: number;
+  resource_base: SpellUpdateResource[];
+  effect: spellEffectType;
+  action: string;
+  price: string;
+  name: string;
+}
 
 export interface Player {
   data: {
@@ -33,8 +38,8 @@ export interface Player {
   };
   npcs: CharacterNPC[];
   heroes: Character[];
-  cards: Spell[];
-  cardUpdates: ForgeReq[];
+  spells: Spell[];
+  spellUpdates: SpellUpdate[];
   adventures: Adventure[];
   enemies: Enemy[];
   resources: OwnedResource[];
@@ -45,10 +50,9 @@ export interface GameState {
   dialogues: Dialogue[];
   enemies: Enemy[];
   resources: Resource[];
-  cards: Spell[];
+  spells: Spell[];
   heroes: Character[];
-  forgeEffects: ForgeEffect[];
-  cardUpdates: ForgeReq[];
+  spellUpdates: SpellUpdate[];
   adventures: Adventure[];
   npcs: Character[];
 }
@@ -108,25 +112,13 @@ export interface Story {
   action: StoryAction[];
 }
 
-export interface ForgeReq {
-  itemType: string;
-  updates: [resourceType, number][];
-  effect: "strengthen";
-}
-
-export interface ForgeEffect {
-  id: string;
-  parameter: "strength" | "mana";
-  change: number;
-}
-
 export interface Enemy {
   id: string;
   name: string;
   element: elementType;
   // exp defines how hard this enemy to kill
   experience: enemyExpLevel;
-  cards: Spell[];
+  spells: Spell[];
   // defines how many cards enemy is given
   life: number;
 }
@@ -149,7 +141,7 @@ export interface FightState {
 }
 
 export interface Resource {
-  id: resourceType;
+  id: string;
   name: string;
   image: string;
   commonality: number;
@@ -169,16 +161,19 @@ export type enemyExpLevel =
   | "master"
   | "grandmaster";
 export type elementType = "fire" | "earth" | "metal" | "water" | "air";
-export type resourceType =
-  | "gold"
-  | "iron"
-  | "dimond"
-  | "silk"
-  | "rdust"
-  | "rflower";
-
 export type storyChangeType =
   | "addNpc"
   | "setAdventure"
   | "openStory"
   | "addHero";
+
+export type spellEffectType =
+  | "h_heal"
+  | "h_trumppush"
+  | "h_trumpset"
+  | "h_redraw"
+  | "h_mana"
+  | "e_redraw"
+  | "e_drop"
+  | "e_reduice"
+  | "h_enforce";

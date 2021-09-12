@@ -1,7 +1,6 @@
 import {
   Character,
   Dialogue,
-  ForgeReq,
   OwnedResource,
   Spell,
   Story,
@@ -67,11 +66,8 @@ export const findCharacter = (characters: Character[], charId: string) => {
   return res;
 };
 
-export const findCardRequirements = (
-  forge: ForgeReq[],
-  card: Spell
-): ForgeReq => {
-  const res = forge.find((f: ForgeReq) => f.itemType === card.type);
+export const findCardRequirements = (forge: any, card: Spell): any => {
+  const res = forge.find((f: any) => f.itemType === card.type);
   if (!res) throw new Error(`Couldn't find a resource for ${card.type}`);
   return res;
 };

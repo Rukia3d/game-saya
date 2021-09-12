@@ -8,7 +8,7 @@ import { InfoCard } from "../UI/InfoCard";
 import { HeroSpellWithInfo } from "../Fight/HeroSpellWithInfo";
 import { GameContext } from "../App";
 import { changeCardsInDeck } from "../utils/gamelogic";
-import { ForgeCard } from "../UI/ForgeCard";
+import { Library } from "../UI/Library";
 
 export const ElementSpells = ({
   element,
@@ -25,12 +25,12 @@ export const ElementSpells = ({
     !context.gameState ||
     !context.setGameState ||
     !context.gameState.player ||
-    !context.gameState.player.cards
+    !context.gameState.player.spells
   ) {
     throw new Error("No data");
   }
   const player = context.gameState.player;
-  const playerCards = context.gameState.player.cards;
+  const playerCards = context.gameState.player.spells;
   const gameState = context.gameState;
   const [info, setInfo] = useState<null | Spell>(null);
   const [forge, setForge] = useState<null | Spell>(null);
@@ -45,7 +45,7 @@ export const ElementSpells = ({
       <h1>{`${element.charAt(0).toUpperCase() + element.slice(1)} spells`}</h1>
       <CloseButton onClick={() => setElement(null)} />
       {info ? <InfoCard item={info} setInfo={setInfo} /> : null}
-      {forge ? <ForgeCard item={forge} setForge={setForge} /> : null}
+      {forge ? <Library item={forge} setForge={setForge} /> : null}
       <div className="AllCharacterSpells" aria-label="character_spells">
         {spells.map((c: Spell, i: number) => (
           <HeroSpellWithInfo

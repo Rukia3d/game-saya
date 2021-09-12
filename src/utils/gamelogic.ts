@@ -6,16 +6,12 @@ import {
   CharacterNPC,
   Enemy,
   FightState,
-  ForgeEffect,
-  ForgeReq,
   GameState,
   Player,
   Resource,
-  resourceType,
   Spell,
   Story,
   StoryAction,
-  StoryGroup,
 } from "./types";
 
 export const changeCardsInDeck = (playerCards: Spell[], s: Spell) => {
@@ -51,7 +47,6 @@ export const generateDeck = (
       image: c.image,
       name: c.name,
       mana: c.mana,
-      effects: c.effects,
       strength: c.strength,
       element: c.element,
       owner: "hero",
@@ -66,13 +61,12 @@ export const generateDeck = (
 
 export const generateEnemyDeck = (enemy: Enemy): Spell[] => {
   const enemySpells: Spell[] = [];
-  enemy.cards.forEach((c: Spell) => {
+  enemy.spells.forEach((c: Spell) => {
     enemySpells.push({
       id: c.id,
       image: c.image,
       name: c.name,
       mana: c.mana,
-      effects: c.effects,
       strength: c.strength,
       element: c.element,
       owner: "enemy",
@@ -128,22 +122,22 @@ const givePlayerExperience = (player: Player, enemy: Enemy): Player => {
   };
 };
 
-const updateCardParameter = (spell: Spell, effect: ForgeEffect): Spell => {
-  spell[effect.parameter] = spell[effect.parameter] + effect.change;
+const updateCardParameter = (spell: Spell, effect: any): Spell => {
   return spell;
 };
 
-const findUpdateEffect = (forgeEffects: ForgeEffect[], effect: string) => {
-  const updateEffect = forgeEffects.find((f: ForgeEffect) => f.id === effect);
+const findUpdateEffect = (forgeEffects: any, effect: string) => {
+  const updateEffect = forgeEffects.find((f: any) => f.id === effect);
   if (!updateEffect) {
     throw new Error(`Can't find update effect ${effect}`);
   }
   return updateEffect;
 };
+
 export const updatedCards = (
-  forgeEffects: ForgeEffect[],
+  forgeEffects: any,
   s: Spell,
-  req: ForgeReq,
+  req: any,
   all: Spell[]
 ): Spell[] => {
   const index = all.indexOf(s);
@@ -157,25 +151,25 @@ export const updatedCards = (
 
 const raiseUpdate = (
   resouceData: Resource[],
-  s: [resourceType, number]
-): [resourceType, number] => {
+  s: [string, number]
+): [string, number] => {
   const multiplier: Resource | null =
     resouceData.find((r: Resource) => r.id === s[0]) || null;
   if (!multiplier) throw new Error(`Can't find multiplier for ${s[0]}`);
-  const res: [resourceType, number] = [s[0], s[1] * multiplier.commonality];
+  const res: [string, number] = [s[0], s[1] * multiplier.commonality];
   return res;
 };
 
 export const cardUpdateRaise = (
   resouceData: Resource[],
   type: string,
-  cardUpdates: ForgeReq[]
-): ForgeReq[] => {
-  const toUpdate = cardUpdates.find((f: ForgeReq) => f.itemType === type);
+  cardUpdates: any
+): any => {
+  const toUpdate = cardUpdates.find((f: any) => f.itemType === type);
   if (!toUpdate) throw new Error(`Can't find spell type ${type} to update`);
   const index = cardUpdates.indexOf(toUpdate);
-  const newUpdates: [resourceType, number][] = toUpdate.updates.map(
-    (s: [resourceType, number]) => raiseUpdate(resouceData, s)
+  const newUpdates: [any, number][] = toUpdate.updates.map((s: [any, number]) =>
+    raiseUpdate(resouceData, s)
   );
   cardUpdates[index] = { ...toUpdate, updates: newUpdates };
   return cardUpdates;
@@ -320,7 +314,7 @@ export const finishStory = (
         break;
       case "addHero":
         player.heroes = updatePlayerHeroes(player.heroes, game.heroes, action);
-        player.cards = updatePlayerCards(player.cards, game.cards, action);
+        player.spells = updatePlayerCards(player.spells, game.spells, action);
         break;
       default:
         throw new Error("Unknown action is called in finishing story");

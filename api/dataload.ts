@@ -208,6 +208,7 @@ export const readSpellUpdates = (): SpellUpdate[] => {
       effect: updateSpellDB[i].effect as spellEffectType,
       action: updateSpellDB[i].action,
       price: updateSpellDB[i].price,
+      name: updateSpellDB[i].name,
     };
   }
   return updates;

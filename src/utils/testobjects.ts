@@ -4,7 +4,6 @@ import {
   Dialogue,
   Enemy,
   FightState,
-  ForgeReq,
   GameState,
   Spell,
   StoryGroup,
@@ -122,7 +121,7 @@ export const enemy: Enemy = {
   element: "earth" as "earth",
   experience: "novice" as "novice",
   life: 2,
-  cards: [enemyCard, enemyCard],
+  spells: [enemyCard, enemyCard],
 };
 
 export const baseCards15: Spell[] = new Array(15).fill(0).map((x, n) => ({
@@ -139,7 +138,7 @@ export const baseCards15: Spell[] = new Array(15).fill(0).map((x, n) => ({
   description: "",
 }));
 
-export const spellUpdates: ForgeReq[] = [
+export const spellUpdates: any[] = [
   {
     itemType: "base_hit_maya",
     updates: [
@@ -190,37 +189,12 @@ export const gameState: GameState = {
       maxMana: 15,
     },
     npcs: playerNpcs,
-    cards: baseCards15,
-    cardUpdates: spellUpdates,
+    spells: baseCards15,
+    spellUpdates: spellUpdates,
     heroes: heroes,
     adventures: adventures,
     enemies: [enemy],
-    resources: [
-      { id: "gold", name: "Gold", image: "../", commonality: 2, quantity: 2 },
-      { id: "iron", name: "Iron", image: "../", commonality: 5, quantity: 10 },
-      {
-        id: "dimond",
-        name: "Dimonds",
-        image: "../",
-        commonality: 1,
-        quantity: 3,
-      },
-      { id: "silk", name: "Silk", image: "../", commonality: 2, quantity: 0 },
-      {
-        id: "rdust",
-        name: "Red dust",
-        image: "../",
-        commonality: 3,
-        quantity: 0,
-      },
-      {
-        id: "rflower",
-        name: "Red flower",
-        image: "../",
-        commonality: 4,
-        quantity: 0,
-      },
-    ],
+    resources: [],
   },
   adventures: adventures,
   enemies: [enemy],
@@ -234,20 +208,14 @@ export const gameState: GameState = {
     },
   ]),
   resources: [
-    { id: "gold", name: "Gold", image: "../", commonality: 2 },
-    { id: "iron", name: "Iron", image: "../", commonality: 10 },
-    { id: "dimond", name: "Dimonds", image: "../", commonality: 1 },
-    { id: "silk", name: "Silk", image: "../", commonality: 3 },
+    { id: "sparks", name: "Sparks", commonality: 2, image: "sparks" },
+    { id: "ash", name: "Ash", commonality: 10, image: "ash" },
+    { id: "lava_r", name: "Lava Rock", commonality: 7, image: "lava_r" },
+    { id: "liz", name: "Scale", commonality: 3, image: "lizard_s" },
+    { id: "char", name: "Charc", commonality: 5, image: "charcoal" },
   ],
-  cards: baseCards15,
-  cardUpdates: spellUpdates,
-  forgeEffects: [
-    {
-      id: "strengthen" as "strengthen",
-      parameter: "strength",
-      change: 1,
-    },
-  ],
+  spells: baseCards15,
+  spellUpdates: spellUpdates,
 };
 
 export const fightState: FightState = {

@@ -29,7 +29,7 @@ export const Spells = () => {
   if (!context || !context.gameState) {
     throw new Error("No data");
   }
-  const spells = context.gameState.player.cards;
+  const spells = context.gameState.player.spells;
 
   const [element, setElement] = useState<elementType | null>(null);
   const elements = spells

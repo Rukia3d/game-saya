@@ -19,6 +19,7 @@ export interface UpdateSpellDB {
   effect: string;
   action: string;
   price: string;
+  name: string;
 }
 
 export interface LineDB {

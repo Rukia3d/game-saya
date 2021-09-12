@@ -1,14 +1,6 @@
 import { enemyToNumber } from "./gamelogic";
 import { shuffle } from "./helpers";
-import { gameState } from "./testobjects";
-import {
-  Enemy,
-  ForgeReq,
-  OwnedResource,
-  Player,
-  Resource,
-  resourceType,
-} from "./types";
+import { Enemy, OwnedResource, Player, Resource } from "./types";
 
 export const givePlayerResources = (player: Player, resources: Resource[]) => {
   const existingResources = player.resources;
@@ -16,16 +8,19 @@ export const givePlayerResources = (player: Player, resources: Resource[]) => {
     const playerRes = player.resources.find(
       (o: OwnedResource) => o.id === r.id
     );
-    if (!playerRes) throw new Error("Can't find resource you want to give me");
-    const playerResIndex = existingResources.indexOf(playerRes);
-    existingResources[playerResIndex].quantity++;
+    if (!playerRes) {
+      player.resources.push({ ...r, quantity: 1 });
+    } else {
+      const playerResIndex = existingResources.indexOf(playerRes);
+      existingResources[playerResIndex].quantity++;
+    }
   });
   return existingResources;
 };
 
-const generateSingleRewards = () => {
+const generateSingleRewards = (resources: Resource[]) => {
   const allRewards: Resource[] = [];
-  gameState.resources.forEach((r: Resource) => {
+  resources.forEach((r: Resource) => {
     for (let i = 0; i < r.commonality; i++) {
       allRewards.push({
         id: r.id,
@@ -35,23 +30,22 @@ const generateSingleRewards = () => {
       });
     }
   });
-  return shuffle(allRewards)[0];
+  const res = shuffle(allRewards)[0];
+  return res;
 };
 
-export const generateReward = (enemy: Enemy) => {
+export const generateReward = (enemy: Enemy, resources: Resource[]) => {
   const rewards = [];
   const max = enemyToNumber(enemy);
   for (let i = 0; i < max; i++) {
-    rewards.push(generateSingleRewards());
+    rewards.push(generateSingleRewards(resources));
   }
+  console.log("generateReward", rewards);
   return rewards;
 };
 
-const removeResource = (
-  r: OwnedResource,
-  toRemove: [resourceType, number][]
-) => {
-  const removable = toRemove.find((t: [resourceType, number]) => t[0] === r.id);
+const removeResource = (r: OwnedResource, toRemove: [string, number][]) => {
+  const removable = toRemove.find((t: [string, number]) => t[0] === r.id);
   if (!removable) return { ...r };
 
   const newQuantity = r.quantity - removable[1];
@@ -60,7 +54,7 @@ const removeResource = (
 };
 
 export const removeResources = (
-  cardRequirements: ForgeReq,
+  cardRequirements: any,
   resources: OwnedResource[]
 ): OwnedResource[] => {
   const newRes = resources.map((r: OwnedResource) =>

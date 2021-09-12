@@ -27,6 +27,7 @@ import { FightResult } from "./FightResult";
 import { GameContext } from "../App";
 import { BigCard } from "./BigCard";
 import { generateReward } from "../utils/resourceLogic";
+import { gameState } from "../utils/testobjects";
 
 export const Fight = () => {
   const context = useContext(GameContext);
@@ -51,7 +52,7 @@ export const Fight = () => {
   if (!enemy) {
     throw new Error(`Can't find the enemy ${enemyId}`);
   }
-  const heroDeck = shuffle(generateDeck(storyCharacters, player.cards));
+  const heroDeck = shuffle(generateDeck(storyCharacters, player.spells));
   if (heroDeck.length === 0) {
     throw new Error(`Couldn't generate cards for player`);
   }
@@ -133,7 +134,7 @@ export const Fight = () => {
       }
       if (fightState.enemyDrop.length === enemyHealt - 1) {
         console.log("Generate rewards");
-        const rewards = generateReward(enemy);
+        const rewards = generateReward(enemy, gameState.resources);
         setRewards(rewards);
         setResult("Won");
       }

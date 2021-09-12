@@ -193,5 +193,5 @@ test("Adds hero correctly if actions requires it", () => {
   const newPlayer = { ...game.player, heroes: game.heroes.slice(0, 2) };
   const res = finishStory({ ...game, player: newPlayer }, action);
   expect(res.heroes.length).toBe(3);
-  expect(res.cards.length).toBe(18);
+  expect(res.spells.length).toBe(18);
 });
