@@ -32,13 +32,25 @@ test("updateHeroDeck shuffles if there are no cards left", () => {
   const newFightState = {
     ...JSON.parse(JSON.stringify(fightState)),
     heroHand: deckForTwo.slice(0, 3),
-    heroDesk: deckForTwo,
-    heroDrop: [],
+    heroDeck: [],
+    heroDrop: deckForTwo,
     enemyDeck: deckForEnemy,
   };
   const [newDeck, newDrop] = updateHeroDeck(newFightState, deckForTwo[0]);
-  expect(newDeck.length).toEqual(2);
+  expect(newDeck.length).toEqual(15);
   expect(newDrop.length).toEqual(1);
+});
+
+test("Throws a correct error when adding a wrong card", () => {
+  const spellsUnselected = new Array(15).fill(0).map((x, n) => ({
+    ...mayaCard,
+    id: "base_hit" + n,
+    name: "Base Hit " + n,
+  }));
+  const newCard = { ...mayaCard, id: "something new" };
+  expect(() => changeCardsInDeck(spellsUnselected, newCard)).toThrow(
+    "Can't find the card you're trying to select in player's cards"
+  );
 });
 
 test("Correctly adds Card to Player's deck", () => {

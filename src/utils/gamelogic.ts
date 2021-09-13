@@ -56,6 +56,7 @@ export const generateDeck = (
       type: c.type,
       level: c.level,
       description: c.description,
+      updates: c.updates,
     });
   });
   return heroSpells;
@@ -76,6 +77,7 @@ export const generateEnemyDeck = (enemy: Enemy): Spell[] => {
       type: c.type,
       level: c.level,
       description: c.description,
+      updates: c.updates,
     });
   });
   return enemySpells.splice(0, enemy.life);
@@ -122,59 +124,6 @@ const givePlayerExperience = (player: Player, enemy: Enemy): Player => {
     ...player,
     data: newData,
   };
-};
-
-const updateCardParameter = (spell: Spell, effect: any): Spell => {
-  return spell;
-};
-
-const findUpdateEffect = (forgeEffects: any, effect: string) => {
-  const updateEffect = forgeEffects.find((f: any) => f.id === effect);
-  if (!updateEffect) {
-    throw new Error(`Can't find update effect ${effect}`);
-  }
-  return updateEffect;
-};
-
-export const updatedCards = (
-  forgeEffects: any,
-  s: Spell,
-  req: any,
-  all: Spell[]
-): Spell[] => {
-  const index = all.indexOf(s);
-  if (index === -1) throw new Error(`Can't find spell ${s.id} to update`);
-  const updateEffect = findUpdateEffect(forgeEffects, req.effect);
-  const newCard = updateCardParameter(s, updateEffect);
-  newCard.level = newCard.level + 1;
-  all[index] = newCard;
-  return all;
-};
-
-const raiseUpdate = (
-  resouceData: Resource[],
-  s: [string, number]
-): [string, number] => {
-  const multiplier: Resource | null =
-    resouceData.find((r: Resource) => r.id === s[0]) || null;
-  if (!multiplier) throw new Error(`Can't find multiplier for ${s[0]}`);
-  const res: [string, number] = [s[0], s[1] * multiplier.commonality];
-  return res;
-};
-
-export const cardUpdateRaise = (
-  resouceData: Resource[],
-  type: string,
-  cardUpdates: any
-): any => {
-  const toUpdate = cardUpdates.find((f: any) => f.itemType === type);
-  if (!toUpdate) throw new Error(`Can't find spell type ${type} to update`);
-  const index = cardUpdates.indexOf(toUpdate);
-  const newUpdates: [any, number][] = toUpdate.updates.map((s: [any, number]) =>
-    raiseUpdate(resouceData, s)
-  );
-  cardUpdates[index] = { ...toUpdate, updates: newUpdates };
-  return cardUpdates;
 };
 
 export const updateWinPlayer = (
@@ -339,4 +288,16 @@ export const finishStory = (
     }
   }
   return player;
+};
+
+export const updatePlayerSpell = (
+  p: Player,
+  s: Spell,
+  u: SpellUpdate
+): Player => {
+  const spellToUpdateIndex = p.spells.indexOf(s);
+  console.log("before", p.spells[spellToUpdateIndex].updates);
+  p.spells[spellToUpdateIndex].updates.push(u.id);
+  console.log("after", p.spells[spellToUpdateIndex].updates);
+  return p;
 };

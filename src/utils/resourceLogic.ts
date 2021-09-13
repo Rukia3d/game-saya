@@ -1,6 +1,12 @@
 import { enemyToNumber } from "./gamelogic";
 import { shuffle } from "./helpers";
-import { Enemy, OwnedResource, Player, Resource } from "./types";
+import {
+  Enemy,
+  OwnedResource,
+  Player,
+  Resource,
+  SpellUpdateResource,
+} from "./types";
 
 export const givePlayerResources = (player: Player, resources: Resource[]) => {
   const existingResources = player.resources;
@@ -54,11 +60,10 @@ const removeResource = (r: OwnedResource, toRemove: [string, number][]) => {
 };
 
 export const removeResources = (
-  cardRequirements: any,
+  req: SpellUpdateResource[],
   resources: OwnedResource[]
 ): OwnedResource[] => {
-  const newRes = resources.map((r: OwnedResource) =>
-    removeResource(r, cardRequirements.updates)
-  );
+  console.log("req", req);
+  const newRes = resources.map((r: OwnedResource) => removeResource(r, req));
   return newRes;
 };

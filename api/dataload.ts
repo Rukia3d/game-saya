@@ -156,6 +156,7 @@ const getEnemySpells = (e: EnemyDB) => {
       type: currentSpell.name,
       level: 0,
       description: currentSpell.description,
+      updates: [],
     };
   }
   return spell;
@@ -209,6 +210,8 @@ export const readSpellUpdates = (): SpellUpdate[] => {
       action: updateSpellDB[i].action,
       price: updateSpellDB[i].price,
       name: updateSpellDB[i].name,
+      description: updateSpellDB[i].description,
+      id: updateSpellDB[i].id,
     };
   }
   return updates;
@@ -287,6 +290,7 @@ export const readSpells = (): Spell[] => {
       type: "base",
       level: 0,
       description: parsedSpells[i].description,
+      updates: [],
     };
   }
   return spells;

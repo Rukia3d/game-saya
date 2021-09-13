@@ -10,6 +10,7 @@ export interface Spell {
   type: string;
   level: number;
   description: string;
+  updates: string[];
 }
 
 export type OwnedResource = Resource & { quantity: number };
@@ -18,6 +19,7 @@ export type CharacterNPC = Hero & { dial: string | null };
 export type SpellUpdateResource = [string, number];
 
 export interface SpellUpdate {
+  id: string;
   element: elementType;
   mana: number;
   resource_base: SpellUpdateResource[];
@@ -25,6 +27,7 @@ export interface SpellUpdate {
   action: string;
   price: string;
   name: string;
+  description: string;
 }
 
 export interface Player {

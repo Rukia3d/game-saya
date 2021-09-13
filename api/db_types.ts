@@ -20,6 +20,8 @@ export interface UpdateSpellDB {
   action: string;
   price: string;
   name: string;
+  description: string;
+  id: string;
 }
 
 export interface LineDB {

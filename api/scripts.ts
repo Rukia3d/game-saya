@@ -55,7 +55,29 @@ app.get("/api/player/", (req: any, res: any) => {
         (s: SpellUpdate) => s.element === "earth"
       ),
       adventures: playerAdventures,
-      resources: [],
+      resources: [
+        {
+          id: "leaf",
+          name: "Leaf",
+          commonality: 7,
+          image: "leaf",
+          quantity: 500,
+        },
+        {
+          id: "r_flower",
+          name: "Red flower",
+          commonality: 5,
+          image: "r_flower",
+          quantity: 500,
+        },
+        {
+          id: "wood",
+          name: "Wood",
+          commonality: 10,
+          image: "wood",
+          quantity: 500,
+        },
+      ],
       enemies: playerEnemies,
     },
     dialogues: dialogues,

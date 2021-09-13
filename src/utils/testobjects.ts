@@ -99,6 +99,7 @@ export const mayaCard: Spell = {
   type: "",
   level: 0,
   description: "",
+  updates: [],
 };
 
 export const enemyCard: Spell = {
@@ -113,6 +114,7 @@ export const enemyCard: Spell = {
   type: "",
   level: 0,
   description: "",
+  updates: [],
 };
 
 export const enemy: Enemy = {
@@ -136,27 +138,9 @@ export const baseCards15: Spell[] = new Array(15).fill(0).map((x, n) => ({
   type: "",
   level: 0,
   description: "",
+  updates: [],
 }));
 
-export const spellUpdates: any[] = [
-  {
-    itemType: "base_hit_maya",
-    updates: [
-      ["gold", 5],
-      ["silk", 3],
-    ],
-    effect: "strengthen",
-  },
-  {
-    itemType: "base_hit1",
-    updates: [
-      ["iron", 1],
-      ["gold", 5],
-      ["silk", 2],
-    ],
-    effect: "strengthen",
-  },
-];
 const playerNpcs = [
   {
     id: "maya",
@@ -190,7 +174,7 @@ export const gameState: GameState = {
     },
     npcs: playerNpcs,
     spells: baseCards15,
-    spellUpdates: spellUpdates,
+    spellUpdates: [],
     heroes: heroes,
     adventures: adventures,
     enemies: [enemy],
@@ -215,7 +199,7 @@ export const gameState: GameState = {
     { id: "char", name: "Charc", commonality: 5, image: "charcoal" },
   ],
   spells: baseCards15,
-  spellUpdates: spellUpdates,
+  spellUpdates: [],
 };
 
 export const fightState: FightState = {
