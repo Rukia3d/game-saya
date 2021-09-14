@@ -1,8 +1,4 @@
-import {
-  updatedCards,
-  updateWinPlayer,
-  cardUpdateRaise,
-} from "../utils/gamelogic";
+import { updateWinPlayer } from "../utils/gamelogic";
 import { generateReward } from "../utils/resourceLogic";
 import {
   baseCards15,
@@ -14,7 +10,6 @@ import {
 
 test("generates rewards correctly", () => {
   const res = generateReward(enemy, gameState.resources);
-  console.log("res", res);
   expect(res.length).toEqual(5);
 });
 

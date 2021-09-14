@@ -5,7 +5,9 @@ import {
   Enemy,
   FightState,
   GameState,
+  Hero,
   Spell,
+  SpellUpdate,
   StoryGroup,
 } from "./types";
 const dialogues: Dialogue[] = [];
@@ -23,6 +25,22 @@ const dialogues: Dialogue[] = [];
     ],
   })
 );
+
+export const spellUpdates: SpellUpdate[] = [];
+[1, 2, 3].forEach((i: number) =>
+  spellUpdates.push({
+    action: "Some Action" + i,
+    description: "Some description" + i,
+    effect: "h_redraw",
+    element: "fire",
+    id: "fire_" + i,
+    mana: 1,
+    name: "SomeName" + i,
+    price: null,
+    resource_base: [["ash", i]],
+  })
+);
+
 export const stories: StoryGroup[] = [];
 [1, 2, 3, 4].forEach((i: number) =>
   stories.push({
@@ -174,7 +192,7 @@ export const gameState: GameState = {
     },
     npcs: playerNpcs,
     spells: baseCards15,
-    spellUpdates: [],
+    spellUpdates: spellUpdates,
     heroes: heroes,
     adventures: adventures,
     enemies: [enemy],
@@ -199,7 +217,7 @@ export const gameState: GameState = {
     { id: "char", name: "Charc", commonality: 5, image: "charcoal" },
   ],
   spells: baseCards15,
-  spellUpdates: [],
+  spellUpdates: spellUpdates,
 };
 
 export const fightState: FightState = {
@@ -237,4 +255,12 @@ export const dialogue: Dialogue = {
     },
   ],
   background: "backg_0.png",
+};
+
+export const characterToAdd: Hero = {
+  element: "fire",
+  id: "nell",
+  image: "../img/nell.png",
+  name: "Nell",
+  selected: false,
 };

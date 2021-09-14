@@ -63,7 +63,6 @@ export const removeResources = (
   req: SpellUpdateResource[],
   resources: OwnedResource[]
 ): OwnedResource[] => {
-  console.log("req", req);
   const newRes = resources.map((r: OwnedResource) => removeResource(r, req));
   return newRes;
 };

@@ -134,7 +134,6 @@ export const Fight = () => {
         setResult("Lost");
       }
       if (fightState.enemyDrop.length === enemyHealt - 1) {
-        console.log("Generate rewards");
         const rewards = generateReward(enemy, gameState.resources);
         setRewards(rewards);
         setResult("Won");

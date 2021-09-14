@@ -1,8 +1,7 @@
 import React, { useContext } from "react";
 import { GameContext } from "../App";
-import { HeroSpell, HeroSpellWithInfo } from "../Fight/HeroSpellWithInfo";
-import { ElementSpells } from "../Spells/ElementSpells";
-import { HeroSpellUpdate } from "../Spells/Spells";
+import { HeroSpell } from "../Fight/HeroSpellWithInfo";
+import { HeroSpellUpdate } from "../Spells/SpellUpdateOptions";
 import { Spell, SpellUpdate } from "../utils/types";
 import "./Character.css";
 
@@ -17,10 +16,10 @@ export const Character = () => {
     throw new Error("No data");
   }
   const character = context.character;
-  if (!character || !character.element || !context.gameState.player.spells) {
-    throw new Error("Character is incorrectly formated");
-  }
   const element = character.element;
+  if (!character || !element) {
+    throw new Error("Incorrectly formatted character");
+  }
   const spells =
     context.gameState.player.spells.filter(
       (s: Spell) => s.element === element

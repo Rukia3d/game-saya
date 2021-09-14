@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import "./Spells.css";
+import "./SpellUpdateOptions.css";
 
 import { GameContext } from "../App";
 
@@ -89,8 +89,8 @@ export const HeroSpellUpdate = ({
       <h3>{update.name}</h3>
       <div>{update.description}</div>
       <div>
-        {update.resource_base.map((s: SpellUpdateResource) => (
-          <div>
+        {update.resource_base.map((s: SpellUpdateResource, i: number) => (
+          <div key={i}>
             <div style={{ color: isEnough(s) ? "green" : "red" }}>{`${
               getResource(s).name
             }: ${s[1]}`}</div>
@@ -106,7 +106,7 @@ export const HeroSpellUpdate = ({
   );
 };
 
-export const Spells = ({
+export const SpellUpdateOptions = ({
   item,
   setForge,
 }: {
@@ -151,7 +151,7 @@ export const Spells = ({
     }
   };
   return (
-    <div className="ForgeCard">
+    <div className="SpellUpdateOptions">
       <CloseButton onClick={() => setForge(null)} />
       <HeroSpellDescription card={item} />
       <HeroSpellUpdates

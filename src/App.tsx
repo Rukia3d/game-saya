@@ -41,7 +41,7 @@ function App() {
   const [character, setCharacter] = useState<null | Hero>(null);
 
   const setGameState = (state: GameState) => {
-    console.log("DEBUG");
+    //console.log("DEBUG");
     if (state) {
       // console.log(
       //   //@ts-ignore

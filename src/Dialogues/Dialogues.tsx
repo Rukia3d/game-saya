@@ -62,14 +62,13 @@ export const Dialogues = () => {
       throw new Error("Trying to add more than 1 hero");
     if (addingHero.length === 1) {
       const action = addingHero[0];
-      console.log("This action requires us to add a Hero");
       const hero = findCharacter(allHeroes, action.id);
-      console.log("Hero", hero);
       context.setCharacter(hero);
     }
   };
 
   const finishDialogue = () => {
+    console.log(context.dialogue?.action);
     if (
       context.gameState &&
       context.gameState.player &&

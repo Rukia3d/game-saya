@@ -47,7 +47,6 @@ export const FightResult = ({
   result: String;
   finishFight: () => void;
 }) => {
-  console.log("rewards", rewards);
   return (
     <div className="FightResult">
       <p>You {result}</p>

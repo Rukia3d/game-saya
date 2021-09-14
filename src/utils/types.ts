@@ -25,7 +25,7 @@ export interface SpellUpdate {
   resource_base: SpellUpdateResource[];
   effect: spellEffectType;
   action: string;
-  price: string;
+  price: string | null;
   name: string;
   description: string;
 }

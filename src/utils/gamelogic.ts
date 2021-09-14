@@ -225,12 +225,10 @@ const updatePlayerSpellUpdates = (
   allUpdates: SpellUpdate[],
   action: StoryAction
 ) => {
-  console.log("Old updates:", updates);
   const updatesToAdd = allUpdates.filter(
     (s: SpellUpdate) => s.element === action.data
   );
   const newUpdates = updates.concat(updatesToAdd);
-  console.log("New updates:", newUpdates);
   return newUpdates;
 };
 
@@ -296,8 +294,6 @@ export const updatePlayerSpell = (
   u: SpellUpdate
 ): Player => {
   const spellToUpdateIndex = p.spells.indexOf(s);
-  console.log("before", p.spells[spellToUpdateIndex].updates);
   p.spells[spellToUpdateIndex].updates.push(u.id);
-  console.log("after", p.spells[spellToUpdateIndex].updates);
   return p;
 };
