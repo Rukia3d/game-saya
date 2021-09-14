@@ -29,6 +29,7 @@ import {
   UpdateSpellDB,
 } from "./db_types";
 import {
+  getHeroInitialSpellSet,
   getResourceSet,
   getSpellSet,
   getStoryActions,
@@ -116,21 +117,6 @@ const getStoryGroups = (a: AdventureDB): StoryGroup[] => {
     }
   }
   return storyGroups;
-};
-
-const heroInitialSpellSet = (db: SpellDB[]) => {
-  const spells = [];
-  for (let x = 0; x < db.length; x++) {
-    const card = db[x];
-    if (parseInt(card.strength) === 1) {
-      [0, 1, 2].map((i: number) => spells.push(card));
-    } else if (parseInt(card.strength) === 2) {
-      [0, 1].map((j: number) => spells.push(card));
-    } else {
-      spells.push(card);
-    }
-  }
-  return spells;
 };
 
 const getEnemySpells = (e: EnemyDB) => {
@@ -276,7 +262,7 @@ export const readSpells = (): Spell[] => {
   const spells: Spell[] = [];
   const inputSpells = fs.readFileSync(path + "Story Data - DB_Cards.csv");
   const spellDB: SpellDB[] = parse(inputSpells, options);
-  const parsedSpells = heroInitialSpellSet(spellDB);
+  const parsedSpells = getHeroInitialSpellSet(spellDB);
   for (let i = 0; i < parsedSpells.length; i++) {
     spells[i] = {
       id: parsedSpells[i].id,

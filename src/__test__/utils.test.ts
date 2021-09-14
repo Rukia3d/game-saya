@@ -4,13 +4,10 @@ import {
   shuffle,
   findLastOpenStory,
   findActiveCharacters,
-  findCardRequirements,
-  achievedUpdate,
   findCharacter,
 } from "../utils/helpers";
-import { baseCards15, gameState } from "../utils/testobjects";
 
-import { StoryGroup } from "../utils/types";
+import { Hero, StoryGroup } from "../utils/types";
 
 test("Unique function returns correctly", () => {
   const array1 = [1, 2, 3, 4];
@@ -27,39 +24,6 @@ test("Remove from array function returns correctly", () => {
 test("Shuffle function returns correctly", () => {
   const array1 = [1, 2, 3, 4];
   expect(shuffle(array1)).not.toEqual([2, 3, 4]);
-});
-
-test.skip("Find the correct requirements for forgin a card", () => {
-  const req: ForgeReq[] = [];
-  [1, 2, 3, 4].forEach((i: number) =>
-    req.push({
-      itemType: "base_hit" + i,
-      updates: [
-        ["gold", 5],
-        ["silk", 3],
-      ],
-      effect: "strenghten" as "strengthen",
-    })
-  );
-  const card = { ...baseCards15[0], type: "base_hit1" };
-  const res = findCardRequirements(req, card);
-  expect(res.itemType).toEqual("base_hit1");
-});
-
-test.skip("Find if this card is ready for an update", () => {
-  const ownedResources = gameState.player.resources;
-  const requiredResources: [string, number][] = [
-    ["gold", 2],
-    ["iron", 5],
-  ];
-  const requiredResources2: [string, number][] = [
-    ["gold", 5],
-    ["iron", 5],
-  ];
-  const res1 = achievedUpdate(ownedResources, requiredResources);
-  const res2 = achievedUpdate(ownedResources, requiredResources2);
-  expect(res1).toBeTruthy();
-  expect(res2).not.toBeTruthy();
 });
 
 test("Find the correct next open story in group", () => {
@@ -90,7 +54,7 @@ test("Find the correct next open story in group", () => {
 });
 
 test("Finds correct characters to be active", () => {
-  const heroes3active: Character[] = [];
+  const heroes3active: Hero[] = [];
   [true, true, true, false, false].map((b: boolean, i: number) =>
     heroes3active.push({
       id: "hero" + i,
@@ -105,7 +69,7 @@ test("Finds correct characters to be active", () => {
     "hero2",
   ]);
 
-  const heroes2active: Character[] = [];
+  const heroes2active: Hero[] = [];
   [false, true, true, false, false].map((b: boolean, i: number) =>
     heroes2active.push({
       id: "hero" + i,
@@ -120,7 +84,7 @@ test("Finds correct characters to be active", () => {
     "hero0",
   ]);
 
-  const heroesNoactive: Character[] = [];
+  const heroesNoactive: Hero[] = [];
   [false, false, false, false, false].map((b: boolean, i: number) =>
     heroesNoactive.push({
       id: "hero" + i,

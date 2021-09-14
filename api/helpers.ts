@@ -1,6 +1,6 @@
 import { generateInt } from "../src/utils/helpers";
 import { SpellUpdateResource, storyChangeType } from "../src/utils/types";
-import { EnemyCardDB } from "./db_types";
+import { EnemyCardDB, SpellDB } from "./db_types";
 
 export const getStoryCharacters = (characters: string) => {
   // Characters in DB are two names separated by coma
@@ -19,6 +19,21 @@ export const getStoryActions = (actions: string) => {
     };
   });
   return res;
+};
+
+export const getHeroInitialSpellSet = (db: SpellDB[]) => {
+  const spells = [];
+  for (let x = 0; x < db.length; x++) {
+    const card = db[x];
+    if (parseInt(card.strength) === 1) {
+      [0, 1, 2].map((i: number) => spells.push(card));
+    } else if (parseInt(card.strength) === 2) {
+      [0, 1].map((j: number) => spells.push(card));
+    } else {
+      spells.push(card);
+    }
+  }
+  return spells;
 };
 
 export const getResourceSet = (data: string): SpellUpdateResource[] => {
