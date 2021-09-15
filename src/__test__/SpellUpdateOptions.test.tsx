@@ -1,10 +1,10 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import { Shop } from "../Main/Shop";
 import { GameContext } from "../App";
 import { gameState, mayaCard } from "../utils/testobjects";
 import { SpellUpdateOptions } from "../Spells/SpellUpdateOptions";
 import { elementType } from "../utils/types";
+import userEvent from "@testing-library/user-event";
 
 const context = {
   adventure: null,
@@ -22,6 +22,7 @@ const context = {
 };
 const enoughResourcesStyle = "color: green;";
 const notenoughResourcesStyle = "color: red;";
+
 test("Renders All Updates available in the correct color", async () => {
   const fireCard = { ...mayaCard, element: "fire" as elementType };
   const newContext = {
@@ -42,9 +43,10 @@ test("Renders All Updates available in the correct color", async () => {
       },
     },
   };
+  const setForge = jest.fn();
   render(
     <GameContext.Provider value={newContext}>
-      <SpellUpdateOptions item={fireCard} setForge={jest.fn()} />
+      <SpellUpdateOptions item={fireCard} setForge={setForge} />
     </GameContext.Provider>
   );
   expect(screen.getByText(/Maya Hit 1/)).toBeInTheDocument();
@@ -56,6 +58,8 @@ test("Renders All Updates available in the correct color", async () => {
     "style",
     notenoughResourcesStyle
   );
+  userEvent.click(screen.getByTestId("close_button"));
+  expect(setForge.mock.calls.length).toBe(1);
 });
 
 test("Skips and update if it's already applied", async () => {
@@ -73,4 +77,17 @@ test("Skips and update if it's already applied", async () => {
   expect(screen.getByText(/Ash: 2/)).toBeInTheDocument();
   expect(screen.getByText(/Ash: 3/)).toBeInTheDocument();
   expect(screen.queryByText(/Ash: 1/)).not.toBeInTheDocument();
+});
+
+test("Throws error if there's a problem with a context", async () => {
+  const newContext = { ...context, gameState: null };
+  jest.spyOn(console, "error").mockImplementation(() => jest.fn());
+  expect(() =>
+    render(
+      <GameContext.Provider value={newContext}>
+        <SpellUpdateOptions item={mayaCard} setForge={jest.fn()} />
+      </GameContext.Provider>
+    )
+  ).toThrow("No data in context");
+  jest.restoreAllMocks();
 });
