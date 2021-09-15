@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { GameContext } from "../App";
 import { HeroSpell } from "../Fight/HeroSpellWithInfo";
-import { HeroSpellUpdate } from "../Spells/SpellUpdateOptions";
+import { ElementSpellUpdate } from "../Spells/ElementSpellUpdates";
 import { Spell, SpellUpdate } from "../utils/types";
 import "./Character.css";
 
@@ -44,7 +44,7 @@ export const Character = () => {
       <h2>New spell updates</h2>
       <div className="CharacterFullUpdates" aria-label="character_spells">
         {updates.map((u: SpellUpdate, i: number) => (
-          <HeroSpellUpdate update={u} key={i} />
+          <ElementSpellUpdate update={u} key={i} />
         ))}
       </div>
     </div>
