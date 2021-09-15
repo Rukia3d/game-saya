@@ -5,7 +5,7 @@ import { elementType, Spell } from "../utils/types";
 
 export const HeroCardLevelFrame = ({ card }: { card: Spell }) => {
   let frame: JSX.Element | null = null;
-  switch (card.level) {
+  switch (card.updates.length) {
     case 1:
       frame = (
         <img

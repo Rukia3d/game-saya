@@ -50,19 +50,29 @@ export const generateReward = (enemy: Enemy, resources: Resource[]) => {
   return rewards;
 };
 
-const removeResource = (r: OwnedResource, toRemove: [string, number][]) => {
-  const removable = toRemove.find((t: [string, number]) => t[0] === r.id);
-  if (!removable) return { ...r };
+const removeResource = (
+  toRemove: SpellUpdateResource[],
+  toCheck: OwnedResource
+) => {
+  const removable = toRemove.find((t: [string, number]) => t[0] === toCheck.id);
+  if (!removable) return { ...toCheck };
 
-  const newQuantity = r.quantity - removable[1];
+  const newQuantity = toCheck.quantity - removable[1];
   if (newQuantity < 0) throw new Error("Cant have negative resource");
-  return { ...r, quantity: r.quantity - removable[1] };
+  return { ...toCheck, quantity: toCheck.quantity - removable[1] };
 };
 
 export const removeResources = (
   req: SpellUpdateResource[],
   resources: OwnedResource[]
 ): OwnedResource[] => {
-  const newRes = resources.map((r: OwnedResource) => removeResource(r, req));
+  const missedResource = req.some(
+    (r: SpellUpdateResource) =>
+      !resources.find((o: OwnedResource) => o.id === r[0])
+  );
+  if (missedResource) {
+    throw new Error("Trying to remove resource that is not owned");
+  }
+  const newRes = resources.map((r: OwnedResource) => removeResource(req, r));
   return newRes;
 };

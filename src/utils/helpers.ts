@@ -66,32 +66,4 @@ export const findCharacter = (characters: Hero[], charId: string) => {
   return res;
 };
 
-export const findCardRequirements = (forge: any, card: Spell): any => {
-  const res = forge.find((f: any) => f.itemType === card.type);
-  if (!res) throw new Error(`Couldn't find a resource for ${card.type}`);
-  return res;
-};
-
-export const achievedUpdate = (
-  resources: OwnedResource[],
-  required: [string, number][]
-) => {
-  const all = required.filter((e: [string, number]) =>
-    achievedResource(resources, e)
-  );
-  return all.length === required.length;
-};
-
-export const achievedResource = (
-  resources: OwnedResource[],
-  e: [string, number]
-) => {
-  const resource = resources.find((o: OwnedResource) => o.id === e[0]);
-  if (!resource || resource?.quantity < e[1]) {
-    return false;
-  } else {
-    return true;
-  }
-};
-
 export const shuffle = (array: any) => array.sort(() => Math.random() - 0.5);

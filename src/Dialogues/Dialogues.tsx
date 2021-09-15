@@ -68,7 +68,6 @@ export const Dialogues = () => {
   };
 
   const finishDialogue = () => {
-    console.log(context.dialogue?.action);
     if (
       context.gameState &&
       context.gameState.player &&

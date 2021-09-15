@@ -5,7 +5,9 @@ import {
   findLastOpenStory,
   findActiveCharacters,
   findCharacter,
+  findDialogue,
 } from "../utils/helpers";
+import { gameState } from "../utils/testobjects";
 
 import { Hero, StoryGroup } from "../utils/types";
 
@@ -16,9 +18,15 @@ test("Unique function returns correctly", () => {
   expect(unique(array2)).toEqual(array1);
 });
 
-test("Remove from array function returns correctly", () => {
+test("Remove from array function returns correctly and throws an error", () => {
   const array1 = [1, 2, 3, 4];
   expect(removeFromArray(array1, 1)).toEqual([2, 3, 4]);
+
+  jest.spyOn(console, "error").mockImplementation(() => jest.fn());
+  expect(() => removeFromArray(array1, 0)).toThrow(
+    "Can't find the item to remove from array"
+  );
+  jest.restoreAllMocks();
 });
 
 test("Shuffle function returns correctly", () => {
@@ -53,7 +61,7 @@ test("Find the correct next open story in group", () => {
   expect(findLastOpenStory(groups)).toEqual(1);
 });
 
-test("Finds correct characters to be active", () => {
+test("Finds correct characters to be active and throws if there are not 3", () => {
   const heroes3active: Hero[] = [];
   [true, true, true, false, false].map((b: boolean, i: number) =>
     heroes3active.push({
@@ -98,12 +106,46 @@ test("Finds correct characters to be active", () => {
     "hero1",
     "hero2",
   ]);
+
+  jest.spyOn(console, "error").mockImplementation(() => jest.fn());
+  const heroesToError: Hero[] = [];
+  [true, true].map((b: boolean, i: number) =>
+    heroesToError.push({
+      id: "hero" + i,
+      name: "hero" + i,
+      image: "",
+      selected: b,
+    })
+  );
+  expect(() => findActiveCharacters(heroesToError)).toThrow(
+    "Issues with heroes"
+  );
+  jest.restoreAllMocks();
 });
 
-test("Finds a character", () => {
+test("Finds a character and throws a correct error", () => {
   const characters = [1, 2, 3].map((i: number) => {
     return { id: "char" + i, name: "Char" + i, image: "" };
   });
   const res = findCharacter(characters, "char1");
   expect(res.id).toEqual("char1");
+
+  jest.spyOn(console, "error").mockImplementation(() => jest.fn());
+  expect(() => findCharacter(characters, "char0")).toThrow(
+    "Couldn't find a character char0"
+  );
+  jest.restoreAllMocks();
+});
+
+test("Find dialogue and throws correct errors", () => {
+  const res = findDialogue(gameState.dialogues, "c1_dialogue1");
+  expect(res.id).toEqual("c1_dialogue1");
+  jest.spyOn(console, "error").mockImplementation(() => jest.fn());
+  expect(() => findDialogue(gameState.dialogues, null)).toThrow(
+    "Trying to find a dialogue for inactive character"
+  );
+  expect(() => findDialogue(gameState.dialogues, "x1_dialogue1")).toThrow(
+    "Couldn't find a dialogue x1_dialogue1"
+  );
+  jest.restoreAllMocks();
 });
