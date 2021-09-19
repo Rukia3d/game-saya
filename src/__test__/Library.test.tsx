@@ -53,5 +53,7 @@ test("Renders Hero Spells", () => {
   expect(screen.getByLabelText("character_spells").children.length).toEqual(3);
   const firstCardName = screen.getAllByLabelText("spell_card")[0].innerHTML;
   userEvent.click(screen.getAllByTestId("hero_card_info")[0]);
-  expect(screen.getByLabelText("item_name").innerHTML).toEqual(firstCardName);
+  expect(screen.getByLabelText("card_name_header").innerHTML).toEqual(
+    firstCardName
+  );
 });

@@ -9,16 +9,33 @@ import { removeResources } from "../utils/resourceLogic";
 import { updatePlayerSpell } from "../utils/gamelogic";
 import { ElementSpellUpdates } from "./ElementSpellUpdates";
 
-const HeroSpellDescription = ({ card }: { card: Spell }) => {
+export const HeroSpellDescription = ({ card }: { card: Spell }) => {
   return (
     <div>
       <h3 aria-label="card_name_header">{card.name}</h3>
-      Strength: {card.strength}
-      {card.element ? "Element " + card.element : null}
-      {card.selected ? "Equiped" : null}
-      {card.mana ? "Special" : null}
+      <p>Strength: {card.strength}</p>
+      <p>{card.element ? "Element " + card.element : null}</p>
+      <p>{card.selected ? "Equiped" : null}</p>
+      <p>{card.mana ? "Special" : null}</p>
     </div>
   );
+};
+
+export const HeroSpellUpdate = ({ updateId }: { updateId: string }) => {
+  const context = useContext(GameContext);
+  if (
+    !context ||
+    !context.gameState ||
+    !context.gameState.player ||
+    !context.gameState.player.spellUpdates
+  ) {
+    throw new Error("No data in context");
+  }
+  const update = context.gameState.player.spellUpdates.find(
+    (s: SpellUpdate) => s.id === updateId
+  );
+  if (!update) throw new Error("Can't find an update to display");
+  return <div>Update: {update.name}</div>;
 };
 
 export const SpellUpdateOptions = ({

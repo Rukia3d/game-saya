@@ -46,7 +46,9 @@ test("Renders Fight screen", () => {
   const firstCardName = screen.getAllByLabelText("spell_card")[0].innerHTML;
 
   userEvent.click(screen.getAllByTestId("hero_card_info")[0]);
-  expect(screen.getByLabelText("item_name").innerHTML).toEqual(firstCardName);
+  expect(screen.getByLabelText("card_name_header").innerHTML).toEqual(
+    firstCardName
+  );
   userEvent.click(screen.getByLabelText("info_card"));
   // TODO info on opponent is correct
   // TODO info on attacking card is correct
