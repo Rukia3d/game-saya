@@ -2,7 +2,7 @@ import React from "react";
 import "./HeroBlock.css";
 
 import { elementType, Enemy, FightState, Spell } from "../utils/types";
-import { HeroSpellWithInfo } from "./HeroSpellWithInfo";
+import { ElementSpellWithInfo } from "../Spells/ElementSpellWithInfo";
 
 export const HeroBlock = ({
   fightState,
@@ -35,7 +35,7 @@ export const HeroBlock = ({
       </div>
       <div className="Deck" aria-label="Deck">
         {fightState.heroHand.map((d: Spell, i: number) => (
-          <HeroSpellWithInfo
+          <ElementSpellWithInfo
             card={d}
             selectCard={selectCard}
             setInfo={setInfo}

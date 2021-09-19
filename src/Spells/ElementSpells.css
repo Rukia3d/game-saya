@@ -1,4 +1,4 @@
-.CharacterSpells {
+.ElementSpells {
   position: absolute;
   top: 0;
   left: 0;
@@ -12,7 +12,74 @@
   z-index: 100;
 }
 
-.AllCharacterSpells {
+.HeroSpellUpdate {
+  border: 1px solid teal;
   display: flex;
   flex-direction: row;
+  align-content: center;
+  justify-content: center;
+}
+
+.ElementSpellUpdates {
+  position: absolute;
+  top: 1em;
+  left: 1em;
+  display: flex;
+  flex-direction: column;
+  border: 5px solid olivedrab;
+  background-color: white;
+  width: 95%;
+  height: 95%;
+  z-index: 140;
+  align-content: center;
+}
+
+.ElementSpellsList {
+  display: flex;
+  flex-direction: row;
+}
+
+.Spell {
+  width: 100px;
+  height: 130px;
+}
+
+.SpellCard {
+  background-color: mediumslateblue;
+  width: 100px;
+  height: 130px;
+}
+
+.SpellCard.active {
+  border: 1px solid red;
+  width: 100%;
+  height: 100%;
+}
+
+.SpellCard.inactive {
+  border: 1px solid green;
+  width: 100%;
+  height: 100%;
+}
+
+.SpellCard.trump {
+  border: 1px solid violet;
+  background-color: red;
+  width: 100%;
+  height: 100%;
+}
+
+.SpellCard.standard {
+  border: 1px solid black;
+  width: 100%;
+  height: 100%;
+}
+
+.SmallCardImage {
+  width: 50px;
+}
+
+.SmallCardFrame {
+  width: 50px;
+  position: absolute;
 }

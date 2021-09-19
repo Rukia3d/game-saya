@@ -1,7 +1,7 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import { gameState, mayaCard, story } from "../utils/testobjects";
-import { HeroSpellWithInfo } from "../Fight/HeroSpellWithInfo";
+import { ElementSpellWithInfo } from "../Spells/ElementSpellWithInfo";
 import userEvent from "@testing-library/user-event";
 import { GameContext } from "../App";
 
@@ -24,7 +24,7 @@ test("Renders a spell and a spell can be selected", async () => {
   const selectCard = jest.fn();
   render(
     <GameContext.Provider value={context}>
-      <HeroSpellWithInfo
+      <ElementSpellWithInfo
         card={mayaCard}
         forge={true}
         element={mayaCard.element}
@@ -45,7 +45,7 @@ test("Renders a spell with a frame and a spell info can be clicked", async () =>
   const updatedCard = { ...mayaCard, updates: ["some_update"] };
   render(
     <GameContext.Provider value={context}>
-      <HeroSpellWithInfo
+      <ElementSpellWithInfo
         card={updatedCard}
         forge={true}
         element={updatedCard.element}

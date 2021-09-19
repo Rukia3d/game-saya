@@ -1,9 +1,9 @@
 import React, { useContext } from "react";
 import { GameContext } from "../App";
-import { HeroSpell } from "../Fight/HeroSpellWithInfo";
-import { ElementSpellUpdate } from "../Spells/ElementSpellUpdates";
 import { Spell, SpellUpdate } from "../utils/types";
 import "./Character.css";
+import { ElementSpell } from "../Spells/ElementSpell";
+import { ElementSpellUpdate } from "../Spells/ElementSpellUpdate";
 
 export const Character = () => {
   const context = useContext(GameContext);
@@ -38,7 +38,7 @@ export const Character = () => {
       <h2>New spells</h2>
       <div className="CharacterFullSpells" aria-label="character_spells">
         {spells.map((c: Spell, i: number) => (
-          <HeroSpell card={c} element={element} key={i} />
+          <ElementSpell card={c} element={element} key={i} />
         ))}
       </div>
       <h2>New spell updates</h2>

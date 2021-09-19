@@ -1,8 +1,6 @@
 import React from "react";
-import {
-  HeroSpellDescription,
-  HeroSpellUpdate,
-} from "../Spells/SpellUpdateOptions";
+import { ElementSpellDescription } from "../Spells/ElementSpellDescription";
+import { ElementSpellUpdated } from "../Spells/ElementSpellUpdated";
 import "./InfoCard.css";
 
 export const InfoCard = ({
@@ -20,9 +18,9 @@ export const InfoCard = ({
         aria-label="info_card"
         onClick={() => setInfo(null)}
       >
-        <HeroSpellDescription card={item} />
+        <ElementSpellDescription card={item} />
         {item.updates.map((s: string) => (
-          <HeroSpellUpdate updateId={s} />
+          <ElementSpellUpdated updateId={s} />
         ))}
       </div>
     );

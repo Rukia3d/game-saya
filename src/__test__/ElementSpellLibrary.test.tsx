@@ -2,9 +2,9 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import { GameContext } from "../App";
 import { gameState, mayaCard } from "../utils/testobjects";
-import { SpellUpdateOptions } from "../Spells/SpellUpdateOptions";
 import { elementType } from "../utils/types";
 import userEvent from "@testing-library/user-event";
+import { ElementSpellLibrary } from "../Spells/ElementSpellLibrary";
 
 const context = {
   adventure: null,
@@ -46,7 +46,7 @@ test("Renders All Updates available in the correct color", async () => {
   const setForge = jest.fn();
   render(
     <GameContext.Provider value={newContext}>
-      <SpellUpdateOptions item={fireCard} setForge={setForge} />
+      <ElementSpellLibrary item={fireCard} setForge={setForge} />
     </GameContext.Provider>
   );
   expect(screen.getByText(/Maya Hit 1/)).toBeInTheDocument();
@@ -70,7 +70,7 @@ test("Skips and update if it's already applied", async () => {
   };
   render(
     <GameContext.Provider value={context}>
-      <SpellUpdateOptions item={fireCard} setForge={jest.fn()} />
+      <ElementSpellLibrary item={fireCard} setForge={jest.fn()} />
     </GameContext.Provider>
   );
   expect(screen.getByText(/Maya Hit 1/)).toBeInTheDocument();
@@ -85,7 +85,7 @@ test("Throws error if there's a problem with a context", async () => {
   expect(() =>
     render(
       <GameContext.Provider value={newContext}>
-        <SpellUpdateOptions item={mayaCard} setForge={jest.fn()} />
+        <ElementSpellLibrary item={mayaCard} setForge={jest.fn()} />
       </GameContext.Provider>
     )
   ).toThrow("No data in context");

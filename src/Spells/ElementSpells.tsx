@@ -5,10 +5,10 @@ import { CloseButton } from "../UI/CloseButton";
 
 import { elementType, Spell } from "../utils/types";
 import { InfoCard } from "../UI/InfoCard";
-import { HeroSpellWithInfo } from "../Fight/HeroSpellWithInfo";
 import { GameContext } from "../App";
 import { changeCardsInDeck } from "../utils/gamelogic";
-import { SpellUpdateOptions } from "./SpellUpdateOptions";
+import { ElementSpellWithInfo } from "./ElementSpellWithInfo";
+import { ElementSpellLibrary } from "./ElementSpellLibrary";
 
 export const ElementSpells = ({
   element,
@@ -41,14 +41,14 @@ export const ElementSpells = ({
     context.setGameState({ ...gameState, player: newPlayer });
   };
   return (
-    <div className="CharacterSpells">
+    <div className="ElementSpells">
       <h1>{`${element.charAt(0).toUpperCase() + element.slice(1)} spells`}</h1>
       <CloseButton onClick={() => setElement(null)} />
       {info ? <InfoCard item={info} setInfo={setInfo} /> : null}
-      {forge ? <SpellUpdateOptions item={forge} setForge={setForge} /> : null}
-      <div className="AllCharacterSpells" aria-label="character_spells">
+      {forge ? <ElementSpellLibrary item={forge} setForge={setForge} /> : null}
+      <div className="ElementSpellsList" aria-label="character_spells">
         {spells.map((c: Spell, i: number) => (
-          <HeroSpellWithInfo
+          <ElementSpellWithInfo
             forge
             key={i}
             selectCard={selectCard}
