@@ -63,7 +63,9 @@ export const ElementSpellUpdate = ({
         ))}
       </div>
       {readyToUpdate(update) ? (
-        <button onClick={() => updateSpell(update)}>Update</button>
+        <button data-testid="update_button" onClick={() => updateSpell(update)}>
+          Update
+        </button>
       ) : (
         <div></div>
       )}

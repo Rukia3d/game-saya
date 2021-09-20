@@ -55,7 +55,29 @@ test("Renders a spell with a frame and a spell info can be clicked", async () =>
     </GameContext.Provider>
   );
   expect(screen.getByText(/Maya Hit 1/)).toBeInTheDocument();
-  expect(screen.getByAltText("spellimage_frame0")).toBeInTheDocument();
+  expect(screen.getByAltText("spellimage_frame1")).toBeInTheDocument();
   userEvent.click(screen.getByTestId("hero_card_info"));
   expect(setInfo.mock.calls.length).toEqual(1);
+});
+
+test("Renders inactive spell and forge can be displayed", async () => {
+  const selectCard = jest.fn();
+  const setForge = jest.fn();
+  const unselectedCard = { ...mayaCard, selected: false };
+  render(
+    <GameContext.Provider value={context}>
+      <ElementSpellWithInfo
+        card={unselectedCard}
+        forge={true}
+        element={unselectedCard.element}
+        selectCard={selectCard}
+        setInfo={jest.fn()}
+        setForge={setForge}
+      />
+    </GameContext.Provider>
+  );
+  expect(screen.getByText(/Maya Hit 1/)).toBeInTheDocument();
+  expect(screen.getByText(/forge/)).toBeInTheDocument();
+  userEvent.click(screen.getByTestId("forge_card"));
+  expect(setForge.mock.calls.length).toEqual(1);
 });

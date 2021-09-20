@@ -6,6 +6,8 @@ import { elementType } from "../utils/types";
 import userEvent from "@testing-library/user-event";
 import { ElementSpellLibrary } from "../Spells/ElementSpellLibrary";
 
+const setForge = jest.fn();
+const setGameState = jest.fn();
 const context = {
   adventure: null,
   setAdventure: jest.fn(),
@@ -25,6 +27,7 @@ const notenoughResourcesStyle = "color: red;";
 
 test("Renders All Updates available in the correct color", async () => {
   const fireCard = { ...mayaCard, element: "fire" as elementType };
+  const newSpells = context.gameState.player.spells.concat([fireCard]);
   const newContext = {
     ...context,
     gameState: {
@@ -40,10 +43,10 @@ test("Renders All Updates available in the correct color", async () => {
             quantity: 1,
           },
         ],
+        spells: newSpells,
       },
     },
   };
-  const setForge = jest.fn();
   render(
     <GameContext.Provider value={newContext}>
       <ElementSpellLibrary item={fireCard} setForge={setForge} />
@@ -58,6 +61,10 @@ test("Renders All Updates available in the correct color", async () => {
     "style",
     notenoughResourcesStyle
   );
+  userEvent.click(screen.getAllByTestId("update_button")[0]);
+  expect(
+    context.setGameState.mock.calls[0][0].player.spells[15].updates[0]
+  ).toEqual("fire_1");
   userEvent.click(screen.getByTestId("close_button"));
   expect(setForge.mock.calls.length).toBe(1);
 });

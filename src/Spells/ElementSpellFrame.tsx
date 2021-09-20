@@ -10,7 +10,7 @@ export const ElementSpellFrame = ({ card }: { card: Spell }) => {
         <img
           className="SmallCardFrame"
           src={"../img/Spells/L1frame.png"}
-          alt={`spellimage_frame${card.level}`}
+          alt={`spellimage_frame${card.updates.length}`}
         />
       );
       break;
@@ -19,7 +19,7 @@ export const ElementSpellFrame = ({ card }: { card: Spell }) => {
         <img
           className="SmallCardFrame"
           src={"../img/Spells/L2frame.png"}
-          alt={`spellimage_frame${card.level}`}
+          alt={`spellimage_frame${card.updates.length}`}
         />
       );
       break;
@@ -28,12 +28,12 @@ export const ElementSpellFrame = ({ card }: { card: Spell }) => {
   }
   return (
     <>
-      {frame ? frame : null}
       <img
         className="SmallCardImage"
         src={`../img/Spells/${card.image}.jpg`}
         alt={`spellimage_${card.id}`}
       />
+      {frame ? frame : null}
     </>
   );
 };

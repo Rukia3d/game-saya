@@ -25,7 +25,11 @@ export const ElementSpellWithInfo = ({
         Info
       </button>
       <ElementSpell card={card} selectCard={selectCard} element={element} />
-      {forge ? <button onClick={() => setForge(card)}>forge</button> : null}
+      {forge ? (
+        <button data-testid="forge_card" onClick={() => setForge(card)}>
+          forge
+        </button>
+      ) : null}
     </div>
   );
 };
