@@ -18,8 +18,8 @@ export const InfoCard = ({
         onClick={() => setInfo(null)}
       >
         <ElementSpellDescription card={item} />
-        {item.updates.map((s: string) => (
-          <ElementSpellUpdated updateId={s} />
+        {item.updates.map((s: string, i: number) => (
+          <ElementSpellUpdated updateId={s} key={i} />
         ))}
       </div>
     );

@@ -116,3 +116,19 @@ test("Renders Top menu with resources", () => {
   expect(screen.getByText(/Ash/)).toBeInTheDocument();
   expect(screen.getByText(/Lava Rock/)).toBeInTheDocument();
 });
+
+test("Throws No Data", async () => {
+  jest.spyOn(console, "error").mockImplementation(() => jest.fn());
+  const newContext = {
+    ...context,
+    gameState: null,
+  };
+  expect(() =>
+    render(
+      <GameContext.Provider value={newContext}>
+        <TopMenu />
+      </GameContext.Provider>
+    )
+  ).toThrow("No Data in Context");
+  jest.restoreAllMocks();
+});

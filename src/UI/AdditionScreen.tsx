@@ -1,32 +1,23 @@
 import React, { useContext } from "react";
 import { GameContext } from "../App";
-import { Spell, SpellUpdate } from "../utils/types";
+import { Hero, Spell, SpellUpdate } from "../utils/types";
 import "./AdditionScreen.css";
 import { ElementSpell } from "../Spells/ElementSpell";
 import { ElementSpellUpdate } from "../Spells/ElementSpellUpdate";
 
-const Update = () => {
-  const context = useContext(GameContext);
-  if (
-    !context ||
-    !context.addition ||
-    !context.gameState ||
-    !context.setAdditionScreen
-  ) {
-    throw new Error("No data");
-  }
-  const isUpdate = "resource_base" in context.addition;
+const Update = ({ props }: { props: CurrentScreenProps }) => {
+  const isUpdate = "resource_base" in props.item;
   if (!isUpdate) {
     throw new Error(
       "Update component should not be used to dsplay Hero screen"
     );
   }
-  const spellUpdate = context.addition;
+  const spellUpdate = props.item;
   return (
     <div
       className="CharacterFull"
       aria-label="character_card"
-      onClick={() => context.setAdditionScreen(null)}
+      onClick={() => props.setAdditionScreen(null)}
     >
       <h1>New spell updates</h1>
       <div className="CharacterFullUpdates" aria-label="character_spells">
@@ -36,38 +27,28 @@ const Update = () => {
   );
 };
 
-const Character = () => {
-  const context = useContext(GameContext);
-  if (
-    !context ||
-    !context.addition ||
-    !context.gameState ||
-    !context.setAdditionScreen
-  ) {
-    throw new Error("No data");
-  }
-  const isUpdate = "resource_base" in context.addition;
+const Character = ({ props }: { props: CurrentScreenProps }) => {
+  const character = props.item;
+  const isUpdate = "resource_base" in character;
   if (isUpdate) {
     throw new Error(
       "Character component should not be used to dsplay Update screen"
     );
   }
 
-  const character = context.addition;
-  const element = character.element;
-  if (!character || !element) {
+  if (!character || !character.element) {
     throw new Error("Incorrectly formatted character");
   }
 
   const spells =
-    context.gameState.player.spells.filter(
-      (s: Spell) => s.element === element
-    ) || [];
+    props.playerSpells.filter((s: Spell) => s.element === character.element) ||
+    [];
+  const element = character.element;
   return (
     <div
       className="CharacterFull"
       aria-label="character_card"
-      onClick={() => context.setAdditionScreen(null)}
+      onClick={() => props.setAdditionScreen(null)}
     >
       <h1 aria-label="character_name">{character?.name} joined the party</h1>
       <h2>New spells</h2>
@@ -82,20 +63,43 @@ const Character = () => {
 
 type additionScreenState = "character" | "update";
 
+interface CurrentScreenProps {
+  item: Hero | SpellUpdate;
+  playerSpells: Spell[];
+  setAdditionScreen: (s: null | Hero | SpellUpdate) => void;
+}
+
 type AdditionScreensType = {
-  [key in additionScreenState]: React.FC;
+  [key in additionScreenState]: ({
+    props,
+  }: {
+    props: CurrentScreenProps;
+  }) => JSX.Element;
 };
 
 export const AdditionScreen = () => {
   const context = useContext(GameContext);
-  if (!context || !context.addition || !context.setAdditionScreen) {
+  if (
+    !context ||
+    !context.addition ||
+    !context.setAdditionScreen ||
+    !context.gameState
+  ) {
     throw new Error("No data");
   }
+  const item = context.addition;
   const screen = "resource_base" in context.addition ? "update" : "character";
+
   const additionScreens: AdditionScreensType = {
     character: Character,
     update: Update,
   };
   const CurrentScreen = additionScreens[screen];
-  return <CurrentScreen />;
+
+  const items: CurrentScreenProps = {
+    item: item,
+    playerSpells: context.gameState?.player.spells,
+    setAdditionScreen: context.setAdditionScreen,
+  };
+  return <CurrentScreen props={items} />;
 };

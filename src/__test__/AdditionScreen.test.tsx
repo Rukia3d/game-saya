@@ -3,6 +3,7 @@ import { render, screen } from "@testing-library/react";
 import { GameContext, GameContextType } from "../App";
 import { characterToAdd, gameState, spellUpdates } from "../utils/testobjects";
 import { AdditionScreen } from "../UI/AdditionScreen";
+import userEvent from "@testing-library/user-event";
 
 const context: GameContextType = {
   adventure: gameState.adventures[0],
@@ -57,10 +58,6 @@ test("Renders Character screen", async () => {
   expect(screen.getByText(/joined the party/)).toBeInTheDocument();
   expect(screen.getByText(/New spells/)).toBeInTheDocument();
   expect(screen.getByText(/Fire Hit 1/)).toBeInTheDocument();
-  // expect(screen.getByText(/New spell updates/)).toBeInTheDocument();
-  // expect(screen.getByText(/SomeName1/)).toBeInTheDocument();
-  // expect(screen.getByText(/Some description1/)).toBeInTheDocument();
-  // expect(screen.getByText(/Ash: 1/)).toBeInTheDocument();
 });
 
 test("Throws no character if none provided", async () => {
@@ -93,6 +90,7 @@ test("Throws incorrectly formatted character if some data is missing", async () 
 });
 
 test("Renders Update screen", async () => {
+  const setAdditionScreen = jest.fn();
   const newContext: GameContextType = {
     ...context,
     gameState: {
@@ -100,6 +98,7 @@ test("Renders Update screen", async () => {
       dialogues: gameState.dialogues,
     },
     addition: spellUpdates[0],
+    setAdditionScreen: setAdditionScreen,
   };
   render(
     <GameContext.Provider value={newContext}>
@@ -110,4 +109,6 @@ test("Renders Update screen", async () => {
   expect(screen.getByText(/SomeName1/)).toBeInTheDocument();
   expect(screen.getByText(/Some description1/)).toBeInTheDocument();
   expect(screen.getByText(/Ash: 1/)).toBeInTheDocument();
+  userEvent.click(screen.getByLabelText("character_card"));
+  expect(setAdditionScreen.mock.calls.length).toBe(1);
 });

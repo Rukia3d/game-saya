@@ -66,7 +66,7 @@ const Mana = ({ max, current }: { max: number; current: number }) => {
 export const TopMenu = () => {
   const context = useContext(GameContext);
   if (!context || !context.gameState || !context.gameState.player) {
-    throw new Error("No data");
+    throw new Error("No Data in Context");
   }
   const player = context.gameState.player.data;
 

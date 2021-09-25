@@ -2,7 +2,7 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import { GameContext, GameContextType } from "../App";
 import { gameState, mayaCard } from "../utils/testobjects";
-import { elementType, GameState } from "../utils/types";
+import { elementType } from "../utils/types";
 import userEvent from "@testing-library/user-event";
 import { ElementSpellLibrary } from "../Spells/ElementSpellLibrary";
 
