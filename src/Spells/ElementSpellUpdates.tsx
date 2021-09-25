@@ -13,7 +13,12 @@ export const ElementSpellUpdates = ({
   return (
     <div>
       {spellUpgrades.map((s: SpellUpdate, i: number) => (
-        <ElementSpellUpdate update={s} key={i} updateSpell={updateSpell} />
+        <ElementSpellUpdate
+          update={s}
+          key={i}
+          updateSpell={updateSpell}
+          canUpdate
+        />
       ))}
     </div>
   );

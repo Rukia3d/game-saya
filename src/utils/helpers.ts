@@ -1,12 +1,10 @@
 import {
   Dialogue,
-  OwnedResource,
-  Spell,
   Story,
   StoryGroup,
   Hero,
   SpellUpdate,
-  elementType,
+  StoryAction,
 } from "./types";
 
 //@ts-ignore
@@ -72,6 +70,24 @@ export const findUpdate = (updates: SpellUpdate[], updateId: string) => {
   const res = updates.find((u: SpellUpdate) => u.id === updateId);
   if (!res) throw new Error(`Couldn't find an update ${updateId}`);
   return res;
+};
+
+export const isValidAction = (actions: StoryAction[]) => {
+  // You can't addHero and addUpdate in one scene
+  const addHeroAction = actions.filter(
+    (a: StoryAction) => a.type === "addHero"
+  );
+  const addUpdateAction = actions.filter(
+    (a: StoryAction) => a.type === "addUpdate"
+  );
+  if (addHeroAction.length > 0 && addUpdateAction.length > 0) {
+    throw new Error("You can't addHero and addUpdate in one scene");
+  }
+  if (addHeroAction.length > 1) {
+    throw new Error("Trying to add more than 1 hero");
+  }
+  if (addUpdateAction.length > 1)
+    throw new Error("Trying to add more than 1 update");
 };
 
 export const shuffle = (array: any) => array.sort(() => Math.random() - 0.5);

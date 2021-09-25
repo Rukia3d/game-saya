@@ -1,19 +1,19 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import { GameContext } from "../App";
+import { GameContext, GameContextType } from "../App";
 import userEvent from "@testing-library/user-event";
 import { gameState, baseCards15 } from "../utils/testobjects";
 import { ElementSpells } from "../Spells/ElementSpells";
 
-const context = {
+const context: GameContextType = {
   adventure: gameState.adventures[1],
   setAdventure: jest.fn(),
   story: null,
   setStory: jest.fn(),
   gameState: gameState,
   dialogue: null,
-  character: null,
-  setCharacter: jest.fn(),
+  addition: null,
+  setAdditionScreen: jest.fn(),
   setDialogue: jest.fn(),
   setGameState: jest.fn(),
   backToMain: jest.fn(),
@@ -21,8 +21,9 @@ const context = {
 };
 
 test("CharacterSpells renders correctly for Earth set", async () => {
+  const setGameState = jest.fn();
   render(
-    <GameContext.Provider value={context}>
+    <GameContext.Provider value={{ ...context, setGameState: setGameState }}>
       <ElementSpells
         element="earth"
         spells={baseCards15}
@@ -37,6 +38,6 @@ test("CharacterSpells renders correctly for Earth set", async () => {
   );
   userEvent.click(screen.getAllByLabelText("spell_card_border")[0]);
   expect(
-    context.setGameState.mock.calls[0][0].player.cards[0].selected
+    setGameState.mock.calls[0][0].player.cards[0].selected
   ).not.toBeTruthy();
 });

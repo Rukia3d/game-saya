@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import "./Fight.css";
 
 import { InfoCard } from "../UI/InfoCard";
@@ -13,9 +13,8 @@ import {
   FightState,
   Resource,
   elementType,
-  StoryAction,
 } from "../utils/types";
-import { findActiveCharacters, shuffle } from "../utils/helpers";
+import { findActiveCharacters, isValidAction, shuffle } from "../utils/helpers";
 import {
   finishStory,
   generateDeck,
@@ -29,6 +28,7 @@ import { GameContext } from "../App";
 import { BigCard } from "./BigCard";
 import { generateReward } from "../utils/resourceLogic";
 import { gameState } from "../utils/testobjects";
+import { displayAddedHero, displayAddedUpdate } from "../utils/screenLogic";
 
 export const Fight = () => {
   const context = useContext(GameContext);
@@ -92,29 +92,6 @@ export const Fight = () => {
   const [info, setInfo] = useState<null | Spell | Enemy>(null);
   const [rewards, setRewards] = useState<null | Resource[]>(null);
 
-  // useEffect(() => {
-  //   console.log("Use effect");
-  //   const gameState = context.gameState;
-  //   const story = context.story;
-  //   if (!gameState || !story) throw new Error("Can't update the fight results");
-  //   const actions = story.action;
-
-  //   if (result === "Won" && rewards) {
-  //     const player = finishStory(gameState, actions);
-  //     context.setGameState({
-  //       ...gameState,
-  //       player: updateWinPlayer(player, enemy, rewards),
-  //     });
-  //   }
-
-  //   if (result === "Lost") {
-  //     context.setGameState({
-  //       ...gameState,
-  //       player: updateLostPlayer(gameState.player),
-  //     });
-  //   }
-  // }, [result, context, enemy, rewards]);
-
   const enemyAct = () => {
     const spell = fightState.enemyDeck[0] || null;
     setEnemyCard(spell);
@@ -146,13 +123,23 @@ export const Fight = () => {
     const gameState = context.gameState;
     const story = context.story;
     if (!gameState || !story) throw new Error("Can't update the fight results");
-    const actions = story.action;
+    isValidAction(story.action);
     if (result === "Won" && rewards) {
-      const player = finishStory(gameState, actions);
+      const player = finishStory(gameState, story.action);
       context.setGameState({
         ...gameState,
         player: updateWinPlayer(player, enemy, rewards),
       });
+      displayAddedHero(
+        gameState.heroes,
+        story.action,
+        context.setAdditionScreen
+      );
+      displayAddedUpdate(
+        gameState.spellUpdates,
+        story.action,
+        context.setAdditionScreen
+      );
     }
 
     if (result === "Lost") {

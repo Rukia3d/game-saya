@@ -10,9 +10,11 @@ import {
 export const ElementSpellUpdate = ({
   update,
   updateSpell = () => {},
+  canUpdate = false,
 }: {
   update: SpellUpdate;
   updateSpell?: (s: SpellUpdate) => void;
+  canUpdate?: boolean;
 }) => {
   const context = useContext(GameContext);
   if (
@@ -62,7 +64,7 @@ export const ElementSpellUpdate = ({
           </div>
         ))}
       </div>
-      {readyToUpdate(update) ? (
+      {readyToUpdate(update) && canUpdate ? (
         <button data-testid="update_button" onClick={() => updateSpell(update)}>
           Update
         </button>

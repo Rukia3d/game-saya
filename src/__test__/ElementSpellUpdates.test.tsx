@@ -1,20 +1,20 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import { GameContext } from "../App";
+import { GameContext, GameContextType } from "../App";
 import userEvent from "@testing-library/user-event";
 import { gameState } from "../utils/testobjects";
 import { ElementSpellUpdates } from "../Spells/ElementSpellUpdates";
 import { Resource } from "../utils/types";
 
-const context = {
+const context: GameContextType = {
   adventure: gameState.adventures[1],
   setAdventure: jest.fn(),
   story: null,
   setStory: jest.fn(),
   gameState: gameState,
   dialogue: null,
-  character: null,
-  setCharacter: jest.fn(),
+  addition: null,
+  setAdditionScreen: jest.fn(),
   setDialogue: jest.fn(),
   setGameState: jest.fn(),
   backToMain: jest.fn(),
@@ -23,15 +23,15 @@ const context = {
 
 test("Renders Element spell updates", async () => {
   const updateSpell = jest.fn();
-  const playerResources = context.gameState.resources.map((r: Resource) => {
+  const playerResources = gameState.resources.map((r: Resource) => {
     return { ...r, quantity: 10 };
   });
   const newContext = {
     ...context,
     gameState: {
-      ...context.gameState,
+      ...gameState,
       player: {
-        ...context.gameState.player,
+        ...gameState.player,
         resources: playerResources,
       },
     },

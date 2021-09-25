@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { GameContext } from "../App";
-import { Hero, Spell, SpellUpdate } from "../utils/types";
+import { Spell, SpellUpdate } from "../utils/types";
 import "./AdditionScreen.css";
 import { ElementSpell } from "../Spells/ElementSpell";
 import { ElementSpellUpdate } from "../Spells/ElementSpellUpdate";
@@ -15,12 +15,13 @@ const Update = () => {
   ) {
     throw new Error("No data");
   }
+  const isUpdate = "resource_base" in context.addition;
+  if (!isUpdate) {
+    throw new Error(
+      "Update component should not be used to dsplay Hero screen"
+    );
+  }
   const spellUpdate = context.addition;
-  const element = spellUpdate.element;
-  const updates =
-    context.gameState.player.spellUpdates.filter(
-      (u: SpellUpdate) => u.element === element
-    ) || [];
   return (
     <div
       className="CharacterFull"
@@ -29,9 +30,7 @@ const Update = () => {
     >
       <h1>New spell updates</h1>
       <div className="CharacterFullUpdates" aria-label="character_spells">
-        {updates.map((u: SpellUpdate, i: number) => (
-          <ElementSpellUpdate update={u} key={i} />
-        ))}
+        <ElementSpellUpdate update={spellUpdate as SpellUpdate} />
       </div>
     </div>
   );
@@ -47,11 +46,19 @@ const Character = () => {
   ) {
     throw new Error("No data");
   }
+  const isUpdate = "resource_base" in context.addition;
+  if (isUpdate) {
+    throw new Error(
+      "Character component should not be used to dsplay Update screen"
+    );
+  }
+
   const character = context.addition;
   const element = character.element;
   if (!character || !element) {
     throw new Error("Incorrectly formatted character");
   }
+
   const spells =
     context.gameState.player.spells.filter(
       (s: Spell) => s.element === element

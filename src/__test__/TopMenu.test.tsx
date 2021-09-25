@@ -1,8 +1,23 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import { TopMenu } from "../UI/TopMenu";
-import { GameContext } from "../App";
+import { GameContext, GameContextType } from "../App";
 import { gameState } from "../utils/testobjects";
+
+const context: GameContextType = {
+  adventure: gameState.adventures[1],
+  setAdventure: jest.fn(),
+  story: null,
+  setStory: jest.fn(),
+  gameState: gameState,
+  dialogue: null,
+  addition: null,
+  setAdditionScreen: jest.fn(),
+  setDialogue: jest.fn(),
+  setGameState: jest.fn(),
+  backToMain: jest.fn(),
+  backToStory: jest.fn(),
+};
 
 test("Renders Top menu with high mana and life", () => {
   const newPlayerData = { ...gameState.player.data, mana: 13 };
@@ -10,18 +25,9 @@ test("Renders Top menu with high mana and life", () => {
   render(
     <GameContext.Provider
       value={{
-        adventure: null,
-        setAdventure: jest.fn(),
-        story: null,
-        setStory: jest.fn(),
-        gameState: { ...gameState, player: newPlayer },
-        dialogue: null,
-        character: null,
-        setCharacter: jest.fn(),
-        setDialogue: jest.fn(),
-        setGameState: jest.fn(),
-        backToMain: jest.fn(),
+        ...context,
         backToStory: jest.fn(),
+        gameState: { ...gameState, player: newPlayer },
       }}
     >
       <TopMenu />
@@ -45,22 +51,7 @@ test("Renders Top menu with high mana and life", () => {
 
 test("Renders Top menu with medium mana", () => {
   render(
-    <GameContext.Provider
-      value={{
-        adventure: null,
-        setAdventure: jest.fn(),
-        story: null,
-        setStory: jest.fn(),
-        gameState: gameState,
-        dialogue: null,
-        character: null,
-        setCharacter: jest.fn(),
-        setDialogue: jest.fn(),
-        setGameState: jest.fn(),
-        backToMain: jest.fn(),
-        backToStory: jest.fn(),
-      }}
-    >
+    <GameContext.Provider value={context}>
       <TopMenu />
     </GameContext.Provider>
   );
@@ -79,18 +70,9 @@ test("Renders Top menu with low mana", () => {
   render(
     <GameContext.Provider
       value={{
-        adventure: null,
-        setAdventure: jest.fn(),
-        story: null,
-        setStory: jest.fn(),
-        gameState: { ...gameState, player: newPlayer },
-        dialogue: null,
-        character: null,
-        setCharacter: jest.fn(),
-        setDialogue: jest.fn(),
-        setGameState: jest.fn(),
-        backToMain: jest.fn(),
+        ...context,
         backToStory: jest.fn(),
+        gameState: { ...gameState, player: newPlayer },
       }}
     >
       <TopMenu />
@@ -121,18 +103,9 @@ test("Renders Top menu with resources", () => {
   render(
     <GameContext.Provider
       value={{
-        adventure: null,
-        setAdventure: jest.fn(),
-        story: null,
-        setStory: jest.fn(),
-        gameState: newGameState,
-        dialogue: null,
-        character: null,
-        setCharacter: jest.fn(),
-        setDialogue: jest.fn(),
-        setGameState: jest.fn(),
-        backToMain: jest.fn(),
+        ...context,
         backToStory: jest.fn(),
+        gameState: newGameState,
       }}
     >
       <TopMenu />

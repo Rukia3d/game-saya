@@ -2,10 +2,10 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Fight } from "../Fight/Fight";
-import { GameContext } from "../App";
+import { GameContext, GameContextType } from "../App";
 import { story, gameState, enemy } from "../utils/testobjects";
 
-const context = {
+const context: GameContextType = {
   adventure: null,
   setAdventure: jest.fn(),
   story: story,
@@ -13,8 +13,8 @@ const context = {
   gameState: gameState,
   setGameState: jest.fn(),
   dialogue: null,
-  character: null,
-  setCharacter: jest.fn(),
+  addition: null,
+  setAdditionScreen: jest.fn(),
   setDialogue: jest.fn(),
   backToMain: jest.fn(),
   backToStory: jest.fn(),
@@ -82,8 +82,9 @@ test("Settings screen switches on and off", async () => {
 });
 
 test("Fight finish shows the end screen for win", async () => {
+  const backToStory = jest.fn();
   render(
-    <GameContext.Provider value={context}>
+    <GameContext.Provider value={{ ...context, backToStory: backToStory }}>
       <Fight />
     </GameContext.Provider>
   );
@@ -96,20 +97,15 @@ test("Fight finish shows the end screen for win", async () => {
   expect(await screen.findByText("You Won")).toBeInTheDocument();
   expect(await screen.findByText("Your prize")).toBeInTheDocument();
   userEvent.click(screen.getByTestId("exit_fight"));
-  expect(context.backToStory.mock.calls.length).toEqual(1);
+  expect(backToStory.mock.calls.length).toEqual(1);
 });
 
 test("Throws error if no data provided in context", () => {
   jest.spyOn(console, "error").mockImplementation(() => jest.fn());
   const context1 = { ...context, story: null };
-  const context2 = { ...context, gameState: null };
-  const context3 = {
-    ...context,
-    story: { ...context.story, enemy: undefined },
-  };
   const context4 = {
     ...context,
-    story: { ...context.story, enemy: "some" },
+    story: { ...story, enemy: "some" },
   };
   expect(() =>
     render(
@@ -118,6 +114,7 @@ test("Throws error if no data provided in context", () => {
       </GameContext.Provider>
     )
   ).toThrow("No data in context");
+  const context2 = { ...context, gameState: null };
   expect(() =>
     render(
       <GameContext.Provider value={context2}>
@@ -125,6 +122,10 @@ test("Throws error if no data provided in context", () => {
       </GameContext.Provider>
     )
   ).toThrow("No data in context");
+  const context3 = {
+    ...context,
+    story: { ...story, enemy: undefined },
+  };
   expect(() =>
     render(
       <GameContext.Provider value={context3}>

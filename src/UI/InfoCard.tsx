@@ -10,7 +10,6 @@ export const InfoCard = ({
   item: any;
   setInfo: (s: any) => void;
 }) => {
-  console.log("item.updates", item.updates);
   if (item.updates) {
     return (
       <div

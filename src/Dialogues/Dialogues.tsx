@@ -2,8 +2,9 @@ import React, { useContext, useState } from "react";
 import { GameContext } from "../App";
 import { CloseButton } from "../UI/CloseButton";
 import { finishStory } from "../utils/gamelogic";
-import { findCharacter, findUpdate } from "../utils/helpers";
-import { DialogueLine, Hero, StoryAction } from "../utils/types";
+import { isValidAction } from "../utils/helpers";
+import { displayAddedHero, displayAddedUpdate } from "../utils/screenLogic";
+import { DialogueLine } from "../utils/types";
 import "./Dialogues.css";
 
 const DialogueLines = ({
@@ -54,32 +55,6 @@ export const Dialogues = () => {
     throw new Error("No data");
   }
   const dialogue = context.dialogue;
-  const allHeroes = context.gameState.heroes;
-  const allUpdates = context.gameState.spellUpdates;
-
-  const addHero = (actions: StoryAction[]) => {
-    const addingHero = actions.filter((a: StoryAction) => a.type === "addHero");
-    if (addingHero.length > 1)
-      throw new Error("Trying to add more than 1 hero");
-    if (addingHero.length === 1) {
-      const action = addingHero[0];
-      const hero = findCharacter(allHeroes, action.id);
-      context.setAdditionScreen(hero);
-    }
-  };
-
-  const addUpdate = (actions: StoryAction[]) => {
-    const addingUpdate = actions.filter(
-      (a: StoryAction) => a.type === "addUpdate"
-    );
-    if (addingUpdate.length > 1)
-      throw new Error("Trying to add more than 1 update");
-    if (addingUpdate.length === 1) {
-      const action = addingUpdate[0];
-      const update = findUpdate(allUpdates, action.id);
-      context.setAdditionScreen(update);
-    }
-  };
 
   const finishDialogue = () => {
     if (
@@ -87,12 +62,21 @@ export const Dialogues = () => {
       context.gameState.player &&
       context.dialogue?.action
     ) {
+      isValidAction(context.dialogue?.action);
       context.setGameState({
         ...context.gameState,
         player: finishStory(context.gameState, context.dialogue?.action),
       });
-      addHero(context.dialogue?.action);
-      addUpdate(context.dialogue?.action);
+      displayAddedHero(
+        context.gameState.heroes,
+        context.dialogue?.action,
+        context.setAdditionScreen
+      );
+      displayAddedUpdate(
+        context.gameState.spellUpdates,
+        context.dialogue?.action,
+        context.setAdditionScreen
+      );
     }
 
     context.setDialogue(null);

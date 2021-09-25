@@ -3,9 +3,9 @@ import { render, screen } from "@testing-library/react";
 import { gameState, mayaCard, story } from "../utils/testobjects";
 import { ElementSpellWithInfo } from "../Spells/ElementSpellWithInfo";
 import userEvent from "@testing-library/user-event";
-import { GameContext } from "../App";
+import { GameContext, GameContextType } from "../App";
 
-const context = {
+const context: GameContextType = {
   adventure: null,
   setAdventure: jest.fn(),
   story: story,
@@ -13,8 +13,8 @@ const context = {
   gameState: gameState,
   setGameState: jest.fn(),
   dialogue: null,
-  character: null,
-  setCharacter: jest.fn(),
+  addition: null,
+  setAdditionScreen: jest.fn(),
   setDialogue: jest.fn(),
   backToMain: jest.fn(),
   backToStory: jest.fn(),
