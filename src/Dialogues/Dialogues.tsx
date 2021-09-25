@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import { GameContext } from "../App";
 import { CloseButton } from "../UI/CloseButton";
 import { finishStory } from "../utils/gamelogic";
-import { findCharacter } from "../utils/helpers";
+import { findCharacter, findUpdate } from "../utils/helpers";
 import { DialogueLine, Hero, StoryAction } from "../utils/types";
 import "./Dialogues.css";
 
@@ -55,6 +55,7 @@ export const Dialogues = () => {
   }
   const dialogue = context.dialogue;
   const allHeroes = context.gameState.heroes;
+  const allUpdates = context.gameState.spellUpdates;
 
   const addHero = (actions: StoryAction[]) => {
     const addingHero = actions.filter((a: StoryAction) => a.type === "addHero");
@@ -63,7 +64,20 @@ export const Dialogues = () => {
     if (addingHero.length === 1) {
       const action = addingHero[0];
       const hero = findCharacter(allHeroes, action.id);
-      context.setCharacter(hero);
+      context.setAdditionScreen(hero);
+    }
+  };
+
+  const addUpdate = (actions: StoryAction[]) => {
+    const addingUpdate = actions.filter(
+      (a: StoryAction) => a.type === "addUpdate"
+    );
+    if (addingUpdate.length > 1)
+      throw new Error("Trying to add more than 1 update");
+    if (addingUpdate.length === 1) {
+      const action = addingUpdate[0];
+      const update = findUpdate(allUpdates, action.id);
+      context.setAdditionScreen(update);
     }
   };
 
@@ -78,6 +92,7 @@ export const Dialogues = () => {
         player: finishStory(context.gameState, context.dialogue?.action),
       });
       addHero(context.dialogue?.action);
+      addUpdate(context.dialogue?.action);
     }
 
     context.setDialogue(null);

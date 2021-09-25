@@ -168,7 +168,8 @@ export type storyChangeType =
   | "addNpc"
   | "setAdventure"
   | "openStory"
-  | "addHero";
+  | "addHero"
+  | "addUpdate";
 
 export type spellEffectType =
   | "h_heal"

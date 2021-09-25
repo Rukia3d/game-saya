@@ -51,9 +51,7 @@ app.get("/api/player/", (req: any, res: any) => {
       npcs: playerNpcs,
       heroes: playerHeroes,
       spells: playerCards,
-      spellUpdates: spellUpdates.filter(
-        (s: SpellUpdate) => s.element === "earth"
-      ),
+      spellUpdates: [spellUpdates[0]],
       adventures: playerAdventures,
       resources: [
         {

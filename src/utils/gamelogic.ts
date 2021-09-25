@@ -226,7 +226,7 @@ const updatePlayerSpellUpdates = (
   action: StoryAction
 ) => {
   const updatesToAdd = allUpdates.filter(
-    (s: SpellUpdate) => s.element === action.data
+    (s: SpellUpdate) => s.id === action.data && s.element === action.id
   );
   const newUpdates = updates.concat(updatesToAdd);
   return newUpdates;
@@ -275,6 +275,8 @@ export const finishStory = (
       case "addHero":
         player.heroes = updatePlayerHeroes(player.heroes, game.heroes, action);
         player.spells = updatePlayerCards(player.spells, game.spells, action);
+        break;
+      case "addUpdate":
         player.spellUpdates = updatePlayerSpellUpdates(
           player.spellUpdates,
           game.spellUpdates,

@@ -14,7 +14,7 @@ import {
   gameState,
   mayaCard,
 } from "../utils/testobjects";
-import { Spell } from "../utils/types";
+import { GameState, Spell } from "../utils/types";
 
 test("generateDeck function returns correct character cards", () => {
   const deckForOne = generateDeck(["maya"], baseCards15);
@@ -206,4 +206,19 @@ test("Adds hero correctly if actions requires it", () => {
   const res = finishStory({ ...game, player: newPlayer }, action);
   expect(res.heroes.length).toBe(3);
   expect(res.spells.length).toBe(18);
+});
+
+test("Adds update correctly if actions requires it", () => {
+  const action = [
+    {
+      type: "addUpdate" as "addUpdate",
+      id: "fire",
+      data: "fire_1",
+    },
+  ];
+  const game: GameState = JSON.parse(JSON.stringify(gameState));
+  const newPlayer = { ...game.player, spellUpdates: [] };
+  const res = finishStory({ ...game, player: newPlayer }, action);
+  expect(res.spellUpdates.length).toBe(1);
+  expect(res.spellUpdates[0].id).toEqual(action[0].data);
 });

@@ -5,6 +5,8 @@ import {
   Story,
   StoryGroup,
   Hero,
+  SpellUpdate,
+  elementType,
 } from "./types";
 
 //@ts-ignore
@@ -63,6 +65,12 @@ export const findActiveCharacters = (heroes: Hero[]) => {
 export const findCharacter = (characters: Hero[], charId: string) => {
   const res = characters.find((c: Hero) => c.id === charId);
   if (!res) throw new Error(`Couldn't find a character ${charId}`);
+  return res;
+};
+
+export const findUpdate = (updates: SpellUpdate[], updateId: string) => {
+  const res = updates.find((u: SpellUpdate) => u.id === updateId);
+  if (!res) throw new Error(`Couldn't find an update ${updateId}`);
   return res;
 };
 

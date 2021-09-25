@@ -1,20 +1,20 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import { GameContext } from "../App";
+import { GameContext, GameContextType } from "../App";
 import { gameState, dialogue } from "../utils/testobjects";
 import userEvent from "@testing-library/user-event";
 import { Dialogues } from "../Dialogues/Dialogues";
-import { Story, storyChangeType } from "../utils/types";
+import { storyChangeType } from "../utils/types";
 
-const context = {
+const context: GameContextType = {
   adventure: gameState.adventures[0],
   setAdventure: jest.fn(),
   story: null,
   setStory: jest.fn(),
   gameState: gameState,
   dialogue: dialogue,
-  character: null,
-  setCharacter: jest.fn(),
+  addition: null,
+  setAdditionScreen: jest.fn(),
   setDialogue: jest.fn(),
   setGameState: jest.fn(),
   backToMain: jest.fn(),
@@ -22,8 +22,9 @@ const context = {
 };
 
 test("Renders dialogue page", async () => {
+  const setDialogue = jest.fn();
   render(
-    <GameContext.Provider value={context}>
+    <GameContext.Provider value={{ ...context, setDialogue: setDialogue }}>
       <Dialogues />
     </GameContext.Provider>
   );
@@ -38,15 +39,20 @@ test("Renders dialogue page", async () => {
   expect(screen.getByAltText("character_image_maya")).toBeInTheDocument();
   expect(screen.getByLabelText("dialogue_line_1")).toBeInTheDocument();
   userEvent.click(screen.getByLabelText("dialogue_line_1"));
-  expect(context.setDialogue.mock.calls.length).toBe(1);
+  expect(setDialogue.mock.calls.length).toBe(1);
 });
 
 test("Renders dialogue page and triggers Character screen", async () => {
+  const setAdditionScreen = jest.fn();
   const newDialogue = {
     ...dialogue,
     action: [{ type: "addHero" as storyChangeType, id: "nell", data: "fire" }],
   };
-  const newContext = { ...context, dialogue: newDialogue };
+  const newContext = {
+    ...context,
+    dialogue: newDialogue,
+    setAdditionScreen: setAdditionScreen,
+  };
   render(
     <GameContext.Provider value={newContext}>
       <Dialogues />
@@ -58,5 +64,5 @@ test("Renders dialogue page and triggers Character screen", async () => {
   userEvent.click(screen.getByLabelText("dialogue_line_0"));
   expect(screen.getByLabelText("dialogue_line_1")).toBeInTheDocument();
   userEvent.click(screen.getByLabelText("dialogue_line_1"));
-  expect(context.setCharacter.mock.calls.length).toBe(1);
+  expect(setAdditionScreen.mock.calls.length).toBe(1);
 });

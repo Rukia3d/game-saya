@@ -10,7 +10,8 @@ import {
   SpellUpdate,
   StoryGroup,
 } from "./types";
-const dialogues: Dialogue[] = [];
+
+export const dialogues: Dialogue[] = [];
 [1, 2, 3].forEach((i: number) =>
   dialogues.push({
     id: "c1_dialogue" + i,
@@ -180,7 +181,7 @@ const heroes = ["maya", "tara", "nell", "dart", "grey"].map((s: string) => ({
   image: "",
 }));
 export const gameState: GameState = {
-  dialogues: dialogues,
+  dialogues: dialogues as Dialogue[],
   player: {
     data: {
       id: 1,

@@ -1,19 +1,19 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import { City } from "../Main/City";
-import { GameContext } from "../App";
+import { GameContext, GameContextType } from "../App";
 import { gameState } from "../utils/testobjects";
 import userEvent from "@testing-library/user-event";
 
-const context = {
+const context: GameContextType = {
   adventure: null,
   setAdventure: jest.fn(),
   story: null,
   setStory: jest.fn(),
   gameState: gameState,
   dialogue: null,
-  character: null,
-  setCharacter: jest.fn(),
+  addition: null,
+  setAdditionScreen: jest.fn(),
   setDialogue: jest.fn(),
   setGameState: jest.fn(),
   backToMain: jest.fn(),
@@ -34,14 +34,15 @@ test("Renders Heroes screen with characters ready for a dialogue", () => {
 });
 
 test("Dialogue is triggered when clicking on panel and closes correctly", () => {
+  const setDialogue = jest.fn();
   render(
-    <GameContext.Provider value={context}>
+    <GameContext.Provider value={{ ...context, setDialogue: setDialogue }}>
       <City />
     </GameContext.Provider>
   );
   expect(screen.getByAltText("intro_background")).toBeInTheDocument();
   userEvent.click(screen.getByAltText("maya_story"));
-  expect(context.setDialogue.mock.calls.length).toBe(1);
+  expect(setDialogue.mock.calls.length).toBe(1);
 });
 
 test("Throws error if no data provided in context", () => {

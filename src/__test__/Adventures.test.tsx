@@ -1,20 +1,19 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import { Adventures } from "../Main/Adventures";
-import { GameContext } from "../App";
+import { GameContext, GameContextType } from "../App";
 import userEvent from "@testing-library/user-event";
 import { gameState } from "../utils/testobjects";
-import { adventureType, Player } from "../utils/types";
 
-const context = {
+const context: GameContextType = {
   adventure: null,
   setAdventure: jest.fn(),
   story: null,
   setStory: jest.fn(),
   gameState: gameState,
   dialogue: null,
-  character: null,
-  setCharacter: jest.fn(),
+  addition: null,
+  setAdditionScreen: jest.fn(),
   setDialogue: jest.fn(),
   setGameState: jest.fn(),
   backToMain: jest.fn(),
@@ -56,12 +55,13 @@ test("Renders Adventures with no character quest and correct state", () => {
 });
 
 test("Renders StoryPanels for adventure", async () => {
+  const setAdventure = jest.fn();
   render(
-    <GameContext.Provider value={context}>
+    <GameContext.Provider value={{ ...context, setAdventure: setAdventure }}>
       <Adventures />
     </GameContext.Provider>
   );
   expect(screen.getByAltText("adventure_story")).toBeInTheDocument();
   userEvent.click(screen.getByLabelText("adventure_border_story"));
-  expect(context.setAdventure.mock.calls.length).toBe(1);
+  expect(setAdventure.mock.calls.length).toBe(1);
 });
