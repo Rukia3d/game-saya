@@ -1,5 +1,5 @@
 import { STORIES_PER_PANEL } from "../Stories/Stories";
-import { findCharacter } from "./helpers";
+import { findCharacter, findUpdate } from "./helpers";
 import { givePlayerResources } from "./resourceLogic";
 import {
   Adventure,
@@ -206,7 +206,12 @@ const updatePlayerHeroes = (
   action: StoryAction
 ) => {
   const hero = findCharacter(allHeroes, action.id);
-  heroes.push(hero);
+  const res = heroes.indexOf(hero);
+  if (res !== -1) {
+    console.warn(`Trying to add the same ${action.id} hero again`);
+  } else {
+    heroes.push(hero);
+  }
   return heroes;
 };
 
@@ -225,11 +230,17 @@ const updatePlayerSpellUpdates = (
   allUpdates: SpellUpdate[],
   action: StoryAction
 ) => {
-  const updatesToAdd = allUpdates.filter(
-    (s: SpellUpdate) => s.id === action.data && s.element === action.id
-  );
-  const newUpdates = updates.concat(updatesToAdd);
-  return newUpdates;
+  if (!action.data) {
+    throw new Error("No update Id for the spell Update addition");
+  }
+  const update = findUpdate(allUpdates, action.data);
+  const res = updates.indexOf(update);
+  if (res !== -1) {
+    console.warn(`Trying to add the same ${action.data} update again`);
+  } else {
+    updates.push(update);
+  }
+  return updates;
 };
 
 const findStoryToUpdate = (

@@ -222,3 +222,41 @@ test("Adds update correctly if actions requires it", () => {
   expect(res.spellUpdates.length).toBe(1);
   expect(res.spellUpdates[0].id).toEqual(action[0].data);
 });
+
+test("Can't add the same hero if exists", () => {
+  const warn = jest.spyOn(console, "warn").mockImplementation(() => {});
+  const action = [
+    {
+      type: "addHero" as "addHero",
+      id: "nell",
+      data: "fire",
+    },
+  ];
+  const game: GameState = {
+    ...gameState,
+    player: { ...gameState.player, heroes: gameState.heroes },
+  };
+  const res = finishStory(game, action);
+  expect(res.heroes.length).toBe(5);
+  expect(warn).toBeCalledWith("Trying to add the same nell hero again");
+  warn.mockReset();
+});
+
+test("Can't add the same update if exists", () => {
+  const warn = jest.spyOn(console, "warn").mockImplementation(() => {});
+  const action = [
+    {
+      type: "addUpdate" as "addUpdate",
+      id: "fire",
+      data: "fire_1",
+    },
+  ];
+  const game: GameState = {
+    ...gameState,
+    player: { ...gameState.player, spellUpdates: gameState.spellUpdates },
+  };
+  const res = finishStory(game, action);
+  expect(res.spellUpdates.length).toBe(3);
+  expect(warn).toBeCalledWith("Trying to add the same fire_1 update again");
+  warn.mockReset();
+});
