@@ -133,6 +133,7 @@ export interface FightState {
     mana: number;
     maxMana: number;
   };
+  heroes: Hero[];
   enemy: Enemy;
   heroDeck: Spell[];
   heroDrop: Spell[];

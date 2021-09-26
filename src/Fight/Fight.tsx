@@ -14,7 +14,12 @@ import {
   Resource,
   elementType,
 } from "../utils/types";
-import { findActiveCharacters, isValidAction, shuffle } from "../utils/helpers";
+import {
+  findActiveCharacters,
+  findStoryCharacters,
+  isValidAction,
+  shuffle,
+} from "../utils/helpers";
 import {
   finishStory,
   generateDeck,
@@ -45,7 +50,7 @@ export const Fight = () => {
   }
 
   const storyCharacters = context.story.characters
-    ? context.story.characters
+    ? findStoryCharacters(context.story.characters, player.heroes)
     : findActiveCharacters(player.heroes);
   const enemy: Enemy | null =
     enemies.find((e: any) => e.id === enemyId) || null;
@@ -76,6 +81,7 @@ export const Fight = () => {
       maxMana: player.data.maxMana,
       mana: player.data.mana,
     },
+    heroes: storyCharacters,
     enemy: enemy,
     heroDeck: heroDeck,
     heroHand: heroDeck.splice(0, 5),

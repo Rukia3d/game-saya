@@ -37,6 +37,7 @@ app.get("/api/player/", (req: any, res: any) => {
   const playerCards = spells.filter((s: Spell) => s.element === "earth");
   playerCards.map((s: Spell) => (s.selected = true));
   const playerEnemies = enemies;
+  console.log("spellUpdates", spellUpdates);
 
   const gameState: GameState = {
     player: {

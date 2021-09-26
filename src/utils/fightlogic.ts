@@ -1,6 +1,6 @@
 import { updateHeroDeck } from "./gamelogic";
 import { removeFromArray } from "./helpers";
-import { FightState, Spell, elementType } from "./types";
+import { FightState, Spell, elementType, SpellUpdate, Hero } from "./types";
 const getNextElement = (
   elements: elementType[],
   element: elementType
@@ -12,6 +12,23 @@ const getNextElement = (
     return elements[0];
   }
   return elements[index + 1];
+};
+
+const manaPriceOfUpdates = (updates: SpellUpdate[]) => {
+  let res = 0;
+  for (let i = 0; i < updates.length; i++) {
+    res = res + updates[i].mana;
+  }
+  return res;
+};
+
+const parseUpdateAction = (action: string) => {
+  const res = action.split(",");
+  return { parameter: res[0], change: parseInt(res[1]) };
+};
+
+const heroIsPresent = (update: SpellUpdate, heroes: Hero[]) => {
+  return heroes.filter((h: Hero) => h.element === update.element).length > 0;
 };
 
 const simpleDamage = (
@@ -73,10 +90,27 @@ export const enemyAttack = (
       enemyCard.strength
     );
   }
+  const nextElement = getNextElement(fightState.elements, fightState.element);
 
-  if (heroCard.mana > 0 && fightState.hero.mana >= heroCard.mana) {
+  if (heroCard.updates.length > 0) {
     // additional effects apply
-    newHeroMana = fightState.hero.mana - heroCard.mana;
+    if (manaPriceOfUpdates(heroCard.updates) < fightState.hero.mana) {
+      const currentupdate = heroCard.updates[0];
+      if (heroIsPresent(currentupdate, fightState.heroes)) {
+        const action = parseUpdateAction(currentupdate.action);
+        switch (currentupdate.effect) {
+          case "h_heal":
+            newHeroHealth = newHeroHealth + action.change;
+            break;
+          default:
+            break;
+        }
+      } else {
+        console.warn("Hero is not present to use this update");
+      }
+    } else {
+      console.warn("Not enough mana to use");
+    }
   }
 
   const heroNew = {
@@ -84,7 +118,6 @@ export const enemyAttack = (
     life: newHeroHealth,
     mana: newHeroMana,
   };
-  const nextElement = getNextElement(fightState.elements, fightState.element);
 
   return {
     ...fightState,

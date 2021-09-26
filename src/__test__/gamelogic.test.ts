@@ -12,12 +12,13 @@ import {
   enemyCard,
   fightState,
   gameState,
+  heroes,
   mayaCard,
 } from "../utils/testobjects";
 import { GameState, Spell } from "../utils/types";
 
 test("generateDeck function returns correct character cards", () => {
-  const deckForOne = generateDeck(["maya"], baseCards15);
+  const deckForOne = generateDeck([heroes[0]], baseCards15);
   expect(deckForOne.length).toEqual(15);
 });
 
@@ -27,7 +28,7 @@ test("generateEnemyDeck function returns correct number for enemy lifes", () => 
 });
 
 test("updateHeroDeck shuffles if there are no cards left", () => {
-  const deckForTwo = generateDeck(["maya", "tara"], baseCards15);
+  const deckForTwo = generateDeck(heroes.slice(0, 2), baseCards15);
   const deckForEnemy = generateEnemyDeck(enemy);
   const newFightState = {
     ...JSON.parse(JSON.stringify(fightState)),

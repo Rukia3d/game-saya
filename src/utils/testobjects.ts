@@ -2,6 +2,7 @@ import {
   Adventure,
   adventureType,
   Dialogue,
+  elementType,
   Enemy,
   FightState,
   GameState,
@@ -174,12 +175,23 @@ const playerNpcs = [
     dial: "c1_dialogue2",
   },
 ];
-const heroes = ["maya", "tara", "nell", "dart", "grey"].map((s: string) => ({
-  id: s,
-  selected: false,
-  name: "",
-  image: "",
-}));
+export const heroes: Hero[] = [];
+const heroesFormat: [string, string][] = [
+  ["maya", "earth"],
+  ["tara", "metal"],
+  ["nell", "fire"],
+  ["dart", "water"],
+  ["grey", "air"],
+];
+heroesFormat.forEach((obj: [string, string]) =>
+  heroes.push({
+    id: obj[0],
+    selected: false,
+    name: obj[0],
+    image: "",
+    element: obj[1] as elementType,
+  })
+);
 export const gameState: GameState = {
   dialogues: dialogues as Dialogue[],
   player: {
@@ -228,6 +240,7 @@ export const fightState: FightState = {
     maxLife: gameState.player.data.maxLife,
     maxMana: gameState.player.data.maxMana,
   },
+  heroes: heroes.slice(0, 3),
   enemy: enemy,
   heroDeck: [mayaCard, mayaCard],
   heroHand: [mayaCard, mayaCard],

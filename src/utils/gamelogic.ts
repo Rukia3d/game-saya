@@ -38,7 +38,7 @@ export const changeCardsInDeck = (playerCards: Spell[], s: Spell) => {
 };
 
 export const generateDeck = (
-  characters: string[],
+  characters: Hero[],
   playerCards: Spell[]
 ): Spell[] => {
   const heroSpells: Spell[] = [];

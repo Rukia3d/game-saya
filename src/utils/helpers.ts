@@ -57,7 +57,12 @@ export const findActiveCharacters = (heroes: Hero[]) => {
     }
     i++;
   }
-  return active.map((c: Hero) => c.id);
+  return active;
+};
+
+export const findStoryCharacters = (heroes: string[], allHeroes: Hero[]) => {
+  const res = allHeroes.filter((s: Hero) => heroes.indexOf(s.id) !== -1);
+  return res;
 };
 
 export const findCharacter = (characters: Hero[], charId: string) => {

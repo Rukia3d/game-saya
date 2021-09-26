@@ -71,7 +71,7 @@ test("Finds correct characters to be active and throws if there are not 3", () =
       selected: b,
     })
   );
-  expect(findActiveCharacters(heroes3active)).toEqual([
+  expect(findActiveCharacters(heroes3active).map((h: Hero) => h.id)).toEqual([
     "hero0",
     "hero1",
     "hero2",
@@ -86,7 +86,7 @@ test("Finds correct characters to be active and throws if there are not 3", () =
       selected: b,
     })
   );
-  expect(findActiveCharacters(heroes2active)).toEqual([
+  expect(findActiveCharacters(heroes2active).map((h: Hero) => h.id)).toEqual([
     "hero1",
     "hero2",
     "hero0",
@@ -101,7 +101,7 @@ test("Finds correct characters to be active and throws if there are not 3", () =
       selected: b,
     })
   );
-  expect(findActiveCharacters(heroesNoactive)).toEqual([
+  expect(findActiveCharacters(heroesNoactive).map((h: Hero) => h.id)).toEqual([
     "hero0",
     "hero1",
     "hero2",
