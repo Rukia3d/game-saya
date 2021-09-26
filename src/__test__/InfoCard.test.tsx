@@ -1,8 +1,8 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import { InfoCard } from "../UI/InfoCard";
-import { gameState, mayaCard } from "../utils/testobjects";
-import { elementType } from "../utils/types";
+import { gameState, mayaCard, spellUpdates } from "../utils/testobjects";
+import { elementType, Spell } from "../utils/types";
 import { GameContext, GameContextType } from "../App";
 import userEvent from "@testing-library/user-event";
 
@@ -30,10 +30,10 @@ test("Renders Item card updates", async () => {
     backToStory: jest.fn(),
   };
   const setInfo = jest.fn();
-  const fireCard = {
+  const fireCard: Spell = {
     ...mayaCard,
     element: "fire" as elementType,
-    updates: ["fire_1"],
+    updates: [spellUpdates[0]],
   };
   render(
     <GameContext.Provider value={context}>

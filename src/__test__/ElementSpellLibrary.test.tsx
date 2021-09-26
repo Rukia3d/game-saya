@@ -1,7 +1,7 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import { GameContext, GameContextType } from "../App";
-import { gameState, mayaCard } from "../utils/testobjects";
+import { gameState, mayaCard, spellUpdates } from "../utils/testobjects";
 import { elementType } from "../utils/types";
 import userEvent from "@testing-library/user-event";
 import { ElementSpellLibrary } from "../Spells/ElementSpellLibrary";
@@ -63,7 +63,7 @@ test("Renders All Updates available in the correct color", async () => {
     notenoughResourcesStyle
   );
   userEvent.click(screen.getAllByTestId("update_button")[0]);
-  expect(setGameState.mock.calls[0][0].player.spells[15].updates[0]).toEqual(
+  expect(setGameState.mock.calls[0][0].player.spells[15].updates[0].id).toEqual(
     "fire_1"
   );
   userEvent.click(screen.getByTestId("close_button"));
@@ -74,7 +74,7 @@ test("Skips and update if it's already applied", async () => {
   const fireCard = {
     ...mayaCard,
     element: "fire" as elementType,
-    updates: ["fire_1"],
+    updates: [spellUpdates[0]],
   };
   render(
     <GameContext.Provider value={context}>

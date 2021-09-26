@@ -307,6 +307,6 @@ export const updatePlayerSpell = (
   u: SpellUpdate
 ): Player => {
   const spellToUpdateIndex = p.spells.indexOf(s);
-  p.spells[spellToUpdateIndex].updates.push(u.id);
+  p.spells[spellToUpdateIndex].updates.push(u);
   return p;
 };

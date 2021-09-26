@@ -10,7 +10,7 @@ export interface Spell {
   type: string;
   level: number;
   description: string;
-  updates: string[];
+  updates: SpellUpdate[];
 }
 
 export type OwnedResource = Resource & { quantity: number };

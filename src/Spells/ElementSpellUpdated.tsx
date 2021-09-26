@@ -3,7 +3,7 @@ import "./ElementSpells.css";
 import { GameContext } from "../App";
 import { SpellUpdate } from "../utils/types";
 
-export const ElementSpellUpdated = ({ updateId }: { updateId: string }) => {
+export const ElementSpellUpdated = ({ update }: { update: SpellUpdate }) => {
   const context = useContext(GameContext);
   if (
     !context ||
@@ -13,9 +13,5 @@ export const ElementSpellUpdated = ({ updateId }: { updateId: string }) => {
   ) {
     throw new Error("No data in context");
   }
-  const update = context.gameState.player.spellUpdates.find(
-    (s: SpellUpdate) => s.id === updateId
-  );
-  if (!update) throw new Error("Can't find an update to display");
   return <div>Update: {update.name}</div>;
 };

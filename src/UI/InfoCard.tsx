@@ -1,6 +1,7 @@
 import React from "react";
 import { ElementSpellDescription } from "../Spells/ElementSpellDescription";
 import { ElementSpellUpdated } from "../Spells/ElementSpellUpdated";
+import { SpellUpdate } from "../utils/types";
 import "./InfoCard.css";
 
 export const InfoCard = ({
@@ -18,8 +19,8 @@ export const InfoCard = ({
         onClick={() => setInfo(null)}
       >
         <ElementSpellDescription card={item} />
-        {item.updates.map((s: string, i: number) => (
-          <ElementSpellUpdated updateId={s} key={i} />
+        {item.updates.map((s: SpellUpdate, i: number) => (
+          <ElementSpellUpdated update={s} key={i} />
         ))}
       </div>
     );

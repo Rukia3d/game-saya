@@ -33,7 +33,7 @@ export const ElementSpellLibrary = ({
   const resources = context.gameState.player.resources;
   const applicableUpdates = updates.filter(
     (s: SpellUpdate) =>
-      s.element === item.element && item.updates.indexOf(s.id) === -1
+      s.element === item.element && item.updates.indexOf(s) === -1
   );
 
   const updateSpell = (update: SpellUpdate) => {
