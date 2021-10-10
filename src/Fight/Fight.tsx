@@ -97,15 +97,15 @@ export const Fight = () => {
     heroes: storyCharacters,
     enemy: enemy,
     heroDeck: heroDeck,
+    heroCard: null,
     heroHand: heroDeck.splice(0, 5),
     heroDrop: [],
     enemyDeck: enemyDeck,
     enemyDrop: [],
+    enemyCard: null,
     elements: elements,
     element: elements[0],
   });
-  const [enemyCard, setEnemyCard] = useState<null | Spell>(null);
-  const [heroCard, setHeroCard] = useState<null | Spell>(null);
   const [result, setResult] = useState<null | String>(null);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [info, setInfo] = useState<null | Spell | Enemy>(null);
@@ -113,24 +113,25 @@ export const Fight = () => {
 
   const enemyAct = () => {
     const spell = fightState.enemyDeck[0] || null;
-    setEnemyCard(spell);
+    setfightState({ ...fightState, enemyCard: spell });
   };
 
-  const selectCard = (c: Spell) => {
-    if (!enemyCard) {
+  const selectCard = (card: Spell) => {
+    if (!fightState.enemyCard) {
       console.warn("You are acting first");
       return;
     }
-    setHeroCard(c);
-    setfightState(enemyAttack(fightState, c, enemyCard));
+    setfightState({ ...fightState, heroCard: card });
+    setTimeout(() => {
+      setfightState(enemyAttack(fightState));
+    }, 500);
     setTimeout(() => {
       actionEnd();
     }, 1000);
   };
 
   const actionEnd = () => {
-    setHeroCard(null);
-    setEnemyCard(null);
+    setfightState({ ...fightState, enemyCard: null, heroCard: null });
     if (fightState.hero.life <= 0) {
       setResult("Lost");
     }
@@ -181,16 +182,16 @@ export const Fight = () => {
     <div className="Fight">
       <SettingsButton onClick={() => setSettingsOpen(!settingsOpen)} />
       {settingsOpen ? <Settings /> : null}
-      {enemyCard ? (
+      {fightState.enemyCard ? (
         <BigCard
-          card={enemyCard}
+          card={fightState.enemyCard}
           setInfo={setInfo}
           element={fightState.element}
         />
       ) : null}
-      {heroCard ? (
+      {fightState.heroCard ? (
         <BigCard
-          card={heroCard}
+          card={fightState.heroCard}
           setInfo={setInfo}
           element={fightState.element}
         />

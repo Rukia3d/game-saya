@@ -136,10 +136,12 @@ export interface FightState {
   heroes: Hero[];
   enemy: Enemy;
   heroDeck: Spell[];
+  heroCard: Spell | null;
   heroDrop: Spell[];
   heroHand: Spell[];
   enemyDeck: Spell[];
   enemyDrop: Spell[];
+  enemyCard: Spell | null;
   element: elementType;
   elements: elementType[];
 }

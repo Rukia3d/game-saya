@@ -242,6 +242,8 @@ export const fightState: FightState = {
   },
   heroes: heroes.slice(0, 3),
   enemy: enemy,
+  heroCard: null,
+  enemyCard: null,
   heroDeck: [mayaCard, mayaCard],
   heroHand: [mayaCard, mayaCard],
   heroDrop: [mayaCard],

@@ -81,8 +81,9 @@ test("Settings screen switches on and off", async () => {
   expect(screen.queryByLabelText("settings_screen")).not.toBeInTheDocument();
 });
 
-test("Fight finish shows the end screen for win", async () => {
+test.skip("Fight finish shows the end screen for win", async () => {
   const backToStory = jest.fn();
+  //const newContext = {...context, gameState: {...gameState}}
   render(
     <GameContext.Provider value={{ ...context, backToStory: backToStory }}>
       <Fight />
@@ -94,6 +95,8 @@ test("Fight finish shows the end screen for win", async () => {
   userEvent.click(screen.getByLabelText("opponent"));
   userEvent.click(screen.getAllByLabelText("spell_card")[0]);
   expect(screen.getAllByLabelText("display_card").length).toEqual(2);
+  userEvent.click(screen.getByLabelText("opponent"));
+  userEvent.click(screen.getAllByLabelText("spell_card")[0]);
   expect(await screen.findByText("You Won")).toBeInTheDocument();
   expect(await screen.findByText("Your prize")).toBeInTheDocument();
   userEvent.click(screen.getByTestId("exit_fight"));

@@ -1,6 +1,6 @@
 import { updateHeroDeck } from "./gamelogic";
 import { removeFromArray } from "./helpers";
-import { FightState, Spell, elementType, SpellUpdate, Hero } from "./types";
+import { FightState, elementType, SpellUpdate, Hero } from "./types";
 const getNextElement = (
   elements: elementType[],
   element: elementType
@@ -44,11 +44,12 @@ const simpleDamage = (
   return health;
 };
 
-export const enemyAttack = (
-  fightState: FightState,
-  heroCard: Spell,
-  enemyCard: Spell
-): FightState => {
+export const enemyAttack = (fightState: FightState): FightState => {
+  const heroCard = fightState.heroCard;
+  const enemyCard = fightState.enemyCard;
+  if (heroCard === null || enemyCard === null) {
+    throw new Error("Fight state is missing enemy or hero cards");
+  }
   // Update cards state
   const [newDeck, newDrop] = updateHeroDeck(fightState, heroCard);
   const newHeroHand = removeFromArray(fightState.heroHand, heroCard);

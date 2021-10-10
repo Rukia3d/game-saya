@@ -1,7 +1,5 @@
 import React from "react";
 import { ElementSpellDescription } from "../Spells/ElementSpellDescription";
-import { ElementSpellUpdated } from "../Spells/ElementSpellUpdated";
-import { SpellUpdate } from "../utils/types";
 import "./InfoCard.css";
 
 export const InfoCard = ({
