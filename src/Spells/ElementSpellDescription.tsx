@@ -1,6 +1,7 @@
 import React from "react";
-import { Spell } from "../utils/types";
+import { Spell, SpellUpdate } from "../utils/types";
 import "./ElementSpells.css";
+import { ElementSpellUpdated } from "./ElementSpellUpdated";
 
 export const ElementSpellDescription = ({ card }: { card: Spell }) => {
   return (
@@ -10,6 +11,11 @@ export const ElementSpellDescription = ({ card }: { card: Spell }) => {
       <p>{card.element ? "Element " + card.element : null}</p>
       <p>{card.selected ? "Equiped" : null}</p>
       <p>{card.mana ? "Special" : null}</p>
+      {card.updates.length > 0
+        ? card.updates.map((u: SpellUpdate) => (
+            <ElementSpellUpdated update={u} />
+          ))
+        : null}
     </div>
   );
 };

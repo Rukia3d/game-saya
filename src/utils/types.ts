@@ -174,7 +174,7 @@ export type storyChangeType =
 
 export type spellEffectType =
   | "h_heal"
-  | "h_trumppush"
+  | "h_trumpremove"
   | "h_trumpset"
   | "h_redraw"
   | "h_mana"

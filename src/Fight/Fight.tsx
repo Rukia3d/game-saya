@@ -35,6 +35,19 @@ import { generateReward } from "../utils/resourceLogic";
 import { gameState } from "../utils/testobjects";
 import { displayAddedHero, displayAddedUpdate } from "../utils/screenLogic";
 
+/*Start animation
+Assign enemy element
+Give cards
+*/
+
+/*Element animation
+Change Element
+*/
+
+/*Hit animation
+Hit hero
+*/
+
 export const Fight = () => {
   const context = useContext(GameContext);
   if (!context || !context.story || !context.gameState) {
@@ -111,17 +124,21 @@ export const Fight = () => {
     setHeroCard(c);
     setfightState(enemyAttack(fightState, c, enemyCard));
     setTimeout(() => {
-      setHeroCard(null);
-      setEnemyCard(null);
-      if (fightState.hero.life <= 0) {
-        setResult("Lost");
-      }
-      if (fightState.enemyDrop.length === enemyHealt - 1) {
-        const rewards = generateReward(enemy, gameState.resources);
-        setRewards(rewards);
-        setResult("Won");
-      }
+      actionEnd();
     }, 1000);
+  };
+
+  const actionEnd = () => {
+    setHeroCard(null);
+    setEnemyCard(null);
+    if (fightState.hero.life <= 0) {
+      setResult("Lost");
+    }
+    if (fightState.enemyDrop.length === enemyHealt - 1) {
+      const rewards = generateReward(enemy, gameState.resources);
+      setRewards(rewards);
+      setResult("Won");
+    }
   };
 
   const finishFight = () => {

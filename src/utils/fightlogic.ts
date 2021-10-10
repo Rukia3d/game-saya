@@ -24,7 +24,7 @@ const manaPriceOfUpdates = (updates: SpellUpdate[]) => {
 
 const parseUpdateAction = (action: string) => {
   const res = action.split(",");
-  return { parameter: res[0], change: parseInt(res[1]) };
+  return { parameter: res[0], change: res[1] };
 };
 
 const heroIsPresent = (update: SpellUpdate, heroes: Hero[]) => {
@@ -90,17 +90,39 @@ export const enemyAttack = (
       enemyCard.strength
     );
   }
-  const nextElement = getNextElement(fightState.elements, fightState.element);
-
+  let nextElement = getNextElement(fightState.elements, fightState.element);
+  /* 
+h_trumpset
+h_redraw
+h_mana
+e_redraw
+e_drop
+e_reduice
+h_enforce
+*/
   if (heroCard.updates.length > 0) {
     // additional effects apply
     if (manaPriceOfUpdates(heroCard.updates) < fightState.hero.mana) {
       const currentupdate = heroCard.updates[0];
       if (heroIsPresent(currentupdate, fightState.heroes)) {
         const action = parseUpdateAction(currentupdate.action);
+        //console.log("Spell effect", currentupdate.effect);
         switch (currentupdate.effect) {
           case "h_heal":
-            newHeroHealth = newHeroHealth + action.change;
+            newHeroHealth = newHeroHealth + parseInt(action.change);
+            break;
+          case "h_trumpremove":
+            if (enemyCard.element === fightState.element) {
+              newHeroHealth = newHeroHealth + enemyCard.strength;
+              newHeroHealth = simpleDamage(
+                newHeroHealth,
+                heroCard.strength,
+                enemyCard.strength
+              );
+            }
+            break;
+          case "h_trumpset":
+            nextElement = action.change.replace(/\s/g, "") as elementType;
             break;
           default:
             break;

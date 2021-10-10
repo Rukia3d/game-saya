@@ -19,9 +19,6 @@ export const InfoCard = ({
         onClick={() => setInfo(null)}
       >
         <ElementSpellDescription card={item} />
-        {item.updates.map((s: SpellUpdate, i: number) => (
-          <ElementSpellUpdated update={s} key={i} />
-        ))}
       </div>
     );
   }
