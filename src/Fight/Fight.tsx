@@ -99,7 +99,6 @@ export const Fight = () => {
     elements: elements,
     element: elements[0],
   };
-  console.log("heroHand", prefightState.heroHand);
   const [result, setResult] = useState<null | String>(null);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [info, setInfo] = useState<null | Spell | Enemy>(null);

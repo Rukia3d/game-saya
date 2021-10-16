@@ -46,32 +46,27 @@ const simpleDamage = (
 
 export const enemyAttack = (fightState: FightState): FightState => {
   if (fightState.heroCardIndex === null)
-    throw new Error("No hero card to play");
+    throw new Error(
+      `No hero card to play, heroCardIndex is ${fightState.heroCardIndex}`
+    );
   if (fightState.enemyCardIndex === null)
-    throw new Error("No enemy card to play");
+    throw new Error(
+      `No enemy card to play, enemyCardIndex is ${fightState.heroCardIndex}`
+    );
+
   const heroCard = fightState.heroHand[fightState.heroCardIndex];
   const enemyCard = fightState.enemyDeck[fightState.enemyCardIndex];
-  if (heroCard === null) {
-    throw new Error("Fight state is missing a hero card");
+
+  if (!heroCard) {
+    throw new Error(
+      `Fight state is missing a hero card, the received card index is ${fightState.heroCardIndex}`
+    );
   }
-  if (enemyCard === null) {
-    throw new Error("Fight state is missing an enemy card");
+  if (!enemyCard) {
+    throw new Error(
+      `Fight state is missing an enemy card, the received card index is ${fightState.enemyCardIndex}`
+    );
   }
-  // Update cards state
-  const [newDeck, newDrop] = updateHeroDeck(fightState, heroCard);
-  const newHeroHand = removePlayedCard(
-    fightState.heroHand,
-    fightState.heroCardIndex
-  );
-  const newCard = newDeck.shift();
-  if (!newCard) {
-    throw new Error("Can't find a new card to give to a player");
-  }
-  newHeroHand.push(newCard);
-  const enemyDrop = fightState.enemyDrop.concat([enemyCard]);
-  console.log("enemyDeck1", fightState.enemyDeck);
-  const enemyDeck = fightState.enemyDeck.splice(1);
-  console.log("enemyDeck2", enemyDeck);
   let newHeroHealth = fightState.hero.life;
   let newHeroMana = fightState.hero.mana;
 
@@ -155,14 +150,35 @@ h_enforce
     life: newHeroHealth,
     mana: newHeroMana,
   };
+  return {
+    ...fightState,
+    hero: heroNew,
+  };
+};
 
+export const updateDecks = (fightState: FightState): FightState => {
+  if (fightState.heroCardIndex === null)
+    throw new Error("No hero card to play");
+  if (fightState.enemyCardIndex === null)
+    throw new Error("No enemy card to play");
+  const heroCard = fightState.heroHand[fightState.heroCardIndex];
+  const enemyCard = fightState.enemyDeck[fightState.enemyCardIndex];
+  const [newDeck, newDrop] = updateHeroDeck(fightState, heroCard);
+  const newHeroHand = removePlayedCard(
+    fightState.heroHand,
+    fightState.heroCardIndex
+  );
+  const newCard = newDeck.shift();
+  if (!newCard) {
+    throw new Error("Can't find a new card to give to a player");
+  }
+  newHeroHand.push(newCard);
   return {
     ...fightState,
     heroDeck: newDeck,
     heroDrop: newDrop,
-    enemyDeck: enemyDeck,
-    enemyDrop: enemyDrop,
+    enemyDrop: fightState.enemyDrop.concat([enemyCard]),
     heroHand: newHeroHand,
-    hero: heroNew,
+    enemyDeck: fightState.enemyDeck.slice(1),
   };
 };

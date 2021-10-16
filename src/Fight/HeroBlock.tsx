@@ -10,7 +10,7 @@ export const HeroBlock = ({
   setInfo,
 }: {
   fightState: FightState;
-  selectCard: (s: Spell) => void;
+  selectCard: (index: number) => void;
   setInfo: (s: Spell | Enemy | null) => void;
 }) => {
   return (
@@ -37,7 +37,7 @@ export const HeroBlock = ({
         {fightState.heroHand.map((d: Spell, i: number) => (
           <ElementSpellWithInfo
             card={d}
-            selectCard={selectCard}
+            selectCard={() => selectCard(i)}
             setInfo={setInfo}
             element={fightState.element}
             key={i}

@@ -1,10 +1,34 @@
-import React, { useState } from "react";
-import { enemyAttack, getNextElement } from "../utils/fightlogic";
-import { Enemy, FightState, Spell } from "../utils/types";
+import React, { useEffect, useState } from "react";
+import { enemyAttack, getNextElement, updateDecks } from "../utils/fightlogic";
+import { elementType, Enemy, FightState, Spell } from "../utils/types";
 import { BigCard } from "./BigCard";
 import { EnemyBlock } from "./EnemyBlock";
 import "./Fight.css";
 import { HeroBlock } from "./HeroBlock";
+
+export const BigCardsBlock = ({
+  enemyCard,
+  heroCard,
+  element,
+  setInfo,
+}: {
+  enemyCard: Spell | null;
+  heroCard: Spell | null;
+  element: elementType;
+  setInfo: (s: null | Spell | Enemy) => void;
+}) => {
+  return (
+    <>
+      {enemyCard ? (
+        <BigCard card={enemyCard} setInfo={setInfo} element={element} />
+      ) : null}
+      {enemyCard && heroCard ? (
+        <BigCard card={heroCard} setInfo={setInfo} element={element} />
+      ) : null}
+    </>
+  );
+};
+
 export const FightScene = ({
   prefightState,
   setInfo,
@@ -15,90 +39,103 @@ export const FightScene = ({
   setResult: (r: null | String) => void;
 }) => {
   const [fightState, setfightState] = useState<FightState>(prefightState);
+  const [firstAction, setFirstAction] = useState(true);
+  const [enemyCard, setEnemyCard] = useState<Spell | null>(null);
+  const [heroCard, setHeroCard] = useState<Spell | null>(null);
   const [commands, setComands] = useState<String[]>([
     "Assign enemy element",
     "Give player cards",
   ]);
-  const enemyAct = () => {
-    const spell = fightState.enemyDeck[0] || null;
-    console.log("Enemy deck", fightState.enemyDeck.length);
-    console.log("Enemy spell", spell);
-    setComands(commands.concat(["Select enemy card"]));
-    setfightState((newstate) => ({
-      ...newstate,
-      enemyCard: spell,
-    }));
-  };
 
-  const selectCard = (card: Spell) => {
-    console.log("selectCard");
-    if (!fightState.enemyCardIndex) {
-      console.warn("You are acting first");
+  const startFight = () => {
+    if (fightState.hero.life <= 0) {
+      setResult("Lost");
       return;
     }
-    setComands(commands.concat(["Select hero card"]));
-    setfightState((newstate) => ({
-      ...newstate,
-      heroCard: card,
-    }));
-    setTimeout(() => {
-      console.log("first timeout");
-      setComands(commands.concat(["Hit hero"]));
-      setfightState((newstate) => enemyAttack(newstate));
-    }, 500);
-    setTimeout(() => {
-      console.log("second timeout");
-      setComands(commands.concat(["Hit enemy"]));
-      actionEnd();
-    }, 1000);
-  };
-
-  const actionEnd = () => {
-    console.log("actionEnd");
-    setComands(commands.concat(["Act both cards"]));
-    setfightState((newstate) => ({
-      ...newstate,
-      enemyCard: null,
-      heroCard: null,
-    }));
-    setComands(commands.concat(["Change Element"]));
+    if (fightState.enemyDeck.length <= 1) {
+      setResult("Won");
+      return;
+    }
     setfightState((newstate) => ({
       ...newstate,
       element: getNextElement(fightState.elements, fightState.element),
     }));
-    console.log("fightState.hero.life <= 0", fightState.hero.life <= 0);
-    if (fightState.hero.life <= 0) {
-      commands.push("Show player lost");
-      setResult("Lost");
-    }
-    console.log(
-      "fightState.enemyDrop.length === fightState.enemyDeck.length - 1",
-      fightState.enemyDrop.length === fightState.enemyDeck.length - 1
-    );
-    if (fightState.enemyDrop.length === fightState.enemyDeck.length - 1) {
-      commands.push("Show player Won");
-      setResult("Won");
-    }
-    commands.push("Give player a card");
-    console.log("Action end", commands);
-    enemyAct();
+    setTimeout(() => {
+      enemyAct(0);
+    }, 500);
   };
+
+  const enemyAct = (index: number) => {
+    if (fightState.enemyDeck.length === index)
+      throw new Error("Enemy Deck is empty");
+    setEnemyCard(fightState.enemyDeck[index]);
+    setfightState((newstate) => ({
+      ...newstate,
+      enemyCardIndex: 0,
+    }));
+  };
+
+  const heroAct = (index: number) => {
+    if (fightState.enemyCardIndex === null) {
+      console.warn("You are acting first");
+      return;
+    }
+    setHeroCard(fightState.heroDeck[index]);
+    setfightState((newstate) => ({
+      ...newstate,
+      heroCardIndex: index,
+    }));
+    setTimeout(() => {
+      matchCards();
+    }, 500);
+  };
+
+  const matchCards = () => {
+    setfightState((newstate) => {
+      return enemyAttack(newstate);
+    });
+    setTimeout(() => {
+      actionEnd();
+    }, 500);
+  };
+
+  const actionEnd = () => {
+    setHeroCard(null);
+    setEnemyCard(null);
+    setfightState((newstate) => {
+      return updateDecks(newstate);
+    });
+    setTimeout(() => {
+      updateCards();
+    }, 500);
+  };
+
+  const updateCards = () => {
+    setfightState((newstate) => ({
+      ...newstate,
+      enemyCardIndex: null,
+      heroCardIndex: null,
+    }));
+
+    setTimeout(() => {
+      startFight();
+    }, 500);
+  };
+
+  if (firstAction) {
+    setTimeout(() => {
+      startFight();
+    }, 500);
+    setFirstAction(false);
+  }
   return (
     <>
-      {fightState.enemyCardIndex ? (
-        <BigCard
-          card={fightState.enemyDeck[fightState.enemyCardIndex]}
-          setInfo={setInfo}
-          element={fightState.element}
-        />
-      ) : null}
-      {fightState.heroCardIndex ? (
-        <BigCard
-          card={fightState.heroHand[fightState.heroCardIndex]}
-          setInfo={setInfo}
-          element={fightState.element}
-        />
-      ) : null}
+      <BigCardsBlock
+        enemyCard={enemyCard}
+        heroCard={heroCard}
+        element={fightState.element}
+        setInfo={setInfo}
+      />
       <EnemyBlock
         fightState={fightState}
         enemyAct={enemyAct}
@@ -106,7 +143,7 @@ export const FightScene = ({
       />
       <HeroBlock
         fightState={fightState}
-        selectCard={selectCard}
+        selectCard={heroAct}
         setInfo={setInfo}
       />
     </>

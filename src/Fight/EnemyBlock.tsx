@@ -7,7 +7,7 @@ export const EnemyBlock = ({
   setInfo,
 }: {
   fightState: FightState;
-  enemyAct: () => void;
+  enemyAct: (i: number) => void;
   setInfo: (i: Spell | Enemy | null) => void;
 }) => {
   return (
@@ -21,7 +21,7 @@ export const EnemyBlock = ({
         <span data-testid="enemy_life">{fightState.enemyDeck.length}</span>,
         drop: {fightState.enemyDrop.length}
       </div>
-      <div className="Enemy" onClick={enemyAct} aria-label="opponent">
+      <div className="Enemy" onClick={() => enemyAct(0)} aria-label="opponent">
         <img
           src={`../img/Enemies/${fightState.enemy.id}.png`}
           alt={fightState.enemy.name}
