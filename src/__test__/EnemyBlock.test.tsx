@@ -1,6 +1,6 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import { CharacterBox } from "../Fight/CharacterBox";
+import { EnemyBlock } from "../Fight/EnemyBlock";
 import userEvent from "@testing-library/user-event";
 import { gameState, fightState } from "../utils/testobjects";
 
@@ -8,11 +8,7 @@ test("Renders Character Box", async () => {
   const setInfo = jest.fn();
   const enemyAct = jest.fn();
   render(
-    <CharacterBox
-      fightState={fightState}
-      enemyAct={enemyAct}
-      setInfo={setInfo}
-    />
+    <EnemyBlock fightState={fightState} enemyAct={enemyAct} setInfo={setInfo} />
   );
   const player = gameState.player.data;
   expect(screen.getByTestId("enemy_life").innerHTML).toEqual(

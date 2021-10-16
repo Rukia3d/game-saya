@@ -1,6 +1,6 @@
 import React from "react";
 import { Resource } from "../utils/types";
-import "./FightResult.css";
+import "./Fight.css";
 
 const Rewards = ({ resource }: { resource: Resource[] }) => {
   return (

@@ -4,15 +4,13 @@ import "./Fight.css";
 import { InfoCard } from "../UI/InfoCard";
 import { Settings } from "../UI/Settings";
 import { SettingsButton } from "../UI/SettingsButton";
-import { CharacterBox } from "./CharacterBox";
-import { HeroBlock } from "./HeroBlock";
 
 import {
   Spell,
   Enemy,
-  FightState,
   Resource,
   elementType,
+  FightState,
 } from "../utils/types";
 import {
   findActiveCharacters,
@@ -27,25 +25,20 @@ import {
   updateLostPlayer,
   updateWinPlayer,
 } from "../utils/gamelogic";
-import { enemyAttack } from "../utils/fightlogic";
 import { FightResult } from "./FightResult";
 import { GameContext } from "../App";
-import { BigCard } from "./BigCard";
-import { generateReward } from "../utils/resourceLogic";
-import { gameState } from "../utils/testobjects";
 import { displayAddedHero, displayAddedUpdate } from "../utils/screenLogic";
+import { FightScene } from "./FightScene";
+import { generateReward } from "../utils/resourceLogic";
 
-/*Start animation
+/*
 Assign enemy element
-Give cards
-*/
-
-/*Element animation
+Give player cards
 Change Element
-*/
-
-/*Hit animation
+Select enemy card
+Select hero card
 Hit hero
+Hit enemy
 */
 
 export const Fight = () => {
@@ -76,8 +69,7 @@ export const Fight = () => {
     throw new Error(`Couldn't generate cards for player`);
   }
   const enemyDeck = shuffle(generateEnemyDeck(enemy)); //shuffle(generateEnemyDeck());
-  const enemyHealt = enemyDeck.length;
-  if (enemyHealt < 1) {
+  if (enemyDeck.length < 1) {
     throw new Error(`Couldn't generate cards for enemy`);
   }
   const elements: elementType[] = shuffle([
@@ -87,7 +79,8 @@ export const Fight = () => {
     "water",
     "air",
   ]);
-  const [fightState, setfightState] = useState<FightState>({
+
+  const prefightState: FightState = {
     hero: {
       maxLife: player.data.maxLife,
       life: player.data.life,
@@ -97,50 +90,20 @@ export const Fight = () => {
     heroes: storyCharacters,
     enemy: enemy,
     heroDeck: heroDeck,
-    heroCard: null,
+    heroCardIndex: null,
     heroHand: heroDeck.splice(0, 5),
     heroDrop: [],
     enemyDeck: enemyDeck,
     enemyDrop: [],
-    enemyCard: null,
+    enemyCardIndex: null,
     elements: elements,
     element: elements[0],
-  });
+  };
+  console.log("heroHand", prefightState.heroHand);
   const [result, setResult] = useState<null | String>(null);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [info, setInfo] = useState<null | Spell | Enemy>(null);
   const [rewards, setRewards] = useState<null | Resource[]>(null);
-
-  const enemyAct = () => {
-    const spell = fightState.enemyDeck[0] || null;
-    setfightState({ ...fightState, enemyCard: spell });
-  };
-
-  const selectCard = (card: Spell) => {
-    if (!fightState.enemyCard) {
-      console.warn("You are acting first");
-      return;
-    }
-    setfightState({ ...fightState, heroCard: card });
-    setTimeout(() => {
-      setfightState(enemyAttack(fightState));
-    }, 500);
-    setTimeout(() => {
-      actionEnd();
-    }, 1000);
-  };
-
-  const actionEnd = () => {
-    setfightState({ ...fightState, enemyCard: null, heroCard: null });
-    if (fightState.hero.life <= 0) {
-      setResult("Lost");
-    }
-    if (fightState.enemyDrop.length === enemyHealt - 1) {
-      const rewards = generateReward(enemy, gameState.resources);
-      setRewards(rewards);
-      setResult("Won");
-    }
-  };
 
   const finishFight = () => {
     console.warn("Fight is finished");
@@ -148,7 +111,9 @@ export const Fight = () => {
     const story = context.story;
     if (!gameState || !story) throw new Error("Can't update the fight results");
     isValidAction(story.action);
-    if (result === "Won" && rewards) {
+    if (result === "Won") {
+      const rewards = generateReward(enemy, gameState.resources);
+      setRewards(rewards);
       const player = finishStory(gameState, story.action);
       context.setGameState({
         ...gameState,
@@ -182,20 +147,11 @@ export const Fight = () => {
     <div className="Fight">
       <SettingsButton onClick={() => setSettingsOpen(!settingsOpen)} />
       {settingsOpen ? <Settings /> : null}
-      {fightState.enemyCard ? (
-        <BigCard
-          card={fightState.enemyCard}
-          setInfo={setInfo}
-          element={fightState.element}
-        />
-      ) : null}
-      {fightState.heroCard ? (
-        <BigCard
-          card={fightState.heroCard}
-          setInfo={setInfo}
-          element={fightState.element}
-        />
-      ) : null}
+      <FightScene
+        prefightState={prefightState}
+        setInfo={setInfo}
+        setResult={setResult}
+      />
       {info ? <InfoCard item={info} setInfo={setInfo} /> : null}
       {result ? (
         <FightResult
@@ -204,16 +160,6 @@ export const Fight = () => {
           rewards={rewards}
         />
       ) : null}
-      <CharacterBox
-        fightState={fightState}
-        enemyAct={enemyAct}
-        setInfo={setInfo}
-      />
-      <HeroBlock
-        fightState={fightState}
-        selectCard={selectCard}
-        setInfo={setInfo}
-      />
     </div>
   );
 };

@@ -44,3 +44,37 @@
 .BigCardImage {
   width: 100px;
 }
+
+.FightResult {
+  position: absolute;
+  top: 2em;
+  left: 2em;
+  padding: 3em;
+  width: 80%;
+  height: 80%;
+  background-color: gold;
+  z-index: 100;
+}
+
+.CharacterBox {
+  border: 1px solid yellow;
+  width: 60%;
+  height: 100%;
+}
+
+.Stats {
+  width: 100%;
+  border: 1px solid black;
+  height: 10%;
+}
+.Enemy {
+  width: 100%;
+  border: 1px solid black;
+  height: 80%;
+}
+
+.Enemy img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}

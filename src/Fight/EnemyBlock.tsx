@@ -1,9 +1,7 @@
 import React from "react";
-import "./CharacterBox.css";
-
 import { Enemy, FightState, Spell } from "../utils/types";
 
-export const CharacterBox = ({
+export const EnemyBlock = ({
   fightState,
   enemyAct,
   setInfo,

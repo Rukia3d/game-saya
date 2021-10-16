@@ -10,9 +10,9 @@ test("Enemy attacks base card 3, hero defends base card 5", () => {
   const newFightState = {
     ...JSON.parse(JSON.stringify(fightState)),
     heroHand: fightState.heroHand.concat(newHeroCard),
-    heroCard: newHeroCard,
+    heroCardIndex: 2,
     enemyDeck: fightState.enemyDeck.concat(newEnemyCard),
-    enemyCard: newEnemyCard,
+    enemyCardIndex: 2,
     hero: testHeroLife,
   };
   const enemyAttackRes = enemyAttack(newFightState);
@@ -25,9 +25,9 @@ test("Enemy attacks base card 3, hero defends base card 3", () => {
   const newFightState = {
     ...JSON.parse(JSON.stringify(fightState)),
     heroHand: fightState.heroHand.concat(newHeroCard),
-    heroCard: newHeroCard,
+    heroCardIndex: 2,
     enemyDeck: fightState.enemyDeck.concat(newEnemyCard),
-    enemyCard: newEnemyCard,
+    enemyCardIndex: 2,
     hero: testHeroLife,
   };
   const enemyAttackRes = enemyAttack(newFightState);
@@ -41,8 +41,8 @@ test("Enemy attacks base card 5, hero defends base card 3", () => {
     ...JSON.parse(JSON.stringify(fightState)),
     heroHand: fightState.heroHand.concat(newHeroCard),
     enemyDeck: fightState.enemyDeck.concat(newEnemyCard),
-    heroCard: newHeroCard,
-    enemyCard: newEnemyCard,
+    heroCardIndex: 2,
+    enemyCardIndex: 2,
     hero: testHeroLife,
   };
   const enemyAttackRes = enemyAttack(newFightState);
@@ -60,9 +60,9 @@ test("Enemy attacks base card 3, hero defends trump card 5", () => {
   const newFightState = {
     ...JSON.parse(JSON.stringify(fightState)),
     heroHand: fightState.heroHand.concat(newHeroCard),
-    heroCard: newHeroCard,
+    heroCardIndex: 2,
     enemyDeck: fightState.enemyDeck.concat(newEnemyCard),
-    enemyCard: newEnemyCard,
+    enemyCardIndex: 2,
     hero: testHeroLife,
   };
   const enemyAttackRes = enemyAttack(newFightState);
@@ -80,8 +80,8 @@ test("Enemy attacks base card 3, hero defends trump card 3", () => {
     ...JSON.parse(JSON.stringify(fightState)),
     heroHand: fightState.heroHand.concat(newHeroCard),
     enemyDeck: fightState.enemyDeck.concat(newEnemyCard),
-    heroCard: newHeroCard,
-    enemyCard: newEnemyCard,
+    heroCardIndex: 2,
+    enemyCardIndex: 2,
     hero: testHeroLife,
   };
   const enemyAttackRes = enemyAttack(newFightState);
@@ -99,8 +99,8 @@ test("Enemy attacks base card 5, hero defends trump card 3", () => {
     ...JSON.parse(JSON.stringify(fightState)),
     heroHand: fightState.heroHand.concat(newHeroCard),
     enemyDeck: fightState.enemyDeck.concat(newEnemyCard),
-    heroCard: newHeroCard,
-    enemyCard: newEnemyCard,
+    heroCardIndex: 2,
+    enemyCardIndex: 2,
     hero: testHeroLife,
   };
   const enemyAttackRes = enemyAttack(newFightState);
@@ -119,8 +119,8 @@ test("Enemy attacks trump card 3, hero defends base card 5", () => {
     ...JSON.parse(JSON.stringify(fightState)),
     heroHand: fightState.heroHand.concat(newHeroCard),
     enemyDeck: fightState.enemyDeck.concat(newEnemyCard),
-    heroCard: newHeroCard,
-    enemyCard: newEnemyCard,
+    heroCardIndex: 2,
+    enemyCardIndex: 2,
     hero: testHeroLife,
   };
   const enemyAttackRes = enemyAttack(newFightState);
@@ -138,8 +138,8 @@ test("Enemy attacks trump card 3, hero defends base card 3", () => {
     ...JSON.parse(JSON.stringify(fightState)),
     heroHand: fightState.heroHand.concat(newHeroCard),
     enemyDeck: fightState.enemyDeck.concat(newEnemyCard),
-    heroCard: newHeroCard,
-    enemyCard: newEnemyCard,
+    heroCardIndex: 2,
+    enemyCardIndex: 2,
     hero: testHeroLife,
   };
   const enemyAttackRes = enemyAttack(newFightState);
@@ -157,8 +157,8 @@ test("Enemy attacks trump card 5, hero defends base card 3", () => {
     ...JSON.parse(JSON.stringify(fightState)),
     heroHand: fightState.heroHand.concat(newHeroCard),
     enemyDeck: fightState.enemyDeck.concat(newEnemyCard),
-    heroCard: newHeroCard,
-    enemyCard: newEnemyCard,
+    heroCardIndex: 2,
+    enemyCardIndex: 2,
     hero: testHeroLife,
   };
   const enemyAttackRes = enemyAttack(newFightState);
@@ -180,8 +180,8 @@ test("Enemy attacks trump card 3, hero defends trump card 5", () => {
     ...JSON.parse(JSON.stringify(fightState)),
     heroHand: fightState.heroHand.concat(newHeroCard),
     enemyDeck: fightState.enemyDeck.concat(newEnemyCard),
-    heroCard: newHeroCard,
-    enemyCard: newEnemyCard,
+    heroCardIndex: 2,
+    enemyCardIndex: 2,
     hero: testHeroLife,
   };
   const enemyAttackRes = enemyAttack(newFightState);
@@ -203,8 +203,8 @@ test("Enemy attacks trump card 3, hero defends trump card 3", () => {
     ...JSON.parse(JSON.stringify(fightState)),
     heroHand: fightState.heroHand.concat(newHeroCard),
     enemyDeck: fightState.enemyDeck.concat(newEnemyCard),
-    heroCard: newHeroCard,
-    enemyCard: newEnemyCard,
+    heroCardIndex: 2,
+    enemyCardIndex: 2,
     hero: testHeroLife,
   };
   const enemyAttackRes = enemyAttack(newFightState);
@@ -226,8 +226,8 @@ test("Enemy attacks trump card 5, hero defends trump card 3", () => {
     ...JSON.parse(JSON.stringify(fightState)),
     heroHand: fightState.heroHand.concat(newHeroCard),
     enemyDeck: fightState.enemyDeck.concat(newEnemyCard),
-    heroCard: newHeroCard,
-    enemyCard: newEnemyCard,
+    heroCardIndex: 2,
+    enemyCardIndex: 2,
     hero: testHeroLife,
   };
   const enemyAttackRes = enemyAttack(newFightState);
@@ -264,8 +264,8 @@ test("Update effect h_heal works with simple attack", () => {
     enemyDeck: fightState.enemyDeck.concat(newEnemyCard),
     element: "air" as elementType,
     elements: ["fire", "earth", "air"],
-    heroCard: newHeroCard,
-    enemyCard: newEnemyCard,
+    heroCardIndex: 2,
+    enemyCardIndex: 2,
     hero: testHeroLife,
   };
   expect(enemyAttack(newFightState).hero.life).toBe(11);
@@ -289,8 +289,8 @@ test("Update effect h_heal works with simple attack with any effect", () => {
     enemyDeck: fightState.enemyDeck.concat(newEnemyCard),
     element: "air" as elementType,
     elements: ["fire", "earth", "air"],
-    heroCard: newHeroCard,
-    enemyCard: newEnemyCard,
+    heroCardIndex: 2,
+    enemyCardIndex: 2,
     hero: testHeroLife,
   };
   expect(enemyAttack(newFightState).hero.life).toBe(13);
@@ -314,8 +314,8 @@ test("Update effect h_heal works with trump defence", () => {
     enemyDeck: fightState.enemyDeck.concat(newEnemyCard),
     element: "earth" as elementType,
     elements: ["fire", "earth", "air"],
-    heroCard: newHeroCard,
-    enemyCard: newEnemyCard,
+    heroCardIndex: 2,
+    enemyCardIndex: 2,
     hero: testHeroLife,
   };
   expect(enemyAttack(newFightState).hero.life).toBe(11);
@@ -339,8 +339,8 @@ test("Update effect h_heal works with trump attack", () => {
     enemyDeck: fightState.enemyDeck.concat(newEnemyCard),
     element: "fire" as elementType,
     elements: ["fire", "earth", "air"],
-    heroCard: newHeroCard,
-    enemyCard: newEnemyCard,
+    heroCardIndex: 2,
+    enemyCardIndex: 2,
     hero: testHeroLife,
   };
   expect(enemyAttack(newFightState).hero.life).toBe(8);
@@ -365,8 +365,8 @@ test("Update effect h_heal doesn't work if there's no mana", () => {
     enemyDeck: fightState.enemyDeck.concat(newEnemyCard),
     element: "air" as elementType,
     elements: ["fire", "earth", "air"],
-    heroCard: newHeroCard,
-    enemyCard: newEnemyCard,
+    heroCardIndex: 2,
+    enemyCardIndex: 2,
     hero: updatedHero,
   };
   const warn = jest.spyOn(console, "warn").mockImplementation(() => {});
@@ -394,8 +394,8 @@ test("Update effect h_heal doesn't work if character is not present", () => {
     enemyDeck: fightState.enemyDeck.concat(newEnemyCard),
     element: "air" as elementType,
     elements: ["fire", "earth", "air"],
-    heroCard: newHeroCard,
-    enemyCard: newEnemyCard,
+    heroCardIndex: 2,
+    enemyCardIndex: 2,
     hero: testHeroLife,
     heroes: fightState.heroes.slice(1, 3),
   };
@@ -436,8 +436,8 @@ test("Update effect h_trumpremove_1 works with trump attack", () => {
     enemyDeck: fightState.enemyDeck.concat(newEnemyCard),
     element: "fire" as elementType,
     elements: ["fire", "earth", "air"],
-    heroCard: newHeroCard,
-    enemyCard: newEnemyCard,
+    heroCardIndex: 2,
+    enemyCardIndex: 2,
     hero: testHeroLife,
     heroes: heroes,
   };
@@ -463,8 +463,8 @@ test("Update effect h_trumpremove_1 doesnt works with simple attack", () => {
     element: "earth" as elementType,
     elements: ["fire", "earth", "air"],
     hero: testHeroLife,
-    heroCard: newHeroCard,
-    enemyCard: newEnemyCard,
+    heroCardIndex: 2,
+    enemyCardIndex: 2,
     heroes: heroes,
   };
   expect(enemyAttack(newFightState).hero.life).toBe(8);
@@ -498,10 +498,10 @@ test("Update effect h_trumpset_1 works", () => {
     ...JSON.parse(JSON.stringify(fightState)),
     heroHand: fightState.heroHand.concat(newHeroCard),
     enemyDeck: fightState.enemyDeck.concat(newEnemyCard),
-    element: "fire" as elementType,
+    element: "air" as elementType,
     elements: ["fire", "earth", "air"],
-    heroCard: newHeroCard,
-    enemyCard: newEnemyCard,
+    heroCardIndex: 2,
+    enemyCardIndex: 2,
     hero: testHeroLife,
     heroes: heroes,
   };

@@ -1,7 +1,7 @@
 import { updateHeroDeck } from "./gamelogic";
-import { removeFromArray } from "./helpers";
+import { removePlayedCard } from "./helpers";
 import { FightState, elementType, SpellUpdate, Hero } from "./types";
-const getNextElement = (
+export const getNextElement = (
   elements: elementType[],
   element: elementType
 ): elementType => {
@@ -45,18 +45,33 @@ const simpleDamage = (
 };
 
 export const enemyAttack = (fightState: FightState): FightState => {
-  const heroCard = fightState.heroCard;
-  const enemyCard = fightState.enemyCard;
-  if (heroCard === null || enemyCard === null) {
-    throw new Error("Fight state is missing enemy or hero cards");
+  if (fightState.heroCardIndex === null)
+    throw new Error("No hero card to play");
+  if (fightState.enemyCardIndex === null)
+    throw new Error("No enemy card to play");
+  const heroCard = fightState.heroHand[fightState.heroCardIndex];
+  const enemyCard = fightState.enemyDeck[fightState.enemyCardIndex];
+  if (heroCard === null) {
+    throw new Error("Fight state is missing a hero card");
+  }
+  if (enemyCard === null) {
+    throw new Error("Fight state is missing an enemy card");
   }
   // Update cards state
   const [newDeck, newDrop] = updateHeroDeck(fightState, heroCard);
-  const newHeroHand = removeFromArray(fightState.heroHand, heroCard);
+  const newHeroHand = removePlayedCard(
+    fightState.heroHand,
+    fightState.heroCardIndex
+  );
   const newCard = newDeck.shift();
+  if (!newCard) {
+    throw new Error("Can't find a new card to give to a player");
+  }
   newHeroHand.push(newCard);
   const enemyDrop = fightState.enemyDrop.concat([enemyCard]);
+  console.log("enemyDeck1", fightState.enemyDeck);
   const enemyDeck = fightState.enemyDeck.splice(1);
+  console.log("enemyDeck2", enemyDeck);
   let newHeroHealth = fightState.hero.life;
   let newHeroMana = fightState.hero.mana;
 
@@ -91,7 +106,6 @@ export const enemyAttack = (fightState: FightState): FightState => {
       enemyCard.strength
     );
   }
-  let nextElement = getNextElement(fightState.elements, fightState.element);
   /* 
 h_trumpset
 h_redraw
@@ -123,7 +137,7 @@ h_enforce
             }
             break;
           case "h_trumpset":
-            nextElement = action.change.replace(/\s/g, "") as elementType;
+            // TODO
             break;
           default:
             break;
@@ -150,6 +164,5 @@ h_enforce
     enemyDrop: enemyDrop,
     heroHand: newHeroHand,
     hero: heroNew,
-    element: nextElement,
   };
 };

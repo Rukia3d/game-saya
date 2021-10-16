@@ -5,6 +5,7 @@ import {
   Hero,
   SpellUpdate,
   StoryAction,
+  Spell,
 } from "./types";
 
 //@ts-ignore
@@ -16,11 +17,17 @@ export const unique = (arrArg: any[]) =>
   );
 
 export const removeFromArray = (arrArg: any[], item: any) => {
-  const index = arrArg.indexOf(item);
+  const stringifiedArray = arrArg.map((a: any) => JSON.stringify(a));
+  const index = stringifiedArray.indexOf(JSON.stringify(item));
   if (!item || index === -1)
     throw new Error("Can't find the item to remove from array");
   arrArg.splice(index, 1);
   return arrArg;
+};
+
+export const removePlayedCard = (cards: Spell[], index: number): Spell[] => {
+  cards.splice(index, 1);
+  return cards;
 };
 
 export const sortByKey = (array: any) => {

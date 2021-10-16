@@ -12,8 +12,8 @@ export const ElementSpellDescription = ({ card }: { card: Spell }) => {
       <p>{card.selected ? "Equiped" : null}</p>
       <p>{card.mana ? "Special" : null}</p>
       {card.updates.length > 0
-        ? card.updates.map((u: SpellUpdate) => (
-            <ElementSpellUpdated update={u} />
+        ? card.updates.map((u: SpellUpdate, i: number) => (
+            <ElementSpellUpdated update={u} key={i} />
           ))
         : null}
     </div>
