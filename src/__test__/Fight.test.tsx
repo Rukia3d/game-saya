@@ -55,17 +55,15 @@ test("Renders Fight screen", () => {
   // TODO info on defending card is correct
 });
 
-test.skip("Fight works enemy attacks and hero defends", () => {
+test("Fight works enemy attacks and hero defends", () => {
   render(
     <GameContext.Provider value={context}>
       <Fight />
     </GameContext.Provider>
   );
   userEvent.click(screen.getByLabelText("opponent"));
-  screen.debug();
   expect(screen.getAllByLabelText("display_card").length).toEqual(1);
   userEvent.click(screen.getAllByLabelText("spell_card")[0]);
-  screen.debug();
   expect(screen.getAllByLabelText("display_card").length).toEqual(2);
 });
 
@@ -81,28 +79,6 @@ test("Settings screen switches on and off", async () => {
   expect(screen.getByLabelText("settings_screen")).toBeInTheDocument();
   userEvent.click(screen.getByTestId("settings_button"));
   expect(screen.queryByLabelText("settings_screen")).not.toBeInTheDocument();
-});
-
-test.skip("Fight finish shows the end screen for win", async () => {
-  const backToStory = jest.fn();
-  //const newContext = {...context, gameState: {...gameState}}
-  render(
-    <GameContext.Provider value={{ ...context, backToStory: backToStory }}>
-      <Fight />
-    </GameContext.Provider>
-  );
-  userEvent.click(screen.getByLabelText("opponent"));
-  expect(screen.getByLabelText("display_card")).toBeInTheDocument();
-  userEvent.click(screen.getAllByLabelText("spell_card")[0]);
-  userEvent.click(screen.getByLabelText("opponent"));
-  userEvent.click(screen.getAllByLabelText("spell_card")[0]);
-  expect(screen.getAllByLabelText("display_card").length).toEqual(2);
-  userEvent.click(screen.getByLabelText("opponent"));
-  userEvent.click(screen.getAllByLabelText("spell_card")[0]);
-  expect(await screen.findByText("You Won")).toBeInTheDocument();
-  expect(await screen.findByText("Your prize")).toBeInTheDocument();
-  userEvent.click(screen.getByTestId("exit_fight"));
-  expect(backToStory.mock.calls.length).toEqual(1);
 });
 
 test("Throws error if no data provided in context", () => {
@@ -145,6 +121,46 @@ test("Throws error if no data provided in context", () => {
       </GameContext.Provider>
     )
   ).toThrow("Can't find the enemy some");
+
+  jest.restoreAllMocks();
+});
+
+test("Throws error if fightState generated incorrectly", () => {
+  jest.spyOn(console, "error").mockImplementation(() => jest.fn());
+  const newPlayer = { ...gameState.player, spells: [] };
+  const context1 = {
+    ...context,
+    gameState: {
+      ...gameState,
+      player: newPlayer,
+    },
+  };
+  expect(() =>
+    render(
+      <GameContext.Provider value={context1}>
+        <Fight />
+      </GameContext.Provider>
+    )
+  ).toThrow("Couldn't generate cards for player");
+
+  const newPlayer2 = {
+    ...gameState.player,
+    enemies: [{ ...enemy, spells: [] }],
+  };
+  const context2 = {
+    ...context,
+    gameState: {
+      ...gameState,
+      player: newPlayer2,
+    },
+  };
+  expect(() =>
+    render(
+      <GameContext.Provider value={context2}>
+        <Fight />
+      </GameContext.Provider>
+    )
+  ).toThrow("Couldn't generate cards for enemy");
 
   jest.restoreAllMocks();
 });

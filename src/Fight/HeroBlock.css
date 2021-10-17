@@ -20,3 +20,11 @@
 .Deck {
   display: flex;
 }
+
+.Characters {
+  display: flex;
+}
+
+.Character {
+  margin: 1em;
+}

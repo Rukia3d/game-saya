@@ -1,8 +1,16 @@
 import React from "react";
 import "./HeroBlock.css";
 
-import { elementType, Enemy, FightState, Spell } from "../utils/types";
+import { elementType, Enemy, FightState, Hero, Spell } from "../utils/types";
 import { ElementSpellWithInfo } from "../Spells/ElementSpellWithInfo";
+
+const SmallHero = ({ hero }: { hero: Hero }) => {
+  return (
+    <div className="Character" aria-label={`character-${hero.id}`}>
+      <h3>{hero.name}</h3>
+    </div>
+  );
+};
 
 export const HeroBlock = ({
   fightState,
@@ -42,6 +50,11 @@ export const HeroBlock = ({
             element={fightState.element}
             key={i}
           />
+        ))}
+      </div>
+      <div className="Characters" aria-label="Characters">
+        {fightState.heroes.map((h: Hero, i: number) => (
+          <SmallHero hero={h} key={i} />
         ))}
       </div>
     </div>

@@ -31,16 +31,6 @@ import { displayAddedHero, displayAddedUpdate } from "../utils/screenLogic";
 import { FightScene } from "./FightScene";
 import { generateReward } from "../utils/resourceLogic";
 
-/*
-Assign enemy element
-Give player cards
-Change Element
-Select enemy card
-Select hero card
-Hit hero
-Hit enemy
-*/
-
 export const Fight = () => {
   const context = useContext(GameContext);
   if (!context || !context.story || !context.gameState) {
@@ -102,17 +92,17 @@ export const Fight = () => {
   const [result, setResult] = useState<null | String>(null);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [info, setInfo] = useState<null | Spell | Enemy>(null);
-  const [rewards, setRewards] = useState<null | Resource[]>(null);
+  const [rewards, setRewards] = useState(
+    generateReward(enemy, context.gameState.resources)
+  );
 
   const finishFight = () => {
-    console.warn("Fight is finished");
+    console.log("Fight is finished with", result);
     const gameState = context.gameState;
     const story = context.story;
     if (!gameState || !story) throw new Error("Can't update the fight results");
     isValidAction(story.action);
     if (result === "Won") {
-      const rewards = generateReward(enemy, gameState.resources);
-      setRewards(rewards);
       const player = finishStory(gameState, story.action);
       context.setGameState({
         ...gameState,
