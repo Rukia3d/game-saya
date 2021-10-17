@@ -1,10 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { enemyAttack, getNextElement, updateDecks } from "../utils/fightlogic";
 import { elementType, Enemy, FightState, Spell } from "../utils/types";
 import { BigCard } from "./BigCard";
 import { EnemyBlock } from "./EnemyBlock";
 import "./Fight.css";
 import { HeroBlock } from "./HeroBlock";
+
+const SHORTANIMATION = 500;
+const LONGANIMATION = 1500;
 
 export const BigCardsBlock = ({
   enemyCard,
@@ -42,33 +45,39 @@ export const FightScene = ({
   const [firstAction, setFirstAction] = useState(true);
   const [enemyCard, setEnemyCard] = useState<Spell | null>(null);
   const [heroCard, setHeroCard] = useState<Spell | null>(null);
-  const [commands, setComands] = useState<String[]>([
-    "Assign enemy element",
-    "Give player cards",
-  ]);
+  const [animation, setAnimation] = useState<String | null>(null);
 
   const startFight = () => {
     if (fightState.hero.life <= 0) {
-      setResult("Lost");
+      setAnimation("LOST");
+      setTimeout(() => {
+        setResult("Lost");
+      }, SHORTANIMATION);
       return;
     }
     if (fightState.enemyDeck.length <= 1) {
-      setResult("Won");
+      setAnimation("WON");
+      setTimeout(() => {
+        setResult("Won");
+      }, SHORTANIMATION);
       return;
     }
+    const newElement = getNextElement(fightState.elements, fightState.element);
     setfightState((newstate) => ({
       ...newstate,
-      element: getNextElement(fightState.elements, fightState.element),
+      element: newElement,
     }));
+    setAnimation(`ELEMENT`);
     setTimeout(() => {
       enemyAct(0);
-    }, 500);
+    }, SHORTANIMATION);
   };
 
   const enemyAct = (index: number) => {
     if (fightState.enemyDeck.length === index)
       throw new Error("Enemy Deck is empty");
     setEnemyCard(fightState.enemyDeck[index]);
+    setAnimation(`ENEMYACT`);
     setfightState((newstate) => ({
       ...newstate,
       enemyCardIndex: 0,
@@ -80,23 +89,29 @@ export const FightScene = ({
       console.warn("You are acting first");
       return;
     }
+    if (fightState.heroCardIndex !== null) {
+      console.warn("Card already selected");
+      return;
+    }
     setHeroCard(fightState.heroDeck[index]);
     setfightState((newstate) => ({
       ...newstate,
       heroCardIndex: index,
     }));
+    setAnimation(`HEROACT`);
     setTimeout(() => {
       matchCards();
-    }, 500);
+    }, SHORTANIMATION);
   };
 
   const matchCards = () => {
     setfightState((newstate) => {
       return enemyAttack(newstate);
     });
+    setAnimation(`FIGHT`);
     setTimeout(() => {
       actionEnd();
-    }, 500);
+    }, SHORTANIMATION);
   };
 
   const actionEnd = () => {
@@ -105,12 +120,14 @@ export const FightScene = ({
     setfightState((newstate) => {
       return updateDecks(newstate);
     });
+    setAnimation(`ACTIONEND`);
     setTimeout(() => {
       updateCards();
-    }, 500);
+    }, SHORTANIMATION);
   };
 
   const updateCards = () => {
+    setAnimation(`GIVECARD`);
     setfightState((newstate) => ({
       ...newstate,
       enemyCardIndex: null,
@@ -119,17 +136,28 @@ export const FightScene = ({
 
     setTimeout(() => {
       startFight();
-    }, 500);
+    }, SHORTANIMATION);
   };
 
   if (firstAction) {
+    setAnimation(`GIVECARDS`);
     setTimeout(() => {
       startFight();
-    }, 500);
+    }, LONGANIMATION);
     setFirstAction(false);
   }
+  const tempStyle = {
+    position: "absolute" as "absolute",
+    top: "20px",
+    left: "20px",
+    zIndex: 50000,
+  };
+
   return (
     <>
+      <div className="Animation" style={tempStyle}>
+        <h1>{animation}</h1>
+      </div>
       <BigCardsBlock
         enemyCard={enemyCard}
         heroCard={heroCard}
