@@ -173,7 +173,7 @@ export const updateDecks = (fightState: FightState): FightState => {
     throw new Error("Can't find a new card to give to a player");
   }
   newHeroHand.push(newCard);
-  return {
+  const newState = {
     ...fightState,
     heroDeck: newDeck,
     heroDrop: newDrop,
@@ -181,4 +181,5 @@ export const updateDecks = (fightState: FightState): FightState => {
     heroHand: newHeroHand,
     enemyDeck: fightState.enemyDeck.slice(1),
   };
+  return newState;
 };

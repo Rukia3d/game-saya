@@ -9,7 +9,7 @@ import { HeroBlock } from "./HeroBlock";
 const SHORTANIMATION = 500;
 const LONGANIMATION = 1500;
 
-export const BigCardsBlock = ({
+const BigCardsBlock = ({
   enemyCard,
   heroCard,
   element,
@@ -46,32 +46,20 @@ export const FightScene = ({
   const [enemyCard, setEnemyCard] = useState<Spell | null>(null);
   const [heroCard, setHeroCard] = useState<Spell | null>(null);
   const [animation, setAnimation] = useState<String | null>(null);
+  const [nextStep, setNextStep] = useState<String | null>(null);
 
-  const startFight = () => {
-    if (fightState.hero.life <= 0) {
-      setAnimation("LOST");
-      setTimeout(() => {
-        setResult("Lost");
-      }, SHORTANIMATION);
-      return;
-    }
-    if (fightState.enemyDeck.length <= 1) {
-      setAnimation("WON");
-      setTimeout(() => {
-        setResult("Won");
-      }, SHORTANIMATION);
-      return;
-    }
-    const newElement = getNextElement(fightState.elements, fightState.element);
+  if (nextStep === "startFight") {
+    setNextStep(null);
     setfightState((newstate) => ({
       ...newstate,
-      element: newElement,
+      element: getNextElement(fightState.elements, fightState.element),
     }));
     setAnimation(`ELEMENT`);
     setTimeout(() => {
-      enemyAct(0);
+      // enemyAct(0);
+      setNextStep("enemyAct0");
     }, SHORTANIMATION);
-  };
+  }
 
   const enemyAct = (index: number) => {
     if (fightState.enemyDeck.length === index)
@@ -83,6 +71,11 @@ export const FightScene = ({
       enemyCardIndex: 0,
     }));
   };
+
+  if (nextStep === "enemyAct0") {
+    setNextStep(null);
+    enemyAct(0);
+  }
 
   const heroAct = (index: number) => {
     if (fightState.enemyCardIndex === null) {
@@ -100,49 +93,60 @@ export const FightScene = ({
     }));
     setAnimation(`HEROACT`);
     setTimeout(() => {
-      matchCards();
+      setNextStep("matchCards");
     }, SHORTANIMATION);
   };
 
-  const matchCards = () => {
-    setfightState((newstate) => {
-      return enemyAttack(newstate);
-    });
+  if (nextStep === "matchCards") {
+    setNextStep(null);
+    setfightState((newstate) => enemyAttack(newstate));
     setAnimation(`FIGHT`);
     setTimeout(() => {
-      actionEnd();
+      setNextStep("actionEnd");
     }, SHORTANIMATION);
-  };
+  }
 
-  const actionEnd = () => {
+  if (nextStep === "actionEnd") {
+    setNextStep(null);
     setHeroCard(null);
     setEnemyCard(null);
-    setfightState((newstate) => {
-      return updateDecks(newstate);
-    });
+    setfightState((newstate) => updateDecks(newstate));
     setAnimation(`ACTIONEND`);
     setTimeout(() => {
-      updateCards();
+      setNextStep("clearCards");
     }, SHORTANIMATION);
-  };
+  }
 
-  const updateCards = () => {
-    setAnimation(`GIVECARD`);
+  if (nextStep === "clearCards") {
+    setNextStep(null);
     setfightState((newstate) => ({
       ...newstate,
       enemyCardIndex: null,
       heroCardIndex: null,
     }));
 
-    setTimeout(() => {
-      startFight();
-    }, SHORTANIMATION);
-  };
+    if (fightState.hero.life <= 0) {
+      setAnimation("LOST");
+      setTimeout(() => {
+        setResult("Lost");
+      }, SHORTANIMATION);
+    } else if (fightState.enemyDeck.length === 0) {
+      setAnimation("WON");
+      setTimeout(() => {
+        setResult("Won");
+      }, SHORTANIMATION);
+    } else {
+      setAnimation(`GIVECARD`);
+      setTimeout(() => {
+        setNextStep("startFight");
+      }, SHORTANIMATION);
+    }
+  }
 
   if (firstAction) {
     setAnimation(`GIVECARDS`);
     setTimeout(() => {
-      startFight();
+      setNextStep("startFight");
     }, LONGANIMATION);
     setFirstAction(false);
   }
@@ -152,10 +156,13 @@ export const FightScene = ({
     left: "20px",
     zIndex: 50000,
   };
-
   return (
     <>
-      <div className="Animation" style={tempStyle}>
+      <div
+        className="Animation"
+        style={tempStyle}
+        aria-label={`animation-${animation}`}
+      >
         <h1>{animation}</h1>
       </div>
       <BigCardsBlock
