@@ -1,13 +1,10 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { enemyAttack, getNextElement, updateDecks } from "../utils/fightlogic";
+import React from "react";
+import { useFightScene } from "../hooks/useFightScene";
 import { elementType, Enemy, FightState, Spell } from "../utils/types";
 import { BigCard } from "./BigCard";
 import { EnemyBlock } from "./EnemyBlock";
 import "./Fight.css";
 import { HeroBlock } from "./HeroBlock";
-
-const SHORTANIMATION = 500;
-const LONGANIMATION = 1500;
 
 const BigCardsBlock = ({
   enemyCard,
@@ -30,147 +27,6 @@ const BigCardsBlock = ({
       ) : null}
     </>
   );
-};
-
-const steps = {
-  loadFight: ["startFight", LONGANIMATION],
-  startFight: ["enemyAct0", SHORTANIMATION],
-  enemyAct0: [null, SHORTANIMATION],
-  preMatchCards: ["matchCards", SHORTANIMATION],
-  matchCards: ["actionEnd", SHORTANIMATION],
-  actionEnd: ["clearCards", SHORTANIMATION],
-  clearCards: ["startFight", SHORTANIMATION],
-
-  giveCards: ["startFight", SHORTANIMATION],
-  endWon: ["won", SHORTANIMATION],
-  endLost: ["lost", SHORTANIMATION],
-  lost: [null, SHORTANIMATION],
-  won: [null, SHORTANIMATION],
-};
-
-const useFightScene = (
-  prefightState: FightState,
-  setResult: (r: null | String) => void
-): [
-  Spell | null,
-  Spell | null,
-  String | null,
-  FightState,
-  (index: number) => void,
-  (index: number) => void
-] => {
-  const [fightState, setfightState] = useState<FightState>(prefightState);
-  const [enemyCard, setEnemyCard] = useState<Spell | null>(null);
-  const [heroCard, setHeroCard] = useState<Spell | null>(null);
-  const [animation, setAnimation] = useState<String | null>(null);
-  const [nextStep, setNextStep] = useState<keyof typeof steps | null>(
-    "loadFight"
-  );
-
-  useEffect(() => {
-    if (!nextStep) return;
-
-    const [step, delay] = steps[nextStep];
-
-    if (!step) return;
-    const timer = setTimeout(
-      () => setNextStep(step as keyof typeof steps),
-      delay as number
-    );
-
-    return () => clearTimeout(timer);
-  }, [nextStep]);
-
-  const enemyAct = useCallback(
-    (index: number) => {
-      if (fightState.enemyDeck.length === index)
-        throw new Error("Enemy Deck is empty");
-      setEnemyCard(fightState.enemyDeck[index]);
-      setAnimation(`ENEMYACT`);
-      setfightState((newstate) => ({
-        ...newstate,
-        enemyCardIndex: 0,
-      }));
-    },
-    [fightState.enemyDeck]
-  );
-
-  const heroAct = (index: number) => {
-    if (fightState.enemyCardIndex === null) {
-      console.warn("You are acting first");
-      return;
-    }
-    if (fightState.heroCardIndex !== null) {
-      console.warn("Card already selected");
-      return;
-    }
-    setHeroCard(fightState.heroDeck[index]);
-    setfightState((newstate) => ({
-      ...newstate,
-      heroCardIndex: index,
-    }));
-    setAnimation(`HEROACT`);
-    setNextStep("preMatchCards");
-  };
-
-  useEffect(() => {
-    if (nextStep === "loadFight") {
-      setAnimation("GIVECARDS");
-    }
-
-    if (nextStep === "startFight") {
-      setfightState((newstate) => ({
-        ...newstate,
-        element: getNextElement(fightState.elements, fightState.element),
-      }));
-      setAnimation(`ELEMENT`);
-    }
-
-    if (nextStep === "enemyAct0") {
-      enemyAct(0);
-    }
-
-    if (nextStep === "matchCards") {
-      setfightState((newstate) => enemyAttack(newstate));
-      setAnimation(`FIGHT`);
-    }
-
-    if (nextStep === "actionEnd") {
-      setHeroCard(null);
-      setEnemyCard(null);
-      setfightState((newstate) => updateDecks(newstate));
-      setAnimation(`ACTIONEND`);
-    }
-
-    if (nextStep === "clearCards") {
-      setfightState((newstate) => ({
-        ...newstate,
-        enemyCardIndex: null,
-        heroCardIndex: null,
-      }));
-
-      if (fightState.hero.life <= 0) {
-        setAnimation("LOST");
-        setNextStep("endLost");
-      } else if (fightState.enemyDeck.length === 0) {
-        setAnimation("WON");
-        setNextStep("endWon");
-      } else {
-        setAnimation(`GIVECARD`);
-        setNextStep("giveCards");
-      }
-    }
-
-    if (nextStep === "lost") {
-      setResult("Lost");
-    }
-
-    if (nextStep === "won") {
-      setResult("Won");
-    }
-  }, [nextStep]);
-
-  return [enemyCard, heroCard, animation, fightState, enemyAct, heroAct];
 };
 
 export const FightScene = ({
