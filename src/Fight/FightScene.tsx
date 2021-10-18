@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { enemyAttack, getNextElement, updateDecks } from "../utils/fightlogic";
 import { elementType, Enemy, FightState, Spell } from "../utils/types";
 import { BigCard } from "./BigCard";
@@ -32,31 +32,68 @@ const BigCardsBlock = ({
   );
 };
 
-export const FightScene = ({
-  prefightState,
-  setInfo,
-  setResult,
-}: {
-  prefightState: FightState;
-  setInfo: (s: null | Spell | Enemy) => void;
-  setResult: (r: null | String) => void;
-}) => {
+const steps = {
+  loadFight: ["startFight", LONGANIMATION],
+  startFight: ["enemyAct0", SHORTANIMATION],
+  enemyAct0: [null, SHORTANIMATION],
+  preMatchCards: ["matchCards", SHORTANIMATION],
+  matchCards: ["actionEnd", SHORTANIMATION],
+  actionEnd: ["clearCards", SHORTANIMATION],
+  clearCards: ["startFight", SHORTANIMATION],
+
+  giveCards: ["startFight", SHORTANIMATION],
+  endWon: ["won", SHORTANIMATION],
+  endLost: ["lost", SHORTANIMATION],
+  lost: [null, SHORTANIMATION],
+  won: [null, SHORTANIMATION],
+};
+
+const useFightScene = (
+  prefightState: FightState,
+  setResult: (r: null | String) => void
+): [
+  Spell | null,
+  Spell | null,
+  String | null,
+  FightState,
+  (index: number) => void,
+  (index: number) => void
+] => {
   const [fightState, setfightState] = useState<FightState>(prefightState);
   const [enemyCard, setEnemyCard] = useState<Spell | null>(null);
   const [heroCard, setHeroCard] = useState<Spell | null>(null);
   const [animation, setAnimation] = useState<String | null>(null);
-  const [nextStep, setNextStep] = useState<String | null>("loadFight");
+  const [nextStep, setNextStep] = useState<keyof typeof steps | null>(
+    "loadFight"
+  );
 
-  const enemyAct = (index: number) => {
-    if (fightState.enemyDeck.length === index)
-      throw new Error("Enemy Deck is empty");
-    setEnemyCard(fightState.enemyDeck[index]);
-    setAnimation(`ENEMYACT`);
-    setfightState((newstate) => ({
-      ...newstate,
-      enemyCardIndex: 0,
-    }));
-  };
+  useEffect(() => {
+    if (!nextStep) return;
+
+    const [step, delay] = steps[nextStep];
+
+    if (!step) return;
+    const timer = setTimeout(
+      () => setNextStep(step as keyof typeof steps),
+      delay as number
+    );
+
+    return () => clearTimeout(timer);
+  }, [nextStep]);
+
+  const enemyAct = useCallback(
+    (index: number) => {
+      if (fightState.enemyDeck.length === index)
+        throw new Error("Enemy Deck is empty");
+      setEnemyCard(fightState.enemyDeck[index]);
+      setAnimation(`ENEMYACT`);
+      setfightState((newstate) => ({
+        ...newstate,
+        enemyCardIndex: 0,
+      }));
+    },
+    [fightState.enemyDeck]
+  );
 
   const heroAct = (index: number) => {
     if (fightState.enemyCardIndex === null) {
@@ -73,83 +110,80 @@ export const FightScene = ({
       heroCardIndex: index,
     }));
     setAnimation(`HEROACT`);
-    setTimeout(() => {
-      setNextStep("matchCards");
-    }, SHORTANIMATION);
+    setNextStep("preMatchCards");
   };
 
-  if (nextStep === "loadFight") {
-    setNextStep(null);
-    setAnimation(`GIVECARDS`);
-    setTimeout(() => {
-      setNextStep("startFight");
-    }, LONGANIMATION);
-  }
-
-  if (nextStep === "startFight") {
-    setNextStep(null);
-    setfightState((newstate) => ({
-      ...newstate,
-      element: getNextElement(fightState.elements, fightState.element),
-    }));
-    setAnimation(`ELEMENT`);
-    setTimeout(() => {
-      setNextStep("enemyAct0");
-    }, SHORTANIMATION);
-  }
-
-  if (nextStep === "enemyAct0") {
-    setNextStep(null);
-    enemyAct(0);
-  }
-
-  if (nextStep === "matchCards") {
-    console.log("match cards");
-    setNextStep(null);
-    setfightState((newstate) => enemyAttack(newstate));
-    setAnimation(`FIGHT`);
-    setTimeout(() => {
-      setNextStep("actionEnd");
-    }, SHORTANIMATION);
-  }
-
-  if (nextStep === "actionEnd") {
-    setNextStep(null);
-    setHeroCard(null);
-    setEnemyCard(null);
-    console.log("actionEnd");
-    setfightState((newstate) => updateDecks(newstate));
-    setAnimation(`ACTIONEND`);
-    setTimeout(() => {
-      setNextStep("clearCards");
-    }, SHORTANIMATION);
-  }
-
-  if (nextStep === "clearCards") {
-    setNextStep(null);
-    setfightState((newstate) => ({
-      ...newstate,
-      enemyCardIndex: null,
-      heroCardIndex: null,
-    }));
-
-    if (fightState.hero.life <= 0) {
-      setAnimation("LOST");
-      setTimeout(() => {
-        setResult("Lost");
-      }, SHORTANIMATION);
-    } else if (fightState.enemyDeck.length === 0) {
-      setAnimation("WON");
-      setTimeout(() => {
-        setResult("Won");
-      }, SHORTANIMATION);
-    } else {
-      setAnimation(`GIVECARD`);
-      setTimeout(() => {
-        setNextStep("startFight");
-      }, SHORTANIMATION);
+  useEffect(() => {
+    if (nextStep === "loadFight") {
+      setAnimation("GIVECARDS");
     }
-  }
+
+    if (nextStep === "startFight") {
+      setfightState((newstate) => ({
+        ...newstate,
+        element: getNextElement(fightState.elements, fightState.element),
+      }));
+      setAnimation(`ELEMENT`);
+    }
+
+    if (nextStep === "enemyAct0") {
+      enemyAct(0);
+    }
+
+    if (nextStep === "matchCards") {
+      setfightState((newstate) => enemyAttack(newstate));
+      setAnimation(`FIGHT`);
+    }
+
+    if (nextStep === "actionEnd") {
+      setHeroCard(null);
+      setEnemyCard(null);
+      setfightState((newstate) => updateDecks(newstate));
+      setAnimation(`ACTIONEND`);
+    }
+
+    if (nextStep === "clearCards") {
+      setfightState((newstate) => ({
+        ...newstate,
+        enemyCardIndex: null,
+        heroCardIndex: null,
+      }));
+
+      if (fightState.hero.life <= 0) {
+        setAnimation("LOST");
+        setNextStep("endLost");
+      } else if (fightState.enemyDeck.length === 0) {
+        setAnimation("WON");
+        setNextStep("endWon");
+      } else {
+        setAnimation(`GIVECARD`);
+        setNextStep("giveCards");
+      }
+    }
+
+    if (nextStep === "lost") {
+      setResult("Lost");
+    }
+
+    if (nextStep === "won") {
+      setResult("Won");
+    }
+  }, [nextStep]);
+
+  return [enemyCard, heroCard, animation, fightState, enemyAct, heroAct];
+};
+
+export const FightScene = ({
+  prefightState,
+  setInfo,
+  setResult,
+}: {
+  prefightState: FightState;
+  setInfo: (s: null | Spell | Enemy) => void;
+  setResult: (r: null | String) => void;
+}) => {
+  const [enemyCard, heroCard, animation, fightState, enemyAct, heroAct] =
+    useFightScene(prefightState, setResult);
 
   const tempStyle = {
     position: "absolute" as "absolute",
