@@ -181,5 +181,6 @@ export const updateDecks = (fightState: FightState): FightState => {
     heroHand: newHeroHand,
     enemyDeck: fightState.enemyDeck.slice(1),
   };
+  console.log("newState.enemyDeck", newState.enemyDeck);
   return newState;
 };
