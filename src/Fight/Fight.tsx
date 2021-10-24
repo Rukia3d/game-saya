@@ -36,7 +36,7 @@ export const Fight = () => {
   if (!context || !context.story || !context.gameState) {
     throw new Error("No data in context");
   }
-
+  // This needs to go into useFightState hook
   const enemyId = context.story.enemy;
   const enemies = context.gameState.player.enemies;
   const player = context.gameState.player;
@@ -96,6 +96,7 @@ export const Fight = () => {
     generateReward(enemy, context.gameState.resources)
   );
 
+  // This needs to go into finish fight hook
   const finishFight = () => {
     console.log("Fight is finished with", result);
     const gameState = context.gameState;
@@ -103,21 +104,23 @@ export const Fight = () => {
     if (!gameState || !story) throw new Error("Can't update the fight results");
     isValidAction(story.action);
     if (result === "Won") {
-      const player = finishStory(gameState, story.action);
-      context.setGameState({
-        ...gameState,
-        player: updateWinPlayer(player, enemy, rewards),
-      });
       displayAddedHero(
+        gameState.player.heroes,
         gameState.heroes,
         story.action,
         context.setAdditionScreen
       );
       displayAddedUpdate(
+        gameState.player.spellUpdates,
         gameState.spellUpdates,
         story.action,
         context.setAdditionScreen
       );
+      const player = finishStory(gameState, story.action);
+      context.setGameState({
+        ...gameState,
+        player: updateWinPlayer(player, enemy, rewards),
+      });
     }
 
     if (result === "Lost") {

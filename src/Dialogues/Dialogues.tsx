@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import { GameContext } from "../App";
 import { CloseButton } from "../UI/CloseButton";
 import { finishStory } from "../utils/gamelogic";
-import { isValidAction } from "../utils/helpers";
+import { findUpdate, isValidAction } from "../utils/helpers";
 import { displayAddedHero, displayAddedUpdate } from "../utils/screenLogic";
 import { DialogueLine } from "../utils/types";
 import "./Dialogues.css";
@@ -63,22 +63,23 @@ export const Dialogues = () => {
       context.dialogue?.action
     ) {
       isValidAction(context.dialogue?.action);
-      context.setGameState({
-        ...context.gameState,
-        player: finishStory(context.gameState, context.dialogue?.action),
-      });
-      displayAddedHero(
-        context.gameState.heroes,
-        context.dialogue?.action,
-        context.setAdditionScreen
-      );
       displayAddedUpdate(
+        context.gameState.player.spellUpdates,
         context.gameState.spellUpdates,
         context.dialogue?.action,
         context.setAdditionScreen
       );
+      displayAddedHero(
+        context.gameState.player.heroes,
+        context.gameState.heroes,
+        context.dialogue?.action,
+        context.setAdditionScreen
+      );
+      context.setGameState({
+        ...context.gameState,
+        player: finishStory(context.gameState, context.dialogue?.action),
+      });
     }
-
     context.setDialogue(null);
   };
   // console.log(

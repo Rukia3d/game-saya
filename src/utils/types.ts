@@ -172,6 +172,7 @@ export type storyChangeType =
   | "setAdventure"
   | "openStory"
   | "addHero"
+  | "addSpells"
   | "addUpdate";
 
 export type spellEffectType =

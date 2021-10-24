@@ -4,7 +4,7 @@ import { GameContext, GameContextType } from "../App";
 import { gameState, dialogue } from "../utils/testobjects";
 import userEvent from "@testing-library/user-event";
 import { Dialogues } from "../Dialogues/Dialogues";
-import { storyChangeType } from "../utils/types";
+import { elementType, storyChangeType } from "../utils/types";
 
 const context: GameContextType = {
   adventure: gameState.adventures[0],
@@ -48,8 +48,24 @@ test("Renders dialogue page and triggers Character screen", async () => {
     ...dialogue,
     action: [{ type: "addHero" as storyChangeType, id: "nell", data: "fire" }],
   };
+  const newGameState = {
+    ...gameState,
+    player: {
+      ...gameState.player,
+      heroes: [
+        {
+          element: "earth" as elementType,
+          id: "maya",
+          image: "maya",
+          name: "Maya",
+          selected: true,
+        },
+      ],
+    },
+  };
   const newContext = {
     ...context,
+    gameState: newGameState,
     dialogue: newDialogue,
     setAdditionScreen: setAdditionScreen,
   };

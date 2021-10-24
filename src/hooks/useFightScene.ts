@@ -86,6 +86,19 @@ export const useFightScene = (
     setNextStep("preMatchCards");
   };
 
+  const canGameContinue = () => {
+    if (fightState.hero.life <= 0) {
+      setAnimation("LOST");
+      setNextStep("endLost");
+    } else if (fightState.enemyDeck.length === 0) {
+      setAnimation("WON");
+      setNextStep("endWon");
+    } else {
+      setAnimation(`GIVECARD`);
+      setNextStep("giveCards");
+    }
+  };
+
   useEffect(() => {
     if (nextStep === "loadFight") {
       setAnimation("GIVECARDS");
@@ -122,16 +135,7 @@ export const useFightScene = (
         heroCardIndex: null,
       }));
 
-      if (fightState.hero.life <= 0) {
-        setAnimation("LOST");
-        setNextStep("endLost");
-      } else if (fightState.enemyDeck.length === 0) {
-        setAnimation("WON");
-        setNextStep("endWon");
-      } else {
-        setAnimation(`GIVECARD`);
-        setNextStep("giveCards");
-      }
+      canGameContinue();
     }
 
     if (nextStep === "lost") {

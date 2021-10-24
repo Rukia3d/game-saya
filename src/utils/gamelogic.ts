@@ -202,17 +202,23 @@ const updatePlayerAdventures = (
 
 const updatePlayerHeroes = (
   heroes: Hero[],
+  spells: Spell[],
   allHeroes: Hero[],
+  allSpells: Spell[],
   action: StoryAction
-) => {
+): [Hero[], Spell[]] => {
+  console.log("updatePlayerHeroes");
+  let newHeroes: Hero[] = heroes;
+  let newSpells: Spell[] = spells;
   const hero = findCharacter(allHeroes, action.id);
   const res = heroes.indexOf(hero);
   if (res !== -1) {
     console.warn(`Trying to add the same ${action.id} hero again`);
   } else {
-    heroes.push(hero);
+    newHeroes.push(hero);
+    newSpells = updatePlayerCards(spells, allSpells, action);
   }
-  return heroes;
+  return [newHeroes, newSpells];
 };
 
 const updatePlayerCards = (
@@ -221,8 +227,7 @@ const updatePlayerCards = (
   action: StoryAction
 ) => {
   const spellsToAdd = allSpells.filter((s: Spell) => s.element === action.data);
-  const newSpells = spells.concat(spellsToAdd);
-  return newSpells;
+  return spells.concat(spellsToAdd);
 };
 
 const updatePlayerSpellUpdates = (
@@ -230,6 +235,7 @@ const updatePlayerSpellUpdates = (
   allUpdates: SpellUpdate[],
   action: StoryAction
 ) => {
+  console.log("updatePlayerSpellUpdates");
   if (!action.data) {
     throw new Error("No update Id for the spell Update addition");
   }
@@ -284,8 +290,15 @@ export const finishStory = (
         player.adventures = updatePlayerStory(player.adventures, action);
         break;
       case "addHero":
-        player.heroes = updatePlayerHeroes(player.heroes, game.heroes, action);
-        player.spells = updatePlayerCards(player.spells, game.spells, action);
+        const [newHeroes, newSpells] = updatePlayerHeroes(
+          player.heroes,
+          player.spells,
+          game.heroes,
+          game.spells,
+          action
+        );
+        player.heroes = newHeroes;
+        player.spells = newSpells;
         break;
       case "addUpdate":
         player.spellUpdates = updatePlayerSpellUpdates(
