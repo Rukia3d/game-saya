@@ -1,6 +1,6 @@
 import { updateHeroDeck } from "./gamelogic";
 import { removePlayedCard } from "./helpers";
-import { FightState, elementType, SpellUpdate, Hero } from "./types";
+import { FightState, elementType, SpellUpdate, Hero, Spell } from "./types";
 export const getNextElement = (
   elements: elementType[],
   element: elementType
@@ -44,6 +44,72 @@ const simpleDamage = (
   return health;
 };
 
+const specialDamage = (
+  element: elementType,
+  heroCard: Spell,
+  enemyCard: Spell,
+  heroHealth: number
+) => {
+  if (element === enemyCard.element && element !== heroCard.element) {
+    //console.log("special attack enemy trump");
+    return heroHealth - enemyCard.strength;
+  }
+
+  if (
+    element === enemyCard.element &&
+    element === heroCard.element &&
+    enemyCard.strength > heroCard.strength
+  ) {
+    //console.log("special attack both trump");
+    return heroHealth - (enemyCard.strength - heroCard.strength);
+  }
+  return heroHealth;
+};
+
+const additionalEffects = (
+  fightState: FightState,
+  heroCard: Spell,
+  enemyCard: Spell,
+  heroHealth: number,
+  heroMana: number
+) => {
+  // additional effects apply
+  const price = manaPriceOfUpdates(heroCard.updates);
+  if (manaPriceOfUpdates(heroCard.updates) < fightState.hero.mana) {
+    const currentupdate = heroCard.updates[0];
+    if (heroIsPresent(currentupdate, fightState.heroes)) {
+      const action = parseUpdateAction(currentupdate.action);
+      //console.log("Spell effect", currentupdate.effect);
+      switch (currentupdate.effect) {
+        case "h_heal":
+          heroHealth = heroHealth + parseInt(action.change);
+          break;
+        case "h_trumpremove":
+          if (enemyCard.element === fightState.element) {
+            heroHealth = heroHealth + enemyCard.strength;
+            heroHealth = simpleDamage(
+              heroHealth,
+              heroCard.strength,
+              enemyCard.strength
+            );
+          }
+          break;
+        case "h_trumpset":
+          // TODO
+          break;
+        default:
+          break;
+      }
+      heroMana = heroMana - price;
+    } else {
+      console.warn("Hero is not present to use this update");
+    }
+  } else {
+    console.warn("Not enough mana to use");
+  }
+  return [heroHealth, heroMana];
+};
+
 export const enemyAttack = (fightState: FightState): FightState => {
   if (fightState.heroCardIndex === null)
     throw new Error(
@@ -76,22 +142,12 @@ export const enemyAttack = (fightState: FightState): FightState => {
       fightState.element === enemyCard.element)
   ) {
     //console.log("special attack");
-    if (
-      fightState.element === enemyCard.element &&
-      fightState.element !== heroCard.element
-    ) {
-      //console.log("special attack enemy trump");
-      newHeroHealth = newHeroHealth - enemyCard.strength;
-    }
-
-    if (
-      fightState.element === enemyCard.element &&
-      fightState.element === heroCard.element &&
-      enemyCard.strength > heroCard.strength
-    ) {
-      //console.log("special attack both trump");
-      newHeroHealth = newHeroHealth - (enemyCard.strength - heroCard.strength);
-    }
+    newHeroHealth = specialDamage(
+      fightState.element,
+      heroCard,
+      enemyCard,
+      newHeroHealth
+    );
   } else {
     // This is a simple attack with no trump
     //console.log("simple attack");
@@ -112,37 +168,15 @@ h_enforce
 */
   if (heroCard.updates.length > 0) {
     // additional effects apply
-    if (manaPriceOfUpdates(heroCard.updates) < fightState.hero.mana) {
-      const currentupdate = heroCard.updates[0];
-      if (heroIsPresent(currentupdate, fightState.heroes)) {
-        const action = parseUpdateAction(currentupdate.action);
-        //console.log("Spell effect", currentupdate.effect);
-        switch (currentupdate.effect) {
-          case "h_heal":
-            newHeroHealth = newHeroHealth + parseInt(action.change);
-            break;
-          case "h_trumpremove":
-            if (enemyCard.element === fightState.element) {
-              newHeroHealth = newHeroHealth + enemyCard.strength;
-              newHeroHealth = simpleDamage(
-                newHeroHealth,
-                heroCard.strength,
-                enemyCard.strength
-              );
-            }
-            break;
-          case "h_trumpset":
-            // TODO
-            break;
-          default:
-            break;
-        }
-      } else {
-        console.warn("Hero is not present to use this update");
-      }
-    } else {
-      console.warn("Not enough mana to use");
-    }
+    const additional = additionalEffects(
+      fightState,
+      heroCard,
+      enemyCard,
+      newHeroHealth,
+      newHeroMana
+    );
+    newHeroHealth = additional[0];
+    newHeroMana = additional[1];
   }
 
   const heroNew = {

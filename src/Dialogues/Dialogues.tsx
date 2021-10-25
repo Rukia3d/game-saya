@@ -57,27 +57,23 @@ export const Dialogues = () => {
   const dialogue = context.dialogue;
 
   const finishDialogue = () => {
-    if (
-      context.gameState &&
-      context.gameState.player &&
-      context.dialogue?.action
-    ) {
+    if (context.gameState?.player && context.dialogue?.action) {
       isValidAction(context.dialogue?.action);
       displayAddedUpdate(
         context.gameState.player.spellUpdates,
         context.gameState.spellUpdates,
-        context.dialogue?.action,
+        context.dialogue.action,
         context.setAdditionScreen
       );
       displayAddedHero(
         context.gameState.player.heroes,
         context.gameState.heroes,
-        context.dialogue?.action,
+        context.dialogue.action,
         context.setAdditionScreen
       );
       context.setGameState({
         ...context.gameState,
-        player: finishStory(context.gameState, context.dialogue?.action),
+        player: finishStory(context.gameState, context.dialogue.action),
       });
     }
     context.setDialogue(null);
