@@ -113,14 +113,14 @@ test("Throws error if no data provided in context", () => {
         <Fight />
       </GameContext.Provider>
     )
-  ).toThrow("No enemy for this fight, something went very wrong");
+  ).toThrow("No enemyId for this fight, something went very wrong");
   expect(() =>
     render(
       <GameContext.Provider value={context4}>
         <Fight />
       </GameContext.Provider>
     )
-  ).toThrow("Can't find the enemy some");
+  ).toThrow("No enemy for this fight, something went very wrong");
 
   jest.restoreAllMocks();
 });

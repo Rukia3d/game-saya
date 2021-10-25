@@ -5,23 +5,14 @@ import { InfoCard } from "../UI/InfoCard";
 import { Settings } from "../UI/Settings";
 import { SettingsButton } from "../UI/SettingsButton";
 
-import {
-  Spell,
-  Enemy,
-  Resource,
-  elementType,
-  FightState,
-} from "../utils/types";
+import { Spell, Enemy, FightState } from "../utils/types";
 import {
   findActiveCharacters,
   findStoryCharacters,
   isValidAction,
-  shuffle,
 } from "../utils/helpers";
 import {
   finishStory,
-  generateDeck,
-  generateEnemyDeck,
   updateLostPlayer,
   updateWinPlayer,
 } from "../utils/gamelogic";
@@ -30,6 +21,7 @@ import { GameContext } from "../App";
 import { displayAddedHero, displayAddedUpdate } from "../utils/screenLogic";
 import { FightScene } from "./FightScene";
 import { generateReward } from "../utils/resourceLogic";
+import { findEnemy, initFight } from "../utils/fightlogic";
 
 export const Fight = () => {
   const context = useContext(GameContext);
@@ -37,38 +29,22 @@ export const Fight = () => {
     throw new Error("No data in context");
   }
   // This needs to go into useFightState hook
-  const enemyId = context.story.enemy;
-  const enemies = context.gameState.player.enemies;
   const player = context.gameState.player;
-
-  if (!enemyId) {
-    throw new Error("No enemy for this fight, something went very wrong");
-  }
 
   const storyCharacters = context.story.characters
     ? findStoryCharacters(context.story.characters, player.heroes)
     : findActiveCharacters(player.heroes);
-  const enemy: Enemy | null =
-    enemies.find((e: any) => e.id === enemyId) || null;
 
-  if (!enemy) {
-    throw new Error(`Can't find the enemy ${enemyId}`);
-  }
-  const heroDeck = shuffle(generateDeck(storyCharacters, player.spells));
-  if (heroDeck.length === 0) {
-    throw new Error(`Couldn't generate cards for player`);
-  }
-  const enemyDeck = shuffle(generateEnemyDeck(enemy)); //shuffle(generateEnemyDeck());
-  if (enemyDeck.length < 1) {
-    throw new Error(`Couldn't generate cards for enemy`);
-  }
-  const elements: elementType[] = shuffle([
-    "fire",
-    "earth",
-    "metal",
-    "water",
-    "air",
-  ]);
+  const enemy = findEnemy(
+    context.gameState.player.enemies,
+    context.story.enemy
+  );
+
+  const [heroDeck, enemyDeck, elements] = initFight(
+    storyCharacters,
+    player.spells,
+    enemy
+  );
 
   const prefightState: FightState = {
     hero: {

@@ -1,6 +1,14 @@
-import { updateHeroDeck } from "./gamelogic";
-import { removePlayedCard } from "./helpers";
-import { FightState, elementType, SpellUpdate, Hero, Spell } from "./types";
+import { generateDeck, generateEnemyDeck, updateHeroDeck } from "./gamelogic";
+import { removePlayedCard, shuffle } from "./helpers";
+import {
+  FightState,
+  elementType,
+  SpellUpdate,
+  Hero,
+  Spell,
+  Enemy,
+} from "./types";
+
 export const getNextElement = (
   elements: elementType[],
   element: elementType
@@ -29,6 +37,40 @@ const parseUpdateAction = (action: string) => {
 
 const heroIsPresent = (update: SpellUpdate, heroes: Hero[]) => {
   return heroes.filter((h: Hero) => h.element === update.element).length > 0;
+};
+
+export const findEnemy = (enemies: Enemy[], enemyId: string | undefined) => {
+  if (!enemyId) {
+    throw new Error("No enemyId for this fight, something went very wrong");
+  }
+  const enemy = enemies.find((e: any) => e.id === enemyId);
+  if (!enemy) {
+    throw new Error("No enemy for this fight, something went very wrong");
+  }
+  return enemy;
+};
+
+export const initFight = (
+  storyCharacters: Hero[],
+  spells: Spell[],
+  enemy: Enemy
+) => {
+  const heroDeck = shuffle(generateDeck(storyCharacters, spells));
+  if (heroDeck.length === 0) {
+    throw new Error(`Couldn't generate cards for player`);
+  }
+  const enemyDeck = shuffle(generateEnemyDeck(enemy));
+  if (enemyDeck.length < 1) {
+    throw new Error(`Couldn't generate cards for enemy`);
+  }
+  const elements: elementType[] = shuffle([
+    "fire",
+    "earth",
+    "metal",
+    "water",
+    "air",
+  ]);
+  return [heroDeck, enemyDeck, elements];
 };
 
 const simpleDamage = (
@@ -157,15 +199,7 @@ export const enemyAttack = (fightState: FightState): FightState => {
       enemyCard.strength
     );
   }
-  /* 
-h_trumpset
-h_redraw
-h_mana
-e_redraw
-e_drop
-e_reduice
-h_enforce
-*/
+
   if (heroCard.updates.length > 0) {
     // additional effects apply
     const additional = additionalEffects(
