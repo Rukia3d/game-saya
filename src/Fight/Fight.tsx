@@ -5,7 +5,7 @@ import { InfoCard } from "../UI/InfoCard";
 import { Settings } from "../UI/Settings";
 import { SettingsButton } from "../UI/SettingsButton";
 
-import { Spell, Enemy, FightState } from "../utils/types";
+import { Spell, Enemy, FightState, Player, Story } from "../utils/types";
 import {
   findActiveCharacters,
   findStoryCharacters,
@@ -23,22 +23,12 @@ import { FightScene } from "./FightScene";
 import { generateReward } from "../utils/resourceLogic";
 import { findEnemy, initFight } from "../utils/fightlogic";
 
-export const Fight = () => {
-  const context = useContext(GameContext);
-  if (!context || !context.story || !context.gameState) {
-    throw new Error("No data in context");
-  }
-  // This needs to go into useFightState hook
-  const player = context.gameState.player;
-
-  const storyCharacters = context.story.characters
-    ? findStoryCharacters(context.story.characters, player.heroes)
+const initPreFight = (player: Player, story: Story) => {
+  const storyCharacters = story.characters
+    ? findStoryCharacters(story.characters, player.heroes)
     : findActiveCharacters(player.heroes);
 
-  const enemy = findEnemy(
-    context.gameState.player.enemies,
-    context.story.enemy
-  );
+  const enemy = findEnemy(player.enemies, story.enemy);
 
   const [heroDeck, enemyDeck, elements] = initFight(
     storyCharacters,
@@ -65,12 +55,26 @@ export const Fight = () => {
     elements: elements,
     element: elements[0],
   };
+  return prefightState;
+};
+
+export const Fight = () => {
+  const context = useContext(GameContext);
+  if (!context || !context.story || !context.gameState?.player) {
+    throw new Error("No data in context");
+  }
+
+  const prefightState: FightState = initPreFight(
+    context.gameState.player,
+    context.story
+  );
+  const rewards = generateReward(
+    prefightState.enemy,
+    context.gameState.resources
+  );
   const [result, setResult] = useState<null | String>(null);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [info, setInfo] = useState<null | Spell | Enemy>(null);
-  const [rewards, setRewards] = useState(
-    generateReward(enemy, context.gameState.resources)
-  );
 
   // This needs to go into finish fight hook
   const finishFight = () => {
@@ -95,7 +99,7 @@ export const Fight = () => {
       const player = finishStory(gameState, story.action);
       context.setGameState({
         ...gameState,
-        player: updateWinPlayer(player, enemy, rewards),
+        player: updateWinPlayer(player, prefightState.enemy, rewards),
       });
     }
 
