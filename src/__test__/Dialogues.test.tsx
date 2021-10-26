@@ -14,6 +14,8 @@ const context: GameContextType = {
   gameState: gameState,
   dialogue: dialogue,
   addition: null,
+  reel: null,
+  setReel: jest.fn(),
   setAdditionScreen: jest.fn(),
   setDialogue: jest.fn(),
   setGameState: jest.fn(),

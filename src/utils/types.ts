@@ -97,6 +97,16 @@ export interface Adventure {
   stories?: StoryGroup[];
 }
 
+export interface Reel {
+  id: string;
+  images: ReelImage[];
+}
+
+export interface ReelImage {
+  id: string;
+  image: string;
+  effect: string;
+}
 export interface StoryGroup {
   id: string;
   name: string;
@@ -105,7 +115,7 @@ export interface StoryGroup {
 }
 
 export interface Story {
-  type: "dialogue" | "fight";
+  type: "dialogue" | "fight" | "reel";
   id: string;
   name?: string;
   image: string;

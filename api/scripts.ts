@@ -1,4 +1,4 @@
-import { GameState, Spell, SpellUpdate } from "../src/utils/types";
+import { GameState, Spell } from "../src/utils/types";
 import {
   readDialogues,
   readAdventures,
@@ -51,31 +51,9 @@ app.get("/api/player/", (req: any, res: any) => {
       npcs: playerNpcs,
       heroes: playerHeroes,
       spells: playerCards,
-      spellUpdates: [spellUpdates[0]],
+      spellUpdates: [],
       adventures: playerAdventures,
-      resources: [
-        {
-          id: "leaf",
-          name: "Leaf",
-          commonality: 7,
-          image: "leaf",
-          quantity: 500,
-        },
-        {
-          id: "r_flower",
-          name: "Red flower",
-          commonality: 5,
-          image: "r_flower",
-          quantity: 500,
-        },
-        {
-          id: "wood",
-          name: "Wood",
-          commonality: 10,
-          image: "wood",
-          quantity: 500,
-        },
-      ],
+      resources: [],
       enemies: playerEnemies,
     },
     dialogues: dialogues,

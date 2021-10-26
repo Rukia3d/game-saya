@@ -17,6 +17,7 @@ import {
   GameState,
   Story,
   SpellUpdate,
+  Reel,
 } from "./utils/types";
 
 export interface GameContextType {
@@ -30,6 +31,8 @@ export interface GameContextType {
   setDialogue: (d: Dialogue | null) => void;
   addition: Hero | null | SpellUpdate;
   setAdditionScreen: (c: Hero | SpellUpdate | null) => void;
+  reel: Reel | null;
+  setReel: (r: Reel | null) => void;
   backToMain: () => void;
   backToStory: () => void;
 }
@@ -42,6 +45,7 @@ function App() {
 
   const [showStart, setShowStart] = useState(true);
   const [adventure, setAdventure] = useState<null | Adventure>(null);
+  const [reel, setReel] = useState<null | Reel>(null);
   const [story, setStory] = useState<null | Story>(null);
   const [gameState, setGameStateOrigin] = useState<GameState>(data);
   const [dialogue, setDialogue] = useState<null | Dialogue>(null);
@@ -84,6 +88,8 @@ function App() {
     setDialogue: setDialogue,
     addition: addition,
     setAdditionScreen: setAdditionScreen,
+    reel: reel,
+    setReel: setReel,
     backToMain: backToMain,
     backToStory: backToStory,
   };

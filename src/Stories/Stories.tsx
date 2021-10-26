@@ -70,6 +70,8 @@ export const Stories = () => {
         ...findDialogue(context.gameState?.dialogues, s.id),
         action: s.action,
       });
+    } else if (s.type === "reel") {
+      console.log("reel is playing");
     } else {
       context.setStory(s);
     }

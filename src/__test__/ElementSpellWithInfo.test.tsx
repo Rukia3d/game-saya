@@ -1,6 +1,6 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import { gameState, mayaCard, story } from "../utils/testobjects";
+import { gameState, mayaCard, spellUpdates, story } from "../utils/testobjects";
 import { ElementSpellWithInfo } from "../Spells/ElementSpellWithInfo";
 import userEvent from "@testing-library/user-event";
 import { GameContext, GameContextType } from "../App";
@@ -14,6 +14,8 @@ const context: GameContextType = {
   setGameState: jest.fn(),
   dialogue: null,
   addition: null,
+  reel: null,
+  setReel: jest.fn(),
   setAdditionScreen: jest.fn(),
   setDialogue: jest.fn(),
   backToMain: jest.fn(),
@@ -42,7 +44,7 @@ test("Renders a spell and a spell can be selected", async () => {
 
 test("Renders a spell with a frame and a spell info can be clicked", async () => {
   const setInfo = jest.fn();
-  const updatedCard = { ...mayaCard, updates: ["some_update"] };
+  const updatedCard = { ...mayaCard, updates: [spellUpdates[0]] };
   render(
     <GameContext.Provider value={context}>
       <ElementSpellWithInfo
