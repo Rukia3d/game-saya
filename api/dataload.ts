@@ -77,20 +77,19 @@ const getGroupStories = (currentGroup: StoryGroupDB): Story[] => {
   );
   for (let x = 0; x < stories.length; x++) {
     const currentStory = stories[x];
-    const nextStory = stories[x + 1];
     if (currentStory) {
       story[x] = {
         type: currentStory.type as "dialogue" | "fight",
         id: currentStory.id,
+        nextStory: currentStory.next,
         name: currentStory.name ? currentStory.name : undefined,
         image: currentStory.image,
         open: false,
         enemy: currentStory.enemy ? currentStory.enemy : undefined,
         characters: getStoryCharacters(currentStory.characters),
-        action:
-          currentStory.actions && nextStory
-            ? getStoryActions(currentStory.actions, nextStory.id)
-            : [],
+        action: currentStory.next
+          ? getStoryActions(currentStory.actions, currentStory.next)
+          : [],
       };
     }
   }

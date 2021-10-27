@@ -118,6 +118,7 @@ export interface StoryGroup {
 export interface Story {
   type: "dialogue" | "fight" | "reel";
   id: string;
+  nextStory: string;
   name?: string;
   image: string;
   open: boolean;

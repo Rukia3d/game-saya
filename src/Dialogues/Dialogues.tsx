@@ -28,6 +28,7 @@ const DialogueLines = ({
       <div className="DialogueCharacter">
         {line.image ? (
           <img
+            className={line.pos}
             src={`../img/Dialogues/${line.character}_${line.image}.png`}
             alt={`character_image_${line.character}`}
           />

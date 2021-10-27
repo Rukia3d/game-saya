@@ -26,8 +26,23 @@
   height: 5em;
 }
 
-.DialogueCharacter img {
+.DialogueCharacter img.L {
   position: absolute;
   bottom: 0;
+  left: 0;
+  max-width: 22em;
+}
+
+.DialogueCharacter img.R {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  max-width: 22em;
+}
+
+.DialogueCharacter img.M {
+  position: absolute;
+  bottom: 0;
+  right: 50%;
   max-width: 22em;
 }

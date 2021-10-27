@@ -57,6 +57,7 @@ export const stories: StoryGroup[] = [];
         open: true,
         characters: [],
         action: [],
+        nextStory: "dialogue" + i + 1,
       },
       {
         id: "dialogue1" + i,
@@ -65,6 +66,7 @@ export const stories: StoryGroup[] = [];
         open: true,
         characters: [],
         action: [],
+        nextStory: "dialogue" + i + 1,
       },
       {
         id: "arena" + i,
@@ -75,6 +77,7 @@ export const stories: StoryGroup[] = [];
         characters: ["maya", "tara"],
         name: "Arena",
         action: [],
+        nextStory: "dialogue" + i + 1,
       },
     ],
   })

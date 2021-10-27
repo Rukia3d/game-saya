@@ -1,5 +1,9 @@
 import { generateInt } from "../src/utils/helpers";
-import { SpellUpdateResource, storyChangeType } from "../src/utils/types";
+import {
+  SpellUpdateResource,
+  StoryAction,
+  storyChangeType,
+} from "../src/utils/types";
 import { EnemyCardDB, SpellDB } from "./db_types";
 
 export const getStoryCharacters = (characters: string) => {
@@ -17,7 +21,13 @@ export const getStoryActions = (actions: string, nextStory: string) => {
       data: details.length > 2 ? details[2] : undefined,
     };
   });
-  return res.concat([{ type: "openStory", id: "story", data: nextStory }]);
+  let all: StoryAction[] = [
+    { type: "openStory", id: "story", data: nextStory },
+  ];
+  if (res[0].type) {
+    all = all.concat(res);
+  }
+  return all;
 };
 
 export const getHeroInitialSpellSet = (db: SpellDB[]) => {

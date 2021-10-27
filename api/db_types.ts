@@ -55,6 +55,7 @@ export interface StoryDB {
   enemy: string;
   characters: string;
   actions: string;
+  next: string;
 }
 export interface EnemyDB {
   id: string;
