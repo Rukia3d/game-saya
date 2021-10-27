@@ -24,10 +24,7 @@ import { generateReward } from "../utils/resourceLogic";
 import { findEnemy, initFight } from "../utils/fightlogic";
 
 const initPreFight = (player: Player, story: Story) => {
-  const storyCharacters = story.characters
-    ? findStoryCharacters(story.characters, player.heroes)
-    : findActiveCharacters(player.heroes);
-
+  const storyCharacters = findStoryCharacters(story.characters, player.heroes);
   const enemy = findEnemy(player.enemies, story.enemy);
 
   const [heroDeck, enemyDeck, elements] = initFight(

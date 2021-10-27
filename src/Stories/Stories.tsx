@@ -9,6 +9,18 @@ import { ScrollButton } from "../UI/ScrollButton";
 import { findDialogue, findLastOpenStory } from "../utils/helpers";
 export const STORIES_PER_PANEL = 3;
 
+const FightIcons = ({ characters }: { characters: string[] }) => {
+  return (
+    <div className="FightIcons">
+      {characters.map((c: string, i: number) => (
+        <div key={i}>
+          <img src={`../img/Heroes/${c}_icon.png`} alt={`fight-icon-${c}`} />
+        </div>
+      ))}
+    </div>
+  );
+};
+
 export const StoryPanel = ({
   group,
   loadStory,
@@ -41,6 +53,7 @@ export const StoryPanel = ({
             className="Story"
             style={{ opacity: s.open ? 1 : 0.3 }}
           />
+          {s.type === "fight" ? <FightIcons characters={s.characters} /> : null}
         </div>
       ))}
     </div>

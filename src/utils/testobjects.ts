@@ -55,6 +55,7 @@ export const stories: StoryGroup[] = [];
         type: "dialogue",
         image: "dialogue" + i,
         open: true,
+        characters: [],
         action: [],
       },
       {
@@ -62,6 +63,7 @@ export const stories: StoryGroup[] = [];
         type: "dialogue",
         image: "dialogue1" + i,
         open: true,
+        characters: [],
         action: [],
       },
       {

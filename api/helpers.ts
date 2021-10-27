@@ -3,11 +3,10 @@ import { SpellUpdateResource, storyChangeType } from "../src/utils/types";
 import { EnemyCardDB, SpellDB } from "./db_types";
 
 export const getStoryCharacters = (characters: string) => {
-  // Characters in DB are two names separated by coma
   return characters.split(", ");
 };
 
-export const getStoryActions = (actions: string) => {
+export const getStoryActions = (actions: string, nextStory: string) => {
   // Actions in DB are separated by coma and a new line
   const act = actions.split(",\n");
   const res = act.map((a: string) => {
@@ -18,7 +17,7 @@ export const getStoryActions = (actions: string) => {
       data: details.length > 2 ? details[2] : undefined,
     };
   });
-  return res;
+  return res.concat([{ type: "openStory", id: "story", data: nextStory }]);
 };
 
 export const getHeroInitialSpellSet = (db: SpellDB[]) => {

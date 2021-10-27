@@ -45,7 +45,7 @@ export const City = () => {
         {characters.map((c: CharacterNPC, i: number) => (
           <img
             className="IntroImage"
-            src={`../img/NPCs/${c.image}.png`}
+            src={`../img/NPCs/${c.image}`}
             alt={`hero_${c.id}`}
             key={i}
           />

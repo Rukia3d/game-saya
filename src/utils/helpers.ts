@@ -67,8 +67,27 @@ export const findActiveCharacters = (heroes: Hero[]) => {
   return active;
 };
 
-export const findStoryCharacters = (heroes: string[], allHeroes: Hero[]) => {
-  const res = allHeroes.filter((s: Hero) => heroes.indexOf(s.id) !== -1);
+export const findRequiredCharacters = (
+  heroes: string[],
+  allHeroes: Hero[]
+): Hero[] => {
+  const res: Hero[] = heroes
+    .map((s: string) => (s !== "any" ? findCharacter(allHeroes, s) : null))
+    .filter((h: Hero | null) => h !== null) as Hero[];
+  return res;
+};
+
+export const findStoryCharacters = (
+  heroes: string[],
+  allHeroes: Hero[]
+): Hero[] => {
+  const active = allHeroes.filter((c: Hero) => c.selected === true);
+  const res: Hero[] = findRequiredCharacters(heroes, allHeroes);
+  if (res.length < heroes.length) {
+    const addHeroes = heroes.length - res.length;
+    res.concat(active.slice(0, addHeroes));
+  }
+  //allHeroes.filter((s: Hero) => heroes.indexOf(s.id) !== -1);
   return res;
 };
 

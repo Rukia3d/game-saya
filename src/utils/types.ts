@@ -67,6 +67,7 @@ export interface DialogueLine {
   pos?: "L" | "R" | "M";
   text: string;
 }
+
 export interface Dialogue {
   id: string;
   lines: DialogueLine[];
@@ -121,7 +122,7 @@ export interface Story {
   image: string;
   open: boolean;
   enemy?: string;
-  characters?: string[];
+  characters: string[];
   action: StoryAction[];
 }
 
