@@ -1,9 +1,10 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import { GameContext, GameContextType } from "../App";
-import { characterToAdd, gameState, spellUpdates } from "../utils/testobjects";
+import { characterToAdd, spellUpdates } from "../utils/testobjects";
 import { AdditionScreen } from "../UI/AdditionScreen";
 import userEvent from "@testing-library/user-event";
+import { gameState } from "../utils/teststates";
 
 const context: GameContextType = {
   adventure: gameState.adventures[0],

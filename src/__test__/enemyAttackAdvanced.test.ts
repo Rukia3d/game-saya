@@ -1,5 +1,6 @@
 import { enemyAttack } from "../utils/hitlogic";
-import { fightState, mayaCard, enemyCard, heroes } from "../utils/testobjects";
+import { mayaCard, enemyCard, heroes } from "../utils/testobjects";
+import { fightState } from "../utils/teststates";
 import { elementType, spellEffectType, ISpellUpdate } from "../utils/types";
 const testHeroLife = { ...fightState.hero, life: 10 };
 

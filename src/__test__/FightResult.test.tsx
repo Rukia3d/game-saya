@@ -1,7 +1,7 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import { FightResult } from "../Fight/FightResult";
-import { gameState } from "../utils/testobjects";
+import { gameState } from "../utils/teststates";
 import { IResource } from "../utils/types";
 import userEvent from "@testing-library/user-event";
 

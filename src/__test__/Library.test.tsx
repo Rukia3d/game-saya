@@ -3,8 +3,9 @@ import { render, screen } from "@testing-library/react";
 import { Library } from "../Main/Library";
 import { GameContext, GameContextType } from "../App";
 import userEvent from "@testing-library/user-event";
-import { gameState, baseCards15 } from "../utils/testobjects";
+import { baseCards15 } from "../utils/testobjects";
 import { GameState, ISpell } from "../utils/types";
+import { gameState } from "../utils/teststates";
 
 const mayaSpells: ISpell[] = new Array(3).fill(0).map((x, n) => ({
   ...baseCards15[0],

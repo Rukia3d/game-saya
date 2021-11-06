@@ -1,10 +1,11 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import { InfoCard } from "../UI/InfoCard";
-import { gameState, mayaCard, spellUpdates } from "../utils/testobjects";
+import { mayaCard, spellUpdates } from "../utils/testobjects";
 import { elementType, ISpell } from "../utils/types";
 import { GameContext, GameContextType } from "../App";
 import userEvent from "@testing-library/user-event";
+import { gameState } from "../utils/teststates";
 
 test("Renders Item if it's a card", async () => {
   const setInfo = jest.fn();

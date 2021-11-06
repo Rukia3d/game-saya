@@ -1,7 +1,7 @@
 import React from "react";
 import { act, render, screen } from "@testing-library/react";
 import { FightScene } from "../Fight/FightScene";
-import { fightState } from "../utils/testobjects";
+import { fightState } from "../utils/teststates";
 import userEvent from "@testing-library/user-event";
 
 const SHORTANIMATION = 500;

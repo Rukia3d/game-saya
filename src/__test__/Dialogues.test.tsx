@@ -1,10 +1,11 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import { GameContext, GameContextType } from "../App";
-import { gameState, baseCards15, dialstory } from "../utils/testobjects";
+import { baseCards15, dialstory } from "../utils/testobjects";
 import userEvent from "@testing-library/user-event";
 import { Dialogue } from "../Dialogues/Dialogue";
 import { elementType, ISpell, storyChangeType } from "../utils/types";
+import { gameState } from "../utils/teststates";
 
 const context: GameContextType = {
   adventure: gameState.adventures[0],

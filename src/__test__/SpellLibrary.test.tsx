@@ -1,10 +1,11 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import { GameContext, GameContextType } from "../App";
-import { gameState, mayaCard, spellUpdates } from "../utils/testobjects";
+import { mayaCard, spellUpdates } from "../utils/testobjects";
 import { elementType } from "../utils/types";
 import userEvent from "@testing-library/user-event";
 import { SpellLibrary } from "../Spells/SpellLibrary";
+import { gameState } from "../utils/teststates";
 
 const setForge = jest.fn();
 const context: GameContextType = {

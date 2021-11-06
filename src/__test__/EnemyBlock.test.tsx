@@ -2,7 +2,7 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import { EnemyBlock } from "../Fight/EnemyBlock";
 import userEvent from "@testing-library/user-event";
-import { gameState, fightState } from "../utils/testobjects";
+import { gameState, fightState } from "../utils/teststates";
 
 test("Renders Character Box", async () => {
   const setInfo = jest.fn();

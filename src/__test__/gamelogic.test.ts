@@ -5,11 +5,10 @@ import {
   baseCards15,
   enemy,
   enemyCard,
-  fightState,
-  gameState,
   heroes,
   mayaCard,
 } from "../utils/testobjects";
+import { fightState, gameState } from "../utils/teststates";
 import { ISpell } from "../utils/types";
 
 test("generateDeck function returns correct character cards", () => {

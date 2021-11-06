@@ -2,7 +2,7 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import { GameContext, GameContextType } from "../App";
 import userEvent from "@testing-library/user-event";
-import { gameState } from "../utils/testobjects";
+import { gameState } from "../utils/teststates";
 import { SpellUpdates } from "../Spells/SpellUpdates";
 import { IResource } from "../utils/types";
 

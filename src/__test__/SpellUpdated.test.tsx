@@ -1,8 +1,9 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import { GameContext, GameContextType } from "../App";
-import { gameState, spellUpdates } from "../utils/testobjects";
+import { spellUpdates } from "../utils/testobjects";
 import { SpellUpdated } from "../Spells/SpellUpdated";
+import { gameState } from "../utils/teststates";
 
 const context: GameContextType = {
   adventure: null,

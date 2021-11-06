@@ -2,8 +2,9 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import { GameContext, GameContextType } from "../App";
 import userEvent from "@testing-library/user-event";
-import { dialstory, gameState } from "../utils/testobjects";
+import { dialstory } from "../utils/testobjects";
 import { Stories } from "../Stories/Stories";
+import { gameState } from "../utils/teststates";
 
 const context: GameContextType = {
   adventure: gameState.adventures[1],

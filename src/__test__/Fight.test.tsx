@@ -3,7 +3,8 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Fight } from "../Fight/Fight";
 import { GameContext, GameContextType } from "../App";
-import { gameState, enemy, fightstory } from "../utils/testobjects";
+import { enemy, fightstory } from "../utils/testobjects";
+import { gameState } from "../utils/teststates";
 const context: GameContextType = {
   adventure: null,
   addition: null,

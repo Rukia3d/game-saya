@@ -1,5 +1,5 @@
 import { displayAddedHero, displayAddedUpdate } from "../utils/screenLogic";
-import { gameState } from "../utils/testobjects";
+import { gameState } from "../utils/teststates";
 import { storyChangeType } from "../utils/types";
 test("displayAddedHero doesn't throw if all arguments are correct", () => {
   const allHeroes = gameState.player.heroes;

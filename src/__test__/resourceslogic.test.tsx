@@ -1,6 +1,7 @@
 import { updateWinPlayer } from "../utils/gamelogic";
 import { generateReward, removeResources } from "../utils/resourceLogic";
-import { enemy, gameState } from "../utils/testobjects";
+import { enemy } from "../utils/testobjects";
+import { gameState } from "../utils/teststates";
 import { IOwnedResource, ISpellUpdateResource } from "../utils/types";
 
 test("generates rewards correctly", () => {

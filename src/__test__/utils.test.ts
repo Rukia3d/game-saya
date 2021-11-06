@@ -7,7 +7,7 @@ import {
   findCharacter,
   findDialogue,
 } from "../utils/helpers";
-import { gameState } from "../utils/testobjects";
+import { gameState } from "../utils/teststates";
 
 import { IHero, IStoryGroup } from "../utils/types";
 

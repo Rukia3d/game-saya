@@ -2,7 +2,7 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import App from "../App";
-import { gameState } from "../utils/testobjects";
+import { gameState } from "../utils/teststates";
 
 const mainMenuActiveStyle = "background-color: aquamarine;";
 const mainMenuInActiveStyle = "background-color: lightgrey;";

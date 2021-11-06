@@ -3,7 +3,7 @@ import { render, screen } from "@testing-library/react";
 import { HeroBlock } from "../Fight/HeroBlock";
 import userEvent from "@testing-library/user-event";
 
-import { fightState } from "../utils/testobjects";
+import { fightState } from "../utils/teststates";
 
 test("Renders HeroBlock screen", async () => {
   const setInfo = jest.fn();

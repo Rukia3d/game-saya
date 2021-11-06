@@ -4,7 +4,7 @@ import { Heroes } from "../Main/Heroes";
 import { GameContext, GameContextType } from "../App";
 import userEvent from "@testing-library/user-event";
 import { GameState } from "../utils/types";
-import { gameState } from "../utils/testobjects";
+import { gameState } from "../utils/teststates";
 
 const context: GameContextType = {
   adventure: null,
