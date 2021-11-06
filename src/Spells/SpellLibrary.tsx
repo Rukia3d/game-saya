@@ -19,15 +19,7 @@ export const SpellLibrary = ({
   setForge: (s: null | ISpell) => void;
 }) => {
   const context = useContext(GameContext);
-  if (
-    !context ||
-    !context.gameState ||
-    !context.gameState.player ||
-    !context.gameState.player.spellUpdates ||
-    !context.gameState.player.resources ||
-    !context.gameState.spellUpdates ||
-    !context.gameState.resources
-  ) {
+  if (!context || !context.gameState?.player) {
     throw new Error("No data in context");
   }
   const updates = context.gameState.player.spellUpdates;
