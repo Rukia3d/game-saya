@@ -5,7 +5,6 @@ import userEvent from "@testing-library/user-event";
 import { dialstory, gameState } from "../utils/testobjects";
 import { Stories } from "../Stories/Stories";
 
-const setDialogue = jest.fn();
 const context: GameContextType = {
   adventure: gameState.adventures[1],
   setAdventure: jest.fn(),

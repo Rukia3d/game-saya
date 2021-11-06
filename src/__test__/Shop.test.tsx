@@ -10,13 +10,10 @@ const context: GameContextType = {
   story: null,
   setStory: jest.fn(),
   gameState: gameState,
-  dialogue: null,
   addition: null,
   setAdditionScreen: jest.fn(),
-  setDialogue: jest.fn(),
   setGameState: jest.fn(),
   backToMain: jest.fn(),
-  backToStory: jest.fn(),
 };
 
 test("Renders College with a background", async () => {

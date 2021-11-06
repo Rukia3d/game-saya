@@ -1,7 +1,7 @@
 import { updateWinPlayer } from "../utils/gamelogic";
 import { generateReward, removeResources } from "../utils/resourceLogic";
 import { enemy, gameState } from "../utils/testobjects";
-import { OwnedResource, SpellUpdateResource } from "../utils/types";
+import { IOwnedResource, ISpellUpdateResource } from "../utils/types";
 
 test("generates rewards correctly", () => {
   const res = generateReward(enemy, gameState.resources);
@@ -24,7 +24,7 @@ test("updateWinPlayer assigns rewards correctly", () => {
 });
 
 test("removeResource removes correctly", () => {
-  const resources: OwnedResource[] = [
+  const resources: IOwnedResource[] = [
     {
       id: "sparks",
       name: "Sparks",
@@ -41,7 +41,7 @@ test("removeResource removes correctly", () => {
       quantity: 10,
     },
   ];
-  const price: SpellUpdateResource[] = [
+  const price: ISpellUpdateResource[] = [
     ["sparks", 5],
     ["ash", 7],
   ];
@@ -52,7 +52,7 @@ test("removeResource removes correctly", () => {
 });
 
 test("removeResource throws correct errors", () => {
-  const resources: OwnedResource[] = [
+  const resources: IOwnedResource[] = [
     {
       id: "sparks",
       name: "Sparks",

@@ -18,7 +18,7 @@ const context: GameContextType = {
 test("Renders 3 panels for a story", async () => {
   render(
     <GameContext.Provider value={context}>
-      <StoryPanel loadStory={jest.fn()} group={stories[0]} />
+      <StoryPanel group={stories[0]} />
     </GameContext.Provider>
   );
   expect(screen.getByAltText("story_dialogue0")).toBeInTheDocument();
@@ -36,14 +36,14 @@ test("Throws error if no data provided in context", () => {
   expect(() =>
     render(
       <GameContext.Provider value={context1}>
-        <StoryPanel loadStory={jest.fn()} group={stories[0]} />
+        <StoryPanel group={stories[0]} />
       </GameContext.Provider>
     )
   ).toThrow("No data in context");
   expect(() =>
     render(
       <GameContext.Provider value={context}>
-        <StoryPanel loadStory={jest.fn()} group={invalidStory} />
+        <StoryPanel group={invalidStory} />
       </GameContext.Provider>
     )
   ).toThrow("Number of stories in panel name0 is incorrect");

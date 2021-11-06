@@ -10,15 +10,10 @@ const context: GameContextType = {
   story: null,
   setStory: jest.fn(),
   gameState: gameState,
-  dialogue: null,
   addition: null,
-  reel: null,
-  setReel: jest.fn(),
   setAdditionScreen: jest.fn(),
-  setDialogue: jest.fn(),
   setGameState: jest.fn(),
   backToMain: jest.fn(),
-  backToStory: jest.fn(),
 };
 
 test("Renders Top menu with high mana and life", () => {
@@ -28,7 +23,6 @@ test("Renders Top menu with high mana and life", () => {
     <GameContext.Provider
       value={{
         ...context,
-        backToStory: jest.fn(),
         gameState: { ...gameState, player: newPlayer },
       }}
     >
@@ -73,7 +67,6 @@ test("Renders Top menu with low mana", () => {
     <GameContext.Provider
       value={{
         ...context,
-        backToStory: jest.fn(),
         gameState: { ...gameState, player: newPlayer },
       }}
     >
@@ -106,7 +99,6 @@ test("Renders Top menu with resources", () => {
     <GameContext.Provider
       value={{
         ...context,
-        backToStory: jest.fn(),
         gameState: newGameState,
       }}
     >
