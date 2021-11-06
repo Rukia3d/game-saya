@@ -1,8 +1,28 @@
 import React, { useContext } from "react";
-import "./Heroes.css";
-import { Hero } from "../utils/types";
 import { GameContext } from "../App";
+import "./Heroes.css";
+// Types
+import { IHero } from "../utils/types";
+// Utils
+// Components
 import { TopMenu } from "../UI/TopMenu";
+
+const Hero = ({
+  hero,
+  selectHero,
+}: {
+  hero: IHero;
+  selectHero: (h: IHero) => void;
+}) => {
+  return (
+    <img
+      className={`HeroImage ${hero.selected ? "active" : "inactive"}`}
+      src={`../img/Heroes/${hero.image}.png`}
+      alt={`hero_${hero.id}`}
+      onClick={() => selectHero(hero)}
+    />
+  );
+};
 
 export const Heroes = () => {
   const context = useContext(GameContext);
@@ -11,21 +31,21 @@ export const Heroes = () => {
   }
   const heroes = context.gameState.player.heroes;
 
-  const characterSelection = (c: Hero) => {
+  const selectHero = (c: IHero) => {
     const i = heroes.indexOf(c);
-    const currentlySelected = heroes.filter((c: Hero) => c.selected);
+    const currentlySelected = heroes.filter((c: IHero) => c.selected);
     if (currentlySelected.length > 2) {
-      const firstSelected = heroes.find((c: Hero) => c.selected);
+      const firstSelected = heroes.find((c: IHero) => c.selected);
       if (!firstSelected)
         throw new Error("Can't find another selected character");
       const j = heroes.indexOf(firstSelected);
       heroes[j].selected = false;
     }
     heroes[i].selected = !heroes[i].selected;
-    saveCharacterChanges(heroes);
+    saveSelectionChanges(heroes);
   };
 
-  const saveCharacterChanges = (heroes: Hero[]) => {
+  const saveSelectionChanges = (heroes: IHero[]) => {
     const newPlayer = context.gameState && {
       ...context.gameState.player,
       heroes: heroes,
@@ -46,14 +66,8 @@ export const Heroes = () => {
       </div>
       <TopMenu />
       <div className="HeroesPresent">
-        {heroes.map((c: Hero, i: number) => (
-          <img
-            className={`HeroImage ${c.selected ? "active" : "inactive"}`}
-            src={`../img/Heroes/${c.image}.png`}
-            alt={`hero_${c.id}`}
-            key={i}
-            onClick={() => characterSelection(c)}
-          />
+        {heroes.map((c: IHero, i: number) => (
+          <Hero key={i} hero={c} selectHero={selectHero} />
         ))}
       </div>
     </div>

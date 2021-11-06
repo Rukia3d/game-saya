@@ -1,6 +1,8 @@
 import React from "react";
 import "./Shop.css";
-
+// Types
+// Utils
+// Components
 export const Shop = () => {
   return (
     <div className="Shop">

@@ -3,28 +3,27 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Fight } from "../Fight/Fight";
 import { GameContext, GameContextType } from "../App";
-import { story, gameState, enemy } from "../utils/testobjects";
-
+import { gameState, enemy, fightstory } from "../utils/testobjects";
 const context: GameContextType = {
   adventure: null,
+  addition: null,
   setAdventure: jest.fn(),
-  story: story,
+  story: fightstory,
   setStory: jest.fn(),
   gameState: gameState,
   setGameState: jest.fn(),
-  dialogue: null,
-  addition: null,
-  reel: null,
-  setReel: jest.fn(),
   setAdditionScreen: jest.fn(),
-  setDialogue: jest.fn(),
   backToMain: jest.fn(),
-  backToStory: jest.fn(),
 };
 
 test("Renders Fight screen", () => {
   render(
-    <GameContext.Provider value={context}>
+    <GameContext.Provider
+      value={{
+        ...context,
+        story: fightstory,
+      }}
+    >
       <Fight />
     </GameContext.Provider>
   );
@@ -59,7 +58,12 @@ test("Renders Fight screen", () => {
 
 test("Fight works enemy attacks and hero defends", () => {
   render(
-    <GameContext.Provider value={context}>
+    <GameContext.Provider
+      value={{
+        ...context,
+        story: fightstory,
+      }}
+    >
       <Fight />
     </GameContext.Provider>
   );
@@ -71,7 +75,12 @@ test("Fight works enemy attacks and hero defends", () => {
 
 test("Settings screen switches on and off", async () => {
   render(
-    <GameContext.Provider value={context}>
+    <GameContext.Provider
+      value={{
+        ...context,
+        story: fightstory,
+      }}
+    >
       <Fight />
     </GameContext.Provider>
   );
@@ -85,40 +94,32 @@ test("Settings screen switches on and off", async () => {
 
 test("Throws error if no data provided in context", () => {
   jest.spyOn(console, "error").mockImplementation(() => jest.fn());
-  const context1 = { ...context, story: null };
-  const context4 = {
-    ...context,
-    story: { ...story, enemy: "some" },
-  };
+  const contextNoStory = { ...context, story: null };
   expect(() =>
     render(
-      <GameContext.Provider value={context1}>
+      <GameContext.Provider value={contextNoStory}>
         <Fight />
       </GameContext.Provider>
     )
   ).toThrow("No data in context");
-  const context2 = { ...context, gameState: null };
+  const contextNoGameState = { ...context, gameState: null };
   expect(() =>
     render(
-      <GameContext.Provider value={context2}>
+      <GameContext.Provider value={contextNoGameState}>
         <Fight />
       </GameContext.Provider>
     )
   ).toThrow("No data in context");
-  const context3 = {
+
+  const fightNoEnemy = { ...gameState.fights[0], enemy: "some" };
+  const contextNoEmeny = {
     ...context,
-    story: { ...story, enemy: undefined },
+    story: fightstory,
+    gameState: { ...gameState, fights: [fightNoEnemy] },
   };
   expect(() =>
     render(
-      <GameContext.Provider value={context3}>
-        <Fight />
-      </GameContext.Provider>
-    )
-  ).toThrow("No enemyId for this fight, something went very wrong");
-  expect(() =>
-    render(
-      <GameContext.Provider value={context4}>
+      <GameContext.Provider value={contextNoEmeny}>
         <Fight />
       </GameContext.Provider>
     )

@@ -1,10 +1,12 @@
 import React from "react";
 import "./HeroBlock.css";
+// Types
+import { elementType, IEnemy, FightState, IHero, ISpell } from "../utils/types";
+// Utils
+// Components
+import { SpellWithInfo } from "../Spells/SpellWithInfo";
 
-import { elementType, Enemy, FightState, Hero, Spell } from "../utils/types";
-import { ElementSpellWithInfo } from "../Spells/ElementSpellWithInfo";
-
-const SmallHero = ({ hero }: { hero: Hero }) => {
+const SmallHero = ({ hero }: { hero: IHero }) => {
   return (
     <div className="Character" aria-label={`character-${hero.id}`}>
       <h3>{hero.name}</h3>
@@ -14,12 +16,12 @@ const SmallHero = ({ hero }: { hero: Hero }) => {
 
 export const HeroBlock = ({
   fightState,
-  selectCard,
+  selectSpell,
   setInfo,
 }: {
   fightState: FightState;
-  selectCard: (index: number) => void;
-  setInfo: (s: Spell | Enemy | null) => void;
+  selectSpell: (index: number) => void;
+  setInfo: (s: ISpell | IEnemy | null) => void;
 }) => {
   return (
     <div className="HeroBlock">
@@ -42,10 +44,10 @@ export const HeroBlock = ({
         </p>
       </div>
       <div className="Deck" aria-label="Deck">
-        {fightState.heroHand.map((d: Spell, i: number) => (
-          <ElementSpellWithInfo
-            card={d}
-            selectCard={() => selectCard(i)}
+        {fightState.heroHand.map((d: ISpell, i: number) => (
+          <SpellWithInfo
+            spell={d}
+            selectSpell={() => selectSpell(i)}
             setInfo={setInfo}
             element={fightState.element}
             key={i}
@@ -53,7 +55,7 @@ export const HeroBlock = ({
         ))}
       </div>
       <div className="Characters" aria-label="Characters">
-        {fightState.heroes.map((h: Hero, i: number) => (
+        {fightState.heroes.map((h: IHero, i: number) => (
           <SmallHero hero={h} key={i} />
         ))}
       </div>

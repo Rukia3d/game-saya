@@ -1,38 +1,36 @@
 import {
-  Adventure,
   adventureType,
-  Hero,
-  Dialogue,
-  DialogueLine,
   elementType,
-  Enemy,
   enemyExpLevel,
-  Resource,
-  Spell,
+  IAdventure,
+  IDialogue,
+  IEnemy,
+  IFight,
+  IHero,
+  IResource,
+  ISpell,
+  ISpellUpdate,
   spellEffectType,
-  SpellUpdate,
-  Story,
-  StoryGroup,
 } from "../src/utils/types";
+import {
+  getDialogueLines,
+  getStoryGroups,
+  getEnemySpells,
+} from "./additionaldata";
 import {
   AdventureDB,
   DialogueDB,
-  EnemyCardDB,
   EnemyDB,
   HeroDB,
-  LineDB,
   NpcDB,
   SpellDB,
-  StoryDB,
-  StoryGroupDB,
   ResourceDB,
   UpdateSpellDB,
+  FightDB,
 } from "./db_types";
 import {
   getHeroInitialSpellSet,
   getResourceSet,
-  getSpellSet,
-  getStoryActions,
   getStoryCharacters,
 } from "./helpers";
 const parse = require("csv-parse/lib/sync");
@@ -43,112 +41,8 @@ const options = {
   skip_empty_lines: true,
 };
 
-const getDialogueLines = (data: DialogueDB): DialogueLine[] => {
-  const inputLines = fs.readFileSync(path + "Story Data - DB_Lines.csv");
-  const linesDB: LineDB[] = parse(inputLines, options);
-  const dialLines: DialogueLine[] = [];
-  const linesList = data.linesList.split(", ");
-  const lines = linesList.map((l: string) =>
-    linesDB.find((line: LineDB) => line.id === l)
-  );
-  if (!lines) throw new Error(`Can't find lines for dialogue ${data.id}`);
-  for (let j = 0; j < lines.length; j++) {
-    const currentLine = lines[j];
-    if (!currentLine)
-      throw new Error(`Can't find line for dialogue ${data.id}`);
-    dialLines[j] = {
-      id: currentLine.id,
-      character: currentLine.character,
-      image: currentLine.image,
-      pos: currentLine.pos as "L" | "R" | "M",
-      text: currentLine.text,
-    };
-  }
-  return dialLines;
-};
-
-const getGroupStories = (currentGroup: StoryGroupDB): Story[] => {
-  const story: Story[] = [];
-  const inputSt = fs.readFileSync(path + "Story Data - DB_Stories.csv");
-  const storyDB: StoryDB[] = parse(inputSt, options);
-  const storyList = currentGroup.stories.split(", ");
-  const stories = storyList.map((l: string) =>
-    storyDB.find((story: StoryDB) => story.id === l)
-  );
-  for (let x = 0; x < stories.length; x++) {
-    const currentStory = stories[x];
-    if (currentStory) {
-      story[x] = {
-        type: currentStory.type as "dialogue" | "fight",
-        id: currentStory.id,
-        nextStory: currentStory.next,
-        name: currentStory.name ? currentStory.name : undefined,
-        image: currentStory.image,
-        open: false,
-        enemy: currentStory.enemy ? currentStory.enemy : undefined,
-        characters: getStoryCharacters(currentStory.characters),
-        action: currentStory.next
-          ? getStoryActions(currentStory.actions, currentStory.next)
-          : [],
-      };
-    }
-  }
-  return story;
-};
-
-const getStoryGroups = (a: AdventureDB): StoryGroup[] => {
-  const inputSG = fs.readFileSync(path + "Story Data - DB_StoryGroups.csv");
-  const sgroupDB: StoryGroupDB[] = parse(inputSG, options);
-  const groupList = a.storyGroups.split(", ");
-  const groups = groupList.map((l: string) =>
-    sgroupDB.find((storyGroup: StoryGroupDB) => storyGroup.id === l)
-  );
-  let storyGroups: StoryGroup[] = [];
-  for (let j = 0; j < groups.length; j++) {
-    const currentGroup = groups[j];
-    if (currentGroup) {
-      storyGroups[j] = {
-        id: currentGroup.id,
-        name: currentGroup.name,
-        stories: getGroupStories(currentGroup),
-        group: parseInt(currentGroup.visual),
-      };
-    }
-  }
-  return storyGroups;
-};
-
-const getEnemySpells = (e: EnemyDB) => {
-  const spell: Spell[] = [];
-  const inputECards = fs.readFileSync(path + "Story Data - DB_Cards.csv");
-  const enemyCardDB: EnemyCardDB[] = parse(inputECards, options);
-  const spellSet = enemyCardDB.filter(
-    (c: EnemyCardDB) => c.element === e.element
-  );
-  const spells = getSpellSet(spellSet, parseInt(e.life));
-  for (let x = 0; x < spells.length; x++) {
-    const currentSpell = spells[x];
-    if (!currentSpell) throw new Error(`Can't find a spell for ${e.id}`);
-    spell[x] = {
-      id: currentSpell.id,
-      image: currentSpell.image,
-      name: currentSpell.name,
-      strength: parseInt(currentSpell.strength),
-      mana: 0,
-      selected: false,
-      element: currentSpell.element as elementType,
-      owner: "enemy" as "enemy",
-      type: currentSpell.name,
-      level: 0,
-      description: currentSpell.description,
-      updates: [],
-    };
-  }
-  return spell;
-};
-
-export const readDialogues = (): Dialogue[] => {
-  const dialogues: Dialogue[] = [];
+export const readDialogues = (): IDialogue[] => {
+  const dialogues: IDialogue[] = [];
   const inputDial = fs.readFileSync(path + "Story Data - DB_Dialogues.csv");
   const dialogueDB: DialogueDB[] = parse(inputDial, options);
   for (let i = 0; i < dialogueDB.length; i++) {
@@ -163,8 +57,8 @@ export const readDialogues = (): Dialogue[] => {
   return dialogues;
 };
 
-export const readResources = (): Resource[] => {
-  const resources: Resource[] = [];
+export const readResources = (): IResource[] => {
+  const resources: IResource[] = [];
   const inputResource = fs.readFileSync(path + "Story Data - DB_Resources.csv");
   const resourceDB: ResourceDB[] = parse(inputResource, options);
   for (let i = 0; i < resourceDB.length; i++) {
@@ -179,8 +73,8 @@ export const readResources = (): Resource[] => {
   return resources;
 };
 
-export const readSpellUpdates = (): SpellUpdate[] => {
-  const updates: SpellUpdate[] = [];
+export const readSpellUpdates = (): ISpellUpdate[] => {
+  const updates: ISpellUpdate[] = [];
   const inputSpellUpdate = fs.readFileSync(
     path + "Story Data - DB_Library.csv"
   );
@@ -202,8 +96,8 @@ export const readSpellUpdates = (): SpellUpdate[] => {
   return updates;
 };
 
-export const readAdventures = (): Adventure[] => {
-  const adventures: Adventure[] = [];
+export const readAdventures = (): IAdventure[] => {
+  const adventures: IAdventure[] = [];
   const inputAdv = fs.readFileSync(path + "Story Data - DB_Adventures.csv");
   const adventureDB: AdventureDB[] = parse(inputAdv, options);
   for (let i = 0; i < adventureDB.length; i++) {
@@ -215,7 +109,7 @@ export const readAdventures = (): Adventure[] => {
       name: adventureDB[i].name,
       image: adventureDB[i].image,
       open: false,
-      stories: storyGroups.length > 0 ? storyGroups : undefined,
+      storyGroups: storyGroups.length > 0 ? storyGroups : undefined,
     };
   }
   if (adventures.length < 5)
@@ -223,8 +117,8 @@ export const readAdventures = (): Adventure[] => {
   return adventures;
 };
 
-export const readEnemies = (): Enemy[] => {
-  const enemies: Enemy[] = [];
+export const readEnemies = (): IEnemy[] => {
+  const enemies: IEnemy[] = [];
   const inputEnemies = fs.readFileSync(path + "Story Data - DB_Enemies.csv");
   const enemyDB: EnemyDB[] = parse(inputEnemies, options);
   for (let i = 0; i < enemyDB.length; i++) {
@@ -241,8 +135,8 @@ export const readEnemies = (): Enemy[] => {
   return enemies;
 };
 
-export const readHeroes = (): Hero[] => {
-  const heroes: Hero[] = [];
+export const readHeroes = (): IHero[] => {
+  const heroes: IHero[] = [];
   const inputHeroes = fs.readFileSync(path + "Story Data - DB_Heroes.csv");
   const heroDB: HeroDB[] = parse(inputHeroes, options);
   for (let i = 0; i < heroDB.length; i++) {
@@ -257,8 +151,8 @@ export const readHeroes = (): Hero[] => {
   return heroes;
 };
 
-export const readSpells = (): Spell[] => {
-  const spells: Spell[] = [];
+export const readSpells = (): ISpell[] => {
+  const spells: ISpell[] = [];
   const inputSpells = fs.readFileSync(path + "Story Data - DB_Cards.csv");
   const spellDB: SpellDB[] = parse(inputSpells, options);
   const parsedSpells = getHeroInitialSpellSet(spellDB);
@@ -281,8 +175,8 @@ export const readSpells = (): Spell[] => {
   return spells;
 };
 
-export const readNpcs = (): Hero[] => {
-  const npcs: Hero[] = [];
+export const readNpcs = (): IHero[] => {
+  const npcs: IHero[] = [];
   const inputNpcs = fs.readFileSync(path + "Story Data - DB_NPCs.csv");
   const npcDB: NpcDB[] = parse(inputNpcs, options);
   for (let i = 0; i < npcDB.length; i++) {
@@ -293,4 +187,20 @@ export const readNpcs = (): Hero[] => {
     };
   }
   return npcs;
+};
+
+export const readFights = (): IFight[] => {
+  const fights: IFight[] = [];
+  const inputFights = fs.readFileSync(path + "Story Data - DB_Fights.csv");
+  const fightsDB: FightDB[] = parse(inputFights, options);
+  for (let i = 0; i < fightsDB.length; i++) {
+    fights[i] = {
+      id: fightsDB[i].id,
+      name: fightsDB[i].name,
+      image: fightsDB[i].image,
+      enemy: fightsDB[i].enemy,
+      characters: getStoryCharacters(fightsDB[i].characters),
+    };
+  }
+  return fights;
 };

@@ -1,8 +1,10 @@
 import React, { useContext } from "react";
 import { GameContext } from "../App";
-import { OwnedResource } from "../utils/types";
 import "./TopMenu.css";
-
+// Types
+import { IOwnedResource } from "../utils/types";
+// Utils
+// Components
 const valueColor = (max: number, current: number): string => {
   const third = Math.ceil(max / 3);
   if (current <= third) {
@@ -14,7 +16,7 @@ const valueColor = (max: number, current: number): string => {
   return "green";
 };
 
-const Resource = ({ resource }: { resource: OwnedResource }) => {
+const Resource = ({ resource }: { resource: IOwnedResource }) => {
   return (
     <div className="Resource" aria-label="top_resource">
       {resource.name}: {resource.quantity}
@@ -22,11 +24,11 @@ const Resource = ({ resource }: { resource: OwnedResource }) => {
   );
 };
 
-const Resources = ({ resources }: { resources: OwnedResource[] }) => {
-  const existing = resources.filter((r: OwnedResource) => r.quantity > 0);
+const Resources = ({ resources }: { resources: IOwnedResource[] }) => {
+  const existing = resources.filter((r: IOwnedResource) => r.quantity > 0);
   return (
     <div className="Resources" aria-label="top_resources">
-      {existing.map((r: OwnedResource, i: number) => (
+      {existing.map((r: IOwnedResource, i: number) => (
         <Resource resource={r} key={i} />
       ))}
     </div>

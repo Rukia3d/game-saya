@@ -11,15 +11,10 @@ const context: GameContextType = {
   story: null,
   setStory: jest.fn(),
   gameState: gameState,
-  dialogue: null,
   addition: null,
-  reel: null,
-  setReel: jest.fn(),
   setAdditionScreen: jest.fn(),
-  setDialogue: jest.fn(),
   setGameState: jest.fn(),
   backToMain: jest.fn(),
-  backToStory: jest.fn(),
 };
 
 test("Renders Heroes screen with characters ready for a dialogue", () => {
@@ -36,15 +31,15 @@ test("Renders Heroes screen with characters ready for a dialogue", () => {
 });
 
 test("Dialogue is triggered when clicking on panel and closes correctly", () => {
-  const setDialogue = jest.fn();
   render(
-    <GameContext.Provider value={{ ...context, setDialogue: setDialogue }}>
+    <GameContext.Provider value={context}>
       <City />
     </GameContext.Provider>
   );
   expect(screen.getByAltText("intro_background")).toBeInTheDocument();
   userEvent.click(screen.getByAltText("maya_story"));
-  expect(setDialogue.mock.calls.length).toBe(1);
+  expect(screen.getByAltText("dialogue_background")).toBeInTheDocument();
+  expect(screen.getByTestId("close_button")).toBeInTheDocument();
 });
 
 test("Throws error if no data provided in context", () => {

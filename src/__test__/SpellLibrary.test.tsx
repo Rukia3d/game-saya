@@ -4,7 +4,7 @@ import { GameContext, GameContextType } from "../App";
 import { gameState, mayaCard, spellUpdates } from "../utils/testobjects";
 import { elementType } from "../utils/types";
 import userEvent from "@testing-library/user-event";
-import { ElementSpellLibrary } from "../Spells/ElementSpellLibrary";
+import { SpellLibrary } from "../Spells/SpellLibrary";
 
 const setForge = jest.fn();
 const context: GameContextType = {
@@ -28,7 +28,11 @@ const notenoughResourcesStyle = "color: red;";
 
 test("Renders All Updates available in the correct color", async () => {
   const setGameState = jest.fn();
-  const fireCard = { ...mayaCard, element: "fire" as elementType };
+  const fireCard = {
+    ...mayaCard,
+    name: "Special Fire Card",
+    element: "fire" as elementType,
+  };
   const newSpells = gameState.player.spells.concat([fireCard]);
   const newContext = {
     ...context,
@@ -52,10 +56,10 @@ test("Renders All Updates available in the correct color", async () => {
   };
   render(
     <GameContext.Provider value={newContext}>
-      <ElementSpellLibrary item={fireCard} setForge={setForge} />
+      <SpellLibrary item={fireCard} setForge={setForge} />
     </GameContext.Provider>
   );
-  expect(screen.getByText(/Maya Hit 1/)).toBeInTheDocument();
+  expect(screen.getByText(/Special Fire Card/)).toBeInTheDocument();
   expect(screen.getByText(/Ash: 1/)).toHaveAttribute(
     "style",
     enoughResourcesStyle
@@ -64,7 +68,7 @@ test("Renders All Updates available in the correct color", async () => {
     "style",
     notenoughResourcesStyle
   );
-  userEvent.click(screen.getAllByTestId("update_button")[0]);
+  userEvent.click(screen.getAllByTestId("update_button")[1]);
   expect(setGameState.mock.calls[0][0].player.spells[15].updates[0].id).toEqual(
     "fire_1"
   );
@@ -76,16 +80,15 @@ test("Skips and update if it's already applied", async () => {
   const fireCard = {
     ...mayaCard,
     element: "fire" as elementType,
-    updates: [spellUpdates[0]],
+    updates: [spellUpdates[1]],
   };
   render(
     <GameContext.Provider value={context}>
-      <ElementSpellLibrary item={fireCard} setForge={jest.fn()} />
+      <SpellLibrary item={fireCard} setForge={jest.fn()} />
     </GameContext.Provider>
   );
   expect(screen.getByText(/Maya Hit 1/)).toBeInTheDocument();
   expect(screen.getByText(/Ash: 2/)).toBeInTheDocument();
-  expect(screen.getByText(/Ash: 3/)).toBeInTheDocument();
   expect(screen.queryByText(/Ash: 1/)).not.toBeInTheDocument();
 });
 
@@ -95,7 +98,7 @@ test("Throws error if there's a problem with a context", async () => {
   expect(() =>
     render(
       <GameContext.Provider value={newContext}>
-        <ElementSpellLibrary item={mayaCard} setForge={jest.fn()} />
+        <SpellLibrary item={mayaCard} setForge={jest.fn()} />
       </GameContext.Provider>
     )
   ).toThrow("No data in context");

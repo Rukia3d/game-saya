@@ -1,16 +1,19 @@
 import React from "react";
-import { Spell } from "../utils/types";
-import "./ElementSpells.css";
+import "./Spells.css";
+// Types
+import { ISpell } from "../utils/types";
+// Utils
+// Components
 
-export const ElementSpellFrame = ({ card }: { card: Spell }) => {
+export const SpellFrame = ({ spell }: { spell: ISpell }) => {
   let frame: JSX.Element | null = null;
-  switch (card.updates.length) {
+  switch (spell.updates.length) {
     case 1:
       frame = (
         <img
           className="SmallCardFrame"
           src={"../img/Spells/L1frame.png"}
-          alt={`spellimage_frame${card.updates.length}`}
+          alt={`spellimage_frame${spell.updates.length}`}
         />
       );
       break;
@@ -19,7 +22,7 @@ export const ElementSpellFrame = ({ card }: { card: Spell }) => {
         <img
           className="SmallCardFrame"
           src={"../img/Spells/L2frame.png"}
-          alt={`spellimage_frame${card.updates.length}`}
+          alt={`spellimage_frame${spell.updates.length}`}
         />
       );
       break;
@@ -30,8 +33,8 @@ export const ElementSpellFrame = ({ card }: { card: Spell }) => {
     <>
       <img
         className="SmallCardImage"
-        src={`../img/Spells/${card.image}.jpg`}
-        alt={`spellimage_${card.id}`}
+        src={`../img/Spells/${spell.image}.jpg`}
+        alt={`spellimage_${spell.id}`}
       />
       {frame ? frame : null}
     </>

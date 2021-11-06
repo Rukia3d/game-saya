@@ -12,15 +12,10 @@ const context: GameContextType = {
   story: null,
   setStory: jest.fn(),
   gameState: gameState,
-  dialogue: null,
   addition: null,
-  reel: null,
-  setReel: jest.fn(),
   setAdditionScreen: jest.fn(),
-  setDialogue: jest.fn(),
   setGameState: jest.fn((s: GameState) => s),
   backToMain: jest.fn(),
-  backToStory: jest.fn(),
 };
 
 test("Renders Heroes screen with characters ready for a dialogue", () => {

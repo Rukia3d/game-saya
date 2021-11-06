@@ -1,7 +1,9 @@
 import React, { useContext } from "react";
 import { GameContext } from "../App";
 import "./Start.css";
-
+// Types
+// Utils
+// Components
 export const Start = ({
   setShowStart,
 }: {

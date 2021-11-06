@@ -9,7 +9,7 @@ import {
 } from "../utils/helpers";
 import { gameState } from "../utils/testobjects";
 
-import { Hero, StoryGroup } from "../utils/types";
+import { IHero, IStoryGroup } from "../utils/types";
 
 test("Unique function returns correctly", () => {
   const array1 = [1, 2, 3, 4];
@@ -40,8 +40,9 @@ test("Find the correct next open story in group", () => {
     type: "fight" as "fight",
     image: "",
     action: [],
+    nextStory: "",
   };
-  const groups: StoryGroup[] = [];
+  const groups: IStoryGroup[] = [];
   [1, 2, 3, 4].forEach((i: number) =>
     groups.push({
       id: "name" + 1,
@@ -62,7 +63,7 @@ test("Find the correct next open story in group", () => {
 });
 
 test("Finds correct characters to be active and throws if there are not 3", () => {
-  const heroes3active: Hero[] = [];
+  const heroes3active: IHero[] = [];
   [true, true, true, false, false].map((b: boolean, i: number) =>
     heroes3active.push({
       id: "hero" + i,
@@ -71,13 +72,13 @@ test("Finds correct characters to be active and throws if there are not 3", () =
       selected: b,
     })
   );
-  expect(findActiveCharacters(heroes3active).map((h: Hero) => h.id)).toEqual([
+  expect(findActiveCharacters(heroes3active).map((h: IHero) => h.id)).toEqual([
     "hero0",
     "hero1",
     "hero2",
   ]);
 
-  const heroes2active: Hero[] = [];
+  const heroes2active: IHero[] = [];
   [false, true, true, false, false].map((b: boolean, i: number) =>
     heroes2active.push({
       id: "hero" + i,
@@ -86,13 +87,13 @@ test("Finds correct characters to be active and throws if there are not 3", () =
       selected: b,
     })
   );
-  expect(findActiveCharacters(heroes2active).map((h: Hero) => h.id)).toEqual([
+  expect(findActiveCharacters(heroes2active).map((h: IHero) => h.id)).toEqual([
     "hero1",
     "hero2",
     "hero0",
   ]);
 
-  const heroesNoactive: Hero[] = [];
+  const heroesNoactive: IHero[] = [];
   [false, false, false, false, false].map((b: boolean, i: number) =>
     heroesNoactive.push({
       id: "hero" + i,
@@ -101,14 +102,14 @@ test("Finds correct characters to be active and throws if there are not 3", () =
       selected: b,
     })
   );
-  expect(findActiveCharacters(heroesNoactive).map((h: Hero) => h.id)).toEqual([
+  expect(findActiveCharacters(heroesNoactive).map((h: IHero) => h.id)).toEqual([
     "hero0",
     "hero1",
     "hero2",
   ]);
 
   jest.spyOn(console, "error").mockImplementation(() => jest.fn());
-  const heroesToError: Hero[] = [];
+  const heroesToError: IHero[] = [];
   [true, true].map((b: boolean, i: number) =>
     heroesToError.push({
       id: "hero" + i,
@@ -138,8 +139,8 @@ test("Finds a character and throws a correct error", () => {
 });
 
 test("Find dialogue and throws correct errors", () => {
-  const res = findDialogue(gameState.dialogues, "c1_dialogue1");
-  expect(res.id).toEqual("c1_dialogue1");
+  const res = findDialogue(gameState.dialogues, "dialogue0");
+  expect(res.id).toEqual("dialogue0");
   jest.spyOn(console, "error").mockImplementation(() => jest.fn());
   expect(() => findDialogue(gameState.dialogues, null)).toThrow(
     "Trying to find a dialogue for inactive character"

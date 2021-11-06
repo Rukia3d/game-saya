@@ -1,19 +1,23 @@
 import React, { useContext } from "react";
-import "./ElementSpells.css";
 import { GameContext } from "../App";
+import "./Spells.css";
+// Types
 import {
-  OwnedResource,
-  Resource,
-  SpellUpdate,
-  SpellUpdateResource,
+  IOwnedResource,
+  IResource,
+  ISpellUpdate,
+  ISpellUpdateResource,
 } from "../utils/types";
-export const ElementSpellUpdate = ({
+// Utils
+// Components
+
+export const SpellUpdate = ({
   update,
   updateSpell = () => {},
   canUpdate = false,
 }: {
-  update: SpellUpdate;
-  updateSpell?: (s: SpellUpdate) => void;
+  update: ISpellUpdate;
+  updateSpell?: (s: ISpellUpdate) => void;
   canUpdate?: boolean;
 }) => {
   const context = useContext(GameContext);
@@ -29,14 +33,14 @@ export const ElementSpellUpdate = ({
   const playerResources = context.gameState.player.resources;
   const resources = context.gameState.resources;
 
-  const getResource = (s: SpellUpdateResource) => {
-    const resource = resources.find((r: Resource) => r.id === s[0]);
+  const getResource = (s: ISpellUpdateResource) => {
+    const resource = resources.find((r: IResource) => r.id === s[0]);
     if (!resource) throw new Error("Can't find a resource to display");
     return resource;
   };
 
-  const isEnough = (s: SpellUpdateResource) => {
-    const resource = playerResources.find((r: OwnedResource) => r.id === s[0]);
+  const isEnough = (s: ISpellUpdateResource) => {
+    const resource = playerResources.find((r: IOwnedResource) => r.id === s[0]);
     const needed = s[1];
     if (resource && resource.quantity >= needed) {
       return true;
@@ -44,8 +48,8 @@ export const ElementSpellUpdate = ({
     return false;
   };
 
-  const readyToUpdate = (u: SpellUpdate) => {
-    const res: boolean[] = u.resource_base.map((r: SpellUpdateResource) =>
+  const readyToUpdate = (u: ISpellUpdate) => {
+    const res: boolean[] = u.resource_base.map((r: ISpellUpdateResource) =>
       isEnough(r)
     );
     return res.every((r: boolean) => r === true);
@@ -56,7 +60,7 @@ export const ElementSpellUpdate = ({
       <h3>{update.name}</h3>
       <div>{update.description}</div>
       <div>
-        {update.resource_base.map((s: SpellUpdateResource, i: number) => (
+        {update.resource_base.map((s: ISpellUpdateResource, i: number) => (
           <div key={i}>
             <div style={{ color: isEnough(s) ? "green" : "red" }}>{`${
               getResource(s).name

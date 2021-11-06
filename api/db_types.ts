@@ -98,3 +98,11 @@ export interface NpcDB {
   name: string;
   image: string;
 }
+
+export interface FightDB {
+  id: string;
+  name: string;
+  image: string;
+  enemy: string;
+  characters: string;
+}

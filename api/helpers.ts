@@ -1,7 +1,7 @@
 import { generateInt } from "../src/utils/helpers";
 import {
-  SpellUpdateResource,
-  StoryAction,
+  ISpellUpdateResource,
+  IStoryAction,
   storyChangeType,
 } from "../src/utils/types";
 import { EnemyCardDB, SpellDB } from "./db_types";
@@ -21,7 +21,7 @@ export const getStoryActions = (actions: string, nextStory: string) => {
       data: details.length > 2 ? details[2] : undefined,
     };
   });
-  let all: StoryAction[] = [
+  let all: IStoryAction[] = [
     { type: "openStory", id: "story", data: nextStory },
   ];
   if (res[0].type) {
@@ -45,8 +45,8 @@ export const getHeroInitialSpellSet = (db: SpellDB[]) => {
   return spells;
 };
 
-export const getResourceSet = (data: string): SpellUpdateResource[] => {
-  const res: SpellUpdateResource[] = [];
+export const getResourceSet = (data: string): ISpellUpdateResource[] => {
+  const res: ISpellUpdateResource[] = [];
   const allResources = data.split(", ");
   allResources.forEach((resource: string) => {
     const price = resource.split(": ");

@@ -1,14 +1,14 @@
 import { findCharacter, findUpdate } from "./helpers";
-import { Hero, SpellUpdate, StoryAction } from "./types";
+import { IHero, ISpellUpdate, IStoryAction } from "./types";
 
 export const displayAddedHero = (
-  playerHeroes: Hero[],
-  allHeroes: Hero[],
-  actions: StoryAction[],
-  setAdditionScreen: (s: null | Hero | SpellUpdate) => void
+  playerHeroes: IHero[],
+  allHeroes: IHero[],
+  actions: IStoryAction[],
+  setAdditionScreen: (s: null | IHero | ISpellUpdate) => void
 ) => {
   //{type: "addHero", id: "nell", data: "fire"}
-  const addingHero = actions.filter((a: StoryAction) => a.type === "addHero");
+  const addingHero = actions.filter((a: IStoryAction) => a.type === "addHero");
   if (addingHero.length === 1) {
     const action = addingHero[0];
     if (!action.id)
@@ -26,15 +26,14 @@ export const displayAddedHero = (
 };
 
 export const displayAddedUpdate = (
-  playerUpdates: SpellUpdate[],
-  allUpdates: SpellUpdate[],
-  actions: StoryAction[],
-  setAdditionScreen: (s: null | Hero | SpellUpdate) => void
+  playerUpdates: ISpellUpdate[],
+  allUpdates: ISpellUpdate[],
+  actions: IStoryAction[],
+  setAdditionScreen: (s: null | IHero | ISpellUpdate) => void
 ) => {
-  console.log("displayAddedUpdate");
   // {type: "addUpdate", id: "earth", data: "earth_2"}
   const addingUpdate = actions.filter(
-    (a: StoryAction) => a.type === "addUpdate"
+    (a: IStoryAction) => a.type === "addUpdate"
   );
   if (addingUpdate.length === 1) {
     const action = addingUpdate[0];

@@ -1,21 +1,22 @@
 import React, { useContext } from "react";
-import "./ElementSpells.css";
-
 import { GameContext } from "../App";
-
-import { Spell, SpellUpdate } from "../utils/types";
-import { CloseButton } from "../UI/CloseButton";
+import "./Spells.css";
+// Types
+import { ISpell, ISpellUpdate } from "../utils/types";
+// Utils
 import { removeResources } from "../utils/resourceLogic";
-import { updatePlayerSpell } from "../utils/gamelogic";
-import { ElementSpellUpdates } from "./ElementSpellUpdates";
-import { ElementSpellDescription } from "./ElementSpellDescription";
+import { updatePlayerSpell } from "../utils/spellslogic";
+// Components
+import { SpellUpdates } from "./SpellUpdates";
+import { SpellDescription } from "./SpellDescription";
+import { CloseButton } from "../UI/CloseButton";
 
-export const ElementSpellLibrary = ({
+export const SpellLibrary = ({
   item,
   setForge,
 }: {
-  item: Spell;
-  setForge: (s: null | Spell) => void;
+  item: ISpell;
+  setForge: (s: null | ISpell) => void;
 }) => {
   const context = useContext(GameContext);
   if (
@@ -32,11 +33,11 @@ export const ElementSpellLibrary = ({
   const updates = context.gameState.player.spellUpdates;
   const resources = context.gameState.player.resources;
   const applicableUpdates = updates.filter(
-    (s: SpellUpdate) =>
+    (s: ISpellUpdate) =>
       s.element === item.element && item.updates.indexOf(s) === -1
   );
 
-  const updateSpell = (update: SpellUpdate) => {
+  const updateSpell = (update: ISpellUpdate) => {
     if (context.gameState && context.gameState.player) {
       const newPlayyerWithSpell = updatePlayerSpell(
         context.gameState.player,
@@ -57,8 +58,8 @@ export const ElementSpellLibrary = ({
   return (
     <div className="ElementSpellUpdates">
       <CloseButton onClick={() => setForge(null)} />
-      <ElementSpellDescription card={item} />
-      <ElementSpellUpdates
+      <SpellDescription spell={item} />
+      <SpellUpdates
         spellUpgrades={applicableUpdates}
         updateSpell={updateSpell}
       />

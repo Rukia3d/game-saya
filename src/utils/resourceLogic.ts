@@ -1,18 +1,18 @@
 import { enemyToNumber } from "./gamelogic";
 import { shuffle } from "./helpers";
 import {
-  Enemy,
-  OwnedResource,
   Player,
-  Resource,
-  SpellUpdateResource,
+  IResource,
+  IOwnedResource,
+  IEnemy,
+  ISpellUpdateResource,
 } from "./types";
 
-export const givePlayerResources = (player: Player, resources: Resource[]) => {
+export const givePlayerResources = (player: Player, resources: IResource[]) => {
   const existingResources = player.resources;
-  resources.forEach((r: Resource) => {
+  resources.forEach((r: IResource) => {
     const playerRes = player.resources.find(
-      (o: OwnedResource) => o.id === r.id
+      (o: IOwnedResource) => o.id === r.id
     );
     if (!playerRes) {
       player.resources.push({ ...r, quantity: 1 });
@@ -24,9 +24,9 @@ export const givePlayerResources = (player: Player, resources: Resource[]) => {
   return existingResources;
 };
 
-const generateSingleRewards = (resources: Resource[]) => {
-  const allRewards: Resource[] = [];
-  resources.forEach((r: Resource) => {
+const generateSingleRewards = (resources: IResource[]) => {
+  const allRewards: IResource[] = [];
+  resources.forEach((r: IResource) => {
     for (let i = 0; i < r.commonality; i++) {
       allRewards.push({
         id: r.id,
@@ -40,7 +40,7 @@ const generateSingleRewards = (resources: Resource[]) => {
   return res;
 };
 
-export const generateReward = (enemy: Enemy, resources: Resource[]) => {
+export const generateReward = (enemy: IEnemy, resources: IResource[]) => {
   const rewards = [];
   const max = enemyToNumber(enemy);
   for (let i = 0; i < max; i++) {
@@ -51,8 +51,8 @@ export const generateReward = (enemy: Enemy, resources: Resource[]) => {
 };
 
 const removeResource = (
-  toRemove: SpellUpdateResource[],
-  toCheck: OwnedResource
+  toRemove: ISpellUpdateResource[],
+  toCheck: IOwnedResource
 ) => {
   const removable = toRemove.find((t: [string, number]) => t[0] === toCheck.id);
   if (!removable) return { ...toCheck };
@@ -63,16 +63,16 @@ const removeResource = (
 };
 
 export const removeResources = (
-  req: SpellUpdateResource[],
-  resources: OwnedResource[]
-): OwnedResource[] => {
+  req: ISpellUpdateResource[],
+  resources: IOwnedResource[]
+): IOwnedResource[] => {
   const missedResource = req.some(
-    (r: SpellUpdateResource) =>
-      !resources.find((o: OwnedResource) => o.id === r[0])
+    (r: ISpellUpdateResource) =>
+      !resources.find((o: IOwnedResource) => o.id === r[0])
   );
   if (missedResource) {
     throw new Error("Trying to remove resource that is not owned");
   }
-  const newRes = resources.map((r: OwnedResource) => removeResource(req, r));
+  const newRes = resources.map((r: IOwnedResource) => removeResource(req, r));
   return newRes;
 };

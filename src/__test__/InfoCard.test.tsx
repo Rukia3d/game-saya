@@ -2,7 +2,7 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import { InfoCard } from "../UI/InfoCard";
 import { gameState, mayaCard, spellUpdates } from "../utils/testobjects";
-import { elementType, Spell } from "../utils/types";
+import { elementType, ISpell } from "../utils/types";
 import { GameContext, GameContextType } from "../App";
 import userEvent from "@testing-library/user-event";
 
@@ -21,18 +21,13 @@ test("Renders Item card updates", async () => {
     story: null,
     setStory: jest.fn(),
     gameState: gameState,
-    dialogue: null,
     addition: null,
-    reel: null,
-    setReel: jest.fn(),
     setAdditionScreen: jest.fn(),
-    setDialogue: jest.fn(),
     setGameState: jest.fn(),
     backToMain: jest.fn(),
-    backToStory: jest.fn(),
   };
   const setInfo = jest.fn();
-  const fireCard: Spell = {
+  const fireCard: ISpell = {
     ...mayaCard,
     element: "fire" as elementType,
     updates: [spellUpdates[0]],
@@ -46,7 +41,7 @@ test("Renders Item card updates", async () => {
   expect(screen.getByText(/Element fire/)).toBeInTheDocument();
   expect(screen.getByText(/Equiped/)).toBeInTheDocument();
   expect(screen.getByText(/Update/)).toBeInTheDocument();
-  expect(screen.getByText(/SomeName1/)).toBeInTheDocument();
+  expect(screen.getByText(/SomeName0/)).toBeInTheDocument();
 });
 
 test("Renders Error if it's not a card", async () => {

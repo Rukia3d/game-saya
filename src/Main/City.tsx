@@ -1,10 +1,20 @@
-import React, { useContext } from "react";
-import "./City.css";
-import { CharacterNPC } from "../utils/types";
+import React, { useContext, useState } from "react";
 import { GameContext } from "../App";
+import "./City.css";
+// Types
+import { IDialogue, INPC } from "../utils/types";
+// Utils
 import { findDialogue } from "../utils/helpers";
+// Components
+import { DialogueCity } from "../Dialogues/DialogueCity";
 
-const CharacterIcon = ({ hero }: { hero: CharacterNPC }) => {
+const NPCIcon = ({
+  hero,
+  setDialogue,
+}: {
+  hero: INPC;
+  setDialogue: (d: IDialogue | null) => void;
+}) => {
   const context = useContext(GameContext);
   if (!context || !context.gameState) {
     throw new Error("No data in context");
@@ -14,7 +24,7 @@ const CharacterIcon = ({ hero }: { hero: CharacterNPC }) => {
   return (
     <div
       className="IntroIconBorder"
-      onClick={() => (hero.dial ? context.setDialogue(dialogue) : null)}
+      onClick={() => (hero.dial ? setDialogue(dialogue) : null)}
     >
       <div className="IntroIcon">
         <img src={stateToImage} alt={`${hero.id}_story`} />
@@ -23,15 +33,26 @@ const CharacterIcon = ({ hero }: { hero: CharacterNPC }) => {
   );
 };
 
+const NPC = ({ hero }: { hero: INPC }) => {
+  return (
+    <img
+      className="IntroImage"
+      src={`../img/NPCs/${hero.image}`}
+      alt={`hero_${hero.id}`}
+    />
+  );
+};
+
 export const City = () => {
   const context = useContext(GameContext);
   if (!context || !context.gameState) {
     throw new Error("No data in context");
   }
+
+  const [dialogue, setDialogue] = useState<IDialogue | null>(null);
   const characters = context.gameState.player.npcs;
-  const activeHeroes = characters.filter(
-    (c: CharacterNPC) => c.dial !== "null"
-  );
+  const activeHeroes = characters.filter((c: INPC) => c.dial !== "null");
+
   return (
     <div className="Intro">
       <div className="IntroBackgroundBorder">
@@ -42,20 +63,18 @@ export const City = () => {
         />
       </div>
       <div className="IntroPresent">
-        {characters.map((c: CharacterNPC, i: number) => (
-          <img
-            className="IntroImage"
-            src={`../img/NPCs/${c.image}`}
-            alt={`hero_${c.id}`}
-            key={i}
-          />
+        {characters.map((c: INPC, i: number) => (
+          <NPC key={i} hero={c} />
         ))}
         <div className="IntroActive">
-          {activeHeroes.map((c: CharacterNPC, i: number) => (
-            <CharacterIcon key={i} hero={c} />
+          {activeHeroes.map((c: INPC, i: number) => (
+            <NPCIcon key={i} hero={c} setDialogue={setDialogue} />
           ))}
         </div>
       </div>
+      {dialogue ? (
+        <DialogueCity dialogue={dialogue} setDialogue={setDialogue} />
+      ) : null}
     </div>
   );
 };

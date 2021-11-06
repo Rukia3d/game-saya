@@ -1,55 +1,48 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import { GameContext, GameContextType } from "../App";
-import { gameState, dialogue } from "../utils/testobjects";
+import { gameState, baseCards15, dialstory } from "../utils/testobjects";
 import userEvent from "@testing-library/user-event";
-import { Dialogues } from "../Dialogues/Dialogues";
-import { elementType, storyChangeType } from "../utils/types";
+import { Dialogue } from "../Dialogues/Dialogue";
+import { elementType, ISpell, storyChangeType } from "../utils/types";
 
 const context: GameContextType = {
   adventure: gameState.adventures[0],
   setAdventure: jest.fn(),
-  story: null,
+  story: dialstory,
   setStory: jest.fn(),
   gameState: gameState,
-  dialogue: dialogue,
   addition: null,
-  reel: null,
-  setReel: jest.fn(),
   setAdditionScreen: jest.fn(),
-  setDialogue: jest.fn(),
   setGameState: jest.fn(),
   backToMain: jest.fn(),
-  backToStory: jest.fn(),
 };
 
 test("Renders dialogue page", async () => {
-  const setDialogue = jest.fn();
   render(
-    <GameContext.Provider value={{ ...context, setDialogue: setDialogue }}>
-      <Dialogues />
+    <GameContext.Provider value={context}>
+      <Dialogue />
     </GameContext.Provider>
   );
   expect(screen.getByLabelText("dialogue_background")).toBeInTheDocument();
-  expect(screen.getByAltText("character_image_olija")).toBeInTheDocument();
+  expect(screen.getByAltText("character_image_maya")).toBeInTheDocument();
   expect(screen.getByLabelText("dialogue_line_0")).toBeInTheDocument();
   userEvent.click(screen.getByLabelText("dialogue_line_0"));
   expect(
     screen.queryByAltText("character_image_olija")
   ).not.toBeInTheDocument();
-  expect(screen.queryByLabelText("dialogue_line_0")).not.toBeInTheDocument();
   expect(screen.getByAltText("character_image_maya")).toBeInTheDocument();
-  expect(screen.getByLabelText("dialogue_line_1")).toBeInTheDocument();
-  userEvent.click(screen.getByLabelText("dialogue_line_1"));
-  expect(setDialogue.mock.calls.length).toBe(1);
+  expect(screen.getByLabelText("dialogue_line_0")).toBeInTheDocument();
 });
 
 test("Renders dialogue page and triggers Character screen", async () => {
   const setAdditionScreen = jest.fn();
-  const newDialogue = {
-    ...dialogue,
-    action: [{ type: "addHero" as storyChangeType, id: "nell", data: "fire" }],
-  };
+  const nellSpells: ISpell[] = new Array(6).fill(0).map((x, n) => ({
+    ...baseCards15[0],
+    id: "some" + n,
+    name: "Some Hit " + n,
+    element: "fire",
+  }));
   const newGameState = {
     ...gameState,
     player: {
@@ -64,23 +57,27 @@ test("Renders dialogue page and triggers Character screen", async () => {
         },
       ],
     },
+    spells: gameState.spells.concat(nellSpells),
   };
   const newContext = {
     ...context,
     gameState: newGameState,
-    dialogue: newDialogue,
+    story: {
+      ...dialstory,
+      action: [
+        { type: "addHero" as storyChangeType, id: "nell", data: "fire" },
+      ],
+    },
     setAdditionScreen: setAdditionScreen,
   };
   render(
     <GameContext.Provider value={newContext}>
-      <Dialogues />
+      <Dialogue />
     </GameContext.Provider>
   );
   expect(screen.getByLabelText("dialogue_background")).toBeInTheDocument();
-  expect(screen.getByAltText("character_image_olija")).toBeInTheDocument();
+  expect(screen.getByAltText("character_image_maya")).toBeInTheDocument();
   expect(screen.getByLabelText("dialogue_line_0")).toBeInTheDocument();
-  userEvent.click(screen.getByLabelText("dialogue_line_0"));
-  expect(screen.getByLabelText("dialogue_line_1")).toBeInTheDocument();
-  userEvent.click(screen.getByLabelText("dialogue_line_1"));
+  userEvent.click(screen.getByLabelText("lines_next"));
   expect(setAdditionScreen.mock.calls.length).toBe(1);
 });

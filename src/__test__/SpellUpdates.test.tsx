@@ -3,8 +3,8 @@ import { render, screen } from "@testing-library/react";
 import { GameContext, GameContextType } from "../App";
 import userEvent from "@testing-library/user-event";
 import { gameState } from "../utils/testobjects";
-import { ElementSpellUpdates } from "../Spells/ElementSpellUpdates";
-import { Resource } from "../utils/types";
+import { SpellUpdates } from "../Spells/SpellUpdates";
+import { IResource } from "../utils/types";
 
 const context: GameContextType = {
   adventure: gameState.adventures[1],
@@ -25,7 +25,7 @@ const context: GameContextType = {
 
 test("Renders Element spell updates", async () => {
   const updateSpell = jest.fn();
-  const playerResources = gameState.resources.map((r: Resource) => {
+  const playerResources = gameState.resources.map((r: IResource) => {
     return { ...r, quantity: 10 };
   });
   const newContext = {
@@ -40,7 +40,7 @@ test("Renders Element spell updates", async () => {
   };
   render(
     <GameContext.Provider value={newContext}>
-      <ElementSpellUpdates
+      <SpellUpdates
         updateSpell={updateSpell}
         spellUpgrades={gameState.spellUpdates}
       />
@@ -59,7 +59,7 @@ test("Throws error if there's a problem with a context", async () => {
   expect(() =>
     render(
       <GameContext.Provider value={newContext}>
-        <ElementSpellUpdates
+        <SpellUpdates
           updateSpell={jest.fn()}
           spellUpgrades={gameState.spellUpdates}
         />
@@ -76,10 +76,7 @@ test("Throws error if can't find the correct resource", async () => {
   expect(() =>
     render(
       <GameContext.Provider value={context}>
-        <ElementSpellUpdates
-          updateSpell={jest.fn()}
-          spellUpgrades={[newUpdate]}
-        />
+        <SpellUpdates updateSpell={jest.fn()} spellUpgrades={[newUpdate]} />
       </GameContext.Provider>
     )
   ).toThrow("Can't find a resource to display");

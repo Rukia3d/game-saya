@@ -1,6 +1,8 @@
 import React from "react";
 import "../App.css";
-
+// Types
+// Utils
+// Components
 export const ScrollButton = ({
   onClick,
   direction,

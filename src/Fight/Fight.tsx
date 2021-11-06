@@ -1,69 +1,33 @@
 import React, { useContext, useState } from "react";
 import "./Fight.css";
-
-import { InfoCard } from "../UI/InfoCard";
-import { Settings } from "../UI/Settings";
-import { SettingsButton } from "../UI/SettingsButton";
-
-import { Spell, Enemy, FightState, Player, Story } from "../utils/types";
-import {
-  findActiveCharacters,
-  findStoryCharacters,
-  isValidAction,
-} from "../utils/helpers";
+import { GameContext } from "../App";
+// Types
+import { ISpell, IEnemy, FightState } from "../utils/types";
+// Utils
+import { generateReward } from "../utils/resourceLogic";
+import { initPreFight } from "../utils/prefightloginc";
+import { findFight, isValidAction } from "../utils/helpers";
 import {
   finishStory,
   updateLostPlayer,
   updateWinPlayer,
 } from "../utils/gamelogic";
-import { FightResult } from "./FightResult";
-import { GameContext } from "../App";
 import { displayAddedHero, displayAddedUpdate } from "../utils/screenLogic";
+// Components
+import { InfoCard } from "../UI/InfoCard";
+import { Settings } from "../UI/Settings";
+import { SettingsButton } from "../UI/SettingsButton";
+import { FightResult } from "./FightResult";
 import { FightScene } from "./FightScene";
-import { generateReward } from "../utils/resourceLogic";
-import { findEnemy, initFight } from "../utils/fightlogic";
-
-const initPreFight = (player: Player, story: Story) => {
-  const storyCharacters = findStoryCharacters(story.characters, player.heroes);
-  const enemy = findEnemy(player.enemies, story.enemy);
-
-  const [heroDeck, enemyDeck, elements] = initFight(
-    storyCharacters,
-    player.spells,
-    enemy
-  );
-
-  const prefightState: FightState = {
-    hero: {
-      maxLife: player.data.maxLife,
-      life: player.data.life,
-      maxMana: player.data.maxMana,
-      mana: player.data.mana,
-    },
-    heroes: storyCharacters,
-    enemy: enemy,
-    heroDeck: heroDeck,
-    heroCardIndex: null,
-    heroHand: heroDeck.splice(0, 5),
-    heroDrop: [],
-    enemyDeck: enemyDeck,
-    enemyDrop: [],
-    enemyCardIndex: null,
-    elements: elements,
-    element: elements[0],
-  };
-  return prefightState;
-};
 
 export const Fight = () => {
   const context = useContext(GameContext);
   if (!context || !context.story || !context.gameState?.player) {
     throw new Error("No data in context");
   }
-
   const prefightState: FightState = initPreFight(
     context.gameState.player,
-    context.story
+    findFight(context.gameState.fights, context.story.id)
   );
   const rewards = generateReward(
     prefightState.enemy,
@@ -71,7 +35,7 @@ export const Fight = () => {
   );
   const [result, setResult] = useState<null | String>(null);
   const [settingsOpen, setSettingsOpen] = useState(false);
-  const [info, setInfo] = useState<null | Spell | Enemy>(null);
+  const [info, setInfo] = useState<null | ISpell | IEnemy>(null);
 
   // This needs to go into finish fight hook
   const finishFight = () => {
@@ -93,7 +57,7 @@ export const Fight = () => {
         story.action,
         context.setAdditionScreen
       );
-      const player = finishStory(gameState, story.action);
+      const player = finishStory(gameState, story);
       context.setGameState({
         ...gameState,
         player: updateWinPlayer(player, prefightState.enemy, rewards),
@@ -106,7 +70,7 @@ export const Fight = () => {
         player: updateLostPlayer(gameState.player),
       });
     }
-    context.backToStory();
+    context.setStory(null);
   };
   // console.log(
   //   "game state FIGHT",
@@ -114,6 +78,11 @@ export const Fight = () => {
   // );
   return (
     <div className="Fight">
+      <img
+        className="FightBackround"
+        src={`../img/Fights/${context.story.id}.jpg`}
+        alt="fight_background"
+      />
       <SettingsButton onClick={() => setSettingsOpen(!settingsOpen)} />
       {settingsOpen ? <Settings /> : null}
       <FightScene

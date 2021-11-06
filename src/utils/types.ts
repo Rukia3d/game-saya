@@ -1,4 +1,4 @@
-export interface Spell {
+export interface ISpell {
   id: string;
   image: string;
   name: string;
@@ -10,19 +10,19 @@ export interface Spell {
   type: string;
   level: number;
   description: string;
-  updates: SpellUpdate[];
+  updates: ISpellUpdate[];
 }
 
-export type OwnedResource = Resource & { quantity: number };
-export type CharacterNPC = Hero & { dial: string | null };
+export type IOwnedResource = IResource & { quantity: number };
+export type INPC = IHero & { dial: string | null };
 
-export type SpellUpdateResource = [string, number];
+export type ISpellUpdateResource = [string, number];
 
-export interface SpellUpdate {
+export interface ISpellUpdate {
   id: string;
   element: elementType;
   mana: number;
-  resource_base: SpellUpdateResource[];
+  resource_base: ISpellUpdateResource[];
   effect: spellEffectType;
   action: string;
   price: string | null;
@@ -39,28 +39,30 @@ export interface Player {
     mana: number;
     maxMana: number;
   };
-  npcs: CharacterNPC[];
-  heroes: Hero[];
-  spells: Spell[];
-  spellUpdates: SpellUpdate[];
-  adventures: Adventure[];
-  enemies: Enemy[];
-  resources: OwnedResource[];
+  npcs: INPC[];
+  heroes: IHero[];
+  spells: ISpell[];
+  spellUpdates: ISpellUpdate[];
+  adventures: IAdventure[];
+  enemies: IEnemy[];
+  resources: IOwnedResource[];
 }
 
 export interface GameState {
   player: Player;
-  dialogues: Dialogue[];
-  enemies: Enemy[];
-  resources: Resource[];
-  spells: Spell[];
-  heroes: Hero[];
-  spellUpdates: SpellUpdate[];
-  adventures: Adventure[];
-  npcs: Hero[];
+  dialogues: IDialogue[];
+  fights: IFight[];
+  enemies: IEnemy[];
+  reels: IReel[];
+  resources: IResource[];
+  spells: ISpell[];
+  heroes: IHero[];
+  spellUpdates: ISpellUpdate[];
+  adventures: IAdventure[];
+  npcs: IHero[];
 }
 
-export interface DialogueLine {
+export interface IDialogueLine {
   id: string;
   character: string;
   image?: string;
@@ -68,20 +70,20 @@ export interface DialogueLine {
   text: string;
 }
 
-export interface Dialogue {
+export interface IDialogue {
   id: string;
-  lines: DialogueLine[];
-  background?: string;
-  action?: StoryAction[];
+  lines: IDialogueLine[];
+  background: string;
+  action?: IStoryAction[];
 }
 
-export interface StoryAction {
+export interface IStoryAction {
   type: storyChangeType;
   id: string;
   data?: string | null;
 }
 
-export interface Hero {
+export interface IHero {
   id: string;
   name: string;
   image: string;
@@ -89,51 +91,64 @@ export interface Hero {
   element?: elementType;
 }
 
-export interface Adventure {
+export interface IAdventure {
   id: adventureType;
   form: string;
   name: string;
   image: string;
   open: boolean;
-  stories?: StoryGroup[];
+  storyGroups?: IStoryGroup[];
 }
 
-export interface Reel {
+export interface IReel {
   id: string;
-  images: ReelImage[];
+  imageGroups: IReelGroup[];
 }
 
-export interface ReelImage {
+export interface IReelGroup {
+  id: number;
+  layout: number;
+  images: IReelImage[];
+}
+
+export interface IReelImage {
   id: string;
   image: string;
-  effect: string;
+  direction: "up" | "down" | "left" | "right";
 }
-export interface StoryGroup {
+
+export interface IStoryGroup {
   id: string;
   name: string;
-  stories: Story[];
+  stories: IStory[];
   group: number;
 }
 
-export interface Story {
+export interface IStory {
   type: "dialogue" | "fight" | "reel";
   id: string;
   nextStory: string;
   name?: string;
   image: string;
   open: boolean;
-  enemy?: string;
-  characters: string[];
-  action: StoryAction[];
+  action: IStoryAction[];
 }
 
-export interface Enemy {
+export interface IFight {
+  id: string;
+  name: string;
+  image: string;
+  enemy: string;
+  characters: string[];
+}
+
+export interface IEnemy {
   id: string;
   name: string;
   element: elementType;
   // exp defines how hard this enemy to kill
   experience: enemyExpLevel;
-  spells: Spell[];
+  spells: ISpell[];
   // defines how many cards enemy is given
   life: number;
 }
@@ -145,20 +160,20 @@ export interface FightState {
     mana: number;
     maxMana: number;
   };
-  heroes: Hero[];
-  enemy: Enemy;
-  heroDeck: Spell[];
+  heroes: IHero[];
+  enemy: IEnemy;
+  heroDeck: ISpell[];
   heroCardIndex: number | null;
-  heroDrop: Spell[];
-  heroHand: Spell[];
-  enemyDeck: Spell[];
-  enemyDrop: Spell[];
+  heroDrop: ISpell[];
+  heroHand: ISpell[];
+  enemyDeck: ISpell[];
+  enemyDrop: ISpell[];
   enemyCardIndex: number | null;
   element: elementType;
   elements: elementType[];
 }
 
-export interface Resource {
+export interface IResource {
   id: string;
   name: string;
   image: string;

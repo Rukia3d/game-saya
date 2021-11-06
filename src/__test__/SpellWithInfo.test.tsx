@@ -1,7 +1,7 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import { gameState, mayaCard, spellUpdates, story } from "../utils/testobjects";
-import { ElementSpellWithInfo } from "../Spells/ElementSpellWithInfo";
+import { SpellWithInfo } from "../Spells/SpellWithInfo";
 import userEvent from "@testing-library/user-event";
 import { GameContext, GameContextType } from "../App";
 
@@ -26,11 +26,11 @@ test("Renders a spell and a spell can be selected", async () => {
   const selectCard = jest.fn();
   render(
     <GameContext.Provider value={context}>
-      <ElementSpellWithInfo
-        card={mayaCard}
+      <SpellWithInfo
+        spell={mayaCard}
         forge={true}
         element={mayaCard.element}
-        selectCard={selectCard}
+        selectSpell={selectCard}
         setInfo={jest.fn()}
       />
     </GameContext.Provider>
@@ -47,12 +47,12 @@ test("Renders a spell with a frame and a spell info can be clicked", async () =>
   const updatedCard = { ...mayaCard, updates: [spellUpdates[0]] };
   render(
     <GameContext.Provider value={context}>
-      <ElementSpellWithInfo
-        card={updatedCard}
+      <SpellWithInfo
+        spell={updatedCard}
         forge={true}
         element={updatedCard.element}
         setInfo={setInfo}
-        selectCard={jest.fn()}
+        selectSpell={jest.fn()}
       />
     </GameContext.Provider>
   );
@@ -68,11 +68,11 @@ test("Renders inactive spell and forge can be displayed", async () => {
   const unselectedCard = { ...mayaCard, selected: false };
   render(
     <GameContext.Provider value={context}>
-      <ElementSpellWithInfo
-        card={unselectedCard}
+      <SpellWithInfo
+        spell={unselectedCard}
         forge={true}
         element={unselectedCard.element}
-        selectCard={selectCard}
+        selectSpell={selectCard}
         setInfo={jest.fn()}
         setForge={setForge}
       />

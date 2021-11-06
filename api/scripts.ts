@@ -1,4 +1,4 @@
-import { GameState, Spell } from "../src/utils/types";
+import { GameState, ISpell } from "../src/utils/types";
 import {
   readDialogues,
   readAdventures,
@@ -8,6 +8,7 @@ import {
   readNpcs,
   readResources,
   readSpellUpdates,
+  readFights,
 } from "./dataload";
 
 const express = require("express");
@@ -23,6 +24,7 @@ const spells = readSpells();
 const npcs = readNpcs();
 const resources = readResources();
 const spellUpdates = readSpellUpdates();
+const fights = readFights();
 
 app.get("/api/player/", (req: any, res: any) => {
   console.log("Requesting new player game data");
@@ -30,12 +32,12 @@ app.get("/api/player/", (req: any, res: any) => {
   const playerAdventures = adventures;
   playerAdventures[0].open = true;
   //@ts-ignore
-  playerAdventures[0].stories[0].stories[0].open = true;
+  playerAdventures[0].storyGroups[0].stories[0].open = true;
   const playerNpcs = [{ ...npcs[0], dial: "maya_replic1" }];
   const playerHeroes = [heroes[0]];
   playerHeroes[0].selected = true;
-  const playerCards = spells.filter((s: Spell) => s.element === "earth");
-  playerCards.map((s: Spell) => (s.selected = true));
+  const playerCards = spells.filter((s: ISpell) => s.element === "earth");
+  playerCards.map((s: ISpell) => (s.selected = true));
   const playerEnemies = enemies;
 
   const gameState: GameState = {
@@ -115,6 +117,7 @@ app.get("/api/player/", (req: any, res: any) => {
       },
     ],
     dialogues: dialogues,
+    fights: fights,
     npcs: npcs,
     heroes: heroes,
     adventures: adventures,

@@ -2,7 +2,7 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import { GameContext, GameContextType } from "../App";
 import userEvent from "@testing-library/user-event";
-import { gameState } from "../utils/testobjects";
+import { dialstory, gameState } from "../utils/testobjects";
 import { Stories } from "../Stories/Stories";
 
 const setDialogue = jest.fn();
@@ -12,21 +12,18 @@ const context: GameContextType = {
   story: null,
   setStory: jest.fn(),
   gameState: gameState,
-  dialogue: null,
   addition: null,
-  reel: null,
-  setReel: jest.fn(),
   setAdditionScreen: jest.fn(),
-  setDialogue: setDialogue,
   setGameState: jest.fn(),
   backToMain: jest.fn(),
-  backToStory: jest.fn(),
 };
 
 test("Stories renders StoryPanels for adventure", async () => {
-  gameState.dialogues[0].id = "dialogue1";
+  const setStory = jest.fn();
   render(
-    <GameContext.Provider value={context}>
+    <GameContext.Provider
+      value={{ ...context, story: dialstory, setStory: setStory }}
+    >
       <Stories />
     </GameContext.Provider>
   );
@@ -40,7 +37,7 @@ test("Stories renders StoryPanels for adventure", async () => {
   userEvent.click(screen.getByTestId("scroll_button"));
   expect(screen.getByLabelText("stories_list").children.length).toEqual(4);
   userEvent.click(screen.getByAltText("story_dialogue1"));
-  expect(setDialogue.mock.calls.length).toBe(1);
+  expect(setStory.mock.calls.length).toBe(1);
 });
 
 test("Throws error if no data provided in context", () => {

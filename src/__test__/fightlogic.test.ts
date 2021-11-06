@@ -1,6 +1,6 @@
-import { enemyAttack } from "../utils/fightlogic";
+import { enemyAttack } from "../utils/hitlogic";
 import { fightState, mayaCard, enemyCard, heroes } from "../utils/testobjects";
-import { elementType, spellEffectType, SpellUpdate } from "../utils/types";
+import { elementType, spellEffectType, ISpellUpdate } from "../utils/types";
 const testHeroLife = { ...fightState.hero, life: 10 };
 
 // Base to Base attacks
@@ -234,7 +234,7 @@ test("Enemy attacks trump card 5, hero defends trump card 3", () => {
   expect(enemyAttackRes.hero.life).toBe(testHeroLife.life - 2);
 });
 
-const h_heal_1: SpellUpdate = {
+const h_heal_1: ISpellUpdate = {
   element: "earth" as elementType,
   mana: 1,
   resource_base: [],
@@ -406,7 +406,7 @@ test("Update effect h_heal doesn't work if character is not present", () => {
   warn.mockReset();
 });
 
-const h_trumpremove_1: SpellUpdate = {
+const h_trumpremove_1: ISpellUpdate = {
   element: "air" as elementType,
   mana: 1,
   resource_base: [],
@@ -470,7 +470,7 @@ test("Update effect h_trumpremove_1 doesnt works with simple attack", () => {
   expect(enemyAttack(newFightState).hero.life).toBe(8);
 });
 
-const h_trumpset_1: SpellUpdate = {
+const h_trumpset_1: ISpellUpdate = {
   element: "air" as elementType,
   mana: 2,
   resource_base: [],

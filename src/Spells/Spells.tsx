@@ -1,22 +1,23 @@
 import React, { useContext, useState } from "react";
-import "./ElementSpells.css";
-
-import { CloseButton } from "../UI/CloseButton";
-
-import { elementType, Spell } from "../utils/types";
-import { InfoCard } from "../UI/InfoCard";
 import { GameContext } from "../App";
-import { changeCardsInDeck } from "../utils/gamelogic";
-import { ElementSpellWithInfo } from "./ElementSpellWithInfo";
-import { ElementSpellLibrary } from "./ElementSpellLibrary";
+import "./Spells.css";
+// Types
+import { elementType, ISpell } from "../utils/types";
+// Utils
+import { changeCardsInDeck } from "../utils/fightlogic";
+// Components
+import { CloseButton } from "../UI/CloseButton";
+import { InfoCard } from "../UI/InfoCard";
+import { SpellWithInfo } from "./SpellWithInfo";
+import { SpellLibrary } from "./SpellLibrary";
 
-export const ElementSpells = ({
+export const Spells = ({
   element,
   spells,
   setElement,
 }: {
   element: elementType;
-  spells: Spell[];
+  spells: ISpell[];
   setElement: (s: elementType | null) => void;
 }) => {
   const context = useContext(GameContext);
@@ -32,10 +33,10 @@ export const ElementSpells = ({
   const player = context.gameState.player;
   const playerCards = context.gameState.player.spells;
   const gameState = context.gameState;
-  const [info, setInfo] = useState<null | Spell>(null);
-  const [forge, setForge] = useState<null | Spell>(null);
+  const [info, setInfo] = useState<null | ISpell>(null);
+  const [forge, setForge] = useState<null | ISpell>(null);
 
-  const selectCard = (s: Spell) => {
+  const selectSpell = (s: ISpell) => {
     const newPlayerCards = changeCardsInDeck(playerCards, s);
     const newPlayer = { ...player, cards: newPlayerCards };
     context.setGameState({ ...gameState, player: newPlayer });
@@ -45,16 +46,16 @@ export const ElementSpells = ({
       <h1>{`${element.charAt(0).toUpperCase() + element.slice(1)} spells`}</h1>
       <CloseButton onClick={() => setElement(null)} />
       {info ? <InfoCard item={info} setInfo={setInfo} /> : null}
-      {forge ? <ElementSpellLibrary item={forge} setForge={setForge} /> : null}
+      {forge ? <SpellLibrary item={forge} setForge={setForge} /> : null}
       <div className="ElementSpellsList" aria-label="character_spells">
-        {spells.map((c: Spell, i: number) => (
-          <ElementSpellWithInfo
+        {spells.map((c: ISpell, i: number) => (
+          <SpellWithInfo
             forge
             key={i}
-            selectCard={selectCard}
+            selectSpell={selectSpell}
             setInfo={setInfo}
             element={c.element}
-            card={c}
+            spell={c}
             setForge={setForge}
           />
         ))}

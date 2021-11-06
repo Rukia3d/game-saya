@@ -1,12 +1,15 @@
 import React from "react";
-import { Resource } from "../utils/types";
 import "./Fight.css";
+// Types
+import { IResource } from "../utils/types";
+// Utils
+// Components
 
-const Rewards = ({ resource }: { resource: Resource[] }) => {
+const Rewards = ({ resource }: { resource: IResource[] }) => {
   return (
     <div aria-label="rewards_list">
       <h2>Your prize</h2>
-      <div>{resource.map((r: Resource) => r.name + " ")}</div>
+      <div>{resource.map((r: IResource) => r.name + " ")}</div>
     </div>
   );
 };
@@ -15,7 +18,7 @@ const ResourceChest = ({
   resource,
   finishFight,
 }: {
-  resource: Resource[];
+  resource: IResource[];
   finishFight: () => void;
 }) => {
   return (
@@ -43,7 +46,7 @@ export const FightResult = ({
   result,
   finishFight,
 }: {
-  rewards: Resource[] | null;
+  rewards: IResource[] | null;
   result: String;
   finishFight: () => void;
 }) => {

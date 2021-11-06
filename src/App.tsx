@@ -1,40 +1,33 @@
 import React, { useEffect, useState } from "react";
 import useSWRImmutable from "swr/immutable";
 import "./App.css";
+// Types
+import {
+  IAdventure,
+  IHero,
+  GameState,
+  IStory,
+  ISpellUpdate,
+} from "./utils/types";
+// Utils
+import { fetcher } from "./utils/helpers";
+// Components
 import { AdditionScreen } from "./UI/AdditionScreen";
-import { Dialogues } from "./Dialogues/Dialogues";
-
-import { Fight } from "./Fight/Fight";
 import { Main } from "./Main/Main";
 import { Start } from "./Main/Start";
 import { Stories } from "./Stories/Stories";
-
-import { fetcher } from "./utils/helpers";
-import {
-  Adventure,
-  Hero,
-  Dialogue,
-  GameState,
-  Story,
-  SpellUpdate,
-  Reel,
-} from "./utils/types";
+import { GenericStory } from "./Main/GenericStory";
 
 export interface GameContextType {
-  adventure: Adventure | null;
-  setAdventure: (a: Adventure) => void;
-  story: Story | null;
-  setStory: (s: Story) => void;
+  adventure: IAdventure | null;
+  setAdventure: (a: IAdventure) => void;
+  story: IStory | null;
+  setStory: (s: IStory | null) => void;
   gameState: GameState | null;
   setGameState: (g: GameState) => void;
-  dialogue: Dialogue | null;
-  setDialogue: (d: Dialogue | null) => void;
-  addition: Hero | null | SpellUpdate;
-  setAdditionScreen: (c: Hero | SpellUpdate | null) => void;
-  reel: Reel | null;
-  setReel: (r: Reel | null) => void;
+  addition: IHero | null | ISpellUpdate;
+  setAdditionScreen: (c: IHero | ISpellUpdate | null) => void;
   backToMain: () => void;
-  backToStory: () => void;
 }
 export const GameContext = React.createContext<undefined | GameContextType>(
   undefined
@@ -44,12 +37,10 @@ function App() {
   const { data, error } = useSWRImmutable("/api/player/", fetcher);
 
   const [showStart, setShowStart] = useState(true);
-  const [adventure, setAdventure] = useState<null | Adventure>(null);
-  const [reel, setReel] = useState<null | Reel>(null);
-  const [story, setStory] = useState<null | Story>(null);
+  const [adventure, setAdventure] = useState<null | IAdventure>(null);
+  const [story, setStory] = useState<null | IStory>(null);
   const [gameState, setGameStateOrigin] = useState<GameState>(data);
-  const [dialogue, setDialogue] = useState<null | Dialogue>(null);
-  const [addition, setAdditionScreen] = useState<null | Hero | SpellUpdate>(
+  const [addition, setAdditionScreen] = useState<null | IHero | ISpellUpdate>(
     null
   );
 
@@ -73,10 +64,6 @@ function App() {
     setStory(null);
   };
 
-  const backToStory = () => {
-    setStory(null);
-    setDialogue(null);
-  };
   const context: GameContextType = {
     adventure: adventure,
     setAdventure: setAdventure,
@@ -84,14 +71,9 @@ function App() {
     setStory: setStory,
     gameState: gameState,
     setGameState: setGameState,
-    dialogue: dialogue,
-    setDialogue: setDialogue,
     addition: addition,
     setAdditionScreen: setAdditionScreen,
-    reel: reel,
-    setReel: setReel,
     backToMain: backToMain,
-    backToStory: backToStory,
   };
 
   if (error || !data) {
@@ -107,9 +89,8 @@ function App() {
     <GameContext.Provider value={context}>
       <div className="App">
         {showStart ? <Start setShowStart={setShowStart} /> : <Main />}
+        {story ? <GenericStory /> : null}
         {adventure ? <Stories /> : null}
-        {story ? <Fight /> : null}
-        {dialogue ? <Dialogues /> : null}
         {addition ? <AdditionScreen /> : null}
       </div>
     </GameContext.Provider>

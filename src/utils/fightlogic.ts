@@ -1,12 +1,12 @@
-import { generateDeck, generateEnemyDeck, updateHeroDeck } from "./gamelogic";
 import { removePlayedCard, shuffle } from "./helpers";
+import { generateDeck, generateEnemyDeck } from "./prefightloginc";
 import {
   FightState,
   elementType,
-  SpellUpdate,
-  Hero,
-  Spell,
-  Enemy,
+  ISpellUpdate,
+  IHero,
+  ISpell,
+  IEnemy,
 } from "./types";
 
 export const getNextElement = (
@@ -22,7 +22,7 @@ export const getNextElement = (
   return elements[index + 1];
 };
 
-const manaPriceOfUpdates = (updates: SpellUpdate[]) => {
+export const manaPriceOfUpdates = (updates: ISpellUpdate[]) => {
   let res = 0;
   for (let i = 0; i < updates.length; i++) {
     res = res + updates[i].mana;
@@ -30,19 +30,16 @@ const manaPriceOfUpdates = (updates: SpellUpdate[]) => {
   return res;
 };
 
-const parseUpdateAction = (action: string) => {
+export const parseUpdateAction = (action: string) => {
   const res = action.split(",");
   return { parameter: res[0], change: res[1] };
 };
 
-const heroIsPresent = (update: SpellUpdate, heroes: Hero[]) => {
-  return heroes.filter((h: Hero) => h.element === update.element).length > 0;
+export const heroIsPresent = (update: ISpellUpdate, heroes: IHero[]) => {
+  return heroes.filter((h: IHero) => h.element === update.element).length > 0;
 };
 
-export const findEnemy = (enemies: Enemy[], enemyId: string | undefined) => {
-  if (!enemyId) {
-    throw new Error("No enemyId for this fight, something went very wrong");
-  }
+export const findEnemy = (enemies: IEnemy[], enemyId: string) => {
   const enemy = enemies.find((e: any) => e.id === enemyId);
   if (!enemy) {
     throw new Error("No enemy for this fight, something went very wrong");
@@ -51,9 +48,9 @@ export const findEnemy = (enemies: Enemy[], enemyId: string | undefined) => {
 };
 
 export const initFight = (
-  storyCharacters: Hero[],
-  spells: Spell[],
-  enemy: Enemy
+  storyCharacters: IHero[],
+  spells: ISpell[],
+  enemy: IEnemy
 ) => {
   const heroDeck = shuffle(generateDeck(storyCharacters, spells));
   if (heroDeck.length === 0) {
@@ -71,157 +68,6 @@ export const initFight = (
     "air",
   ]);
   return [heroDeck, enemyDeck, elements];
-};
-
-const simpleDamage = (
-  health: number,
-  heroStrength: number,
-  enemyStrength: number
-) => {
-  //console.log(health, heroStrength, enemyStrength);
-  if (heroStrength < enemyStrength) {
-    health = health - (enemyStrength - heroStrength);
-  }
-  //console.log("new health", health);
-  return health;
-};
-
-const specialDamage = (
-  element: elementType,
-  heroCard: Spell,
-  enemyCard: Spell,
-  heroHealth: number
-) => {
-  if (element === enemyCard.element && element !== heroCard.element) {
-    //console.log("special attack enemy trump");
-    return heroHealth - enemyCard.strength;
-  }
-
-  if (
-    element === enemyCard.element &&
-    element === heroCard.element &&
-    enemyCard.strength > heroCard.strength
-  ) {
-    //console.log("special attack both trump");
-    return heroHealth - (enemyCard.strength - heroCard.strength);
-  }
-  return heroHealth;
-};
-
-const additionalEffects = (
-  fightState: FightState,
-  heroCard: Spell,
-  enemyCard: Spell,
-  heroHealth: number,
-  heroMana: number
-) => {
-  // additional effects apply
-  const price = manaPriceOfUpdates(heroCard.updates);
-  if (manaPriceOfUpdates(heroCard.updates) < fightState.hero.mana) {
-    const currentupdate = heroCard.updates[0];
-    if (heroIsPresent(currentupdate, fightState.heroes)) {
-      const action = parseUpdateAction(currentupdate.action);
-      //console.log("Spell effect", currentupdate.effect);
-      switch (currentupdate.effect) {
-        case "h_heal":
-          heroHealth = heroHealth + parseInt(action.change);
-          break;
-        case "h_trumpremove":
-          if (enemyCard.element === fightState.element) {
-            heroHealth = heroHealth + enemyCard.strength;
-            heroHealth = simpleDamage(
-              heroHealth,
-              heroCard.strength,
-              enemyCard.strength
-            );
-          }
-          break;
-        case "h_trumpset":
-          // TODO
-          break;
-        default:
-          break;
-      }
-      heroMana = heroMana - price;
-    } else {
-      console.warn("Hero is not present to use this update");
-    }
-  } else {
-    console.warn("Not enough mana to use");
-  }
-  return [heroHealth, heroMana];
-};
-
-export const enemyAttack = (fightState: FightState): FightState => {
-  if (fightState.heroCardIndex === null)
-    throw new Error(
-      `No hero card to play, heroCardIndex is ${fightState.heroCardIndex}`
-    );
-  if (fightState.enemyCardIndex === null)
-    throw new Error(
-      `No enemy card to play, enemyCardIndex is ${fightState.heroCardIndex}`
-    );
-
-  const heroCard = fightState.heroHand[fightState.heroCardIndex];
-  const enemyCard = fightState.enemyDeck[fightState.enemyCardIndex];
-
-  if (!heroCard) {
-    throw new Error(
-      `Fight state is missing a hero card, the received card index is ${fightState.heroCardIndex}`
-    );
-  }
-  if (!enemyCard) {
-    throw new Error(
-      `Fight state is missing an enemy card, the received card index is ${fightState.enemyCardIndex}`
-    );
-  }
-  let newHeroHealth = fightState.hero.life;
-  let newHeroMana = fightState.hero.mana;
-
-  if (
-    fightState.element &&
-    (fightState.element === heroCard.element ||
-      fightState.element === enemyCard.element)
-  ) {
-    //console.log("special attack");
-    newHeroHealth = specialDamage(
-      fightState.element,
-      heroCard,
-      enemyCard,
-      newHeroHealth
-    );
-  } else {
-    // This is a simple attack with no trump
-    //console.log("simple attack");
-    newHeroHealth = simpleDamage(
-      newHeroHealth,
-      heroCard.strength,
-      enemyCard.strength
-    );
-  }
-
-  if (heroCard.updates.length > 0) {
-    // additional effects apply
-    const additional = additionalEffects(
-      fightState,
-      heroCard,
-      enemyCard,
-      newHeroHealth,
-      newHeroMana
-    );
-    newHeroHealth = additional[0];
-    newHeroMana = additional[1];
-  }
-
-  const heroNew = {
-    ...fightState.hero,
-    life: newHeroHealth,
-    mana: newHeroMana,
-  };
-  return {
-    ...fightState,
-    hero: heroNew,
-  };
 };
 
 export const updateDecks = (fightState: FightState): FightState => {
@@ -250,4 +96,37 @@ export const updateDecks = (fightState: FightState): FightState => {
     enemyDeck: fightState.enemyDeck.slice(1),
   };
   return newState;
+};
+
+export const changeCardsInDeck = (playerCards: ISpell[], s: ISpell) => {
+  const playerCard = playerCards.find((c: ISpell) => s.id === c.id);
+  if (!playerCard) {
+    throw new Error(
+      "Can't find the card you're trying to select in player's cards"
+    );
+  }
+  const cardIndex = playerCards.indexOf(playerCard);
+  const currentlySelected = playerCards.filter((c: ISpell) => c.selected);
+
+  if (currentlySelected.length >= 15) {
+    const firstSelectedIndex = playerCards.indexOf(currentlySelected[0]);
+    playerCards[firstSelectedIndex] = {
+      ...playerCards[firstSelectedIndex],
+      selected: false,
+    };
+  }
+  playerCards[cardIndex] = { ...s, selected: !s.selected };
+  return playerCards;
+};
+
+export const updateHeroDeck = (fightState: FightState, heroCard: ISpell) => {
+  let newDeck = fightState.heroDeck;
+  let newDrop = fightState.heroDrop;
+  if (fightState.heroDeck.length <= 0) {
+    newDeck = newDrop;
+    newDrop = [heroCard];
+  } else {
+    newDrop.push(heroCard);
+  }
+  return [newDeck, newDrop];
 };

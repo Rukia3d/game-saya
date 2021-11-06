@@ -1,33 +1,13 @@
 import React from "react";
-import { useFightScene } from "../hooks/useFightScene";
-import { elementType, Enemy, FightState, Spell } from "../utils/types";
-import { BigCard } from "./BigCard";
-import { EnemyBlock } from "./EnemyBlock";
 import "./Fight.css";
+import { useFightScene } from "../hooks/useFightScene";
+// Types
+import { IEnemy, FightState, ISpell } from "../utils/types";
+// Utils
+// Components
+import { EnemyBlock } from "./EnemyBlock";
 import { HeroBlock } from "./HeroBlock";
-
-const BigCardsBlock = ({
-  enemyCard,
-  heroCard,
-  element,
-  setInfo,
-}: {
-  enemyCard: Spell | null;
-  heroCard: Spell | null;
-  element: elementType;
-  setInfo: (s: null | Spell | Enemy) => void;
-}) => {
-  return (
-    <>
-      {enemyCard ? (
-        <BigCard card={enemyCard} setInfo={setInfo} element={element} />
-      ) : null}
-      {enemyCard && heroCard ? (
-        <BigCard card={heroCard} setInfo={setInfo} element={element} />
-      ) : null}
-    </>
-  );
-};
+import { SpellsBig } from "./SpellsBig";
 
 export const FightScene = ({
   prefightState,
@@ -35,7 +15,7 @@ export const FightScene = ({
   setResult,
 }: {
   prefightState: FightState;
-  setInfo: (s: null | Spell | Enemy) => void;
+  setInfo: (s: null | ISpell | IEnemy) => void;
   setResult: (r: null | String) => void;
 }) => {
   const [enemyCard, heroCard, animation, fightState, enemyAct, heroAct] =
@@ -47,7 +27,7 @@ export const FightScene = ({
     left: "20px",
     zIndex: 50000,
   };
-  // console.log("figtstate life", fightState.enemyDeck.length);
+
   return (
     <>
       <div
@@ -57,9 +37,9 @@ export const FightScene = ({
       >
         <h1>{animation}</h1>
       </div>
-      <BigCardsBlock
-        enemyCard={enemyCard}
-        heroCard={heroCard}
+      <SpellsBig
+        enemySpell={enemyCard}
+        heroSpell={heroCard}
         element={fightState.element}
         setInfo={setInfo}
       />
@@ -70,7 +50,7 @@ export const FightScene = ({
       />
       <HeroBlock
         fightState={fightState}
-        selectCard={heroAct}
+        selectSpell={heroAct}
         setInfo={setInfo}
       />
     </>

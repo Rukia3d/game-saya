@@ -4,16 +4,16 @@ import { Library } from "../Main/Library";
 import { GameContext, GameContextType } from "../App";
 import userEvent from "@testing-library/user-event";
 import { gameState, baseCards15 } from "../utils/testobjects";
-import { GameState, Spell } from "../utils/types";
+import { GameState, ISpell } from "../utils/types";
 
-const mayaSpells: Spell[] = new Array(3).fill(0).map((x, n) => ({
+const mayaSpells: ISpell[] = new Array(3).fill(0).map((x, n) => ({
   ...baseCards15[0],
   id: "base_hit" + n,
   name: "Base Hit " + n,
   element: "earth",
 }));
 
-const taraSpells: Spell[] = new Array(3).fill(0).map((x, n) => ({
+const taraSpells: ISpell[] = new Array(3).fill(0).map((x, n) => ({
   ...baseCards15[0],
   id: "some" + n,
   name: "Some Hit " + n,
@@ -32,14 +32,9 @@ const context: GameContextType = {
   setStory: jest.fn(),
   gameState: newGameState,
   setGameState: jest.fn(),
-  dialogue: null,
   addition: null,
-  reel: null,
-  setReel: jest.fn(),
   setAdditionScreen: jest.fn(),
-  setDialogue: jest.fn(),
   backToMain: jest.fn(),
-  backToStory: jest.fn(),
 };
 
 test("Renders Hero Spells", () => {

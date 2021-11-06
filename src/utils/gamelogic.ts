@@ -2,100 +2,20 @@ import { STORIES_PER_PANEL } from "../Stories/Stories";
 import { findCharacter, findUpdate } from "./helpers";
 import { givePlayerResources } from "./resourceLogic";
 import {
-  Adventure,
-  Hero,
-  CharacterNPC,
-  Enemy,
-  FightState,
+  IAdventure,
+  IHero,
+  INPC,
+  IEnemy,
   GameState,
   Player,
-  Resource,
-  Spell,
-  Story,
-  StoryAction,
-  SpellUpdate,
+  IResource,
+  ISpell,
+  IStory,
+  ISpellUpdate,
+  IStoryAction,
 } from "./types";
 
-export const changeCardsInDeck = (playerCards: Spell[], s: Spell) => {
-  const playerCard = playerCards.find((c: Spell) => s.id === c.id);
-  if (!playerCard) {
-    throw new Error(
-      "Can't find the card you're trying to select in player's cards"
-    );
-  }
-  const cardIndex = playerCards.indexOf(playerCard);
-  const currentlySelected = playerCards.filter((c: Spell) => c.selected);
-
-  if (currentlySelected.length >= 15) {
-    const firstSelectedIndex = playerCards.indexOf(currentlySelected[0]);
-    playerCards[firstSelectedIndex] = {
-      ...playerCards[firstSelectedIndex],
-      selected: false,
-    };
-  }
-  playerCards[cardIndex] = { ...s, selected: !s.selected };
-  return playerCards;
-};
-
-export const generateDeck = (
-  characters: Hero[],
-  playerCards: Spell[]
-): Spell[] => {
-  const heroSpells: Spell[] = [];
-  playerCards.forEach((c: Spell) => {
-    //    if (!c.selected) return;
-    heroSpells.push({
-      id: c.id,
-      image: c.image,
-      name: c.name,
-      mana: c.mana,
-      strength: c.strength,
-      element: c.element,
-      owner: "hero",
-      selected: c.selected,
-      type: c.type,
-      level: c.level,
-      description: c.description,
-      updates: c.updates,
-    });
-  });
-  return heroSpells;
-};
-
-export const generateEnemyDeck = (enemy: Enemy): Spell[] => {
-  const enemySpells: Spell[] = [];
-  enemy.spells.forEach((c: Spell) => {
-    enemySpells.push({
-      id: c.id,
-      image: c.image,
-      name: c.name,
-      mana: c.mana,
-      strength: c.strength,
-      element: c.element,
-      owner: "enemy",
-      selected: true,
-      type: c.type,
-      level: c.level,
-      description: c.description,
-      updates: c.updates,
-    });
-  });
-  return enemySpells.splice(0, enemy.life);
-};
-
-export const updateHeroDeck = (fightState: FightState, heroCard: Spell) => {
-  let newDeck = fightState.heroDeck;
-  let newDrop = fightState.heroDrop;
-  if (fightState.heroDeck.length <= 0) {
-    newDeck = newDrop;
-    newDrop = [heroCard];
-  } else {
-    newDrop.push(heroCard);
-  }
-  return [newDeck, newDrop];
-};
-
-export const enemyToNumber = (enemy: Enemy) => {
+export const enemyToNumber = (enemy: IEnemy) => {
   switch (enemy.experience) {
     case "apprentice":
       return 6;
@@ -117,7 +37,7 @@ export const updateLostPlayer = (player: Player) => {
   };
 };
 
-const givePlayerExperience = (player: Player, enemy: Enemy): Player => {
+const givePlayerExperience = (player: Player, enemy: IEnemy): Player => {
   const newExp = player.data.experience + enemyToNumber(enemy) * 5;
   const newData = { ...player.data, experience: newExp };
   return {
@@ -128,8 +48,8 @@ const givePlayerExperience = (player: Player, enemy: Enemy): Player => {
 
 export const updateWinPlayer = (
   player: Player,
-  enemy: Enemy,
-  resources: Resource[]
+  enemy: IEnemy,
+  resources: IResource[]
 ): Player => {
   const updatedPlayerData: Player = givePlayerExperience(player, enemy);
 
@@ -140,41 +60,42 @@ export const updateWinPlayer = (
 };
 
 const updatePlayerNpcs = (
-  npcs: CharacterNPC[],
-  allNpcs: Hero[],
-  action: StoryAction
-): CharacterNPC[] => {
-  const npc = npcs.find((n: CharacterNPC) => action.id === n.id);
+  npcs: INPC[],
+  allNpcs: IHero[],
+  action: IStoryAction
+): INPC[] => {
+  const newnpcs = npcs;
+  const npc = newnpcs.find((n: INPC) => action.id === n.id);
   if (action.data === undefined) {
     throw new Error("NPC dialogue data to change is invalid");
   }
   if (!npc) {
-    const npcToAdd = allNpcs.find((n: Hero) => action.id === n.id);
+    const npcToAdd = allNpcs.find((n: IHero) => action.id === n.id);
     if (!npcToAdd) {
       throw new Error("Can't find npc to add to the Intro screen");
     }
     const newNpc = { ...npcToAdd, dial: action.data };
-    npcs.push(newNpc);
+    newnpcs.push(newNpc);
   } else {
-    const i = npcs.indexOf(npc);
+    const i = newnpcs.indexOf(npc);
     if (action.data === "remove") {
-      npcs.splice(i, 1);
+      newnpcs.splice(i, 1);
     } else {
-      npcs[i] = { ...npcs[i], dial: action.data };
+      newnpcs[i] = { ...newnpcs[i], dial: action.data };
     }
   }
-
-  return npcs;
+  return newnpcs;
 };
 
 const updatePlayerStory = (
-  adventures: Adventure[],
-  action: StoryAction
-): Adventure[] => {
-  const adventuresection = adventures.find(
-    (a: Adventure) => action.id === a.id
+  adventures: IAdventure[],
+  action: IStoryAction
+): IAdventure[] => {
+  const newAdventures = adventures;
+  const adventuresection = newAdventures.find(
+    (a: IAdventure) => action.id === a.id
   );
-  if (!adventuresection || !adventuresection.stories || !action.data)
+  if (!adventuresection || !adventuresection.storyGroups || !action.data)
     throw new Error("No adventure to change");
   const [x, y] = findStoryToUpdate(adventuresection, action.data);
   if (x > STORIES_PER_PANEL) {
@@ -182,18 +103,18 @@ const updatePlayerStory = (
       "WIP - add next panel from adventures to user story in adventures"
     );
   }
-  const n = adventures.indexOf(adventuresection);
-  if (!adventures[n].stories) throw new Error("No adventure to change");
+  const n = newAdventures.indexOf(adventuresection);
+  if (!newAdventures[n].storyGroups) throw new Error("No adventure to change");
   //@ts-ignore
-  adventures[n].stories[x].stories[y].open = true;
-  return adventures;
+  newAdventures[n].storyGroups[x].stories[y].open = true;
+  return newAdventures;
 };
 
 const updatePlayerAdventures = (
-  adventures: Adventure[],
-  action: StoryAction
-): Adventure[] => {
-  const adventure = adventures.find((a: Adventure) => action.id === a.id);
+  adventures: IAdventure[],
+  action: IStoryAction
+): IAdventure[] => {
+  const adventure = adventures.find((a: IAdventure) => action.id === a.id);
   if (!adventure) throw new Error("No adventure to change");
   const j = adventures.indexOf(adventure);
   adventures[j] = { ...adventures[j], open: true };
@@ -201,69 +122,78 @@ const updatePlayerAdventures = (
 };
 
 const updatePlayerHeroes = (
-  heroes: Hero[],
-  spells: Spell[],
-  allHeroes: Hero[],
-  allSpells: Spell[],
-  action: StoryAction
-): [Hero[], Spell[]] => {
-  console.log("updatePlayerHeroes");
-  let newHeroes: Hero[] = heroes;
-  let newSpells: Spell[] = spells;
+  heroes: IHero[],
+  spells: ISpell[],
+  allHeroes: IHero[],
+  allSpells: ISpell[],
+  action: IStoryAction
+): [IHero[], ISpell[]] => {
+  let newHeroes: IHero[] = heroes;
+  let newSpells: ISpell[] = spells;
   const hero = findCharacter(allHeroes, action.id);
-  const res = heroes.indexOf(hero);
-  if (res !== -1) {
+  const alreadyExists = newHeroes.filter((h: IHero) => h.id === hero.id);
+  if (alreadyExists.length > 0) {
     console.warn(`Trying to add the same ${action.id} hero again`);
   } else {
     newHeroes.push(hero);
+    const before = newSpells.length;
     newSpells = updatePlayerCards(spells, allSpells, action);
+    const after = newSpells.length;
+    const newNumber = after - before;
+    if (newNumber !== 6) {
+      throw new Error("Hero to add had less than 6 spells to add");
+    }
   }
   return [newHeroes, newSpells];
 };
 
 const updatePlayerCards = (
-  spells: Spell[],
-  allSpells: Spell[],
-  action: StoryAction
+  spells: ISpell[],
+  allSpells: ISpell[],
+  action: IStoryAction
 ) => {
-  const spellsToAdd = allSpells.filter((s: Spell) => s.element === action.data);
+  const spellsToAdd = allSpells.filter(
+    (s: ISpell) => s.element === action.data
+  );
   return spells.concat(spellsToAdd);
 };
 
 const updatePlayerSpellUpdates = (
-  updates: SpellUpdate[],
-  allUpdates: SpellUpdate[],
-  action: StoryAction
+  updates: ISpellUpdate[],
+  allUpdates: ISpellUpdate[],
+  action: IStoryAction
 ) => {
-  console.log("updatePlayerSpellUpdates");
   if (!action.data) {
     throw new Error("No update Id for the spell Update addition");
   }
-  const update = findUpdate(allUpdates, action.data);
-  const res = updates.indexOf(update);
-  if (res !== -1) {
+  const newUpdates: ISpellUpdate[] = updates;
+  const update: ISpellUpdate = findUpdate(allUpdates, action.data);
+  const alreadyExists = newUpdates.filter(
+    (h: ISpellUpdate) => h.id === update.id
+  );
+  if (alreadyExists.length > 0) {
     console.warn(`Trying to add the same ${action.data} update again`);
   } else {
-    updates.push(update);
+    newUpdates.push(update);
   }
-  return updates;
+  return newUpdates;
 };
 
 const findStoryToUpdate = (
-  adventuresection: Adventure,
+  adventuresection: IAdventure,
   id: string
 ): number[] => {
-  if (!adventuresection.stories)
+  if (!adventuresection.storyGroups)
     throw new Error("No stories in this adventure");
   let res: number | null = null;
   let storyGroup = 0;
   for (
     storyGroup = 0;
-    storyGroup < adventuresection.stories.length;
+    storyGroup < adventuresection.storyGroups.length;
     storyGroup++
   ) {
-    const currentSG = adventuresection.stories[storyGroup];
-    res = currentSG.stories.findIndex((s: Story) => s.id === id);
+    const currentSG = adventuresection.storyGroups[storyGroup];
+    res = currentSG.stories.findIndex((s: IStory) => s.id === id);
     if (res >= 0) break;
   }
   if (res == null || res === -1)
@@ -271,11 +201,9 @@ const findStoryToUpdate = (
   return [storyGroup, res];
 };
 
-export const finishStory = (
-  game: GameState,
-  actions: StoryAction[]
-): Player => {
-  actions.map((a: StoryAction) => console.log("Action", a));
+export const finishStory = (game: GameState, story: IStory): Player => {
+  const actions = story.action;
+  //actions.map((a: IStoryAction) => console.log("Action", a));
   let player = game.player;
   for (let i = 0; i < actions.length; i++) {
     const action = actions[i];
@@ -312,14 +240,4 @@ export const finishStory = (
     }
   }
   return player;
-};
-
-export const updatePlayerSpell = (
-  p: Player,
-  s: Spell,
-  u: SpellUpdate
-): Player => {
-  const spellToUpdateIndex = p.spells.indexOf(s);
-  p.spells[spellToUpdateIndex].updates.push(u);
-  return p;
 };

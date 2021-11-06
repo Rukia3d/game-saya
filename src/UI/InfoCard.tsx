@@ -1,6 +1,9 @@
 import React from "react";
-import { ElementSpellDescription } from "../Spells/ElementSpellDescription";
 import "./InfoCard.css";
+// Types
+// Utils
+// Components
+import { SpellDescription } from "../Spells/SpellDescription";
 
 export const InfoCard = ({
   item,
@@ -16,7 +19,7 @@ export const InfoCard = ({
         aria-label="info_card"
         onClick={() => setInfo(null)}
       >
-        <ElementSpellDescription card={item} />
+        <SpellDescription spell={item} />
       </div>
     );
   }

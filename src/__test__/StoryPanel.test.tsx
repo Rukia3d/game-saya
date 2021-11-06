@@ -2,7 +2,7 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import { gameState, stories } from "../utils/testobjects";
 import { GameContext, GameContextType } from "../App";
-import { StoryPanel } from "../Stories/Stories";
+import { StoryPanel } from "../Stories/StoryPanel";
 
 const context: GameContextType = {
   adventure: gameState.adventures[1],
@@ -10,15 +10,10 @@ const context: GameContextType = {
   story: null,
   setStory: jest.fn(),
   gameState: gameState,
-  dialogue: null,
   addition: null,
-  reel: null,
-  setReel: jest.fn(),
   setAdditionScreen: jest.fn(),
-  setDialogue: jest.fn(),
   setGameState: jest.fn(),
   backToMain: jest.fn(),
-  backToStory: jest.fn(),
 };
 test("Renders 3 panels for a story", async () => {
   render(
@@ -26,9 +21,9 @@ test("Renders 3 panels for a story", async () => {
       <StoryPanel loadStory={jest.fn()} group={stories[0]} />
     </GameContext.Provider>
   );
-  expect(screen.getByAltText("story_dialogue1")).toBeInTheDocument();
-  expect(screen.getByAltText("story_dialogue11")).toBeInTheDocument();
-  expect(screen.getByAltText("story_arena1")).toBeInTheDocument();
+  expect(screen.getByAltText("story_dialogue0")).toBeInTheDocument();
+  expect(screen.getByAltText("story_dialogue10")).toBeInTheDocument();
+  expect(screen.getByAltText("story_arena0")).toBeInTheDocument();
 });
 
 test("Throws error if no data provided in context", () => {
@@ -51,7 +46,7 @@ test("Throws error if no data provided in context", () => {
         <StoryPanel loadStory={jest.fn()} group={invalidStory} />
       </GameContext.Provider>
     )
-  ).toThrow("Number of stories in this panel is incorrect");
+  ).toThrow("Number of stories in panel name0 is incorrect");
 
   jest.restoreAllMocks();
 });

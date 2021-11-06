@@ -1,11 +1,6 @@
-import {
-  changeCardsInDeck,
-  enemyToNumber,
-  finishStory,
-  generateDeck,
-  generateEnemyDeck,
-  updateHeroDeck,
-} from "../utils/gamelogic";
+import { updateHeroDeck, changeCardsInDeck } from "../utils/fightlogic";
+import { enemyToNumber, finishStory } from "../utils/gamelogic";
+import { generateDeck, generateEnemyDeck } from "../utils/prefightloginc";
 import {
   baseCards15,
   enemy,
@@ -15,7 +10,7 @@ import {
   heroes,
   mayaCard,
 } from "../utils/testobjects";
-import { GameState, Spell } from "../utils/types";
+import { ISpell } from "../utils/types";
 
 test("generateDeck function returns correct character cards", () => {
   const deckForOne = generateDeck([heroes[0]], baseCards15);
@@ -94,7 +89,7 @@ test("Correctly adds Card to Player's deck", () => {
   expect(changingThirdTaken.length).toEqual(15);
   expect(changingThirdTaken[3].selected).not.toBeTruthy();
 
-  spellsMore.map((s: Spell, i: number) =>
+  spellsMore.map((s: ISpell, i: number) =>
     i < 15 ? (s.selected = true) : (s.selected = false)
   );
   const addingWhenAllSelected = changeCardsInDeck(spellsMore, spellsMore[15]);
@@ -124,18 +119,21 @@ test("Opens next story if dialogue is open", () => {
     },
     {
       type: "openStory" as "openStory",
-      id: "arena",
-      data: "arena1",
+      id: "story",
+      data: "arena0",
     },
   ];
   const game = JSON.parse(JSON.stringify(gameState));
-  const res = finishStory(game, action);
-  const stories = res.adventures[0].stories || null;
+  game.adventures[2].open = false;
+  const currentStory = game.adventures[1].storyGroups[1].stories[1];
+  currentStory.action = action;
+  const res = finishStory(game, currentStory);
+  const stories = res.adventures[1].storyGroups || null;
   expect(stories).not.toBeNull();
   expect(res.npcs[0].dial).toBe(action[0].data);
-  expect(res.adventures[2].open).toBeTruthy();
+  expect(res.adventures[1].open).toBeTruthy();
   //@ts-ignore
-  expect(res.adventures[2].stories[0].stories[2].open).toBeTruthy();
+  expect(res.adventures[1].storyGroups[0].stories[2].open).toBeTruthy();
 });
 
 test("Removes npc correctly if data says remove", () => {
@@ -147,7 +145,9 @@ test("Removes npc correctly if data says remove", () => {
     },
   ];
   const game = JSON.parse(JSON.stringify(gameState));
-  const res = finishStory(game, action);
+  const currentStory = game.adventures[1].storyGroups[1].stories[1];
+  currentStory.action = action;
+  const res = finishStory(game, currentStory);
   expect(res.npcs.length).toBe(1);
   expect(res.npcs[0].id).toBe("tara");
 });
@@ -161,7 +161,9 @@ test("Adds npc correctly if it's not present", () => {
     },
   ];
   const game = JSON.parse(JSON.stringify(gameState));
-  const res = finishStory(game, action);
+  const currentStory = game.adventures[1].storyGroups[1].stories[1];
+  currentStory.action = action;
+  const res = finishStory(game, currentStory);
   expect(res.npcs.length).toBe(3);
   expect(res.npcs[2].id).toBe("olija");
 });
@@ -175,7 +177,9 @@ test("Adds npc correctly if it's not present and doesn't have a dialogue", () =>
     },
   ];
   const game = JSON.parse(JSON.stringify(gameState));
-  const res = finishStory(game, action);
+  const currentStory = game.adventures[1].storyGroups[1].stories[1];
+  currentStory.action = action;
+  const res = finishStory(game, currentStory);
   expect(res.npcs.length).toBe(3);
   expect(res.npcs[2].id).toBe("olija");
 });
@@ -189,24 +193,21 @@ test("Adds hero correctly if actions requires it", () => {
     },
   ];
   const game = JSON.parse(JSON.stringify(gameState));
-  const nellCards = new Array(3).fill(0).map((x, n) => ({
-    id: "base_hit" + n,
-    name: "Base Hit " + n,
-    strength: 1,
+  const nellCards = new Array(6).fill(0).map((x, n) => ({
+    ...baseCards15[0],
+    id: "some" + n,
+    name: "Some Hit " + n,
     element: "fire",
-    image: "",
-    mana: 0,
-    selected: true,
-    owner: "hero" as "hero",
-    type: "",
-    level: 0,
-    description: "",
   }));
-  game.spells = game.spells.concat(nellCards);
   const newPlayer = { ...game.player, heroes: game.heroes.slice(0, 2) };
-  const res = finishStory({ ...game, player: newPlayer }, action);
+  const currentStory = game.adventures[1].storyGroups[1].stories[1];
+  currentStory.action = action;
+  const res = finishStory(
+    { ...game, player: newPlayer, spells: game.spells.concat(nellCards) },
+    currentStory
+  );
   expect(res.heroes.length).toBe(3);
-  expect(res.spells.length).toBe(18);
+  expect(res.spells.length).toBe(21);
 });
 
 test("Adds update correctly if actions requires it", () => {
@@ -217,9 +218,11 @@ test("Adds update correctly if actions requires it", () => {
       data: "fire_1",
     },
   ];
-  const game: GameState = JSON.parse(JSON.stringify(gameState));
-  const newPlayer = { ...game.player, spellUpdates: [] };
-  const res = finishStory({ ...game, player: newPlayer }, action);
+  const game = JSON.parse(JSON.stringify(gameState));
+  const newPlayer = { ...game.player, spellUpdates: [game.spellUpdates[1]] };
+  const currentStory = game.adventures[1].storyGroups[1].stories[1];
+  currentStory.action = action;
+  const res = finishStory({ ...game, player: newPlayer }, currentStory);
   expect(res.spellUpdates.length).toBe(1);
   expect(res.spellUpdates[0].id).toEqual(action[0].data);
 });
@@ -233,11 +236,20 @@ test("Can't add the same hero if exists", () => {
       data: "fire",
     },
   ];
-  const game: GameState = {
-    ...gameState,
-    player: { ...gameState.player, heroes: gameState.heroes },
-  };
-  const res = finishStory(game, action);
+  const nellSpells: ISpell[] = new Array(6).fill(0).map((x, n) => ({
+    ...baseCards15[0],
+    id: "some" + n,
+    name: "Some Hit " + n,
+    element: "fire",
+  }));
+  const newPlayer = { ...gameState.player, heroes: gameState.heroes };
+  const game = JSON.parse(JSON.stringify(gameState));
+  const currentStory = game.adventures[1].storyGroups[1].stories[1];
+  currentStory.action = action;
+  const res = finishStory(
+    { ...game, spells: game.spells.concat(nellSpells), player: newPlayer },
+    currentStory
+  );
   expect(res.heroes.length).toBe(5);
   expect(warn).toBeCalledWith("Trying to add the same nell hero again");
   warn.mockReset();
@@ -252,11 +264,14 @@ test("Can't add the same update if exists", () => {
       data: "fire_1",
     },
   ];
-  const game: GameState = {
-    ...gameState,
-    player: { ...gameState.player, spellUpdates: gameState.spellUpdates },
+  const newPlayer = {
+    ...gameState.player,
+    spellUpdates: gameState.spellUpdates,
   };
-  const res = finishStory(game, action);
+  const game = JSON.parse(JSON.stringify(gameState));
+  const currentStory = game.adventures[1].storyGroups[1].stories[1];
+  currentStory.action = action;
+  const res = finishStory({ ...game, player: newPlayer }, currentStory);
   expect(res.spellUpdates.length).toBe(3);
   expect(warn).toBeCalledWith("Trying to add the same fire_1 update again");
   warn.mockReset();

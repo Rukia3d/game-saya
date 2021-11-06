@@ -7,19 +7,14 @@ import { gameState } from "../utils/testobjects";
 
 const context: GameContextType = {
   adventure: null,
-  setAdventure: jest.fn(),
   story: null,
-  setStory: jest.fn(),
   gameState: gameState,
-  dialogue: null,
   addition: null,
-  reel: null,
-  setReel: jest.fn(),
   setAdditionScreen: jest.fn(),
-  setDialogue: jest.fn(),
   setGameState: jest.fn(),
+  setStory: jest.fn(),
+  setAdventure: jest.fn(),
   backToMain: jest.fn(),
-  backToStory: jest.fn(),
 };
 
 test("Renders Adventures with character quest and correct state", () => {

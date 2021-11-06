@@ -7,19 +7,14 @@ import userEvent from "@testing-library/user-event";
 
 const context: GameContextType = {
   adventure: gameState.adventures[0],
-  setAdventure: jest.fn(),
   story: null,
-  setStory: jest.fn(),
   gameState: gameState,
-  dialogue: null,
   addition: characterToAdd,
-  reel: null,
-  setReel: jest.fn(),
   setAdditionScreen: jest.fn(),
-  setDialogue: jest.fn(),
   setGameState: jest.fn(),
   backToMain: jest.fn(),
-  backToStory: jest.fn(),
+  setStory: jest.fn(),
+  setAdventure: jest.fn(),
 };
 
 test("Renders Character screen", async () => {
@@ -108,9 +103,9 @@ test("Renders Update screen", async () => {
     </GameContext.Provider>
   );
   expect(screen.getByText(/New spell updates/)).toBeInTheDocument();
-  expect(screen.getByText(/SomeName1/)).toBeInTheDocument();
-  expect(screen.getByText(/Some description1/)).toBeInTheDocument();
-  expect(screen.getByText(/Ash: 1/)).toBeInTheDocument();
+  expect(screen.getByText(/SomeName0/)).toBeInTheDocument();
+  expect(screen.getByText(/Some description0/)).toBeInTheDocument();
+  expect(screen.getByText(/Ash: 0/)).toBeInTheDocument();
   userEvent.click(screen.getByLabelText("character_card"));
   expect(setAdditionScreen.mock.calls.length).toBe(1);
 });

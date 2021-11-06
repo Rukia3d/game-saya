@@ -3,7 +3,7 @@ import { render, screen } from "@testing-library/react";
 import { GameContext, GameContextType } from "../App";
 import userEvent from "@testing-library/user-event";
 import { gameState, baseCards15 } from "../utils/testobjects";
-import { ElementSpells } from "../Spells/ElementSpells";
+import { Spells } from "../Spells/Spells";
 
 const context: GameContextType = {
   adventure: gameState.adventures[1],
@@ -26,11 +26,7 @@ test("CharacterSpells renders correctly for Earth set", async () => {
   const setGameState = jest.fn();
   render(
     <GameContext.Provider value={{ ...context, setGameState: setGameState }}>
-      <ElementSpells
-        element="earth"
-        spells={baseCards15}
-        setElement={jest.fn()}
-      />
+      <Spells element="earth" spells={baseCards15} setElement={jest.fn()} />
     </GameContext.Provider>
   );
   expect(screen.getByText("Earth spells")).toBeInTheDocument();

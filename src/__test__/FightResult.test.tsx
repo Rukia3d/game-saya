@@ -2,12 +2,12 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import { FightResult } from "../Fight/FightResult";
 import { gameState } from "../utils/testobjects";
-import { Resource } from "../utils/types";
+import { IResource } from "../utils/types";
 import userEvent from "@testing-library/user-event";
 
 test("Renders FightResult screen for Win", async () => {
   const finishFight = jest.fn();
-  const playerResources = gameState.resources.map((r: Resource) => {
+  const playerResources = gameState.resources.map((r: IResource) => {
     return { ...r, quantity: 1 };
   });
   render(
@@ -27,7 +27,7 @@ test("Renders FightResult screen for Win", async () => {
 
 test("Renders FightResult screen for Lost", async () => {
   const finishFight = jest.fn();
-  const playerResources = gameState.resources.map((r: Resource) => {
+  const playerResources = gameState.resources.map((r: IResource) => {
     return { ...r, quantity: 1 };
   });
   render(

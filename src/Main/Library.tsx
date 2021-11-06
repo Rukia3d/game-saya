@@ -1,17 +1,18 @@
 import React, { useContext, useState } from "react";
 import { GameContext } from "../App";
-import { ElementSpells } from "../Spells/ElementSpells";
-import { TopMenu } from "../UI/TopMenu";
-import { elementType, Spell } from "../utils/types";
 import "./Library.css";
+// Types
+import { elementType, ISpell } from "../utils/types";
+// Utils
+// Components
+import { Spells } from "../Spells/Spells";
+import { TopMenu } from "../UI/TopMenu";
 
 const LibraryPanel = ({
   element,
-  image,
   setElement,
 }: {
   element: elementType;
-  image: boolean;
   setElement: (s: elementType) => void;
 }) => {
   return (
@@ -33,17 +34,17 @@ export const Library = () => {
 
   const [element, setElement] = useState<elementType | null>(null);
   const elements = spells
-    .map((s: Spell) => s.element)
+    .map((s: ISpell) => s.element)
     .filter((v: any, i: any, a: any) => a.indexOf(v) === i && v);
 
   if (element) {
     return (
       <div className="Spells">
         <TopMenu />
-        <ElementSpells
+        <Spells
           element={element}
           setElement={setElement}
-          spells={spells.filter((s: Spell) => s.element === element)}
+          spells={spells.filter((s: ISpell) => s.element === element)}
         />
       </div>
     );
@@ -54,7 +55,7 @@ export const Library = () => {
       <TopMenu />
       <div className="SpellsList">
         {elements.sort().map((s: elementType, i: number) => (
-          <LibraryPanel key={i} element={s} image setElement={setElement} />
+          <LibraryPanel key={i} element={s} setElement={setElement} />
         ))}
       </div>
     </div>

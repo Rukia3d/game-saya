@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import "./Main.css";
 
+// Types
+// Utils
+// Components
 import { Settings } from "../UI/Settings";
 import { SettingsButton } from "../UI/SettingsButton";
-
 import { City } from "./City";
 import { Heroes } from "./Heroes";
 import { Adventures } from "./Adventures";

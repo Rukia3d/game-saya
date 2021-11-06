@@ -1,9 +1,12 @@
 import React, { useContext } from "react";
-import "./ElementSpells.css";
 import { GameContext } from "../App";
-import { SpellUpdate } from "../utils/types";
+import "./Spells.css";
+// Types
+import { ISpellUpdate } from "../utils/types";
+// Utils
+// Components
 
-export const ElementSpellUpdated = ({ update }: { update: SpellUpdate }) => {
+export const SpellUpdated = ({ update }: { update: ISpellUpdate }) => {
   const context = useContext(GameContext);
   if (
     !context ||
