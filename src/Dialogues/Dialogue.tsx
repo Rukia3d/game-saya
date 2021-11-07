@@ -52,7 +52,7 @@ export const Dialogue = () => {
   // );
   return (
     <div className="Dialogues" aria-label="dialogue_background">
-      {/* <CloseButton onClick={() => context.setStory(null)} /> */}
+      <CloseButton onClick={() => context.setStory(null)} />
       {dialogue.background ? (
         <img
           className="DialogueBackground"
