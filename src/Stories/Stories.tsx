@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import { GameContext } from "../App";
 import "./Stories.css";
 // Types
-import { IStory, IStoryGroup } from "../utils/types";
+import { IStoryGroup } from "../utils/types";
 // Utils
 import { findLastOpenStory } from "../utils/helpers";
 // Components

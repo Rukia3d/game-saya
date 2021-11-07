@@ -2,7 +2,7 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import { EnemyBlock } from "../Fight/EnemyBlock";
 import userEvent from "@testing-library/user-event";
-import { gameState, fightState } from "../utils/teststates";
+import { fightState } from "../utils/teststates";
 
 test("Renders Character Box", async () => {
   const setInfo = jest.fn();
@@ -10,15 +10,8 @@ test("Renders Character Box", async () => {
   render(
     <EnemyBlock fightState={fightState} enemyAct={enemyAct} setInfo={setInfo} />
   );
-  const player = gameState.player.data;
   expect(screen.getByTestId("enemy_life").innerHTML).toEqual(
     fightState.enemyDeck.length.toString()
-  );
-  expect(screen.getByTestId("hero_life").innerHTML).toEqual(
-    player.life.toString()
-  );
-  expect(screen.getByTestId("hero_mana").innerHTML).toEqual(
-    player.mana.toString()
   );
   userEvent.click(screen.getByLabelText("opponent_info"));
   expect(setInfo.mock.calls.length).toBe(1);

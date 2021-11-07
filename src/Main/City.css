@@ -39,7 +39,8 @@
 }
 
 .IntroImage {
-  height: 40%;
+  width: 150px;
+  height: 300px;
   z-index: 10;
 }
 

@@ -18,7 +18,7 @@ export const AnimatedSpriteCycle = ({
 }) => {
   const [frame, setFrame] = useState(0);
 
-  const style = {
+  const style1 = {
     width: `${width}px`,
     height: `${height}px`,
     overflow: "hidden",
@@ -26,9 +26,17 @@ export const AnimatedSpriteCycle = ({
     flexGrow: 0,
   };
 
+  const style = {
+    width: "100%",
+    overflow: "hidden",
+    flexShrink: 0,
+    flexGrow: 0,
+  };
+
   const animatedSprite = {
-    transform: `translateX(${-frame * width}px)`,
+    transform: `translateX(${-frame * (100 / frames)}%)`,
     height: "100%",
+    width: `${100 * frames}%`,
   };
 
   useEffect(() => {
@@ -50,7 +58,7 @@ export const AnimatedSpriteCycle = ({
   }, [frame, frames, randomStart]);
 
   return (
-    <div style={style} data-testid={"characterImage"}>
+    <div style={style}>
       <img
         aria-label="animatedSprite"
         style={animatedSprite}

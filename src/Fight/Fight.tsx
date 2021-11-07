@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import "./Fight.css";
 import { GameContext } from "../App";
 // Types
-import { ISpell, IEnemy, FightState } from "../utils/types";
+import { ISpell, IEnemy, FightState, IFight } from "../utils/types";
 // Utils
 import { generateReward } from "../utils/resourceLogic";
 import { initPreFight } from "../utils/prefightloginc";
@@ -36,6 +36,7 @@ export const Fight = () => {
   const [result, setResult] = useState<null | String>(null);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [info, setInfo] = useState<null | ISpell | IEnemy>(null);
+  const fight: IFight = findFight(context.gameState.fights, context.story.id);
 
   // This needs to go into finish fight hook
   const finishFight = () => {
@@ -80,7 +81,7 @@ export const Fight = () => {
     <div className="Fight">
       <img
         className="FightBackround"
-        src={`../img/Fights/${context.story.id}.jpg`}
+        src={`../img/Fights/${fight.image}.jpg`}
         alt="fight_background"
       />
       <SettingsButton onClick={() => setSettingsOpen(!settingsOpen)} />

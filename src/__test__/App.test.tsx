@@ -60,9 +60,9 @@ test("Renders Main screen for existing player with Hero menu active", async () =
   expect(screen.getByText("ADVENTURES")).toBeInTheDocument();
   expect(screen.getByText("LIBRARY")).toBeInTheDocument();
   expect(screen.getByText("SHOP")).toBeInTheDocument();
-  expect(screen.getByAltText("hero_maya")).toHaveAttribute(
+  expect(screen.getAllByLabelText("animatedSprite")[0]).toHaveAttribute(
     "src",
-    expect.stringContaining("maya.png")
+    expect.stringContaining("maya_idle")
   );
   // Correct button is highlighted
   expect(screen.getByText("CITY")).toHaveAttribute(

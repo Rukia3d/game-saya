@@ -39,6 +39,15 @@ const EnemyStats = ({
   );
 };
 
+const EnemyInfo = ({ fightState }: { fightState: FightState }) => {
+  return (
+    <div>
+      Your opponent: {fightState.enemy.name} with power of{" "}
+      {fightState.enemy.element}
+    </div>
+  );
+};
+
 export const EnemyBlock = ({
   fightState,
   enemyAct,
@@ -51,14 +60,8 @@ export const EnemyBlock = ({
   return (
     <div className="CharacterBox">
       <EnemyStats fightState={fightState} setInfo={setInfo} />
+      <EnemyInfo fightState={fightState} />
       <Enemy enemy={fightState.enemy} enemyAct={enemyAct} />
-      <div className="Stats">
-        hero health: <span data-testid="hero_life">{fightState.hero.life}</span>
-        , hero mana: <span data-testid="hero_mana">{fightState.hero.mana}</span>
-        , cards:
-        {fightState.heroDeck.length}+{fightState.heroHand.length}, drop:{" "}
-        {fightState.heroDrop.length}
-      </div>
     </div>
   );
 };

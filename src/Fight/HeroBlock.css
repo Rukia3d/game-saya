@@ -4,6 +4,7 @@
   border: 1px solid blue;
   display: flex;
   flex-direction: column;
+  align-items: end;
 }
 
 .Info {
@@ -19,6 +20,15 @@
 
 .Deck {
   display: flex;
+  flex-direction: column;
+}
+
+.DeckRow {
+  display: flex;
+}
+
+.DeckCol {
+  flex: 1;
 }
 
 .Characters {

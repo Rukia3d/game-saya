@@ -33,11 +33,12 @@ const Story = ({ index, story }: { index: number; story: IStory }) => {
       ? findFight(context.gameState.fights, story.id)
       : null;
 
+  const setStory = (story: IStory) => {
+    console.log("Trying to set story", story.id);
+    context.setStory(story);
+  };
   return (
-    <div
-      className={`Story${index + 1}`}
-      onClick={() => context.setStory(story)}
-    >
+    <div className={`Story${index + 1}`} onClick={() => setStory(story)}>
       <img
         src={`../img/Stories/${story.image}.jpg`}
         alt={`story_${story.id}`}
