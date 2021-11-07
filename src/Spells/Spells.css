@@ -52,27 +52,19 @@
 
 .SpellCard.active {
   border: 1px solid red;
-  width: 100%;
-  height: 100%;
 }
 
 .SpellCard.inactive {
   border: 1px solid green;
-  width: 100%;
-  height: 100%;
 }
 
 .SpellCard.trump {
   border: 1px solid violet;
   background-color: red;
-  width: 100%;
-  height: 100%;
 }
 
 .SpellCard.standard {
   border: 1px solid black;
-  width: 100%;
-  height: 100%;
 }
 
 .SmallCardImage {

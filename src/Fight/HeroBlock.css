@@ -20,15 +20,9 @@
 
 .Deck {
   display: flex;
-  flex-direction: column;
-}
-
-.DeckRow {
-  display: flex;
-}
-
-.DeckCol {
-  flex: 1;
+  flex-direction: row;
+  flex-wrap: wrap;
+  max-width: 300px;
 }
 
 .Characters {

@@ -6,10 +6,9 @@ import {
   IEnemy,
   IHero,
   elementType,
-  GameState,
-  FightState,
   IStoryGroup,
   ISpellUpdate,
+  IReel,
 } from "./types";
 
 export const dialogues = new Array(3).fill(0).map((x, i) => ({
@@ -95,6 +94,29 @@ advFormat.forEach((obj: [string, boolean]) =>
 export const fightstory = adventures[0].storyGroups[0].stories[2];
 //@ts-ignore
 export const dialstory = adventures[0].storyGroups[0].stories[0];
+//@ts-ignore
+export const reelStory: IReel = {
+  id: "reel1",
+  imageGroups: [
+    {
+      id: 1,
+      layout: 1,
+      images: [{ id: "reel1", image: "storyline", direction: "left" }],
+    },
+    {
+      id: 2,
+      layout: 2,
+      images: [
+        {
+          id: "reel2",
+          image: "storyline",
+          direction: "right",
+        },
+        { id: "reel3", image: "storyline", direction: "left" },
+      ],
+    },
+  ],
+};
 
 export const fights = new Array(6).fill(0).map((x, i) => ({
   id: "arena" + i,

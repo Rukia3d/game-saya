@@ -69,6 +69,16 @@ const HeroDeck = ({
   );
 };
 
+const Heroes = ({ fightState }: { fightState: FightState }) => {
+  return (
+    <div className="Characters" aria-label="Characters">
+      {fightState.heroes.map((h: IHero, i: number) => (
+        <SmallHero hero={h} key={i} />
+      ))}
+    </div>
+  );
+};
+
 export const HeroBlock = ({
   fightState,
   selectSpell,
@@ -87,11 +97,7 @@ export const HeroBlock = ({
         selectSpell={selectSpell}
         setInfo={setInfo}
       />
-      <div className="Characters" aria-label="Characters">
-        {fightState.heroes.map((h: IHero, i: number) => (
-          <SmallHero hero={h} key={i} />
-        ))}
-      </div>
+      <Heroes fightState={fightState} />
     </div>
   );
 };
