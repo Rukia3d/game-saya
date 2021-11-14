@@ -212,3 +212,5 @@ export type spellEffectType =
   | "e_drop"
   | "e_reduice"
   | "h_enforce";
+
+export type herosSelectionError = "none" | "less" | "more" | "incorrect" | null;

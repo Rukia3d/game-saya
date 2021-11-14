@@ -8,6 +8,7 @@ import {
   IFight,
   ISpellUpdate,
   IStoryAction,
+  herosSelectionError,
 } from "./types";
 
 //@ts-ignore
@@ -62,6 +63,33 @@ export const findStory = (groups: IStoryGroup[], id: string) => {
   }
   if (!res) throw new Error(`Couldn't find a story ${id}`);
   return res;
+};
+
+export const checkFightCharactersIds = (
+  fightheroes: string[],
+  playerheroes: string[]
+): herosSelectionError => {
+  console.log(fightheroes);
+  console.log(playerheroes);
+  if (playerheroes.length === 0) {
+    return "none";
+  }
+  if (fightheroes.length > playerheroes.length) {
+    return "less";
+  }
+  if (fightheroes.length < playerheroes.length) {
+    return "more";
+  }
+  if (
+    JSON.stringify(fightheroes.sort()) !== JSON.stringify(playerheroes.sort())
+  ) {
+    return "incorrect";
+  }
+  return null;
+};
+
+export const filterActiveCharacrers = (heroes: IHero[]) => {
+  return heroes.filter((c: IHero) => c.selected === true);
 };
 
 export const findActiveCharacters = (heroes: IHero[]) => {

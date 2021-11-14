@@ -7,7 +7,8 @@ import {
 import { EnemyCardDB, SpellDB } from "./db_types";
 
 export const getStoryCharacters = (characters: string) => {
-  return characters.split(", ");
+  const newCharacters = characters.split(", ");
+  return newCharacters.map((c: string) => c.trim());
 };
 
 export const getStoryActions = (actions: string, nextStory: string) => {

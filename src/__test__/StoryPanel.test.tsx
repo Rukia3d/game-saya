@@ -4,6 +4,7 @@ import { stories } from "../utils/testobjects";
 import { GameContext, GameContextType } from "../App";
 import { StoryPanel } from "../Stories/StoryPanel";
 import { gameState } from "../utils/teststates";
+import userEvent from "@testing-library/user-event";
 
 const context: GameContextType = {
   adventure: gameState.adventures[1],
@@ -19,7 +20,7 @@ const context: GameContextType = {
 test("Renders 3 panels for a story", async () => {
   render(
     <GameContext.Provider value={context}>
-      <StoryPanel group={stories[0]} />
+      <StoryPanel group={stories[0]} setSelectionError={jest.fn()} />
     </GameContext.Provider>
   );
   expect(screen.getByAltText("story_dialogue0")).toBeInTheDocument();
@@ -37,14 +38,14 @@ test("Throws error if no data provided in context", () => {
   expect(() =>
     render(
       <GameContext.Provider value={context1}>
-        <StoryPanel group={stories[0]} />
+        <StoryPanel group={stories[0]} setSelectionError={jest.fn()} />
       </GameContext.Provider>
     )
   ).toThrow("No data in context");
   expect(() =>
     render(
       <GameContext.Provider value={context}>
-        <StoryPanel group={invalidStory} />
+        <StoryPanel group={invalidStory} setSelectionError={jest.fn()} />
       </GameContext.Provider>
     )
   ).toThrow("Number of stories in panel name0 is incorrect");

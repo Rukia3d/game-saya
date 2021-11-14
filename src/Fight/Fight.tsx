@@ -33,7 +33,7 @@ export const Fight = () => {
     prefightState.enemy,
     context.gameState.resources
   );
-  const [result, setResult] = useState<null | String>(null);
+  const [result, setResult] = useState<null | string>(null);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [info, setInfo] = useState<null | ISpell | IEnemy>(null);
   const fight: IFight = findFight(context.gameState.fights, context.story.id);

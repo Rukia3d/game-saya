@@ -1,16 +1,26 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { GameContext } from "../App";
 import { STORIES_PER_PANEL } from "./Stories";
 import "./Stories.css";
 // Types
-import { IStory, IStoryGroup } from "../utils/types";
+import {
+  herosSelectionError,
+  IHero,
+  IStory,
+  IStoryGroup,
+} from "../utils/types";
 // Utils
-import { findFight } from "../utils/helpers";
+import {
+  checkFightCharactersIds,
+  filterActiveCharacrers,
+  findFight,
+} from "../utils/helpers";
+import { InfoCard } from "../UI/InfoCard";
 // Components
 
 const FightIcons = ({ characters }: { characters: string[] }) => {
   return (
-    <div className="FightIcons">
+    <div className="FightIcons" aria-label="fight-icons">
       {characters.map((c: string, i: number) => (
         <div key={i}>
           <img
@@ -23,7 +33,15 @@ const FightIcons = ({ characters }: { characters: string[] }) => {
   );
 };
 
-const Story = ({ index, story }: { index: number; story: IStory }) => {
+const Story = ({
+  index,
+  story,
+  setSelectionError,
+}: {
+  index: number;
+  story: IStory;
+  setSelectionError: (s: herosSelectionError) => void;
+}) => {
   const context = useContext(GameContext);
   if (!context || !context.gameState || !context.setStory) {
     throw new Error("No data in context");
@@ -34,9 +52,24 @@ const Story = ({ index, story }: { index: number; story: IStory }) => {
       : null;
 
   const setStory = (story: IStory) => {
-    console.log("Trying to set story", story.id);
+    let error;
+    if (!story.open) {
+      console.warn(`The story ${story.id} is not open yet`);
+      return;
+    }
+    if (fight && context.gameState) {
+      const activeCharactersNames: string[] = filterActiveCharacrers(
+        context.gameState.player.heroes
+      ).map((c: IHero) => {
+        return c.id;
+      });
+      error = checkFightCharactersIds(fight.characters, activeCharactersNames);
+      setSelectionError(error);
+      return;
+    }
     context.setStory(story);
   };
+
   return (
     <div className={`Story${index + 1}`} onClick={() => setStory(story)}>
       <img
@@ -50,7 +83,13 @@ const Story = ({ index, story }: { index: number; story: IStory }) => {
   );
 };
 
-export const StoryPanel = ({ group }: { group: IStoryGroup }) => {
+export const StoryPanel = ({
+  group,
+  setSelectionError,
+}: {
+  group: IStoryGroup;
+  setSelectionError: (s: herosSelectionError) => void;
+}) => {
   const context = useContext(GameContext);
   if (!context || !context.gameState || !context.setStory) {
     throw new Error("No data in context");
@@ -61,7 +100,12 @@ export const StoryPanel = ({ group }: { group: IStoryGroup }) => {
   return (
     <div className={`StoryGroup_${group.group}`}>
       {group.stories.map((s: IStory, i: number) => (
-        <Story story={s} index={i} key={i} />
+        <Story
+          story={s}
+          index={i}
+          key={i}
+          setSelectionError={setSelectionError}
+        />
       ))}
     </div>
   );

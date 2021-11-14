@@ -24,11 +24,11 @@ const steps = {
 
 export const useFightScene = (
   prefightState: FightState,
-  setResult: (r: null | String) => void
+  setResult: (r: null | string) => void
 ): [
   ISpell | null,
   ISpell | null,
-  String | null,
+  string | null,
   FightState,
   (index: number) => void,
   (index: number) => void
@@ -36,7 +36,7 @@ export const useFightScene = (
   const [fightState, setfightState] = useState<FightState>(prefightState);
   const [enemyCard, setEnemyCard] = useState<ISpell | null>(null);
   const [heroCard, setHeroCard] = useState<ISpell | null>(null);
-  const [animation, setAnimation] = useState<String | null>(null);
+  const [animation, setAnimation] = useState<string | null>(null);
   const [nextStep, setNextStep] = useState<keyof typeof steps | null>(
     "loadFight"
   );

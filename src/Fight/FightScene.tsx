@@ -16,7 +16,7 @@ export const FightScene = ({
 }: {
   prefightState: FightState;
   setInfo: (s: null | ISpell | IEnemy) => void;
-  setResult: (r: null | String) => void;
+  setResult: (r: null | string) => void;
 }) => {
   const [enemyCard, heroCard, animation, fightState, enemyAct, heroAct] =
     useFightScene(prefightState, setResult);

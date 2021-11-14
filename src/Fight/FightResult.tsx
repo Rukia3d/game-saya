@@ -47,7 +47,7 @@ export const FightResult = ({
   finishFight,
 }: {
   rewards: IResource[] | null;
-  result: String;
+  result: string;
   finishFight: () => void;
 }) => {
   return (

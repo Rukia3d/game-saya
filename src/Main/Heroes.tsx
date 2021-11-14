@@ -24,7 +24,7 @@ const Hero = ({
   );
 };
 
-export const Heroes = () => {
+export const HeroesSelection = () => {
   const context = useContext(GameContext);
   if (!context || !context.gameState || !context.gameState.player.heroes) {
     throw new Error("No data");
@@ -54,7 +54,16 @@ export const Heroes = () => {
       throw new Error("Can't find the player to update");
     context.setGameState({ ...context.gameState, player: newPlayer });
   };
+  return (
+    <div className="HeroesPresent">
+      {heroes.map((c: IHero, i: number) => (
+        <Hero key={i} hero={c} selectHero={selectHero} />
+      ))}
+    </div>
+  );
+};
 
+export const Heroes = () => {
   return (
     <div className="Heroes">
       <div className="HeroesBackgroundBorder">
@@ -65,11 +74,7 @@ export const Heroes = () => {
         />
       </div>
       <TopMenu />
-      <div className="HeroesPresent">
-        {heroes.map((c: IHero, i: number) => (
-          <Hero key={i} hero={c} selectHero={selectHero} />
-        ))}
-      </div>
+      <HeroesSelection />
     </div>
   );
 };
