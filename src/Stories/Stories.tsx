@@ -1,10 +1,22 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { GameContext } from "../App";
 import "./Stories.css";
 // Types
-import { herosSelectionError, IStoryGroup } from "../utils/types";
+import {
+  GameState,
+  herosSelectionError,
+  IFight,
+  IHero,
+  IStory,
+  IStoryGroup,
+} from "../utils/types";
 // Utils
-import { findLastOpenStory } from "../utils/helpers";
+import {
+  checkFightCharactersIds,
+  filterActiveCharacters,
+  findFight,
+  findLastOpenStory,
+} from "../utils/helpers";
 // Components
 import { CloseButton } from "../UI/CloseButton";
 import { ScrollButton } from "../UI/ScrollButton";
@@ -14,14 +26,65 @@ import { StoryHeroes } from "./StoryHeroes";
 export const STORIES_PER_PANEL = 3;
 const STORIESPERPAGE = 3;
 
+const selectionErrored = (
+  fight: IFight | null,
+  gameState: GameState | null
+) => {
+  let res = null;
+  if (fight && gameState) {
+    const activeCharactersNames: string[] = filterActiveCharacters(
+      gameState.player.heroes
+    ).map((c: IHero) => {
+      return c.id;
+    });
+    res = checkFightCharactersIds(fight.characters, activeCharactersNames);
+    console.log("error found", res);
+    return res;
+  }
+};
 const StoriesContent = ({ startingPage }: { startingPage: number }) => {
   const context = useContext(GameContext);
-  const [page, setPage] = useState(startingPage);
-  const [selectionError, setSelectionError] =
-    useState<herosSelectionError>(null);
-  if (!context || !context.gameState || !context.adventure) {
+  if (
+    !context ||
+    !context.gameState ||
+    !context.adventure ||
+    !context.gameState.fights
+  ) {
     throw new Error("No data in context");
   }
+  const game = context.gameState;
+  const [page, setPage] = useState(startingPage);
+  const [story, setStory] = useState<IStory | null>(null);
+  const [fight, setFight] = useState<IFight | null>(
+    story && story.type === "fight" ? findFight(game.fights, story.id) : null
+  );
+  const [selectionError, setSelectionError] =
+    useState<herosSelectionError>(null);
+
+  const activeCharactersNames: string[] = filterActiveCharacters(
+    game.player.heroes
+  ).map((c: IHero) => {
+    return c.id;
+  });
+
+  const setStoryWithType = (story: IStory) => {
+    setStory(story);
+    if (story.type !== "fight") {
+      context.setStory(story);
+    } else {
+      const fight = findFight(game.fights, story.id);
+      setFight(fight);
+      const error = checkFightCharactersIds(
+        fight.characters,
+        activeCharactersNames
+      );
+      setSelectionError(error);
+      if (error == null) {
+        context.setStory(story);
+      }
+    }
+  };
+
   if (!context.adventure.storyGroups) {
     return <div>No stories</div>;
   }
@@ -32,10 +95,12 @@ const StoriesContent = ({ startingPage }: { startingPage: number }) => {
   const numberOfPages = Math.ceil(
     context.adventure.storyGroups.length / STORIESPERPAGE
   );
-  if (selectionError) {
+
+  if (selectionError !== null && fight && story) {
     return (
       <StoryHeroes
-        error={selectionError}
+        story={story}
+        fight={fight}
         setSelectionError={setSelectionError}
       />
     );
@@ -46,7 +111,12 @@ const StoriesContent = ({ startingPage }: { startingPage: number }) => {
           <ScrollButton onClick={() => setPage(page - 1)} direction="l" />
         ) : null}
         {groups.map((s: IStoryGroup, i: number) => (
-          <StoryPanel group={s} key={i} setSelectionError={setSelectionError} />
+          <StoryPanel
+            group={s}
+            key={i}
+            setSelectionError={setSelectionError}
+            selectStory={setStoryWithType}
+          />
         ))}
         {page < numberOfPages - 1 ? (
           <ScrollButton onClick={() => setPage(page + 1)} direction="r" />

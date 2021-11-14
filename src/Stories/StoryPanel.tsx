@@ -1,21 +1,11 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import { GameContext } from "../App";
 import { STORIES_PER_PANEL } from "./Stories";
 import "./Stories.css";
 // Types
-import {
-  herosSelectionError,
-  IHero,
-  IStory,
-  IStoryGroup,
-} from "../utils/types";
+import { herosSelectionError, IStory, IStoryGroup } from "../utils/types";
 // Utils
-import {
-  checkFightCharactersIds,
-  filterActiveCharacrers,
-  findFight,
-} from "../utils/helpers";
-import { InfoCard } from "../UI/InfoCard";
+import { findFight } from "../utils/helpers";
 // Components
 
 const FightIcons = ({ characters }: { characters: string[] }) => {
@@ -37,13 +27,15 @@ const Story = ({
   index,
   story,
   setSelectionError,
+  selectStory,
 }: {
   index: number;
   story: IStory;
   setSelectionError: (s: herosSelectionError) => void;
+  selectStory: (s: IStory) => void;
 }) => {
   const context = useContext(GameContext);
-  if (!context || !context.gameState || !context.setStory) {
+  if (!context || !context.gameState) {
     throw new Error("No data in context");
   }
   const fight =
@@ -51,27 +43,8 @@ const Story = ({
       ? findFight(context.gameState.fights, story.id)
       : null;
 
-  const setStory = (story: IStory) => {
-    let error;
-    if (!story.open) {
-      console.warn(`The story ${story.id} is not open yet`);
-      return;
-    }
-    if (fight && context.gameState) {
-      const activeCharactersNames: string[] = filterActiveCharacrers(
-        context.gameState.player.heroes
-      ).map((c: IHero) => {
-        return c.id;
-      });
-      error = checkFightCharactersIds(fight.characters, activeCharactersNames);
-      setSelectionError(error);
-      return;
-    }
-    context.setStory(story);
-  };
-
   return (
-    <div className={`Story${index + 1}`} onClick={() => setStory(story)}>
+    <div className={`Story${index + 1}`} onClick={() => selectStory(story)}>
       <img
         src={`../img/Stories/${story.image}.jpg`}
         alt={`story_${story.id}`}
@@ -86,9 +59,11 @@ const Story = ({
 export const StoryPanel = ({
   group,
   setSelectionError,
+  selectStory,
 }: {
   group: IStoryGroup;
   setSelectionError: (s: herosSelectionError) => void;
+  selectStory: (s: IStory) => void;
 }) => {
   const context = useContext(GameContext);
   if (!context || !context.gameState || !context.setStory) {
@@ -105,6 +80,7 @@ export const StoryPanel = ({
           index={i}
           key={i}
           setSelectionError={setSelectionError}
+          selectStory={selectStory}
         />
       ))}
     </div>

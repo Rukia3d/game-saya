@@ -18,14 +18,6 @@ export const AnimatedSpriteCycle = ({
 }) => {
   const [frame, setFrame] = useState(0);
 
-  const style1 = {
-    width: `${width}px`,
-    height: `${height}px`,
-    overflow: "hidden",
-    flexShrink: 0,
-    flexGrow: 0,
-  };
-
   const style = {
     width: "100%",
     overflow: "hidden",
@@ -55,6 +47,7 @@ export const AnimatedSpriteCycle = ({
     return () => {
       clearTimeout(timer);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [frame, frames, randomStart]);
 
   return (

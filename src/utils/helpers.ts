@@ -80,15 +80,25 @@ export const checkFightCharactersIds = (
   if (fightheroes.length < playerheroes.length) {
     return "more";
   }
+  const anyHeroes = fightheroes.filter((s: string) => s === "any");
   if (
+    anyHeroes.length === 0 &&
     JSON.stringify(fightheroes.sort()) !== JSON.stringify(playerheroes.sort())
   ) {
     return "incorrect";
   }
+  if (anyHeroes.length > 0) {
+    const needed = fightheroes.filter((s: string) => s !== "any");
+    const res = needed
+      .map((s: string) => playerheroes.indexOf(s) === -1)
+      .some((b: boolean) => b);
+    if (res) return "incorrect";
+    return null;
+  }
   return null;
 };
 
-export const filterActiveCharacrers = (heroes: IHero[]) => {
+export const filterActiveCharacters = (heroes: IHero[]) => {
   return heroes.filter((c: IHero) => c.selected === true);
 };
 

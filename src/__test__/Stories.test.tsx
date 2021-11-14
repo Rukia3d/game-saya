@@ -4,9 +4,8 @@ import { GameContext, GameContextType } from "../App";
 import userEvent from "@testing-library/user-event";
 import { dialstory } from "../utils/testobjects";
 import { Stories } from "../Stories/Stories";
-import { gameState } from "../utils/teststates";
-import { IHero, IStoryGroup } from "../utils/types";
-import { Heroes } from "../Main/Heroes";
+import { gameRestrictedCharacters, gameState } from "../utils/teststates";
+import { IHero } from "../utils/types";
 
 const context: GameContextType = {
   adventure: gameState.adventures[1],
@@ -67,50 +66,17 @@ test("Throws error if no data provided in context", () => {
   jest.restoreAllMocks();
 });
 
-const game = JSON.parse(JSON.stringify(gameState));
-game.adventures[1].storyGroups = [
-  {
-    id: "test_group_1",
-    name: "test group 1",
-    group: 0,
-    stories: new Array(3).fill(0).map((x, i) => ({
-      id: "test_arena" + i,
-      type: "fight",
-      image: "arena",
-      open: i === 0,
-      name: "Test Arena" + i,
-      action: [],
-      nextStory: "test_arena" + (i + 1),
-    })),
-  },
-];
-game.fights = [
-  {
-    id: "test_arena0",
-    name: "Test Arena 0",
-    image: "../img/arena_1.png",
-    enemy: "test-dude",
-    characters: ["maya", "tara"],
-  },
-  {
-    id: "test_arena1",
-    name: "Test Arena 1",
-    image: "../img/arena_1.png",
-    enemy: "test-dude",
-    characters: ["maya", "any", "any"],
-  },
-  {
-    id: "test_arena2",
-    image: "../img/arena_1.png",
-    enemy: "test-dude",
-    characters: ["any", "any", "any"],
-  },
-];
-test("If no characters selected, show error No heros selected", () => {
-  game.player.heroes.map((h: IHero) => (h.selected = false));
+test("For M and T fight, if no characters selected, show error No heros selected", () => {
+  gameRestrictedCharacters.player.heroes.map(
+    (h: IHero) => (h.selected = false)
+  );
   render(
     <GameContext.Provider
-      value={{ ...context, gameState: game, adventure: game.adventures[1] }}
+      value={{
+        ...context,
+        gameState: gameRestrictedCharacters,
+        adventure: gameRestrictedCharacters.adventures[1],
+      }}
     >
       <Stories />
     </GameContext.Provider>
@@ -122,12 +88,18 @@ test("If no characters selected, show error No heros selected", () => {
   expect(screen.getByText(/No heros selected/)).toBeInTheDocument();
 });
 
-test("If less characters selected, show error You need more heroes for this fight", () => {
-  game.player.heroes.map((h: IHero) => (h.selected = false));
-  game.player.heroes[0].selected = true;
+test("For M and T fight, if less characters selected, show error You need more heroes for this fight", () => {
+  gameRestrictedCharacters.player.heroes.map(
+    (h: IHero) => (h.selected = false)
+  );
+  gameRestrictedCharacters.player.heroes[0].selected = true;
   render(
     <GameContext.Provider
-      value={{ ...context, gameState: game, adventure: game.adventures[1] }}
+      value={{
+        ...context,
+        gameState: gameRestrictedCharacters,
+        adventure: gameRestrictedCharacters.adventures[1],
+      }}
     >
       <Stories />
     </GameContext.Provider>
@@ -141,14 +113,20 @@ test("If less characters selected, show error You need more heroes for this figh
   ).toBeInTheDocument();
 });
 
-test("If no characters selected, show error Number of heroes for this fight is limited", () => {
-  game.player.heroes.map((h: IHero) => (h.selected = false));
-  game.player.heroes[0].selected = true;
-  game.player.heroes[1].selected = true;
-  game.player.heroes[2].selected = true;
+test("For M and T fight, if no characters selected, show error Number of heroes for this fight is limited", () => {
+  gameRestrictedCharacters.player.heroes.map(
+    (h: IHero) => (h.selected = false)
+  );
+  gameRestrictedCharacters.player.heroes[0].selected = true;
+  gameRestrictedCharacters.player.heroes[1].selected = true;
+  gameRestrictedCharacters.player.heroes[2].selected = true;
   render(
     <GameContext.Provider
-      value={{ ...context, gameState: game, adventure: game.adventures[1] }}
+      value={{
+        ...context,
+        gameState: gameRestrictedCharacters,
+        adventure: gameRestrictedCharacters.adventures[1],
+      }}
     >
       <Stories />
     </GameContext.Provider>
@@ -162,13 +140,19 @@ test("If no characters selected, show error Number of heroes for this fight is l
   ).toBeInTheDocument();
 });
 
-test("If no characters selected, show error This fight is restricted", () => {
-  game.player.heroes.map((h: IHero) => (h.selected = false));
-  game.player.heroes[2].selected = true;
-  game.player.heroes[4].selected = true;
+test("For M and T fight, if no characters selected, show error This fight is restricted", () => {
+  gameRestrictedCharacters.player.heroes.map(
+    (h: IHero) => (h.selected = false)
+  );
+  gameRestrictedCharacters.player.heroes[2].selected = true;
+  gameRestrictedCharacters.player.heroes[4].selected = true;
   render(
     <GameContext.Provider
-      value={{ ...context, gameState: game, adventure: game.adventures[1] }}
+      value={{
+        ...context,
+        gameState: gameRestrictedCharacters,
+        adventure: gameRestrictedCharacters.adventures[1],
+      }}
     >
       <Stories />
     </GameContext.Provider>
@@ -178,4 +162,89 @@ test("If no characters selected, show error This fight is restricted", () => {
   expect(figtIcons[1].children.length).toBe(3);
   userEvent.click(screen.getByAltText("story_test_arena0"));
   expect(screen.getByText(/This fight is restricted/)).toBeInTheDocument();
+});
+
+test("For combined fight, if some of the heroes included, show error This fight is restricted", () => {
+  //@ts-ignore
+  gameRestrictedCharacters.adventures[1].storyGroups[0].stories[1].open = true;
+  gameRestrictedCharacters.player.heroes.map(
+    (h: IHero) => (h.selected = false)
+  );
+  gameRestrictedCharacters.player.heroes[0].selected = true;
+  gameRestrictedCharacters.player.heroes[3].selected = true;
+  //@ts-ignore
+  gameRestrictedCharacters.player.heroes[1].selected = true;
+  render(
+    <GameContext.Provider
+      value={{
+        ...context,
+        gameState: gameRestrictedCharacters,
+        adventure: gameRestrictedCharacters.adventures[1],
+      }}
+    >
+      <Stories />
+    </GameContext.Provider>
+  );
+  const figtIcons = screen.getAllByLabelText("fight-icons");
+  expect(figtIcons[0].children.length).toBe(2);
+  expect(figtIcons[1].children.length).toBe(3);
+  userEvent.click(screen.getByAltText("story_test_arena1"));
+  expect(screen.getByText(/This fight is restricted/)).toBeInTheDocument();
+});
+
+test("For combined fight, if none of the heroes included, show error This fight is restricted", () => {
+  //@ts-ignore
+  gameRestrictedCharacters.adventures[1].storyGroups[0].stories[1].open = true;
+  gameRestrictedCharacters.player.heroes.map(
+    (h: IHero) => (h.selected = false)
+  );
+  gameRestrictedCharacters.player.heroes[2].selected = true;
+  gameRestrictedCharacters.player.heroes[3].selected = true;
+  gameRestrictedCharacters.player.heroes[1].selected = true;
+  render(
+    <GameContext.Provider
+      value={{
+        ...context,
+        gameState: gameRestrictedCharacters,
+        adventure: gameRestrictedCharacters.adventures[1],
+      }}
+    >
+      <Stories />
+    </GameContext.Provider>
+  );
+  const figtIcons = screen.getAllByLabelText("fight-icons");
+  expect(figtIcons[0].children.length).toBe(2);
+  expect(figtIcons[1].children.length).toBe(3);
+  userEvent.click(screen.getByAltText("story_test_arena1"));
+  screen.debug();
+  expect(screen.getByText(/This fight is restricted/)).toBeInTheDocument();
+});
+
+test("For combined fight, if all of the heroes included, don't show the error", () => {
+  //@ts-ignore
+  gameRestrictedCharacters.adventures[1].storyGroups[0].stories[1].open = true;
+  gameRestrictedCharacters.player.heroes.map(
+    (h: IHero) => (h.selected = false)
+  );
+  gameRestrictedCharacters.player.heroes[0].selected = true;
+  gameRestrictedCharacters.player.heroes[4].selected = true;
+  gameRestrictedCharacters.player.heroes[1].selected = true;
+  const setStory = jest.fn();
+  render(
+    <GameContext.Provider
+      value={{
+        ...context,
+        gameState: gameRestrictedCharacters,
+        adventure: gameRestrictedCharacters.adventures[1],
+        setStory: setStory,
+      }}
+    >
+      <Stories />
+    </GameContext.Provider>
+  );
+  const figtIcons = screen.getAllByLabelText("fight-icons");
+  expect(figtIcons[0].children.length).toBe(2);
+  expect(figtIcons[1].children.length).toBe(3);
+  userEvent.click(screen.getByAltText("story_test_arena1"));
+  expect(setStory.mock.calls.length).toBe(1);
 });

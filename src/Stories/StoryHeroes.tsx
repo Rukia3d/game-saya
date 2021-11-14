@@ -1,8 +1,14 @@
-import React from "react";
-import "./Stories.css";
+import React, { useContext, useEffect, useState } from "react";
+import "../Main/Heroes.css";
 // Types
-import { herosSelectionError } from "../utils/types";
-import { HeroesSelection } from "../Main/Heroes";
+import { herosSelectionError, IFight, IHero, IStory } from "../utils/types";
+import { HeroesSelection } from "../Heroes/HeroesSelection";
+import { GameContext } from "../App";
+import {
+  checkFightCharactersIds,
+  filterActiveCharacters,
+} from "../utils/helpers";
+
 // Utils
 // Components
 
@@ -23,19 +29,52 @@ const getHeaderText = (error: herosSelectionError) => {
 };
 
 export const StoryHeroes = ({
-  error,
+  story,
+  fight,
   setSelectionError,
 }: {
-  error: herosSelectionError;
+  story: IStory;
+  fight: IFight;
   setSelectionError: (s: herosSelectionError) => void;
 }) => {
-  console.log("Error", error);
+  const context = useContext(GameContext);
+  if (!context || !context.gameState || !context.adventure) {
+    throw new Error("No data in context");
+  }
+  const [selected, setSelected] = useState(
+    filterActiveCharacters(context.gameState.player.heroes).map((c: IHero) => {
+      return c.id;
+    })
+  );
+  const [error, setError] = useState(
+    checkFightCharactersIds(fight.characters, selected)
+  );
+
+  useEffect(() => {
+    if (!context.gameState) return;
+    const newActive = filterActiveCharacters(
+      context.gameState.player.heroes
+    ).map((c: IHero) => {
+      return c.id;
+    });
+    setSelected(newActive);
+    setError(checkFightCharactersIds(fight.characters, newActive));
+  }, [context.gameState, fight.characters]);
+
+  const checkSelection = () => {
+    setSelectionError(null);
+    context.setStory(story);
+  };
+
   return (
     <div className="StoryHeroes">
-      <div className="InfoCard" aria-label="info_card">
+      {error === null ? (
+        <button onClick={checkSelection}>Fight</button>
+      ) : (
         <h1>{getHeaderText(error)}</h1>
-        <HeroesSelection />
-      </div>
+      )}
+      <h3>Required heroes: {fight.characters}</h3>
+      <HeroesSelection />
     </div>
   );
 };

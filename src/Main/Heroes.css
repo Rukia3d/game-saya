@@ -30,11 +30,28 @@
   height: 100%;
 }
 
+.StoryHeroes {
+  background-color: gold;
+  width: 100%;
+  height: 90%;
+  border: 1px solid goldenrod;
+  display: flex;
+  flex-direction: column;
+}
+
 .HeroesPresent {
   display: flex;
   flex-direction: row;
   z-index: 10;
   margin-top: 2em;
+  height: 90%;
+}
+
+.StoryHeroes .HeroesPresent {
+  display: flex;
+  flex-direction: row;
+  z-index: 10;
+  height: 90%;
 }
 
 .HeroImage {
@@ -42,12 +59,25 @@
   z-index: 10;
 }
 
+.StoryHeroes .HeroImage {
+  z-index: 10;
+  background-color: red;
+}
+
 .HeroImage.inactive {
   height: 25%;
+}
+
+.StoryHeroes .HeroImage.active {
+  height: 70%;
 }
 
 .HeroImage.active {
   height: 40%;
   z-index: 10;
   margin: 1em;
+}
+
+.StoryHeroes .Action {
+  width: 100%;
 }
