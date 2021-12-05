@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import { GameContext } from "../App";
-import "./City.css";
+import "./City.scss";
 // Types
 import { IDialogue, INPC } from "../utils/types";
 // Utils
@@ -36,7 +36,7 @@ const NPCIcon = ({
 
 const NPC = ({ hero }: { hero: INPC }) => {
   return (
-    <div className="IntroImage" aria-label={`hero_${hero.id}`}>
+    <div className="IntroHeroImage" aria-label={`hero_${hero.id}`}>
       <AnimatedSpriteCycle
         width={350}
         height={741}
@@ -61,7 +61,7 @@ export const City = () => {
 
   const [dialogue, setDialogue] = useState<IDialogue | null>(null);
   const characters = context.gameState.player.npcs;
-  const activeHeroes = characters.filter((c: INPC) => c.dial !== "null");
+  const activeHeroes = characters.filter((c: INPC) => c.dial !== null);
 
   return (
     <div className="Intro">
@@ -76,11 +76,11 @@ export const City = () => {
         {characters.map((c: INPC, i: number) => (
           <NPC key={i} hero={c} />
         ))}
-        <div className="IntroActive">
-          {activeHeroes.map((c: INPC, i: number) => (
-            <NPCIcon key={i} hero={c} setDialogue={setDialogue} />
-          ))}
-        </div>
+      </div>
+      <div className="IntroActive">
+        {activeHeroes.map((c: INPC, i: number) => (
+          <NPCIcon key={i} hero={c} setDialogue={setDialogue} />
+        ))}
       </div>
       {dialogue ? (
         <DialogueCity dialogue={dialogue} setDialogue={setDialogue} />
