@@ -78,7 +78,7 @@ export const useFightScene = (
       console.warn("Card already selected");
       return;
     }
-    setHeroCard(fightState.heroDeck[index]);
+    setHeroCard(fightState.heroHand[index]);
     setfightState((newstate) => ({
       ...newstate,
       heroCardIndex: index,
@@ -148,6 +148,5 @@ export const useFightScene = (
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [nextStep]);
-
   return [enemyCard, heroCard, animation, fightState, enemyAct, heroAct];
 };

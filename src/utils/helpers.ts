@@ -69,8 +69,8 @@ export const checkFightCharactersIds = (
   fightheroes: string[],
   playerheroes: string[]
 ): herosSelectionError => {
-  console.log(fightheroes);
-  console.log(playerheroes);
+  // console.log(fightheroes);
+  // console.log(playerheroes);
   if (playerheroes.length === 0) {
     return "none";
   }

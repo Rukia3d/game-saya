@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { GameContext } from "../App";
-import "./Start.css";
+import "./Start.scss";
 // Types
 // Utils
 // Components
@@ -12,7 +12,11 @@ export const Start = ({
   const context = useContext(GameContext);
   return (
     <div className="Start">
-      <h1>Start</h1>
+      <img
+        className="StartBackground"
+        src="../img/start_background.png"
+        alt="intro_background"
+      />
       {context?.gameState?.player ? (
         <button className="PlayButton" onClick={() => setShowStart(false)}>
           PLAY
