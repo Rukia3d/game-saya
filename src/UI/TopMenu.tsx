@@ -2,9 +2,10 @@ import React, { useContext } from "react";
 import { GameContext } from "../App";
 import "./TopMenu.css";
 // Types
-import { IOwnedResource } from "../utils/types";
 // Utils
 // Components
+import { Resources } from "../Spells/Resources";
+
 const valueColor = (max: number, current: number): string => {
   const third = Math.ceil(max / 3);
   if (current <= third) {
@@ -14,25 +15,6 @@ const valueColor = (max: number, current: number): string => {
     return "orange";
   }
   return "green";
-};
-
-const Resource = ({ resource }: { resource: IOwnedResource }) => {
-  return (
-    <div className="Resource" aria-label="top_resource">
-      {resource.name}: {resource.quantity}
-    </div>
-  );
-};
-
-const Resources = ({ resources }: { resources: IOwnedResource[] }) => {
-  const existing = resources.filter((r: IOwnedResource) => r.quantity > 0);
-  return (
-    <div className="Resources" aria-label="top_resources">
-      {existing.map((r: IOwnedResource, i: number) => (
-        <Resource resource={r} key={i} />
-      ))}
-    </div>
-  );
 };
 
 const Life = ({ max, current }: { max: number; current: number }) => {

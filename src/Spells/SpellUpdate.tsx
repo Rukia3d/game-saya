@@ -8,6 +8,7 @@ import {
   ISpellUpdate,
   ISpellUpdateResource,
 } from "../utils/types";
+import { findResource } from "../utils/helpers";
 // Utils
 // Components
 
@@ -38,12 +39,6 @@ export const SpellUpdate = ({
   const playerResources = context.gameState.player.resources;
   const resources = context.gameState.resources;
 
-  const getResource = (s: ISpellUpdateResource) => {
-    const resource = resources.find((r: IResource) => r.id === s[0]);
-    if (!resource) throw new Error("Can't find a resource to display");
-    return resource;
-  };
-
   const isEnough = (s: ISpellUpdateResource) => {
     const resource = playerResources.find((r: IOwnedResource) => r.id === s[0]);
     const needed = s[1];
@@ -64,7 +59,6 @@ export const SpellUpdate = ({
     );
     return res.every((r: boolean) => r === true);
   };
-  const imgUrl = `../img/Spells/${update.element}/${update.id}.png`;
   return (
     <div className="HeroSpellUpdateBorder">
       <div className="HeroSpellUpdate">
@@ -92,7 +86,7 @@ export const SpellUpdate = ({
             {update.resource_base.map((s: ISpellUpdateResource, i: number) => (
               <div key={i}>
                 <div style={{ color: isEnough(s) ? "green" : "red" }}>{`${
-                  getResource(s).name
+                  findResource(resources, s).name
                 }: ${currentAmount(s)} of ${s[1]}`}</div>
               </div>
             ))}

@@ -21,7 +21,7 @@ import {
 } from "../utils/gamelogic";
 import { displayAddedHero, displayAddedUpdate } from "../utils/screenLogic";
 // Components
-import { InfoCard } from "../UI/InfoCard";
+import { InfoCard } from "../Info/InfoCard";
 import { Settings } from "../UI/Settings";
 import { SettingsButton } from "../UI/SettingsButton";
 import { FightResult } from "./FightResult";

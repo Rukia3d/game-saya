@@ -13,7 +13,7 @@ import {
 import { changeCardsInDeck } from "../utils/fightlogic";
 // Components
 import { CloseButton } from "../UI/CloseButton";
-import { InfoCard } from "../UI/InfoCard";
+import { InfoCard } from "../Info/InfoCard";
 import { SpellWithInfo } from "./SpellWithInfo";
 import { SpellLibrary } from "./SpellLibrary";
 

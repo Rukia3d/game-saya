@@ -1,6 +1,6 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import { InfoCard } from "../UI/InfoCard";
+import { InfoCard } from "../Info/InfoCard";
 import { mayaCard, spellUpdates } from "../utils/testobjects";
 import { elementType, ISpell } from "../utils/types";
 import { GameContext, GameContextType } from "../App";

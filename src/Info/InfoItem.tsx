@@ -1,13 +1,11 @@
 import React from "react";
-import { SpellUpdate } from "../Spells/SpellUpdate";
-import { IEnemy, IHero, ISpell, ISpellUpdate } from "../utils/types";
-import { CloseButton } from "./CloseButton";
 import "./InfoCard.scss";
 // Types
+import { ISpell, ISpellUpdate } from "../utils/types";
 // Utils
 // Components
-
-type ItemsForCard = ISpell | ISpellUpdate | IEnemy | IHero;
+import { SpellUpdate } from "../Spells/SpellUpdate";
+import { ResourceDatalist } from "../Spells/Resources";
 
 const ItemCard = ({ item }: { item: ISpell | ISpellUpdate }) => {
   //TODO Replace static img with animation
@@ -71,6 +69,7 @@ const ItemData = ({ item }: { item: ISpell | ISpellUpdate }) => {
         <div>
           <div className="ItemDataHeader">
             <h3>Resources</h3>
+            <ResourceDatalist spellResources={item.resource_base} />
           </div>
         </div>
       )}
@@ -78,35 +77,16 @@ const ItemData = ({ item }: { item: ISpell | ISpellUpdate }) => {
   );
 };
 
-const HeroSpells = ({ item }: { item: IHero | IEnemy }) => {
-  return (
-    <div className="">
-      <h3>HeroSpells</h3>
-    </div>
-  );
-};
-
-const HeroDescription = ({ item }: { item: IHero | IEnemy }) => {
-  return (
-    <div className="">
-      <h3>HeroDescription</h3>
-    </div>
-  );
-};
-
-const HeroCard = ({ item }: { item: IHero | IEnemy }) => {
-  return (
-    <div className="">
-      <h3>HeroCard</h3>
-    </div>
-  );
-};
-
-const TopCard = ({ item }: { item: ItemsForCard }) => {
+const TopCardItem = ({ item }: { item: ISpell | ISpellUpdate }) => {
   // Only Spells and Updates have mana
   const imgUrl = `/img/Spells/${item.element}/${item.element}_back.jpg`;
   return (
-    <div className="TopCard">
+    <div
+      className="TopCard"
+      style={{
+        height: "updates" in item ? "40%" : "30%",
+      }}
+    >
       <div className="TopLeftBorder">
         <div
           className="TopLeft"
@@ -114,55 +94,31 @@ const TopCard = ({ item }: { item: ItemsForCard }) => {
             backgroundImage: `url(${imgUrl})`,
           }}
         >
-          {"mana" in item ? (
-            <ItemCard item={item as ISpell | ISpellUpdate} />
-          ) : (
-            <HeroCard item={item as IHero | IEnemy} />
-          )}
+          <ItemCard item={item} />
         </div>
       </div>
       <div className="TopRightBorder">
         <div className="TopRight">
-          {"mana" in item ? (
-            <ItemDescription item={item as ISpell | ISpellUpdate} />
-          ) : (
-            <HeroSpells item={item as IHero | IEnemy} />
-          )}
+          <ItemDescription item={item} />
         </div>
       </div>
     </div>
   );
 };
 
-const BottomCard = ({ item }: { item: ItemsForCard }) => {
+const BottomCardItem = ({ item }: { item: ISpell | ISpellUpdate }) => {
   return (
     <div className="BottomCard">
-      {"mana" in item ? (
-        <ItemData item={item as ISpell | ISpellUpdate} />
-      ) : (
-        <HeroDescription item={item as IHero | IEnemy} />
-      )}
+      <ItemData item={item as ISpell | ISpellUpdate} />
     </div>
   );
 };
 
-export const InfoCard = ({
-  item,
-  setInfo,
-}: {
-  item: ItemsForCard;
-  setInfo: (s: ItemsForCard | null) => void;
-}) => {
-  console.log(item);
+export const InfoItem = ({ item }: { item: ISpellUpdate }) => {
   return (
-    <div className="Info" aria-label="info_card" onClick={() => setInfo(null)}>
-      <div className="InfoCardBorder">
-        <div className="InfoCard">
-          <CloseButton onClick={setInfo} />
-          <TopCard item={item} />
-          <BottomCard item={item} />
-        </div>
-      </div>
+    <div className="InfoCard">
+      <TopCardItem item={item} />
+      <BottomCardItem item={item} />
     </div>
   );
 };

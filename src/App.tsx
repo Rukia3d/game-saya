@@ -8,8 +8,6 @@ import {
   GameState,
   IStory,
   ISpellUpdate,
-  ISpell,
-  elementType,
 } from "./utils/types";
 // Utils
 import { fetcher } from "./utils/helpers";
@@ -19,8 +17,6 @@ import { Main } from "./Main/Main";
 import { Start } from "./Main/Start";
 import { Stories } from "./Stories/Stories";
 import { GenericStory } from "./Main/GenericStory";
-import { InfoCard } from "./UI/InfoCard";
-import { mayaCard, spellUpdates } from "./utils/testobjects";
 
 export interface GameContextType {
   adventure: IAdventure | null;

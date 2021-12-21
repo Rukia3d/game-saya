@@ -10,16 +10,6 @@
   left: 0;
 }
 
-.Resources {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-}
-
-.Resource {
-  padding-right: 0.5em;
-}
-
 .TopMenu .HeroStats {
   display: flex;
 }

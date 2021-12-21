@@ -9,6 +9,9 @@ import {
   ISpellUpdate,
   IStoryAction,
   herosSelectionError,
+  IResource,
+  ISpellUpdateResource,
+  IOwnedResource,
 } from "./types";
 
 //@ts-ignore
@@ -63,6 +66,24 @@ export const findStory = (groups: IStoryGroup[], id: string) => {
   }
   if (!res) throw new Error(`Couldn't find a story ${id}`);
   return res;
+};
+
+export const findResource = (
+  resources: IResource[],
+  s: ISpellUpdateResource
+) => {
+  const resource = resources.find((r: IResource) => r.id === s[0]);
+  if (!resource) throw new Error("Can't find a resource to display");
+  return resource;
+};
+
+export const findOwnedResource = (
+  resources: IOwnedResource[],
+  s: ISpellUpdateResource
+) => {
+  const resource = resources.find((r: IOwnedResource) => r.id === s[0]);
+  if (!resource) throw new Error("Can't find a resource to display");
+  return resource;
 };
 
 export const checkFightCharactersIds = (

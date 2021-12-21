@@ -2,11 +2,13 @@ import React, { useContext, useState } from "react";
 import { GameContext } from "../App";
 import "./Library.css";
 // Types
-import { elementType, ISpell } from "../utils/types";
+import { elementType, ISpell, ISpellUpdate } from "../utils/types";
 // Utils
 // Components
 import { Spells } from "../Spells/Spells";
 import { TopMenu } from "../UI/TopMenu";
+import { SpellUpdates } from "../Spells/SpellUpdates";
+import { InfoCard } from "../Info/InfoCard";
 
 const LibraryPanel = ({
   element,
@@ -32,6 +34,7 @@ export const Library = () => {
   }
   const spells = context.gameState.player.spells;
 
+  const [item, setItem] = useState(1);
   const [element, setElement] = useState<elementType | null>(null);
   const elements = spells
     .map((s: ISpell) => s.element)
@@ -46,7 +49,26 @@ export const Library = () => {
           setElement={setElement}
           spells={spells.filter((s: ISpell) => s.element === element)}
         />
+        <SpellUpdates
+          spellUpgrades={context.gameState.player.spellUpdates}
+          updateSpell={() => {}}
+        />
       </div>
+    );
+  }
+
+  if (item === 1) {
+    return (
+      <InfoCard
+        item={context.gameState.player.spellUpdates[0]}
+        setInfo={() => {}}
+      />
+    );
+  }
+
+  if (item === 2) {
+    return (
+      <InfoCard item={context.gameState.player.spells[0]} setInfo={() => {}} />
     );
   }
 
@@ -58,6 +80,10 @@ export const Library = () => {
           <LibraryPanel key={i} element={s} setElement={setElement} />
         ))}
       </div>
+      <SpellUpdates
+        spellUpgrades={context.gameState.player.spellUpdates}
+        updateSpell={() => {}}
+      />
     </div>
   );
 };

@@ -13,6 +13,7 @@ export const SpellUpdates = ({
   spellUpgrades: ISpellUpdate[];
   updateSpell: (s: ISpellUpdate) => void;
 }) => {
+  console.log("spellUpgrades", spellUpgrades);
   return (
     <div>
       {spellUpgrades.map((s: ISpellUpdate, i: number) => (
