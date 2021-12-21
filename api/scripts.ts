@@ -38,6 +38,9 @@ app.get("/api/player/", (req: any, res: any) => {
   playerHeroes[0].selected = true;
   const playerCards = spells.filter((s: ISpell) => s.element === "earth");
   playerCards.map((s: ISpell) => (s.selected = true));
+  playerCards[0].updates = [spellUpdates[0]];
+  playerCards[1].updates = [spellUpdates[0], spellUpdates[2]];
+  playerCards[2].updates = [spellUpdates[1], spellUpdates[1]];
   const playerEnemies = enemies;
 
   const gameState: GameState = {
@@ -53,7 +56,7 @@ app.get("/api/player/", (req: any, res: any) => {
       npcs: playerNpcs,
       heroes: playerHeroes,
       spells: playerCards,
-      spellUpdates: [],
+      spellUpdates: spellUpdates, //[],
       adventures: playerAdventures,
       resources: [],
       enemies: playerEnemies,

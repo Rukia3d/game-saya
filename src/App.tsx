@@ -8,6 +8,8 @@ import {
   GameState,
   IStory,
   ISpellUpdate,
+  ISpell,
+  elementType,
 } from "./utils/types";
 // Utils
 import { fetcher } from "./utils/helpers";
@@ -17,6 +19,8 @@ import { Main } from "./Main/Main";
 import { Start } from "./Main/Start";
 import { Stories } from "./Stories/Stories";
 import { GenericStory } from "./Main/GenericStory";
+import { InfoCard } from "./UI/InfoCard";
+import { mayaCard, spellUpdates } from "./utils/testobjects";
 
 export interface GameContextType {
   adventure: IAdventure | null;
@@ -45,17 +49,19 @@ function App() {
   );
 
   const setGameState = (state: GameState) => {
-    //console.log("DEBUG");
+    console.log("DEBUG");
     if (state) {
-      // console.log(
-      //   //@ts-ignore
-      //   JSON.parse(JSON.stringify(state.player.adventures[0].stories[0]))
-      // );
+      console.log(
+        //@ts-ignore
+        "LOG",
+        JSON.parse(JSON.stringify(state.player))
+      );
       setGameStateOrigin(state);
     }
   };
 
   useEffect(() => {
+    console.log("useEffect", data);
     setGameState(data);
   }, [data]);
 
@@ -85,6 +91,7 @@ function App() {
       </GameContext.Provider>
     );
   }
+
   return (
     <GameContext.Provider value={context}>
       <div className="App">

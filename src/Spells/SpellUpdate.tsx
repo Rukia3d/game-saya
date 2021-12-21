@@ -28,7 +28,12 @@ export const SpellUpdate = ({
     !context.gameState.player.resources ||
     !context.gameState.resources
   ) {
-    throw new Error("No data in context");
+    throw new Error(
+      "No data in context"
+      // context
+      // context.gameState.player,
+      // context.gameState.resources
+    );
   }
   const playerResources = context.gameState.player.resources;
   const resources = context.gameState.resources;
@@ -48,33 +53,52 @@ export const SpellUpdate = ({
     return false;
   };
 
+  const currentAmount = (s: ISpellUpdateResource) => {
+    const resource = playerResources.find((r: IOwnedResource) => r.id === s[0]);
+    return resource ? resource.quantity : 0;
+  };
+
   const readyToUpdate = (u: ISpellUpdate) => {
     const res: boolean[] = u.resource_base.map((r: ISpellUpdateResource) =>
       isEnough(r)
     );
     return res.every((r: boolean) => r === true);
   };
-
+  const imgUrl = `../img/Spells/${update.element}/${update.id}.png`;
   return (
-    <div className="HeroSpellUpdate">
-      <h3>{update.name}</h3>
-      <div>{update.description}</div>
-      <div>
-        {update.resource_base.map((s: ISpellUpdateResource, i: number) => (
-          <div key={i}>
-            <div style={{ color: isEnough(s) ? "green" : "red" }}>{`${
-              getResource(s).name
-            }: ${s[1]}`}</div>
+    <div className="HeroSpellUpdateBorder">
+      <div className="HeroSpellUpdate">
+        <div className="UpdateImage">
+          <img
+            src={`../img/Spells/${update.element}/${update.id}.png`}
+            alt="update_image"
+          />
+          {readyToUpdate(update) && canUpdate ? (
+            <button
+              data-testid="update_button"
+              onClick={() => updateSpell(update)}
+            >
+              Update
+            </button>
+          ) : (
+            <div></div>
+          )}
+        </div>
+        <div className="UpdateData">
+          <div>{update.name}</div>
+          <div>Mana: {update.mana}</div>
+          <div>{update.description}</div>
+          <div>
+            {update.resource_base.map((s: ISpellUpdateResource, i: number) => (
+              <div key={i}>
+                <div style={{ color: isEnough(s) ? "green" : "red" }}>{`${
+                  getResource(s).name
+                }: ${currentAmount(s)} of ${s[1]}`}</div>
+              </div>
+            ))}
           </div>
-        ))}
+        </div>
       </div>
-      {readyToUpdate(update) && canUpdate ? (
-        <button data-testid="update_button" onClick={() => updateSpell(update)}>
-          Update
-        </button>
-      ) : (
-        <div></div>
-      )}
     </div>
   );
 };

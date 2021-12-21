@@ -11,6 +11,9 @@ import { Heroes } from "./Heroes";
 import { Adventures } from "./Adventures";
 import { Library } from "./Library";
 import { Shop } from "./Shop";
+import { elementType, ISpell } from "../utils/types";
+import { mayaCard, spellUpdates } from "../utils/testobjects";
+import { InfoCard } from "../UI/InfoCard";
 
 type mainScreenState = "city" | "heroes" | "adventures" | "library" | "shop";
 
@@ -88,7 +91,7 @@ export const Main = () => {
   return (
     <div className="Main">
       <SettingsButton onClick={() => setSettingsOpen(!settingsOpen)} />
-      {settingsOpen ? <Settings /> : null}
+      {/* {settingsOpen ? <Settings /> : null} */}
       {CurrentScreen ? <CurrentScreen /> : null}
       <MainMenu selected={selected} setSelected={changeScreen} />
     </div>

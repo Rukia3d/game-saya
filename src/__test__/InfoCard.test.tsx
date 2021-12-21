@@ -7,12 +7,23 @@ import { GameContext, GameContextType } from "../App";
 import userEvent from "@testing-library/user-event";
 import { gameState } from "../utils/teststates";
 
-test("Renders Item if it's a card", async () => {
+test.only("Renders Item if it's a card", async () => {
   const setInfo = jest.fn();
   render(<InfoCard item={mayaCard} setInfo={setInfo} />);
   expect(screen.getByText(/Maya Hit 1/)).toBeInTheDocument();
-  expect(screen.getByText(/Element earth/)).toBeInTheDocument();
-  expect(screen.getByText(/Equiped/)).toBeInTheDocument();
+  expect(screen.getByAltText("spell_image")).toHaveAttribute(
+    "src",
+    expect.stringContaining("spell2")
+  );
+  expect(screen.getByText(/Mana/)).toBeInTheDocument();
+  expect(screen.getByLabelText("Mana")).toHaveTextContent(/0/);
+  expect(screen.getByText(/Strength/)).toBeInTheDocument();
+  expect(screen.getByLabelText("Strength")).toHaveTextContent(/1/);
+  expect(screen.getByText(/earth/)).toBeInTheDocument();
+  expect(screen.getByAltText("selected_spell")).toHaveAttribute(
+    "src",
+    expect.stringContaining("equipped_item")
+  );
 });
 
 test("Renders Item card updates", async () => {
@@ -45,8 +56,33 @@ test("Renders Item card updates", async () => {
   expect(screen.getByText(/SomeName0/)).toBeInTheDocument();
 });
 
+test("Renders Updates if it's an Update", async () => {
+  const setInfo = jest.fn();
+  render(<InfoCard item={mayaCard} setInfo={setInfo} />);
+  expect(screen.getByText(/Maya Hit 1/)).toBeInTheDocument();
+  expect(screen.getByText(/Element earth/)).toBeInTheDocument();
+  expect(screen.getByText(/Equiped/)).toBeInTheDocument();
+});
+
+test("Renders Hero if it's a hero", async () => {
+  const setInfo = jest.fn();
+  render(<InfoCard item={mayaCard} setInfo={setInfo} />);
+  expect(screen.getByText(/Maya Hit 1/)).toBeInTheDocument();
+  expect(screen.getByText(/Element earth/)).toBeInTheDocument();
+  expect(screen.getByText(/Equiped/)).toBeInTheDocument();
+});
+
+test("Renders Enemy if it's an Update", async () => {
+  const setInfo = jest.fn();
+  render(<InfoCard item={mayaCard} setInfo={setInfo} />);
+  expect(screen.getByText(/Maya Hit 1/)).toBeInTheDocument();
+  expect(screen.getByText(/Element earth/)).toBeInTheDocument();
+  expect(screen.getByText(/Equiped/)).toBeInTheDocument();
+});
+
 test("Renders Error if it's not a card", async () => {
   const setInfo = jest.fn();
+  //@ts-ignore
   render(<InfoCard item={{ example: "some" }} setInfo={setInfo} />);
   expect(screen.getByText(/I am not a card/)).toBeInTheDocument();
 });

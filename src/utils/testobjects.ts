@@ -131,13 +131,14 @@ export const mayaCard: ISpell = {
   name: "Maya Hit 1",
   strength: 1,
   element: "earth" as "earth",
-  image: "../img/Spells/spell1.jpg",
+  image: "spell2",
   selected: true,
   mana: 0,
   owner: "hero" as "hero",
   type: "",
   level: 0,
-  description: "",
+  description:
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ",
   updates: [],
 };
 

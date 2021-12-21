@@ -2,7 +2,13 @@ import React, { useContext, useState } from "react";
 import { GameContext } from "../App";
 import "./Spells.css";
 // Types
-import { elementType, ISpell } from "../utils/types";
+import {
+  elementType,
+  IEnemy,
+  IHero,
+  ISpell,
+  ISpellUpdate,
+} from "../utils/types";
 // Utils
 import { changeCardsInDeck } from "../utils/fightlogic";
 // Components
@@ -33,7 +39,9 @@ export const Spells = ({
   const player = context.gameState.player;
   const playerCards = context.gameState.player.spells;
   const gameState = context.gameState;
-  const [info, setInfo] = useState<null | ISpell>(null);
+  const [info, setInfo] = useState<
+    null | ISpell | ISpellUpdate | IEnemy | IHero
+  >(null);
   const [forge, setForge] = useState<null | ISpell>(null);
 
   const selectSpell = (s: ISpell) => {
