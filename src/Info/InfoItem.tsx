@@ -114,7 +114,7 @@ const BottomCardItem = ({ item }: { item: ISpell | ISpellUpdate }) => {
   );
 };
 
-export const InfoItem = ({ item }: { item: ISpellUpdate }) => {
+export const InfoItem = ({ item }: { item: ISpellUpdate | ISpell }) => {
   return (
     <div className="InfoCard">
       <TopCardItem item={item} />

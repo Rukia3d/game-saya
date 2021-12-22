@@ -89,6 +89,7 @@ export interface IHero {
   image: string;
   selected?: boolean;
   element?: elementType;
+  description: string;
 }
 
 export interface IAdventure {
@@ -151,6 +152,7 @@ export interface IEnemy {
   spells: ISpell[];
   // defines how many cards enemy is given
   life: number;
+  description: string;
 }
 
 export interface FightState {

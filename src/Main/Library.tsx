@@ -34,7 +34,7 @@ export const Library = () => {
   }
   const spells = context.gameState.player.spells;
 
-  const [item, setItem] = useState(1);
+  const [item, setItem] = useState(2);
   const [element, setElement] = useState<elementType | null>(null);
   const elements = spells
     .map((s: ISpell) => s.element)
@@ -59,17 +59,12 @@ export const Library = () => {
 
   if (item === 1) {
     return (
-      <InfoCard
-        item={context.gameState.player.spellUpdates[0]}
-        setInfo={() => {}}
-      />
+      <InfoCard item={context.gameState.player.heroes[0]} setInfo={() => {}} />
     );
   }
 
   if (item === 2) {
-    return (
-      <InfoCard item={context.gameState.player.spells[0]} setInfo={() => {}} />
-    );
+    return <InfoCard item={context.gameState.enemies[0]} setInfo={() => {}} />;
   }
 
   return (

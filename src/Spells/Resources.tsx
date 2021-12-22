@@ -59,7 +59,7 @@ export const ResourceData = ({
         <div>
           {notOwned.name}: {commonality()}
         </div>
-        <div>
+        <div aria-label="resource_requirements">
           You have {currentAmount(resource)} of {resource[1]} needed
         </div>
       </div>

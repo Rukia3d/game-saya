@@ -35,7 +35,7 @@ export const spellUpdates: ISpellUpdate[] = new Array(3)
     mana: 1,
     name: "SomeName" + i,
     price: null,
-    resource_base: [["ash", i]],
+    resource_base: [["ash", i + 1]],
   }));
 
 export const stories: IStoryGroup[] = new Array(4).fill(0).map((x, i) => ({
@@ -164,6 +164,8 @@ export const enemy: IEnemy = {
   experience: "novice" as "novice",
   life: 2,
   spells: [enemyCard, enemyCard],
+  description:
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 };
 
 export const baseCards15: ISpell[] = new Array(15).fill(0).map((x, n) => ({
@@ -187,12 +189,16 @@ export const playerNpcs = [
     name: "Maya",
     image: "../img/maya.png",
     dial: "dialogue0",
+    description:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ",
   },
   {
     id: "tara",
     name: "Tara",
     image: "../img/tara.png",
     dial: "dialogue1",
+    description:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ",
   },
 ];
 export const heroes: IHero[] = [];
@@ -210,6 +216,8 @@ heroesFormat.forEach((obj: [string, string]) =>
     name: obj[0],
     image: "",
     element: obj[1] as elementType,
+    description:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
   })
 );
 
@@ -239,4 +247,6 @@ export const characterToAdd: IHero = {
   image: "../img/nell.png",
   name: "Nell",
   selected: false,
+  description:
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ",
 };

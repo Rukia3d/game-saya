@@ -41,6 +41,8 @@ export const gameState: GameState = {
       name: "Tara",
       image: "../img/olija.png",
       dial: "olija_replic1",
+      description:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ",
     },
   ]),
   resources: [

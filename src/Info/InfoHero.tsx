@@ -1,30 +1,64 @@
 import React from "react";
 import "./InfoCard.scss";
 // Types
-import { IEnemy, IHero } from "../utils/types";
+import { IEnemy, IHero, ISpell } from "../utils/types";
+import { Spell } from "../Spells/Spell";
 // Utils
 // Components
 
-const HeroSpells = ({ item }: { item: IHero | IEnemy }) => {
+const HeroSkins = ({ item }: { item: IHero }) => {
   return (
-    <div className="">
-      <h3>HeroSpells</h3>
+    <div className="ItemData">
+      <div className="ItemDataHeader">
+        <h3>Skins</h3>
+      </div>
+    </div>
+  );
+};
+
+const EnemySpells = ({ item }: { item: IEnemy }) => {
+  return (
+    <div className="ItemData">
+      <div className="ItemDataHeader">
+        <h3>Speels</h3>
+        {item.spells.map((s: ISpell, i: number) => (
+          <Spell element={item.element} spell={s} key={i} />
+        ))}
+      </div>
     </div>
   );
 };
 
 const HeroDescription = ({ item }: { item: IHero | IEnemy }) => {
   return (
-    <div className="">
-      <h3>HeroDescription</h3>
+    <div className="ItemDescription">
+      <div className="ItemDescriptionElement">{item.element}</div>
+      {"experience" in item ? (
+        <div
+          className="ItemDescriptionDifficulty"
+          aria-label="enemy_experience"
+        >
+          Experience: {item.experience}
+        </div>
+      ) : null}
+      <div className="ItemDescriptionText">{item.description}</div>
     </div>
   );
 };
 
 const HeroCard = ({ item }: { item: IHero | IEnemy }) => {
   return (
-    <div className="">
-      <h3>HeroCard</h3>
+    <div className="ItemCard">
+      <div className="ItemCardHeader">{item.name}</div>
+      <img
+        src={
+          "life" in item
+            ? `../img/Enemies/${item.element}/${item.id}.png`
+            : `../img/Heroes/${item.id}.png`
+        }
+        alt="enemy_image"
+      />
+      {"life" in item ? <h3 aria-label="Spells">Spells: {item.life}</h3> : null}
     </div>
   );
 };
@@ -46,7 +80,7 @@ const TopCardHero = ({ item }: { item: IHero | IEnemy }) => {
       </div>
       <div className="TopRightBorder">
         <div className="TopRight">
-          <HeroSpells item={item} />
+          <HeroDescription item={item} />
         </div>
       </div>
     </div>
@@ -56,12 +90,12 @@ const TopCardHero = ({ item }: { item: IHero | IEnemy }) => {
 const BottomCardHero = ({ item }: { item: IHero | IEnemy }) => {
   return (
     <div className="BottomCard">
-      <HeroDescription item={item as IHero | IEnemy} />
+      {"life" in item ? <EnemySpells item={item} /> : <HeroSkins item={item} />}
     </div>
   );
 };
 
-export const InfoHero = ({ item }: { item: IHero }) => {
+export const InfoHero = ({ item }: { item: IHero | IEnemy }) => {
   return (
     <div className="InfoCard">
       <TopCardHero item={item} />

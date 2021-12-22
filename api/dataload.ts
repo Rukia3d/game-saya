@@ -130,6 +130,7 @@ export const readEnemies = (): IEnemy[] => {
       experience: enemyDB[i].exp as enemyExpLevel,
       spells: enemyCards,
       life: parseInt(enemyDB[i].life),
+      description: enemyDB[i].description,
     };
   }
   return enemies;
@@ -146,6 +147,7 @@ export const readHeroes = (): IHero[] => {
       image: heroDB[i].image,
       selected: false,
       element: heroDB[i].element as elementType,
+      description: heroDB[i].description,
     };
   }
   return heroes;
@@ -184,6 +186,7 @@ export const readNpcs = (): IHero[] => {
       id: npcDB[i].id,
       name: npcDB[i].name,
       image: npcDB[i].image,
+      description: npcDB[i].description,
     };
   }
   return npcs;

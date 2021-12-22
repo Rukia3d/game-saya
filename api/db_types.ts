@@ -63,6 +63,7 @@ export interface EnemyDB {
   element: string;
   life: string;
   exp: string;
+  description: string;
 }
 export interface EnemyCardDB {
   id: string;
@@ -77,6 +78,7 @@ export interface HeroDB {
   name: string;
   image: string;
   element: string;
+  description: string;
 }
 export interface SpellDB {
   owner: string;
@@ -97,6 +99,7 @@ export interface NpcDB {
   id: string;
   name: string;
   image: string;
+  description: string;
 }
 
 export interface FightDB {

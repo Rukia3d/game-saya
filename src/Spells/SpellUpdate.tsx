@@ -29,12 +29,7 @@ export const SpellUpdate = ({
     !context.gameState.player.resources ||
     !context.gameState.resources
   ) {
-    throw new Error(
-      "No data in context"
-      // context
-      // context.gameState.player,
-      // context.gameState.resources
-    );
+    throw new Error("No data in context");
   }
   const playerResources = context.gameState.player.resources;
   const resources = context.gameState.resources;
@@ -80,11 +75,11 @@ export const SpellUpdate = ({
         </div>
         <div className="UpdateData">
           <div>{update.name}</div>
-          <div>Mana: {update.mana}</div>
+          <div aria-label="UpdateMana">Mana: {update.mana}</div>
           <div>{update.description}</div>
           <div>
             {update.resource_base.map((s: ISpellUpdateResource, i: number) => (
-              <div key={i}>
+              <div key={i} aria-label="UpdateResource">
                 <div style={{ color: isEnough(s) ? "green" : "red" }}>{`${
                   findResource(resources, s).name
                 }: ${currentAmount(s)} of ${s[1]}`}</div>
