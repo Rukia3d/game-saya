@@ -1,5 +1,6 @@
 import {
   adventureType,
+  dialogueLayout,
   elementType,
   enemyExpLevel,
   IAdventure,
@@ -52,6 +53,7 @@ export const readDialogues = (): IDialogue[] => {
       id: dialogueDB[i].id,
       lines: dialLines,
       background: dialogueDB[i].background,
+      layout: dialogueDB[i].layout as dialogueLayout,
     };
   }
   return dialogues;

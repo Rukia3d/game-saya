@@ -3,6 +3,7 @@ export interface DialogueDB {
   background: string;
   linesList: string;
   action: string;
+  layout: string;
 }
 
 export interface ResourceDB {

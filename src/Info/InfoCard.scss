@@ -140,6 +140,18 @@
             background-color: white;
             height: 2em;
           }
+
+          .ItemDataButtons {
+            background-color: white;
+            padding: 1em;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            align-content: space-around;
+            justify-content: space-evenly;
+            gap: 10px 5px;
+            font-size: 10px;
+          }
         }
       }
     }

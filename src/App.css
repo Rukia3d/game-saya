@@ -24,6 +24,14 @@ html,
   z-index: 99;
 }
 
+.LivesButton {
+  position: absolute;
+  top: 1em;
+  left: 1em;
+  width: 46px;
+  height: 46px;
+  z-index: 99;
+}
 .CloseButton {
   position: absolute;
   background-color: black;

@@ -1,0 +1,68 @@
+.Dialogues {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+
+  .Dialogue {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+
+    .DialogueCharacter {
+      width: 100%;
+      height: 100%;
+      background-size: cover;
+      margin-left: -5%;
+    }
+
+    .DialogueTopBorder {
+      height: 60%;
+      width: 100%;
+
+      .DialogueTop {
+        width: 100%;
+        height: 100%;
+
+        .DialogueSingleBorder {
+          background-color: black;
+          clip-path: polygon(6% 2%, 70% 5%, 100% 95%, 3% 100%);
+          width: 95%;
+          height: 100%;
+        }
+
+        .DialogueSingle {
+          width: 100%;
+          height: 100%;
+          clip-path: polygon(8% 4%, 68% 8%, 98% 94%, 4% 99%);
+        }
+      }
+    }
+    .DialogueBottomBorder {
+      height: 40%;
+      width: 100%;
+      background-color: black;
+      clip-path: polygon(6% 6%, 100% 0%, 94% 97%, 0% 100%);
+
+      .DialogueBottom {
+        width: 100%;
+        height: 100%;
+        padding: 1em;
+        clip-path: polygon(10% 10%, 98% 2%, 90% 95%, 2% 98%);
+        background-color: white;
+
+        .DialogueLines {
+          padding: 2em;
+          text-align: left;
+        }
+      }
+    }
+  }
+}

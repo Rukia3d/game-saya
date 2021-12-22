@@ -1,23 +1,9 @@
 import React, { useState } from "react";
-import "./Dialogue.css";
+import "./Dialogue.scss";
 // Types
 import { IDialogueLine } from "../utils/types";
 // Utils
 // Components
-
-const DialogueImage = ({ line, i }: { line: IDialogueLine; i: number }) => {
-  return (
-    <div className="DialogueCharacter">
-      {line.image ? (
-        <img
-          className={line.pos}
-          src={`../img/Dialogues/${line.character}_${line.image}.png`}
-          alt={`character_image_${line.character}`}
-        />
-      ) : null}
-    </div>
-  );
-};
 
 const DialogueLine = ({ line, i }: { line: IDialogueLine; i: number }) => {
   return (
@@ -47,7 +33,6 @@ export const DialogueLines = ({
   };
   return (
     <div className="DialogueLines" onClick={nextLine} aria-label="lines_next">
-      <DialogueImage line={line} i={res} />
       <DialogueLine line={line} i={res} />
     </div>
   );

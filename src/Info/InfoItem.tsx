@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "./InfoCard.scss";
 // Types
 import { ISpell, ISpellUpdate } from "../utils/types";
@@ -6,6 +6,11 @@ import { ISpell, ISpellUpdate } from "../utils/types";
 // Components
 import { SpellUpdate } from "../Spells/SpellUpdate";
 import { ResourceDatalist } from "../Spells/Resources";
+import { GameContext } from "../App";
+import { updatePlayerSpell } from "../utils/spellslogic";
+import { removeResources } from "../utils/resourceLogic";
+import { SpellWithInfo } from "../Spells/SpellWithInfo";
+import { ItemsForCard } from "./InfoCard";
 
 const ItemCard = ({ item }: { item: ISpell | ISpellUpdate }) => {
   //TODO Replace static img with animation
@@ -53,26 +58,80 @@ const ItemDescription = ({ item }: { item: ISpell | ISpellUpdate }) => {
   );
 };
 
-const ItemData = ({ item }: { item: ISpell | ISpellUpdate }) => {
+const ItemSpellUpdates = ({ item }: { item: ISpell }) => {
+  const [updatesToDisplay, setupdatesToDisplay] = useState(item.updates);
+  const [selection, setSelection] = useState("applied");
+
+  const context = useContext(GameContext);
+  if (!context || !context.gameState?.player) {
+    throw new Error("No data in context");
+  }
+  const updates = context.gameState.player.spellUpdates;
+  const resources = context.gameState.player.resources;
+  const applicableUpdates = updates.filter(
+    (s: ISpellUpdate) =>
+      s.element === item.element && item.updates.indexOf(s) === -1
+  );
+
+  const select = (s: "applied" | "available") => {
+    if (s === "applied") {
+      setSelection("applied");
+      setupdatesToDisplay(item.updates);
+    } else {
+      setSelection("available");
+      setupdatesToDisplay(applicableUpdates);
+    }
+  };
+
+  //TODO move into UpdateSpell screen with the confirmation
+  const updateSpell = (update: ISpellUpdate) => {
+    if (context.gameState && context.gameState.player) {
+      const newPlayyerWithSpell = updatePlayerSpell(
+        context.gameState.player,
+        item,
+        update
+      );
+      const newPlayerRemovedResources = {
+        ...newPlayyerWithSpell,
+        resources: removeResources(update.resource_base, resources),
+      };
+
+      context.setGameState({
+        ...context.gameState,
+        player: newPlayerRemovedResources,
+      });
+    }
+  };
+
   return (
     <div className="ItemData">
-      {"updates" in item ? (
-        <div>
-          <div className="ItemDataHeader">
-            <h3>Updates</h3>
-          </div>
-          {item.updates.map((u: ISpellUpdate, i: number) => (
-            <SpellUpdate key={i} update={u} canUpdate={false} />
-          ))}
+      <div>
+        <div className="ItemDataButtons">
+          <button onClick={() => select("applied")}>Updated</button>
+          <button onClick={() => select("available")}>Updates</button>
         </div>
-      ) : (
-        <div>
-          <div className="ItemDataHeader">
-            <h3>Resources</h3>
-            <ResourceDatalist spellResources={item.resource_base} />
-          </div>
+        {updatesToDisplay.map((u: ISpellUpdate, i: number) => (
+          <SpellUpdate
+            key={i}
+            update={u}
+            canUpdate={selection === "available"}
+            updateSpell={updateSpell}
+          />
+        ))}
+      </div>
+    </div>
+  );
+};
+
+const ItemSpellResources = ({ item }: { item: ISpellUpdate }) => {
+  return (
+    <div className="ItemData">
+      <div>
+        <div className="ItemDataHeader">
+          <h3>Resources</h3>
+          <ResourceDatalist spellResources={item.resource_base} />
         </div>
-      )}
+      </div>
     </div>
   );
 };
@@ -109,7 +168,11 @@ const TopCardItem = ({ item }: { item: ISpell | ISpellUpdate }) => {
 const BottomCardItem = ({ item }: { item: ISpell | ISpellUpdate }) => {
   return (
     <div className="BottomCard">
-      <ItemData item={item as ISpell | ISpellUpdate} />
+      {"updates" in item ? (
+        <ItemSpellUpdates item={item as ISpell} />
+      ) : (
+        <ItemSpellResources item={item as ISpellUpdate} />
+      )}
     </div>
   );
 };

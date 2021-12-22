@@ -4,10 +4,11 @@ import "./City.scss";
 // Types
 import { IDialogue, INPC } from "../utils/types";
 // Utils
-import { findDialogue } from "../utils/helpers";
+import { findDialogue, generateInt } from "../utils/helpers";
 // Components
 import { DialogueCity } from "../Dialogues/DialogueCity";
 import { AnimatedSpriteCycle } from "../Animations/AnimatedSpriteCycle";
+import { Dialogue } from "../Dialogues/Dialogue";
 
 const NPCIcon = ({
   hero,
@@ -61,21 +62,13 @@ export const City = () => {
 
   const [dialogue, setDialogue] = useState<IDialogue | null>(null);
   const characters = context.gameState.player.npcs;
+  const mainScreenChar = characters[generateInt(characters.length - 1)];
   const activeHeroes = characters.filter((c: INPC) => c.dial !== null);
 
   return (
     <div className="Intro">
-      <div className="IntroBackgroundBorder">
-        <img
-          className="IntroBackground"
-          src="../img/main_hall_background.png"
-          alt="intro_background"
-        />
-      </div>
       <div className="IntroPresent">
-        {characters.map((c: INPC, i: number) => (
-          <NPC key={i} hero={c} />
-        ))}
+        <NPC hero={mainScreenChar} />
       </div>
       <div className="IntroActive">
         {activeHeroes.map((c: INPC, i: number) => (

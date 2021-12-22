@@ -8,7 +8,7 @@ import { CloseButton } from "../UI/CloseButton";
 import { InfoItem } from "./InfoItem";
 import { InfoHero } from "./InfoHero";
 
-type ItemsForCard = IHero | IEnemy | ISpell | ISpellUpdate;
+export type ItemsForCard = IHero | IEnemy | ISpell | ISpellUpdate;
 
 type infoScreenState = "update" | "hero";
 
@@ -34,9 +34,9 @@ export const InfoCard = ({
   const screen = determineInfoScreenType();
   const InfoScreens = infoScreens[screen];
   return (
-    <div className="Info" aria-label="info_card" onClick={() => setInfo(null)}>
+    <div className="Info" aria-label="info_card">
       <div className="InfoCardBorder">
-        <CloseButton onClick={setInfo} />
+        <CloseButton onClick={() => setInfo(null)} />
         <InfoScreens item={item} />
       </div>
     </div>

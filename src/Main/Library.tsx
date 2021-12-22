@@ -2,7 +2,13 @@ import React, { useContext, useState } from "react";
 import { GameContext } from "../App";
 import "./Library.css";
 // Types
-import { elementType, ISpell, ISpellUpdate } from "../utils/types";
+import {
+  elementType,
+  IEnemy,
+  IHero,
+  ISpell,
+  ISpellUpdate,
+} from "../utils/types";
 // Utils
 // Components
 import { Spells } from "../Spells/Spells";
@@ -34,7 +40,10 @@ export const Library = () => {
   }
   const spells = context.gameState.player.spells;
 
-  const [item, setItem] = useState(2);
+  const [item, setItem] = useState(1);
+  const [info, setInfo] = useState<
+    null | ISpell | ISpellUpdate | IEnemy | IHero
+  >(null);
   const [element, setElement] = useState<elementType | null>(null);
   const elements = spells
     .map((s: ISpell) => s.element)
@@ -59,12 +68,12 @@ export const Library = () => {
 
   if (item === 1) {
     return (
-      <InfoCard item={context.gameState.player.heroes[0]} setInfo={() => {}} />
+      <InfoCard item={context.gameState.player.spells[0]} setInfo={setInfo} />
     );
   }
 
   if (item === 2) {
-    return <InfoCard item={context.gameState.enemies[0]} setInfo={() => {}} />;
+    return <InfoCard item={context.gameState.enemies[0]} setInfo={setInfo} />;
   }
 
   return (

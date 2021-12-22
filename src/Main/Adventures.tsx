@@ -1,43 +1,120 @@
 import React, { useContext } from "react";
 import { GameContext } from "../App";
-import "./Adventures.css";
+import "./Adventures.scss";
 // Types
 import { IAdventure } from "../utils/types";
 // Utils
 // Components
 import { Lock } from "../UI/Lock";
-import { TopMenu } from "../UI/TopMenu";
 
-const AdventureImage = ({ adventure }: { adventure: IAdventure }) => {
-  return (
-    <div className={`Adventure_${adventure.form}_border`}>
-      <div className={`Adventure_${adventure.form}`}>
-        <div className="AdventureName">{adventure.name}</div>
-        {!adventure.open ? <Lock /> : null}
-        <img
-          src={`../img/Adventures/${adventure.image}`}
-          alt={`adventure_${adventure.id}`}
-        />
-      </div>
-    </div>
-  );
-};
-
-const Adventure = ({
+const AdventureArena = ({
   adventure,
   selectAdventure,
 }: {
   adventure: IAdventure;
   selectAdventure: (a: IAdventure) => void;
 }) => {
+  const imgUrl = `/img/Backgrounds/adventure_${adventure.id}_background.jpg`;
   return (
     <div
-      aria-label={`adventure_border_${adventure.id}`}
+      className="AdventureArenaBorder"
       onClick={() =>
         adventure.storyGroups ? selectAdventure(adventure) : null
       }
     >
-      <AdventureImage adventure={adventure} />
+      {/* {!adventure.open ? <Lock /> : null} */}
+      <div
+        className="AdventureArena"
+        style={{
+          backgroundImage: `url(${imgUrl})`,
+        }}
+      >
+        <h3>{adventure.name}</h3>
+      </div>
+    </div>
+  );
+};
+
+const AdventureStory = ({
+  adventure,
+  selectAdventure,
+}: {
+  adventure: IAdventure;
+  selectAdventure: (a: IAdventure) => void;
+}) => {
+  const imgUrl = `/img/Backgrounds/adventure_${adventure.id}_background.jpg`;
+  return (
+    <div
+      className="AdventureStoryBorder"
+      onClick={() =>
+        adventure.storyGroups ? selectAdventure(adventure) : null
+      }
+    >
+      {/* {!adventure.open ? <Lock /> : null} */}
+      <div
+        className="AdventureStory"
+        style={{
+          backgroundImage: `url(${imgUrl})`,
+        }}
+      >
+        <h3>{adventure.name}</h3>
+      </div>
+    </div>
+  );
+};
+
+const AdventureTournament = ({
+  adventure,
+  selectAdventure,
+}: {
+  adventure: IAdventure;
+  selectAdventure: (a: IAdventure) => void;
+}) => {
+  const imgUrl = `/img/Backgrounds/adventure_${adventure.id}_background.jpg`;
+  return (
+    <div
+      className="AdventureTournamentBorder"
+      onClick={() =>
+        adventure.storyGroups ? selectAdventure(adventure) : null
+      }
+    >
+      {/* {!adventure.open ? <Lock /> : null} */}
+      <div
+        className="AdventureTournament"
+        style={{
+          backgroundImage: `url(${imgUrl})`,
+        }}
+      >
+        <h3>{adventure.name}</h3>
+      </div>
+    </div>
+  );
+};
+
+const AdventureEvent = ({
+  adventure,
+  selectAdventure,
+}: {
+  adventure: IAdventure;
+  selectAdventure: (a: IAdventure) => void;
+}) => {
+  const imgUrl = `/img/Backgrounds/adventure_${adventure.id}_background.jpg`;
+  return (
+    <div
+      className="AdventureEventBorder"
+      onClick={() =>
+        adventure.storyGroups ? selectAdventure(adventure) : null
+      }
+    >
+      {/* {!adventure.open ? <Lock /> : null} */}
+      <div
+        className="AdventureEvent"
+        style={{
+          backgroundImage: `url(${imgUrl})`,
+        }}
+      >
+        <h3>{adventure.name}</h3>
+      </div>
     </div>
   );
 };
@@ -53,13 +130,28 @@ export const Adventures = () => {
       context.setAdventure(a);
     }
   };
+  console.log(context.gameState.player.adventures);
   return (
-    <div className="Adventures" aria-label="adventures_background">
-      <TopMenu />
-      <div className="AdventuresList">
-        {context.gameState.player.adventures.map((a: IAdventure, i: number) => (
-          <Adventure selectAdventure={selectAdventure} adventure={a} key={i} />
-        ))}
+    <div className="Adventures">
+      <div className="AdventuresTop">
+        <AdventureStory
+          selectAdventure={selectAdventure}
+          adventure={context.gameState.player.adventures[0]}
+        />
+        <AdventureArena
+          selectAdventure={selectAdventure}
+          adventure={context.gameState.player.adventures[2]}
+        />
+      </div>
+      <div className="AdventuresBottom">
+        <AdventureTournament
+          selectAdventure={selectAdventure}
+          adventure={context.gameState.player.adventures[3]}
+        />
+        <AdventureEvent
+          selectAdventure={selectAdventure}
+          adventure={context.gameState.player.adventures[4]}
+        />
       </div>
     </div>
   );

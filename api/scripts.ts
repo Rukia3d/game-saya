@@ -38,7 +38,7 @@ app.get("/api/player/", (req: any, res: any) => {
   playerHeroes[0].selected = true;
   const playerCards = spells.filter((s: ISpell) => s.element === "earth");
   playerCards.map((s: ISpell) => (s.selected = true));
-  playerCards[0].updates = [spellUpdates[0]];
+  playerCards[0].updates = [];
   playerCards[1].updates = [spellUpdates[0], spellUpdates[2]];
   playerCards[2].updates = [spellUpdates[1], spellUpdates[1]];
   const playerEnemies = enemies;
@@ -58,7 +58,29 @@ app.get("/api/player/", (req: any, res: any) => {
       spells: playerCards,
       spellUpdates: spellUpdates, //[],
       adventures: playerAdventures,
-      resources: [],
+      resources: [
+        {
+          id: "wood",
+          name: "Wood",
+          commonality: 10,
+          image: "wood",
+          quantity: 1000,
+        },
+        {
+          id: "leaf",
+          name: "Leaf",
+          commonality: 7,
+          image: "leaf",
+          quantity: 1000,
+        },
+        {
+          id: "r_flower",
+          name: "Red flower",
+          commonality: 5,
+          image: "r_flower",
+          quantity: 1000,
+        },
+      ],
       enemies: playerEnemies,
     },
     reels: [

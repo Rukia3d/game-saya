@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import "./Dialogue.css";
+import "./Dialogue.scss";
 import { GameContext } from "../App";
 // Types
 // Utils

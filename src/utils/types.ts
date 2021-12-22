@@ -65,7 +65,7 @@ export interface GameState {
 export interface IDialogueLine {
   id: string;
   character: string;
-  image?: string;
+  image: string;
   pos?: "L" | "R" | "M";
   text: string;
 }
@@ -75,6 +75,7 @@ export interface IDialogue {
   lines: IDialogueLine[];
   background: string;
   action?: IStoryAction[];
+  layout: dialogueLayout;
 }
 
 export interface IStoryAction {
@@ -216,3 +217,5 @@ export type spellEffectType =
   | "h_enforce";
 
 export type herosSelectionError = "none" | "less" | "more" | "incorrect" | null;
+
+export type dialogueLayout = "single" | "double" | "triple";

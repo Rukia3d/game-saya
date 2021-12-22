@@ -6,3 +6,7 @@ import "./Settings.css";
 export const Settings = () => {
   return <div className="Settings" aria-label="settings_screen"></div>;
 };
+
+export const Lives = () => {
+  return <div className="Settings" aria-label="settings_screen"></div>;
+};

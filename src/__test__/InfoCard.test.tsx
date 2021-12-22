@@ -2,7 +2,7 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import { InfoCard } from "../Info/InfoCard";
 import { mayaCard, spellUpdates } from "../utils/testobjects";
-import { elementType, ISpell } from "../utils/types";
+import { elementType, GameState, ISpell } from "../utils/types";
 import { GameContext, GameContextType } from "../App";
 import userEvent from "@testing-library/user-event";
 import { gameState } from "../utils/teststates";
@@ -138,4 +138,58 @@ test("Closes properly", async () => {
   expect(screen.getByText(/Maya Hit 1/)).toBeInTheDocument();
   userEvent.click(screen.getByLabelText("info_card"));
   expect(setInfo.mock.calls.length).toBe(1);
+});
+
+test.only("Renders Update screen Update is possible", async () => {
+  const fireCard: ISpell = {
+    ...mayaCard,
+    element: "fire" as elementType,
+    updates: [spellUpdates[0]],
+  };
+  const newGamestate: GameState = {
+    ...gameState,
+    player: {
+      ...gameState.player,
+      resources: [
+        { id: "ash", name: "Ash", commonality: 10, image: "ash", quantity: 5 },
+      ],
+    },
+  };
+  const context: GameContextType = {
+    adventure: null,
+    setAdventure: jest.fn(),
+    story: null,
+    setStory: jest.fn(),
+    gameState: newGamestate,
+    addition: null,
+    setAdditionScreen: jest.fn(),
+    setGameState: jest.fn(),
+    backToMain: jest.fn(),
+  };
+  const setInfo = jest.fn();
+  render(
+    <GameContext.Provider value={context}>
+      <InfoCard item={fireCard} setInfo={setInfo} />
+    </GameContext.Provider>
+  );
+  expect(screen.getByText(/SomeName0/)).toBeInTheDocument();
+  expect(screen.getByAltText("element_image")).toHaveAttribute(
+    "src",
+    expect.stringContaining("fire_0")
+  );
+  expect(screen.getByText(/Mana/)).toBeInTheDocument();
+  expect(screen.getByLabelText("Mana")).toHaveTextContent(/1/);
+  expect(screen.getByText(/Some description0/)).toBeInTheDocument();
+  expect(screen.getByText(/fire/)).toBeInTheDocument();
+  expect(screen.getByText(/Resources/)).toBeInTheDocument();
+  expect(screen.getByAltText("resource_image")).toHaveAttribute(
+    "src",
+    expect.stringContaining("ash")
+  );
+  expect(screen.getByLabelText("resource_data")).toHaveTextContent(
+    /Ash: Very Common/
+  );
+  expect(screen.getByLabelText("resource_requirements")).toHaveTextContent(
+    /You have 0 of 1 needed/
+  );
 });
