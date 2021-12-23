@@ -4,6 +4,7 @@ export interface DialogueDB {
   linesList: string;
   action: string;
   layout: string;
+  characters: string;
 }
 
 export interface ResourceDB {

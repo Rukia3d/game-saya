@@ -76,6 +76,7 @@ export interface IDialogue {
   background: string;
   action?: IStoryAction[];
   layout: dialogueLayout;
+  characters: string[];
 }
 
 export interface IStoryAction {

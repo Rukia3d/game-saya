@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { GameContext } from "../App";
-import "./Stories.css";
+import "./Stories.scss";
 // Types
 import {
   GameState,
@@ -108,7 +108,7 @@ const StoriesContent = ({ startingPage }: { startingPage: number }) => {
     return (
       <div className="StoriesList" aria-label="stories_list">
         {page !== 0 ? (
-          <ScrollButton onClick={() => setPage(page - 1)} direction="l" />
+          <ScrollButton onClick={() => setPage(page - 1)} direction="t" />
         ) : null}
         {groups.map((s: IStoryGroup, i: number) => (
           <StoryPanel
@@ -119,7 +119,7 @@ const StoriesContent = ({ startingPage }: { startingPage: number }) => {
           />
         ))}
         {page < numberOfPages - 1 ? (
-          <ScrollButton onClick={() => setPage(page + 1)} direction="r" />
+          <ScrollButton onClick={() => setPage(page + 1)} direction="d" />
         ) : null}
       </div>
     );

@@ -6,7 +6,7 @@ import {
 } from "../src/utils/types";
 import { EnemyCardDB, SpellDB } from "./db_types";
 
-export const getStoryCharacters = (characters: string) => {
+export const getCharacters = (characters: string) => {
   const newCharacters = characters.split(", ");
   return newCharacters.map((c: string) => c.trim());
 };

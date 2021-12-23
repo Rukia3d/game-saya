@@ -40,7 +40,6 @@ export const Library = () => {
   }
   const spells = context.gameState.player.spells;
 
-  const [item, setItem] = useState(1);
   const [info, setInfo] = useState<
     null | ISpell | ISpellUpdate | IEnemy | IHero
   >(null);
@@ -64,16 +63,6 @@ export const Library = () => {
         />
       </div>
     );
-  }
-
-  if (item === 1) {
-    return (
-      <InfoCard item={context.gameState.player.spells[0]} setInfo={setInfo} />
-    );
-  }
-
-  if (item === 2) {
-    return <InfoCard item={context.gameState.enemies[0]} setInfo={setInfo} />;
   }
 
   return (

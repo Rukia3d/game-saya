@@ -240,6 +240,7 @@ export const dialogue: IDialogue = {
   ],
   background: "backg_0.png",
   layout: "double",
+  characters: ["olija", "maya"],
 };
 
 export const characterToAdd: IHero = {

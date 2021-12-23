@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { GameContext } from "../App";
 import { STORIES_PER_PANEL } from "./Stories";
-import "./Stories.css";
+import "./Stories.scss";
 // Types
 import { herosSelectionError, IStory, IStoryGroup } from "../utils/types";
 // Utils

@@ -6,9 +6,8 @@ import { IDialogue, INPC } from "../utils/types";
 // Utils
 import { findDialogue, generateInt } from "../utils/helpers";
 // Components
-import { DialogueCity } from "../Dialogues/DialogueCity";
-import { AnimatedSpriteCycle } from "../Animations/AnimatedSpriteCycle";
 import { Dialogue } from "../Dialogues/Dialogue";
+import { AnimatedSpriteCycle } from "../Animations/AnimatedSpriteCycle";
 
 const NPCIcon = ({
   hero,
@@ -39,10 +38,10 @@ const NPC = ({ hero }: { hero: INPC }) => {
   return (
     <div className="IntroHeroImage" aria-label={`hero_${hero.id}`}>
       <AnimatedSpriteCycle
-        width={350}
-        height={741}
+        width={500}
+        height={500}
         img={`../img/NPCs/${hero.id}_idle.png`}
-        frames={8}
+        frames={5}
         breakpoint={1}
       />
     </div>
@@ -76,7 +75,7 @@ export const City = () => {
         ))}
       </div>
       {dialogue ? (
-        <DialogueCity dialogue={dialogue} setDialogue={setDialogue} />
+        <Dialogue dialogue={dialogue} setDialogue={setDialogue} />
       ) : null}
     </div>
   );

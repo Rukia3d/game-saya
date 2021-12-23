@@ -22,7 +22,7 @@ const AdventureArena = ({
         adventure.storyGroups ? selectAdventure(adventure) : null
       }
     >
-      {/* {!adventure.open ? <Lock /> : null} */}
+      {!adventure.open ? <Lock /> : null}
       <div
         className="AdventureArena"
         style={{
@@ -50,7 +50,7 @@ const AdventureStory = ({
         adventure.storyGroups ? selectAdventure(adventure) : null
       }
     >
-      {/* {!adventure.open ? <Lock /> : null} */}
+      {!adventure.open ? <Lock /> : null}
       <div
         className="AdventureStory"
         style={{
@@ -78,7 +78,7 @@ const AdventureTournament = ({
         adventure.storyGroups ? selectAdventure(adventure) : null
       }
     >
-      {/* {!adventure.open ? <Lock /> : null} */}
+      {!adventure.open ? <Lock /> : null}
       <div
         className="AdventureTournament"
         style={{
@@ -106,9 +106,37 @@ const AdventureEvent = ({
         adventure.storyGroups ? selectAdventure(adventure) : null
       }
     >
-      {/* {!adventure.open ? <Lock /> : null} */}
+      {!adventure.open ? <Lock /> : null}
       <div
         className="AdventureEvent"
+        style={{
+          backgroundImage: `url(${imgUrl})`,
+        }}
+      >
+        <h3>{adventure.name}</h3>
+      </div>
+    </div>
+  );
+};
+
+const AdventureCharacter = ({
+  adventure,
+  selectAdventure,
+}: {
+  adventure: IAdventure;
+  selectAdventure: (a: IAdventure) => void;
+}) => {
+  const imgUrl = `/img/Backgrounds/adventure_${adventure.id}_background.jpg`;
+  return (
+    <div
+      className="AdventureCharacterBorder"
+      onClick={() =>
+        adventure.storyGroups ? selectAdventure(adventure) : null
+      }
+    >
+      {!adventure.open ? <Lock /> : null}
+      <div
+        className="AdventureCharacter"
         style={{
           backgroundImage: `url(${imgUrl})`,
         }}
@@ -151,6 +179,12 @@ export const Adventures = () => {
         <AdventureEvent
           selectAdventure={selectAdventure}
           adventure={context.gameState.player.adventures[4]}
+        />
+      </div>
+      <div className="AdventuresAbsolute">
+        <AdventureCharacter
+          selectAdventure={selectAdventure}
+          adventure={context.gameState.player.adventures[1]}
         />
       </div>
     </div>

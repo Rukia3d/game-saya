@@ -19,8 +19,7 @@
       height: 100%;
       display: flex;
       flex-direction: row;
-      align-items: center;
-      justify-content: space-evenly;
+      gap: 10px;
     }
 
     .MainMenuRows {
@@ -28,10 +27,7 @@
       height: 100%;
       display: flex;
       flex-direction: column;
-      align-items: center;
-      align-content: space-around;
-      justify-content: space-evenly;
-      gap: 1em;
+      gap: 10px;
     }
 
     .MainMenuCityBorder {

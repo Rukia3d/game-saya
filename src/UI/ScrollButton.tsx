@@ -16,6 +16,10 @@ export const ScrollButton = ({
         return "ChevronRight";
       case "l":
         return "ChevronLeft";
+      case "t":
+        return "ChevronTop";
+      case "d":
+        return "ChevronDown";
       default:
         return "ChevronRight";
     }

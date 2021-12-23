@@ -30,9 +30,9 @@ import {
   FightDB,
 } from "./db_types";
 import {
+  getCharacters,
   getHeroInitialSpellSet,
   getResourceSet,
-  getStoryCharacters,
 } from "./helpers";
 const parse = require("csv-parse/lib/sync");
 const fs = require("fs");
@@ -54,6 +54,7 @@ export const readDialogues = (): IDialogue[] => {
       lines: dialLines,
       background: dialogueDB[i].background,
       layout: dialogueDB[i].layout as dialogueLayout,
+      characters: getCharacters(dialogueDB[i].characters),
     };
   }
   return dialogues;
@@ -204,7 +205,7 @@ export const readFights = (): IFight[] => {
       name: fightsDB[i].name,
       image: fightsDB[i].image,
       enemy: fightsDB[i].enemy,
-      characters: getStoryCharacters(fightsDB[i].characters),
+      characters: getCharacters(fightsDB[i].characters),
     };
   }
   return fights;
