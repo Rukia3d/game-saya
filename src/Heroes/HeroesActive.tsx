@@ -1,51 +1,48 @@
-import React, { useContext } from "react";
+import React from "react";
 import "./Heroes.scss";
 // Types
-import { IHero } from "../utils/types";
-import { GameContext } from "../App";
-import { findCharacter } from "../utils/helpers";
+import { IEnemy, IHero } from "../utils/types";
 // Utils
 // Components
-
-const DoubleHeroesOne = ({ hero }: { hero: IHero | null }) => {
-  return <div></div>;
-};
-
-const DoubleHeroesTwo = ({ hero }: { hero: IHero | null }) => {
-  return <div></div>;
-};
+import { AnimatedSpriteCycle } from "../Animations/AnimatedSpriteCycle";
 
 export const HeroesActive = ({
-  selected,
-  needed,
+  characters,
+  enemy,
 }: {
-  selected: string[];
-  needed: number;
+  characters: IHero[];
+  enemy: IEnemy;
 }) => {
-  const context = useContext(GameContext);
-  if (!context || !context.gameState || !context.gameState.player.heroes) {
-    throw new Error("No data in context");
-  }
-  const game = context.gameState;
-  const characters = selected.map((s: string) =>
-    findCharacter(game.player.heroes, s)
+  console.log("enemy", enemy);
+  return (
+    <div className="MidSection">
+      {characters.map((h: IHero, i: number) => (
+        <div
+          className="HeroActive"
+          style={{ position: "absolute", left: 70 * i }}
+        >
+          <AnimatedSpriteCycle
+            width={500}
+            height={500}
+            img={`../img/Heroes/Animations/${h.id}_idle.png`}
+            frames={9}
+            breakpoint={1}
+          />
+        </div>
+      ))}
+      <div className="HeroActive" style={{ position: "absolute", right: 0 }}>
+        <AnimatedSpriteCycle
+          width={500}
+          height={500}
+          img={`../img/Enemies/${enemy.element}/${enemy.id}_idle.png`}
+          frames={10}
+          breakpoint={1}
+        />
+      </div>
+    </div>
   );
-  console.log("Charactes needed", needed);
-  if (needed === 2) {
-    return (
-      <div className="HeroesActive">
-        <DoubleHeroesOne hero={characters[0] ? characters[0] : null} />
-        <DoubleHeroesTwo hero={characters[1] ? characters[1] : null} />
-      </div>
-    );
-  }
-  if (needed === 3) {
-    return (
-      <div className="HeroesActive">
-        {/* <TripleHeroesOne />
-        <TripleHeroesTwpo /> */}
-      </div>
-    );
-  }
-  return <div className="HeroesActive"></div>;
+};
+
+export const HeroesActiveData = ({ characters }: { characters: IHero[] }) => {
+  return <div className="BottomSection"></div>;
 };

@@ -7,9 +7,11 @@ import { herosSelectionError, IFight, IHero, IStory } from "../utils/types";
 import {
   checkFightCharactersIds,
   filterActiveCharacters,
+  findCharacter,
 } from "../utils/helpers";
 import { Heroes } from "../Heroes/Heroes";
-import { HeroesActive } from "../Heroes/HeroesActive";
+import { HeroesActive, HeroesActiveData } from "../Heroes/HeroesActive";
+import { findEnemy } from "../utils/fightlogic";
 // Components
 
 const getHeaderText = (error: herosSelectionError) => {
@@ -41,11 +43,18 @@ export const StoryHeroes = ({
   if (!context || !context.gameState || !context.adventure) {
     throw new Error("No data in context");
   }
+  const game = context.gameState;
   const [selected, setSelected] = useState(
-    filterActiveCharacters(context.gameState.player.heroes).map((c: IHero) => {
+    filterActiveCharacters(game.player.heroes).map((c: IHero) => {
       return c.id;
     })
   );
+
+  const characters = selected.map((s: string) =>
+    findCharacter(game.player.heroes, s)
+  );
+  const enemy = findEnemy(game.player.enemies, fight.enemy);
+
   const [error, setError] = useState(
     checkFightCharactersIds(fight.characters, selected)
   );
@@ -68,17 +77,14 @@ export const StoryHeroes = ({
 
   return (
     <div className="Heroes">
-      {/* {error === null ? (
+      <Heroes />
+      <HeroesActive characters={characters} enemy={enemy} />
+      {error === null ? (
         <button onClick={checkSelection}>Fight</button>
       ) : (
-        <h1>{getHeaderText(error)}</h1>
+        <div>{getHeaderText(error)}</div>
       )}
-      <h3>Required heroes: {fight.characters}</h3> */}
-      <Heroes />
-      <div className="MidSection">
-        <HeroesActive selected={selected} needed={fight.characters.length} />
-      </div>
-      <div className="BottomSection"></div>
+      <HeroesActiveData characters={characters} />
     </div>
   );
 };
