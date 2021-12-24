@@ -26,22 +26,22 @@ import { StoryHeroes } from "./StoryHeroes";
 export const STORIES_PER_PANEL = 3;
 const STORIESPERPAGE = 3;
 
-const selectionErrored = (
-  fight: IFight | null,
-  gameState: GameState | null
-) => {
-  let res = null;
-  if (fight && gameState) {
-    const activeCharactersNames: string[] = filterActiveCharacters(
-      gameState.player.heroes
-    ).map((c: IHero) => {
-      return c.id;
-    });
-    res = checkFightCharactersIds(fight.characters, activeCharactersNames);
-    console.log("error found", res);
-    return res;
-  }
-};
+// const selectionErrored = (
+//   fight: IFight | null,
+//   gameState: GameState | null
+// ) => {
+//   let res = null;
+//   if (fight && gameState) {
+//     const activeCharactersNames: string[] = filterActiveCharacters(
+//       gameState.player.heroes
+//     ).map((c: IHero) => {
+//       return c.id;
+//     });
+//     res = checkFightCharactersIds(fight.characters, activeCharactersNames);
+//     console.log("error found", res);
+//     return res;
+//   }
+// };
 const StoriesContent = ({ startingPage }: { startingPage: number }) => {
   const context = useContext(GameContext);
   if (

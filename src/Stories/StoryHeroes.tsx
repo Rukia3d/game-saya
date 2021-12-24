@@ -1,15 +1,15 @@
 import React, { useContext, useEffect, useState } from "react";
-import "../Main/Heroes.css";
+import { GameContext } from "../App";
+import "../Heroes/Heroes.scss";
 // Types
 import { herosSelectionError, IFight, IHero, IStory } from "../utils/types";
-import { HeroesSelection } from "../Heroes/HeroesSelection";
-import { GameContext } from "../App";
+// Utils
 import {
   checkFightCharactersIds,
   filterActiveCharacters,
 } from "../utils/helpers";
-
-// Utils
+import { Heroes } from "../Heroes/Heroes";
+import { HeroesActive } from "../Heroes/HeroesActive";
 // Components
 
 const getHeaderText = (error: herosSelectionError) => {
@@ -67,14 +67,18 @@ export const StoryHeroes = ({
   };
 
   return (
-    <div className="StoryHeroes">
-      {error === null ? (
+    <div className="Heroes">
+      {/* {error === null ? (
         <button onClick={checkSelection}>Fight</button>
       ) : (
         <h1>{getHeaderText(error)}</h1>
       )}
-      <h3>Required heroes: {fight.characters}</h3>
-      <HeroesSelection />
+      <h3>Required heroes: {fight.characters}</h3> */}
+      <Heroes />
+      <div className="MidSection">
+        <HeroesActive selected={selected} needed={fight.characters.length} />
+      </div>
+      <div className="BottomSection"></div>
     </div>
   );
 };

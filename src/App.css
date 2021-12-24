@@ -57,29 +57,23 @@ html,
 }
 
 .ChevronRight {
-  clip-path: polygon(75% 0%, 100% 50%, 75% 100%, 0% 100%, 25% 50%, 0% 0%);
+  clip-path: polygon(0 0, 0 100%, 100% 50%);
   background-color: black;
-  width: 100%;
+  width: 5%;
   height: 100%;
   position: absolute;
-  top: 10em;
-  right: 1em;
-  width: 46px;
-  height: 46px;
-  z-index: 100;
+  right: 0;
+  top: 0;
 }
 
 .ChevronLeft {
-  clip-path: polygon(100% 0%, 75% 50%, 100% 100%, 25% 100%, 0% 50%, 25% 0%);
+  clip-path: polygon(100% 0, 0 50%, 100% 100%);
   background-color: black;
-  width: 100%;
+  width: 5%;
   height: 100%;
   position: absolute;
-  top: 10em;
-  left: 1em;
-  width: 46px;
-  height: 46px;
-  z-index: 100;
+  left: 0;
+  top: 0;
 }
 
 .ChevronTop {

@@ -1,34 +1,26 @@
-import React, { useContext } from "react";
-import "../Main/Heroes.css";
+import React, { useContext, useState } from "react";
+import "./Heroes.scss";
 import { GameContext } from "../App";
 // Types
 import { IHero } from "../utils/types";
+import { ScrollButton } from "../UI/ScrollButton";
+import { Hero } from "./Hero";
 // Utils
 // Components
 
-const Hero = ({
-  hero,
-  selectHero,
-}: {
-  hero: IHero;
-  selectHero: (h: IHero) => void;
-}) => {
-  return (
-    <img
-      className={`HeroImage ${hero.selected ? "active" : "inactive"}`}
-      src={`../img/Heroes/${hero.image}.png`}
-      alt={`hero_${hero.id}`}
-      onClick={() => selectHero(hero)}
-    />
-  );
-};
+const HEROESPERPAGE = 3;
 
-export const HeroesSelection = () => {
+export const Heroes = () => {
   const context = useContext(GameContext);
   if (!context || !context.gameState || !context.gameState.player.heroes) {
     throw new Error("No data");
   }
+
+  if (context.gameState.player.heroes.length < 1) {
+    throw new Error("Not enough heroes");
+  }
   const heroes = context.gameState.player.heroes;
+  const [startingIndex, setStartingIndex] = useState(0);
 
   const selectHero = (c: IHero) => {
     const i = heroes.indexOf(c);
@@ -53,11 +45,28 @@ export const HeroesSelection = () => {
       throw new Error("Can't find the player to update");
     context.setGameState({ ...context.gameState, player: newPlayer });
   };
+
+  const currentHeroes: IHero[] = new Array(HEROESPERPAGE)
+    .fill(0)
+    .map((x, i) => (startingIndex + i) % heroes.length)
+    .map((n) => (n < 0 ? heroes.length + n : n))
+    .map((n) => heroes[n]);
+
   return (
-    <div className="HeroesPresent">
-      {heroes.map((c: IHero, i: number) => (
-        <Hero key={i} hero={c} selectHero={selectHero} />
-      ))}
+    <div className="TopSection">
+      <ScrollButton
+        onClick={() => setStartingIndex(startingIndex + 1)}
+        direction="r"
+      />
+      <div className="HeroesList">
+        {currentHeroes.map((c: IHero, i: number) => (
+          <Hero key={i} hero={c} selectHero={selectHero} />
+        ))}
+      </div>
+      <ScrollButton
+        onClick={() => setStartingIndex(startingIndex - 1)}
+        direction="l"
+      />
     </div>
   );
 };
