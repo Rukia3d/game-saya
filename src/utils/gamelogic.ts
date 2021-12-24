@@ -218,6 +218,7 @@ export const finishStory = (game: GameState, story: IStory): Player => {
         player.adventures = updatePlayerStory(player.adventures, action);
         break;
       case "addHero":
+        console.log("addHero");
         const [newHeroes, newSpells] = updatePlayerHeroes(
           player.heroes,
           player.spells,
@@ -225,6 +226,8 @@ export const finishStory = (game: GameState, story: IStory): Player => {
           game.spells,
           action
         );
+        console.log("newHeroes", newHeroes);
+        console.log("newSpells", newSpells);
         player.heroes = newHeroes;
         player.spells = newSpells;
         break;

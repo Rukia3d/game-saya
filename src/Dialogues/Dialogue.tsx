@@ -180,6 +180,11 @@ export const Dialogue = ({
     }
   };
 
+  const finishDialogueWithStory = () => {
+    setDialogue(null);
+    context.setStory(null);
+  };
+
   return (
     <div
       className="Dialogues"
@@ -188,7 +193,7 @@ export const Dialogue = ({
         backgroundImage: `url(${imgUrl})`,
       }}
     >
-      <CloseButton onClick={() => setDialogue(null)} />
+      <CloseButton onClick={finishDialogueWithStory} />
       <div className="Dialogue">
         <div className="DialogueTopBorder">
           <div className="DialogueTop">

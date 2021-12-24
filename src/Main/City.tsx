@@ -2,14 +2,14 @@ import React, { useContext, useState } from "react";
 import { GameContext } from "../App";
 import "./City.scss";
 // Types
-import { IDialogue, INPC } from "../utils/types";
+import { IDialogue, IHero, INPC } from "../utils/types";
 // Utils
 import { findDialogue, generateInt } from "../utils/helpers";
 // Components
 import { Dialogue } from "../Dialogues/Dialogue";
 import { AnimatedSpriteCycle } from "../Animations/AnimatedSpriteCycle";
 
-const NPCIcon = ({
+const MainScreenIcon = ({
   hero,
   setDialogue,
 }: {
@@ -21,7 +21,7 @@ const NPCIcon = ({
     throw new Error("No data in context");
   }
   const dialogue = findDialogue(context.gameState.dialogues, hero.dial);
-  const stateToImage = `../img/NPCs/${hero.id}_story.jpg`;
+  const stateToImage = `../img/Dialogues/Main/${hero.id}_story.jpg`;
   return (
     <div
       className="IntroIconBorder"
@@ -34,22 +34,17 @@ const NPCIcon = ({
   );
 };
 
-const NPC = ({ hero }: { hero: INPC }) => {
+const MainScreenHero = ({ hero }: { hero: IHero }) => {
   return (
     <div className="IntroHeroImage" aria-label={`hero_${hero.id}`}>
       <AnimatedSpriteCycle
         width={500}
         height={500}
-        img={`../img/NPCs/${hero.id}_idle.png`}
-        frames={5}
+        img={`../img/Heroes/Animations/${hero.id}_idle.png`}
+        frames={9}
         breakpoint={1}
       />
     </div>
-    // <img
-    //   className="IntroImage"
-    //   src={`../img/NPCs/${hero.image}`}
-    //   alt={`hero_${hero.id}`}
-    // />
   );
 };
 
@@ -60,18 +55,19 @@ export const City = () => {
   }
 
   const [dialogue, setDialogue] = useState<IDialogue | null>(null);
+  const heroes = context.gameState.player.heroes;
   const characters = context.gameState.player.npcs;
-  const mainScreenChar = characters[generateInt(characters.length - 1)];
+  const mainScreenHero = heroes[generateInt(heroes.length - 1)];
   const activeHeroes = characters.filter((c: INPC) => c.dial !== null);
 
   return (
     <div className="Intro">
       <div className="IntroPresent">
-        <NPC hero={mainScreenChar} />
+        <MainScreenHero hero={mainScreenHero} />
       </div>
       <div className="IntroActive">
         {activeHeroes.map((c: INPC, i: number) => (
-          <NPCIcon key={i} hero={c} setDialogue={setDialogue} />
+          <MainScreenIcon key={i} hero={c} setDialogue={setDialogue} />
         ))}
       </div>
       {dialogue ? (

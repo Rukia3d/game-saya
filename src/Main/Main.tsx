@@ -196,7 +196,7 @@ export const Main = () => {
       }}
     >
       {new Array(50).fill(0).map((x, n) => (
-        <div className="snow"></div>
+        <div className="snow" key={n}></div>
       ))}
       <LivesButton onClick={() => setLivesOpen(!livesOpen)} />
       <SettingsButton onClick={() => setSettingsOpen(!settingsOpen)} />

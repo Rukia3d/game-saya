@@ -34,7 +34,7 @@ app.get("/api/player/", (req: any, res: any) => {
   //@ts-ignore
   playerAdventures[0].storyGroups[0].stories[0].open = true;
   const playerNpcs = [{ ...npcs[0], dial: "maya_replic1" }];
-  const playerHeroes = heroes;
+  const playerHeroes = [heroes[0]];
   playerHeroes[0].selected = true;
   const playerCards = spells.filter((s: ISpell) => s.element === "earth");
   playerCards.map((s: ISpell) => (s.selected = true));

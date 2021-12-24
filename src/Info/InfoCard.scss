@@ -152,6 +152,16 @@
             gap: 10px 5px;
             font-size: 10px;
           }
+
+          .ItemDataList {
+            display: flex;
+            align-items: center;
+            align-content: space-around;
+            justify-content: space-evenly;
+            width: 100%;
+            height: 100%;
+            flex-wrap: wrap;
+          }
         }
       }
     }
