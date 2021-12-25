@@ -90,18 +90,17 @@
 }
 
 .SpellCard {
-  background-color: mediumslateblue;
   width: 100px;
   height: 130px;
 }
 
-// .SpellCard.active {
-//   border: 1px solid red;
-// }
+.SpellCard.active {
+  background-color: violet;
+}
 
-// .SpellCard.inactive {
-//   border: 1px solid green;
-// }
+.SpellCard.inactive {
+  background-color: mediumslateblue;
+}
 
 // .SpellCard.trump {
 //   border: 1px solid violet;

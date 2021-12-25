@@ -12,8 +12,6 @@ import {
 // Utils
 import {
   checkFightCharactersIds,
-  filterActiveCharacters,
-  findCharacter,
   findRequiredCharacters,
 } from "../utils/helpers";
 import { Heroes } from "./Heroes";
@@ -118,13 +116,15 @@ export const HeroesSelection = ({
   return (
     <div className="Heroes">
       <h2>Select heroes</h2>
-      <Heroes selectHero={requiredCharacters ? undefined : selectHero} />
+      <Heroes
+        selectHero={requiredCharacters ? undefined : selectHero}
+        required={requiredCharacters}
+      />
       <HeroesPreview characters={selected} enemy={enemy} />
       <HeroesSpells spells={spells} />
       <ReadyToFight
         error={error}
-        needed={fight.characters.length}
-        selected={selected.length}
+        characters={fight.characters.length}
         checkSelection={checkSelection}
         setSpellSelect={setSpellSelect}
       />
@@ -134,27 +134,33 @@ export const HeroesSelection = ({
 
 export const ReadyToFight = ({
   error,
-  needed,
-  selected,
+  characters,
   checkSelection,
   setSpellSelect,
 }: {
   error: herosSelectionError;
-  needed: number;
-  selected: number;
+  characters: number;
   checkSelection: () => void;
   setSpellSelect: (b: boolean) => void;
 }) => {
+  const context = useContext(GameContext);
+  if (!context || !context.gameState || !context.adventure) {
+    throw new Error("No data in context");
+  }
+  const game = context.gameState;
+  const selectedSpells = game.player.spells.filter((s: ISpell) => s.selected);
   if (error)
     return (
       <div className="StartFight">
         <div>{getHeaderText(error)}</div>
       </div>
     );
-  if (needed * 5 !== selected)
+  if (characters * 5 !== selectedSpells.length)
     return (
       <div className="StartFight">
-        <div>{`You need ${needed * 5} spells for a fight`}</div>
+        <div>{`You need ${characters * 5} spells for a fight and you have ${
+          selectedSpells.length
+        }`}</div>
         <div>
           <button onClick={() => setSpellSelect(true)}>Select spells</button>
         </div>

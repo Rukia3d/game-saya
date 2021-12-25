@@ -18,7 +18,7 @@ export const SpellWithInfo = ({
   spell: ISpell;
   element: elementType;
   setForge?: (s: ISpell) => void;
-  selectSpell: (s: ISpell) => void;
+  selectSpell: (s: number) => void;
   setInfo: (s: any) => void;
 }) => {
   return (
@@ -26,7 +26,7 @@ export const SpellWithInfo = ({
       <button onClick={() => setInfo(spell)} data-testid="hero_card_info">
         Info
       </button>
-      <Spell spell={spell} selectSpell={selectSpell} element={element} />
+      <Spell spell={spell} selectSpell={selectSpell} />
       {forge ? (
         <button data-testid="forge_card" onClick={() => setForge(spell)}>
           forge

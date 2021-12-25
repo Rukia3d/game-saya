@@ -36,19 +36,31 @@ export const Spells = ({ spells }: { spells: ISpell[] }) => {
   const [info, setInfo] = useState<
     null | ISpell | ISpellUpdate | IEnemy | IHero
   >(null);
+
   // const [forge, setForge] = useState<null | ISpell>(null);
 
-  const selectSpell = (s: ISpell) => {
-    const newPlayerCards = changeCardsInDeck(playerSpells, s);
+  const selectSpell = (i: number) => {
+    const newPlayerCards = changeCardsInDeck(playerSpells, i);
     const newPlayer = { ...player, cards: newPlayerCards };
     context.setGameState({ ...gameState, player: newPlayer });
   };
+  console.log("spells", playerSpells.length);
+  console.log(
+    "selected spells",
+    playerSpells.filter((s: ISpell) => s.selected).length
+  );
   return (
     <div className="SpellsSelection">
+      {info ? <InfoCard item={info} setInfo={setInfo} /> : null}
       <ScrollButton onClick={() => {}} direction="t" />
       <div className="SpellsList">
-        {spells.map((s: ISpell) => (
-          <Spell element={s.element} spell={s} selectSpell={selectSpell} />
+        {spells.map((s: ISpell, i: number) => (
+          <Spell
+            spell={s}
+            index={i}
+            spellInfo={setInfo}
+            selectSpell={selectSpell}
+          />
         ))}
       </div>
       <ScrollButton onClick={() => {}} direction="d" />

@@ -20,10 +20,11 @@ const SpellsList = ({ spells }: { spells: ISpell[] }) => {
   }
   const [groupIndex, setGroupIndex] = useState(0);
   const scrollSpells = (d: string) => {
-    if (d === "r" && groupIndex < parsedSpells.length) {
+    if (d === "r" && groupIndex < parsedSpells.length - 1) {
       setGroupIndex(groupIndex + 1);
     }
     if (d === "l" && groupIndex > 0) {
+      console.log("Will scroll left");
       setGroupIndex(groupIndex - 1);
     }
   };
@@ -33,7 +34,7 @@ const SpellsList = ({ spells }: { spells: ISpell[] }) => {
       <ScrollButton onClick={() => scrollSpells("r")} direction="r" />
       <div className="SpellsData">
         {parsedSpells[groupIndex].map((s: ISpell) => (
-          <Spell element={s.element} spell={s} />
+          <Spell spell={s} />
         ))}
       </div>
       <ScrollButton onClick={() => scrollSpells("l")} direction="l" />

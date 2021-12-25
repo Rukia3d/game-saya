@@ -98,14 +98,13 @@ export const updateDecks = (fightState: FightState): FightState => {
   return newState;
 };
 
-export const changeCardsInDeck = (playerCards: ISpell[], s: ISpell) => {
-  const playerCard = playerCards.find((c: ISpell) => s.id === c.id);
+export const changeCardsInDeck = (playerCards: ISpell[], i: number) => {
+  const playerCard = playerCards[i];
   if (!playerCard) {
     throw new Error(
       "Can't find the card you're trying to select in player's cards"
     );
   }
-  const cardIndex = playerCards.indexOf(playerCard);
   const currentlySelected = playerCards.filter((c: ISpell) => c.selected);
 
   if (currentlySelected.length >= 15) {
@@ -115,7 +114,7 @@ export const changeCardsInDeck = (playerCards: ISpell[], s: ISpell) => {
       selected: false,
     };
   }
-  playerCards[cardIndex] = { ...s, selected: !s.selected };
+  playerCards[i] = { ...playerCard, selected: !playerCard.selected };
   return playerCards;
 };
 

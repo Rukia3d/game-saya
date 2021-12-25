@@ -33,7 +33,7 @@ const HeroSpells = ({ item }: { item: IHero }) => {
       </div>
       <div className="ItemDataList">
         {spells.map((s: ISpell, i: number) => (
-          <Spell element={s.element} spell={s} key={i} />
+          <Spell spell={s} key={i} />
         ))}
       </div>
     </div>
@@ -46,7 +46,7 @@ const EnemySpells = ({ item }: { item: IEnemy }) => {
       <div className="ItemDataHeader">
         <h3>Speels</h3>
         {item.spells.map((s: ISpell, i: number) => (
-          <Spell element={item.element} spell={s} key={i} />
+          <Spell spell={s} key={i} />
         ))}
       </div>
     </div>

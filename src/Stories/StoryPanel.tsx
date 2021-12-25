@@ -44,7 +44,10 @@ const Story = ({
       : null;
 
   return (
-    <div className={`Story${index + 1}`} onClick={() => selectStory(story)}>
+    <div
+      className={`Story${index + 1}`}
+      onClick={() => (story.open ? selectStory(story) : null)}
+    >
       <img
         src={`../img/Stories/${story.image}.jpg`}
         alt={`story_${story.id}`}

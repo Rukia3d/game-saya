@@ -10,7 +10,13 @@ import { Hero } from "./Hero";
 
 const HEROESPERPAGE = 3;
 
-export const Heroes = ({ selectHero }: { selectHero?: (c: IHero) => void }) => {
+export const Heroes = ({
+  selectHero,
+  required,
+}: {
+  selectHero?: (c: IHero) => void;
+  required?: IHero[];
+}) => {
   const context = useContext(GameContext);
   if (!context || !context.gameState || !context.gameState.player.heroes) {
     throw new Error("No data");
@@ -22,11 +28,16 @@ export const Heroes = ({ selectHero }: { selectHero?: (c: IHero) => void }) => {
   const heroes = context.gameState.player.heroes;
   const [startingIndex, setStartingIndex] = useState(0);
 
-  const currentHeroes: IHero[] = new Array(HEROESPERPAGE)
-    .fill(0)
-    .map((x, i) => (startingIndex + i) % heroes.length)
-    .map((n) => (n < 0 ? heroes.length + n : n))
-    .map((n) => heroes[n]);
+  let currentHeroes: IHero[] = [];
+  if (required) {
+    currentHeroes = required;
+  } else {
+    currentHeroes = new Array(HEROESPERPAGE)
+      .fill(0)
+      .map((x, i) => (startingIndex + i) % heroes.length)
+      .map((n) => (n < 0 ? heroes.length + n : n))
+      .map((n) => heroes[n]);
+  }
 
   return (
     <div className="HeroesSelection">
