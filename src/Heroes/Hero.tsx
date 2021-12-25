@@ -10,7 +10,7 @@ export const Hero = ({
   selectHero,
 }: {
   hero: IHero;
-  selectHero: (h: IHero) => void;
+  selectHero?: (h: IHero) => void;
 }) => {
   const imgUrl = `../img/Heroes/${hero.image}.png`;
   return (
@@ -21,7 +21,7 @@ export const Hero = ({
           backgroundImage: `url(${imgUrl})`,
         }}
         area-label={`hero_${hero.id}`}
-        onClick={() => selectHero(hero)}
+        onClick={() => (selectHero ? selectHero(hero) : null)}
       ></div>
     </div>
   );

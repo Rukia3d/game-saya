@@ -1,5 +1,5 @@
 import React from "react";
-import "./Spells.css";
+import "./Spells.scss";
 // Types
 import { elementType, ISpell } from "../utils/types";
 // Utils

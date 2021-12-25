@@ -1,20 +1,3 @@
-.Spells {
-  display: flex;
-  flex-direction: row;
-  background-color: white;
-  width: 100%;
-  height: 100%;
-}
-
-.SpellsList {
-  position: absolute;
-  display: flex;
-  flex-direction: row;
-  top: 3em;
-  height: 90%;
-  width: 100%;
-}
-
 .SpellPanel {
   height: 90%;
   margin-left: 1em;

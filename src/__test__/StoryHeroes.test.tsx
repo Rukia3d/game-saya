@@ -2,7 +2,7 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import { GameContext, GameContextType } from "../App";
 import { gameRestrictedCharacters, gameState } from "../utils/teststates";
-import { StoryHeroes } from "../Stories/StoryHeroes";
+import { StoryHeroes } from "../Heroes/HeroesSelection";
 import { IFight, IHero } from "../utils/types";
 
 const context: GameContextType = {

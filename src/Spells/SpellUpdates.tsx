@@ -1,5 +1,5 @@
 import React from "react";
-import "./Spells.css";
+import "./Spells.scss";
 // Types
 import { ISpellUpdate } from "../utils/types";
 // Utils

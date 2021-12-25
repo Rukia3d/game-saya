@@ -52,11 +52,11 @@ export const Library = () => {
     return (
       <div className="Spells">
         <TopMenu />
-        <Spells
+        {/* <Spells
           element={element}
           setElement={setElement}
           spells={spells.filter((s: ISpell) => s.element === element)}
-        />
+        /> */}
         <SpellUpdates
           spellUpgrades={context.gameState.player.spellUpdates}
           updateSpell={() => {}}

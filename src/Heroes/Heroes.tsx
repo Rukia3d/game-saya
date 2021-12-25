@@ -10,7 +10,7 @@ import { Hero } from "./Hero";
 
 const HEROESPERPAGE = 3;
 
-export const Heroes = () => {
+export const Heroes = ({ selectHero }: { selectHero?: (c: IHero) => void }) => {
   const context = useContext(GameContext);
   if (!context || !context.gameState || !context.gameState.player.heroes) {
     throw new Error("No data");
@@ -22,30 +22,6 @@ export const Heroes = () => {
   const heroes = context.gameState.player.heroes;
   const [startingIndex, setStartingIndex] = useState(0);
 
-  const selectHero = (c: IHero) => {
-    const i = heroes.indexOf(c);
-    const currentlySelected = heroes.filter((c: IHero) => c.selected);
-    if (currentlySelected.length > 2) {
-      const firstSelected = heroes.find((c: IHero) => c.selected);
-      if (!firstSelected)
-        throw new Error("Can't find another selected character");
-      const j = heroes.indexOf(firstSelected);
-      heroes[j].selected = false;
-    }
-    heroes[i].selected = !heroes[i].selected;
-    saveSelectionChanges(heroes);
-  };
-
-  const saveSelectionChanges = (heroes: IHero[]) => {
-    const newPlayer = context.gameState && {
-      ...context.gameState.player,
-      heroes: heroes,
-    };
-    if (!newPlayer || !context.gameState)
-      throw new Error("Can't find the player to update");
-    context.setGameState({ ...context.gameState, player: newPlayer });
-  };
-
   const currentHeroes: IHero[] = new Array(HEROESPERPAGE)
     .fill(0)
     .map((x, i) => (startingIndex + i) % heroes.length)
@@ -53,7 +29,7 @@ export const Heroes = () => {
     .map((n) => heroes[n]);
 
   return (
-    <div className="TopSection">
+    <div className="HeroesSelection">
       <ScrollButton
         onClick={() => setStartingIndex(startingIndex + 1)}
         direction="r"

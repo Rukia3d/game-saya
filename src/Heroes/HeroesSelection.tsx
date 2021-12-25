@@ -1,0 +1,168 @@
+import React, { useContext, useEffect, useState } from "react";
+import { GameContext } from "../App";
+import "./Heroes.scss";
+// Types
+import {
+  herosSelectionError,
+  IFight,
+  IHero,
+  ISpell,
+  IStory,
+} from "../utils/types";
+// Utils
+import {
+  checkFightCharactersIds,
+  filterActiveCharacters,
+  findCharacter,
+  findRequiredCharacters,
+} from "../utils/helpers";
+import { Heroes } from "./Heroes";
+import { findEnemy } from "../utils/fightlogic";
+import { HeroesPreview } from "./HeroesPreview";
+import { HeroesSpells } from "./HeroesSpells";
+// Components
+
+const getHeaderText = (error: herosSelectionError) => {
+  switch (error) {
+    case "none":
+      return "No heros selected";
+    case "less":
+      return "You need more heroes for this fight";
+    case "more":
+      return "Number of heroes for this fight is limited";
+    case "incorrect":
+      return "This fight is restricted";
+    default:
+      return "Select heroes";
+  }
+};
+
+export const HeroesSelection = ({
+  story,
+  fight,
+  setSelectionError,
+  setSpellSelect,
+}: {
+  story: IStory;
+  fight: IFight;
+  setSelectionError: (s: herosSelectionError) => void;
+  setSpellSelect: (b: boolean) => void;
+}) => {
+  const context = useContext(GameContext);
+  if (!context || !context.gameState || !context.adventure) {
+    throw new Error("No data in context");
+  }
+  const game = context.gameState;
+  const requiredCharacters = findRequiredCharacters(
+    fight.characters,
+    game.player.heroes
+  );
+  const [selected, setSelected] = useState(requiredCharacters);
+  const enemy = findEnemy(game.player.enemies, fight.enemy);
+  const spells = game.player.spells.filter((s: ISpell) => s.selected);
+  const [error, setError] = useState(
+    checkFightCharactersIds(
+      fight.characters,
+      selected.map((s: IHero) => s.id)
+    )
+  );
+  console.log("ERROR", error);
+
+  // const characters = selected.map((s: string) =>
+  //   findCharacter(game.player.heroes, s)
+  // );
+  // const enemy = findEnemy(game.player.enemies, fight.enemy);
+
+  useEffect(() => {
+    // if (!context.gameState) return;
+    // const newActive = filterActiveCharacters(
+    //   context.gameState.player.heroes
+    // ).map((c: IHero) => {
+    //   return c.id;
+    // });
+    // setSelected(newActive);
+    // setError(checkFightCharactersIds(fight.characters, newActive));
+  }, [context.gameState, fight.characters]);
+
+  const selectHero = (c: IHero) => {
+    const i = game.player.heroes.indexOf(c);
+    const currentlySelected = game.player.heroes.filter(
+      (c: IHero) => c.selected
+    );
+    if (currentlySelected.length > 2) {
+      const firstSelected = game.player.heroes.find((c: IHero) => c.selected);
+      if (!firstSelected)
+        throw new Error("Can't find another selected character");
+      const j = game.player.heroes.indexOf(firstSelected);
+      game.player.heroes[j].selected = false;
+    }
+    game.player.heroes[i].selected = !game.player.heroes[i].selected;
+    saveSelectionChanges(game.player.heroes);
+  };
+
+  const saveSelectionChanges = (heroes: IHero[]) => {
+    const newPlayer = context.gameState && {
+      ...context.gameState.player,
+      heroes: heroes,
+    };
+    if (!newPlayer || !context.gameState)
+      throw new Error("Can't find the player to update");
+    context.setGameState({ ...context.gameState, player: newPlayer });
+  };
+
+  const checkSelection = () => {
+    setSelectionError(null);
+    context.setStory(story);
+  };
+
+  return (
+    <div className="Heroes">
+      <h2>Select heroes</h2>
+      <Heroes selectHero={requiredCharacters ? undefined : selectHero} />
+      <HeroesPreview characters={selected} enemy={enemy} />
+      <HeroesSpells spells={spells} />
+      <ReadyToFight
+        error={error}
+        needed={fight.characters.length}
+        selected={selected.length}
+        checkSelection={checkSelection}
+        setSpellSelect={setSpellSelect}
+      />
+    </div>
+  );
+};
+
+export const ReadyToFight = ({
+  error,
+  needed,
+  selected,
+  checkSelection,
+  setSpellSelect,
+}: {
+  error: herosSelectionError;
+  needed: number;
+  selected: number;
+  checkSelection: () => void;
+  setSpellSelect: (b: boolean) => void;
+}) => {
+  if (error)
+    return (
+      <div className="StartFight">
+        <div>{getHeaderText(error)}</div>
+      </div>
+    );
+  if (needed * 5 !== selected)
+    return (
+      <div className="StartFight">
+        <div>{`You need ${needed * 5} spells for a fight`}</div>
+        <div>
+          <button onClick={() => setSpellSelect(true)}>Select spells</button>
+        </div>
+      </div>
+    );
+  return (
+    <div className="StartFight">
+      <button onClick={checkSelection}>Fight</button>
+    </div>
+  );
+};

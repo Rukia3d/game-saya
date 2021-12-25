@@ -6,7 +6,7 @@ import { IEnemy, IHero } from "../utils/types";
 // Components
 import { AnimatedSpriteCycle } from "../Animations/AnimatedSpriteCycle";
 
-export const HeroesActive = ({
+export const HeroesPreview = ({
   characters,
   enemy,
 }: {
@@ -15,7 +15,7 @@ export const HeroesActive = ({
 }) => {
   console.log("enemy", enemy);
   return (
-    <div className="MidSection">
+    <div className="FightPreview">
       {characters.map((h: IHero, i: number) => (
         <div
           className="HeroActive"
@@ -41,8 +41,4 @@ export const HeroesActive = ({
       </div>
     </div>
   );
-};
-
-export const HeroesActiveData = ({ characters }: { characters: IHero[] }) => {
-  return <div className="BottomSection"></div>;
 };

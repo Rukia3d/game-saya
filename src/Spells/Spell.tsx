@@ -1,5 +1,5 @@
 import React from "react";
-import "./Spells.css";
+import "./Spells.scss";
 // Types
 import { elementType, ISpell } from "../utils/types";
 // Utils
@@ -18,15 +18,19 @@ export const Spell = ({
   return (
     <div className="Spell">
       <div
-        className={`SpellCard ${
-          spell.element === element ? "trump" : "standard"
-        }`}
-        aria-label="spell_card_border"
+        className={`SpellCard`}
         onClick={() => (selectSpell ? selectSpell(spell) : null)}
       >
         <p aria-label="spell_card">{spell.name}</p>
-        <SpellFrame spell={spell} />
       </div>
+    </div>
+  );
+};
+
+export const EmptySpell = () => {
+  return (
+    <div className="Spell">
+      <div className={`SpellCard`}></div>
     </div>
   );
 };

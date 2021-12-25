@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { GameContext } from "../App";
-import "./Spells.css";
+import "./Spells.scss";
 // Types
 import { ISpellUpdate } from "../utils/types";
 // Utils
