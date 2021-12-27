@@ -29,11 +29,11 @@ const HeroSpells = ({ item }: { item: IHero }) => {
   return (
     <div className="ItemData">
       <div className="ItemDataHeader">
-        <h3>Spels</h3>
+        <h3>Spells</h3>
       </div>
       <div className="ItemDataList">
         {spells.map((s: ISpell, i: number) => (
-          <Spell spell={s} key={i} />
+          <Spell spell={s} key={i} withName withBorder />
         ))}
       </div>
     </div>

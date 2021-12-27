@@ -44,17 +44,26 @@ export const Spells = ({ spells }: { spells: ISpell[] }) => {
     const newPlayer = { ...player, cards: newPlayerCards };
     context.setGameState({ ...gameState, player: newPlayer });
   };
+
+  const imgUrl = `/img/Backgrounds/spells_background.jpg`;
   return (
     <div className="SpellsSelection">
       {info ? <InfoCard item={info} setInfo={setInfo} /> : null}
       <ScrollButton onClick={() => {}} direction="t" />
-      <div className="SpellsList">
+      <div
+        className="SpellsList"
+        style={{
+          backgroundImage: `url(${imgUrl})`,
+        }}
+      >
         {spells.map((s: ISpell, i: number) => (
           <Spell
             spell={s}
             index={i}
             spellInfo={setInfo}
             selectSpell={selectSpell}
+            withName
+            withBorder
           />
         ))}
       </div>

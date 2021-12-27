@@ -54,7 +54,7 @@ const LibraryUpdates = ({ hero }: { hero: IHero }) => {
 };
 
 const LibraryResources = ({ hero }: { hero: IHero }) => {
-  return <div className=""></div>;
+  return <div className="LibraryResources"></div>;
 };
 
 type libraryScreenState = "hero" | "spells" | "updates" | "resources";

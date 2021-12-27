@@ -31,7 +31,7 @@ const getHeaderText = (error: herosSelectionError) => {
     case "incorrect":
       return "This fight is restricted";
     default:
-      return "Select heroes";
+      return "Select Heroes";
   }
 };
 
@@ -112,9 +112,9 @@ export const HeroesSelection = ({
     setSelectionError(null);
     context.setStory(story);
   };
-
+  const imgUrl = `/img/Backgrounds/fightSelection_background.jpg`;
   return (
-    <div className="Heroes">
+    <div className="Heroes" style={{ backgroundImage: `url(${imgUrl})` }}>
       <h2>Select heroes</h2>
       <Heroes
         selectHero={requiredCharacters ? undefined : selectHero}

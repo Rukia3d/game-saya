@@ -36,7 +36,7 @@ const SpellsList = ({ spells }: { spells: ISpell[] }) => {
       <ScrollButton onClick={() => scrollSpells("r")} direction="r" />
       <div className="SpellsData">
         {parsedSpells[groupIndex].map((s: ISpell) => (
-          <Spell spell={s} />
+          <Spell spell={s} withBorder withName />
         ))}
       </div>
       <ScrollButton onClick={() => scrollSpells("l")} direction="l" />
