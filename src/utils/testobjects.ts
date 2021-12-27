@@ -27,7 +27,7 @@ export const dialogues = new Array(3).fill(0).map((x, i) => ({
 export const spellUpdates: ISpellUpdate[] = new Array(3)
   .fill(0)
   .map((x, i) => ({
-    action: "Some Action" + i,
+    action: { action: "health", strength: i },
     description: "Some description" + i,
     effect: "h_redraw",
     element: "fire",

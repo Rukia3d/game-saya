@@ -24,8 +24,8 @@ export interface ISpellUpdate {
   mana: number;
   resource_base: ISpellUpdateResource[];
   effect: spellEffectType;
-  action: string;
-  price: string | null;
+  action: { action: spellUpdateEffect; strength: number };
+  price: { action: spellUpdatePrice; strength: number } | null;
   name: string;
   description: string;
 }
@@ -218,5 +218,12 @@ export type spellEffectType =
   | "h_enforce";
 
 export type herosSelectionError = "none" | "less" | "more" | "incorrect" | null;
-
+export type spellUpdateEffect =
+  | "health"
+  | "trump"
+  | "redraw"
+  | "mana"
+  | "drop"
+  | "strength";
+export type spellUpdatePrice = "health";
 export type dialogueLayout = "single" | "double" | "triple";

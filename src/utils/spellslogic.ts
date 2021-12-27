@@ -9,3 +9,23 @@ export const updatePlayerSpell = (
   p.spells[spellToUpdateIndex].updates.push(u);
   return p;
 };
+
+export const calculateSpellMana = (spell: ISpell) => {
+  let allMana = spell.mana;
+  if ("updates" in spell) {
+    spell.updates.map((u: ISpellUpdate) => (allMana = allMana + u.mana));
+  }
+  return allMana;
+};
+
+export const calculateSpellStrength = (spell: ISpell) => {
+  let allStrength = spell.strength;
+  if ("updates" in spell) {
+    spell.updates.map((u: ISpellUpdate) => {
+      if (u.action.action === "strength") {
+        allStrength = allStrength + u.mana;
+      }
+    });
+  }
+  return allStrength;
+};

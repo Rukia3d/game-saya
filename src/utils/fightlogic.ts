@@ -30,11 +30,6 @@ export const manaPriceOfUpdates = (updates: ISpellUpdate[]) => {
   return res;
 };
 
-export const parseUpdateAction = (action: string) => {
-  const res = action.split(",");
-  return { parameter: res[0], change: res[1] };
-};
-
 export const heroIsPresent = (update: ISpellUpdate, heroes: IHero[]) => {
   return heroes.filter((h: IHero) => h.element === update.element).length > 0;
 };

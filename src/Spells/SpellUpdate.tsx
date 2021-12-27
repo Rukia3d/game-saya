@@ -59,7 +59,7 @@ export const SpellUpdate = ({
       <div className="HeroSpellUpdate">
         <div className="UpdateImage">
           <img
-            src={`../img/Spells/${update.element}/${update.id}.png`}
+            src={`../img/Spells/${update.element}/update_${update.id}.png`}
             alt="update_image"
           />
           {readyToUpdate(update) && canUpdate ? (

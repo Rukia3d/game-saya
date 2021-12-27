@@ -7,12 +7,14 @@ import { ISpell } from "../utils/types";
 import { ScrollButton } from "../UI/ScrollButton";
 import { Spell } from "../Spells/Spell";
 
+const SPELLSPERSCROLL = 4;
+
 const SpellsList = ({ spells }: { spells: ISpell[] }) => {
   const parsedSpells = [];
   let i,
     j,
     temporary,
-    chunk = 5;
+    chunk = SPELLSPERSCROLL;
   for (i = 0, j = spells.length; i < j; i += chunk) {
     temporary = spells.slice(i, i + chunk);
     // do whatever
@@ -29,8 +31,14 @@ const SpellsList = ({ spells }: { spells: ISpell[] }) => {
     }
   };
 
+  const imgUrl = `/img/Spells/preview_background.jpg`;
   return (
-    <div className="SpellsList">
+    <div
+      className="SpellsList"
+      style={{
+        backgroundImage: `url(${imgUrl})`,
+      }}
+    >
       <ScrollButton onClick={() => scrollSpells("r")} direction="r" />
       <div className="SpellsData">
         {parsedSpells[groupIndex].map((s: ISpell) => (

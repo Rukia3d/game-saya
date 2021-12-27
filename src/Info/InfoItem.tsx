@@ -7,21 +7,12 @@ import { ISpell, ISpellUpdate } from "../utils/types";
 import { SpellUpdate } from "../Spells/SpellUpdate";
 import { ResourceDatalist } from "../Spells/Resources";
 import { GameContext } from "../App";
-import { updatePlayerSpell } from "../utils/spellslogic";
+import { calculateSpellMana, updatePlayerSpell } from "../utils/spellslogic";
 import { removeResources } from "../utils/resourceLogic";
-import { SpellWithInfo } from "../Spells/SpellWithInfo";
-import { ItemsForCard } from "./InfoCard";
 
 const ItemCard = ({ item }: { item: ISpell | ISpellUpdate }) => {
   //TODO Replace static img with animation
-  const calculateItemMana = () => {
-    let allMana = item.mana;
-    if ("updates" in item) {
-      item.updates.map((u: ISpellUpdate) => (allMana = allMana + u.mana));
-    }
-    return allMana;
-  };
-
+  const mana = "updates" in item ? calculateSpellMana(item) : item.mana;
   return (
     <div className="ItemCard">
       <div className="ItemCardHeader">{item.name}</div>
@@ -36,7 +27,7 @@ const ItemCard = ({ item }: { item: ISpell | ISpellUpdate }) => {
           alt="element_image"
         />
       )}
-      <h3 aria-label="Mana">Mana: {calculateItemMana()}</h3>
+      <h3 aria-label="Mana">Mana: {mana}</h3>
       {"updates" in item ? (
         <h3 aria-label="Strength">Strength: {item.strength}</h3>
       ) : null}

@@ -1,8 +1,4 @@
-import {
-  heroIsPresent,
-  manaPriceOfUpdates,
-  parseUpdateAction,
-} from "./fightlogic";
+import { heroIsPresent, manaPriceOfUpdates } from "./fightlogic";
 import { elementType, FightState, ISpell } from "./types";
 
 const simpleDamage = (
@@ -52,11 +48,10 @@ const additionalEffects = (
   if (manaPriceOfUpdates(heroCard.updates) < fightState.hero.mana) {
     const currentupdate = heroCard.updates[0];
     if (heroIsPresent(currentupdate, fightState.heroes)) {
-      const action = parseUpdateAction(currentupdate.action);
       //console.log("Spell effect", currentupdate.effect);
       switch (currentupdate.effect) {
         case "h_heal":
-          heroHealth = heroHealth + parseInt(action.change);
+          heroHealth = heroHealth + currentupdate.action.strength;
           break;
         case "h_trumpremove":
           if (enemyCard.element === fightState.element) {
