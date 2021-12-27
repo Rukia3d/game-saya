@@ -1,16 +1,16 @@
 import React from "react";
-import "./Shop.css";
+import "./Shop.scss";
 // Types
 // Utils
 // Components
+const imgUrl = `/img/Backgrounds/shop_background.jpg`;
 export const Shop = () => {
   return (
-    <div className="Shop">
-      <img
-        className="ShopBackground"
-        src="../img/lab_background.png"
-        alt="shop_background"
-      />
-    </div>
+    <div
+      className="Shop"
+      style={{
+        backgroundImage: `url(${imgUrl})`,
+      }}
+    ></div>
   );
 };

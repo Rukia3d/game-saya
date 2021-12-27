@@ -1,12 +1,14 @@
-.Intro {
+.City {
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 100%;
   height: 100%;
-  overflow: hidden;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: bottom;
 
-  .IntroPresent {
+  .CityPresent {
     position: absolute;
     left: -10%;
     top: 10%;
@@ -14,12 +16,12 @@
     margin-top: 5em;
     width: 100%;
 
-    .IntroHeroImage {
+    .CityHeroImage {
       z-index: 10;
     }
   }
 
-  .IntroActive {
+  .CityActive {
     position: absolute;
     display: flex;
     align-items: flex-start;
@@ -27,13 +29,13 @@
     top: 10%;
     right: 0;
 
-    .IntroIconBorder {
+    .CityIconBorder {
       width: 206px;
       clip-path: polygon(12% 5%, 100% 5%, 84% 100%, 0% 100%);
       background-color: black;
       z-index: 10;
 
-      .IntroIcon {
+      .CityIcon {
         width: 200px;
         margin-top: 3px;
         margin-left: 3px;

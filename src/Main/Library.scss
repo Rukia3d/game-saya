@@ -1,0 +1,70 @@
+.Library {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: bottom;
+
+  .HeroesSelection {
+    margin-top: 15%;
+  }
+
+  .LibraryContentBorder {
+    width: 100%;
+    height: 43%;
+    clip-path: polygon(5% 5%, 98% 2%, 95% 90%, 2% 98%);
+    background-color: black;
+  }
+
+  .LibraryContent {
+    width: 100%;
+    height: 100%;
+    background-color: white;
+    clip-path: polygon(8% 8%, 95% 5%, 95% 90%, 0% 95%);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    align-content: flex-start;
+    justify-content: center;
+    flex-wrap: wrap;
+    position: relative;
+
+    .LibraryDetails {
+      width: 100%;
+      height: 80%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      .LibraryHero {
+        margin-top: 10%;
+        width: 90%;
+      }
+
+      .LibrarySpells {
+        width: 90%;
+        margin-top: 10px;
+      }
+    }
+  }
+
+  .LibraryMenu {
+    position: absolute;
+    bottom: 33%;
+    z-index: 100;
+
+    button {
+      font-size: 11px !important;
+    }
+  }
+
+  .LibraryUpdates {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+}

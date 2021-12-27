@@ -31,14 +31,8 @@ const SpellsList = ({ spells }: { spells: ISpell[] }) => {
     }
   };
 
-  const imgUrl = `/img/Spells/preview_background.jpg`;
   return (
-    <div
-      className="SpellsList"
-      style={{
-        backgroundImage: `url(${imgUrl})`,
-      }}
-    >
+    <div className="SpellsList">
       <ScrollButton onClick={() => scrollSpells("r")} direction="r" />
       <div className="SpellsData">
         {parsedSpells[groupIndex].map((s: ISpell) => (

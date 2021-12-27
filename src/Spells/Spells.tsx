@@ -44,11 +44,6 @@ export const Spells = ({ spells }: { spells: ISpell[] }) => {
     const newPlayer = { ...player, cards: newPlayerCards };
     context.setGameState({ ...gameState, player: newPlayer });
   };
-  console.log("spells", playerSpells.length);
-  console.log(
-    "selected spells",
-    playerSpells.filter((s: ISpell) => s.selected).length
-  );
   return (
     <div className="SpellsSelection">
       {info ? <InfoCard item={info} setInfo={setInfo} /> : null}

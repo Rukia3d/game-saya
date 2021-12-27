@@ -11,11 +11,11 @@ export const SpellUpdates = ({
   updateSpell,
 }: {
   spellUpgrades: ISpellUpdate[];
-  updateSpell: (s: ISpellUpdate) => void;
+  updateSpell?: (s: ISpellUpdate) => void;
 }) => {
   console.log("spellUpgrades", spellUpgrades);
   return (
-    <div>
+    <div className="SpellUpdates">
       {spellUpgrades.map((s: ISpellUpdate, i: number) => (
         <SpellUpdate update={s} key={i} updateSpell={updateSpell} canUpdate />
       ))}

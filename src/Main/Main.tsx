@@ -187,14 +187,8 @@ export const Main = () => {
   };
 
   const CurrentScreen = mainScreens[selected];
-  const imgUrl = `/img/Backgrounds/main_street_background.jpg`;
   return (
-    <div
-      className="Main"
-      style={{
-        backgroundImage: `url(${imgUrl})`,
-      }}
-    >
+    <div className="Main">
       {new Array(50).fill(0).map((x, n) => (
         <div className="snow" key={n}></div>
       ))}

@@ -24,10 +24,10 @@ const MainScreenIcon = ({
   const stateToImage = `../img/Dialogues/Main/${hero.id}_story.jpg`;
   return (
     <div
-      className="IntroIconBorder"
+      className="CityIconBorder"
       onClick={() => (hero.dial ? setDialogue(dialogue) : null)}
     >
-      <div className="IntroIcon">
+      <div className="CityIcon">
         <img src={stateToImage} alt={`${hero.id}_story`} />
       </div>
     </div>
@@ -36,7 +36,7 @@ const MainScreenIcon = ({
 
 const MainScreenHero = ({ hero }: { hero: IHero }) => {
   return (
-    <div className="IntroHeroImage" aria-label={`hero_${hero.id}`}>
+    <div className="CityHeroImage" aria-label={`hero_${hero.id}`}>
       <AnimatedSpriteCycle
         width={500}
         height={500}
@@ -59,13 +59,18 @@ export const City = () => {
   const characters = context.gameState.player.npcs;
   const mainScreenHero = heroes[generateInt(heroes.length - 1)];
   const activeHeroes = characters.filter((c: INPC) => c.dial !== null);
-
+  const imgUrl = `/img/Backgrounds/main_background.jpg`;
   return (
-    <div className="Intro">
-      <div className="IntroPresent">
+    <div
+      className="City"
+      style={{
+        backgroundImage: `url(${imgUrl})`,
+      }}
+    >
+      <div className="CityPresent">
         <MainScreenHero hero={mainScreenHero} />
       </div>
-      <div className="IntroActive">
+      <div className="CityActive">
         {activeHeroes.map((c: INPC, i: number) => (
           <MainScreenIcon key={i} hero={c} setDialogue={setDialogue} />
         ))}

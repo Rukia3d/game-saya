@@ -158,9 +158,14 @@ export const Adventures = () => {
       context.setAdventure(a);
     }
   };
-  console.log(context.gameState.player.adventures);
+  const imgUrl = `/img/Backgrounds/adventure_background.jpg`;
   return (
-    <div className="Adventures">
+    <div
+      className="Adventures"
+      style={{
+        backgroundImage: `url(${imgUrl})`,
+      }}
+    >
       <div className="AdventuresTop">
         <AdventureStory
           selectAdventure={selectAdventure}
