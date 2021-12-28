@@ -69,7 +69,7 @@ export const findStory = (groups: IStoryGroup[], id: string) => {
 };
 
 export const findResource = (
-  resources: IResource[],
+  resources: IResource[] | IOwnedResource[],
   s: ISpellUpdateResource
 ) => {
   const resource = resources.find((r: IResource) => r.id === s[0]);

@@ -12,6 +12,7 @@ export interface ResourceDB {
   name: string;
   commonality: string;
   image: string;
+  element: string;
 }
 
 export interface UpdateSpellDB {

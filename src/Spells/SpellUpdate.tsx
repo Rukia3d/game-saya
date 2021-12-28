@@ -9,17 +9,24 @@ import {
   ISpellUpdateResource,
 } from "../utils/types";
 import { findResource } from "../utils/helpers";
+import { Resource, ResourcesImages } from "./Resources";
 // Utils
+import useLongPress from "../hooks/useLongPress";
+import { spellUpdates } from "../utils/testobjects";
 // Components
 
 export const SpellUpdate = ({
   update,
-  updateSpell = () => {},
-  canUpdate = false,
+  updateSpell,
+  distructSpell,
+  withUpdate,
+  updateInfo,
 }: {
   update: ISpellUpdate;
   updateSpell?: (s: ISpellUpdate) => void;
-  canUpdate?: boolean;
+  distructSpell?: (s: ISpellUpdate) => void;
+  withUpdate?: boolean;
+  updateInfo?: (s: ISpellUpdate) => void;
 }) => {
   const context = useContext(GameContext);
   if (
@@ -48,24 +55,82 @@ export const SpellUpdate = ({
     return resource ? resource.quantity : 0;
   };
 
+  const readyToDistruct = (u: ISpellUpdate) => {
+    //TODO:
+    return withUpdate && distructSpell && true;
+  };
+
   const readyToUpdate = (u: ISpellUpdate) => {
     const res: boolean[] = u.resource_base.map((r: ISpellUpdateResource) =>
       isEnough(r)
     );
-    return res.every((r: boolean) => r === true);
+    const allResources = res.every((r: boolean) => r === true);
+    return allResources && withUpdate && updateSpell;
   };
+  const updateResource = update.resource_base.map((s: ISpellUpdateResource) =>
+    findResource(resources, s)
+  );
+
+  const onLongPress = () => {
+    if (updateInfo) {
+      console.log("longpress is triggered - SetInfo");
+      updateInfo(update);
+    }
+  };
+
+  const onClick = () => {
+    console.log("Onclick");
+    if (updateSpell) {
+      console.log("click is triggered");
+      updateSpell(update);
+    }
+  };
+
+  const defaultOptions = {
+    shouldPreventDefault: true,
+    delay: 500,
+  };
+
+  const longPressEvent = useLongPress({ onLongPress, onClick }, defaultOptions);
   return (
-    <div className="HeroSpellUpdateBorder">
-      <div className="HeroSpellUpdate">
-        <div className="UpdateImage">
-          <img
-            src={`../img/Spells/${update.element}/update_${update.id}.png`}
-            alt="update_image"
-          />
-          {readyToUpdate(update) && canUpdate ? (
+    <div className="SpellUpdate">
+      <div
+        className={`HeroSpellUpdateBorder ${
+          readyToUpdate(update) ? "Partial" : "Full"
+        }`}
+      >
+        <div className="HeroSpellUpdate" {...longPressEvent}>
+          <div className="UpdateImage">
+            <img
+              src={`../img/Spells/${update.element}/update_${update.id}.png`}
+              alt="update_image"
+            />
+          </div>
+          <div className="UpdateData">
+            <div className="UpdateName">{update.name}</div>
+            <div className="UpdateMana" aria-label="UpdateMana">
+              Mana: {update.mana}
+            </div>
+            {/* <div className="UpdateDescription">{update.description}</div> */}
+            <div className="UpdateResource">
+              <ResourcesImages resources={updateResource} />
+              {/* {update.resource_base.map((s: ISpellUpdateResource, i: number) => (
+              <div key={i} aria-label="UpdateResource">
+                <div style={{ color: isEnough(s) ? "green" : "red" }}>{`${
+                  findResource(resources, s).name
+                }: ${currentAmount(s)} of ${s[1]}`}</div>
+              </div>
+            ))} */}
+            </div>
+          </div>
+        </div>
+      </div>
+      {withUpdate ? (
+        <div className="UpdateActions">
+          {readyToUpdate(update) ? (
             <button
               data-testid="update_button"
-              onClick={() => updateSpell(update)}
+              onClick={() => (updateSpell ? updateSpell(update) : null)}
             >
               Update
             </button>
@@ -73,21 +138,7 @@ export const SpellUpdate = ({
             <div></div>
           )}
         </div>
-        <div className="UpdateData">
-          <div>{update.name}</div>
-          <div aria-label="UpdateMana">Mana: {update.mana}</div>
-          <div>{update.description}</div>
-          <div>
-            {update.resource_base.map((s: ISpellUpdateResource, i: number) => (
-              <div key={i} aria-label="UpdateResource">
-                <div style={{ color: isEnough(s) ? "green" : "red" }}>{`${
-                  findResource(resources, s).name
-                }: ${currentAmount(s)} of ${s[1]}`}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
+      ) : null}
     </div>
   );
 };

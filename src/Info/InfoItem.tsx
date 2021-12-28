@@ -23,7 +23,7 @@ const ItemCard = ({ item }: { item: ISpell | ISpellUpdate }) => {
         />
       ) : (
         <img
-          src={`../img/Spells/${item.element}/${item.id}.png`}
+          src={`../img/Spells/${item.element}/update_${item.id}.png`}
           alt="element_image"
         />
       )}
@@ -96,18 +96,23 @@ const ItemSpellUpdates = ({ item }: { item: ISpell }) => {
 
   return (
     <div className="ItemData">
-      <div>
+      <div className="ItemDataInner">
         <div className="ItemDataButtons">
-          <button onClick={() => select("applied")}>Updated</button>
-          <button onClick={() => select("available")}>Updates</button>
+          <button
+            className={selection === "applied" ? "active" : "inactive"}
+            onClick={() => select("applied")}
+          >
+            Updated
+          </button>
+          <button
+            className={selection === "available" ? "active" : "inactive"}
+            onClick={() => select("available")}
+          >
+            Updates
+          </button>
         </div>
         {updatesToDisplay.map((u: ISpellUpdate, i: number) => (
-          <SpellUpdate
-            key={i}
-            update={u}
-            canUpdate={selection === "available"}
-            updateSpell={updateSpell}
-          />
+          <SpellUpdate key={i} update={u} />
         ))}
       </div>
     </div>

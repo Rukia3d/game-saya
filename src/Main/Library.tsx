@@ -2,25 +2,41 @@ import React, { useContext, useState } from "react";
 import { GameContext } from "../App";
 import "./Library.scss";
 // Types
-import { IEnemy, IHero, ISpell, ISpellUpdate } from "../utils/types";
+import {
+  IEnemy,
+  IHero,
+  IOwnedResource,
+  IResource,
+  ISpell,
+  ISpellUpdate,
+} from "../utils/types";
 import { Heroes } from "../Heroes/Heroes";
 import { HeroesSpells } from "../Heroes/HeroesSpells";
 import { SpellUpdate } from "../Spells/SpellUpdate";
 import { SpellUpdates } from "../Spells/SpellUpdates";
 import { InfoCard } from "../Info/InfoCard";
+import { Resources, ResourcesImages } from "../Spells/Resources";
 // Utils
 // Components
 
 const LibraryHero = ({ hero }: { hero: IHero }) => {
   return (
-    <div className="LibraryHero">
-      <h3>{hero.name}</h3>
-      <div>{hero.description}</div>
+    <div className="LibraryHeroBorder">
+      <div className="LibraryHero">
+        <h3>{hero.name}</h3>
+        <div>{hero.description}</div>
+      </div>
     </div>
   );
 };
 
-const LibrarySpells = ({ hero }: { hero: IHero }) => {
+const LibrarySpells = ({
+  hero,
+  setInfo,
+}: {
+  hero: IHero;
+  setInfo?: (s: ISpell | ISpellUpdate | null) => void;
+}) => {
   const context = useContext(GameContext);
   if (!context || !context.gameState) {
     throw new Error("No data in context");
@@ -32,12 +48,18 @@ const LibrarySpells = ({ hero }: { hero: IHero }) => {
   );
   return (
     <div className="LibrarySpells">
-      <HeroesSpells spells={heroSpells} />
+      <HeroesSpells spells={heroSpells} setInfo={setInfo} />
     </div>
   );
 };
 
-const LibraryUpdates = ({ hero }: { hero: IHero }) => {
+const LibraryUpdates = ({
+  hero,
+  setInfo,
+}: {
+  hero: IHero;
+  setInfo?: (s: ISpell | ISpellUpdate | null) => void;
+}) => {
   const context = useContext(GameContext);
   if (!context || !context.gameState) {
     throw new Error("No data in context");
@@ -48,19 +70,34 @@ const LibraryUpdates = ({ hero }: { hero: IHero }) => {
   );
   return (
     <div className="LibraryUpdates">
-      <SpellUpdates spellUpgrades={heroUpdates} />
+      <SpellUpdates spellUpgrades={heroUpdates} updateInfo={setInfo} />
     </div>
   );
 };
 
 const LibraryResources = ({ hero }: { hero: IHero }) => {
-  return <div className="LibraryResources"></div>;
+  const context = useContext(GameContext);
+  if (!context || !context.gameState) {
+    throw new Error("No data in context");
+  }
+  const ownedResources = context.gameState.player.resources;
+  const heroResources = ownedResources.filter(
+    (r: IOwnedResource) => r.element === hero.element
+  );
+  return (
+    <div className="LibraryResources">
+      {<ResourcesImages resources={heroResources} />}
+    </div>
+  );
 };
 
 type libraryScreenState = "hero" | "spells" | "updates" | "resources";
 
 type LibraryScreensType = {
-  [key in libraryScreenState]: React.FC<{ hero: IHero }>;
+  [key in libraryScreenState]: React.FC<{
+    hero: IHero;
+    setInfo?: (s: ISpell | ISpellUpdate | null) => void;
+  }>;
 };
 const mainScreens: LibraryScreensType = {
   hero: LibraryHero,
@@ -70,19 +107,17 @@ const mainScreens: LibraryScreensType = {
 };
 const LibraryContent = ({
   hero,
+  setInfo,
   selected,
 }: {
   hero: IHero;
+  setInfo?: (s: ISpell | ISpellUpdate | null) => void;
   selected: libraryScreenState;
 }) => {
   const CurrentScreen = mainScreens[selected];
   return (
-    <div className="LibraryContentBorder">
-      <div className="LibraryContent">
-        <div className="LibraryDetails">
-          <CurrentScreen hero={hero} />
-        </div>
-      </div>
+    <div className="LibraryContent">
+      <CurrentScreen hero={hero} setInfo={setInfo} />
     </div>
   );
 };
@@ -132,7 +167,7 @@ export const Library = () => {
 
   const [info, setInfo] = useState<
     null | ISpell | ISpellUpdate | IEnemy | IHero
-  >(player.spells[0]);
+  >(player.spells[1]);
   const [hero, setHero] = useState<IHero>(player.heroes[0]);
   const [selected, setSelected] = useState<libraryScreenState>("hero");
   let required: IHero[] | undefined = undefined;
@@ -150,7 +185,7 @@ export const Library = () => {
     >
       {info ? <InfoCard item={info} setInfo={setInfo} /> : null}
       <Heroes selectHero={setHero} required={required} />
-      <LibraryContent selected={selected} hero={hero} />
+      <LibraryContent selected={selected} hero={hero} setInfo={setInfo} />
       <LibraryMenu selected={selected} setSelected={setSelected} />
     </div>
   );

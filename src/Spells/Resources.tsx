@@ -6,15 +6,57 @@ import {
   IOwnedResource,
   ISpellUpdateResource,
 } from "../utils/types";
-import { findOwnedResource, findResource } from "../utils/helpers";
+import { findResource } from "../utils/helpers";
 import { GameContext } from "../App";
 // Utils
 // Components
 
-const Resource = ({ resource }: { resource: IOwnedResource }) => {
+export const ResourceImage = ({ resource }: { resource: IResource }) => {
+  const context = useContext(GameContext);
+  if (
+    !context ||
+    !context.gameState ||
+    !context.gameState.player ||
+    !context.gameState.player.resources ||
+    !context.gameState.resources
+  ) {
+    throw new Error("No data in context");
+  }
+  const imgUrl = `../img/Resources/${resource.id}.jpg`;
+  const playerResources = context.gameState.player.resources;
+  const owned = playerResources.find(
+    (r: IOwnedResource) => r.id === resource.id
+  );
+  return (
+    <div
+      className="ResourceImage"
+      style={{
+        backgroundImage: `url(${imgUrl})`,
+      }}
+    >
+      <div className="ResourceBadge">{owned ? owned.quantity : 0}</div>
+    </div>
+  );
+};
+
+export const ResourcesImages = ({ resources }: { resources: IResource[] }) => {
+  return (
+    <div className="ResourcesImages">
+      {resources.map((s: IResource, i: number) => (
+        <ResourceImage resource={s} key={i} />
+      ))}
+    </div>
+  );
+};
+
+export const Resource = ({
+  resource,
+}: {
+  resource: IOwnedResource | IResource;
+}) => {
   return (
     <div className="Resource" aria-label="top_resource">
-      {resource.name}: {resource.quantity}
+      {resource.name}: {"quantity" in resource ? resource.quantity : 0}
     </div>
   );
 };
@@ -79,11 +121,35 @@ export const ResourceDatalist = ({
     </div>
   );
 };
-export const Resources = ({ resources }: { resources: IOwnedResource[] }) => {
-  const existing = resources.filter((r: IOwnedResource) => r.quantity > 0);
+export const Resources = ({
+  resources,
+  filter,
+}: {
+  resources: IOwnedResource[] | IResource[];
+  filter?: "all" | "added" | "owned";
+}) => {
+  // all - no filtering
+  // added - including quantity 0
+  // owned - only non 0
+  let res: IOwnedResource[] | IResource[] = [];
+
+  switch (filter) {
+    case "added":
+      res = resources.filter(
+        (r: IOwnedResource | IResource) => "quantity" in r
+      );
+      return;
+    case "owned":
+      res = resources.filter(
+        (r: IOwnedResource | IResource) => "quantity" in r && r.quantity > 0
+      );
+      return;
+    default:
+      res = resources;
+  }
   return (
-    <div className="Resources" aria-label="top_resources">
-      {existing.map((r: IOwnedResource, i: number) => (
+    <div className="Resources">
+      {res.map((r: IOwnedResource | IResource, i: number) => (
         <Resource resource={r} key={i} />
       ))}
     </div>

@@ -2,9 +2,30 @@ import { generateInt } from "../src/utils/helpers";
 import {
   ISpellUpdateResource,
   IStoryAction,
+  spellUpdateEffect,
+  spellUpdatePrice,
   storyChangeType,
 } from "../src/utils/types";
 import { EnemyCardDB, SpellDB } from "./db_types";
+
+export const parseAction = (action: string) => {
+  const parsed = action.split(", ");
+  return {
+    action: parsed[0].trim() as spellUpdateEffect,
+    strength: parseInt(parsed[1].trim()),
+  };
+};
+
+export const parsePrice = (action: string) => {
+  const parsed = action.split(", ");
+  if (parsed.length < 2) {
+    return null;
+  }
+  return {
+    action: parsed[0].trim() as spellUpdatePrice,
+    strength: parseInt(parsed[1].trim()),
+  };
+};
 
 export const getCharacters = (characters: string) => {
   const newCharacters = characters.split(", ");

@@ -136,6 +136,12 @@
         overflow: scroll;
 
         .ItemData {
+          width: 100%;
+          height: 100%;
+          .ItemDataInner {
+            width: 100%;
+          }
+
           .ItemDataHeader {
             background-color: white;
             height: 2em;
@@ -151,6 +157,14 @@
             justify-content: space-evenly;
             gap: 10px 5px;
             font-size: 10px;
+          }
+
+          .ItemDataButton.active {
+            background-color: seagreen;
+          }
+
+          .ItemDataButton.inactive {
+            background-color: white;
           }
 
           .ItemDataList {

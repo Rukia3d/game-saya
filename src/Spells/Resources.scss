@@ -9,6 +9,9 @@
 }
 
 .ResourcesDataList {
+  margin-top: 40%;
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -18,13 +21,52 @@
 }
 
 .ResourceData {
+  width: 100%;
   display: flex;
   flex-direction: row;
   align-items: center;
   align-content: space-around;
   justify-content: space-evenly;
+  height: 100px;
 
   img {
-    width: 10%;
+    width: 50px;
+  }
+}
+
+.UpdateResource {
+  width: 100%;
+  height: 100%;
+}
+
+.ResourcesImages {
+  width: 100%;
+  height: 50px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  align-content: flex-start;
+  justify-content: flex-start;
+  gap: 10px;
+
+  .ResourceImage {
+    width: 30px;
+    height: 30px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: bottom;
+    position: relative;
+
+    .ResourceBadge {
+      position: absolute;
+      background-color: black;
+      color: white;
+      clip-path: polygon(0 0, 94% 11%, 100% 100%, 10% 90%);
+      padding-left: 5px;
+      padding-right: 5px;
+      font-size: 10px;
+      bottom: -5px;
+      right: -5px;
+    }
   }
 }

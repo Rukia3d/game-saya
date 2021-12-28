@@ -33,6 +33,8 @@ import {
   getCharacters,
   getHeroInitialSpellSet,
   getResourceSet,
+  parseAction,
+  parsePrice,
 } from "./helpers";
 const parse = require("csv-parse/lib/sync");
 const fs = require("fs");
@@ -71,6 +73,7 @@ export const readResources = (): IResource[] => {
       name: resourceDB[i].name,
       commonality: parseInt(resourceDB[i].commonality),
       image: resourceDB[i].image,
+      element: resourceDB[i].element as elementType,
     };
   }
   return resources;
@@ -89,8 +92,8 @@ export const readSpellUpdates = (): ISpellUpdate[] => {
       mana: parseInt(updateSpellDB[i].mana),
       resource_base: getResourceSet(updateSpellDB[i].resource_base),
       effect: updateSpellDB[i].effect as spellEffectType,
-      action: updateSpellDB[i].action,
-      price: updateSpellDB[i].price,
+      action: parseAction(updateSpellDB[i].action),
+      price: parsePrice(updateSpellDB[i].price),
       name: updateSpellDB[i].name,
       description: updateSpellDB[i].description,
       id: updateSpellDB[i].id,

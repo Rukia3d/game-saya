@@ -33,6 +33,7 @@ const generateSingleRewards = (resources: IResource[]) => {
         name: r.name,
         image: r.image,
         commonality: r.commonality,
+        element: r.element,
       });
     }
   });

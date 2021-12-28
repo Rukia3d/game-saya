@@ -49,6 +49,7 @@ export const Spell = ({
   const updates = spell.updates.length;
   const longPressEvent = useLongPress({ onLongPress, onClick }, defaultOptions);
   const imgUrl = `/img/Spells/${spell.element}/${spell.image}.png`;
+  const backImgUrl = `/img/Spells/${spell.element}/${spell.element}_back.jpg`;
 
   return (
     <div
@@ -58,16 +59,23 @@ export const Spell = ({
     >
       <div
         className={`SpellCard ${withBorder ? "border" : "noborder"}`}
-        {...longPressEvent}
-        onClick={onClick}
         style={{
-          backgroundImage: `url(${imgUrl})`,
+          backgroundImage: `url(${backImgUrl})`,
         }}
       >
-        {withName ? <h4>{spell.name}</h4> : null}
-        {mana > 0 ? <Mana mana={mana} /> : null}
-        {updates > 0 ? <Updates updates={spell.updates} /> : null}
-        {strength > 0 ? <Strength strength={strength} /> : null}
+        <div
+          className="SpellCardImage"
+          {...longPressEvent}
+          onClick={onClick}
+          style={{
+            backgroundImage: `url(${imgUrl})`,
+          }}
+        >
+          {withName ? <h4>{spell.name}</h4> : null}
+          {mana > 0 ? <Mana mana={mana} /> : null}
+          {updates > 0 ? <Updates updates={spell.updates} /> : null}
+          {strength > 0 ? <Strength strength={strength} /> : null}
+        </div>
       </div>
     </div>
   );

@@ -9,7 +9,13 @@ import { Spell } from "../Spells/Spell";
 
 const SPELLSPERSCROLL = 4;
 
-const SpellsList = ({ spells }: { spells: ISpell[] }) => {
+const SpellsList = ({
+  spells,
+  setInfo,
+}: {
+  spells: ISpell[];
+  setInfo?: (s: ISpell | null) => void;
+}) => {
   const parsedSpells = [];
   let i,
     j,
@@ -36,7 +42,7 @@ const SpellsList = ({ spells }: { spells: ISpell[] }) => {
       <ScrollButton onClick={() => scrollSpells("r")} direction="r" />
       <div className="SpellsData">
         {parsedSpells[groupIndex].map((s: ISpell) => (
-          <Spell spell={s} withBorder withName />
+          <Spell spell={s} withBorder withName spellInfo={setInfo} />
         ))}
       </div>
       <ScrollButton onClick={() => scrollSpells("l")} direction="l" />
@@ -44,10 +50,16 @@ const SpellsList = ({ spells }: { spells: ISpell[] }) => {
   );
 };
 
-export const HeroesSpells = ({ spells }: { spells: ISpell[] }) => {
+export const HeroesSpells = ({
+  spells,
+  setInfo,
+}: {
+  spells: ISpell[];
+  setInfo?: (s: ISpell | null) => void;
+}) => {
   return (
     <div className="SpellsPreview">
-      <SpellsList spells={spells} />
+      <SpellsList spells={spells} setInfo={setInfo} />
     </div>
   );
 };

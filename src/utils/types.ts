@@ -181,6 +181,7 @@ export interface IResource {
   id: string;
   name: string;
   image: string;
+  element: elementType;
   commonality: number;
 }
 

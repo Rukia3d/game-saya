@@ -9,15 +9,24 @@ import { SpellUpdate } from "./SpellUpdate";
 export const SpellUpdates = ({
   spellUpgrades,
   updateSpell,
+  updateInfo,
+  distructSpell,
 }: {
   spellUpgrades: ISpellUpdate[];
   updateSpell?: (s: ISpellUpdate) => void;
+  distructSpell?: (s: ISpellUpdate) => void;
+  updateInfo?: (s: ISpellUpdate) => void;
 }) => {
-  console.log("spellUpgrades", spellUpgrades);
   return (
     <div className="SpellUpdates">
       {spellUpgrades.map((s: ISpellUpdate, i: number) => (
-        <SpellUpdate update={s} key={i} updateSpell={updateSpell} canUpdate />
+        <SpellUpdate
+          update={s}
+          key={i}
+          updateSpell={updateSpell}
+          updateInfo={updateInfo}
+          distructSpell={distructSpell}
+        />
       ))}
     </div>
   );

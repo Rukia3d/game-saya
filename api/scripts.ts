@@ -65,6 +65,7 @@ app.get("/api/player/", (req: any, res: any) => {
           commonality: 10,
           image: "wood",
           quantity: 1000,
+          element: "earth",
         },
         {
           id: "leaf",
@@ -72,6 +73,7 @@ app.get("/api/player/", (req: any, res: any) => {
           commonality: 7,
           image: "leaf",
           quantity: 1000,
+          element: "earth",
         },
         {
           id: "r_flower",
@@ -79,6 +81,7 @@ app.get("/api/player/", (req: any, res: any) => {
           commonality: 5,
           image: "r_flower",
           quantity: 1000,
+          element: "earth",
         },
       ],
       enemies: playerEnemies,

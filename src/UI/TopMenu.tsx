@@ -58,7 +58,7 @@ export const TopMenu = () => {
     <div className="TopMenu" aria-label="top_menu">
       <Mana max={player.maxMana} current={player.mana} />
       <Life max={player.maxLife} current={player.life} />
-      <Resources resources={context.gameState.player.resources} />
+      {/* <Resources resources={context.gameState.player.resources} /> */}
     </div>
   );
 };
