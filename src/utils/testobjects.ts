@@ -11,8 +11,11 @@ import {
   IReel,
 } from "./types";
 
-export const dialogues = new Array(3).fill(0).map((x, i) => ({
+export const dialogues: IDialogue[] = new Array(3).fill(0).map((x, i) => ({
   id: "dialogue" + i,
+  background: "background" + i,
+  layout: "single",
+  characters: ["maya"],
   lines: [
     {
       id: "id" + i,

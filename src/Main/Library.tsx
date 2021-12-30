@@ -167,7 +167,7 @@ export const Library = () => {
 
   const [info, setInfo] = useState<
     null | ISpell | ISpellUpdate | IEnemy | IHero
-  >(player.spells[1]);
+  >(null);
   const [hero, setHero] = useState<IHero>(player.heroes[0]);
   const [selected, setSelected] = useState<libraryScreenState>("hero");
   let required: IHero[] | undefined = undefined;

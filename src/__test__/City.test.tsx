@@ -5,29 +5,36 @@ import { GameContext, GameContextType } from "../App";
 import { gameState } from "../utils/teststates";
 import userEvent from "@testing-library/user-event";
 
+const newPlayer = { ...gameState.player, heroes: [gameState.player.heroes[0]] };
+const newGameState = {
+  ...JSON.parse(JSON.stringify(gameState)),
+  player: newPlayer,
+};
+
 const context: GameContextType = {
   adventure: null,
   setAdventure: jest.fn(),
   story: null,
   setStory: jest.fn(),
-  gameState: gameState,
+  gameState: newGameState,
   addition: null,
   setAdditionScreen: jest.fn(),
   setGameState: jest.fn(),
   backToMain: jest.fn(),
 };
 
-test("Renders Heroes screen with characters ready for a dialogue", () => {
+test("Renders Heroes screen with a hero and a dialogue preview", () => {
   render(
     <GameContext.Provider value={context}>
       <City />
     </GameContext.Provider>
   );
-  expect(screen.getByAltText("intro_background")).toBeInTheDocument();
-  expect(screen.getByLabelText("hero_maya")).toBeInTheDocument();
-  expect(screen.getByLabelText("hero_tara")).toBeInTheDocument();
-  expect(screen.getByAltText("maya_story")).toBeInTheDocument();
-  expect(screen.getByAltText("tara_story")).toBeInTheDocument();
+  expect(screen.getByLabelText("city-background")).toHaveAttribute(
+    "style",
+    expect.stringContaining("main_background")
+  );
+  expect(screen.getByLabelText("main-screen-hero-maya")).toBeInTheDocument();
+  expect(screen.getByAltText("dialogue-maya-story")).toBeInTheDocument();
 });
 
 test("Dialogue is triggered when clicking on panel and closes correctly", () => {
@@ -36,10 +43,11 @@ test("Dialogue is triggered when clicking on panel and closes correctly", () => 
       <City />
     </GameContext.Provider>
   );
-  expect(screen.getByAltText("intro_background")).toBeInTheDocument();
-  userEvent.click(screen.getByAltText("maya_story"));
-  expect(screen.getByAltText("dialogue_background")).toBeInTheDocument();
-  expect(screen.getByTestId("close_button")).toBeInTheDocument();
+  userEvent.click(screen.getByAltText("dialogue-maya-story"));
+  expect(screen.getByLabelText("dialogue_background")).toHaveAttribute(
+    "style",
+    expect.stringContaining("dialogue_background")
+  );
 });
 
 test("Throws error if no data provided in context", () => {

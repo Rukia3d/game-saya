@@ -1,0 +1,161 @@
+.Fight {
+  width: 100%;
+  height: 100%;
+  z-index: 150;
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  .FightScene {
+    background-color: rosybrown;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    z-index: 100;
+
+    .EnemyBlock {
+      position: relative;
+      width: 100%;
+      height: 60%;
+      background-size: cover;
+      display: flex;
+      flex-direction: row;
+      background-repeat: no-repeat;
+      background-position: bottom;
+
+      .EnemyStats {
+        position: absolute;
+        width: 100%;
+        height: 20%;
+        vertical-align: bottom;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        background-repeat: repeat-x;
+        background-position: right top;
+        color: white;
+      }
+
+      .Enemy {
+        display: flex;
+        padding: 10%;
+        margin-top: 10%;
+        height: 90%;
+      }
+
+      .HeroPreviews {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        height: 30%;
+
+        img {
+          align-self: center;
+          height: 100%;
+        }
+      }
+    }
+
+    .HeroBlock {
+      background-color: skyblue;
+      width: 100%;
+    }
+  }
+}
+// .Fight {
+//   position: absolute;
+//   top: 0;
+//   left: 0;
+//   display: flex;
+//   flex-direction: row;
+//   border: 5px solid red;
+//   width: 100%;
+//   height: 100%;
+//   background-color: white;
+//   z-index: 1000;
+// }
+
+// .FightBackround {
+//   position: absolute;
+//   top: 0;
+//   width: 100%;
+//   height: 100%;
+//   z-index: -1;
+// }
+
+// .EnemyCard {
+//   position: absolute;
+//   top: 2em;
+//   left: 2em;
+//   padding: 1em;
+//   width: 30%;
+//   height: 80%;
+//   background-color: hotpink;
+//   z-index: 100;
+//   display: flex;
+//   flex-direction: column;
+//   align-items: center;
+// }
+
+// .EnemyCard.trump,
+// .HeroCard.trump {
+//   background-color: red;
+// }
+
+// .HeroCard {
+//   position: absolute;
+//   top: 3em;
+//   left: 8em;
+//   padding: 3em;
+//   width: 30%;
+//   height: 80%;
+//   background-color: cyan;
+//   z-index: 100;
+// }
+
+// .BigSpellImage {
+//   width: 100px;
+// }
+
+// .FightResult {
+//   position: absolute;
+//   top: 2em;
+//   left: 2em;
+//   padding: 3em;
+//   width: 80%;
+//   height: 80%;
+//   background-color: gold;
+//   z-index: 100;
+// }
+
+// .CharacterBox {
+//   border: 1px solid yellow;
+//   width: 60%;
+//   height: 100%;
+// }
+
+// .Stats {
+//   width: 100%;
+//   border: 1px solid black;
+//   height: 10%;
+//   background-color: white;
+// }
+
+// .Enemy {
+//   width: 100%;
+//   border: 1px solid black;
+//   height: 80%;
+// }
+
+// .Enemy img {
+//   width: 100%;
+//   height: 100%;
+//   object-fit: contain;
+// }

@@ -1,10 +1,9 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import { City } from "../Main/City";
 import { GameContext, GameContextType } from "../App";
 import { gameState } from "../utils/teststates";
-import userEvent from "@testing-library/user-event";
 import { Main } from "../Main/Main";
+import userEvent from "@testing-library/user-event";
 
 const context: GameContextType = {
   adventure: null,
@@ -24,9 +23,37 @@ test("Renders Heroes screen with characters ready for a dialogue", () => {
       <Main />
     </GameContext.Provider>
   );
-  expect(screen.getByAltText("intro_background")).toBeInTheDocument();
-  expect(screen.getByLabelText("hero_maya")).toBeInTheDocument();
-  expect(screen.getByLabelText("hero_tara")).toBeInTheDocument();
-  expect(screen.getByAltText("maya_story")).toBeInTheDocument();
-  expect(screen.getByAltText("tara_story")).toBeInTheDocument();
+  expect(screen.getByLabelText("mmenu-city-border")).toHaveAttribute(
+    "style",
+    "background-color: white;"
+  );
+  expect(screen.getByLabelText("mmenu-city")).toHaveAttribute(
+    "style",
+    expect.stringContaining("main_background")
+  );
+  expect(screen.getByLabelText("mmenu-adventure-border")).toHaveAttribute(
+    "style",
+    "background-color: black;"
+  );
+  expect(screen.getByLabelText("mmenu-adventure")).toHaveAttribute(
+    "style",
+    expect.stringContaining("adventure_background")
+  );
+  expect(screen.getByLabelText("mmenu-library-border")).toHaveAttribute(
+    "style",
+    "background-color: black;"
+  );
+  expect(screen.getByLabelText("mmenu-library")).toHaveAttribute(
+    "style",
+    expect.stringContaining("library_background")
+  );
+  userEvent.click(screen.getByLabelText("mmenu-adventure-border"));
+  expect(screen.getByLabelText("mmenu-city-border")).toHaveAttribute(
+    "style",
+    "background-color: black;"
+  );
+  expect(screen.getByLabelText("mmenu-adventure-border")).toHaveAttribute(
+    "style",
+    "background-color: white;"
+  );
 });

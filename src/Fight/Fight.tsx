@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import "./Fight.css";
+import "./Fight.scss";
 import { GameContext } from "../App";
 // Types
 import {
@@ -88,13 +88,7 @@ export const Fight = () => {
   // );
   return (
     <div className="Fight">
-      <img
-        className="FightBackround"
-        src={`../img/Fights/${fight.image}.jpg`}
-        alt="fight_background"
-      />
-      <SettingsButton onClick={() => setSettingsOpen(!settingsOpen)} />
-      {settingsOpen ? <Settings /> : null}
+      <SettingsButton onClick={() => setSettingsOpen(false)} />
       <FightScene
         prefightState={prefightState}
         setInfo={setInfo}

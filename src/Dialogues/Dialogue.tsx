@@ -67,7 +67,6 @@ const DialogueDoubleLayout = ({
 }) => {
   const [rChar, setRChar] = useState<IDialogueLine | null>(null);
   const [lChar, setLChar] = useState<IDialogueLine | null>(null);
-  console.log("imgUrl", imgUrl);
 
   useEffect(() => {
     setRChar(line.pos === "R" ? line : null);
@@ -142,6 +141,7 @@ export const Dialogue = ({
   ) {
     throw new Error("No data");
   }
+
   const CurrentDialogueLayout = dialLayouts[dialogue.layout];
   const imgUrl = `/img/Backgrounds/dialogue_background.jpg`;
 

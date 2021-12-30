@@ -28,7 +28,7 @@ const MainScreenIcon = ({
       onClick={() => (hero.dial ? setDialogue(dialogue) : null)}
     >
       <div className="CityIcon">
-        <img src={stateToImage} alt={`${hero.id}_story`} />
+        <img src={stateToImage} alt={`dialogue-${hero.id}-story`} />
       </div>
     </div>
   );
@@ -36,7 +36,7 @@ const MainScreenIcon = ({
 
 const MainScreenHero = ({ hero }: { hero: IHero }) => {
   return (
-    <div className="CityHeroImage" aria-label={`hero_${hero.id}`}>
+    <div className="CityHeroImage" aria-label={`main-screen-hero-${hero.id}`}>
       <AnimatedSpriteCycle
         width={500}
         height={500}
@@ -63,6 +63,7 @@ export const City = () => {
   return (
     <div
       className="City"
+      aria-label="city-background"
       style={{
         backgroundImage: `url(${imgUrl})`,
       }}

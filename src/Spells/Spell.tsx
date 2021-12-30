@@ -33,7 +33,6 @@ export const Spell = ({
 
   const onClick = () => {
     console.log("Onclick");
-    console.log("index", index);
     if (selectSpell && index) {
       console.log("click is triggered - SelectSpell");
       selectSpell(index);

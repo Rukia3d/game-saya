@@ -26,29 +26,16 @@ test("Renders Adventures with character quest and correct state", () => {
       <Adventures />
     </GameContext.Provider>
   );
-  expect(screen.getByLabelText("adventures_background")).toBeInTheDocument();
-  expect(screen.getByAltText("adventure_character")).toBeInTheDocument();
-  expect(screen.getAllByTestId("locked").length).toBe(3);
-  expect(screen.getByAltText("adventure_arena")).toBeInTheDocument();
-  expect(screen.getByAltText("adventure_story")).toBeInTheDocument();
-  expect(screen.getByAltText("adventure_event")).toBeInTheDocument();
-});
-
-test("Renders Adventures with no character quest and correct state", () => {
-  const newContext = JSON.parse(JSON.stringify(context));
-  newContext.gameState.player.adventures[0].open = true;
-  newContext.gameState.player.adventures[1].open = false;
-  render(
-    <GameContext.Provider value={newContext}>
-      <Adventures />
-    </GameContext.Provider>
+  expect(screen.getByLabelText("adventures-background")).toHaveAttribute(
+    "style",
+    expect.stringContaining("adventure_background")
   );
-  expect(screen.getByLabelText("adventures_background")).toBeInTheDocument();
-  expect(screen.getByAltText("adventure_character")).toBeInTheDocument();
-  expect(screen.getAllByTestId("locked").length).toBe(4);
-  expect(screen.getByAltText("adventure_arena")).toBeInTheDocument();
-  expect(screen.getByAltText("adventure_story")).toBeInTheDocument();
-  expect(screen.getByAltText("adventure_event")).toBeInTheDocument();
+  expect(screen.getByLabelText("adventure-story")).toBeInTheDocument();
+  expect(screen.getAllByTestId("locked").length).toBe(3);
+  expect(screen.getByLabelText("adventure-arena")).toBeInTheDocument();
+  expect(screen.getByLabelText("adventure-tournament")).toBeInTheDocument();
+  expect(screen.getByLabelText("adventure-character")).toBeInTheDocument();
+  expect(screen.getByLabelText("adventure-event")).toBeInTheDocument();
 });
 
 test("Renders StoryPanels for adventure", async () => {
@@ -58,7 +45,7 @@ test("Renders StoryPanels for adventure", async () => {
       <Adventures />
     </GameContext.Provider>
   );
-  expect(screen.getByAltText("adventure_story")).toBeInTheDocument();
-  userEvent.click(screen.getByLabelText("adventure_border_story"));
+  expect(screen.getByLabelText("adventure-story")).toBeInTheDocument();
+  userEvent.click(screen.getByLabelText("adventure-story"));
   expect(setAdventure.mock.calls.length).toBe(1);
 });

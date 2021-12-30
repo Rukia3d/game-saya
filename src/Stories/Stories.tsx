@@ -57,7 +57,6 @@ export const Stories = () => {
   });
 
   const setStoryWithType = (story: IStory) => {
-    console.log("setStoryWithType");
     setStory(story);
     if (story.type !== "fight") {
       context.setStory(story);
@@ -95,11 +94,7 @@ export const Stories = () => {
     );
   }
   const res = selectionError !== null && fight && story;
-  console.log("selectionError !== null", selectionError !== null);
-  console.log("fight", fight);
-  console.log("story", story);
-  if (selectionError !== null && fight && story) {
-    console.log("I SHOULD RENDER");
+  if (res) {
     return (
       <div className="Stories" aria-label="story_background">
         <CloseButton onClick={context.backToMain} />

@@ -1,5 +1,5 @@
 import React from "react";
-import "./TopMenu.css";
+import "./TopMenu.scss";
 // Types
 // Utils
 // Components

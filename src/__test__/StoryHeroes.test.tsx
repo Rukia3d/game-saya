@@ -26,8 +26,8 @@ test.only("Renders HerosSelection if 0 characters", async () => {
     //@ts-ignore
     gameRestrictedCharacters.adventures[1].storyGroups[0].stories[0];
   const fight = gameRestrictedCharacters.fights[0];
-  console.log("Story", story);
-  console.log("Fight", fight);
+  // console.log("Story", story);
+  // console.log("Fight", fight);
   render(
     <GameContext.Provider
       value={{

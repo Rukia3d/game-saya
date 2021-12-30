@@ -36,6 +36,7 @@ const MainMenuCity = ({
   return (
     <div
       className="MainMenuCityBorder"
+      aria-label="mmenu-city-border"
       onClick={() => setSelected(screen)}
       style={{
         backgroundColor: selected === screen ? "white" : "black",
@@ -43,6 +44,7 @@ const MainMenuCity = ({
     >
       <div
         className="MainMenuCity"
+        aria-label="mmenu-city"
         style={{
           backgroundImage: `url(${imgUrl})`,
           opacity: selected === screen ? 1 : 0.8,
@@ -65,6 +67,7 @@ const MainMenuAdventures = ({
   return (
     <div
       className="MainMenuAdventuresBorder"
+      aria-label="mmenu-adventure-border"
       onClick={() => setSelected(screen)}
       style={{
         backgroundColor: selected === screen ? "white" : "black",
@@ -72,6 +75,7 @@ const MainMenuAdventures = ({
     >
       <div
         className="MainMenuAdventures"
+        aria-label="mmenu-adventure"
         style={{
           backgroundImage: `url(${imgUrl})`,
           opacity: selected === screen ? 1 : 0.5,
@@ -94,6 +98,7 @@ const MainMenuLibrary = ({
   return (
     <div
       className="MainMenuLibraryBorder"
+      aria-label="mmenu-library-border"
       onClick={() => setSelected(screen)}
       style={{
         backgroundColor: selected === screen ? "white" : "black",
@@ -101,6 +106,7 @@ const MainMenuLibrary = ({
     >
       <div
         className="MainMenuLibrary"
+        aria-label="mmenu-library"
         style={{
           backgroundImage: `url(${imgUrl})`,
           opacity: selected === screen ? 1 : 0.5,
@@ -123,6 +129,7 @@ const MainMenuShop = ({
   return (
     <div
       className="MainMenuShopBorder"
+      aria-label="mmenu-shop-border"
       onClick={() => setSelected(screen)}
       style={{
         backgroundColor: selected === screen ? "white" : "black",
@@ -130,6 +137,7 @@ const MainMenuShop = ({
     >
       <div
         className="MainMenuShop"
+        aria-label="mmenu-shop"
         style={{
           backgroundImage: `url(${imgUrl})`,
           opacity: selected === screen ? 1 : 0.5,

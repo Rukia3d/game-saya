@@ -18,6 +18,7 @@ const AdventureArena = ({
   return (
     <div
       className="AdventureArenaBorder"
+      aria-label="adventure-arena"
       onClick={() =>
         adventure.storyGroups ? selectAdventure(adventure) : null
       }
@@ -46,6 +47,7 @@ const AdventureStory = ({
   return (
     <div
       className="AdventureStoryBorder"
+      aria-label="adventure-story"
       onClick={() =>
         adventure.storyGroups ? selectAdventure(adventure) : null
       }
@@ -74,6 +76,7 @@ const AdventureTournament = ({
   return (
     <div
       className="AdventureTournamentBorder"
+      aria-label="adventure-tournament"
       onClick={() =>
         adventure.storyGroups ? selectAdventure(adventure) : null
       }
@@ -102,6 +105,7 @@ const AdventureEvent = ({
   return (
     <div
       className="AdventureEventBorder"
+      aria-label="adventure-event"
       onClick={() =>
         adventure.storyGroups ? selectAdventure(adventure) : null
       }
@@ -130,6 +134,7 @@ const AdventureCharacter = ({
   return (
     <div
       className="AdventureCharacterBorder"
+      aria-label="adventure-character"
       onClick={() =>
         adventure.storyGroups ? selectAdventure(adventure) : null
       }
@@ -162,6 +167,7 @@ export const Adventures = () => {
   return (
     <div
       className="Adventures"
+      aria-label="adventures-background"
       style={{
         backgroundImage: `url(${imgUrl})`,
       }}

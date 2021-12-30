@@ -13,7 +13,6 @@ export const HeroesPreview = ({
   characters: IHero[];
   enemy: IEnemy;
 }) => {
-  console.log("enemy", enemy);
   return (
     <div className="FightPreview">
       {characters.map((h: IHero, i: number) => (

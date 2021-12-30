@@ -1,5 +1,5 @@
 import React from "react";
-import "./Fight.css";
+import "./Fight.scss";
 import { useFightScene } from "../hooks/useFightScene";
 // Types
 import { IEnemy, FightState, ISpell } from "../utils/types";
@@ -29,8 +29,8 @@ export const FightScene = ({
   };
 
   return (
-    <>
-      <div
+    <div className="FightScene">
+      {/* <div
         className="Animation"
         style={tempStyle}
         aria-label={`animation-${animation}`}
@@ -42,7 +42,7 @@ export const FightScene = ({
         heroSpell={heroCard}
         element={fightState.element}
         setInfo={setInfo}
-      />
+      /> */}
       <EnemyBlock
         fightState={fightState}
         enemyAct={enemyAct}
@@ -53,6 +53,6 @@ export const FightScene = ({
         selectSpell={heroAct}
         setInfo={setInfo}
       />
-    </>
+    </div>
   );
 };

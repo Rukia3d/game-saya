@@ -1,5 +1,5 @@
 import React from "react";
-import "./Fight.css";
+import "./Fight.scss";
 // Types
 import { elementType, IEnemy, ISpell } from "../utils/types";
 // Utils

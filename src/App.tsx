@@ -45,19 +45,17 @@ function App() {
   );
 
   const setGameState = (state: GameState) => {
-    console.log("DEBUG");
     if (state) {
-      console.log(
-        //@ts-ignore
-        "LOG",
-        JSON.parse(JSON.stringify(state.player))
-      );
+      // console.log(
+      //   //@ts-ignore
+      //   "LOG",
+      //   JSON.parse(JSON.stringify(state.player))
+      // );
       setGameStateOrigin(state);
     }
   };
 
   useEffect(() => {
-    console.log("useEffect", data);
     setGameState(data);
   }, [data]);
 

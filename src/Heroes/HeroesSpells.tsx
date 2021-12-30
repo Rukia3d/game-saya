@@ -32,7 +32,6 @@ const SpellsList = ({
       setGroupIndex(groupIndex + 1);
     }
     if (d === "l" && groupIndex > 0) {
-      console.log("Will scroll left");
       setGroupIndex(groupIndex - 1);
     }
   };
@@ -41,8 +40,8 @@ const SpellsList = ({
     <div className="SpellsList">
       <ScrollButton onClick={() => scrollSpells("r")} direction="r" />
       <div className="SpellsData">
-        {parsedSpells[groupIndex].map((s: ISpell) => (
-          <Spell spell={s} withBorder withName spellInfo={setInfo} />
+        {parsedSpells[groupIndex].map((s: ISpell, i: number) => (
+          <Spell spell={s} withBorder withName spellInfo={setInfo} key={i} />
         ))}
       </div>
       <ScrollButton onClick={() => scrollSpells("l")} direction="l" />

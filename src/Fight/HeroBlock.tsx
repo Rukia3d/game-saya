@@ -14,18 +14,6 @@ const SmallHero = ({ hero }: { hero: IHero }) => {
   );
 };
 
-const HeroIfo = ({ fightState }: { fightState: FightState }) => {
-  return (
-    <div className="Stats">
-      hero health: <span data-testid="hero_life">{fightState.hero.life}</span>,
-      hero mana: <span data-testid="hero_mana">{fightState.hero.mana}</span>,
-      cards:
-      {fightState.heroDeck.length}+{fightState.heroHand.length}, drop:{" "}
-      {fightState.heroDrop.length}
-    </div>
-  );
-};
-
 const ElementInfo = ({ fightState }: { fightState: FightState }) => {
   return (
     <div className="Info">
@@ -90,7 +78,6 @@ export const HeroBlock = ({
 }) => {
   return (
     <div className="HeroBlock">
-      <HeroIfo fightState={fightState} />
       <ElementInfo fightState={fightState} />
       <HeroDeck
         fightState={fightState}

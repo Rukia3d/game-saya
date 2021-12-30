@@ -15,17 +15,19 @@ export const GenericStory = () => {
   if (!context || !context.story || !context.gameState) {
     throw new Error("No data in context");
   }
-  const [dialogue, setDialogue] = useState<IDialogue | null>(
-    findDialogue(context.gameState.dialogues, context.story.id)
-  );
-
   const story = context.story;
+  const [dialogue, setDialogue] = useState<IDialogue | null>(
+    context.story.type === "dialogue"
+      ? findDialogue(context.gameState.dialogues, context.story.id)
+      : null
+  );
 
   if (story.type === "fight") {
     return <Fight />;
   }
-  if (story.type === "dialogue" && dialogue) {
-    return <Dialogue dialogue={dialogue} setDialogue={setDialogue} />;
+  if (story.type === "dialogue") {
+    if (dialogue)
+      return <Dialogue dialogue={dialogue} setDialogue={setDialogue} />;
   }
   return <Reel />;
 };
