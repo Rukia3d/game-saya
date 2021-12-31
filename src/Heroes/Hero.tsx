@@ -13,16 +13,24 @@ export const Hero = ({
   selectHero?: (h: IHero) => void;
 }) => {
   const imgUrl = `../img/Heroes/${hero.image}.png`;
+  const backImgUrl = `/img/Spells/${hero.element}/${hero.element}_back.jpg`;
   return (
     <div className="HeroImageBorder">
       <div
-        className="HeroImage"
+        className="HeroImageBack"
         style={{
-          backgroundImage: `url(${imgUrl})`,
+          backgroundImage: `url(${backImgUrl})`,
         }}
-        area-label={`hero_${hero.id}`}
-        onClick={() => (selectHero ? selectHero(hero) : null)}
-      ></div>
+      >
+        <div
+          className="HeroImage"
+          style={{
+            backgroundImage: `url(${imgUrl})`,
+          }}
+          area-label={`hero_${hero.id}`}
+          onClick={() => (selectHero ? selectHero(hero) : null)}
+        ></div>
+      </div>
     </div>
   );
 };

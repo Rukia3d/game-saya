@@ -7,7 +7,7 @@
   left: 0;
 
   .FightScene {
-    background-color: rosybrown;
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -40,10 +40,7 @@
       }
 
       .Enemy {
-        display: flex;
-        padding: 10%;
-        margin-top: 10%;
-        height: 90%;
+        margin-top: 20%;
       }
 
       .HeroPreviews {
@@ -55,6 +52,7 @@
         bottom: 0;
         width: 100%;
         height: 30%;
+        z-index: 100;
 
         img {
           align-self: center;
@@ -64,11 +62,153 @@
     }
 
     .HeroBlock {
-      background-color: skyblue;
       width: 100%;
+      height: 60%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      .ElementInfo {
+        height: 10%;
+        width: 100%;
+
+        img {
+          width: 30px;
+          height: 30px;
+          margin: 0.5em;
+        }
+      }
+
+      .Deck {
+        width: 100%;
+        margin-top: 10%;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+
+        .Spell {
+          flex-shrink: 2;
+          flex-grow: 0;
+        }
+      }
     }
   }
+
+  .SpellsBig {
+    position: absolute;
+    top: 5%;
+    left: 5%;
+    width: 80%;
+    height: 50%;
+
+    .BigSpell.fire {
+      z-index: 100;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      width: 300px;
+      height: 300px;
+      top: calc(50% - 150px);
+      left: calc(50% - 150px);
+      border-radius: 50%;
+      box-shadow: inset 0 0 50px rgba(255, 255, 255, 0.5),
+        inset 20px 0 80px rgba(255, 4, 4, 0.5),
+        inset -20px 0 80px rgba(249, 249, 44, 0.5),
+        inset 20px 0 300px rgba(255, 4, 4, 0.5),
+        inset -20px 0 300px rgba(249, 249, 44, 0.5),
+        0 0 50px rgba(255, 255, 255, 0.5), -10px 0 80px rgba(255, 4, 4, 0.5),
+        10px 0 80px rgba(249, 249, 44, 0.5);
+    }
+
+    .BigSpell.earth {
+      z-index: 100;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      width: 300px;
+      height: 300px;
+      top: calc(50% - 150px);
+      left: calc(50% - 150px);
+      border-radius: 50%;
+      box-shadow: inset 0 0 50px rgba(255, 255, 255, 0.5),
+        inset 20px 0 80px rgba(255, 217, 4, 0.5),
+        inset -20px 0 80px rgba(54, 249, 44, 0.5),
+        inset 20px 0 300px rgba(255, 217, 4, 0.5),
+        inset -20px 0 300px rgba(54, 249, 44, 0.5),
+        0 0 50px rgba(255, 255, 255, 0.5), -10px 0 80px rgb(255, 196, 4),
+        10px 0 80px rgba(249, 174, 44, 0.5);
+    }
+
+    .BigSpellOriginal {
+      position: absolute;
+      top: calc(50% - 150px);
+      left: calc(50% - 150px);
+      border-radius: 50%;
+      box-shadow: inset 0 0 50px #fff, inset 20px 0 80px #f0f,
+        inset -20px 0 80px #0ff, inset 20px 0 300px #f0f,
+        inset -20px 0 300px #0ff, 0 0 50px #fff, -10px 0 80px #f0f,
+        10px 0 80px #0ff;
+    }
+
+    .Path {
+      position: absolute;
+      border: 1px solid black;
+      border-radius: 50%;
+      animation: spin-right 10s linear infinite;
+
+      .Strength {
+        width: 1em;
+        height: 1em;
+        border-radius: 50%;
+        position: relative;
+        left: 50%;
+        top: -0.5rem;
+      }
+    }
+
+    .size_0 {
+      width: 100%;
+      height: 100%;
+    }
+
+    .size_1 {
+      width: 85%;
+      height: 85%;
+    }
+
+    .size_2 {
+      width: 70%;
+      height: 70%;
+    }
+
+    @keyframes spin-right {
+      100% {
+        transform: rotate(-360deg);
+      }
+    }
+
+    .BigSpellImage {
+      width: 50%;
+      height: 50%;
+    }
+  }
+
+  .FightResult {
+    position: absolute;
+    top: 2em;
+    left: 2em;
+    padding: 3em;
+    width: 80%;
+    height: 80%;
+    background-color: gold;
+    z-index: 100;
+  }
 }
+
 // .Fight {
 //   position: absolute;
 //   top: 0;

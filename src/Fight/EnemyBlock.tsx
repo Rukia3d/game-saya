@@ -56,8 +56,12 @@ const EnemyStats = ({
 export const HeroPreviews = ({ heroes }: { heroes: IHero[] }) => {
   return (
     <div className="HeroPreviews">
-      {heroes.map((h: IHero) => (
-        <img src={`/img/Heroes/${h.id}_icon_back.png`} alt="hero-back" />
+      {heroes.map((h: IHero, i: number) => (
+        <img
+          src={`/img/Heroes/${h.id}_icon_back.png`}
+          alt="hero-back"
+          key={i}
+        />
       ))}
     </div>
   );

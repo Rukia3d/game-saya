@@ -40,6 +40,7 @@ export const useFightScene = (
   const [nextStep, setNextStep] = useState<keyof typeof steps | null>(
     "loadFight"
   );
+  console.log("next step", nextStep);
 
   useEffect(() => {
     if (!nextStep) return;
@@ -70,6 +71,7 @@ export const useFightScene = (
   );
 
   const heroAct = (index: number) => {
+    console.log("Hero act");
     if (fightState.enemyCardIndex === null) {
       console.warn("You are acting first");
       return;

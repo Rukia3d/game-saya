@@ -36,13 +36,13 @@ export const FightScene = ({
         aria-label={`animation-${animation}`}
       >
         <h1>{animation}</h1>
-      </div>
+      </div> */}
       <SpellsBig
         enemySpell={enemyCard}
         heroSpell={heroCard}
         element={fightState.element}
         setInfo={setInfo}
-      /> */}
+      />
       <EnemyBlock
         fightState={fightState}
         enemyAct={enemyAct}

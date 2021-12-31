@@ -44,9 +44,9 @@ app.get("/api/player/", (req: any, res: any) => {
   playerCards.map((s: ISpell, i: number) =>
     i < 10 ? (s.selected = true) : (s.selected = false)
   );
-  playerCards[0].updates = [];
-  playerCards[1].updates = [spellUpdates[0], spellUpdates[2]];
-  playerCards[2].updates = [spellUpdates[1], spellUpdates[1]];
+  // playerCards[0].updates = [];
+  // playerCards[1].updates = [spellUpdates[0], spellUpdates[2]];
+  // playerCards[2].updates = [spellUpdates[1], spellUpdates[1]];
   const playerEnemies = enemies;
 
   const gameState: GameState = {

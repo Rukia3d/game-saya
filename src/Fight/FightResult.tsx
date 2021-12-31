@@ -51,7 +51,7 @@ export const FightResult = ({
   finishFight: () => void;
 }) => {
   return (
-    <div className="FightResult">
+    <div className={`FightResult ${result === "Won" ? `gold` : `silver`}`}>
       <p>You {result}</p>
       {result === "Won" && rewards ? (
         <ResourceChest resource={rewards} finishFight={finishFight} />

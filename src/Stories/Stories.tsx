@@ -77,13 +77,8 @@ export const Stories = () => {
   if (!context.adventure.storyGroups) {
     return <div>No stories</div>;
   }
-  const groups = context.adventure.storyGroups.slice(
-    page * STORIESPERPAGE,
-    page * STORIESPERPAGE + STORIESPERPAGE
-  );
-  const numberOfPages = Math.ceil(
-    context.adventure.storyGroups.length / STORIESPERPAGE
-  );
+
+  const pageLength = context.adventure.storyGroups.length * 30;
 
   if (spellSelect) {
     return (
@@ -112,11 +107,12 @@ export const Stories = () => {
     <div className="Stories" aria-label="story_background">
       <CloseButton onClick={context.backToMain} />
       <h2>{context.adventure.name}</h2>
-      <div className="StoriesList" aria-label="stories_list">
-        {page !== 0 ? (
-          <ScrollButton onClick={() => setPage(page - 1)} direction="t" />
-        ) : null}
-        {groups.map((s: IStoryGroup, i: number) => (
+      <div
+        className="StoriesList"
+        aria-label="stories_list"
+        style={{ height: `${pageLength}%` }}
+      >
+        {context.adventure.storyGroups.map((s: IStoryGroup, i: number) => (
           <StoryPanel
             group={s}
             key={i}
@@ -124,9 +120,6 @@ export const Stories = () => {
             selectStory={setStoryWithType}
           />
         ))}
-        {page < numberOfPages - 1 ? (
-          <ScrollButton onClick={() => setPage(page + 1)} direction="d" />
-        ) : null}
       </div>
     </div>
   );

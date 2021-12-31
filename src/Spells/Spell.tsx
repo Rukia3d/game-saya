@@ -1,7 +1,7 @@
 import React from "react";
 import "./Spells.scss";
 // Types
-import { ISpell, ISpellUpdate } from "../utils/types";
+import { elementType, ISpell, ISpellUpdate } from "../utils/types";
 import useLongPress from "../hooks/useLongPress";
 import {
   calculateSpellMana,
@@ -11,6 +11,7 @@ import {
 // Components
 export const Spell = ({
   spell,
+  currentElement,
   index,
   withName,
   withBorder,
@@ -18,6 +19,7 @@ export const Spell = ({
   spellInfo,
 }: {
   spell: ISpell;
+  currentElement?: elementType;
   index?: number;
   withName?: boolean;
   withBorder?: boolean;
@@ -25,16 +27,15 @@ export const Spell = ({
   spellInfo?: (s: ISpell) => void;
 }) => {
   const onLongPress = () => {
+    console.log("longpress is triggered - SetInfo");
     if (spellInfo) {
-      console.log("longpress is triggered - SetInfo");
       spellInfo(spell);
     }
   };
 
   const onClick = () => {
-    console.log("Onclick");
-    if (selectSpell && index) {
-      console.log("click is triggered - SelectSpell");
+    console.log("click is triggered - SelectSpell");
+    if (selectSpell && index !== undefined) {
       selectSpell(index);
     }
   };
@@ -47,19 +48,24 @@ export const Spell = ({
   const strength = calculateSpellStrength(spell);
   const updates = spell.updates.length;
   const longPressEvent = useLongPress({ onLongPress, onClick }, defaultOptions);
-  const imgUrl = `/img/Spells/${spell.element}/${spell.image}.png`;
-  const backImgUrl = `/img/Spells/${spell.element}/${spell.element}_back.jpg`;
-
+  const imgUrl = `/img/Spells/${spell.element}/${spell.id}.png`;
+  const backImgUrl =
+    spell.element === currentElement
+      ? `/img/Spells/${spell.element}/${spell.image}.png`
+      : `/img/Spells/${spell.element}/${spell.image}_white.png`;
   return (
     <div
       className={`Spell ${spell.selected ? "active" : "inactive"} ${
-        withBorder ? "border" : "noborder"
+        withBorder ? `border ${spell.element}` : "noborder"
       }`}
     >
       <div
-        className={`SpellCard ${withBorder ? "border" : "noborder"}`}
+        className={`SpellCard ${
+          withBorder ? `border ${spell.element}` : "noborder"
+        }`}
         style={{
           backgroundImage: `url(${backImgUrl})`,
+          // backgroundColor: "white",
         }}
       >
         <div
@@ -92,7 +98,7 @@ const UpdateIcon = ({ update }: { update: ISpellUpdate }) => {
   );
 };
 
-const Strength = ({ strength }: { strength: number }) => {
+export const Strength = ({ strength }: { strength: number }) => {
   const imgUrl = `/img/Spells/strength.png`;
   return (
     <div className="SpellStrength">
@@ -108,7 +114,7 @@ const Strength = ({ strength }: { strength: number }) => {
   );
 };
 
-const Updates = ({ updates }: { updates: ISpellUpdate[] }) => {
+export const Updates = ({ updates }: { updates: ISpellUpdate[] }) => {
   return (
     <div className="SpellUpdate">
       {updates.map((u: ISpellUpdate, i: number) => (
@@ -118,7 +124,7 @@ const Updates = ({ updates }: { updates: ISpellUpdate[] }) => {
   );
 };
 
-const Mana = ({ mana }: { mana: number }) => {
+export const Mana = ({ mana }: { mana: number }) => {
   const imgUrl = `/img/Spells/mana.png`;
   return (
     <div className="SpellMana">

@@ -1,34 +1,26 @@
 import React from "react";
-import "./HeroBlock.css";
+import "./Fight.scss";
 // Types
-import { elementType, IEnemy, FightState, IHero, ISpell } from "../utils/types";
+import { elementType, IEnemy, FightState, ISpell } from "../utils/types";
 // Utils
 // Components
-import { SpellWithInfo } from "../Spells/SpellWithInfo";
-
-const SmallHero = ({ hero }: { hero: IHero }) => {
-  return (
-    <div className="Character" aria-label={`character-${hero.id}`}>
-      <h3>{hero.name}</h3>
-    </div>
-  );
-};
+import { Spell } from "../Spells/Spell";
 
 const ElementInfo = ({ fightState }: { fightState: FightState }) => {
+  const currentElement = fightState.element;
   return (
-    <div className="Info">
-      <p>
-        Elements:
-        {fightState.elements.map((s: elementType, i: number) => (
-          <span
-            key={i}
-            style={{ color: s === fightState.element ? "green" : "black" }}
-          >
-            {" "}
-            {s.toUpperCase()}
-          </span>
-        ))}
-      </p>
+    <div className="ElementInfo">
+      {fightState.elements.map((s: elementType, i: number) => (
+        <img
+          src={
+            currentElement === s
+              ? `/img/Spells/${s}/${s}.png`
+              : `/img/Spells/${s}/${s}_black.png`
+          }
+          alt="element"
+          key={i}
+        />
+      ))}
     </div>
   );
 };
@@ -45,23 +37,16 @@ const HeroDeck = ({
   return (
     <div className="Deck" aria-label="Deck">
       {fightState.heroHand.map((h: ISpell, i: number) => (
-        <SpellWithInfo
+        <Spell
+          withBorder
+          withName
           spell={h}
           selectSpell={() => selectSpell(i)}
-          setInfo={setInfo}
-          element={fightState.element}
+          spellInfo={setInfo}
           key={i}
+          index={i}
+          currentElement={fightState.element}
         />
-      ))}
-    </div>
-  );
-};
-
-const Heroes = ({ fightState }: { fightState: FightState }) => {
-  return (
-    <div className="Characters" aria-label="Characters">
-      {fightState.heroes.map((h: IHero, i: number) => (
-        <SmallHero hero={h} key={i} />
       ))}
     </div>
   );
@@ -77,14 +62,13 @@ export const HeroBlock = ({
   setInfo: (s: ISpell | IEnemy | null) => void;
 }) => {
   return (
-    <div className="HeroBlock">
+    <div className="HeroBlock MulticoloredBackground">
       <ElementInfo fightState={fightState} />
       <HeroDeck
         fightState={fightState}
         selectSpell={selectSpell}
         setInfo={setInfo}
       />
-      <Heroes fightState={fightState} />
     </div>
   );
 };

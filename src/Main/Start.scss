@@ -4,6 +4,13 @@
   display: flex;
   justify-content: center;
 
+  .StartBackground {
+    background-repeat: no-repeat;
+    background-position: right top;
+    background-origin: content-box;
+    background-size: auto;
+  }
+
   .PlayButton {
     position: absolute;
     top: 50%;

@@ -23,7 +23,6 @@
       align-content: flex-start;
       justify-content: center;
       flex-wrap: wrap;
-
       background-size: cover;
       background-repeat: no-repeat;
       background-position: bottom;
@@ -109,16 +108,35 @@
 }
 
 .Spell.active {
-  background-color: black;
+  opacity: 1;
 }
 
 .Spell.inactive {
-  background-color: grey;
+  opacity: 1;
 }
 
 .SpellCard.border {
-  background-color: white;
   clip-path: polygon(4% 0%, 98% 0%, 98% 98%, 10% 90%);
+}
+
+.Spell.border.fire {
+  background-color: #e70d04 !important;
+}
+
+.Spell.border.earth {
+  background-color: #fbb901 !important;
+}
+
+.Spell.border.air {
+  background-color: #21f7f7 !important;
+}
+
+.Spell.border.water {
+  background-color: #023465 !important;
+}
+
+.Spell.border.metal {
+  background-color: #dedede !important;
 }
 
 .Spell {

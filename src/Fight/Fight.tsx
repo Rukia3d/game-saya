@@ -41,6 +41,7 @@ export const Fight = () => {
     context.gameState.resources
   );
   const [result, setResult] = useState<null | string>(null);
+
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [info, setInfo] = useState<
     null | ISpell | ISpellUpdate | IEnemy | IHero
@@ -55,6 +56,7 @@ export const Fight = () => {
     if (!gameState || !story) throw new Error("Can't update the fight results");
     isValidAction(story.action);
     if (result === "Won") {
+      console.log("I won");
       displayAddedHero(
         gameState.player.heroes,
         gameState.heroes,
