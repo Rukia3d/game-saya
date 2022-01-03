@@ -21,22 +21,8 @@ export const FightScene = ({
   const [enemyCard, heroCard, animation, fightState, enemyAct, heroAct] =
     useFightScene(prefightState, setResult);
 
-  const tempStyle = {
-    position: "absolute" as "absolute",
-    top: "20px",
-    left: "20px",
-    zIndex: 50000,
-  };
-
   return (
     <div className="FightScene">
-      {/* <div
-        className="Animation"
-        style={tempStyle}
-        aria-label={`animation-${animation}`}
-      >
-        <h1>{animation}</h1>
-      </div> */}
       <SpellsBig
         enemySpell={enemyCard}
         heroSpell={heroCard}
@@ -47,6 +33,7 @@ export const FightScene = ({
         fightState={fightState}
         enemyAct={enemyAct}
         setInfo={setInfo}
+        animation={animation}
       />
       <HeroBlock
         fightState={fightState}

@@ -70,6 +70,7 @@ export const Fight = () => {
         context.setAdditionScreen
       );
       const player = finishStory(gameState, story);
+      console.log("Updated player", player);
       context.setGameState({
         ...gameState,
         player: updateWinPlayer(player, prefightState.enemy, rewards),

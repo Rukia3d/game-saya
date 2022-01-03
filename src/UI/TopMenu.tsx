@@ -59,17 +59,30 @@ const Spells = ({ cards }: { cards: ISpell[] }) => {
   );
 };
 
-export const TopMenu = ({ cards }: { cards?: ISpell[] }) => {
+export const TopMenu = ({
+  cards,
+  currentHealth,
+  currentMana,
+}: {
+  cards?: ISpell[];
+  currentHealth?: number;
+  currentMana?: number;
+}) => {
   const context = useContext(GameContext);
   if (!context || !context.gameState || !context.gameState.player) {
     throw new Error("No Data in Context");
   }
   const player = context.gameState.player.data;
-
   return (
     <div className="TopMenu" aria-label="top_menu">
-      <Life max={player.maxLife} current={player.life} />
-      <Mana max={player.maxMana} current={player.mana} />
+      <Life
+        max={player.maxLife}
+        current={currentHealth ? currentHealth : player.life}
+      />
+      <Mana
+        max={player.maxMana}
+        current={currentMana ? currentMana : player.mana}
+      />
       {cards ? <Spells cards={cards} /> : null}
     </div>
   );

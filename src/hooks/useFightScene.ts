@@ -5,17 +5,18 @@ import { FightState, ISpell } from "../utils/types";
 
 const SHORTANIMATION = 500;
 const LONGANIMATION = 1500;
+const EXTRALONGANIMATION = 3000;
 
 const steps = {
-  loadFight: ["startFight", LONGANIMATION],
+  loadFight: ["startFight", EXTRALONGANIMATION],
   startFight: ["enemyAct0", SHORTANIMATION],
   enemyAct0: [null, SHORTANIMATION],
   preMatchCards: ["matchCards", SHORTANIMATION],
-  matchCards: ["actionEnd", SHORTANIMATION],
+  matchCards: ["actionEnd", LONGANIMATION],
   actionEnd: ["clearCards", SHORTANIMATION],
   clearCards: ["startFight", SHORTANIMATION],
 
-  giveCards: ["startFight", SHORTANIMATION],
+  giveCards: ["startFight", LONGANIMATION],
   endWon: ["won", SHORTANIMATION],
   endLost: ["lost", SHORTANIMATION],
   lost: [null, SHORTANIMATION],
@@ -40,7 +41,6 @@ export const useFightScene = (
   const [nextStep, setNextStep] = useState<keyof typeof steps | null>(
     "loadFight"
   );
-  console.log("next step", nextStep);
 
   useEffect(() => {
     if (!nextStep) return;
@@ -142,13 +142,18 @@ export const useFightScene = (
     }
 
     if (nextStep === "lost") {
-      setResult("Lost");
+      setTimeout(() => {
+        setResult("Lost");
+      }, 1000);
     }
 
     if (nextStep === "won") {
-      setResult("Won");
+      setTimeout(() => {
+        setResult("Won");
+      }, 1000);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [nextStep]);
+  console.log("animation", animation);
   return [enemyCard, heroCard, animation, fightState, enemyAct, heroAct];
 };

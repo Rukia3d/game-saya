@@ -39,10 +39,6 @@
         color: white;
       }
 
-      .Enemy {
-        margin-top: 20%;
-      }
-
       .HeroPreviews {
         display: flex;
         flex-direction: row;
@@ -206,6 +202,49 @@
     height: 80%;
     background-color: gold;
     z-index: 100;
+  }
+}
+
+.FightLevel {
+  background-color: violet;
+  width: 200%;
+  height: 100%;
+  background-size: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  .Enemy {
+    position: absolute;
+    height: 100%;
+    width: 30%;
+    left: 20%;
+    top: 40%;
+    z-index: 95;
+  }
+
+  .Heroes {
+    position: absolute;
+    height: 100%;
+    width: 30%;
+    left: 45%;
+    top: 10%;
+    display: flex;
+    flex-direction: row;
+    background-color: transparent;
+    z-index: 90;
+  }
+
+  .Heroes :nth-child(2) {
+    position: absolute;
+    left: 55%;
+    top: 30%;
+  }
+
+  .Heroes :nth-child(3) {
+    position: absolute;
+    left: 65%;
+    top: 40%;
   }
 }
 

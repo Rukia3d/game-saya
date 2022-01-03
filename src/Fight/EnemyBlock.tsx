@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "./Fight.scss";
 // Types
 import { IEnemy, FightState, ISpell, IHero } from "../utils/types";
@@ -53,16 +53,92 @@ const EnemyStats = ({
   );
 };
 
-export const HeroPreviews = ({ heroes }: { heroes: IHero[] }) => {
+export const Heroes = ({ heroes }: { heroes: IHero[] }) => {
   return (
-    <div className="HeroPreviews">
+    <div className="Heroes">
       {heroes.map((h: IHero, i: number) => (
-        <img
-          src={`/img/Heroes/${h.id}_icon_back.png`}
-          alt="hero-back"
+        <AnimatedSpriteCycle
+          width={500}
+          height={500}
+          img={`../img/Heroes/Animations/${h.id}_idle.png`}
+          frames={9}
+          breakpoint={1}
           key={i}
         />
       ))}
+    </div>
+  );
+};
+
+export const FightLevel = ({
+  fightState,
+  enemyAct,
+  animation,
+}: {
+  fightState: FightState;
+  enemyAct: (i: number) => void;
+  animation: string | null;
+}) => {
+  const context = useContext(GameContext);
+  if (!context || !context.gameState || !context.story) {
+    throw new Error("No data in context");
+  }
+  const story = context.story;
+  const imgUrl = `/img/Fights/${story.image}.jpg`;
+  const [currentCameraX, setCurrentCameraX] = useState(0);
+  const [moveCameraX, setMoveCameraX] = useState(0);
+
+  useEffect(() => {
+    if (animation === "GIVECARDS") {
+      console.log("I will move right");
+      setTimeout(() => {
+        setMoveCameraX(250);
+      }, 1000);
+    }
+
+    // if (animation === "HEROACT") {
+    //   console.log("I will move left");
+    //   setMoveCameraX(0);
+    // }
+  }, [animation]);
+
+  useEffect(() => {
+    const interval = window.setInterval(() => {
+      if (currentCameraX < moveCameraX) {
+        setCurrentCameraX(currentCameraX + 10);
+      }
+      if (currentCameraX > moveCameraX) {
+        setCurrentCameraX(currentCameraX - 10);
+      }
+    }, 40);
+    return () => {
+      window.clearInterval(interval);
+    };
+  }, [currentCameraX, moveCameraX]);
+
+  const tempStyle = {
+    position: "absolute" as "absolute",
+    top: "20px",
+    left: "20px",
+    zIndex: 50000,
+  };
+  return (
+    <div
+      className={`FightLevel`}
+      style={{
+        backgroundImage: `url(${imgUrl})`,
+        left: `-${currentCameraX}px`,
+      }}
+    >
+      <div
+        className="Animation"
+        style={tempStyle}
+        aria-label={`animation-${animation}`}
+      >
+        <h1>{animation}</h1>
+      </div>
+      <Enemy enemy={fightState.enemy} enemyAct={enemyAct} />
+      <Heroes heroes={fightState.heroes} />
     </div>
   );
 };
@@ -71,28 +147,25 @@ export const EnemyBlock = ({
   fightState,
   enemyAct,
   setInfo,
+  animation,
 }: {
   fightState: FightState;
   enemyAct: (i: number) => void;
   setInfo: (i: ISpell | IEnemy | null) => void;
+  animation: string | null;
 }) => {
-  const context = useContext(GameContext);
-  if (!context || !context.gameState || !context.story) {
-    throw new Error("No data in context");
-  }
-  const story = context.story;
-  const imgUrl = `/img/Fights/${story.image}.jpg`;
   return (
-    <div
-      className="EnemyBlock"
-      style={{
-        backgroundImage: `url(${imgUrl})`,
-      }}
-    >
-      <TopMenu />
+    <div className="EnemyBlock">
+      <TopMenu
+        currentHealth={fightState.hero.life}
+        currentMana={fightState.hero.mana}
+      />
       <EnemyStats fightState={fightState} setInfo={setInfo} />
-      <Enemy enemy={fightState.enemy} enemyAct={enemyAct} />
-      <HeroPreviews heroes={fightState.heroes} />
+      <FightLevel
+        fightState={fightState}
+        enemyAct={enemyAct}
+        animation={animation}
+      />
     </div>
   );
 };
