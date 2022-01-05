@@ -39,17 +39,18 @@ export const DialogueImage = ({
 
 const DialogueSingleLayout = ({
   line,
-  imgUrl,
+  backImgUrl,
 }: {
   line: IDialogueLine;
-  imgUrl: string;
+  backImgUrl: string;
 }) => {
+  const panelImgUrl = `/img/Dialogues/backg_singular.jpg`;
   return (
     <div className="DialogueSingleBorder">
       <div
         className="DialogueSingle"
         style={{
-          backgroundImage: `url(${imgUrl})`,
+          backgroundImage: `url(${panelImgUrl})`,
         }}
       >
         <DialogueImage hero={line.character} image={line.image} />
@@ -60,10 +61,10 @@ const DialogueSingleLayout = ({
 
 const DialogueDoubleLayout = ({
   line,
-  imgUrl,
+  backImgUrl,
 }: {
   line: IDialogueLine;
-  imgUrl: string;
+  backImgUrl: string;
 }) => {
   const [rChar, setRChar] = useState<IDialogueLine | null>(null);
   const [lChar, setLChar] = useState<IDialogueLine | null>(null);
@@ -73,23 +74,35 @@ const DialogueDoubleLayout = ({
     setLChar(line.pos === "L" ? line : null);
   }, [line]);
 
+  const panelImgUrl = `/img/Dialogues/backg_double.jpg`;
   return (
-    <div className="DialogueDouble">
-      <div className="DialogueDoubleBorderLeft">
+    <div
+      className="DialogueDouble"
+      style={{
+        backgroundImage: `url(${backImgUrl})`,
+      }}
+    >
+      <div
+        className="DialogueDoubleBorderLeft"
+        style={{ opacity: `${lChar ? 1 : 0.3}` }}
+      >
         <div
           className="DialogueDoubleLeft"
           style={{
-            backgroundImage: `url(${imgUrl})`,
+            backgroundImage: `url(${panelImgUrl})`,
           }}
         >
           <DialogueImage hero={lChar?.character} image={lChar?.image} />
         </div>
       </div>
-      <div className="DialogueDoubleBorderRight">
+      <div
+        className="DialogueDoubleBorderRight"
+        style={{ opacity: `${rChar ? 1 : 0.3}` }}
+      >
         <div
           className="DialogueDoubleRight"
           style={{
-            backgroundImage: `url(${imgUrl})`,
+            backgroundImage: `url(${panelImgUrl})`,
           }}
         >
           <DialogueImage hero={rChar?.character} image={rChar?.image} />
@@ -101,10 +114,10 @@ const DialogueDoubleLayout = ({
 
 const DialogueTripleLayout = ({
   line,
-  imgUrl,
+  backImgUrl,
 }: {
   line: IDialogueLine;
-  imgUrl: string;
+  backImgUrl: string;
 }) => {
   return (
     <div className="DialogueTopBorder">
@@ -116,7 +129,7 @@ const DialogueTripleLayout = ({
 type DialogueLayoutsType = {
   [key in dialogueLayout]: React.FC<{
     line: IDialogueLine;
-    imgUrl: string;
+    backImgUrl: string;
   }>;
 };
 const dialLayouts: DialogueLayoutsType = {
@@ -198,7 +211,7 @@ export const Dialogue = ({
         <div className="DialogueTopBorder">
           <div className="DialogueTop">
             <CurrentDialogueLayout
-              imgUrl={`/img/Dialogues/${dialogue.background}.jpg`}
+              backImgUrl={`/img/Dialogues/${dialogue.background}.jpg`}
               line={line}
             />
           </div>

@@ -130,13 +130,13 @@ export const FightLevel = ({
         left: `-${currentCameraX}px`,
       }}
     >
-      <div
+      {/* <div
         className="Animation"
         style={tempStyle}
         aria-label={`animation-${animation}`}
       >
         <h1>{animation}</h1>
-      </div>
+      </div> */}
       <Enemy enemy={fightState.enemy} enemyAct={enemyAct} />
       <Heroes heroes={fightState.heroes} />
     </div>

@@ -47,12 +47,14 @@ const AdventureStory = ({
   return (
     <div
       className="AdventureStoryBorder"
+      style={{
+        opacity: `${adventure.open ? 1 : 0.5}`,
+      }}
       aria-label="adventure-story"
       onClick={() =>
         adventure.storyGroups ? selectAdventure(adventure) : null
       }
     >
-      {!adventure.open ? <Lock /> : null}
       <div
         className="AdventureStory"
         style={{
@@ -76,12 +78,14 @@ const AdventureTournament = ({
   return (
     <div
       className="AdventureTournamentBorder"
+      style={{
+        opacity: `${adventure.open ? 1 : 0.5}`,
+      }}
       aria-label="adventure-tournament"
       onClick={() =>
         adventure.storyGroups ? selectAdventure(adventure) : null
       }
     >
-      {!adventure.open ? <Lock /> : null}
       <div
         className="AdventureTournament"
         style={{
@@ -105,12 +109,14 @@ const AdventureEvent = ({
   return (
     <div
       className="AdventureEventBorder"
+      style={{
+        opacity: `${adventure.open ? 1 : 0.5}`,
+      }}
       aria-label="adventure-event"
       onClick={() =>
         adventure.storyGroups ? selectAdventure(adventure) : null
       }
     >
-      {!adventure.open ? <Lock /> : null}
       <div
         className="AdventureEvent"
         style={{
@@ -172,31 +178,33 @@ export const Adventures = () => {
         backgroundImage: `url(${imgUrl})`,
       }}
     >
-      <div className="AdventuresTop">
-        <AdventureStory
-          selectAdventure={selectAdventure}
-          adventure={context.gameState.player.adventures[0]}
-        />
-        <AdventureArena
-          selectAdventure={selectAdventure}
-          adventure={context.gameState.player.adventures[2]}
-        />
-      </div>
-      <div className="AdventuresBottom">
-        <AdventureTournament
-          selectAdventure={selectAdventure}
-          adventure={context.gameState.player.adventures[3]}
-        />
-        <AdventureEvent
-          selectAdventure={selectAdventure}
-          adventure={context.gameState.player.adventures[4]}
-        />
-      </div>
-      <div className="AdventuresAbsolute">
-        <AdventureCharacter
-          selectAdventure={selectAdventure}
-          adventure={context.gameState.player.adventures[1]}
-        />
+      <div className="AdventuresList">
+        <div className="AdventuresTop">
+          <AdventureStory
+            selectAdventure={selectAdventure}
+            adventure={context.gameState.player.adventures[0]}
+          />
+          <AdventureArena
+            selectAdventure={selectAdventure}
+            adventure={context.gameState.player.adventures[2]}
+          />
+        </div>
+        {/* <div className="AdventuresBottom">
+          <AdventureTournament
+            selectAdventure={selectAdventure}
+            adventure={context.gameState.player.adventures[3]}
+          />
+          <AdventureEvent
+            selectAdventure={selectAdventure}
+            adventure={context.gameState.player.adventures[4]}
+          />
+        </div> */}
+        <div className="AdventuresAbsolute">
+          <AdventureCharacter
+            selectAdventure={selectAdventure}
+            adventure={context.gameState.player.adventures[1]}
+          />
+        </div>
       </div>
     </div>
   );

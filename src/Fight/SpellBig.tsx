@@ -57,7 +57,7 @@ export const SpellBig = ({
         top: spell.owner === "enemy" ? "0" : "10%",
         left: spell.owner === "enemy" ? "0" : "10%",
         zIndex: spell.owner === "enemy" ? 100 : 150,
-        opacity: transparency ? 0.7 : 1,
+        opacity: transparency ? 0.5 : 1,
       }}
     >
       <div className={`BigSpell ${spell.element}`}>

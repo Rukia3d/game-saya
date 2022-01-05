@@ -5,14 +5,11 @@
   justify-content: center;
 
   .StartBackground {
-    background-repeat: no-repeat;
-    background-position: right top;
-    background-origin: content-box;
-    background-size: auto;
+    height: 100%;
   }
 
   .PlayButton {
     position: absolute;
-    top: 50%;
+    top: 60%;
   }
 }
