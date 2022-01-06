@@ -58,6 +58,7 @@ export const Spell = ({
       className={`Spell ${spell.selected ? "active" : "inactive"} ${
         withBorder ? `border ${spell.element}` : "noborder"
       }`}
+      aria-label="spell_card_border"
     >
       <div
         className={`SpellCard ${
@@ -67,6 +68,7 @@ export const Spell = ({
           backgroundImage: `url(${backImgUrl})`,
           // backgroundColor: "white",
         }}
+        aria-label="spell_card"
       >
         <div
           className="SpellCardImage"

@@ -1,7 +1,12 @@
 import { enemyAttack } from "../utils/hitlogic";
 import { mayaCard, enemyCard, heroes } from "../utils/testobjects";
 import { fightState } from "../utils/teststates";
-import { elementType, spellEffectType, ISpellUpdate } from "../utils/types";
+import {
+  elementType,
+  spellEffectType,
+  ISpellUpdate,
+  ISpell,
+} from "../utils/types";
 const testHeroLife = { ...fightState.hero, life: 10 };
 
 const h_heal_1: ISpellUpdate = {
@@ -9,7 +14,7 @@ const h_heal_1: ISpellUpdate = {
   mana: 1,
   resource_base: [],
   effect: "h_heal" as spellEffectType,
-  action: "health, +1",
+  action: { action: "health", strength: 1 },
   price: null,
   name: "Heal 1",
   description: "Earth: heal 1 (mana 1)",
@@ -42,13 +47,13 @@ test("Update effect h_heal works with simple attack", () => {
 });
 
 test("Update effect h_heal works with simple attack with any effect", () => {
-  const newHeroCard = {
+  const newHeroCard: ISpell = {
     ...mayaCard,
     strength: 3,
     element: "earth" as elementType,
-    updates: [{ ...h_heal_1, action: "health, +3" }],
+    updates: [{ ...h_heal_1, action: { action: "health", strength: 3 } }],
   };
-  const newEnemyCard = {
+  const newEnemyCard: ISpell = {
     ...enemyCard,
     strength: 3,
     element: "fire" as elementType,
@@ -181,8 +186,8 @@ const h_trumpremove_1: ISpellUpdate = {
   mana: 1,
   resource_base: [],
   effect: "h_trumpremove" as spellEffectType,
-  action: "trump, 0",
-  price: "",
+  action: { action: "trump", strength: 0 },
+  price: null,
   name: "Simplify",
   description: "Air: make not trump (mana 1)",
   id: "air_1",
@@ -245,8 +250,8 @@ const h_trumpset_1: ISpellUpdate = {
   mana: 2,
   resource_base: [],
   effect: "h_trumpset" as spellEffectType,
-  action: "trump, air",
-  price: "",
+  action: { action: "trump", strength: "air" },
+  price: null,
   name: "Make Air",
   description: "Air: change trump to air next turn (mana 2)",
   id: "air_2",

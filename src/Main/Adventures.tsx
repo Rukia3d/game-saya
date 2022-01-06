@@ -189,7 +189,7 @@ export const Adventures = () => {
             adventure={context.gameState.player.adventures[2]}
           />
         </div>
-        {/* <div className="AdventuresBottom">
+        <div className="AdventuresBottom">
           <AdventureTournament
             selectAdventure={selectAdventure}
             adventure={context.gameState.player.adventures[3]}
@@ -198,7 +198,7 @@ export const Adventures = () => {
             selectAdventure={selectAdventure}
             adventure={context.gameState.player.adventures[4]}
           />
-        </div> */}
+        </div>
         <div className="AdventuresAbsolute">
           <AdventureCharacter
             selectAdventure={selectAdventure}

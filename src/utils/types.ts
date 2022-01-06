@@ -24,7 +24,7 @@ export interface ISpellUpdate {
   mana: number;
   resource_base: ISpellUpdateResource[];
   effect: spellEffectType;
-  action: { action: spellUpdateEffect; strength: number };
+  action: { action: spellUpdateEffect; strength: number | string };
   price: { action: spellUpdatePrice; strength: number } | null;
   name: string;
   description: string;

@@ -9,22 +9,22 @@ import {
   mayaCard,
 } from "../utils/testobjects";
 import { fightState, gameState } from "../utils/teststates";
-import { ISpell } from "../utils/types";
+import { FightState, ISpell } from "../utils/types";
 
 test("generateDeck function returns correct character cards", () => {
-  const deckForOne = generateDeck([heroes[0]], baseCards15);
+  const deckForOne: ISpell[] = generateDeck([heroes[0]], baseCards15);
   expect(deckForOne.length).toEqual(15);
 });
 
 test("generateEnemyDeck function returns correct number for enemy lifes", () => {
-  const deckForEnemy = generateEnemyDeck(enemy);
+  const deckForEnemy: ISpell[] = generateEnemyDeck(enemy);
   expect(deckForEnemy.length).toEqual(2);
 });
 
 test("updateHeroDeck shuffles if there are no cards left", () => {
-  const deckForTwo = generateDeck(heroes.slice(0, 2), baseCards15);
-  const deckForEnemy = generateEnemyDeck(enemy);
-  const newFightState = {
+  const deckForTwo: ISpell[] = generateDeck(heroes.slice(0, 2), baseCards15);
+  const deckForEnemy: ISpell[] = generateEnemyDeck(enemy);
+  const newFightState: FightState = {
     ...JSON.parse(JSON.stringify(fightState)),
     heroHand: deckForTwo.slice(0, 3),
     heroDeck: [],
@@ -37,25 +37,24 @@ test("updateHeroDeck shuffles if there are no cards left", () => {
 });
 
 test("Throws a correct error when adding a wrong card", () => {
-  const spellsUnselected = new Array(15).fill(0).map((x, n) => ({
+  const spellsUnselected: ISpell[] = new Array(15).fill(0).map((x, n) => ({
     ...mayaCard,
     id: "base_hit" + n,
     name: "Base Hit " + n,
   }));
-  const newCard = { ...mayaCard, id: "something new" };
-  expect(() => changeCardsInDeck(spellsUnselected, newCard)).toThrow(
+  expect(() => changeCardsInDeck(spellsUnselected, 18)).toThrow(
     "Can't find the card you're trying to select in player's cards"
   );
 });
 
 test("Correctly adds Card to Player's deck", () => {
-  const spellsUnselected = new Array(15).fill(0).map((x, n) => ({
+  const spellsUnselected: ISpell[] = new Array(15).fill(0).map((x, n) => ({
     ...mayaCard,
     id: "base_hit" + n,
     name: "Base Hit " + n,
   }));
 
-  const spellsSelected = new Array(15).fill(0).map((x, n) => ({
+  const spellsSelected: ISpell[] = new Array(15).fill(0).map((x, n) => ({
     ...enemyCard,
     id: "base_hit" + n,
     name: "Base Hit " + n,
@@ -63,35 +62,29 @@ test("Correctly adds Card to Player's deck", () => {
 
   const spellsMore = spellsSelected.concat([mayaCard, mayaCard]);
   spellsUnselected[0].selected = false;
-  const addingFirst = changeCardsInDeck(spellsUnselected, spellsUnselected[0]);
+  const addingFirst = changeCardsInDeck(spellsUnselected, 0);
   expect(addingFirst.length).toEqual(15);
   expect(addingFirst[0].selected).toBeTruthy();
 
   spellsUnselected[3].selected = false;
-  const addingThird = changeCardsInDeck(spellsUnselected, spellsUnselected[3]);
+  const addingThird = changeCardsInDeck(spellsUnselected, 3);
   expect(addingThird.length).toEqual(15);
   expect(addingThird[3].selected).toBeTruthy();
 
   spellsSelected[0].selected = true;
-  const chaingingFirstTaken = changeCardsInDeck(
-    spellsSelected,
-    spellsSelected[0]
-  );
+  const chaingingFirstTaken = changeCardsInDeck(spellsSelected, 0);
   expect(chaingingFirstTaken.length).toEqual(15);
   expect(chaingingFirstTaken[0].selected).not.toBeTruthy();
 
   spellsSelected[3].selected = true;
-  const changingThirdTaken = changeCardsInDeck(
-    spellsSelected,
-    spellsSelected[3]
-  );
+  const changingThirdTaken = changeCardsInDeck(spellsSelected, 3);
   expect(changingThirdTaken.length).toEqual(15);
   expect(changingThirdTaken[3].selected).not.toBeTruthy();
 
   spellsMore.map((s: ISpell, i: number) =>
     i < 15 ? (s.selected = true) : (s.selected = false)
   );
-  const addingWhenAllSelected = changeCardsInDeck(spellsMore, spellsMore[15]);
+  const addingWhenAllSelected = changeCardsInDeck(spellsMore, 15);
   expect(addingWhenAllSelected.length).toEqual(17);
   expect(addingWhenAllSelected[0].selected).not.toBeTruthy();
   expect(addingWhenAllSelected[15].selected).toBeTruthy();

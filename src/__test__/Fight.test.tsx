@@ -1,6 +1,5 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
 import { Fight } from "../Fight/Fight";
 import { GameContext, GameContextType } from "../App";
 import { enemy, fightstory } from "../utils/testobjects";
@@ -28,69 +27,21 @@ test("Renders Fight screen", () => {
       <Fight />
     </GameContext.Provider>
   );
-  expect(screen.getByText(/Your opponent/)).toBeInTheDocument();
+  expect(screen.getByText(/Dude/)).toBeInTheDocument();
   // TODO check the correct element was assigned
-  expect(screen.getByText(/Elements:/)).toBeInTheDocument();
+  expect(screen.getByText(/earth/)).toBeInTheDocument();
   // correct number of enemy life
-  expect(screen.getByTestId("enemy_life").innerHTML).toMatch(
+  expect(screen.getByTestId("enemy-life").innerHTML).toMatch(
     enemy.life.toString()
   );
   // Correct hero and enemy data
-  expect(screen.getByTestId("hero_life").innerHTML).toMatch(
+  expect(screen.getByLabelText("life_value").innerHTML).toMatch(
     gameState.player.data.life.toString()
   );
-  expect(screen.getByTestId("hero_mana").innerHTML).toMatch(
+  expect(screen.getByLabelText("mana_value").innerHTML).toMatch(
     gameState.player.data.mana.toString()
   );
   expect(screen.getByLabelText("Deck").childElementCount).toEqual(5);
-
-  // Info popup shows correct informatioj
-  const firstCardName = screen.getAllByLabelText("spell_card")[0].innerHTML;
-
-  userEvent.click(screen.getAllByTestId("hero_card_info")[0]);
-  expect(screen.getByLabelText("card_name_header").innerHTML).toEqual(
-    firstCardName
-  );
-  userEvent.click(screen.getByLabelText("info_card"));
-  // TODO info on opponent is correct
-  // TODO info on attacking card is correct
-  // TODO info on defending card is correct
-});
-
-test("Fight works enemy attacks and hero defends", () => {
-  render(
-    <GameContext.Provider
-      value={{
-        ...context,
-        story: fightstory,
-      }}
-    >
-      <Fight />
-    </GameContext.Provider>
-  );
-  userEvent.click(screen.getByLabelText("opponent"));
-  expect(screen.getAllByLabelText("display_card").length).toEqual(1);
-  userEvent.click(screen.getAllByLabelText("spell_card")[0]);
-  expect(screen.getAllByLabelText("display_card").length).toEqual(2);
-});
-
-test("Settings screen switches on and off", async () => {
-  render(
-    <GameContext.Provider
-      value={{
-        ...context,
-        story: fightstory,
-      }}
-    >
-      <Fight />
-    </GameContext.Provider>
-  );
-  expect(screen.queryByLabelText("settings_screen")).not.toBeInTheDocument();
-  expect(screen.getByTestId("settings_button")).toBeInTheDocument();
-  userEvent.click(screen.getByTestId("settings_button"));
-  expect(screen.getByLabelText("settings_screen")).toBeInTheDocument();
-  userEvent.click(screen.getByTestId("settings_button"));
-  expect(screen.queryByLabelText("settings_screen")).not.toBeInTheDocument();
 });
 
 test("Throws error if no data provided in context", () => {

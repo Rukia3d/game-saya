@@ -51,7 +51,7 @@ const additionalEffects = (
       //console.log("Spell effect", currentupdate.effect);
       switch (currentupdate.effect) {
         case "h_heal":
-          heroHealth = heroHealth + currentupdate.action.strength;
+          heroHealth = heroHealth + (currentupdate.action.strength as number);
           break;
         case "h_trumpremove":
           if (enemyCard.element === fightState.element) {

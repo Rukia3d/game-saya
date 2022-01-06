@@ -34,7 +34,13 @@ export const DialogueImage = ({
           backgroundImage: `url(${imgUrl})`,
         }
       : {};
-  return <div className="DialogueCharacter" style={style}></div>;
+  return (
+    <div
+      className="DialogueCharacter"
+      style={style}
+      aria-label={`character_image_${hero}`}
+    ></div>
+  );
 };
 
 const DialogueSingleLayout = ({
@@ -154,7 +160,6 @@ export const Dialogue = ({
   ) {
     throw new Error("No data");
   }
-
   const CurrentDialogueLayout = dialLayouts[dialogue.layout];
   const imgUrl = `/img/Backgrounds/dialogue_background.jpg`;
 
@@ -183,11 +188,11 @@ export const Dialogue = ({
   const lines = dialogue.lines;
   const [line, setLine] = useState(lines[0]);
   let res = lines.indexOf(line);
-
+  const isNotActionable = !context.story;
   const nextLine = () => {
     res = lines.indexOf(line);
     if (res >= lines.length - 1) {
-      dialogue.layout === "single" ? setDialogue(null) : finishDialogue();
+      isNotActionable ? setDialogue(null) : finishDialogue();
     } else {
       setLine(lines[res + 1]);
     }
