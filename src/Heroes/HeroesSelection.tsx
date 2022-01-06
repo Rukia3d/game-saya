@@ -64,7 +64,6 @@ export const HeroesSelection = ({
       selected.map((s: IHero) => s.id)
     )
   );
-  console.log("ERROR", error);
 
   // const characters = selected.map((s: string) =>
   //   findCharacter(game.player.heroes, s)

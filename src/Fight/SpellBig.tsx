@@ -45,7 +45,6 @@ export const SpellBig = ({
   spell: ISpell;
   setInfo: (s: ISpell | IEnemy | null) => void;
 }) => {
-  console.log("Spell", spell);
   //const mana = calculateSpellMana(spell);
   const strength = calculateSpellStrength(spell);
   //const updates = spell.updates.length;
@@ -62,7 +61,7 @@ export const SpellBig = ({
     >
       <div className={`BigSpell ${spell.element}`}>
         {new Array(strength).fill(0).map((x, n) => (
-          <Strength n={n} element={spell.element} />
+          <Strength n={n} element={spell.element} key={n} />
         ))}
         <img
           className="BigSpellImage"

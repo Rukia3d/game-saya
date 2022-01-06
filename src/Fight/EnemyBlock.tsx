@@ -90,7 +90,6 @@ export const FightLevel = ({
 
   useEffect(() => {
     if (animation === "GIVECARDS") {
-      console.log("I will move right");
       setTimeout(() => {
         setMoveCameraX(250);
       }, 1000);

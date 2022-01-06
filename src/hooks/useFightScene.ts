@@ -71,7 +71,6 @@ export const useFightScene = (
   );
 
   const heroAct = (index: number) => {
-    console.log("Hero act");
     if (fightState.enemyCardIndex === null) {
       console.warn("You are acting first");
       return;
@@ -154,6 +153,5 @@ export const useFightScene = (
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [nextStep]);
-  console.log("animation", animation);
   return [enemyCard, heroCard, animation, fightState, enemyAct, heroAct];
 };
