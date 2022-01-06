@@ -8,6 +8,7 @@ export const Shop = () => {
   return (
     <div
       className="Shop"
+      aria-label="shop_background"
       style={{
         backgroundImage: `url(${imgUrl})`,
       }}

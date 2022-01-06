@@ -60,11 +60,9 @@ const Spells = ({ cards }: { cards: ISpell[] }) => {
 };
 
 export const TopMenu = ({
-  cards,
   currentHealth,
   currentMana,
 }: {
-  cards?: ISpell[];
   currentHealth?: number;
   currentMana?: number;
 }) => {
@@ -83,7 +81,6 @@ export const TopMenu = ({
         max={player.maxMana}
         current={currentMana ? currentMana : player.mana}
       />
-      {cards ? <Spells cards={cards} /> : null}
     </div>
   );
 };

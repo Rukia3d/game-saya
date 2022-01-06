@@ -2,8 +2,8 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import { GameContext, GameContextType } from "../App";
 import { gameRestrictedCharacters, gameState } from "../utils/teststates";
-import { StoryHeroes } from "../Heroes/HeroesSelection";
 import { IFight, IHero } from "../utils/types";
+import { HeroesSelection } from "../Heroes/HeroesSelection";
 
 const context: GameContextType = {
   adventure: gameState.adventures[1],
@@ -36,12 +36,13 @@ test.only("Renders HerosSelection if 0 characters", async () => {
         adventure: gameRestrictedCharacters.adventures[1],
       }}
     >
-      <StoryHeroes
+      <HeroesSelection
         setSelectionError={setSelectionError}
+        setSpellSelect={jest.fn()}
         story={story}
         fight={fight}
       />
     </GameContext.Provider>
   );
-  expect(screen.getByText(/No heros selected/)).toBeInTheDocument();
+  expect(screen.getByText(/Select heroes/)).toBeInTheDocument();
 });

@@ -44,14 +44,9 @@ test("Renders Hero Spells", () => {
       <Library />
     </GameContext.Provider>
   );
-  expect(screen.getByAltText("image_earth_spells")).toBeInTheDocument();
-  expect(screen.getByAltText("image_metal_spells")).toBeInTheDocument();
-  userEvent.click(screen.getByAltText("image_earth_spells"));
-  expect(screen.getByText("Earth spells")).toBeInTheDocument();
-  expect(screen.getByLabelText("character_spells").children.length).toEqual(3);
-  const firstCardName = screen.getAllByLabelText("spell_card")[0].innerHTML;
-  userEvent.click(screen.getAllByTestId("hero_card_info")[0]);
-  expect(screen.getByLabelText("card_name_header").innerHTML).toEqual(
-    firstCardName
-  );
+  expect(screen.getByText(/maya/)).toBeInTheDocument();
+  expect(screen.getByText(/Hero/)).toBeInTheDocument();
+  expect(screen.getByText(/Spells/)).toBeInTheDocument();
+  expect(screen.getByText(/Updates/)).toBeInTheDocument();
+  expect(screen.getByText(/Resources/)).toBeInTheDocument();
 });

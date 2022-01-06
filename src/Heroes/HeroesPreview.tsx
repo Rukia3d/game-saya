@@ -19,6 +19,7 @@ export const HeroesPreview = ({
         <div
           className="HeroActive"
           style={{ position: "absolute", left: 70 * i }}
+          key={i}
         >
           <AnimatedSpriteCycle
             width={500}

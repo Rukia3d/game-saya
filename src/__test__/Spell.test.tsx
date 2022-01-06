@@ -7,14 +7,6 @@ import { Spell } from "../Spells/Spell";
 
 test("Renders Element Spell", async () => {
   const selectSpell = jest.fn();
-  render(
-    <Spell
-      spell={mayaCard}
-      selectSpell={selectSpell}
-      element={mayaCard.element}
-    />
-  );
+  render(<Spell spell={mayaCard} selectSpell={selectSpell} withName />);
   expect(screen.getByText("Maya Hit 1")).toBeInTheDocument();
-  userEvent.click(screen.getByLabelText("spell_card_border"));
-  expect(selectSpell.mock.calls.length).toBe(1);
 });

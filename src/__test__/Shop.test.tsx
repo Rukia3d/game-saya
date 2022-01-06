@@ -22,5 +22,5 @@ test("Renders College with a background", async () => {
       <Shop />
     </GameContext.Provider>
   );
-  expect(screen.getByAltText("shop_background")).toBeInTheDocument();
+  expect(screen.getByLabelText("shop_background")).toBeInTheDocument();
 });

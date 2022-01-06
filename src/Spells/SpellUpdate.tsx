@@ -108,11 +108,11 @@ export const SpellUpdate = ({
           </div>
           <div className="UpdateData">
             <div className="UpdateName">{update.name}</div>
-            <div className="UpdateMana" aria-label="UpdateMana">
+            <div className="UpdateMana" aria-label="update-mana">
               Mana: {update.mana}
             </div>
             {/* <div className="UpdateDescription">{update.description}</div> */}
-            <div className="UpdateResource">
+            <div className="UpdateResource" aria-label="update-resource">
               <ResourcesImages resources={updateResource} />
               {/* {update.resource_base.map((s: ISpellUpdateResource, i: number) => (
               <div key={i} aria-label="UpdateResource">

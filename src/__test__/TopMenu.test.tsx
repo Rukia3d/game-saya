@@ -82,35 +82,6 @@ test("Renders Top menu with low mana", () => {
   );
 });
 
-test("Renders Top menu with resources", () => {
-  const resources = [
-    { id: "ash", name: "Ash", image: "ash", commonality: 10, quantity: 5 },
-    {
-      id: "lava_r",
-      name: "Lava Rock",
-      image: "lava_r",
-      commonality: 7,
-      quantity: 3,
-    },
-  ];
-  const newPlayerResources = { ...gameState.player, resources: resources };
-  const newGameState = { ...gameState, player: newPlayerResources };
-  render(
-    <GameContext.Provider
-      value={{
-        ...context,
-        gameState: newGameState,
-      }}
-    >
-      <TopMenu />
-    </GameContext.Provider>
-  );
-  expect(screen.getByLabelText("top_resources")).toBeInTheDocument();
-  expect(screen.getAllByLabelText("top_resource").length).toEqual(2);
-  expect(screen.getByText(/Ash/)).toBeInTheDocument();
-  expect(screen.getByText(/Lava Rock/)).toBeInTheDocument();
-});
-
 test("Throws No Data", async () => {
   jest.spyOn(console, "error").mockImplementation(() => jest.fn());
   const newContext = {

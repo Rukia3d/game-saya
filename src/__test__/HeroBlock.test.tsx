@@ -15,16 +15,5 @@ test("Renders HeroBlock screen", async () => {
       selectSpell={selectSpell}
     />
   );
-  const player = gameState.player.data;
-  expect(screen.getByLabelText("character-maya")).toBeInTheDocument();
-  expect(screen.getByLabelText("character-nell")).toBeInTheDocument();
-  expect(screen.getByLabelText("character-tara")).toBeInTheDocument();
-  userEvent.click(screen.getAllByLabelText("spell_card_border")[0]);
-  expect(selectSpell.mock.calls.length).toBe(1);
-  expect(screen.getByTestId("hero_life").innerHTML).toEqual(
-    player.life.toString()
-  );
-  expect(screen.getByTestId("hero_mana").innerHTML).toEqual(
-    player.mana.toString()
-  );
+  expect(screen.getAllByLabelText("spell_card").length).toEqual(2);
 });

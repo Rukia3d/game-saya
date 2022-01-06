@@ -12,10 +12,7 @@ import {
 // Utils
 import { changeCardsInDeck } from "../utils/fightlogic";
 // Components
-import { CloseButton } from "../UI/CloseButton";
 import { InfoCard } from "../Info/InfoCard";
-import { SpellWithInfo } from "./SpellWithInfo";
-import { SpellLibrary } from "./SpellLibrary";
 import { ScrollButton } from "../UI/ScrollButton";
 import { Spell } from "./Spell";
 
@@ -70,27 +67,6 @@ export const Spells = ({ spells }: { spells: ISpell[] }) => {
       <ScrollButton onClick={() => {}} direction="d" />
     </div>
   );
-  // return (
-  //   <div className="ElementSpells">
-  //     <h1>{`${element.charAt(0).toUpperCase() + element.slice(1)} spells`}</h1>
-  //     <CloseButton onClick={() => setElement(null)} />
-  //     {info ? <InfoCard item={info} setInfo={setInfo} /> : null}
-  //     {forge ? <SpellLibrary item={forge} setForge={setForge} /> : null}
-  //     <div className="ElementSpellsList" aria-label="character_spells">
-  //       {spells.map((c: ISpell, i: number) => (
-  //         <SpellWithInfo
-  //           forge
-  //           key={i}
-  //           selectSpell={selectSpell}
-  //           setInfo={setInfo}
-  //           element={c.element}
-  //           spell={c}
-  //           setForge={setForge}
-  //         />
-  //       ))}
-  //     </div>
-  //   </div>
-  // );
 };
 
 export const SpellsSelection = ({ spells }: { spells: ISpell[] }) => {

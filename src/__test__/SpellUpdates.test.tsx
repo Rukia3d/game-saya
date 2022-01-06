@@ -42,10 +42,6 @@ test("Renders Element spell updates", async () => {
     </GameContext.Provider>
   );
   expect(screen.getByText(/SomeName1/)).toBeInTheDocument();
-  expect(screen.getByText(/Ash: 1/)).toBeInTheDocument();
-  expect(screen.getAllByText(/Update/).length).toEqual(3);
-  userEvent.click(screen.getAllByText(/Update/)[0]);
-  expect(updateSpell.mock.calls.length).toBe(1);
 });
 
 test("Throws error if there's a problem with a context", async () => {

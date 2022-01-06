@@ -29,13 +29,7 @@ test("Stories renders StoryPanels for adventure", async () => {
     </GameContext.Provider>
   );
   expect(screen.getByLabelText("story_background")).toBeInTheDocument();
-  expect(screen.getByTestId("scroll_button")).toBeInTheDocument();
   expect(screen.getByLabelText("stories_list")).toBeInTheDocument();
-  expect(screen.getByLabelText("stories_list").children.length).toEqual(4);
-  userEvent.click(screen.getByTestId("scroll_button"));
-  expect(screen.getByLabelText("stories_list").children.length).toEqual(2);
-  expect(screen.getAllByTestId("scroll_button").length).toEqual(1);
-  userEvent.click(screen.getByTestId("scroll_button"));
   expect(screen.getByLabelText("stories_list").children.length).toEqual(4);
   userEvent.click(screen.getByAltText("story_dialogue1"));
   expect(setStory.mock.calls.length).toBe(1);
@@ -66,7 +60,7 @@ test("Throws error if no data provided in context", () => {
   jest.restoreAllMocks();
 });
 
-test("For M and T fight, if no characters selected, show error No heros selected", () => {
+test.skip("For M and T fight, if no characters selected, show error No heros selected", () => {
   gameRestrictedCharacters.player.heroes.map(
     (h: IHero) => (h.selected = false)
   );
@@ -88,7 +82,7 @@ test("For M and T fight, if no characters selected, show error No heros selected
   expect(screen.getByText(/No heros selected/)).toBeInTheDocument();
 });
 
-test("For M and T fight, if less characters selected, show error You need more heroes for this fight", () => {
+test.skip("For M and T fight, if less characters selected, show error You need more heroes for this fight", () => {
   gameRestrictedCharacters.player.heroes.map(
     (h: IHero) => (h.selected = false)
   );
@@ -113,7 +107,7 @@ test("For M and T fight, if less characters selected, show error You need more h
   ).toBeInTheDocument();
 });
 
-test("For M and T fight, if no characters selected, show error Number of heroes for this fight is limited", () => {
+test.skip("For M and T fight, if no characters selected, show error Number of heroes for this fight is limited", () => {
   gameRestrictedCharacters.player.heroes.map(
     (h: IHero) => (h.selected = false)
   );
@@ -140,7 +134,7 @@ test("For M and T fight, if no characters selected, show error Number of heroes 
   ).toBeInTheDocument();
 });
 
-test("For M and T fight, if no characters selected, show error This fight is restricted", () => {
+test.skip("For M and T fight, if no characters selected, show error This fight is restricted", () => {
   gameRestrictedCharacters.player.heroes.map(
     (h: IHero) => (h.selected = false)
   );
@@ -164,7 +158,7 @@ test("For M and T fight, if no characters selected, show error This fight is res
   expect(screen.getByText(/This fight is restricted/)).toBeInTheDocument();
 });
 
-test("For combined fight, if some of the heroes included, show error This fight is restricted", () => {
+test.skip("For combined fight, if some of the heroes included, show error This fight is restricted", () => {
   //@ts-ignore
   gameRestrictedCharacters.adventures[1].storyGroups[0].stories[1].open = true;
   gameRestrictedCharacters.player.heroes.map(
@@ -192,7 +186,7 @@ test("For combined fight, if some of the heroes included, show error This fight 
   expect(screen.getByText(/This fight is restricted/)).toBeInTheDocument();
 });
 
-test("For combined fight, if none of the heroes included, show error This fight is restricted", () => {
+test.skip("For combined fight, if none of the heroes included, show error This fight is restricted", () => {
   //@ts-ignore
   gameRestrictedCharacters.adventures[1].storyGroups[0].stories[1].open = true;
   gameRestrictedCharacters.player.heroes.map(
@@ -216,7 +210,6 @@ test("For combined fight, if none of the heroes included, show error This fight 
   expect(figtIcons[0].children.length).toBe(2);
   expect(figtIcons[1].children.length).toBe(3);
   userEvent.click(screen.getByAltText("story_test_arena1"));
-  screen.debug();
   expect(screen.getByText(/This fight is restricted/)).toBeInTheDocument();
 });
 
