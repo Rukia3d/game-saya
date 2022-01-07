@@ -3,7 +3,7 @@ import { render, screen } from "@testing-library/react";
 import { GameContext, GameContextType } from "../App";
 import { gameState } from "../utils/teststates";
 import userEvent from "@testing-library/user-event";
-import { ResourceChest } from "../Fight/ResourceChest";
+import { FightWon } from "../Fight/FightWon";
 import { IResource } from "../utils/types";
 import { enemy, fightstory } from "../utils/testobjects";
 
@@ -25,7 +25,7 @@ test("Renders Winning screen with a button", () => {
   });
   render(
     <GameContext.Provider value={context}>
-      <ResourceChest rewards={playerResources} enemy={enemy} />
+      <FightWon rewards={playerResources} enemy={enemy} />
     </GameContext.Provider>
   );
   expect(screen.getByText(/Your prize/)).toBeInTheDocument();
@@ -40,7 +40,7 @@ test("Throws correct error with no context", () => {
   expect(() =>
     render(
       <GameContext.Provider value={{ ...context, story: null }}>
-        <ResourceChest rewards={playerResources} enemy={enemy} />
+        <FightWon rewards={playerResources} enemy={enemy} />
       </GameContext.Provider>
     )
   ).toThrow("No data in context");

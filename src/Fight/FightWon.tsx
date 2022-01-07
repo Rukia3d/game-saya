@@ -18,7 +18,7 @@ const Rewards = ({ rewards }: { rewards: IResource[] }) => {
   );
 };
 
-export const ResourceChest = ({
+export const FightWon = ({
   rewards,
   enemy,
 }: {
@@ -55,7 +55,7 @@ export const ResourceChest = ({
     context.setStory(null);
   };
   return (
-    <div className="ResourceChest">
+    <div className="FightWon">
       <Rewards rewards={rewards} />
       <button data-testid="exit_fight" onClick={backToStories}>
         exit
