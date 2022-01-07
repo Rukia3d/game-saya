@@ -50,6 +50,7 @@ export const SpellBig = ({
   return (
     <div
       className={"BigSpellPosition"}
+      aria-label="big-spell-frame"
       style={{
         position: "absolute",
         top: spell.owner === "enemy" ? "0" : "10%",
@@ -61,6 +62,7 @@ export const SpellBig = ({
       <div
         className={`BigSpell ${spell.element}`}
         onClick={() => setInfo(spell)}
+        aria-label="big-spell"
       >
         {new Array(strength).fill(0).map((x, n) => (
           <Strength n={n} element={spell.element} key={n} />

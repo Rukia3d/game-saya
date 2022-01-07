@@ -1,5 +1,5 @@
 import React from "react";
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { SpellBig } from "../Fight/SpellBig";
 import userEvent from "@testing-library/user-event";
 
@@ -40,4 +40,26 @@ test("Renders Big Card screen with strength 2 and air", async () => {
     "style",
     expect.stringContaining("rgb(8, 254, 221)")
   );
+  expect(screen.getByLabelText("big-spell-frame")).toHaveAttribute(
+    "style",
+    expect.stringContaining("opacity: 1")
+  );
+});
+
+test("Renders Big Card screen and shows the info", async () => {
+  const setInfo = jest.fn();
+  const earthCard: ISpell = { ...mayaCard, element: "water", strength: 2 };
+  render(<SpellBig spell={earthCard} setInfo={setInfo} transparency />);
+  expect(screen.getByAltText("spellimage_base_hit1_maya")).toBeInTheDocument();
+  expect(screen.getAllByLabelText("spell-strength").length).toEqual(2);
+  expect(screen.getAllByLabelText("spell-strength")[0]).toHaveAttribute(
+    "style",
+    expect.stringContaining("rgb(0, 39, 194)")
+  );
+  expect(screen.getByLabelText("big-spell-frame")).toHaveAttribute(
+    "style",
+    expect.stringContaining("opacity: 0.5")
+  );
+  userEvent.click(screen.getByLabelText("big-spell"));
+  expect(setInfo.mock.calls.length).toBe(1);
 });
