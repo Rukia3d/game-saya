@@ -22,7 +22,7 @@ import { GenericStory } from "./Main/GenericStory";
 export interface GameContextType {
   adventure: IAdventure | null;
   setAdventure: (a: IAdventure) => void;
-  story: IStory | IReel | null;
+  story: IStory | null;
   setStory: (s: IStory | null) => void;
   gameState: GameState | null;
   setGameState: (g: GameState) => void;

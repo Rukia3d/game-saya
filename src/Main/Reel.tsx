@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import { GameContext } from "../App";
 import "./Reel.css";
 // Types
-import { IReelGroup } from "../utils/types";
+import { IReel, IReelGroup } from "../utils/types";
 // Utils
 // Components
 import { CloseButton } from "../UI/CloseButton";
@@ -72,12 +72,18 @@ const CurrentReel = ({ reel }: { reel: IReelGroup }) => {
   }
 };
 
-export const Reel = () => {
+export const Reel = ({
+  reel,
+  setReel,
+}: {
+  reel: IReel;
+  setReel: (r: IReel | null) => void;
+}) => {
   const context = useContext(GameContext);
   if (!context || !context.story || !context.gameState) {
     throw new Error("No data");
   }
-  const reel = findReel(context.gameState?.reels, context.story.id);
+
   const [reelGroup, setReelGroup] = useState<IReelGroup>(reel.imageGroups[0]);
 
   const isLast = () => {
@@ -92,10 +98,14 @@ export const Reel = () => {
     return next;
   };
 
+  const backToMain = () => {
+    setReel(null);
+    context.setStory(null);
+  };
   return (
     <div className="ReelScreen" aria-label="reel-screen">
       {isLast() ? (
-        <CloseButton onClick={() => context.setStory(null)} />
+        <CloseButton onClick={backToMain} />
       ) : (
         <ScrollButton onClick={() => setReelGroup(nextReel())} direction="r" />
       )}

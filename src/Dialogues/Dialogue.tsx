@@ -160,11 +160,6 @@ export const Dialogue = ({
   ) {
     throw new Error("No data");
   }
-
-  // making sure only dialogues can be rendered
-  if (context.story && context.story.type !== "dialogue") {
-    throw new Error("Incorrect type of the story");
-  }
   const CurrentDialogueLayout = dialLayouts[dialogue.layout];
   const imgUrl = `/img/Backgrounds/dialogue-screen.jpg`;
 

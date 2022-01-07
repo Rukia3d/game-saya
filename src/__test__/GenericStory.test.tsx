@@ -2,10 +2,7 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import { GameContext, GameContextType } from "../App";
 import { gameState } from "../utils/teststates";
-import userEvent from "@testing-library/user-event";
-import { FightWon } from "../Fight/FightWon";
-import { IResource } from "../utils/types";
-import { dialstory, enemy, fightstory, reelStory } from "../utils/testobjects";
+import { dialstory, fightstory, reelstory, reel } from "../utils/testobjects";
 import { GenericStory } from "../Main/GenericStory";
 
 const context: GameContextType = {
@@ -43,8 +40,8 @@ test("Renders Reel if no other cases", () => {
     <GameContext.Provider
       value={{
         ...context,
-        story: reelStory,
-        gameState: { ...gameState, reels: [reelStory] },
+        story: reelstory,
+        gameState: { ...gameState, reels: [reel] },
       }}
     >
       <GenericStory />

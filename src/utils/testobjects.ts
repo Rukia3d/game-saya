@@ -97,8 +97,14 @@ advFormat.forEach((obj: [string, boolean]) =>
 export const fightstory = adventures[0].storyGroups[0].stories[2];
 //@ts-ignore
 export const dialstory = adventures[0].storyGroups[0].stories[0];
-//@ts-ignore
-export const reelStory: IReel = {
+export const reelstory = {
+  //@ts-ignore
+  ...adventures[0].storyGroups[0].stories[0],
+  type: "reel" as "reel",
+  id: "reel1",
+};
+
+export const reel: IReel = {
   id: "reel1",
   type: "reel",
   action: [],

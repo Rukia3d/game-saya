@@ -5,8 +5,8 @@ import { GameContext } from "../App";
 // Components
 import { Dialogue } from "../Dialogues/Dialogue";
 import { Fight } from "../Fight/Fight";
-import { findDialogue } from "../utils/helpers";
-import { IDialogue } from "../utils/types";
+import { findDialogue, findReel } from "../utils/helpers";
+import { IDialogue, IReel } from "../utils/types";
 import { Reel } from "./Reel";
 
 export const GenericStory = () => {
@@ -21,6 +21,11 @@ export const GenericStory = () => {
       ? findDialogue(context.gameState.dialogues, context.story.id)
       : null
   );
+  const [reel, setReel] = useState<IReel | null>(
+    context.story.type === "reel"
+      ? findReel(context.gameState?.reels, context.story.id)
+      : null
+  );
 
   if (story.type === "fight") {
     return <Fight />;
@@ -31,7 +36,9 @@ export const GenericStory = () => {
     }
   }
   if (story.type === "reel") {
-    return <Reel />;
+    if (reel) {
+      return <Reel reel={reel} setReel={setReel} />;
+    }
   }
   throw new Error("Unknown story type");
 };
