@@ -241,3 +241,18 @@ export const finishStory = (game: GameState, story: IStory): Player => {
   }
   return player;
 };
+
+export const finishFight = (
+  gameState: GameState,
+  story: IStory,
+  result: string,
+  enemy?: IEnemy,
+  rewards?: IResource[]
+): Player => {
+  const player = finishStory(gameState, story);
+  if (result === "Won" && enemy && rewards) {
+    return updateWinPlayer(player, enemy, rewards);
+  } else {
+    return updateLostPlayer(gameState.player);
+  }
+};

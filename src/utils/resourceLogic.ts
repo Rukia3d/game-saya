@@ -41,7 +41,10 @@ const generateSingleRewards = (resources: IResource[]) => {
   return res;
 };
 
-export const generateReward = (enemy: IEnemy, resources: IResource[]) => {
+export const generateReward = (
+  enemy: IEnemy,
+  resources: IResource[]
+): IResource[] => {
   const rewards = [];
   const max = enemyToNumber(enemy);
   for (let i = 0; i < max; i++) {

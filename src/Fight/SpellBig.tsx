@@ -28,6 +28,7 @@ const Strength = ({ n, element }: { n: number; element: elementType }) => {
     <div className={`Path size_${n}`}>
       <div
         className="Strength"
+        aria-label="spell-strength"
         style={{ backgroundColor: strengthColor() }}
       ></div>
     </div>
@@ -35,12 +36,10 @@ const Strength = ({ n, element }: { n: number; element: elementType }) => {
 };
 
 export const SpellBig = ({
-  element,
   transparency,
   spell,
   setInfo,
 }: {
-  element: elementType;
   transparency?: boolean;
   spell: ISpell;
   setInfo: (s: ISpell | IEnemy | null) => void;
@@ -59,7 +58,10 @@ export const SpellBig = ({
         opacity: transparency ? 0.5 : 1,
       }}
     >
-      <div className={`BigSpell ${spell.element}`}>
+      <div
+        className={`BigSpell ${spell.element}`}
+        onClick={() => setInfo(spell)}
+      >
         {new Array(strength).fill(0).map((x, n) => (
           <Strength n={n} element={spell.element} key={n} />
         ))}

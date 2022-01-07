@@ -26,6 +26,7 @@ import { Settings } from "../UI/Settings";
 import { SettingsButton } from "../UI/SettingsButton";
 import { FightResult } from "./FightResult";
 import { FightScene } from "./FightScene";
+import useFinishFight from "../hooks/useFinishFight";
 
 export const Fight = () => {
   const context = useContext(GameContext);
@@ -46,43 +47,7 @@ export const Fight = () => {
   const [info, setInfo] = useState<
     null | ISpell | ISpellUpdate | IEnemy | IHero
   >(null);
-  const fight: IFight = findFight(context.gameState.fights, context.story.id);
 
-  // This needs to go into finish fight hook
-  const finishFight = () => {
-    console.log("Fight is finished with", result);
-    const gameState = context.gameState;
-    const story = context.story;
-    if (!gameState || !story) throw new Error("Can't update the fight results");
-    isValidAction(story.action);
-    if (result === "Won") {
-      displayAddedHero(
-        gameState.player.heroes,
-        gameState.heroes,
-        story.action,
-        context.setAdditionScreen
-      );
-      displayAddedUpdate(
-        gameState.player.spellUpdates,
-        gameState.spellUpdates,
-        story.action,
-        context.setAdditionScreen
-      );
-      const player = finishStory(gameState, story);
-      context.setGameState({
-        ...gameState,
-        player: updateWinPlayer(player, prefightState.enemy, rewards),
-      });
-    }
-
-    if (result === "Lost") {
-      context.setGameState({
-        ...gameState,
-        player: updateLostPlayer(gameState.player),
-      });
-    }
-    context.setStory(null);
-  };
   // console.log(
   //   "game state FIGHT",
   //   JSON.parse(JSON.stringify(context.gameState?.adventures[0].stories))
@@ -98,9 +63,9 @@ export const Fight = () => {
       {info ? <InfoCard item={info} setInfo={setInfo} /> : null}
       {result ? (
         <FightResult
-          finishFight={finishFight}
           result={result}
           rewards={rewards}
+          enemy={prefightState.enemy}
         />
       ) : null}
     </div>
