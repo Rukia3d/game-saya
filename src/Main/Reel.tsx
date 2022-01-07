@@ -93,7 +93,7 @@ export const Reel = () => {
   };
 
   return (
-    <div className="ReelScreen">
+    <div className="ReelScreen" aria-label="reel-screen">
       {isLast() ? (
         <CloseButton onClick={() => context.setStory(null)} />
       ) : (

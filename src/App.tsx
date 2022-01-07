@@ -8,6 +8,7 @@ import {
   GameState,
   IStory,
   ISpellUpdate,
+  IReel,
 } from "./utils/types";
 // Utils
 import { fetcher } from "./utils/helpers";
@@ -21,7 +22,7 @@ import { GenericStory } from "./Main/GenericStory";
 export interface GameContextType {
   adventure: IAdventure | null;
   setAdventure: (a: IAdventure) => void;
-  story: IStory | null;
+  story: IStory | IReel | null;
   setStory: (s: IStory | null) => void;
   gameState: GameState | null;
   setGameState: (g: GameState) => void;

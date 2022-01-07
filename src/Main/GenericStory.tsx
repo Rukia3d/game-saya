@@ -26,8 +26,12 @@ export const GenericStory = () => {
     return <Fight />;
   }
   if (story.type === "dialogue") {
-    if (dialogue)
+    if (dialogue) {
       return <Dialogue dialogue={dialogue} setDialogue={setDialogue} />;
+    }
   }
-  return <Reel />;
+  if (story.type === "reel") {
+    return <Reel />;
+  }
+  throw new Error("Unknown story type");
 };

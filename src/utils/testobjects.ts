@@ -100,6 +100,8 @@ export const dialstory = adventures[0].storyGroups[0].stories[0];
 //@ts-ignore
 export const reelStory: IReel = {
   id: "reel1",
+  type: "reel",
+  action: [],
   imageGroups: [
     {
       id: 1,

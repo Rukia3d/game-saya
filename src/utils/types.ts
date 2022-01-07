@@ -105,7 +105,9 @@ export interface IAdventure {
 
 export interface IReel {
   id: string;
+  type: string;
   imageGroups: IReelGroup[];
+  action: IStoryAction[];
 }
 
 export interface IReelGroup {

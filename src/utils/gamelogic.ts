@@ -13,6 +13,7 @@ import {
   IStory,
   ISpellUpdate,
   IStoryAction,
+  IReel,
 } from "./types";
 
 export const enemyToNumber = (enemy: IEnemy) => {
@@ -201,7 +202,7 @@ const findStoryToUpdate = (
   return [storyGroup, res];
 };
 
-export const finishStory = (game: GameState, story: IStory): Player => {
+export const finishStory = (game: GameState, story: IStory | IReel): Player => {
   const actions = story.action;
   //actions.map((a: IStoryAction) => console.log("Action", a));
   let player = game.player;

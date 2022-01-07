@@ -90,6 +90,8 @@ app.get("/api/player/", (req: any, res: any) => {
     reels: [
       {
         id: "c1_reel_1",
+        type: "reel",
+        action: [],
         imageGroups: [
           {
             id: 1,
@@ -112,6 +114,8 @@ app.get("/api/player/", (req: any, res: any) => {
       },
       {
         id: "c1_reel_2",
+        type: "reel",
+        action: [],
         imageGroups: [
           {
             id: 1,

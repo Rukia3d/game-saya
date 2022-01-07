@@ -26,7 +26,6 @@ import { Settings } from "../UI/Settings";
 import { SettingsButton } from "../UI/SettingsButton";
 import { FightResult } from "./FightResult";
 import { FightScene } from "./FightScene";
-import useFinishFight from "../hooks/useFinishFight";
 
 export const Fight = () => {
   const context = useContext(GameContext);
@@ -53,7 +52,7 @@ export const Fight = () => {
   //   JSON.parse(JSON.stringify(context.gameState?.adventures[0].stories))
   // );
   return (
-    <div className="Fight">
+    <div className="Fight" aria-label="fight-screen">
       <SettingsButton onClick={() => setSettingsOpen(false)} />
       <FightScene
         prefightState={prefightState}

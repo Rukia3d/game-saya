@@ -44,9 +44,9 @@ test("Dialogue is triggered when clicking on panel and closes correctly", () => 
     </GameContext.Provider>
   );
   userEvent.click(screen.getByAltText("dialogue-maya-story"));
-  expect(screen.getByLabelText("dialogue_background")).toHaveAttribute(
+  expect(screen.getByLabelText("dialogue-screen")).toHaveAttribute(
     "style",
-    expect.stringContaining("dialogue_background")
+    expect.stringContaining("dialogue-screen")
   );
 });
 

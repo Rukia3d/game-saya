@@ -30,7 +30,7 @@ test("Renders dialogue page", async () => {
       <Dialogue dialogue={dialogues[0]} setDialogue={jest.fn()} />
     </GameContext.Provider>
   );
-  expect(screen.getByLabelText("dialogue_background")).toBeInTheDocument();
+  expect(screen.getByLabelText("dialogue-screen")).toBeInTheDocument();
   expect(screen.getByLabelText("character_image_maya")).toBeInTheDocument();
   expect(screen.getByLabelText("dialogue_line_0")).toBeInTheDocument();
   userEvent.click(screen.getByLabelText("dialogue_line_0"));
@@ -93,7 +93,7 @@ test("Renders dialogue page and triggers Character screen", async () => {
       <Dialogue dialogue={newDialogue} setDialogue={jest.fn()} />
     </GameContext.Provider>
   );
-  expect(screen.getByLabelText("dialogue_background")).toBeInTheDocument();
+  expect(screen.getByLabelText("dialogue-screen")).toBeInTheDocument();
   expect(screen.getByLabelText("character_image_maya")).toBeInTheDocument();
   expect(screen.getByLabelText("dialogue_line_0")).toBeInTheDocument();
   userEvent.click(screen.getByLabelText("dialogue_line_0"));
