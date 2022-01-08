@@ -6,8 +6,9 @@ import { IAdventure } from "../utils/types";
 // Utils
 // Components
 import { Lock } from "../UI/Lock";
+import { capitalizeFirstLetter } from "../utils/helpers";
 
-const AdventureArena = ({
+const GenericAdventure = ({
   adventure,
   selectAdventure,
 }: {
@@ -15,110 +16,23 @@ const AdventureArena = ({
   selectAdventure: (a: IAdventure) => void;
 }) => {
   const imgUrl = `/img/Backgrounds/adventure_${adventure.id}_background.jpg`;
+  const adventureTitle = capitalizeFirstLetter(adventure.type);
   return (
     <div
-      className="AdventureArenaBorder"
-      aria-label="adventure-arena"
+      className={`Adventure${adventureTitle}Border`}
+      style={{
+        opacity: `${
+          adventure.open || adventure.type === "character" ? 1 : 0.5
+        }`,
+      }}
+      aria-label={`adventure-${adventure.type}`}
       onClick={() =>
         adventure.storyGroups ? selectAdventure(adventure) : null
       }
     >
       {!adventure.open ? <Lock /> : null}
       <div
-        className="AdventureArena"
-        style={{
-          backgroundImage: `url(${imgUrl})`,
-        }}
-      >
-        <h3>{adventure.name}</h3>
-      </div>
-    </div>
-  );
-};
-
-const AdventureStory = ({
-  adventure,
-  selectAdventure,
-}: {
-  adventure: IAdventure;
-  selectAdventure: (a: IAdventure) => void;
-}) => {
-  const imgUrl = `/img/Backgrounds/adventure_${adventure.id}_background.jpg`;
-  return (
-    <div
-      className="AdventureStoryBorder"
-      style={{
-        opacity: `${adventure.open ? 1 : 0.5}`,
-      }}
-      aria-label="adventure-story"
-      onClick={() =>
-        adventure.storyGroups ? selectAdventure(adventure) : null
-      }
-    >
-      <div
-        className="AdventureStory"
-        style={{
-          backgroundImage: `url(${imgUrl})`,
-        }}
-      >
-        <h3>{adventure.name}</h3>
-      </div>
-    </div>
-  );
-};
-
-const AdventureTournament = ({
-  adventure,
-  selectAdventure,
-}: {
-  adventure: IAdventure;
-  selectAdventure: (a: IAdventure) => void;
-}) => {
-  const imgUrl = `/img/Backgrounds/adventure_${adventure.id}_background.jpg`;
-  return (
-    <div
-      className="AdventureTournamentBorder"
-      style={{
-        opacity: `${adventure.open ? 1 : 0.5}`,
-      }}
-      aria-label="adventure-tournament"
-      onClick={() =>
-        adventure.storyGroups ? selectAdventure(adventure) : null
-      }
-    >
-      <div
-        className="AdventureTournament"
-        style={{
-          backgroundImage: `url(${imgUrl})`,
-        }}
-      >
-        <h3>{adventure.name}</h3>
-      </div>
-    </div>
-  );
-};
-
-const AdventureEvent = ({
-  adventure,
-  selectAdventure,
-}: {
-  adventure: IAdventure;
-  selectAdventure: (a: IAdventure) => void;
-}) => {
-  const imgUrl = `/img/Backgrounds/adventure_${adventure.id}_background.jpg`;
-  return (
-    <div
-      className="AdventureEventBorder"
-      style={{
-        opacity: `${adventure.open ? 1 : 0.5}`,
-      }}
-      aria-label="adventure-event"
-      onClick={() =>
-        adventure.storyGroups ? selectAdventure(adventure) : null
-      }
-    >
-      <div
-        className="AdventureEvent"
+        className={`Adventure${adventureTitle}`}
         style={{
           backgroundImage: `url(${imgUrl})`,
         }}
@@ -169,6 +83,14 @@ export const Adventures = () => {
       context.setAdventure(a);
     }
   };
+  const topAdventures = [
+    context.gameState.player.adventures[0],
+    context.gameState.player.adventures[1],
+  ];
+  const bottomAdventures = [
+    context.gameState.player.adventures[2],
+    context.gameState.player.adventures[3],
+  ];
   const imgUrl = `/img/Backgrounds/adventure_background.jpg`;
   return (
     <div
@@ -180,29 +102,27 @@ export const Adventures = () => {
     >
       <div className="AdventuresList">
         <div className="AdventuresTop">
-          <AdventureStory
-            selectAdventure={selectAdventure}
-            adventure={context.gameState.player.adventures[0]}
-          />
-          <AdventureArena
-            selectAdventure={selectAdventure}
-            adventure={context.gameState.player.adventures[2]}
-          />
+          {topAdventures.map((a: IAdventure, i: number) => (
+            <GenericAdventure
+              adventure={a}
+              selectAdventure={selectAdventure}
+              key={i}
+            />
+          ))}
         </div>
         <div className="AdventuresBottom">
-          <AdventureTournament
-            selectAdventure={selectAdventure}
-            adventure={context.gameState.player.adventures[3]}
-          />
-          <AdventureEvent
-            selectAdventure={selectAdventure}
-            adventure={context.gameState.player.adventures[4]}
-          />
+          {bottomAdventures.map((a: IAdventure, i: number) => (
+            <GenericAdventure
+              adventure={a}
+              selectAdventure={selectAdventure}
+              key={i}
+            />
+          ))}
         </div>
         <div className="AdventuresAbsolute">
-          <AdventureCharacter
+          <GenericAdventure
+            adventure={context.gameState.player.adventures[4]}
             selectAdventure={selectAdventure}
-            adventure={context.gameState.player.adventures[1]}
           />
         </div>
       </div>

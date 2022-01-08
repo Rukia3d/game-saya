@@ -96,7 +96,7 @@ export interface IHero {
 
 export interface IAdventure {
   id: adventureType;
-  form: string;
+  type: string;
   name: string;
   image: string;
   open: boolean;

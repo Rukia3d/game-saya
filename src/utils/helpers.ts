@@ -22,6 +22,10 @@ export const unique = (arrArg: any[]) =>
     (elem: any, pos: number, arr: any) => arr.indexOf(elem) === pos
   );
 
+export const capitalizeFirstLetter = (string: string): string => {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+};
+
 export const removeFromArray = (arrArg: any[], item: any) => {
   const stringifiedArray = arrArg.map((a: any) => JSON.stringify(a));
   const index = stringifiedArray.indexOf(JSON.stringify(item));

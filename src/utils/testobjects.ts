@@ -79,7 +79,7 @@ const advFormat: [string, boolean][] = [
   ["character", true],
   ["story", true],
   ["arena", false],
-  ["torunament", false],
+  ["tournament", false],
   ["event", false],
 ];
 advFormat.forEach((obj: [string, boolean]) =>
@@ -88,7 +88,7 @@ advFormat.forEach((obj: [string, boolean]) =>
     name: obj[0],
     image: `${obj[0]}.jpg`,
     open: obj[1],
-    form: obj[0],
+    type: obj[0],
     storyGroups: stories,
   })
 );

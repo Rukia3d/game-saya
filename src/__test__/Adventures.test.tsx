@@ -31,7 +31,7 @@ test("Renders Adventures with character quest and correct state", () => {
     expect.stringContaining("adventure_background")
   );
   expect(screen.getByLabelText("adventure-story")).toBeInTheDocument();
-  expect(screen.getAllByTestId("locked").length).toBe(1);
+  expect(screen.getAllByTestId("locked").length).toBe(3);
   expect(screen.getByLabelText("adventure-arena")).toBeInTheDocument();
   expect(screen.getByLabelText("adventure-tournament")).toBeInTheDocument();
   expect(screen.getByLabelText("adventure-character")).toBeInTheDocument();

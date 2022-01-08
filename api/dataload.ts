@@ -111,7 +111,7 @@ export const readAdventures = (): IAdventure[] => {
     // Transform data from DB into game Adventure format
     adventures[i] = {
       id: adventureDB[i].id as adventureType,
-      form: adventureDB[i].form,
+      type: adventureDB[i].form,
       name: adventureDB[i].name,
       image: adventureDB[i].image,
       open: false,
