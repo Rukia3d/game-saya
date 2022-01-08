@@ -60,7 +60,7 @@ test("Renders Item card updates", async () => {
   expect(screen.getByText(/Updated/)).toBeInTheDocument();
   expect(screen.getByText(/Updates/)).toBeInTheDocument();
   expect(screen.getByText(/SomeName0/)).toBeInTheDocument();
-  expect(screen.getByAltText("update_image")).toHaveAttribute(
+  expect(screen.getByAltText("update-fire_0")).toHaveAttribute(
     "src",
     expect.stringContaining("fire_0")
   );

@@ -103,7 +103,7 @@ export const SpellUpdate = ({
           <div className="UpdateImage">
             <img
               src={`../img/Spells/${update.element}/update_${update.id}.png`}
-              alt="update_image"
+              alt={`update-${update.id}`}
             />
           </div>
           <div className="UpdateData">

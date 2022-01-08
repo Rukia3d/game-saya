@@ -4,7 +4,7 @@ import { Library } from "../Main/Library";
 import { GameContext, GameContextType } from "../App";
 import userEvent from "@testing-library/user-event";
 import { baseCards15 } from "../utils/testobjects";
-import { GameState, ISpell } from "../utils/types";
+import { GameState, IResource, ISpell, ISpellUpdate } from "../utils/types";
 import { gameState } from "../utils/teststates";
 
 const mayaSpells: ISpell[] = new Array(3).fill(0).map((x, n) => ({
@@ -21,9 +21,22 @@ const taraSpells: ISpell[] = new Array(3).fill(0).map((x, n) => ({
   element: "metal",
 }));
 const newSpells = mayaSpells.concat(taraSpells);
+const playerResources = gameState.resources.map((r: IResource, i: number) => {
+  return { ...r, quantity: 1, element: i < 3 ? "earth" : "fire" };
+});
+const playerUpdates = gameState.spellUpdates.map(
+  (s: ISpellUpdate, i: number) => {
+    return { ...s, element: i < 2 ? "earth" : "fire" };
+  }
+);
 const newGameState: GameState = {
   ...JSON.parse(JSON.stringify(gameState)),
-  player: { ...gameState.player, spells: newSpells },
+  player: {
+    ...gameState.player,
+    spells: newSpells,
+    resources: playerResources,
+    spellUpdates: playerUpdates,
+  },
 };
 
 const context: GameContextType = {
@@ -56,7 +69,42 @@ test("Renders Library with Hero data", () => {
   expect(screen.getByText(/Hero/).getAttribute("class")).toMatch(/inactive/);
 });
 
-test("Throws correct error", () => {
+test("Renders Library with Resources data", () => {
+  render(
+    <GameContext.Provider value={context}>
+      <Library />
+    </GameContext.Provider>
+  );
+  expect(screen.getByText(/Resources/)).toBeInTheDocument();
+  userEvent.click(screen.getByText(/Resources/));
+  expect(screen.getByText(/Resources/).getAttribute("class")).toMatch(/active/);
+  expect(screen.getByText(/Hero/).getAttribute("class")).toMatch(/inactive/);
+  expect(screen.getByLabelText("resources-images").children.length).toEqual(3);
+  expect(screen.getByLabelText("resource-image-sparks")).toBeInTheDocument();
+  expect(screen.getByLabelText("resource-image-sparks").innerHTML).toMatch(/1/);
+  expect(screen.getByLabelText("resource-image-ash")).toBeInTheDocument();
+  expect(screen.getByLabelText("resource-image-ash").innerHTML).toMatch(/1/);
+});
+
+test("Renders Library with Updates data", () => {
+  render(
+    <GameContext.Provider value={context}>
+      <Library />
+    </GameContext.Provider>
+  );
+  expect(screen.getByText(/Updates/)).toBeInTheDocument();
+  userEvent.click(screen.getByText(/Updates/));
+  expect(screen.getByText(/Updates/).getAttribute("class")).toMatch(/active/);
+  expect(screen.getByText(/Hero/).getAttribute("class")).toMatch(/inactive/);
+  expect(screen.getByLabelText("spell-updates").children.length).toEqual(2);
+  expect(screen.getByAltText("update-fire_0")).toHaveAttribute(
+    "src",
+    expect.stringContaining("fire_0")
+  );
+  expect(screen.getByText(/SomeName0/)).toBeInTheDocument();
+});
+
+test("Library throws correct error when gameState is missing in context", () => {
   jest.spyOn(console, "error").mockImplementation(() => jest.fn());
   expect(() =>
     render(

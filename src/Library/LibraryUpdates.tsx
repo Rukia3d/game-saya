@@ -22,6 +22,7 @@ export const LibraryUpdates = ({
   const heroUpdates = allUpdates.filter(
     (s: ISpellUpdate) => s.element === hero.element
   );
+
   return (
     <div className="LibraryUpdates">
       <SpellUpdates spellUpgrades={heroUpdates} updateInfo={setInfo} />

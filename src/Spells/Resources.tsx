@@ -30,6 +30,7 @@ export const ResourceImage = ({ resource }: { resource: IResource }) => {
   return (
     <div
       className="ResourceImage"
+      aria-label={`resource-image-${resource.id}`}
       style={{
         backgroundImage: `url(${imgUrl})`,
       }}
@@ -41,7 +42,7 @@ export const ResourceImage = ({ resource }: { resource: IResource }) => {
 
 export const ResourcesImages = ({ resources }: { resources: IResource[] }) => {
   return (
-    <div className="ResourcesImages">
+    <div className="ResourcesImages" aria-label="resources-images">
       {resources.map((s: IResource, i: number) => (
         <ResourceImage resource={s} key={i} />
       ))}

@@ -18,7 +18,7 @@ export const SpellUpdates = ({
   updateInfo?: (s: ISpellUpdate) => void;
 }) => {
   return (
-    <div className="SpellUpdates">
+    <div className="SpellUpdates" aria-label="spell-updates">
       {spellUpgrades.map((s: ISpellUpdate, i: number) => (
         <SpellUpdate
           update={s}
