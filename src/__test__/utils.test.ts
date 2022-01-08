@@ -70,6 +70,7 @@ test("Finds correct characters to be active and throws if there are not 3", () =
       name: "hero" + i,
       image: "",
       selected: b,
+      description: "",
     })
   );
   expect(findActiveCharacters(heroes3active).map((h: IHero) => h.id)).toEqual([
@@ -85,6 +86,7 @@ test("Finds correct characters to be active and throws if there are not 3", () =
       name: "hero" + i,
       image: "",
       selected: b,
+      description: "",
     })
   );
   expect(findActiveCharacters(heroes2active).map((h: IHero) => h.id)).toEqual([
@@ -100,6 +102,7 @@ test("Finds correct characters to be active and throws if there are not 3", () =
       name: "hero" + i,
       image: "",
       selected: b,
+      description: "",
     })
   );
   expect(findActiveCharacters(heroesNoactive).map((h: IHero) => h.id)).toEqual([
@@ -116,6 +119,7 @@ test("Finds correct characters to be active and throws if there are not 3", () =
       name: "hero" + i,
       image: "",
       selected: b,
+      description: "",
     })
   );
   expect(() => findActiveCharacters(heroesToError)).toThrow(
@@ -126,7 +130,7 @@ test("Finds correct characters to be active and throws if there are not 3", () =
 
 test("Finds a character and throws a correct error", () => {
   const characters = [1, 2, 3].map((i: number) => {
-    return { id: "char" + i, name: "Char" + i, image: "" };
+    return { id: "char" + i, name: "Char" + i, image: "", description: "" };
   });
   const res = findCharacter(characters, "char1");
   expect(res.id).toEqual("char1");
