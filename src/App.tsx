@@ -8,7 +8,6 @@ import {
   GameState,
   IStory,
   ISpellUpdate,
-  IReel,
 } from "./utils/types";
 // Utils
 import { fetcher } from "./utils/helpers";

@@ -43,35 +43,6 @@ const GenericAdventure = ({
   );
 };
 
-const AdventureCharacter = ({
-  adventure,
-  selectAdventure,
-}: {
-  adventure: IAdventure;
-  selectAdventure: (a: IAdventure) => void;
-}) => {
-  const imgUrl = `/img/Backgrounds/adventure_${adventure.id}_background.jpg`;
-  return (
-    <div
-      className="AdventureCharacterBorder"
-      aria-label="adventure-character"
-      onClick={() =>
-        adventure.storyGroups ? selectAdventure(adventure) : null
-      }
-    >
-      {!adventure.open ? <Lock /> : null}
-      <div
-        className="AdventureCharacter"
-        style={{
-          backgroundImage: `url(${imgUrl})`,
-        }}
-      >
-        <h3>{adventure.name}</h3>
-      </div>
-    </div>
-  );
-};
-
 export const Adventures = () => {
   const context = useContext(GameContext);
   if (!context || !context.gameState || !context.gameState.player.adventures) {

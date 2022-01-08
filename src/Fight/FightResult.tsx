@@ -1,10 +1,8 @@
-import React, { useContext } from "react";
+import React from "react";
 import "./Fight.scss";
-import { GameContext } from "../App";
 // Types
 import { IEnemy, IResource } from "../utils/types";
 // Utils
-import { finishFight } from "../utils/gamelogic";
 // Components
 import { FightWon } from "./FightWon";
 import { FightLost } from "./FightLost";

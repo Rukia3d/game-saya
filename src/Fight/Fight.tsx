@@ -6,20 +6,13 @@ import {
   ISpell,
   IEnemy,
   FightState,
-  IFight,
   ISpellUpdate,
   IHero,
 } from "../utils/types";
 // Utils
 import { generateReward } from "../utils/resourceLogic";
 import { initPreFight } from "../utils/prefightloginc";
-import { findFight, isValidAction } from "../utils/helpers";
-import {
-  finishStory,
-  updateLostPlayer,
-  updateWinPlayer,
-} from "../utils/gamelogic";
-import { displayAddedHero, displayAddedUpdate } from "../utils/screenLogic";
+import { findFight } from "../utils/helpers";
 // Components
 import { InfoCard } from "../Info/InfoCard";
 import { Settings } from "../UI/Settings";
