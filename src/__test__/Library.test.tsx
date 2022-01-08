@@ -38,15 +38,32 @@ const context: GameContextType = {
   backToMain: jest.fn(),
 };
 
-test("Renders Hero Spells", () => {
+test("Renders Library with Hero data", () => {
   render(
     <GameContext.Provider value={context}>
       <Library />
     </GameContext.Provider>
   );
-  expect(screen.getByText(/maya/)).toBeInTheDocument();
+  expect(screen.getByText(/Maya/)).toBeInTheDocument();
   expect(screen.getByText(/Hero/)).toBeInTheDocument();
   expect(screen.getByText(/Spells/)).toBeInTheDocument();
   expect(screen.getByText(/Updates/)).toBeInTheDocument();
   expect(screen.getByText(/Resources/)).toBeInTheDocument();
+  expect(screen.getByText(/Hero/).getAttribute("class")).toMatch(/active/);
+  expect(screen.getByText(/Spells/).getAttribute("class")).toMatch(/inactive/);
+  userEvent.click(screen.getByText(/Spells/));
+  expect(screen.getByText(/Spells/).getAttribute("class")).toMatch(/active/);
+  expect(screen.getByText(/Hero/).getAttribute("class")).toMatch(/inactive/);
+});
+
+test("Throws correct error", () => {
+  jest.spyOn(console, "error").mockImplementation(() => jest.fn());
+  expect(() =>
+    render(
+      <GameContext.Provider value={{ ...context, gameState: null }}>
+        <Library />
+      </GameContext.Provider>
+    )
+  ).toThrow("No data in context");
+  jest.restoreAllMocks();
 });
