@@ -57,3 +57,21 @@ test("Renders Main Menu in the correct state", () => {
     "background-color: white;"
   );
 });
+
+test("Settings and lives are triggered correctly", () => {
+  render(
+    <GameContext.Provider value={context}>
+      <Main />
+    </GameContext.Provider>
+  );
+  expect(screen.getByTestId("lives_button")).toBeInTheDocument();
+  expect(screen.getByTestId("settings_button")).toBeInTheDocument();
+  userEvent.click(screen.getByTestId("lives_button"));
+  expect(screen.getByLabelText("settings_screen")).toBeInTheDocument();
+  userEvent.click(screen.getByTestId("lives_button"));
+  expect(screen.queryByLabelText("settings_screen")).not.toBeInTheDocument();
+  userEvent.click(screen.getByTestId("settings_button"));
+  expect(screen.getByLabelText("settings_screen")).toBeInTheDocument();
+  userEvent.click(screen.getByTestId("settings_button"));
+  expect(screen.queryByLabelText("settings_screen")).not.toBeInTheDocument();
+});
