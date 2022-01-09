@@ -64,6 +64,7 @@ export const Heroes = ({ heroes }: { heroes: IHero[] }) => {
           frames={9}
           breakpoint={1}
           key={i}
+          styleWidth="auto"
         />
       ))}
     </div>

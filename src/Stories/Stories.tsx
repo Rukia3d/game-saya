@@ -20,7 +20,7 @@ import {
 import { CloseButton } from "../UI/CloseButton";
 import { ScrollButton } from "../UI/ScrollButton";
 import { StoryPanel } from "./StoryPanel";
-import { HeroesSelection } from "../Heroes/HeroesSelection";
+import { FightSelection } from "../Fight/FightSelection";
 import { SpellsSelection } from "../Spells/Spells";
 
 export const STORIES_PER_PANEL = 3;
@@ -93,7 +93,7 @@ export const Stories = () => {
     return (
       <div className="Stories" aria-label="story_background">
         <CloseButton onClick={context.backToMain} />
-        <HeroesSelection
+        <FightSelection
           story={story}
           fight={fight}
           setSelectionError={setSelectionError}
@@ -124,28 +124,3 @@ export const Stories = () => {
     </div>
   );
 };
-
-// export const Stories = () => {
-//   const context = useContext(GameContext);
-//   if (!context || !context.gameState || !context.adventure) {
-//     throw new Error("No data in context");
-//   }
-//   const startingPage = context.adventure.storyGroups
-//     ? Math.floor(
-//         findLastOpenStory(context.adventure.storyGroups) / STORIESPERPAGE
-//       )
-//     : 0;
-//   // console.log(
-//   //   "game state STORIES",
-//   //   //@ts-ignore
-//   //   JSON.parse(JSON.stringify(context.gameState?.adventures[0].stories[0]))
-//   // );
-
-//   return (
-//     <div className="Stories" aria-label="story_background">
-//       <CloseButton onClick={context.backToMain} />
-//       <h2>{context.adventure.name}</h2>
-//       <StoriesContent startingPage={startingPage} />
-//     </div>
-//   );
-// };

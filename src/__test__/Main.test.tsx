@@ -17,7 +17,7 @@ const context: GameContextType = {
   backToMain: jest.fn(),
 };
 
-test("Renders Heroes screen with characters ready for a dialogue", () => {
+test("Renders Main Menu in the correct state", () => {
   render(
     <GameContext.Provider value={context}>
       <Main />

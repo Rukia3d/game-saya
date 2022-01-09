@@ -8,6 +8,7 @@ export const AnimatedSpriteCycle = ({
   frames,
   img,
   randomStart = false,
+  styleWidth,
 }: {
   width: number;
   height: number;
@@ -15,11 +16,12 @@ export const AnimatedSpriteCycle = ({
   frames: number;
   img: string;
   randomStart?: boolean;
+  styleWidth?: string;
 }) => {
   const [frame, setFrame] = useState(0);
 
   const style = {
-    width: "100%",
+    width: styleWidth ? styleWidth : "100%",
     overflow: "hidden",
     flexShrink: 0,
     flexGrow: 0,

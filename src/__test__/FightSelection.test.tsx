@@ -2,8 +2,8 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import { GameContext, GameContextType } from "../App";
 import { gameRestrictedCharacters, gameState } from "../utils/teststates";
-import { IFight, IHero } from "../utils/types";
-import { HeroesSelection } from "../Heroes/HeroesSelection";
+import { IHero } from "../utils/types";
+import { FightSelection } from "../Fight/FightSelection";
 
 const context: GameContextType = {
   adventure: gameState.adventures[1],
@@ -17,7 +17,7 @@ const context: GameContextType = {
   backToMain: jest.fn(),
 };
 
-test.only("Renders HerosSelection if 0 characters", async () => {
+test("Renders HerosSelection if 0 characters", async () => {
   const setSelectionError = jest.fn();
   gameRestrictedCharacters.player.heroes.map(
     (h: IHero) => (h.selected = false)
@@ -36,7 +36,7 @@ test.only("Renders HerosSelection if 0 characters", async () => {
         adventure: gameRestrictedCharacters.adventures[1],
       }}
     >
-      <HeroesSelection
+      <FightSelection
         setSelectionError={setSelectionError}
         setSpellSelect={jest.fn()}
         story={story}

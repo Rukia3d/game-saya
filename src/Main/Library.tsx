@@ -5,7 +5,7 @@ import "./Library.scss";
 import { IEnemy, IHero, ISpell, ISpellUpdate } from "../utils/types";
 // Utils
 // Components
-import { Heroes } from "../Heroes/Heroes";
+import { HeroSelection } from "../Heroes/HeroSelection";
 import { InfoCard } from "../Info/InfoCard";
 import { LibraryHero } from "../Library/LibraryHero";
 import { LibrarySpells } from "../Library/LibrarySpells";
@@ -98,7 +98,7 @@ export const Library = () => {
       }}
     >
       {info ? <InfoCard item={info} setInfo={setInfo} /> : null}
-      <Heroes selectHero={setHero} required={required} />
+      <HeroSelection selectHero={setHero} required={required} />
       <LibraryContent selected={selected} hero={hero} setInfo={setInfo} />
       <LibraryMenu selected={selected} setSelected={setSelected} />
     </div>

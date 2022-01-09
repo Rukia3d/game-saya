@@ -10,7 +10,7 @@ import { Hero } from "./Hero";
 
 const HEROESPERPAGE = 3;
 
-export const Heroes = ({
+export const HeroSelection = ({
   selectHero,
   required,
 }: {
@@ -40,7 +40,7 @@ export const Heroes = ({
   }
 
   return (
-    <div className="HeroesSelection">
+    <div className="HeroSelection">
       <ScrollButton
         onClick={() => setStartingIndex(startingIndex + 1)}
         direction="r"

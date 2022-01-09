@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { GameContext } from "../App";
-import "./Heroes.scss";
+import "./FightSelection.scss";
 // Types
 import {
   herosSelectionError,
@@ -14,10 +14,10 @@ import {
   checkFightCharactersIds,
   findRequiredCharacters,
 } from "../utils/helpers";
-import { Heroes } from "./Heroes";
+import { HeroSelection } from "../Heroes/HeroSelection";
 import { findEnemy } from "../utils/fightlogic";
-import { HeroesPreview } from "./HeroesPreview";
-import { HeroesSpells } from "./HeroesSpells";
+import { HeroesPreview } from "../Heroes/HeroesPreview";
+import { HeroesSpells } from "../Heroes/HeroesSpells";
 // Components
 
 const getHeaderText = (error: herosSelectionError) => {
@@ -35,7 +35,7 @@ const getHeaderText = (error: herosSelectionError) => {
   }
 };
 
-export const HeroesSelection = ({
+export const FightSelection = ({
   story,
   fight,
   setSelectionError,
@@ -113,9 +113,12 @@ export const HeroesSelection = ({
   };
   const imgUrl = `/img/Backgrounds/fightSelection_background.jpg`;
   return (
-    <div className="Heroes" style={{ backgroundImage: `url(${imgUrl})` }}>
+    <div
+      className="FightSelection"
+      style={{ backgroundImage: `url(${imgUrl})` }}
+    >
       <h2>Select heroes</h2>
-      <Heroes
+      <HeroSelection
         selectHero={requiredCharacters ? undefined : selectHero}
         required={requiredCharacters}
       />
