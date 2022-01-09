@@ -8,8 +8,8 @@ import "./AdditionScreen.css";
 
 export const AdditionScreen = () => {
   const context = useContext(GameContext);
-  if (!context || !context.setAdditionScreen || !context.gameState) {
-    throw new Error("No data");
+  if (!context || !context.setAdditionScreen) {
+    throw new Error("No data in context");
   }
 
   const closeInfo = () => {
