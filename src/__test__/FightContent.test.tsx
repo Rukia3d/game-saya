@@ -1,6 +1,6 @@
 import React from "react";
 import { act, render, screen } from "@testing-library/react";
-import { FightScene } from "../Fight/FightScene";
+import { FightContent } from "../Fight/FightContent";
 import { fightState, gameState } from "../utils/teststates";
 import userEvent from "@testing-library/user-event";
 import { GameContext, GameContextType } from "../App";
@@ -26,7 +26,7 @@ afterEach(() => {
   jest.useRealTimers();
 });
 
-test("Renders FightScene screen and follows though the flow", async () => {
+test("Renders FightContent screen and follows though the flow", async () => {
   const setInfo = jest.fn();
   const setResult = jest.fn();
   const prefightState = { ...fightState };
@@ -34,7 +34,7 @@ test("Renders FightScene screen and follows though the flow", async () => {
 
   render(
     <GameContext.Provider value={context}>
-      <FightScene
+      <FightContent
         prefightState={prefightState}
         setInfo={setInfo}
         setResult={setResult}
@@ -69,7 +69,7 @@ test("Renders FightScene screen and follows though the flow", async () => {
   jest.useRealTimers();
 });
 
-test("Renders FightScene screen and wins", async () => {
+test("Renders FightContent screen and wins", async () => {
   const setInfo = jest.fn();
   const setResult = jest.fn();
   const prefightState = { ...JSON.parse(JSON.stringify(fightState)) };
@@ -78,7 +78,7 @@ test("Renders FightScene screen and wins", async () => {
 
   render(
     <GameContext.Provider value={context}>
-      <FightScene
+      <FightContent
         prefightState={prefightState}
         setInfo={setInfo}
         setResult={setResult}

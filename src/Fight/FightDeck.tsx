@@ -52,7 +52,7 @@ const HeroDeck = ({
   );
 };
 
-export const HeroBlock = ({
+export const FightDeck = ({
   fightState,
   selectSpell,
   setInfo,
@@ -62,7 +62,7 @@ export const HeroBlock = ({
   setInfo: (s: ISpell | IEnemy | null) => void;
 }) => {
   return (
-    <div className="HeroBlock MulticoloredBackground">
+    <div className="FightDeck MulticoloredBackground">
       <ElementInfo fightState={fightState} />
       <HeroDeck
         fightState={fightState}

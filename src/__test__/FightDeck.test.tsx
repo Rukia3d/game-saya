@@ -1,15 +1,15 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import { HeroBlock } from "../Fight/HeroBlock";
+import { FightDeck } from "../Fight/FightDeck";
 import userEvent from "@testing-library/user-event";
 
 import { fightState, gameState } from "../utils/teststates";
 
-test("Renders HeroBlock screen", async () => {
+test("Renders FightDeck screen", async () => {
   const setInfo = jest.fn();
   const selectSpell = jest.fn();
   render(
-    <HeroBlock
+    <FightDeck
       fightState={fightState}
       setInfo={setInfo}
       selectSpell={selectSpell}

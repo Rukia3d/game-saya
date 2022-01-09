@@ -94,6 +94,6 @@ test("Throws No Data", async () => {
         <TopMenu />
       </GameContext.Provider>
     )
-  ).toThrow("No Data in Context");
+  ).toThrow("No data in context");
   jest.restoreAllMocks();
 });

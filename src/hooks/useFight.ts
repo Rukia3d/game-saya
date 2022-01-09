@@ -23,7 +23,7 @@ const steps = {
   won: [null, SHORTANIMATION],
 };
 
-export const useFightScene = (
+export const useFight = (
   prefightState: FightState,
   setResult: (r: null | string) => void
 ): [

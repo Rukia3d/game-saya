@@ -18,7 +18,7 @@ import { InfoCard } from "../Info/InfoCard";
 import { Settings } from "../UI/Settings";
 import { SettingsButton } from "../UI/SettingsButton";
 import { FightResult } from "./FightResult";
-import { FightScene } from "./FightScene";
+import { FightContent } from "./FightContent";
 
 export const Fight = () => {
   const context = useContext(GameContext);
@@ -46,13 +46,14 @@ export const Fight = () => {
   // );
   return (
     <div className="Fight" aria-label="fight-screen">
+      {info ? <InfoCard item={info} setInfo={setInfo} /> : null}
+      {settingsOpen ? <Settings /> : null}
       <SettingsButton onClick={() => setSettingsOpen(false)} />
-      <FightScene
+      <FightContent
         prefightState={prefightState}
         setInfo={setInfo}
         setResult={setResult}
       />
-      {info ? <InfoCard item={info} setInfo={setInfo} /> : null}
       {result ? (
         <FightResult
           result={result}

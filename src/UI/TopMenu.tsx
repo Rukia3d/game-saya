@@ -68,7 +68,7 @@ export const TopMenu = ({
 }) => {
   const context = useContext(GameContext);
   if (!context || !context.gameState || !context.gameState.player) {
-    throw new Error("No Data in Context");
+    throw new Error("No data in context");
   }
   const player = context.gameState.player.data;
   return (

@@ -71,7 +71,7 @@ export const Heroes = ({ heroes }: { heroes: IHero[] }) => {
   );
 };
 
-export const FightLevel = ({
+export const FightScene = ({
   fightState,
   enemyAct,
   animation,
@@ -124,7 +124,7 @@ export const FightLevel = ({
   };
   return (
     <div
-      className={`FightLevel`}
+      className={`FightScene`}
       style={{
         backgroundImage: `url(${imgUrl})`,
         left: `-${currentCameraX}px`,
@@ -143,7 +143,7 @@ export const FightLevel = ({
   );
 };
 
-export const EnemyBlock = ({
+export const FightLevel = ({
   fightState,
   enemyAct,
   setInfo,
@@ -155,13 +155,13 @@ export const EnemyBlock = ({
   animation: string | null;
 }) => {
   return (
-    <div className="EnemyBlock">
+    <div className="FightLevel">
       <TopMenu
         currentHealth={fightState.hero.life}
         currentMana={fightState.hero.mana}
       />
       <EnemyStats fightState={fightState} setInfo={setInfo} />
-      <FightLevel
+      <FightScene
         fightState={fightState}
         enemyAct={enemyAct}
         animation={animation}
