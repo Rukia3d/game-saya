@@ -8,6 +8,8 @@ import {
   GameState,
   IStory,
   ISpellUpdate,
+  IEnemy,
+  ISpell,
 } from "./utils/types";
 // Utils
 import { fetcher } from "./utils/helpers";
@@ -25,8 +27,8 @@ export interface GameContextType {
   setStory: (s: IStory | null) => void;
   gameState: GameState | null;
   setGameState: (g: GameState) => void;
-  addition: IHero | null | ISpellUpdate;
-  setAdditionScreen: (c: IHero | ISpellUpdate | null) => void;
+  addition: IHero | ISpellUpdate | ISpell | IEnemy | null;
+  setAdditionScreen: (c: IHero | ISpellUpdate | ISpell | IEnemy | null) => void;
   backToMain: () => void;
 }
 export const GameContext = React.createContext<undefined | GameContextType>(
@@ -40,9 +42,9 @@ function App() {
   const [adventure, setAdventure] = useState<null | IAdventure>(null);
   const [story, setStory] = useState<null | IStory>(null);
   const [gameState, setGameStateOrigin] = useState<GameState>(data);
-  const [addition, setAdditionScreen] = useState<null | IHero | ISpellUpdate>(
-    null
-  );
+  const [addition, setAdditionScreen] = useState<
+    IHero | ISpellUpdate | ISpell | IEnemy | null
+  >(null);
 
   const setGameState = (state: GameState) => {
     if (state) {

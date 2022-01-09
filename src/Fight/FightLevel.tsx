@@ -29,19 +29,17 @@ const Enemy = ({
   );
 };
 
-const EnemyStats = ({
-  fightState,
-  setInfo,
-}: {
-  fightState: FightState;
-  setInfo: (i: ISpell | IEnemy | null) => void;
-}) => {
+const EnemyStats = ({ fightState }: { fightState: FightState }) => {
+  const context = useContext(GameContext);
+  if (!context || !context.story || !context.setAdditionScreen) {
+    throw new Error("No data in context");
+  }
   const imgUrl = `/img/Backgrounds/gradient.png`;
   return (
     <div
       className="EnemyStats"
       aria-label="opponent_info"
-      onClick={() => setInfo(fightState.enemy)}
+      onClick={() => context.setAdditionScreen(fightState.enemy)}
       style={{
         backgroundImage: `url(${imgUrl})`,
       }}
@@ -146,12 +144,10 @@ export const FightScene = ({
 export const FightLevel = ({
   fightState,
   enemyAct,
-  setInfo,
   animation,
 }: {
   fightState: FightState;
   enemyAct: (i: number) => void;
-  setInfo: (i: ISpell | IEnemy | null) => void;
   animation: string | null;
 }) => {
   return (
@@ -160,7 +156,7 @@ export const FightLevel = ({
         currentHealth={fightState.hero.life}
         currentMana={fightState.hero.mana}
       />
-      <EnemyStats fightState={fightState} setInfo={setInfo} />
+      <EnemyStats fightState={fightState} />
       <FightScene
         fightState={fightState}
         enemyAct={enemyAct}

@@ -27,18 +27,13 @@ afterEach(() => {
 });
 
 test("Renders FightContent screen and follows though the flow", async () => {
-  const setInfo = jest.fn();
   const setResult = jest.fn();
   const prefightState = { ...fightState };
   jest.useFakeTimers();
 
   render(
     <GameContext.Provider value={context}>
-      <FightContent
-        prefightState={prefightState}
-        setInfo={setInfo}
-        setResult={setResult}
-      />
+      <FightContent prefightState={prefightState} setResult={setResult} />
     </GameContext.Provider>
   );
   expect(screen.getByLabelText("animation-GIVECARDS")).toBeInTheDocument();
@@ -70,7 +65,6 @@ test("Renders FightContent screen and follows though the flow", async () => {
 });
 
 test("Renders FightContent screen and wins", async () => {
-  const setInfo = jest.fn();
   const setResult = jest.fn();
   const prefightState = { ...JSON.parse(JSON.stringify(fightState)) };
   prefightState.enemyDeck.shift();
@@ -78,11 +72,7 @@ test("Renders FightContent screen and wins", async () => {
 
   render(
     <GameContext.Provider value={context}>
-      <FightContent
-        prefightState={prefightState}
-        setInfo={setInfo}
-        setResult={setResult}
-      />
+      <FightContent prefightState={prefightState} setResult={setResult} />
     </GameContext.Provider>
   );
   expect(screen.getByLabelText("animation-GIVECARDS")).toBeInTheDocument();

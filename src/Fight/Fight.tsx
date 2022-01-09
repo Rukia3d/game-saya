@@ -14,7 +14,6 @@ import { generateReward } from "../utils/resourceLogic";
 import { initPreFight } from "../utils/prefightloginc";
 import { findFight } from "../utils/helpers";
 // Components
-import { InfoCard } from "../Info/InfoCard";
 import { Settings } from "../UI/Settings";
 import { SettingsButton } from "../UI/SettingsButton";
 import { FightResult } from "./FightResult";
@@ -36,9 +35,6 @@ export const Fight = () => {
   const [result, setResult] = useState<null | string>(null);
 
   const [settingsOpen, setSettingsOpen] = useState(false);
-  const [info, setInfo] = useState<
-    null | ISpell | ISpellUpdate | IEnemy | IHero
-  >(null);
 
   // console.log(
   //   "game state FIGHT",
@@ -46,14 +42,9 @@ export const Fight = () => {
   // );
   return (
     <div className="Fight" aria-label="fight-screen">
-      {info ? <InfoCard item={info} setInfo={setInfo} /> : null}
       {settingsOpen ? <Settings /> : null}
       <SettingsButton onClick={() => setSettingsOpen(false)} />
-      <FightContent
-        prefightState={prefightState}
-        setInfo={setInfo}
-        setResult={setResult}
-      />
+      <FightContent prefightState={prefightState} setResult={setResult} />
       {result ? (
         <FightResult
           result={result}

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import "./Fight.scss";
 // Types
 import { elementType, IEnemy, ISpell } from "../utils/types";
@@ -6,6 +6,7 @@ import {
   calculateSpellMana,
   calculateSpellStrength,
 } from "../utils/spellslogic";
+import { GameContext } from "../App";
 // Utils
 // Components
 
@@ -38,12 +39,14 @@ const Strength = ({ n, element }: { n: number; element: elementType }) => {
 export const SpellBig = ({
   transparency,
   spell,
-  setInfo,
 }: {
   transparency?: boolean;
   spell: ISpell;
-  setInfo: (s: ISpell | IEnemy | null) => void;
 }) => {
+  const context = useContext(GameContext);
+  if (!context || !context.story || !context.setAdditionScreen) {
+    throw new Error("No data in context");
+  }
   //const mana = calculateSpellMana(spell);
   const strength = calculateSpellStrength(spell);
   //const updates = spell.updates.length;
@@ -61,7 +64,7 @@ export const SpellBig = ({
     >
       <div
         className={`BigSpell ${spell.element}`}
-        onClick={() => setInfo(spell)}
+        onClick={() => context.setAdditionScreen(spell)}
         aria-label="big-spell"
       >
         {new Array(strength).fill(0).map((x, n) => (

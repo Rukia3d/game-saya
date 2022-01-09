@@ -12,11 +12,9 @@ import { SpellsBig } from "./SpellsBig";
 
 export const FightContent = ({
   prefightState,
-  setInfo,
   setResult,
 }: {
   prefightState: FightState;
-  setInfo: (s: null | ISpell | IEnemy) => void;
   setResult: (r: null | string) => void;
 }) => {
   const [enemyCard, heroCard, animation, fightState, enemyAct, heroAct] =
@@ -28,19 +26,13 @@ export const FightContent = ({
         enemySpell={enemyCard}
         heroSpell={heroCard}
         element={fightState.element}
-        setInfo={setInfo}
       />
       <FightLevel
         fightState={fightState}
         enemyAct={enemyAct}
-        setInfo={setInfo}
         animation={animation}
       />
-      <FightDeck
-        fightState={fightState}
-        selectSpell={heroAct}
-        setInfo={setInfo}
-      />
+      <FightDeck fightState={fightState} selectSpell={heroAct} />
       {/* <div className="fireflies">
         {new Array(100).fill(0).map((x, n) => (
           <div key={n} className="firefly"></div>

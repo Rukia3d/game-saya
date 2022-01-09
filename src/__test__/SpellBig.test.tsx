@@ -1,15 +1,32 @@
 import React from "react";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { SpellBig } from "../Fight/SpellBig";
 import userEvent from "@testing-library/user-event";
 
-import { mayaCard } from "../utils/testobjects";
+import { fightstory, mayaCard } from "../utils/testobjects";
 import { ISpell } from "../utils/types";
+import { gameState } from "../utils/teststates";
+import { GameContext, GameContextType } from "../App";
+
+const context: GameContextType = {
+  adventure: gameState.adventures[0],
+  setAdventure: jest.fn(),
+  story: fightstory,
+  setStory: jest.fn(),
+  gameState: gameState,
+  addition: null,
+  setAdditionScreen: jest.fn(),
+  setGameState: jest.fn(),
+  backToMain: jest.fn(),
+};
 
 test("Renders Big Card screen with strength 1 and earth", async () => {
-  const setInfo = jest.fn();
   const earthCard: ISpell = { ...mayaCard, element: "earth", strength: 1 };
-  render(<SpellBig spell={earthCard} setInfo={setInfo} />);
+  render(
+    <GameContext.Provider value={context}>
+      <SpellBig spell={earthCard} />
+    </GameContext.Provider>
+  );
   expect(screen.getByAltText("spellimage_base_hit1_maya")).toBeInTheDocument();
   expect(screen.getAllByLabelText("spell-strength").length).toEqual(1);
   expect(screen.getByLabelText("spell-strength")).toHaveAttribute(
@@ -19,9 +36,12 @@ test("Renders Big Card screen with strength 1 and earth", async () => {
 });
 
 test("Renders Big Card screen with strength 3 and fire", async () => {
-  const setInfo = jest.fn();
   const earthCard: ISpell = { ...mayaCard, element: "fire", strength: 3 };
-  render(<SpellBig spell={earthCard} setInfo={setInfo} />);
+  render(
+    <GameContext.Provider value={context}>
+      <SpellBig spell={earthCard} />
+    </GameContext.Provider>
+  );
   expect(screen.getByAltText("spellimage_base_hit1_maya")).toBeInTheDocument();
   expect(screen.getAllByLabelText("spell-strength").length).toEqual(3);
   expect(screen.getAllByLabelText("spell-strength")[0]).toHaveAttribute(
@@ -31,9 +51,12 @@ test("Renders Big Card screen with strength 3 and fire", async () => {
 });
 
 test("Renders Big Card screen with strength 2 and air", async () => {
-  const setInfo = jest.fn();
   const earthCard: ISpell = { ...mayaCard, element: "air", strength: 2 };
-  render(<SpellBig spell={earthCard} setInfo={setInfo} />);
+  render(
+    <GameContext.Provider value={context}>
+      <SpellBig spell={earthCard} />
+    </GameContext.Provider>
+  );
   expect(screen.getByAltText("spellimage_base_hit1_maya")).toBeInTheDocument();
   expect(screen.getAllByLabelText("spell-strength").length).toEqual(2);
   expect(screen.getAllByLabelText("spell-strength")[0]).toHaveAttribute(
@@ -47,9 +70,15 @@ test("Renders Big Card screen with strength 2 and air", async () => {
 });
 
 test("Renders Big Card screen and shows the info", async () => {
-  const setInfo = jest.fn();
   const earthCard: ISpell = { ...mayaCard, element: "water", strength: 2 };
-  render(<SpellBig spell={earthCard} setInfo={setInfo} transparency />);
+  const setAdditionScreen = jest.fn();
+  render(
+    <GameContext.Provider
+      value={{ ...context, setAdditionScreen: setAdditionScreen }}
+    >
+      <SpellBig spell={earthCard} transparency />
+    </GameContext.Provider>
+  );
   expect(screen.getByAltText("spellimage_base_hit1_maya")).toBeInTheDocument();
   expect(screen.getAllByLabelText("spell-strength").length).toEqual(2);
   expect(screen.getAllByLabelText("spell-strength")[0]).toHaveAttribute(
@@ -61,5 +90,5 @@ test("Renders Big Card screen and shows the info", async () => {
     expect.stringContaining("opacity: 0.5")
   );
   userEvent.click(screen.getByLabelText("big-spell"));
-  expect(setInfo.mock.calls.length).toBe(1);
+  expect(setAdditionScreen.mock.calls.length).toBe(1);
 });
