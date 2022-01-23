@@ -47,7 +47,12 @@ export const initFight = (
   spells: ISpell[],
   enemy: IEnemy
 ) => {
-  const heroDeck = shuffle(generateDeck(storyCharacters, spells));
+  const heroDeck = shuffle(
+    generateDeck(
+      storyCharacters,
+      spells.filter((s: ISpell) => s.selected)
+    )
+  );
   if (heroDeck.length === 0) {
     throw new Error(`Couldn't generate cards for player`);
   }
