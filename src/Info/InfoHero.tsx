@@ -24,7 +24,7 @@ const HeroSpells = ({ item }: { item: IHero }) => {
   }
   const playerSpells = context.gameState.player.spells;
   const spells =
-    playerSpells.filter((s: ISpell) => s.element === item.element) || [];
+    playerSpells.filter((s: ISpell) => s.element === item.color) || [];
 
   return (
     <div className="ItemData">
@@ -56,7 +56,6 @@ const EnemySpells = ({ item }: { item: IEnemy }) => {
 const HeroDescription = ({ item }: { item: IHero | IEnemy }) => {
   return (
     <div className="ItemDescription">
-      <div className="ItemDescriptionElement">{item.element}</div>
       {"experience" in item ? (
         <div
           className="ItemDescriptionDifficulty"
@@ -77,7 +76,7 @@ const HeroCard = ({ item }: { item: IHero | IEnemy }) => {
       <img
         src={
           "life" in item
-            ? `../img/Enemies/${item.element}/${item.id}.png`
+            ? `../img/Enemies/${item.color}/${item.id}.png`
             : `../img/Heroes/${item.id}.png`
         }
         alt="enemy_image"
@@ -89,7 +88,7 @@ const HeroCard = ({ item }: { item: IHero | IEnemy }) => {
 
 const TopCardHero = ({ item }: { item: IHero | IEnemy }) => {
   // Only Enemy has life
-  const imgUrl = `/img/Spells/${item.element}/${item.element}_back.jpg`;
+  const imgUrl = `/img/Spells/${item.color}/back.jpg`;
   return (
     <div className="TopCard">
       <div className="TopLeftBorder">

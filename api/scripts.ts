@@ -39,9 +39,6 @@ app.get("/api/player/", (req: any, res: any) => {
   playerCards.map((s: ISpell, i: number) =>
     i < 7 ? (s.selected = true) : (s.selected = false)
   );
-  // playerCards[0].updates = [];
-  // playerCards[1].updates = [spellUpdates[0], spellUpdates[2]];
-  // playerCards[2].updates = [spellUpdates[1], spellUpdates[1]];
   const playerEnemies = enemies;
 
   const gameState: GameState = {
@@ -161,6 +158,10 @@ app.get("/api/player/", (req: any, res: any) => {
   };
   res.send(gameState);
 });
+
+// app.get("/api/rewards/", (req: any, res: any) => {
+//   console.log("rewards", req);
+// });
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);

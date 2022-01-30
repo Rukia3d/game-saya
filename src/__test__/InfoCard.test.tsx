@@ -105,7 +105,6 @@ test("Renders Hero if it's a hero", async () => {
     </GameContext.Provider>
   );
   expect(screen.getByText(/maya/)).toBeInTheDocument();
-  expect(screen.getByText(/earth/)).toBeInTheDocument();
 });
 
 test.skip("Renders Enemy if it's an Enemy", async () => {

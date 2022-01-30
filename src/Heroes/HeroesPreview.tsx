@@ -34,7 +34,7 @@ export const HeroesPreview = ({
         <AnimatedSpriteCycle
           width={500}
           height={500}
-          img={`../img/Enemies/${enemy.element}/${enemy.id}_idle.png`}
+          img={`../img/Enemies/${enemy.color}/${enemy.id}_idle.png`}
           frames={10}
           breakpoint={1}
         />

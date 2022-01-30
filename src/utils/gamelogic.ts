@@ -62,7 +62,7 @@ export const updateWinPlayer = (
 
 const updatePlayerNpcs = (
   npcs: INPC[],
-  allNpcs: IHero[],
+  allNpcs: INPC[],
   action: IStoryAction
 ): INPC[] => {
   const newnpcs = npcs;
@@ -71,7 +71,7 @@ const updatePlayerNpcs = (
     throw new Error("NPC dialogue data to change is invalid");
   }
   if (!npc) {
-    const npcToAdd = allNpcs.find((n: IHero) => action.id === n.id);
+    const npcToAdd = allNpcs.find((n: INPC) => action.id === n.id);
     if (!npcToAdd) {
       throw new Error("Can't find npc to add to the Intro screen");
     }

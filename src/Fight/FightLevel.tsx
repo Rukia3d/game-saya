@@ -21,7 +21,7 @@ const Enemy = ({
       <AnimatedSpriteCycle
         width={500}
         height={500}
-        img={`../img/Enemies/${enemy.element}/${enemy.id}_idle.png`}
+        img={`../img/Enemies/${enemy.color}/${enemy.id}_idle.png`}
         frames={10}
         breakpoint={1}
       />
@@ -45,7 +45,7 @@ const EnemyStats = ({ fightState }: { fightState: FightState }) => {
       }}
     >
       <div data-testid="enemy-name">{enemy.name}: </div>
-      <div data-testid="enemy-element">{enemy.element}: </div>
+      <div data-testid="enemy-element">{enemy.color}: </div>
       <div data-testid="enemy-life">{fightState.enemyDeck.length}</div>
     </div>
   );

@@ -14,7 +14,19 @@ export interface ISpell {
 }
 
 export type IOwnedResource = IResource & { quantity: number };
-export type INPC = IHero & { dial: string | null };
+export type INPC = ICharacter & { image: string; dial: string | null };
+export type IHero = ICharacter & {
+  selected: boolean;
+  code: string;
+  color: elementType;
+  image: string;
+};
+export type IEnemy = ICharacter & {
+  color: elementType;
+  experience: enemyExpLevel;
+  spells: ISpell[];
+  life: number;
+};
 
 export type ISpellUpdateResource = [string, number];
 
@@ -59,7 +71,7 @@ export interface GameState {
   heroes: IHero[];
   spellUpdates: ISpellUpdate[];
   adventures: IAdventure[];
-  npcs: IHero[];
+  npcs: INPC[];
 }
 
 export interface IDialogueLine {
@@ -85,12 +97,9 @@ export interface IStoryAction {
   data?: string | null;
 }
 
-export interface IHero {
+export interface ICharacter {
   id: string;
   name: string;
-  image: string;
-  selected?: boolean;
-  element?: elementType;
   description: string;
 }
 
@@ -147,18 +156,6 @@ export interface IFight {
   characters: string[];
 }
 
-export interface IEnemy {
-  id: string;
-  name: string;
-  element: elementType;
-  // exp defines how hard this enemy to kill
-  experience: enemyExpLevel;
-  spells: ISpell[];
-  // defines how many cards enemy is given
-  life: number;
-  description: string;
-}
-
 export interface FightState {
   hero: {
     life: number;
@@ -200,7 +197,27 @@ export type enemyExpLevel =
   | "practitioner"
   | "master"
   | "grandmaster";
-export type elementType = "fire" | "earth" | "metal" | "water" | "air";
+export type elementType =
+  | "fire"
+  | "earth"
+  | "metal"
+  | "water"
+  | "air"
+  | "violet"
+  | "grey"
+  | "red"
+  | "indigo"
+  | "green"
+  | "blue"
+  | "white"
+  | "orange"
+  | "yellow"
+  | "rose"
+  | "teal"
+  | "sand"
+  | "lime"
+  | "black"
+  | "brown";
 export type storyChangeType =
   | "addNpc"
   | "setAdventure"

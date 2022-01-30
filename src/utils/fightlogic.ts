@@ -31,7 +31,7 @@ export const manaPriceOfUpdates = (updates: ISpellUpdate[]) => {
 };
 
 export const heroIsPresent = (update: ISpellUpdate, heroes: IHero[]) => {
-  return heroes.filter((h: IHero) => h.element === update.element).length > 0;
+  return heroes.filter((h: IHero) => h.color === update.element).length > 0;
 };
 
 export const findEnemy = (enemies: IEnemy[], enemyId: string) => {

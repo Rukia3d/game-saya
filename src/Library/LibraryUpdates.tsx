@@ -20,7 +20,7 @@ export const LibraryUpdates = ({
   }
   const allUpdates = context.gameState.player.spellUpdates;
   const heroUpdates = allUpdates.filter(
-    (s: ISpellUpdate) => s.element === hero.element
+    (s: ISpellUpdate) => s.element === hero.color
   );
 
   return (

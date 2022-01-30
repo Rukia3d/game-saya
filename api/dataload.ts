@@ -8,6 +8,7 @@ import {
   IEnemy,
   IFight,
   IHero,
+  INPC,
   IResource,
   ISpell,
   ISpellUpdate,
@@ -132,7 +133,7 @@ export const readEnemies = (): IEnemy[] => {
     enemies[i] = {
       id: enemyDB[i].id,
       name: enemyDB[i].name,
-      element: enemyDB[i].element as elementType,
+      color: enemyDB[i].element as elementType,
       experience: enemyDB[i].exp as enemyExpLevel,
       spells: enemyCards,
       life: parseInt(enemyDB[i].life),
@@ -150,9 +151,10 @@ export const readHeroes = (): IHero[] => {
     heroes[i] = {
       id: heroDB[i].id,
       name: heroDB[i].name,
-      image: heroDB[i].image,
+      image: heroDB[i].id,
       selected: false,
-      element: heroDB[i].element as elementType,
+      color: heroDB[i].color as elementType,
+      code: heroDB[i].code,
       description: heroDB[i].description,
     };
   }
@@ -183,8 +185,8 @@ export const readSpells = (): ISpell[] => {
   return spells;
 };
 
-export const readNpcs = (): IHero[] => {
-  const npcs: IHero[] = [];
+export const readNpcs = (): INPC[] => {
+  const npcs: INPC[] = [];
   const inputNpcs = fs.readFileSync(path + "Story Data - DB_NPCs.csv");
   const npcDB: NpcDB[] = parse(inputNpcs, options);
   for (let i = 0; i < npcDB.length; i++) {
@@ -193,6 +195,7 @@ export const readNpcs = (): IHero[] => {
       name: npcDB[i].name,
       image: npcDB[i].image,
       description: npcDB[i].description,
+      dial: null,
     };
   }
   return npcs;

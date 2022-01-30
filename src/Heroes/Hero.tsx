@@ -13,7 +13,7 @@ export const Hero = ({
   selectHero?: (h: IHero) => void;
 }) => {
   const imgUrl = `../img/Heroes/${hero.image}.png`;
-  const backImgUrl = `/img/Spells/${hero.element}/${hero.element}_back.jpg`;
+  const backImgUrl = `/img/Spells/${hero.color}/back.jpg`;
   return (
     <div className="HeroImageBorder">
       <div

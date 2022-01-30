@@ -171,7 +171,7 @@ export const enemyCard: ISpell = {
 export const enemy: IEnemy = {
   id: "test-dude",
   name: "Dude",
-  element: "earth" as "earth",
+  color: "earth" as "earth",
   experience: "novice" as "novice",
   life: 2,
   spells: [enemyCard, enemyCard],
@@ -225,8 +225,9 @@ heroesFormat.forEach((obj: [string, string]) =>
     id: obj[0],
     selected: false,
     name: obj[0],
+    code: "000000",
     image: "",
-    element: obj[1] as elementType,
+    color: obj[1] as elementType,
     description:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
   })
@@ -255,8 +256,9 @@ export const dialogue: IDialogue = {
 };
 
 export const characterToAdd: IHero = {
-  element: "fire",
+  color: "fire",
   id: "nell",
+  code: "000000",
   image: "../img/nell.png",
   name: "Nell",
   selected: false,
