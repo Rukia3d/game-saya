@@ -98,7 +98,7 @@ app.get("/api/player/", (req: any, res: any) => {
   playerAdventures[0].storyGroups[0].stories[0].open = true;
   const playerHeroes = [heroes[0]];
   playerHeroes[0].selected = true;
-  const playerCards = spells.filter((s: ISpell) => s.element === "earth");
+  const playerCards = spells.filter((s: ISpell) => s.color === "violet");
   playerCards.map((s: ISpell, i: number) =>
     i < 7 ? (s.selected = true) : (s.selected = false)
   );
@@ -124,25 +124,22 @@ app.get("/api/player/", (req: any, res: any) => {
           id: "wood",
           name: "Wood",
           commonality: 10,
-          image: "wood",
           quantity: 1000,
-          element: "earth",
+          school: "restoration",
         },
         {
           id: "leaf",
           name: "Leaf",
           commonality: 7,
-          image: "leaf",
           quantity: 1000,
-          element: "earth",
+          school: "restoration",
         },
         {
           id: "r_flower",
           name: "Red flower",
           commonality: 5,
-          image: "r_flower",
           quantity: 1000,
-          element: "earth",
+          school: "restoration",
         },
       ],
       enemies: playerEnemies,

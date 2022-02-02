@@ -1,4 +1,3 @@
-import { enemyToNumber } from "./gamelogic";
 import { shuffle } from "./helpers";
 import {
   Player,
@@ -44,8 +43,9 @@ export const generateReward = (
   enemy: IEnemy,
   resources: IResource[]
 ): IResource[] => {
+  const DEFAULTMAXREWARD = 5;
   const rewards = [];
-  const max = enemyToNumber(enemy);
+  const max = DEFAULTMAXREWARD;
   for (let i = 0; i < max; i++) {
     rewards.push(generateSingleRewards(resources));
   }

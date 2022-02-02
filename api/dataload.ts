@@ -74,7 +74,7 @@ export const readResources = (): IResource[] => {
       id: resourceDB[i].id,
       name: resourceDB[i].name,
       commonality: parseInt(resourceDB[i].commonality),
-      element: resourceDB[i].element as colorType,
+      school: resourceDB[i].school as schoolType,
     };
   }
   return resources;
@@ -89,7 +89,7 @@ export const readSpellUpdates = (): ISpellUpdate[] => {
   for (let i = 0; i < updateSpellDB.length; i++) {
     // Transform data from DB into game Dialogue format
     updates[i] = {
-      element: updateSpellDB[i].element as colorType,
+      school: updateSpellDB[i].school as schoolType,
       mana: parseInt(updateSpellDB[i].mana),
       resource_base: getResourceSet(updateSpellDB[i].resource_base),
       effect: updateSpellDB[i].effect as spellEffectType,
@@ -133,11 +133,9 @@ export const readEnemies = (): IEnemy[] => {
     enemies[i] = {
       id: enemyDB[i].id,
       name: enemyDB[i].name,
-      color: enemyDB[i].element as colorType,
-      experience: enemyDB[i].exp as enemyExpLevel,
+      color: enemyDB[i].color as colorType,
       school: enemyDB[i].school as schoolType,
       spells: enemyCards,
-      life: parseInt(enemyDB[i].life),
       description: enemyDB[i].description,
     };
   }
@@ -171,15 +169,12 @@ export const readSpells = (): ISpell[] => {
   for (let i = 0; i < parsedSpells.length; i++) {
     spells[i] = {
       id: parsedSpells[i].id,
-      image: parsedSpells[i].image,
       name: parsedSpells[i].name,
       strength: parseInt(parsedSpells[i].strength),
-      mana: 0,
       selected: false,
-      element: parsedSpells[i].element as colorType,
+      color: parsedSpells[i].color as colorType,
+      school: parsedSpells[i].school as schoolType,
       owner: "hero",
-      type: "base",
-      level: 0,
       description: parsedSpells[i].description,
       updates: [],
     };

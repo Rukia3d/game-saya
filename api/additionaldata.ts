@@ -4,6 +4,7 @@ import {
   IStoryGroup,
   ISpell,
   colorType,
+  schoolType,
 } from "../src/utils/types";
 import {
   DialogueDB,
@@ -99,27 +100,23 @@ export const getStoryGroups = (a: AdventureDB): IStoryGroup[] => {
 };
 
 export const getEnemySpells = (e: EnemyDB) => {
+  const TEMPCARDNUMBER = 3;
   const spell: ISpell[] = [];
   const inputECards = fs.readFileSync(path + "Story Data - DB_Cards.csv");
   const enemyCardDB: EnemyCardDB[] = parse(inputECards, options);
-  const spellSet = enemyCardDB.filter(
-    (c: EnemyCardDB) => c.element === e.element
-  );
-  const spells = getSpellSet(spellSet, parseInt(e.life));
+  const spellSet = enemyCardDB.filter((c: EnemyCardDB) => c.color === e.color);
+  const spells = getSpellSet(spellSet, TEMPCARDNUMBER);
   for (let x = 0; x < spells.length; x++) {
     const currentSpell = spells[x];
     if (!currentSpell) throw new Error(`Can't find a spell for ${e.id}`);
     spell[x] = {
       id: currentSpell.id,
-      image: currentSpell.image,
       name: currentSpell.name,
       strength: parseInt(currentSpell.strength),
-      mana: 0,
       selected: false,
-      element: currentSpell.element as colorType,
+      school: currentSpell.school as schoolType,
+      color: currentSpell.color as colorType,
       owner: "enemy" as "enemy",
-      type: currentSpell.name,
-      level: 0,
       description: currentSpell.description,
       updates: [],
     };

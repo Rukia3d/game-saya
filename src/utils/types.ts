@@ -21,9 +21,7 @@ export type IHero = ICharacter & {
 };
 export type IEnemy = ICharacter & {
   color: colorType;
-  experience: enemyExpLevel;
   spells: ISpell[];
-  life: number;
   school: schoolType;
 };
 

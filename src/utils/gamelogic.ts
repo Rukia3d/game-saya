@@ -16,34 +16,10 @@ import {
   IReel,
 } from "./types";
 
-export const enemyToNumber = (enemy: IEnemy) => {
-  switch (enemy.experience) {
-    case "apprentice":
-      return 6;
-    case "practitioner":
-      return 7;
-    case "master":
-      return 8;
-    case "grandmaster":
-      return 9;
-    default:
-      return 5;
-  }
-};
-
 export const updateLostPlayer = (player: Player) => {
   return {
     ...player,
     mana: player.data.mana - 1,
-  };
-};
-
-const givePlayerExperience = (player: Player, enemy: IEnemy): Player => {
-  const newExp = player.data.experience + enemyToNumber(enemy) * 5;
-  const newData = { ...player.data, experience: newExp };
-  return {
-    ...player,
-    data: newData,
   };
 };
 
@@ -52,10 +28,8 @@ export const updateWinPlayer = (
   enemy: IEnemy,
   resources: IResource[]
 ): Player => {
-  const updatedPlayerData: Player = givePlayerExperience(player, enemy);
-
   return {
-    ...updatedPlayerData,
+    ...player,
     resources: givePlayerResources(player, resources),
   };
 };

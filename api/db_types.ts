@@ -11,11 +11,11 @@ export interface ResourceDB {
   id: string;
   name: string;
   commonality: string;
-  element: string;
+  school: string;
 }
 
 export interface UpdateSpellDB {
-  element: string;
+  school: string;
   mana: string;
   resource_base: string;
   effect: string;
@@ -62,9 +62,7 @@ export interface StoryDB {
 export interface EnemyDB {
   id: string;
   name: string;
-  element: string;
-  life: string;
-  exp: string;
+  color: string;
   description: string;
   school: string;
 }
@@ -72,10 +70,11 @@ export interface EnemyCardDB {
   id: string;
   name: string;
   strength: string;
-  element: string;
-  image: string;
+  school: string;
+  color: string;
   description: string;
 }
+
 export interface HeroDB {
   id: string;
   name: string;
@@ -85,18 +84,11 @@ export interface HeroDB {
   school: string;
 }
 export interface SpellDB {
-  owner: string;
   id: string;
   name: string;
-  effect: string;
-  trump: string;
-  character: string;
-  element: string;
   strength: string;
-  default: string;
-  mana: string;
-  image: string;
-  type: string;
+  school: string;
+  color: string;
   description: string;
 }
 export interface NpcDB {

@@ -36,10 +36,8 @@ export const GameContext = React.createContext<undefined | GameContextType>(
 );
 
 function App() {
-  const { data, error } = useSWRImmutable(
-    "/api/player/?rewrewrw=5464565",
-    fetcher
-  );
+  const { data, error } = useSWRImmutable("/api/player", fetcher);
+  //"/api/player/?rewrewrw=5464565",
 
   const [showStart, setShowStart] = useState(true);
   const [adventure, setAdventure] = useState<null | IAdventure>(null);

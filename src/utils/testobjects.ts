@@ -154,8 +154,8 @@ export const enemyCard: ISpell = {
   id: "base_hit1",
   name: "Base Hit 1",
   strength: 0,
-  color: "yellow" as "yellow",
-  school: "alteration" as "alteration",
+  color: "grey" as "grey",
+  school: "restoration" as "restoration",
   selected: false,
   owner: "enemy" as "enemy",
   description: "",
@@ -165,10 +165,8 @@ export const enemyCard: ISpell = {
 export const enemy: IEnemy = {
   id: "test-dude",
   name: "Dude",
-  color: "yellow" as "yellow",
-  experience: "novice" as "novice",
-  life: 2,
-  school: "alteration",
+  color: "grey" as "grey",
+  school: "restoration",
   spells: [enemyCard, enemyCard],
   description:
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",

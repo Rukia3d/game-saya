@@ -58,32 +58,17 @@ const EnemySpells = ({ item }: { item: IEnemy }) => {
 const HeroDescription = ({ item }: { item: IHero | IEnemy }) => {
   return (
     <div className="ItemDescription">
-      {"experience" in item ? (
-        <div
-          className="ItemDescriptionDifficulty"
-          aria-label="enemy_experience"
-        >
-          Experience: {item.experience}
-        </div>
-      ) : null}
       <div className="ItemDescriptionText">{item.description}</div>
     </div>
   );
 };
 
 const HeroCard = ({ item }: { item: IHero | IEnemy }) => {
+  // TODO enemy won't be displayed correctly
   return (
     <div className="ItemCard">
       <div className="ItemCardHeader">{item.name}</div>
-      <img
-        src={
-          "life" in item
-            ? `../img/Enemies/${item.color}/${item.id}.png`
-            : `../img/Heroes/${item.id}.png`
-        }
-        alt="enemy_image"
-      />
-      {"life" in item ? <h3 aria-label="Spells">Spells: {item.life}</h3> : null}
+      <img src={`../img/Heroes/${item.id}.png`} alt="enemy_image" />
     </div>
   );
 };
@@ -117,25 +102,26 @@ const BottomCardHero = ({ item }: { item: IHero | IEnemy }) => {
   if (!context || !context.gameState) {
     throw new Error("No data in context");
   }
-  if ("life" in item) {
-    return (
-      <div className="BottomCard">
-        <EnemySpells item={item} />
-      </div>
-    );
-  }
-  if (context.addition) {
-    return (
-      <div className="BottomCard">
-        <HeroSpells item={item} />
-      </div>
-    );
-  }
-  return (
-    <div className="BottomCard">
-      <HeroSkins item={item} />
-    </div>
-  );
+  // if ("life" in item) {
+  //   return (
+  //     <div className="BottomCard">
+  //       <EnemySpells item={item} />
+  //     </div>
+  //   );
+  // }
+  // if (context.addition) {
+  //   return (
+  //     <div className="BottomCard">
+  //       <HeroSpells item={item} />
+  //     </div>
+  //   );
+  // }
+  // return (
+  //   <div className="BottomCard">
+  //     <HeroSkins item={item} />
+  //   </div>
+  // );
+  return <div className="BottomCard"></div>;
 };
 
 export const InfoHero = ({ item }: { item: IHero | IEnemy }) => {

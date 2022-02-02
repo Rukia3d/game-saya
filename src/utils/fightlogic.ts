@@ -68,6 +68,8 @@ export const initFight = (
   if (enemyDeck.length < 1) {
     throw new Error(`Couldn't generate cards for enemy`);
   }
+
+  // TODO Generate the elements correctly
   const elements: colorType[] = shuffle([
     "fire",
     "earth",

@@ -25,6 +25,7 @@ export const generateDeck = (
 };
 
 export const generateEnemyDeck = (enemy: IEnemy): ISpell[] => {
+  const DEFAULENEMYSPELLS = 5;
   const enemySpells: ISpell[] = [];
   enemy.spells.forEach((c: ISpell) => {
     enemySpells.push({
@@ -39,7 +40,7 @@ export const generateEnemyDeck = (enemy: IEnemy): ISpell[] => {
       updates: c.updates,
     });
   });
-  return enemySpells.splice(0, enemy.life);
+  return enemySpells.splice(0, DEFAULENEMYSPELLS);
 };
 
 export const initPreFight = (player: Player, fight: IFight) => {
