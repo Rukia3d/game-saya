@@ -24,7 +24,9 @@ const HeroSpells = ({ item }: { item: IHero }) => {
   }
   const playerSpells = context.gameState.player.spells;
   const spells =
-    playerSpells.filter((s: ISpell) => s.element === item.color) || [];
+    playerSpells.filter(
+      (s: ISpell) => s.school === item.school && s.color === item.color
+    ) || [];
 
   return (
     <div className="ItemData">

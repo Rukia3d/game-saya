@@ -6,7 +6,7 @@ import userEvent from "@testing-library/user-event";
 import { Dialogue } from "../Dialogues/Dialogue";
 import {
   dialogueLayout,
-  elementType,
+  colorType,
   ISpell,
   storyChangeType,
 } from "../utils/types";
@@ -55,7 +55,7 @@ test("Renders dialogue page and triggers Character screen", async () => {
       ...gameState.player,
       heroes: [
         {
-          element: "earth" as elementType,
+          element: "earth" as colorType,
           id: "maya",
           image: "maya",
           name: "Maya",

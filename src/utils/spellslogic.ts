@@ -11,7 +11,7 @@ export const updatePlayerSpell = (
 };
 
 export const calculateSpellMana = (spell: ISpell) => {
-  let allMana = spell.mana;
+  let allMana = 0;
   if ("updates" in spell) {
     spell.updates.map((u: ISpellUpdate) => (allMana = allMana + u.mana));
   }

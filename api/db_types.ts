@@ -11,7 +11,6 @@ export interface ResourceDB {
   id: string;
   name: string;
   commonality: string;
-  image: string;
   element: string;
 }
 
@@ -67,6 +66,7 @@ export interface EnemyDB {
   life: string;
   exp: string;
   description: string;
+  school: string;
 }
 export interface EnemyCardDB {
   id: string;
@@ -82,7 +82,7 @@ export interface HeroDB {
   description: string;
   code: string;
   color: string;
-  effect: string;
+  school: string;
 }
 export interface SpellDB {
   owner: string;

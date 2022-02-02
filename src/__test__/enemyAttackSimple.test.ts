@@ -1,7 +1,7 @@
 import { enemyAttack } from "../utils/hitlogic";
 import { mayaCard, enemyCard } from "../utils/testobjects";
 import { fightState } from "../utils/teststates";
-import { elementType } from "../utils/types";
+import { colorType } from "../utils/types";
 const testHeroLife = { ...fightState.hero, life: 10 };
 
 // Base to Base attacks
@@ -55,7 +55,7 @@ test("Enemy attacks base card 3, hero defends trump card 5", () => {
   const newHeroCard = {
     ...mayaCard,
     strength: 5,
-    element: "fire" as elementType,
+    element: "fire" as colorType,
   };
   const newEnemyCard = { ...enemyCard, strength: 3 };
   const newFightState = {
@@ -74,7 +74,7 @@ test("Enemy attacks base card 3, hero defends trump card 3", () => {
   const newHeroCard = {
     ...mayaCard,
     strength: 3,
-    element: "fire" as elementType,
+    element: "fire" as colorType,
   };
   const newEnemyCard = { ...enemyCard, strength: 3 };
   const newFightState = {
@@ -93,7 +93,7 @@ test("Enemy attacks base card 5, hero defends trump card 3", () => {
   const newHeroCard = {
     ...mayaCard,
     strength: 3,
-    element: "fire" as elementType,
+    element: "fire" as colorType,
   };
   const newEnemyCard = { ...enemyCard, strength: 5 };
   const newFightState = {
@@ -114,7 +114,7 @@ test("Enemy attacks trump card 3, hero defends base card 5", () => {
   const newEnemyCard = {
     ...enemyCard,
     strength: 3,
-    element: "fire" as elementType,
+    element: "fire" as colorType,
   };
   const newFightState = {
     ...JSON.parse(JSON.stringify(fightState)),
@@ -133,7 +133,7 @@ test("Enemy attacks trump card 3, hero defends base card 3", () => {
   const newEnemyCard = {
     ...enemyCard,
     strength: 3,
-    element: "fire" as elementType,
+    element: "fire" as colorType,
   };
   const newFightState = {
     ...JSON.parse(JSON.stringify(fightState)),
@@ -152,7 +152,7 @@ test("Enemy attacks trump card 5, hero defends base card 3", () => {
   const newEnemyCard = {
     ...enemyCard,
     strength: 5,
-    element: "fire" as elementType,
+    element: "fire" as colorType,
   };
   const newFightState = {
     ...JSON.parse(JSON.stringify(fightState)),
@@ -170,12 +170,12 @@ test("Enemy attacks trump card 3, hero defends trump card 5", () => {
   const newHeroCard = {
     ...mayaCard,
     strength: 5,
-    element: "fire" as elementType,
+    element: "fire" as colorType,
   };
   const newEnemyCard = {
     ...enemyCard,
     strength: 3,
-    element: "fire" as elementType,
+    element: "fire" as colorType,
   };
   const newFightState = {
     ...JSON.parse(JSON.stringify(fightState)),
@@ -193,12 +193,12 @@ test("Enemy attacks trump card 3, hero defends trump card 3", () => {
   const newHeroCard = {
     ...mayaCard,
     strength: 3,
-    element: "fire" as elementType,
+    element: "fire" as colorType,
   };
   const newEnemyCard = {
     ...enemyCard,
     strength: 3,
-    element: "fire" as elementType,
+    element: "fire" as colorType,
   };
   const newFightState = {
     ...JSON.parse(JSON.stringify(fightState)),
@@ -216,12 +216,12 @@ test("Enemy attacks trump card 5, hero defends trump card 3", () => {
   const newHeroCard = {
     ...mayaCard,
     strength: 3,
-    element: "fire" as elementType,
+    element: "fire" as colorType,
   };
   const newEnemyCard = {
     ...enemyCard,
     strength: 5,
-    element: "fire" as elementType,
+    element: "fire" as colorType,
   };
   const newFightState = {
     ...JSON.parse(JSON.stringify(fightState)),

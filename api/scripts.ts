@@ -1,14 +1,14 @@
-import { GameState, ISpell } from "../src/utils/types";
+import { GameState, IReel, ISpell } from "../src/utils/types";
 import {
   readDialogues,
   readAdventures,
   readEnemies,
   readHeroes,
-  readSpells,
   readNpcs,
   readResources,
   readSpellUpdates,
   readFights,
+  readSpells,
 } from "./dataload";
 
 const express = require("express");
@@ -20,11 +20,74 @@ const dialogues = readDialogues();
 const adventures = readAdventures();
 const enemies = readEnemies();
 const heroes = readHeroes();
-const spells = readSpells();
 const npcs = readNpcs();
 const resources = readResources();
 const spellUpdates = readSpellUpdates();
 const fights = readFights();
+const spells = readSpells();
+
+const reelsInitialSet: IReel[] = [
+  {
+    id: "c1_reel_1",
+    type: "reel",
+    action: [],
+    imageGroups: [
+      {
+        id: 1,
+        layout: 4,
+        images: [
+          { id: "c1_reel_1_1_img1", image: "storyline", direction: "down" },
+          { id: "c1_reel_1_1_img2", image: "storyline", direction: "up" },
+          { id: "c1_reel_1_1_img3", image: "storyline", direction: "left" },
+          { id: "c1_reel_1_1_img4", image: "storyline", direction: "left" },
+        ],
+      },
+      {
+        id: 2,
+        layout: 1,
+        images: [
+          { id: "c1_reel_1_2_img1", image: "storyline", direction: "left" },
+        ],
+      },
+    ],
+  },
+  {
+    id: "c1_reel_2",
+    type: "reel",
+    action: [],
+    imageGroups: [
+      {
+        id: 1,
+        layout: 3,
+        images: [
+          {
+            id: "c1_reel_2_1_img1",
+            image: "storyline",
+            direction: "right",
+          },
+          {
+            id: "c1_reel_2_1_img2",
+            image: "storyline",
+            direction: "left",
+          },
+          { id: "c1_reel_2_1_img3", image: "storyline", direction: "left" },
+        ],
+      },
+      {
+        id: 2,
+        layout: 2,
+        images: [
+          {
+            id: "c1_reel_2_2_img1",
+            image: "storyline",
+            direction: "right",
+          },
+          { id: "c1_reel_2_2_img2", image: "storyline", direction: "left" },
+        ],
+      },
+    ],
+  },
+];
 
 app.get("/api/player/", (req: any, res: any) => {
   console.log("Requesting new player game data");
@@ -84,68 +147,7 @@ app.get("/api/player/", (req: any, res: any) => {
       ],
       enemies: playerEnemies,
     },
-    reels: [
-      {
-        id: "c1_reel_1",
-        type: "reel",
-        action: [],
-        imageGroups: [
-          {
-            id: 1,
-            layout: 4,
-            images: [
-              { id: "c1_reel_1_1_img1", image: "storyline", direction: "down" },
-              { id: "c1_reel_1_1_img2", image: "storyline", direction: "up" },
-              { id: "c1_reel_1_1_img3", image: "storyline", direction: "left" },
-              { id: "c1_reel_1_1_img4", image: "storyline", direction: "left" },
-            ],
-          },
-          {
-            id: 2,
-            layout: 1,
-            images: [
-              { id: "c1_reel_1_2_img1", image: "storyline", direction: "left" },
-            ],
-          },
-        ],
-      },
-      {
-        id: "c1_reel_2",
-        type: "reel",
-        action: [],
-        imageGroups: [
-          {
-            id: 1,
-            layout: 3,
-            images: [
-              {
-                id: "c1_reel_2_1_img1",
-                image: "storyline",
-                direction: "right",
-              },
-              {
-                id: "c1_reel_2_1_img2",
-                image: "storyline",
-                direction: "left",
-              },
-              { id: "c1_reel_2_1_img3", image: "storyline", direction: "left" },
-            ],
-          },
-          {
-            id: 2,
-            layout: 2,
-            images: [
-              {
-                id: "c1_reel_2_2_img1",
-                image: "storyline",
-                direction: "right",
-              },
-              { id: "c1_reel_2_2_img2", image: "storyline", direction: "left" },
-            ],
-          },
-        ],
-      },
-    ],
+    reels: reelsInitialSet,
     dialogues: dialogues,
     fights: fights,
     npcs: npcs,
@@ -159,9 +161,9 @@ app.get("/api/player/", (req: any, res: any) => {
   res.send(gameState);
 });
 
-// app.get("/api/rewards/", (req: any, res: any) => {
-//   console.log("rewards", req);
-// });
+app.get("/api/rewards/", (req: any, res: any) => {
+  console.log("rewards", req.query);
+});
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);

@@ -2,13 +2,7 @@ import React, { useContext, useState } from "react";
 import { GameContext } from "../App";
 import "./Spells.scss";
 // Types
-import {
-  elementType,
-  IEnemy,
-  IHero,
-  ISpell,
-  ISpellUpdate,
-} from "../utils/types";
+import { colorType, IEnemy, IHero, ISpell, ISpellUpdate } from "../utils/types";
 // Utils
 import { changeCardsInDeck } from "../utils/fightlogic";
 // Components

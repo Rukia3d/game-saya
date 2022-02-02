@@ -153,9 +153,7 @@ const updatePlayerCards = (
   allSpells: ISpell[],
   action: IStoryAction
 ) => {
-  const spellsToAdd = allSpells.filter(
-    (s: ISpell) => s.element === action.data
-  );
+  const spellsToAdd = allSpells.filter((s: ISpell) => s.color === action.data);
   return spells.concat(spellsToAdd);
 };
 

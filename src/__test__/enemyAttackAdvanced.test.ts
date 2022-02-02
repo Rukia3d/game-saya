@@ -2,7 +2,7 @@ import { enemyAttack } from "../utils/hitlogic";
 import { mayaCard, enemyCard, heroes } from "../utils/testobjects";
 import { fightState } from "../utils/teststates";
 import {
-  elementType,
+  colorType,
   spellEffectType,
   ISpellUpdate,
   ISpell,
@@ -10,7 +10,7 @@ import {
 const testHeroLife = { ...fightState.hero, life: 10 };
 
 const h_heal_1: ISpellUpdate = {
-  element: "earth" as elementType,
+  element: "earth" as colorType,
   mana: 1,
   resource_base: [],
   effect: "h_heal" as spellEffectType,
@@ -25,19 +25,19 @@ test("Update effect h_heal works with simple attack", () => {
   const newHeroCard = {
     ...mayaCard,
     strength: 3,
-    element: "earth" as elementType,
+    element: "earth" as colorType,
     updates: [h_heal_1],
   };
   const newEnemyCard = {
     ...enemyCard,
     strength: 3,
-    element: "fire" as elementType,
+    element: "fire" as colorType,
   };
   const newFightState = {
     ...JSON.parse(JSON.stringify(fightState)),
     heroHand: fightState.heroHand.concat(newHeroCard),
     enemyDeck: fightState.enemyDeck.concat(newEnemyCard),
-    element: "air" as elementType,
+    element: "air" as colorType,
     elements: ["fire", "earth", "air"],
     heroCardIndex: 2,
     enemyCardIndex: 2,
@@ -50,19 +50,19 @@ test("Update effect h_heal works with simple attack with any effect", () => {
   const newHeroCard: ISpell = {
     ...mayaCard,
     strength: 3,
-    element: "earth" as elementType,
+    element: "earth" as colorType,
     updates: [{ ...h_heal_1, action: { action: "health", strength: 3 } }],
   };
   const newEnemyCard: ISpell = {
     ...enemyCard,
     strength: 3,
-    element: "fire" as elementType,
+    element: "fire" as colorType,
   };
   const newFightState = {
     ...JSON.parse(JSON.stringify(fightState)),
     heroHand: fightState.heroHand.concat(newHeroCard),
     enemyDeck: fightState.enemyDeck.concat(newEnemyCard),
-    element: "air" as elementType,
+    element: "air" as colorType,
     elements: ["fire", "earth", "air"],
     heroCardIndex: 2,
     enemyCardIndex: 2,
@@ -75,19 +75,19 @@ test("Update effect h_heal works with trump defence", () => {
   const newHeroCard = {
     ...mayaCard,
     strength: 1,
-    element: "earth" as elementType,
+    element: "earth" as colorType,
     updates: [h_heal_1],
   };
   const newEnemyCard = {
     ...enemyCard,
     strength: 3,
-    element: "fire" as elementType,
+    element: "fire" as colorType,
   };
   const newFightState = {
     ...JSON.parse(JSON.stringify(fightState)),
     heroHand: fightState.heroHand.concat(newHeroCard),
     enemyDeck: fightState.enemyDeck.concat(newEnemyCard),
-    element: "earth" as elementType,
+    element: "earth" as colorType,
     elements: ["fire", "earth", "air"],
     heroCardIndex: 2,
     enemyCardIndex: 2,
@@ -100,19 +100,19 @@ test("Update effect h_heal works with trump attack", () => {
   const newHeroCard = {
     ...mayaCard,
     strength: 1,
-    element: "earth" as elementType,
+    element: "earth" as colorType,
     updates: [h_heal_1],
   };
   const newEnemyCard = {
     ...enemyCard,
     strength: 3,
-    element: "fire" as elementType,
+    element: "fire" as colorType,
   };
   const newFightState = {
     ...JSON.parse(JSON.stringify(fightState)),
     heroHand: fightState.heroHand.concat(newHeroCard),
     enemyDeck: fightState.enemyDeck.concat(newEnemyCard),
-    element: "fire" as elementType,
+    element: "fire" as colorType,
     elements: ["fire", "earth", "air"],
     heroCardIndex: 2,
     enemyCardIndex: 2,
@@ -125,20 +125,20 @@ test("Update effect h_heal doesn't work if there's no mana", () => {
   const newHeroCard = {
     ...mayaCard,
     strength: 3,
-    element: "earth" as elementType,
+    element: "earth" as colorType,
     updates: [h_heal_1],
   };
   const newEnemyCard = {
     ...enemyCard,
     strength: 3,
-    element: "fire" as elementType,
+    element: "fire" as colorType,
   };
   const updatedHero = { ...testHeroLife, mana: 0 };
   const newFightState = {
     ...JSON.parse(JSON.stringify(fightState)),
     heroHand: fightState.heroHand.concat(newHeroCard),
     enemyDeck: fightState.enemyDeck.concat(newEnemyCard),
-    element: "air" as elementType,
+    element: "air" as colorType,
     elements: ["fire", "earth", "air"],
     heroCardIndex: 2,
     enemyCardIndex: 2,
@@ -155,19 +155,19 @@ test("Update effect h_heal doesn't work if character is not present", () => {
   const newHeroCard = {
     ...mayaCard,
     strength: 3,
-    element: "earth" as elementType,
+    element: "earth" as colorType,
     updates: [h_heal_1],
   };
   const newEnemyCard = {
     ...enemyCard,
     strength: 3,
-    element: "fire" as elementType,
+    element: "fire" as colorType,
   };
   const newFightState = {
     ...JSON.parse(JSON.stringify(fightState)),
     heroHand: fightState.heroHand.concat(newHeroCard),
     enemyDeck: fightState.enemyDeck.concat(newEnemyCard),
-    element: "air" as elementType,
+    element: "air" as colorType,
     elements: ["fire", "earth", "air"],
     heroCardIndex: 2,
     enemyCardIndex: 2,
@@ -182,7 +182,7 @@ test("Update effect h_heal doesn't work if character is not present", () => {
 });
 
 const h_trumpremove_1: ISpellUpdate = {
-  element: "air" as elementType,
+  element: "air" as colorType,
   mana: 1,
   resource_base: [],
   effect: "h_trumpremove" as spellEffectType,
@@ -197,19 +197,19 @@ test("Update effect h_trumpremove_1 works with trump attack", () => {
   const newHeroCard = {
     ...mayaCard,
     strength: 1,
-    element: "air" as elementType,
+    element: "air" as colorType,
     updates: [h_trumpremove_1],
   };
   const newEnemyCard = {
     ...enemyCard,
     strength: 3,
-    element: "fire" as elementType,
+    element: "fire" as colorType,
   };
   const newFightState = {
     ...JSON.parse(JSON.stringify(fightState)),
     heroHand: fightState.heroHand.concat(newHeroCard),
     enemyDeck: fightState.enemyDeck.concat(newEnemyCard),
-    element: "fire" as elementType,
+    element: "fire" as colorType,
     elements: ["fire", "earth", "air"],
     heroCardIndex: 2,
     enemyCardIndex: 2,
@@ -223,19 +223,19 @@ test("Update effect h_trumpremove_1 doesnt works with simple attack", () => {
   const newHeroCard = {
     ...mayaCard,
     strength: 1,
-    element: "air" as elementType,
+    element: "air" as colorType,
     updates: [h_trumpremove_1],
   };
   const newEnemyCard = {
     ...enemyCard,
     strength: 3,
-    element: "fire" as elementType,
+    element: "fire" as colorType,
   };
   const newFightState = {
     ...JSON.parse(JSON.stringify(fightState)),
     heroHand: fightState.heroHand.concat(newHeroCard),
     enemyDeck: fightState.enemyDeck.concat(newEnemyCard),
-    element: "earth" as elementType,
+    element: "earth" as colorType,
     elements: ["fire", "earth", "air"],
     hero: testHeroLife,
     heroCardIndex: 2,
@@ -246,7 +246,7 @@ test("Update effect h_trumpremove_1 doesnt works with simple attack", () => {
 });
 
 const h_trumpset_1: ISpellUpdate = {
-  element: "air" as elementType,
+  element: "air" as colorType,
   mana: 2,
   resource_base: [],
   effect: "h_trumpset" as spellEffectType,
@@ -261,19 +261,19 @@ test("Update effect h_trumpset_1 works", () => {
   const newHeroCard = {
     ...mayaCard,
     strength: 1,
-    element: "air" as elementType,
+    element: "air" as colorType,
     updates: [h_trumpset_1],
   };
   const newEnemyCard = {
     ...enemyCard,
     strength: 3,
-    element: "fire" as elementType,
+    element: "fire" as colorType,
   };
   const newFightState = {
     ...JSON.parse(JSON.stringify(fightState)),
     heroHand: fightState.heroHand.concat(newHeroCard),
     enemyDeck: fightState.enemyDeck.concat(newEnemyCard),
-    element: "air" as elementType,
+    element: "air" as colorType,
     elements: ["fire", "earth", "air"],
     heroCardIndex: 2,
     enemyCardIndex: 2,

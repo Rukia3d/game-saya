@@ -9,6 +9,7 @@ import { ResourceDatalist } from "../Spells/Resources";
 import { GameContext } from "../App";
 import { calculateSpellMana, updatePlayerSpell } from "../utils/spellslogic";
 import { removeResources } from "../utils/resourceLogic";
+import { spellUpdates } from "../utils/testobjects";
 
 const ItemCard = ({ item }: { item: ISpell | ISpellUpdate }) => {
   //TODO Replace static img with animation
@@ -18,12 +19,12 @@ const ItemCard = ({ item }: { item: ISpell | ISpellUpdate }) => {
       <div className="ItemCardHeader">{item.name}</div>
       {"updates" in item ? (
         <img
-          src={`../img/Spells/${item.element}/${item.image}.png`}
+          src={`../img/Spells/${item.color}/${item.id}.png`}
           alt="spell_image"
         />
       ) : (
         <img
-          src={`../img/Spells/${item.element}/update_${item.id}.png`}
+          src={`../img/Spells/${item.school}/update_${item.id}.png`}
           alt="element_image"
         />
       )}
@@ -41,8 +42,10 @@ const ItemDescription = ({ item }: { item: ISpell | ISpellUpdate }) => {
       <div className="ItemDescriptionImage">
         {"selected" in item ? (
           <img src={"../img/Spells/equipped_item.png"} alt="selected_spell" />
-        ) : null}
-        {item.element}
+        ) : (
+          item.school
+        )}
+        {item.school}
       </div>
       <div className="ItemDescriptionText">{item.description}</div>
     </div>
@@ -61,7 +64,7 @@ const ItemSpellUpdates = ({ item }: { item: ISpell }) => {
   const resources = context.gameState.player.resources;
   const applicableUpdates = updates.filter(
     (s: ISpellUpdate) =>
-      s.element === item.element && item.updates.indexOf(s) === -1
+      s.school === item.school && item.updates.indexOf(s) === -1
   );
 
   const select = (s: "applied" | "available") => {
@@ -134,7 +137,10 @@ const ItemSpellResources = ({ item }: { item: ISpellUpdate }) => {
 
 const TopCardItem = ({ item }: { item: ISpell | ISpellUpdate }) => {
   // Only Spells and Updates have mana
-  const imgUrl = `/img/Spells/${item.element}/${item.element}_back.jpg`;
+  const imgUrl =
+    "updates" in item
+      ? `/img/Spells/${item.color}/${item.id}_back.jpg`
+      : `/img/Spells/${item.school}/${item.id}_back.jpg`;
   return (
     <div
       className="TopCard"

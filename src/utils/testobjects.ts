@@ -5,7 +5,7 @@ import {
   ISpell,
   IEnemy,
   IHero,
-  elementType,
+  colorType,
   IStoryGroup,
   ISpellUpdate,
   IReel,
@@ -33,7 +33,7 @@ export const spellUpdates: ISpellUpdate[] = new Array(3)
     action: { action: "health", strength: i },
     description: "Some description" + i,
     effect: "h_redraw",
-    element: "fire",
+    school: "restoration",
     id: "fire_" + i,
     mana: 1,
     name: "SomeName" + i,
@@ -141,13 +141,10 @@ export const mayaCard: ISpell = {
   id: "base_hit1_maya",
   name: "Maya Hit 1",
   strength: 1,
-  element: "earth" as "earth",
-  image: "spell2",
+  color: "yellow" as "yellow",
+  school: "alteration" as "alteration",
   selected: true,
-  mana: 0,
   owner: "hero" as "hero",
-  type: "",
-  level: 0,
   description:
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ",
   updates: [],
@@ -157,13 +154,10 @@ export const enemyCard: ISpell = {
   id: "base_hit1",
   name: "Base Hit 1",
   strength: 0,
-  element: "earth" as "earth",
-  image: "",
+  color: "yellow" as "yellow",
+  school: "alteration" as "alteration",
   selected: false,
   owner: "enemy" as "enemy",
-  mana: 0,
-  type: "",
-  level: 0,
   description: "",
   updates: [],
 };
@@ -171,9 +165,10 @@ export const enemyCard: ISpell = {
 export const enemy: IEnemy = {
   id: "test-dude",
   name: "Dude",
-  color: "earth" as "earth",
+  color: "yellow" as "yellow",
   experience: "novice" as "novice",
   life: 2,
+  school: "alteration",
   spells: [enemyCard, enemyCard],
   description:
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
@@ -183,13 +178,10 @@ export const baseCards15: ISpell[] = new Array(15).fill(0).map((x, n) => ({
   id: "base_hit" + n,
   name: "Base Hit " + n,
   strength: 1,
-  element: "earth",
-  image: "",
-  mana: 0,
+  color: "yellow" as "yellow",
+  school: "alteration" as "alteration",
   selected: true,
   owner: "hero" as "hero",
-  type: "",
-  level: 0,
   description: "",
   updates: [],
 }));
@@ -227,7 +219,8 @@ heroesFormat.forEach((obj: [string, string]) =>
     name: obj[0],
     code: "000000",
     image: "",
-    color: obj[1] as elementType,
+    color: obj[1] as colorType,
+    school: "alteration",
     description:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
   })
@@ -256,12 +249,13 @@ export const dialogue: IDialogue = {
 };
 
 export const characterToAdd: IHero = {
-  color: "fire",
+  color: "red",
   id: "nell",
   code: "000000",
   image: "../img/nell.png",
   name: "Nell",
   selected: false,
+  school: "alteration",
   description:
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ",
 };

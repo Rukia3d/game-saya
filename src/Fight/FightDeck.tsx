@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import "./Fight.scss";
 // Types
-import { elementType, FightState, ISpell } from "../utils/types";
+import { colorType, FightState, ISpell } from "../utils/types";
 // Utils
 // Components
 import { Spell } from "../Spells/Spell";
@@ -11,7 +11,7 @@ const ElementInfo = ({ fightState }: { fightState: FightState }) => {
   const currentElement = fightState.element;
   return (
     <div className="ElementInfo">
-      {fightState.elements.map((s: elementType, i: number) => (
+      {fightState.elements.map((s: colorType, i: number) => (
         <img
           src={
             currentElement === s

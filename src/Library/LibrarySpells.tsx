@@ -20,7 +20,9 @@ export const LibrarySpells = ({
   }
 
   const allSpells = context.gameState.player.spells;
-  const heroSpells = allSpells.filter((s: ISpell) => s.element === hero.color);
+  const heroSpells = allSpells.filter(
+    (s: ISpell) => s.color === hero.color && s.school === hero.school
+  );
   return (
     <div className="LibrarySpells">
       <HeroesSpells spells={heroSpells} setInfo={setInfo} />

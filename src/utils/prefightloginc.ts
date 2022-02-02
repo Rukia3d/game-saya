@@ -11,15 +11,12 @@ export const generateDeck = (
     //    if (!c.selected) return;
     heroSpells.push({
       id: c.id,
-      image: c.image,
       name: c.name,
-      mana: c.mana,
       strength: c.strength,
-      element: c.element,
+      color: c.color,
       owner: "hero",
       selected: c.selected,
-      type: c.type,
-      level: c.level,
+      school: c.school,
       description: c.description,
       updates: c.updates,
     });
@@ -32,15 +29,12 @@ export const generateEnemyDeck = (enemy: IEnemy): ISpell[] => {
   enemy.spells.forEach((c: ISpell) => {
     enemySpells.push({
       id: c.id,
-      image: c.image,
       name: c.name,
-      mana: c.mana,
       strength: c.strength,
-      element: c.element,
+      color: c.color,
       owner: "enemy",
       selected: true,
-      type: c.type,
-      level: c.level,
+      school: c.school,
       description: c.description,
       updates: c.updates,
     });

@@ -2,7 +2,7 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import { InfoCard } from "../Info/InfoCard";
 import { heroes, mayaCard, spellUpdates } from "../utils/testobjects";
-import { elementType, GameState, ISpell } from "../utils/types";
+import { colorType, GameState, ISpell } from "../utils/types";
 import { GameContext, GameContextType } from "../App";
 import userEvent from "@testing-library/user-event";
 import { gameState } from "../utils/teststates";
@@ -46,7 +46,7 @@ test("Renders Item card updates", async () => {
   const setInfo = jest.fn();
   const fireCard: ISpell = {
     ...mayaCard,
-    element: "fire" as elementType,
+    element: "fire" as colorType,
     updates: [spellUpdates[0]],
   };
   render(

@@ -3,7 +3,7 @@ import { generateReward, removeResources } from "../utils/resourceLogic";
 import { enemy } from "../utils/testobjects";
 import { gameState } from "../utils/teststates";
 import {
-  elementType,
+  colorType,
   IOwnedResource,
   ISpellUpdateResource,
 } from "../utils/types";
@@ -20,35 +20,35 @@ test("updateWinPlayer assigns rewards correctly", () => {
       name: "Ash",
       image: "ash",
       commonality: 10,
-      element: "fire" as elementType,
+      element: "fire" as colorType,
     },
     {
       id: "lava_r",
       name: "Lava Rock",
       image: "lava_r",
       commonality: 7,
-      element: "fire" as elementType,
+      element: "fire" as colorType,
     },
     {
       id: "ash",
       name: "Ash",
       image: "ash",
       commonality: 10,
-      element: "fire" as elementType,
+      element: "fire" as colorType,
     },
     {
       id: "ash",
       name: "Ash",
       image: "ash",
       commonality: 10,
-      element: "fire" as elementType,
+      element: "fire" as colorType,
     },
     {
       id: "ash",
       name: "Ash",
       image: "ash",
       commonality: 10,
-      element: "fire" as elementType,
+      element: "fire" as colorType,
     },
   ];
 
@@ -66,7 +66,7 @@ test("removeResource removes correctly", () => {
       commonality: 2,
       image: "sparks",
       quantity: 10,
-      element: "fire" as elementType,
+      element: "fire" as colorType,
     },
     {
       id: "ash",
@@ -74,7 +74,7 @@ test("removeResource removes correctly", () => {
       commonality: 10,
       image: "ash",
       quantity: 10,
-      element: "fire" as elementType,
+      element: "fire" as colorType,
     },
     {
       id: "lava_r",
@@ -82,7 +82,7 @@ test("removeResource removes correctly", () => {
       commonality: 7,
       image: "lava_r",
       quantity: 10,
-      element: "fire" as elementType,
+      element: "fire" as colorType,
     },
   ];
   const price: ISpellUpdateResource[] = [
@@ -99,7 +99,7 @@ test("removeResource throws correct errors", () => {
   const resources: IOwnedResource[] = [
     {
       id: "sparks",
-      element: "fire" as elementType,
+      element: "fire" as colorType,
       name: "Sparks",
       commonality: 2,
       image: "sparks",
@@ -111,7 +111,7 @@ test("removeResource throws correct errors", () => {
       commonality: 10,
       image: "ash",
       quantity: 10,
-      element: "fire" as elementType,
+      element: "fire" as colorType,
     },
     {
       id: "lava_r",
@@ -119,7 +119,7 @@ test("removeResource throws correct errors", () => {
       commonality: 7,
       image: "lava_r",
       quantity: 10,
-      element: "fire" as elementType,
+      element: "fire" as colorType,
     },
   ];
   jest.spyOn(console, "error").mockImplementation(() => jest.fn());

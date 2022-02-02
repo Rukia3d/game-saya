@@ -31,9 +31,8 @@ const generateSingleRewards = (resources: IResource[]) => {
       allRewards.push({
         id: r.id,
         name: r.name,
-        image: r.image,
         commonality: r.commonality,
-        element: r.element,
+        school: r.school,
       });
     }
   });

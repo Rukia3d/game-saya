@@ -102,7 +102,7 @@ export const SpellUpdate = ({
         <div className="HeroSpellUpdate" {...longPressEvent}>
           <div className="UpdateImage">
             <img
-              src={`../img/Spells/${update.element}/update_${update.id}.png`}
+              src={`../img/Updates/${update.school}/update_${update.id}.png`}
               alt={`update-${update.id}`}
             />
           </div>

@@ -1,5 +1,5 @@
 import { heroIsPresent, manaPriceOfUpdates } from "./fightlogic";
-import { elementType, FightState, ISpell } from "./types";
+import { colorType, FightState, ISpell } from "./types";
 
 const simpleDamage = (
   health: number,
@@ -15,19 +15,19 @@ const simpleDamage = (
 };
 
 const specialDamage = (
-  element: elementType,
+  element: colorType,
   heroCard: ISpell,
   enemyCard: ISpell,
   heroHealth: number
 ) => {
-  if (element === enemyCard.element && element !== heroCard.element) {
+  if (element === enemyCard.color && element !== heroCard.color) {
     //console.log("special attack enemy trump");
     return heroHealth - enemyCard.strength;
   }
 
   if (
-    element === enemyCard.element &&
-    element === heroCard.element &&
+    element === enemyCard.color &&
+    element === heroCard.color &&
     enemyCard.strength > heroCard.strength
   ) {
     //console.log("special attack both trump");
@@ -47,14 +47,14 @@ const additionalEffects = (
   const price = manaPriceOfUpdates(heroCard.updates);
   if (manaPriceOfUpdates(heroCard.updates) < fightState.hero.mana) {
     const currentupdate = heroCard.updates[0];
-    if (heroIsPresent(currentupdate, fightState.heroes)) {
+    if (heroIsPresent(currentupdate, heroCard, fightState.heroes)) {
       //console.log("Spell effect", currentupdate.effect);
       switch (currentupdate.effect) {
         case "h_heal":
           heroHealth = heroHealth + (currentupdate.action.strength as number);
           break;
         case "h_trumpremove":
-          if (enemyCard.element === fightState.element) {
+          if (enemyCard.color === fightState.element) {
             heroHealth = heroHealth + enemyCard.strength;
             heroHealth = simpleDamage(
               heroHealth,
@@ -107,8 +107,8 @@ export const enemyAttack = (fightState: FightState): FightState => {
 
   if (
     fightState.element &&
-    (fightState.element === heroCard.element ||
-      fightState.element === enemyCard.element)
+    (fightState.element === heroCard.color ||
+      fightState.element === enemyCard.color)
   ) {
     //console.log("special attack");
     newHeroHealth = specialDamage(

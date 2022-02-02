@@ -3,7 +3,7 @@ import {
   IStory,
   IStoryGroup,
   ISpell,
-  elementType,
+  colorType,
 } from "../src/utils/types";
 import {
   DialogueDB,
@@ -116,7 +116,7 @@ export const getEnemySpells = (e: EnemyDB) => {
       strength: parseInt(currentSpell.strength),
       mana: 0,
       selected: false,
-      element: currentSpell.element as elementType,
+      element: currentSpell.element as colorType,
       owner: "enemy" as "enemy",
       type: currentSpell.name,
       level: 0,

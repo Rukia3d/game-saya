@@ -1,7 +1,7 @@
 import React from "react";
 import "./Spells.scss";
 // Types
-import { elementType, ISpell, ISpellUpdate } from "../utils/types";
+import { colorType, ISpell, ISpellUpdate } from "../utils/types";
 import useLongPress from "../hooks/useLongPress";
 import {
   calculateSpellMana,
@@ -19,7 +19,7 @@ export const Spell = ({
   spellInfo,
 }: {
   spell: ISpell;
-  currentElement?: elementType;
+  currentElement?: colorType;
   index?: number;
   withName?: boolean;
   withBorder?: boolean;
@@ -48,21 +48,21 @@ export const Spell = ({
   const strength = calculateSpellStrength(spell);
   const updates = spell.updates.length;
   const longPressEvent = useLongPress({ onLongPress, onClick }, defaultOptions);
-  const imgUrl = `/img/Spells/${spell.element}/${spell.id}.png`;
+  const imgUrl = `/img/Spells/${spell.color}/${spell.id}.png`;
   const backImgUrl =
-    spell.element === currentElement
-      ? `/img/Spells/${spell.element}/${spell.image}.png`
-      : `/img/Spells/${spell.element}/${spell.image}_white.png`;
+    spell.color === currentElement
+      ? `/img/Schools/${spell.school}_black.png`
+      : `/img/Schools/${spell.school}_white.png`;
   return (
     <div
       className={`Spell ${spell.selected ? "active" : "inactive"} ${
-        withBorder ? `border ${spell.element}` : "noborder"
+        withBorder ? `border ${spell.school}` : "noborder"
       }`}
       aria-label="spell_card_border"
     >
       <div
         className={`SpellCard ${
-          withBorder ? `border ${spell.element}` : "noborder"
+          withBorder ? `border ${spell.school}` : "noborder"
         }`}
         style={{
           backgroundImage: `url(${backImgUrl})`,
@@ -89,7 +89,7 @@ export const Spell = ({
 };
 
 const UpdateIcon = ({ update }: { update: ISpellUpdate }) => {
-  const imgUrl = `../img/Spells/${update.element}/update_${update.id}.png`;
+  const imgUrl = `../img/Updates/${update.school}/update_${update.id}.png`;
   return (
     <div
       className="UpdateIcon"

@@ -2,7 +2,7 @@ import { removePlayedCard, shuffle } from "./helpers";
 import { generateDeck, generateEnemyDeck } from "./prefightloginc";
 import {
   FightState,
-  elementType,
+  colorType,
   ISpellUpdate,
   IHero,
   ISpell,
@@ -10,9 +10,9 @@ import {
 } from "./types";
 
 export const getNextElement = (
-  elements: elementType[],
-  element: elementType
-): elementType => {
+  elements: colorType[],
+  element: colorType
+): colorType => {
   const index = elements.indexOf(element);
   if (index === -1)
     throw new Error("Can't find the element to give you the next one");
@@ -30,8 +30,16 @@ export const manaPriceOfUpdates = (updates: ISpellUpdate[]) => {
   return res;
 };
 
-export const heroIsPresent = (update: ISpellUpdate, heroes: IHero[]) => {
-  return heroes.filter((h: IHero) => h.color === update.element).length > 0;
+export const heroIsPresent = (
+  update: ISpellUpdate,
+  spell: ISpell,
+  heroes: IHero[]
+) => {
+  return (
+    heroes.filter(
+      (h: IHero) => h.school === update.school && spell.color === h.color
+    ).length > 0
+  );
 };
 
 export const findEnemy = (enemies: IEnemy[], enemyId: string) => {
@@ -60,7 +68,7 @@ export const initFight = (
   if (enemyDeck.length < 1) {
     throw new Error(`Couldn't generate cards for enemy`);
   }
-  const elements: elementType[] = shuffle([
+  const elements: colorType[] = shuffle([
     "fire",
     "earth",
     "metal",

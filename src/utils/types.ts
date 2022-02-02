@@ -1,14 +1,11 @@
 export interface ISpell {
   id: string;
-  image: string;
   name: string;
   strength: number;
-  mana: number;
   selected: boolean;
-  element: elementType;
+  color: colorType;
+  school: schoolType;
   owner: "hero" | "enemy";
-  type: string;
-  level: number;
   description: string;
   updates: ISpellUpdate[];
 }
@@ -18,21 +15,23 @@ export type INPC = ICharacter & { image: string; dial: string | null };
 export type IHero = ICharacter & {
   selected: boolean;
   code: string;
-  color: elementType;
+  color: colorType;
   image: string;
+  school: schoolType;
 };
 export type IEnemy = ICharacter & {
-  color: elementType;
+  color: colorType;
   experience: enemyExpLevel;
   spells: ISpell[];
   life: number;
+  school: schoolType;
 };
 
 export type ISpellUpdateResource = [string, number];
 
 export interface ISpellUpdate {
   id: string;
-  element: elementType;
+  school: schoolType;
   mana: number;
   resource_base: ISpellUpdateResource[];
   effect: spellEffectType;
@@ -172,15 +171,14 @@ export interface FightState {
   enemyDeck: ISpell[];
   enemyDrop: ISpell[];
   enemyCardIndex: number | null;
-  element: elementType;
-  elements: elementType[];
+  element: colorType;
+  elements: colorType[];
 }
 
 export interface IResource {
   id: string;
   name: string;
-  image: string;
-  element: elementType;
+  school: schoolType;
   commonality: number;
 }
 
@@ -197,12 +195,7 @@ export type enemyExpLevel =
   | "practitioner"
   | "master"
   | "grandmaster";
-export type elementType =
-  | "fire"
-  | "earth"
-  | "metal"
-  | "water"
-  | "air"
+export type colorType =
   | "violet"
   | "grey"
   | "red"
@@ -247,3 +240,9 @@ export type spellUpdateEffect =
   | "strength";
 export type spellUpdatePrice = "health";
 export type dialogueLayout = "single" | "double" | "triple";
+export type schoolType =
+  | "restoration"
+  | "amplification"
+  | "oblation"
+  | "alteration"
+  | "deception";

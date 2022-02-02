@@ -1,7 +1,7 @@
 import React from "react";
 import "./Fight.scss";
 // Types
-import { elementType, ISpell } from "../utils/types";
+import { colorType, ISpell } from "../utils/types";
 // Utils
 // Components
 import { SpellBig } from "./SpellBig";
@@ -13,7 +13,7 @@ export const SpellsBig = ({
 }: {
   enemySpell: ISpell | null;
   heroSpell: ISpell | null;
-  element: elementType;
+  element: colorType;
 }) => {
   return (
     <div className="SpellsBig">

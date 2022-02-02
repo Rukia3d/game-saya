@@ -1,7 +1,7 @@
 import {
   adventureType,
   dialogueLayout,
-  elementType,
+  colorType,
   enemyExpLevel,
   IAdventure,
   IDialogue,
@@ -12,6 +12,7 @@ import {
   IResource,
   ISpell,
   ISpellUpdate,
+  schoolType,
   spellEffectType,
 } from "../src/utils/types";
 import {
@@ -73,8 +74,7 @@ export const readResources = (): IResource[] => {
       id: resourceDB[i].id,
       name: resourceDB[i].name,
       commonality: parseInt(resourceDB[i].commonality),
-      image: resourceDB[i].image,
-      element: resourceDB[i].element as elementType,
+      element: resourceDB[i].element as colorType,
     };
   }
   return resources;
@@ -89,7 +89,7 @@ export const readSpellUpdates = (): ISpellUpdate[] => {
   for (let i = 0; i < updateSpellDB.length; i++) {
     // Transform data from DB into game Dialogue format
     updates[i] = {
-      element: updateSpellDB[i].element as elementType,
+      element: updateSpellDB[i].element as colorType,
       mana: parseInt(updateSpellDB[i].mana),
       resource_base: getResourceSet(updateSpellDB[i].resource_base),
       effect: updateSpellDB[i].effect as spellEffectType,
@@ -133,8 +133,9 @@ export const readEnemies = (): IEnemy[] => {
     enemies[i] = {
       id: enemyDB[i].id,
       name: enemyDB[i].name,
-      color: enemyDB[i].element as elementType,
+      color: enemyDB[i].element as colorType,
       experience: enemyDB[i].exp as enemyExpLevel,
+      school: enemyDB[i].school as schoolType,
       spells: enemyCards,
       life: parseInt(enemyDB[i].life),
       description: enemyDB[i].description,
@@ -153,8 +154,9 @@ export const readHeroes = (): IHero[] => {
       name: heroDB[i].name,
       image: heroDB[i].id,
       selected: false,
-      color: heroDB[i].color as elementType,
+      color: heroDB[i].color as colorType,
       code: heroDB[i].code,
+      school: heroDB[i].school as schoolType,
       description: heroDB[i].description,
     };
   }
@@ -174,7 +176,7 @@ export const readSpells = (): ISpell[] => {
       strength: parseInt(parsedSpells[i].strength),
       mana: 0,
       selected: false,
-      element: parsedSpells[i].element as elementType,
+      element: parsedSpells[i].element as colorType,
       owner: "hero",
       type: "base",
       level: 0,
