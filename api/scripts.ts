@@ -90,7 +90,7 @@ const reelsInitialSet: IReel[] = [
 ];
 
 app.get("/api/player/", (req: any, res: any) => {
-  console.log("Requesting new player game data");
+  console.log("Requesting new player game data", req.query);
   // TODO: Cut the second page of stories, add them if open is called at the end of a dialogue
   const playerAdventures = adventures;
   playerAdventures[0].open = true;
@@ -160,6 +160,10 @@ app.get("/api/player/", (req: any, res: any) => {
 
 app.get("/api/rewards/", (req: any, res: any) => {
   console.log("rewards", req.query);
+});
+
+app.get("/api/fights/", (req: any, res: any) => {
+  console.log("fights", req.query);
 });
 
 app.listen(port, () => {

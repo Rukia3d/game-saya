@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import useSWRImmutable from "swr/immutable";
+import short from "short-uuid";
 import "./App.css";
 // Types
 import {
@@ -19,6 +20,10 @@ import { Main } from "./Main/Main";
 import { Start } from "./Main/Start";
 import { Stories } from "./Stories/Stories";
 import { GenericStory } from "./Main/GenericStory";
+import { useSWRConfig } from "swr";
+
+// Quick start with flickrBase58 format
+short.generate(); // 73WakrfVbNJBaAmhQtEeDv
 
 export interface GameContextType {
   adventure: IAdventure | null;
@@ -31,13 +36,23 @@ export interface GameContextType {
   setAdditionScreen: (c: IHero | ISpellUpdate | ISpell | IEnemy | null) => void;
   backToMain: () => void;
 }
+
 export const GameContext = React.createContext<undefined | GameContextType>(
   undefined
 );
 
 function App() {
-  const { data, error } = useSWRImmutable("/api/player", fetcher);
-  //"/api/player/?rewrewrw=5464565",
+  let playerId = window.localStorage.getItem("playerId");
+  const { mutate } = useSWRConfig();
+  if (!playerId) {
+    playerId = short.generate();
+    mutate("/api/player", { id: playerId }, false);
+  }
+  const { data, error } = useSWRImmutable(
+    `/api/player?id=${playerId}`,
+    fetcher
+  );
+  window.localStorage.setItem("playerId", playerId);
 
   const [showStart, setShowStart] = useState(true);
   const [adventure, setAdventure] = useState<null | IAdventure>(null);
