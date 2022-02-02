@@ -21,7 +21,7 @@ const context: GameContextType = {
 };
 
 test("Renders Big Card screen with strength 1 and earth", async () => {
-  const earthCard: ISpell = { ...mayaCard, element: "earth", strength: 1 };
+  const earthCard: ISpell = { ...mayaCard, school: "restoration", strength: 1 };
   render(
     <GameContext.Provider value={context}>
       <SpellBig spell={earthCard} />
@@ -36,7 +36,7 @@ test("Renders Big Card screen with strength 1 and earth", async () => {
 });
 
 test("Renders Big Card screen with strength 3 and fire", async () => {
-  const earthCard: ISpell = { ...mayaCard, element: "fire", strength: 3 };
+  const earthCard: ISpell = { ...mayaCard, school: "oblation", strength: 3 };
   render(
     <GameContext.Provider value={context}>
       <SpellBig spell={earthCard} />
@@ -51,7 +51,7 @@ test("Renders Big Card screen with strength 3 and fire", async () => {
 });
 
 test("Renders Big Card screen with strength 2 and air", async () => {
-  const earthCard: ISpell = { ...mayaCard, element: "air", strength: 2 };
+  const earthCard: ISpell = { ...mayaCard, school: "deception", strength: 2 };
   render(
     <GameContext.Provider value={context}>
       <SpellBig spell={earthCard} />
@@ -70,7 +70,7 @@ test("Renders Big Card screen with strength 2 and air", async () => {
 });
 
 test("Renders Big Card screen and shows the info", async () => {
-  const earthCard: ISpell = { ...mayaCard, element: "water", strength: 2 };
+  const earthCard: ISpell = { ...mayaCard, school: "alteration", strength: 2 };
   const setAdditionScreen = jest.fn();
   render(
     <GameContext.Provider

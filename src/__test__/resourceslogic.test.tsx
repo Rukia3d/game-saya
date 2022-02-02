@@ -5,6 +5,7 @@ import { gameState } from "../utils/teststates";
 import {
   colorType,
   IOwnedResource,
+  IResource,
   ISpellUpdateResource,
 } from "../utils/types";
 
@@ -14,41 +15,36 @@ test("generates rewards correctly", () => {
 });
 
 test("updateWinPlayer assigns rewards correctly", () => {
-  const resource = [
+  const resource: IResource[] = [
     {
       id: "ash",
       name: "Ash",
-      image: "ash",
       commonality: 10,
-      element: "fire" as colorType,
+      school: "restoration",
     },
     {
       id: "lava_r",
       name: "Lava Rock",
-      image: "lava_r",
       commonality: 7,
-      element: "fire" as colorType,
+      school: "restoration",
     },
     {
       id: "ash",
       name: "Ash",
-      image: "ash",
       commonality: 10,
-      element: "fire" as colorType,
+      school: "restoration",
     },
     {
       id: "ash",
       name: "Ash",
-      image: "ash",
       commonality: 10,
-      element: "fire" as colorType,
+      school: "restoration",
     },
     {
       id: "ash",
       name: "Ash",
-      image: "ash",
       commonality: 10,
-      element: "fire" as colorType,
+      school: "restoration",
     },
   ];
 
@@ -64,25 +60,22 @@ test("removeResource removes correctly", () => {
       id: "sparks",
       name: "Sparks",
       commonality: 2,
-      image: "sparks",
       quantity: 10,
-      element: "fire" as colorType,
+      school: "restoration",
     },
     {
       id: "ash",
       name: "Ash",
       commonality: 10,
-      image: "ash",
       quantity: 10,
-      element: "fire" as colorType,
+      school: "restoration",
     },
     {
       id: "lava_r",
       name: "Lava Rock",
       commonality: 7,
-      image: "lava_r",
       quantity: 10,
-      element: "fire" as colorType,
+      school: "restoration",
     },
   ];
   const price: ISpellUpdateResource[] = [
@@ -99,27 +92,24 @@ test("removeResource throws correct errors", () => {
   const resources: IOwnedResource[] = [
     {
       id: "sparks",
-      element: "fire" as colorType,
+      school: "restoration",
       name: "Sparks",
       commonality: 2,
-      image: "sparks",
       quantity: 10,
     },
     {
       id: "ash",
       name: "Ash",
       commonality: 10,
-      image: "ash",
       quantity: 10,
-      element: "fire" as colorType,
+      school: "restoration",
     },
     {
       id: "lava_r",
       name: "Lava Rock",
       commonality: 7,
-      image: "lava_r",
       quantity: 10,
-      element: "fire" as colorType,
+      school: "restoration",
     },
   ];
   jest.spyOn(console, "error").mockImplementation(() => jest.fn());

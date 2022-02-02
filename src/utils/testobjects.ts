@@ -9,6 +9,7 @@ import {
   IStoryGroup,
   ISpellUpdate,
   IReel,
+  schoolType,
 } from "./types";
 
 export const dialogues: IDialogue[] = new Array(3).fill(0).map((x, i) => ({
@@ -203,14 +204,14 @@ export const playerNpcs = [
   },
 ];
 export const heroes: IHero[] = [];
-const heroesFormat: [string, string][] = [
-  ["maya", "earth"],
-  ["tara", "metal"],
-  ["nell", "fire"],
-  ["dart", "water"],
-  ["grey", "air"],
+const heroesFormat: [string, string, string][] = [
+  ["maya", "violet", "restoration"],
+  ["tara", "grey", "amplification"],
+  ["nell", "red", "oblation"],
+  ["dart", "indigo", "alteration"],
+  ["grey", "green", "deception"],
 ];
-heroesFormat.forEach((obj: [string, string]) =>
+heroesFormat.forEach((obj: [string, string, string]) =>
   heroes.push({
     id: obj[0],
     selected: false,
@@ -218,7 +219,7 @@ heroesFormat.forEach((obj: [string, string]) =>
     code: "000000",
     image: "",
     color: obj[1] as colorType,
-    school: "alteration",
+    school: obj[2] as schoolType,
     description:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
   })

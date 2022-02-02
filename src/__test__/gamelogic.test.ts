@@ -1,5 +1,5 @@
 import { updateHeroDeck, changeCardsInDeck } from "../utils/fightlogic";
-import { enemyToNumber, finishStory } from "../utils/gamelogic";
+import { finishStory } from "../utils/gamelogic";
 import { generateDeck, generateEnemyDeck } from "../utils/prefightloginc";
 import {
   baseCards15,
@@ -90,14 +90,6 @@ test("Correctly adds Card to Player's deck", () => {
   expect(addingWhenAllSelected[15].selected).toBeTruthy();
 });
 
-test("Returns correct number for enemy experience", () => {
-  expect(enemyToNumber(enemy)).toEqual(5);
-  expect(enemyToNumber({ ...enemy, experience: "apprentice" })).toEqual(6);
-  expect(enemyToNumber({ ...enemy, experience: "practitioner" })).toEqual(7);
-  expect(enemyToNumber({ ...enemy, experience: "master" })).toEqual(8);
-  expect(enemyToNumber({ ...enemy, experience: "grandmaster" })).toEqual(9);
-});
-
 test("Opens next story if dialogue is open", () => {
   const action = [
     {
@@ -181,15 +173,16 @@ test("Adds hero correctly if actions requires it", () => {
     {
       type: "addHero" as "addHero",
       id: "nell",
-      data: "fire",
+      data: "red",
     },
   ];
   const game = JSON.parse(JSON.stringify(gameState));
-  const nellCards = new Array(6).fill(0).map((x, n) => ({
+  const nellCards: ISpell[] = new Array(6).fill(0).map((x, n) => ({
     ...baseCards15[0],
     id: "some" + n,
     name: "Some Hit " + n,
-    element: "fire",
+    color: "red",
+    school: "oblation",
   }));
   const newPlayer = { ...game.player, heroes: game.heroes.slice(0, 2) };
   const currentStory = game.adventures[1].storyGroups[1].stories[1];

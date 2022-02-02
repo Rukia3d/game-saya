@@ -12,8 +12,20 @@ import { GameContext } from "../App";
 
 const Strength = ({ n, school }: { n: number; school: schoolType }) => {
   const strengthColor = () => {
-    return `rgb(0, 39, 194)`;
+    switch (school) {
+      case "oblation":
+        return `rgba(255, 0, 0, 1)`;
+      case "restoration":
+        return `rgb(254, 222, 8)`;
+      case "deception":
+        return `rgb(8, 254, 221)`;
+      case "amplification":
+        return `rgb(82, 82, 82)`;
+      case "alteration":
+        return `rgb(0, 39, 194)`;
+    }
   };
+
   return (
     <div className={`Path size_${n}`}>
       <div

@@ -11,22 +11,24 @@ const mayaSpells: ISpell[] = new Array(3).fill(0).map((x, n) => ({
   ...baseCards15[0],
   id: "base_hit" + n,
   name: "Base Hit " + n,
-  element: "earth",
+  school: "restoration",
+  color: "violet",
 }));
 
 const taraSpells: ISpell[] = new Array(3).fill(0).map((x, n) => ({
   ...baseCards15[0],
   id: "some" + n,
   name: "Some Hit " + n,
-  element: "metal",
+  school: "amplification",
+  color: "grey",
 }));
 const newSpells = mayaSpells.concat(taraSpells);
 const playerResources = gameState.resources.map((r: IResource, i: number) => {
-  return { ...r, quantity: 1, element: i < 3 ? "earth" : "fire" };
+  return { ...r, quantity: 1, school: i < 3 ? "restoration" : "oblation" };
 });
 const playerUpdates = gameState.spellUpdates.map(
   (s: ISpellUpdate, i: number) => {
-    return { ...s, element: i < 2 ? "earth" : "fire" };
+    return { ...s, school: i < 2 ? "restoration" : "oblation" };
   }
 );
 const newGameState: GameState = {
@@ -36,6 +38,10 @@ const newGameState: GameState = {
     spells: newSpells,
     resources: playerResources,
     spellUpdates: playerUpdates,
+    heroes: [
+      { ...gameState.player.heroes[0], school: "restoration" },
+      { ...gameState.player.heroes[1], school: "amplification" },
+    ],
   },
 };
 
@@ -96,6 +102,7 @@ test("Renders Library with Updates data", () => {
   userEvent.click(screen.getByText(/Updates/));
   expect(screen.getByText(/Updates/).getAttribute("class")).toMatch(/active/);
   expect(screen.getByText(/Hero/).getAttribute("class")).toMatch(/inactive/);
+
   expect(screen.getByLabelText("spell-updates").children.length).toEqual(2);
   expect(screen.getByAltText("update-fire_0")).toHaveAttribute(
     "src",

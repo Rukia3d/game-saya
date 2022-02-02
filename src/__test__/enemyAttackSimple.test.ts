@@ -1,14 +1,14 @@
 import { enemyAttack } from "../utils/hitlogic";
 import { mayaCard, enemyCard } from "../utils/testobjects";
 import { fightState } from "../utils/teststates";
-import { colorType } from "../utils/types";
+import { colorType, FightState, ISpell } from "../utils/types";
 const testHeroLife = { ...fightState.hero, life: 10 };
 
 // Base to Base attacks
 test("Enemy attacks base card 3, hero defends base card 5", () => {
-  const newHeroCard = { ...mayaCard, strength: 5 };
-  const newEnemyCard = { ...enemyCard, strength: 3 };
-  const newFightState = {
+  const newHeroCard: ISpell = { ...mayaCard, strength: 5 };
+  const newEnemyCard: ISpell = { ...enemyCard, strength: 3 };
+  const newFightState: FightState = {
     ...JSON.parse(JSON.stringify(fightState)),
     heroHand: fightState.heroHand.concat(newHeroCard),
     heroCardIndex: 2,
@@ -21,9 +21,9 @@ test("Enemy attacks base card 3, hero defends base card 5", () => {
 });
 
 test("Enemy attacks base card 3, hero defends base card 3", () => {
-  const newHeroCard = { ...mayaCard, strength: 3 };
-  const newEnemyCard = { ...enemyCard, strength: 3 };
-  const newFightState = {
+  const newHeroCard: ISpell = { ...mayaCard, strength: 3 };
+  const newEnemyCard: ISpell = { ...enemyCard, strength: 3 };
+  const newFightState: FightState = {
     ...JSON.parse(JSON.stringify(fightState)),
     heroHand: fightState.heroHand.concat(newHeroCard),
     heroCardIndex: 2,
@@ -36,9 +36,9 @@ test("Enemy attacks base card 3, hero defends base card 3", () => {
 });
 
 test("Enemy attacks base card 5, hero defends base card 3", () => {
-  const newHeroCard = { ...mayaCard, strength: 3 };
-  const newEnemyCard = { ...enemyCard, strength: 5 };
-  const newFightState = {
+  const newHeroCard: ISpell = { ...mayaCard, strength: 3 };
+  const newEnemyCard: ISpell = { ...enemyCard, strength: 5 };
+  const newFightState: FightState = {
     ...JSON.parse(JSON.stringify(fightState)),
     heroHand: fightState.heroHand.concat(newHeroCard),
     enemyDeck: fightState.enemyDeck.concat(newEnemyCard),
@@ -52,13 +52,13 @@ test("Enemy attacks base card 5, hero defends base card 3", () => {
 
 // Base to defence Trump
 test("Enemy attacks base card 3, hero defends trump card 5", () => {
-  const newHeroCard = {
+  const newHeroCard: ISpell = {
     ...mayaCard,
     strength: 5,
-    element: "fire" as colorType,
+    color: "red" as colorType,
   };
-  const newEnemyCard = { ...enemyCard, strength: 3 };
-  const newFightState = {
+  const newEnemyCard: ISpell = { ...enemyCard, strength: 3 };
+  const newFightState: FightState = {
     ...JSON.parse(JSON.stringify(fightState)),
     heroHand: fightState.heroHand.concat(newHeroCard),
     heroCardIndex: 2,
@@ -71,13 +71,13 @@ test("Enemy attacks base card 3, hero defends trump card 5", () => {
 });
 
 test("Enemy attacks base card 3, hero defends trump card 3", () => {
-  const newHeroCard = {
+  const newHeroCard: ISpell = {
     ...mayaCard,
     strength: 3,
-    element: "fire" as colorType,
+    color: "red" as colorType,
   };
-  const newEnemyCard = { ...enemyCard, strength: 3 };
-  const newFightState = {
+  const newEnemyCard: ISpell = { ...enemyCard, strength: 3 };
+  const newFightState: FightState = {
     ...JSON.parse(JSON.stringify(fightState)),
     heroHand: fightState.heroHand.concat(newHeroCard),
     enemyDeck: fightState.enemyDeck.concat(newEnemyCard),
@@ -90,13 +90,13 @@ test("Enemy attacks base card 3, hero defends trump card 3", () => {
 });
 
 test("Enemy attacks base card 5, hero defends trump card 3", () => {
-  const newHeroCard = {
+  const newHeroCard: ISpell = {
     ...mayaCard,
     strength: 3,
-    element: "fire" as colorType,
+    color: "red" as colorType,
   };
-  const newEnemyCard = { ...enemyCard, strength: 5 };
-  const newFightState = {
+  const newEnemyCard: ISpell = { ...enemyCard, strength: 5 };
+  const newFightState: FightState = {
     ...JSON.parse(JSON.stringify(fightState)),
     heroHand: fightState.heroHand.concat(newHeroCard),
     enemyDeck: fightState.enemyDeck.concat(newEnemyCard),
@@ -110,13 +110,13 @@ test("Enemy attacks base card 5, hero defends trump card 3", () => {
 
 // Trump to base defence
 test("Enemy attacks trump card 3, hero defends base card 5", () => {
-  const newHeroCard = { ...mayaCard, strength: 5 };
-  const newEnemyCard = {
+  const newHeroCard: ISpell = { ...mayaCard, strength: 5 };
+  const newEnemyCard: ISpell = {
     ...enemyCard,
     strength: 3,
-    element: "fire" as colorType,
+    color: "red" as colorType,
   };
-  const newFightState = {
+  const newFightState: FightState = {
     ...JSON.parse(JSON.stringify(fightState)),
     heroHand: fightState.heroHand.concat(newHeroCard),
     enemyDeck: fightState.enemyDeck.concat(newEnemyCard),
@@ -129,13 +129,13 @@ test("Enemy attacks trump card 3, hero defends base card 5", () => {
 });
 
 test("Enemy attacks trump card 3, hero defends base card 3", () => {
-  const newHeroCard = { ...mayaCard, strength: 3 };
-  const newEnemyCard = {
+  const newHeroCard: ISpell = { ...mayaCard, strength: 3 };
+  const newEnemyCard: ISpell = {
     ...enemyCard,
     strength: 3,
-    element: "fire" as colorType,
+    color: "red" as colorType,
   };
-  const newFightState = {
+  const newFightState: FightState = {
     ...JSON.parse(JSON.stringify(fightState)),
     heroHand: fightState.heroHand.concat(newHeroCard),
     enemyDeck: fightState.enemyDeck.concat(newEnemyCard),
@@ -148,13 +148,13 @@ test("Enemy attacks trump card 3, hero defends base card 3", () => {
 });
 
 test("Enemy attacks trump card 5, hero defends base card 3", () => {
-  const newHeroCard = { ...mayaCard, strength: 3 };
-  const newEnemyCard = {
+  const newHeroCard: ISpell = { ...mayaCard, strength: 3 };
+  const newEnemyCard: ISpell = {
     ...enemyCard,
     strength: 5,
-    element: "fire" as colorType,
+    color: "red" as colorType,
   };
-  const newFightState = {
+  const newFightState: FightState = {
     ...JSON.parse(JSON.stringify(fightState)),
     heroHand: fightState.heroHand.concat(newHeroCard),
     enemyDeck: fightState.enemyDeck.concat(newEnemyCard),
@@ -167,17 +167,17 @@ test("Enemy attacks trump card 5, hero defends base card 3", () => {
 });
 
 test("Enemy attacks trump card 3, hero defends trump card 5", () => {
-  const newHeroCard = {
+  const newHeroCard: ISpell = {
     ...mayaCard,
     strength: 5,
-    element: "fire" as colorType,
+    color: "red" as colorType,
   };
-  const newEnemyCard = {
+  const newEnemyCard: ISpell = {
     ...enemyCard,
     strength: 3,
-    element: "fire" as colorType,
+    color: "red" as colorType,
   };
-  const newFightState = {
+  const newFightState: FightState = {
     ...JSON.parse(JSON.stringify(fightState)),
     heroHand: fightState.heroHand.concat(newHeroCard),
     enemyDeck: fightState.enemyDeck.concat(newEnemyCard),
@@ -190,17 +190,17 @@ test("Enemy attacks trump card 3, hero defends trump card 5", () => {
 });
 
 test("Enemy attacks trump card 3, hero defends trump card 3", () => {
-  const newHeroCard = {
+  const newHeroCard: ISpell = {
     ...mayaCard,
     strength: 3,
-    element: "fire" as colorType,
+    color: "red" as colorType,
   };
-  const newEnemyCard = {
+  const newEnemyCard: ISpell = {
     ...enemyCard,
     strength: 3,
-    element: "fire" as colorType,
+    color: "red" as colorType,
   };
-  const newFightState = {
+  const newFightState: FightState = {
     ...JSON.parse(JSON.stringify(fightState)),
     heroHand: fightState.heroHand.concat(newHeroCard),
     enemyDeck: fightState.enemyDeck.concat(newEnemyCard),
@@ -213,17 +213,17 @@ test("Enemy attacks trump card 3, hero defends trump card 3", () => {
 });
 
 test("Enemy attacks trump card 5, hero defends trump card 3", () => {
-  const newHeroCard = {
+  const newHeroCard: ISpell = {
     ...mayaCard,
     strength: 3,
-    element: "fire" as colorType,
+    color: "red" as colorType,
   };
-  const newEnemyCard = {
+  const newEnemyCard: ISpell = {
     ...enemyCard,
     strength: 5,
-    element: "fire" as colorType,
+    color: "red" as colorType,
   };
-  const newFightState = {
+  const newFightState: FightState = {
     ...JSON.parse(JSON.stringify(fightState)),
     heroHand: fightState.heroHand.concat(newHeroCard),
     enemyDeck: fightState.enemyDeck.concat(newEnemyCard),

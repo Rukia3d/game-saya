@@ -7,6 +7,7 @@ import { IEnemy, IHero, ISpell, ISpellUpdate } from "../utils/types";
 import { CloseButton } from "../UI/CloseButton";
 import { InfoItem } from "./InfoItem";
 import { InfoHero } from "./InfoHero";
+import { heroes } from "../utils/testobjects";
 
 export type ItemsForCard = IHero | IEnemy | ISpell | ISpellUpdate;
 
@@ -28,8 +29,9 @@ export const InfoCard = ({
   setInfo: (s: ItemsForCard | null) => void;
 }) => {
   const determineInfoScreenType = (): infoScreenState => {
-    if ("mana" in item) return "update";
-    return "hero";
+    if ("spells" in item) return "hero";
+    if ("code" in item) return "hero";
+    return "update";
   };
   const screen = determineInfoScreenType();
   const InfoScreens = infoScreens[screen];

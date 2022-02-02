@@ -28,8 +28,16 @@ export const updateWinPlayer = (
   enemy: IEnemy,
   resources: IResource[]
 ): Player => {
-  return {
+  const DEFAULTEXPERIENCE = 25;
+  const newPlayer = {
     ...player,
+    data: {
+      ...player.data,
+      experience: player.data.experience + DEFAULTEXPERIENCE,
+    },
+  };
+  return {
+    ...newPlayer,
     resources: givePlayerResources(player, resources),
   };
 };

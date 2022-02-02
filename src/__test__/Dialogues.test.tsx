@@ -9,6 +9,7 @@ import {
   colorType,
   ISpell,
   storyChangeType,
+  schoolType,
 } from "../utils/types";
 import { gameState } from "../utils/teststates";
 
@@ -47,7 +48,7 @@ test("Renders dialogue page and triggers Character screen", async () => {
     ...baseCards15[0],
     id: "some" + n,
     name: "Some Hit " + n,
-    element: "fire",
+    color: "red",
   }));
   const newGameState = {
     ...gameState,
@@ -55,12 +56,14 @@ test("Renders dialogue page and triggers Character screen", async () => {
       ...gameState.player,
       heroes: [
         {
-          element: "earth" as colorType,
+          color: "yellow" as colorType,
+          school: "restoration" as schoolType,
           id: "maya",
           image: "maya",
           name: "Maya",
           selected: true,
           description: "some",
+          code: "",
         },
       ],
     },
@@ -71,9 +74,7 @@ test("Renders dialogue page and triggers Character screen", async () => {
     gameState: newGameState,
     story: {
       ...dialstory,
-      action: [
-        { type: "addHero" as storyChangeType, id: "nell", data: "fire" },
-      ],
+      action: [{ type: "addHero" as storyChangeType, id: "nell", data: "red" }],
     },
     setAdditionScreen: setAdditionScreen,
   };
