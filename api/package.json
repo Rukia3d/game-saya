@@ -7,12 +7,14 @@
     "@types/jest": "^26.0.15",
     "@types/node": "^12.0.0",
     "@types/react": "^17.0.0",
+    "@types/sqlite3": "^3.1.8",
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "node-sass": "^6.0.1",
+    "short-uuid": "^4.2.0",
+    "sqlite3": "^5.0.2",
     "swr": "^1.0.0",
-    "typescript": "^4.1.2",
-    "short-uuid": "^4.2.0"
+    "typescript": "^4.1.2"
   },
   "scripts": {
     "start": "npx ts-node --project tsconfig-node.json ./scripts.ts",

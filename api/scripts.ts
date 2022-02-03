@@ -1,30 +1,11 @@
 import { GameState, IReel, ISpell } from "../src/utils/types";
-import {
-  readDialogues,
-  readAdventures,
-  readEnemies,
-  readHeroes,
-  readNpcs,
-  readResources,
-  readSpellUpdates,
-  readFights,
-  readSpells,
-} from "./dataload";
+import { createPlayer, loadPlayer } from "./database";
 
 const express = require("express");
 const cors = require("cors");
 const app = express();
 const port = 3001;
 app.use(cors());
-const dialogues = readDialogues();
-const adventures = readAdventures();
-const enemies = readEnemies();
-const heroes = readHeroes();
-const npcs = readNpcs();
-const resources = readResources();
-const spellUpdates = readSpellUpdates();
-const fights = readFights();
-const spells = readSpells();
 
 const reelsInitialSet: IReel[] = [
   {
@@ -89,71 +70,24 @@ const reelsInitialSet: IReel[] = [
   },
 ];
 
-app.get("/api/player/", (req: any, res: any) => {
+app.get("/api/player/", async (req: any, res: any) => {
   console.log("Requesting new player game data", req.query);
-  // TODO: Cut the second page of stories, add them if open is called at the end of a dialogue
-  const playerAdventures = adventures;
-  playerAdventures[0].open = true;
-  //@ts-ignore
-  playerAdventures[0].storyGroups[0].stories[0].open = true;
-  const playerHeroes = [heroes[0]];
-  playerHeroes[0].selected = true;
-  const playerCards = spells.filter((s: ISpell) => s.color === "violet");
-  playerCards.map((s: ISpell, i: number) =>
-    i < 7 ? (s.selected = true) : (s.selected = false)
-  );
-  const playerEnemies = enemies;
+  const player = req.query.id
+    ? await loadPlayer(req.query.id)
+    : await createPlayer();
 
   const gameState: GameState = {
-    player: {
-      data: {
-        id: 1,
-        experience: 300,
-        life: 7,
-        maxLife: 7,
-        mana: 10,
-        maxMana: 15,
-      },
-      npcs: [],
-      heroes: playerHeroes,
-      spells: playerCards,
-      spellUpdates: spellUpdates, //[],
-      adventures: playerAdventures,
-      resources: [
-        {
-          id: "wood",
-          name: "Wood",
-          commonality: 10,
-          quantity: 1000,
-          school: "restoration",
-        },
-        {
-          id: "leaf",
-          name: "Leaf",
-          commonality: 7,
-          quantity: 1000,
-          school: "restoration",
-        },
-        {
-          id: "r_flower",
-          name: "Red flower",
-          commonality: 5,
-          quantity: 1000,
-          school: "restoration",
-        },
-      ],
-      enemies: playerEnemies,
-    },
+    player: player,
     reels: reelsInitialSet,
-    dialogues: dialogues,
-    fights: fights,
-    npcs: npcs,
-    heroes: heroes,
-    adventures: adventures,
-    enemies: enemies,
-    resources: resources,
-    spells: spells,
-    spellUpdates: spellUpdates,
+    dialogues: [],
+    fights: [],
+    npcs: [],
+    heroes: [],
+    adventures: [],
+    enemies: [],
+    resources: [],
+    spells: [],
+    spellUpdates: [],
   };
   res.send(gameState);
 });

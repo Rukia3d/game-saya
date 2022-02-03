@@ -1,87 +1,96 @@
 import { generateInt } from "../src/utils/helpers";
 import {
+  colorType,
+  IHero,
+  INPC,
+  ISpell,
+  ISpellUpdate,
+  ISpellUpdateApplied,
   ISpellUpdateResource,
   IStoryAction,
+  schoolType,
+  spellEffectType,
   spellUpdateEffect,
   spellUpdatePrice,
   storyChangeType,
 } from "../src/utils/types";
-import { EnemyCardDB, SpellDB } from "./db_types";
+import { CharacterDB, HeroDB, SpellAppliedDB, SpellDB } from "./db_types";
 
-export const parseAction = (action: string) => {
-  const parsed = action.split(", ");
+export const parseCharacter = (row: CharacterDB): INPC => {
   return {
-    action: parsed[0].trim() as spellUpdateEffect,
-    strength: parseInt(parsed[1].trim()),
+    id: row.id,
+    name: row.name,
+    image: row.image,
+    dialogue: row.dialogue_id === "null" ? null : row.dialogue_id,
   };
 };
 
-export const parsePrice = (action: string) => {
-  const parsed = action.split(", ");
-  if (parsed.length < 2) {
-    return null;
-  }
+export const parseHero = (row: HeroDB): IHero => {
   return {
-    action: parsed[0].trim() as spellUpdatePrice,
-    strength: parseInt(parsed[1].trim()),
+    id: row.id,
+    name: row.name,
+    description: row.description,
+    selected: row.selected === 1 ? true : false,
+    element: {
+      code: row.code,
+      color: row.element_id as colorType,
+      school: row.school_id as schoolType,
+      school_name: row.school_name,
+    },
   };
 };
 
-export const getCharacters = (characters: string) => {
-  const newCharacters = characters.split(", ");
-  return newCharacters.map((c: string) => c.trim());
+export const parseSpell = (row: SpellDB): ISpell => {
+  return {
+    id: row.id,
+    copy: row.copy_id,
+    name: row.name,
+    strength: row.strength,
+    selected: row.selected === 1 ? true : false,
+    color: row.element_id as colorType,
+    school: row.school_id as schoolType,
+    owner: "hero",
+    description: row.description,
+    updates: [],
+  };
 };
 
-export const getStoryActions = (actions: string, nextStory: string) => {
-  // Actions in DB are separated by coma and a new line
-  const act = actions.split(",\n");
-  const res = act.map((a: string) => {
-    const details = a.split(", ");
-    return {
-      type: details[0] as storyChangeType,
-      id: details[1],
-      data: details.length > 2 ? details[2] : undefined,
-    };
-  });
-  let all: IStoryAction[] = [
-    { type: "openStory", id: "story", data: nextStory },
-  ];
-  if (res[0].type) {
-    all = all.concat(res);
+export const applyUpdateToSpell = (
+  row: SpellAppliedDB | undefined
+): ISpellUpdateApplied | null => {
+  console.log("got row", row);
+  if (!row) return null;
+  return {
+    id: row.spell_id,
+    school: row.school_id as schoolType,
+    mana: row.mana,
+    effect: row.effect as spellEffectType,
+    action: {
+      action: row.updateaction_action as spellUpdateEffect,
+      strength: row.updateaction_effect,
+    },
+    price: row.updateprice_id
+      ? {
+          action: row.updateprice_action as spellUpdatePrice,
+          strength: row.updateprice_effect,
+        }
+      : null,
+    name: row.name,
+    description: row.description,
+  };
+};
+
+export const addUpdatesToSpell = (
+  spell: ISpell,
+  appliedUpdatesData: SpellAppliedDB[]
+) => {
+  const update = appliedUpdatesData.find(
+    (a: SpellAppliedDB) => a.spell_id === spell.id && a.copy_id === spell.copy
+  );
+  const res = applyUpdateToSpell(update);
+  console.log(res);
+  if (res) {
+    spell.updates.push(res);
   }
-  return all;
-};
-
-export const getHeroInitialSpellSet = (db: SpellDB[]) => {
-  const spells = [];
-  for (let x = 0; x < db.length; x++) {
-    const card = db[x];
-    if (parseInt(card.strength) === 1) {
-      [0, 1, 2].map((i: number) => spells.push(card));
-    } else if (parseInt(card.strength) === 2) {
-      [0, 1].map((j: number) => spells.push(card));
-    } else {
-      spells.push(card);
-    }
-  }
-  return spells;
-};
-
-export const getResourceSet = (data: string): ISpellUpdateResource[] => {
-  const res: ISpellUpdateResource[] = [];
-  const allResources = data.split(", ");
-  allResources.forEach((resource: string) => {
-    const price = resource.split(": ");
-    res.push([price[0], parseInt(price[1])]);
-  });
-  return res;
-};
-
-export const getSpellSet = (set: EnemyCardDB[], life: number) => {
-  const spells = [];
-  for (let x = 0; x < life; x++) {
-    const card = set[generateInt(set.length)];
-    spells.push(card);
-  }
-  return spells;
+  return spell;
 };

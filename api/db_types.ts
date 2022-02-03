@@ -1,107 +1,57 @@
-export interface DialogueDB {
+export interface PlayerDB {
   id: string;
-  background: string;
-  linesList: string;
-  action: string;
-  layout: string;
-  characters: string;
+  experience: number;
+  maxlife: number;
+  maxmana: number;
+  life: number;
+  mana: number;
 }
 
-export interface ResourceDB {
-  id: string;
-  name: string;
-  commonality: string;
-  school: string;
-}
-
-export interface UpdateSpellDB {
-  school: string;
-  mana: string;
-  resource_base: string;
-  effect: string;
-  action: string;
-  price: string;
-  name: string;
-  description: string;
-  id: string;
-}
-
-export interface LineDB {
-  dialogueId: string;
-  id: string;
-  character: string;
-  image: string;
-  pos: string;
-  text: string;
-}
-export interface AdventureDB {
+export interface CharacterDB {
   id: string;
   name: string;
   image: string;
-  form: string;
-  storyGroups: string;
-}
-export interface StoryGroupDB {
-  id: string;
-  adventure: string;
-  visual: string;
-  name: string;
-  stories: string;
-}
-export interface StoryDB {
-  group: string;
-  id: string;
-  name: string;
-  image: string;
-  type: string;
-  enemy: string;
-  characters: string;
-  actions: string;
-  next: string;
-}
-export interface EnemyDB {
-  id: string;
-  name: string;
-  color: string;
-  description: string;
-  school: string;
-}
-export interface EnemyCardDB {
-  id: string;
-  name: string;
-  strength: string;
-  school: string;
-  color: string;
-  description: string;
+  dialogue_id: string;
 }
 
 export interface HeroDB {
   id: string;
   name: string;
   description: string;
+  selected: number;
   code: string;
-  color: string;
-  school: string;
-}
-export interface SpellDB {
-  id: string;
-  name: string;
-  strength: string;
-  school: string;
-  color: string;
-  description: string;
-}
-export interface NpcDB {
-  id: string;
-  name: string;
-  image: string;
-  description: string;
+  element_id: string;
+  school_id: string;
+  school_name: string;
 }
 
-export interface FightDB {
+export interface SpellDB {
   id: string;
+  copy_id: number;
   name: string;
-  image: string;
-  enemy: string;
-  characters: string;
+  strength: number;
+  description: string;
+  selected: number;
+  code: string;
+  element_id: string;
+  school_id: string;
+  school_name: string;
+  spellupdate_id: string;
+}
+
+export interface SpellAppliedDB {
+  update_id: string;
+  spell_id: string;
+  copy_id: number;
+  school_id: string;
+  mana: number;
+  name: string;
+  effect: string;
+  description: string;
+  updateaction_id: string;
+  updateaction_effect: string;
+  updateaction_action: string;
+  updateprice_id: string;
+  updateprice_effect: string;
+  updateprice_action: string;
 }
