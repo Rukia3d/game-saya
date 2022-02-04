@@ -40,7 +40,7 @@ export interface SpellDB {
 }
 
 export interface SpellAppliedDB {
-  update_id: string;
+  spellupdate_id: string;
   spell_id: string;
   copy_id: number;
   school_id: string;

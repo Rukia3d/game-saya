@@ -9,7 +9,6 @@ import {
 } from "./db_types";
 import {
   addUpdatesToSpell,
-  applyUpdateToSpell,
   parseCharacter,
   parseHero,
   parseSpell,
@@ -35,7 +34,12 @@ const exampleplayer: Player = {
 };
 
 const readPlayer = (id: string, db: Database): Promise<PlayerDB> => {
-  const sqlPlayer = `SELECT DISTINCT * FROM player WHERE id='${id}';`;
+  const sqlPlayer = `
+    SELECT DISTINCT * 
+    FROM 
+      player 
+    WHERE 
+      id='${id}';`;
 
   // request player data from db and save into player
   return new Promise((resolve, reject) => {
@@ -49,7 +53,18 @@ const readPlayer = (id: string, db: Database): Promise<PlayerDB> => {
 };
 
 const readNPC = (id: string, db: Database): Promise<CharacterDB[]> => {
-  const sqlNPCs = `SELECT character.id, name, dialogue_id, image FROM player_character INNER JOIN character ON character.id = player_character.character_id WHERE player_character.player_id='${id}';`;
+  const sqlNPCs = `
+    SELECT 
+      character.id, name, dialogue_id, image 
+    FROM 
+      player_character 
+    INNER JOIN 
+      character 
+    ON 
+      character.id = player_character.character_id 
+    WHERE 
+      player_character.player_id='${id}';`;
+
   const playerNPCS: CharacterDB[] = [];
   return new Promise((resolve, reject) => {
     db.all(sqlNPCs, [], (err: Error, rows: CharacterDB[]) => {
@@ -66,7 +81,27 @@ const readNPC = (id: string, db: Database): Promise<CharacterDB[]> => {
 };
 
 const readHeroes = (id: string, db: Database): Promise<HeroDB[]> => {
-  const sqlHeroes = `SELECT hero_id as id, character.name, element.name as school_name, selected, hero.description, element_id, element.school_id, element.code FROM player_hero INNER JOIN character ON character.id = player_hero.hero_id INNER JOIN hero ON hero.id = player_hero.hero_id INNER JOIN element ON hero.element_id=element.id WHERE player_hero.player_id='${id}'`;
+  const sqlHeroes = `
+  SELECT 
+    hero_id as id, character.name, element.name as school_name, selected, 
+    hero.description, element_id, element.school_id, element.code 
+  FROM 
+    player_hero 
+  INNER JOIN 
+    character 
+  ON 
+    character.id = player_hero.hero_id 
+  INNER JOIN 
+    hero 
+  ON 
+    hero.id = player_hero.hero_id 
+  INNER JOIN 
+    element 
+  ON 
+    hero.element_id=element.id 
+  WHERE 
+    player_hero.player_id='${id}'`;
+
   const playerHeroes: HeroDB[] = [];
   return new Promise((resolve, reject) => {
     db.all(sqlHeroes, [], (err: Error, rows: HeroDB[]) => {
@@ -83,7 +118,24 @@ const readHeroes = (id: string, db: Database): Promise<HeroDB[]> => {
 };
 
 const readSpells = (id: string, db: Database): Promise<SpellDB[]> => {
-  const sqlSpells = `SELECT player_spell.id as copy_id, player_spell.spell_id as id, spell.name, spell.strength, spell.description, player_spell.selected, spell.color_id as element_id, element.school_id FROM player_spell INNER JOIN spell ON player_spell.spell_id=spell.id INNER JOIN element ON spell.color_id=element.id WHERE player_spell.player_id='${id}'`;
+  const sqlSpells = `
+  SELECT 
+    player_spell.id as copy_id, player_spell.spell_id as id, spell.name, 
+    spell.strength, spell.description, player_spell.selected, 
+    spell.color_id as element_id, element.school_id 
+  FROM 
+    player_spell 
+  INNER JOIN 
+    spell 
+  ON 
+    player_spell.spell_id=spell.id 
+  INNER JOIN 
+    element 
+  ON 
+    spell.color_id=element.id 
+  WHERE 
+    player_spell.player_id='${id}'`;
+
   const playerSpells: SpellDB[] = [];
   return new Promise((resolve, reject) => {
     db.all(sqlSpells, [], (err: Error, rows: SpellDB[]) => {
@@ -103,7 +155,25 @@ const readAppliedUpdates = (
   id: string,
   db: Database
 ): Promise<SpellAppliedDB[]> => {
-  const sqlUpdatesApplied = `SELECT player_spell_spellupdate.spell_id, player_spell_spellupdate.copy_id, spellupdate.id as spellupdate_id, school_id, mana, spellupdate.effect, spellupdate.name, spellupdate.description, updateaction.id as updateaction_id, updateaction.effect as updateaction_effect, updateaction.action as updateaction_action, updateprice.id as updateprice_id, updateprice.effect as updateprice_effect, updateprice.action as updateprice_action  FROM player_spell_spellupdate INNER JOIN spellupdate on player_spell_spellupdate.spellupdate_id=spellupdate.id LEFT JOIN updateaction on spellupdate.updateaction_id=updateaction.id LEFT JOIN updateprice on spellupdate.updateprice_id=updateprice.id where player_spell_spellupdate.player_id='${id}'`;
+  const sqlUpdatesApplied = `
+  SELECT 
+    player_spell_spellupdate.spell_id, player_spell_spellupdate.copy_id, 
+    spellupdate.id as spellupdate_id, school_id, mana, spellupdate.effect, 
+    spellupdate.name, spellupdate.description, updateaction.id as updateaction_id, 
+    updateaction.effect as updateaction_effect, updateaction.action as updateaction_action, 
+    updateprice.id as updateprice_id, updateprice.effect as updateprice_effect, 
+    updateprice.action as updateprice_action  FROM player_spell_spellupdate 
+  INNER JOIN 
+    spellupdate 
+  ON 
+    player_spell_spellupdate.spellupdate_id=spellupdate.id 
+  LEFT JOIN 
+    updateaction on spellupdate.updateaction_id=updateaction.id 
+  LEFT JOIN 
+    updateprice on spellupdate.updateprice_id=updateprice.id 
+  WHERE 
+    player_spell_spellupdate.player_id='${id}'`;
+
   const appliedUpdates: SpellAppliedDB[] = [];
   return new Promise((resolve, reject) => {
     db.all(sqlUpdatesApplied, [], (err: Error, rows: SpellAppliedDB[]) => {

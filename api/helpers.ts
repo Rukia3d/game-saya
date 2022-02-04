@@ -5,7 +5,7 @@ import {
   INPC,
   ISpell,
   ISpellUpdate,
-  ISpellUpdateApplied,
+  ISpellUpdateData,
   ISpellUpdateResource,
   IStoryAction,
   schoolType,
@@ -57,11 +57,10 @@ export const parseSpell = (row: SpellDB): ISpell => {
 
 export const applyUpdateToSpell = (
   row: SpellAppliedDB | undefined
-): ISpellUpdateApplied | null => {
-  console.log("got row", row);
+): ISpellUpdateData | null => {
   if (!row) return null;
   return {
-    id: row.spell_id,
+    id: row.spellupdate_id,
     school: row.school_id as schoolType,
     mana: row.mana,
     effect: row.effect as spellEffectType,
@@ -88,7 +87,6 @@ export const addUpdatesToSpell = (
     (a: SpellAppliedDB) => a.spell_id === spell.id && a.copy_id === spell.copy
   );
   const res = applyUpdateToSpell(update);
-  console.log(res);
   if (res) {
     spell.updates.push(res);
   }
