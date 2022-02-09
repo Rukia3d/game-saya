@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { GameContext } from "../App";
 import "../Main/Library.scss";
 // Types
-import { IHero, IOwnedResource } from "../utils/types";
+import { IHero, IPlayerResource } from "../utils/types";
 // Utils
 // Components
 import { ResourcesImages } from "../Spells/Resources";
@@ -14,7 +14,7 @@ export const LibraryResources = ({ hero }: { hero: IHero }) => {
   }
   const ownedResources = context.gameState.player.resources;
   const heroResources = ownedResources.filter(
-    (r: IOwnedResource) => r.school === hero.school
+    (r: IPlayerResource) => r.school === hero.school
   );
   return (
     <div className="LibraryResources">

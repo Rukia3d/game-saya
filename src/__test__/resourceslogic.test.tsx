@@ -4,7 +4,7 @@ import { enemy } from "../utils/testobjects";
 import { gameState } from "../utils/teststates";
 import {
   colorType,
-  IOwnedResource,
+  IPlayerResource,
   IResource,
   ISpellUpdateResource,
 } from "../utils/types";
@@ -55,7 +55,7 @@ test("updateWinPlayer assigns rewards correctly", () => {
 });
 
 test("removeResource removes correctly", () => {
-  const resources: IOwnedResource[] = [
+  const resources: IPlayerResource[] = [
     {
       id: "sparks",
       name: "Sparks",
@@ -89,7 +89,7 @@ test("removeResource removes correctly", () => {
 });
 
 test("removeResource throws correct errors", () => {
-  const resources: IOwnedResource[] = [
+  const resources: IPlayerResource[] = [
     {
       id: "sparks",
       school: "restoration",

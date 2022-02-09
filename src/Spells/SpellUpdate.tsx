@@ -3,7 +3,7 @@ import { GameContext } from "../App";
 import "./Spells.scss";
 // Types
 import {
-  IOwnedResource,
+  IPlayerResource,
   IResource,
   ISpellUpdate,
   ISpellUpdateResource,
@@ -42,7 +42,9 @@ export const SpellUpdate = ({
   const resources = context.gameState.resources;
 
   const isEnough = (s: ISpellUpdateResource) => {
-    const resource = playerResources.find((r: IOwnedResource) => r.id === s[0]);
+    const resource = playerResources.find(
+      (r: IPlayerResource) => r.id === s[0]
+    );
     const needed = s[1];
     if (resource && resource.quantity >= needed) {
       return true;
@@ -51,7 +53,9 @@ export const SpellUpdate = ({
   };
 
   const currentAmount = (s: ISpellUpdateResource) => {
-    const resource = playerResources.find((r: IOwnedResource) => r.id === s[0]);
+    const resource = playerResources.find(
+      (r: IPlayerResource) => r.id === s[0]
+    );
     return resource ? resource.quantity : 0;
   };
 

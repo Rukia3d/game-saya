@@ -2,7 +2,7 @@ import { shuffle } from "./helpers";
 import {
   Player,
   IResource,
-  IOwnedResource,
+  IPlayerResource,
   IEnemy,
   ISpellUpdateResource,
 } from "./types";
@@ -11,7 +11,7 @@ export const givePlayerResources = (player: Player, resources: IResource[]) => {
   const existingResources = player.resources;
   resources.forEach((r: IResource) => {
     const playerRes = player.resources.find(
-      (o: IOwnedResource) => o.id === r.id
+      (o: IPlayerResource) => o.id === r.id
     );
     if (!playerRes) {
       player.resources.push({ ...r, quantity: 1 });
@@ -55,7 +55,7 @@ export const generateReward = (
 
 const removeResource = (
   toRemove: ISpellUpdateResource[],
-  toCheck: IOwnedResource
+  toCheck: IPlayerResource
 ) => {
   const removable = toRemove.find((t: [string, number]) => t[0] === toCheck.id);
   if (!removable) return { ...toCheck };
@@ -67,15 +67,15 @@ const removeResource = (
 
 export const removeResources = (
   req: ISpellUpdateResource[],
-  resources: IOwnedResource[]
-): IOwnedResource[] => {
+  resources: IPlayerResource[]
+): IPlayerResource[] => {
   const missedResource = req.some(
     (r: ISpellUpdateResource) =>
-      !resources.find((o: IOwnedResource) => o.id === r[0])
+      !resources.find((o: IPlayerResource) => o.id === r[0])
   );
   if (missedResource) {
     throw new Error("Trying to remove resource that is not owned");
   }
-  const newRes = resources.map((r: IOwnedResource) => removeResource(req, r));
+  const newRes = resources.map((r: IPlayerResource) => removeResource(req, r));
   return newRes;
 };

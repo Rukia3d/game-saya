@@ -3,7 +3,7 @@ import "./Resources.scss";
 // Types
 import {
   IResource,
-  IOwnedResource,
+  IPlayerResource,
   ISpellUpdateResource,
 } from "../utils/types";
 import { findResource } from "../utils/helpers";
@@ -25,7 +25,7 @@ export const ResourceImage = ({ resource }: { resource: IResource }) => {
   const imgUrl = `../img/Resources/${resource.id}.jpg`;
   const playerResources = context.gameState.player.resources;
   const owned = playerResources.find(
-    (r: IOwnedResource) => r.id === resource.id
+    (r: IPlayerResource) => r.id === resource.id
   );
   return (
     <div
@@ -53,7 +53,7 @@ export const ResourcesImages = ({ resources }: { resources: IResource[] }) => {
 export const Resource = ({
   resource,
 }: {
-  resource: IOwnedResource | IResource;
+  resource: IPlayerResource | IResource;
 }) => {
   return (
     <div className="Resource" aria-label="top_resource">
@@ -91,7 +91,9 @@ export const ResourceData = ({
   };
 
   const currentAmount = (s: ISpellUpdateResource) => {
-    const resource = playerResources.find((r: IOwnedResource) => r.id === s[0]);
+    const resource = playerResources.find(
+      (r: IPlayerResource) => r.id === s[0]
+    );
     return resource ? resource.quantity : 0;
   };
 
@@ -126,23 +128,23 @@ export const Resources = ({
   resources,
   filter,
 }: {
-  resources: IOwnedResource[] | IResource[];
+  resources: IPlayerResource[] | IResource[];
   filter?: "all" | "added" | "owned";
 }) => {
   // all - no filtering
   // added - including quantity 0
   // owned - only non 0
-  let res: IOwnedResource[] | IResource[] = [];
+  let res: IPlayerResource[] | IResource[] = [];
 
   switch (filter) {
     case "added":
       res = resources.filter(
-        (r: IOwnedResource | IResource) => "quantity" in r
+        (r: IPlayerResource | IResource) => "quantity" in r
       );
       return;
     case "owned":
       res = resources.filter(
-        (r: IOwnedResource | IResource) => "quantity" in r && r.quantity > 0
+        (r: IPlayerResource | IResource) => "quantity" in r && r.quantity > 0
       );
       return;
     default:
@@ -150,7 +152,7 @@ export const Resources = ({
   }
   return (
     <div className="Resources">
-      {res.map((r: IOwnedResource | IResource, i: number) => (
+      {res.map((r: IPlayerResource | IResource, i: number) => (
         <Resource resource={r} key={i} />
       ))}
     </div>

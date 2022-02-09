@@ -2,158 +2,191 @@ export interface ISpell {
   id: string;
   name: string;
   strength: number;
-  selected: boolean;
-  color: colorType;
-  school: schoolType;
-  owner: "hero" | "enemy";
+  element: IElement;
   description: string;
-  updates: ISpellUpdate[];
 }
 
-export type IOwnedResource = IResource & { quantity: number };
-export type INPC = ICharacter & { image: string; dial: string | null };
-export type IHero = ICharacter & {
-  selected: boolean;
+export type IElement = {
   code: string;
   color: colorType;
+  description: string;
+  school: ISchool;
+};
+
+export type ISchool = {
+  id: schoolType;
+  description: string;
+  name: string;
+};
+
+export type IPlayerSpell = ISpell & {
+  copy: number;
+  selected: boolean;
+  owner: "hero" | "enemy";
+  updates: ISpellUpdate[];
+  created_at: Date;
+};
+
+export type IPlayerResource = IResource & {
+  quantity: number;
+  created_at: Date;
+};
+export type INPC = ICharacter & {
   image: string;
-  school: schoolType;
+  dialogue: string | null;
+  created_at: Date;
 };
+export type IHero = ICharacter & {
+  element: IElement;
+};
+export type IPlayerHero = IHero & { selected: boolean; created_at: Date };
+
 export type IEnemy = ICharacter & {
-  color: colorType;
-  spells: ISpell[];
-  school: schoolType;
+  element: IElement;
 };
 
-export type ISpellUpdateResource = [string, number];
+export type IEnemyFight = IEnemy & { spells: ISpell[] };
 
-export interface ISpellUpdate {
-  id: string;
-  school: schoolType;
-  mana: number;
+export type ISpellUpdateResource = IResource & { quantity: number };
+
+export type ISpellUpdate = ISpellUpdateData & {
   resource_base: ISpellUpdateResource[];
+};
+
+export type IUpdateAction = {
+  item: spellUpdateEffect;
+  data: number | string;
+};
+export type ISpellUpdateData = {
+  id: string;
+  school: ISchool;
+  mana: number;
   effect: spellEffectType;
-  action: { action: spellUpdateEffect; strength: number | string };
-  price: { action: spellUpdatePrice; strength: number } | null;
+  action: IUpdateAction;
+  price: { action: spellUpdatePrice; strength: number | string } | null;
   name: string;
   description: string;
-}
-
-export interface Player {
-  data: {
-    id: number;
-    experience: number;
-    life: number;
-    maxLife: number;
-    mana: number;
-    maxMana: number;
-  };
+};
+export type PlayerData = {
+  id: string;
+  experience: number;
+  life: number;
+  maxlife: number;
+  mana: number;
+  maxmana: number;
+  created_at: Date;
+  rank: number;
+};
+export type Player = {
+  data: PlayerData;
   npcs: INPC[];
   heroes: IHero[];
   spells: ISpell[];
   spellUpdates: ISpellUpdate[];
-  adventures: IAdventure[];
-  enemies: IEnemy[];
-  resources: IOwnedResource[];
-}
+  adventures: IPlayerAdventure[];
+  resources: IPlayerResource[];
+};
 
-export interface GameState {
-  player: Player;
+export type GameStateData = {
   dialogues: IDialogue[];
   fights: IFight[];
-  enemies: IEnemy[];
   reels: IReel[];
   resources: IResource[];
   spells: ISpell[];
-  heroes: IHero[];
-  spellUpdates: ISpellUpdate[];
   adventures: IAdventure[];
-  npcs: INPC[];
-}
+  characters: ICharacter[];
+  heroes: IHero[];
+  updates: ISpellUpdate[];
+};
 
-export interface IDialogueLine {
+export type GameState = {
+  player: Player;
+  game: GameStateData;
+};
+
+export type IDialogueLine = {
   id: string;
   character: string;
   image: string;
-  pos?: "L" | "R" | "M";
+  position: dialogueCharacterPosition;
   text: string;
-}
+};
 
-export interface IDialogue {
+export type IDialogue = {
   id: string;
   lines: IDialogueLine[];
   background: string;
-  action?: IStoryAction[];
   layout: dialogueLayout;
-  characters: string[];
-}
+  character_ids: string[];
+};
 
-export interface IStoryAction {
-  type: storyChangeType;
+export type IStoryAction = {
   id: string;
+  type: storyChangeType;
+  item: string;
   data?: string | null;
-}
+};
 
-export interface ICharacter {
+export type ICharacter = {
   id: string;
   name: string;
   description: string;
-}
+};
 
-export interface IAdventure {
+export type IAdventure = {
   id: adventureType;
   type: string;
   name: string;
   image: string;
-  open: boolean;
-  storyGroups?: IStoryGroup[];
-}
+  storyGroups: IStoryGroup[] | null;
+};
+export type IPlayerAdventure = IAdventure & { open: boolean; created_at: Date };
 
-export interface IReel {
+export type IReel = {
   id: string;
   type: string;
   imageGroups: IReelGroup[];
   action: IStoryAction[];
-}
+};
 
-export interface IReelGroup {
+export type IReelGroup = {
   id: number;
   layout: number;
   images: IReelImage[];
-}
+};
 
-export interface IReelImage {
+export type IReelImage = {
   id: string;
   image: string;
   direction: "up" | "down" | "left" | "right";
-}
+};
 
-export interface IStoryGroup {
+export type IStoryGroup = {
   id: string;
   name: string;
   stories: IStory[];
   group: number;
-}
+};
 
-export interface IStory {
-  type: "dialogue" | "fight" | "reel";
+export type IStory = {
+  type: storyType;
   id: string;
   nextStory: string;
-  name?: string;
-  image: string;
-  open: boolean;
-  action: IStoryAction[];
-}
-
-export interface IFight {
-  id: string;
   name: string;
   image: string;
-  enemy: string;
-  characters: string[];
-}
+  actions: IStoryAction[];
+  open?: boolean;
+};
 
-export interface FightState {
+export type IFight = {
+  id: string;
+  name: string;
+  hero_num: number;
+  enemy: IEnemy;
+  hero_elements: colorType[];
+};
+
+export type FightState = {
   hero: {
     life: number;
     maxLife: number;
@@ -171,14 +204,17 @@ export interface FightState {
   enemyCardIndex: number | null;
   element: colorType;
   elements: colorType[];
-}
+};
 
-export interface IResource {
+export type IResource = {
   id: string;
   name: string;
-  school: schoolType;
+  school: ISchool;
+  description: string;
   commonality: number;
-}
+};
+
+export type storyType = "dialogue" | "fight" | "reel";
 
 export type adventureType =
   | "character"
@@ -244,3 +280,4 @@ export type schoolType =
   | "oblation"
   | "alteration"
   | "deception";
+export type dialogueCharacterPosition = "L" | "R" | "M";

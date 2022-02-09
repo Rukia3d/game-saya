@@ -1,5 +1,5 @@
 import { GameState, IReel, ISpell } from "../src/utils/types";
-import { createPlayer, loadPlayer } from "./database";
+import { createPlayer, getGameData, loadPlayer } from "./db/database";
 
 const express = require("express");
 const cors = require("cors");
@@ -72,22 +72,13 @@ const reelsInitialSet: IReel[] = [
 
 app.get("/api/player/", async (req: any, res: any) => {
   console.log("Requesting new player game data", req.query);
+  const gameData = await getGameData();
   const player = req.query.id
-    ? await loadPlayer(req.query.id)
-    : await createPlayer();
-
+    ? await loadPlayer(req.query.id, gameData)
+    : await createPlayer(gameData);
   const gameState: GameState = {
     player: player,
-    reels: reelsInitialSet,
-    dialogues: [],
-    fights: [],
-    npcs: [],
-    heroes: [],
-    adventures: [],
-    enemies: [],
-    resources: [],
-    spells: [],
-    spellUpdates: [],
+    game: gameData,
   };
   res.send(gameState);
 });
@@ -99,6 +90,10 @@ app.get("/api/rewards/", (req: any, res: any) => {
 app.get("/api/fights/", (req: any, res: any) => {
   console.log("fights", req.query);
 });
+
+app.post("/api/heroes/:id", (req: any, res: any) => {});
+
+app.post("/api/updates/:id", (req: any, res: any) => {});
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);

@@ -11,7 +11,7 @@ import {
   herosSelectionError,
   IResource,
   ISpellUpdateResource,
-  IOwnedResource,
+  IPlayerResource,
 } from "./types";
 
 //@ts-ignore
@@ -73,7 +73,7 @@ export const findStory = (groups: IStoryGroup[], id: string) => {
 };
 
 export const findResource = (
-  resources: IResource[] | IOwnedResource[],
+  resources: IResource[] | IPlayerResource[],
   s: ISpellUpdateResource
 ) => {
   const resource = resources.find((r: IResource) => r.id === s[0]);
@@ -82,10 +82,10 @@ export const findResource = (
 };
 
 export const findOwnedResource = (
-  resources: IOwnedResource[],
+  resources: IPlayerResource[],
   s: ISpellUpdateResource
 ) => {
-  const resource = resources.find((r: IOwnedResource) => r.id === s[0]);
+  const resource = resources.find((r: IPlayerResource) => r.id === s[0]);
   if (!resource) throw new Error("Can't find a resource to display");
   return resource;
 };
