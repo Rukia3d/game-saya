@@ -1,4 +1,4 @@
-import { GameState, IReel, ISpell } from "../src/utils/types";
+import { GameState, IReel } from "../src/utils/types";
 import { createPlayer, getGameData, loadPlayer } from "./db/database";
 
 const express = require("express");
@@ -11,7 +11,7 @@ const reelsInitialSet: IReel[] = [
   {
     id: "c1_reel_1",
     type: "reel",
-    action: [],
+    actions: [],
     imageGroups: [
       {
         id: 1,
@@ -35,7 +35,7 @@ const reelsInitialSet: IReel[] = [
   {
     id: "c1_reel_2",
     type: "reel",
-    action: [],
+    actions: [],
     imageGroups: [
       {
         id: 1,

@@ -1,50 +1,56 @@
 import { findEnemy, initFight } from "./fightlogic";
-import { findStoryCharacters } from "./helpers";
-import { IHero, ISpell, IEnemy, Player, IFight, FightState } from "./types";
+import { Player, IFight, FightState, IPlayerSpell, IPlayerHero } from "./types";
 
 export const generateDeck = (
-  characters: IHero[],
-  playerCards: ISpell[]
-): ISpell[] => {
-  const heroSpells: ISpell[] = [];
-  playerCards.forEach((c: ISpell) => {
-    //    if (!c.selected) return;
+  characters: IPlayerHero[],
+  playerSpells: IPlayerSpell[]
+): IPlayerSpell[] => {
+  const heroSpells: IPlayerSpell[] = [];
+  playerSpells.forEach((c: IPlayerSpell) => {
+    if (!c.selected) return;
     heroSpells.push({
       id: c.id,
       name: c.name,
       strength: c.strength,
-      color: c.color,
-      owner: "hero",
+      element: c.element,
       selected: c.selected,
-      school: c.school,
       description: c.description,
+      created_at: c.created_at,
+      owner: "hero",
       updates: c.updates,
+      copy: c.copy,
     });
   });
   return heroSpells;
 };
 
-export const generateEnemyDeck = (enemy: IEnemy): ISpell[] => {
+export const generateEnemyDeck = (
+  enemySpells: IPlayerSpell[]
+): IPlayerSpell[] => {
   const DEFAULENEMYSPELLS = 5;
-  const enemySpells: ISpell[] = [];
-  enemy.spells.forEach((c: ISpell) => {
+  const spells: IPlayerSpell[] = [];
+  enemySpells.forEach((c: IPlayerSpell) => {
     enemySpells.push({
       id: c.id,
       name: c.name,
       strength: c.strength,
-      color: c.color,
+      element: c.element,
       owner: "enemy",
       selected: true,
-      school: c.school,
       description: c.description,
       updates: c.updates,
+      created_at: c.created_at,
+      copy: 1,
     });
   });
-  return enemySpells.splice(0, DEFAULENEMYSPELLS);
+  return spells.splice(0, DEFAULENEMYSPELLS);
 };
 
 export const initPreFight = (player: Player, fight: IFight) => {
-  const storyCharacters = findStoryCharacters(fight.characters, player.heroes);
+  const storyCharacters = findStoryCharacters(
+    fight.hero_elements,
+    player.heroes
+  );
   const enemy = findEnemy(player.enemies, fight.enemy);
 
   const [heroDeck, enemyDeck, elements] = initFight(

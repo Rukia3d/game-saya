@@ -10,10 +10,7 @@ import {
   IStory,
 } from "../utils/types";
 // Utils
-import {
-  checkFightCharactersIds,
-  findRequiredCharacters,
-} from "../utils/helpers";
+import { checkFightCharactersIds } from "../utils/helpers";
 import { HeroSelection } from "../Heroes/HeroSelection";
 import { findEnemy } from "../utils/fightlogic";
 import { HeroesPreview } from "../Heroes/HeroesPreview";

@@ -2,7 +2,7 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import App from "../App";
-import { gameState } from "../utils/teststates";
+import { gameState } from "../utils/test_states";
 
 // This is the section where we mock `fetch`
 const unmockedFetch = global.fetch;

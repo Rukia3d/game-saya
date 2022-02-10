@@ -18,7 +18,7 @@ export const LibraryUpdates = ({
   if (!context || !context.gameState) {
     throw new Error("No data in context");
   }
-  const allUpdates = context.gameState.player.spellUpdates;
+  const allUpdates = context.gameState.player.updates;
   const heroUpdates = allUpdates.filter(
     (s: ISpellUpdate) => s.school === hero.school
   );

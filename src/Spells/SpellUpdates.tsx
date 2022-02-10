@@ -1,7 +1,7 @@
 import React from "react";
 import "./Spells.scss";
 // Types
-import { ISpellUpdate } from "../utils/types";
+import { IPlayerSpellUpdate, ISpellUpdate } from "../utils/types";
 // Utils
 // Components
 import { SpellUpdate } from "./SpellUpdate";
@@ -12,10 +12,10 @@ export const SpellUpdates = ({
   updateInfo,
   distructSpell,
 }: {
-  spellUpgrades: ISpellUpdate[];
-  updateSpell?: (s: ISpellUpdate) => void;
-  distructSpell?: (s: ISpellUpdate) => void;
-  updateInfo?: (s: ISpellUpdate) => void;
+  spellUpgrades: IPlayerSpellUpdate[];
+  updateSpell?: (s: IPlayerSpellUpdate) => void;
+  distructSpell?: (s: IPlayerSpellUpdate) => void;
+  updateInfo?: (s: ISpellUpdate | IPlayerSpellUpdate) => void;
 }) => {
   return (
     <div className="SpellUpdates" aria-label="spell-updates">

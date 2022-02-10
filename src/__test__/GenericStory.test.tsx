@@ -1,8 +1,13 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import { GameContext, GameContextType } from "../App";
-import { gameState } from "../utils/teststates";
-import { dialstory, fightstory, reelstory, reel } from "../utils/testobjects";
+import { gameState } from "../utils/test_states";
+import {
+  dialstory,
+  fightstory,
+  reelstory,
+  reel,
+} from "../utils/test_gameobjects";
 import { GenericStory } from "../Main/GenericStory";
 
 const context: GameContextType = {
@@ -41,7 +46,6 @@ test("Renders Reel if no other cases", () => {
       value={{
         ...context,
         story: reelstory,
-        gameState: { ...gameState, reels: [reel] },
       }}
     >
       <GenericStory />

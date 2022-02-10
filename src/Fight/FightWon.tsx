@@ -32,19 +32,19 @@ export const FightWon = ({
   const gameState = context.gameState;
   const story = context.story;
   if (!gameState || !story) throw new Error("Can't update the fight results");
-  isValidAction(story.action);
+  isValidAction(story.actions);
 
   const backToStories = () => {
     displayAddedHero(
       gameState.player.heroes,
-      gameState.heroes,
-      story.action,
+      gameState.game.heroes,
+      story.actions,
       context.setAdditionScreen
     );
     displayAddedUpdate(
-      gameState.player.spellUpdates,
-      gameState.spellUpdates,
-      story.action,
+      gameState.player.updates,
+      gameState.game.updates,
+      story.actions,
       context.setAdditionScreen
     );
 

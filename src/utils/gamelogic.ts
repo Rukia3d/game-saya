@@ -14,6 +14,11 @@ import {
   ISpellUpdate,
   IStoryAction,
   IReel,
+  ICharacter,
+  IPlayerAdventure,
+  IPlayerSpell,
+  IPlayerHero,
+  IPlayerSpellUpdate,
 } from "./types";
 
 export const updateLostPlayer = (player: Player) => {
@@ -44,7 +49,7 @@ export const updateWinPlayer = (
 
 const updatePlayerNpcs = (
   npcs: INPC[],
-  allNpcs: INPC[],
+  allNpcs: ICharacter[],
   action: IStoryAction
 ): INPC[] => {
   const newnpcs = npcs;
@@ -53,27 +58,37 @@ const updatePlayerNpcs = (
     throw new Error("NPC dialogue data to change is invalid");
   }
   if (!npc) {
-    const npcToAdd = allNpcs.find((n: INPC) => action.id === n.id);
+    const npcToAdd = allNpcs.find((n: ICharacter) => action.id === n.id);
     if (!npcToAdd) {
       throw new Error("Can't find npc to add to the Intro screen");
     }
-    const newNpc = { ...npcToAdd, dial: action.data };
+    const newNpc = {
+      ...npcToAdd,
+      dialogue: action.data,
+      image: `${action.id}_${npcToAdd.id}`,
+      created_at: new Date(),
+    };
     newnpcs.push(newNpc);
   } else {
     const i = newnpcs.indexOf(npc);
     if (action.data === "remove") {
       newnpcs.splice(i, 1);
     } else {
-      newnpcs[i] = { ...newnpcs[i], dial: action.data };
+      newnpcs[i] = {
+        ...newnpcs[i],
+        dialogue: action.data,
+        image: `${action.id}_${newnpcs[i].id}`,
+        created_at: new Date(),
+      };
     }
   }
   return newnpcs;
 };
 
 const updatePlayerStory = (
-  adventures: IAdventure[],
+  adventures: IPlayerAdventure[],
   action: IStoryAction
-): IAdventure[] => {
+): IPlayerAdventure[] => {
   const newAdventures = adventures;
   const adventuresection = newAdventures.find(
     (a: IAdventure) => action.id === a.id
@@ -94,10 +109,12 @@ const updatePlayerStory = (
 };
 
 const updatePlayerAdventures = (
-  adventures: IAdventure[],
+  adventures: IPlayerAdventure[],
   action: IStoryAction
-): IAdventure[] => {
-  const adventure = adventures.find((a: IAdventure) => action.id === a.id);
+): IPlayerAdventure[] => {
+  const adventure = adventures.find(
+    (a: IPlayerAdventure) => action.id === a.id
+  );
   if (!adventure) throw new Error("No adventure to change");
   const j = adventures.indexOf(adventure);
   adventures[j] = { ...adventures[j], open: true };
@@ -105,20 +122,20 @@ const updatePlayerAdventures = (
 };
 
 const updatePlayerHeroes = (
-  heroes: IHero[],
-  spells: ISpell[],
+  heroes: IPlayerHero[],
+  spells: IPlayerSpell[],
   allHeroes: IHero[],
   allSpells: ISpell[],
   action: IStoryAction
-): [IHero[], ISpell[]] => {
-  let newHeroes: IHero[] = heroes;
-  let newSpells: ISpell[] = spells;
+): [IPlayerHero[], IPlayerSpell[]] => {
+  let newHeroes: IPlayerHero[] = heroes;
+  let newSpells: IPlayerSpell[] = spells;
   const hero = findCharacter(allHeroes, action.id);
   const alreadyExists = newHeroes.filter((h: IHero) => h.id === hero.id);
   if (alreadyExists.length > 0) {
     console.warn(`Trying to add the same ${action.id} hero again`);
   } else {
-    newHeroes.push(hero);
+    newHeroes.push({ ...hero, created_at: new Date(), selected: false });
     const before = newSpells.length;
     newSpells = updatePlayerCards(spells, allSpells, action);
     const after = newSpells.length;
@@ -131,23 +148,34 @@ const updatePlayerHeroes = (
 };
 
 const updatePlayerCards = (
-  spells: ISpell[],
+  spells: IPlayerSpell[],
   allSpells: ISpell[],
   action: IStoryAction
 ) => {
-  const spellsToAdd = allSpells.filter((s: ISpell) => s.color === action.data);
+  const spellsToAdd: IPlayerSpell[] = allSpells
+    .filter((s: ISpell) => s.element.color === action.data)
+    .map((s: ISpell, n: number) => {
+      return {
+        ...s,
+        owner: "hero",
+        created_at: new Date(),
+        copy: n,
+        updates: [],
+        selected: false,
+      };
+    });
   return spells.concat(spellsToAdd);
 };
 
 const updatePlayerSpellUpdates = (
-  updates: ISpellUpdate[],
+  updates: IPlayerSpellUpdate[],
   allUpdates: ISpellUpdate[],
   action: IStoryAction
-) => {
+): IPlayerSpellUpdate[] => {
   if (!action.data) {
     throw new Error("No update Id for the spell Update addition");
   }
-  const newUpdates: ISpellUpdate[] = updates;
+  const newUpdates: IPlayerSpellUpdate[] = updates;
   const update: ISpellUpdate = findUpdate(allUpdates, action.data);
   const alreadyExists = newUpdates.filter(
     (h: ISpellUpdate) => h.id === update.id
@@ -155,7 +183,7 @@ const updatePlayerSpellUpdates = (
   if (alreadyExists.length > 0) {
     console.warn(`Trying to add the same ${action.data} update again`);
   } else {
-    newUpdates.push(update);
+    newUpdates.push({ ...update, created_at: new Date() });
   }
   return newUpdates;
 };
@@ -182,15 +210,22 @@ const findStoryToUpdate = (
   return [storyGroup, res];
 };
 
-export const finishStory = (game: GameState, story: IStory | IReel): Player => {
-  const actions = story.action;
+export const finishStory = (
+  gameState: GameState,
+  story: IStory | IReel
+): Player => {
+  const actions = story.actions;
   //actions.map((a: IStoryAction) => console.log("Action", a));
-  let player = game.player;
+  let player = gameState.player;
   for (let i = 0; i < actions.length; i++) {
     const action = actions[i];
     switch (action.type) {
       case "addNpc":
-        player.npcs = updatePlayerNpcs(player.npcs, game.npcs, action);
+        player.npcs = updatePlayerNpcs(
+          player.npcs,
+          gameState.game.characters,
+          action
+        );
         break;
       case "setAdventure":
         player.adventures = updatePlayerAdventures(player.adventures, action);
@@ -202,17 +237,17 @@ export const finishStory = (game: GameState, story: IStory | IReel): Player => {
         const [newHeroes, newSpells] = updatePlayerHeroes(
           player.heroes,
           player.spells,
-          game.heroes,
-          game.spells,
+          gameState.game.heroes,
+          gameState.game.spells,
           action
         );
         player.heroes = newHeroes;
         player.spells = newSpells;
         break;
       case "addUpdate":
-        player.spellUpdates = updatePlayerSpellUpdates(
-          player.spellUpdates,
-          game.spellUpdates,
+        player.updates = updatePlayerSpellUpdates(
+          player.updates,
+          gameState.game.updates,
           action
         );
         break;

@@ -2,10 +2,10 @@ import {
   colorType,
   ICharacter,
   IElement,
+  IPlayerSpellUpdate,
+  IResource,
   ISchool,
   ISpellUpdate,
-  ISpellUpdateData,
-  ISpellUpdateResource,
   IStory,
   IStoryGroup,
   IUpdateAction,
@@ -109,7 +109,28 @@ export const findUpdates = (
   const res = playerUpdates.map((p: PlayerSpellAppliedUpdateDB) => {
     const upd = updates.find((u: ISpellUpdate) => u.id === p.spellupdate_id);
     if (!upd) throw new Error(`Can't find update for ${p.spellupdate_id}`);
-    return upd;
+    return { ...upd, created_at: p.created_at };
+  });
+
+  return res;
+};
+
+export const findPlayerUpdates = (
+  pUpd: PlayerSpellAppliedUpdateDB[],
+  updates: IPlayerSpellUpdate[],
+  spell_id: string,
+  copy: number
+): IPlayerSpellUpdate[] => {
+  const playerUpdates = pUpd.filter(
+    (p: PlayerSpellAppliedUpdateDB) =>
+      p.copy_id === copy && p.spell_id === spell_id
+  );
+  const res = playerUpdates.map((p: PlayerSpellAppliedUpdateDB) => {
+    const upd = updates.find(
+      (u: IPlayerSpellUpdate) => u.id === p.spellupdate_id
+    );
+    if (!upd) throw new Error(`Can't find update for ${p.spellupdate_id}`);
+    return { ...upd, created_at: p.created_at };
   });
 
   return res;
@@ -119,7 +140,7 @@ export const findResources = (
   sResDB: SpellUpdateResourceDB[],
   resDB: ResourceDB[],
   eDB: ElementDB[]
-): ISpellUpdateResource[] => {
+): IResource[] => {
   const res = sResDB.map((s: SpellUpdateResourceDB) => {
     const resource = resDB.find((r: ResourceDB) => r.id === s.resource_id);
     if (!resource)

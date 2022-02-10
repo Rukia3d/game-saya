@@ -2,10 +2,10 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import { TopMenu } from "../UI/TopMenu";
 import { GameContext, GameContextType } from "../App";
-import { gameState } from "../utils/teststates";
+import { gameState, testAdventure } from "../utils/test_states";
 
 const context: GameContextType = {
-  adventure: gameState.adventures[1],
+  adventure: testAdventure,
   setAdventure: jest.fn(),
   story: null,
   setStory: jest.fn(),

@@ -1,3 +1,4 @@
+import { ElementType } from "react";
 import {
   ISpell,
   IStoryGroup,
@@ -10,8 +11,10 @@ import {
   IStoryAction,
   herosSelectionError,
   IResource,
-  ISpellUpdateResource,
   IPlayerResource,
+  IPlayerHero,
+  colorType,
+  IPlayerSpell,
 } from "./types";
 
 //@ts-ignore
@@ -35,7 +38,10 @@ export const removeFromArray = (arrArg: any[], item: any) => {
   return arrArg;
 };
 
-export const removePlayedCard = (cards: ISpell[], index: number): ISpell[] => {
+export const removePlayedCard = (
+  cards: IPlayerSpell[],
+  index: number
+): IPlayerSpell[] => {
   cards.splice(index, 1);
   return cards;
 };
@@ -74,18 +80,9 @@ export const findStory = (groups: IStoryGroup[], id: string) => {
 
 export const findResource = (
   resources: IResource[] | IPlayerResource[],
-  s: ISpellUpdateResource
+  id: string
 ) => {
-  const resource = resources.find((r: IResource) => r.id === s[0]);
-  if (!resource) throw new Error("Can't find a resource to display");
-  return resource;
-};
-
-export const findOwnedResource = (
-  resources: IPlayerResource[],
-  s: ISpellUpdateResource
-) => {
-  const resource = resources.find((r: IPlayerResource) => r.id === s[0]);
+  const resource = resources.find((r: IResource) => r.id === id);
   if (!resource) throw new Error("Can't find a resource to display");
   return resource;
 };
@@ -123,33 +120,8 @@ export const checkFightCharactersIds = (
   return null;
 };
 
-export const filterActiveCharacters = (heroes: IHero[]) => {
-  return heroes.filter((c: IHero) => c.selected === true);
-};
-
-export const findActiveCharacters = (heroes: IHero[]) => {
-  if (heroes.length < 3) {
-    throw new Error("Issues with heroes");
-  }
-  const active = heroes.filter((c: IHero) => c.selected === true);
-  let i = 0;
-  while (active.length < 3) {
-    if (!heroes[i].selected) {
-      active.push(heroes[i]);
-    }
-    i++;
-  }
-  return active;
-};
-
-export const findRequiredCharacters = (
-  heroes: string[],
-  allHeroes: IHero[]
-): IHero[] => {
-  const res: IHero[] = heroes
-    .map((s: string) => (s !== "any" ? findCharacter(allHeroes, s) : null))
-    .filter((h: IHero | null) => h !== null) as IHero[];
-  return res;
+export const filterActiveCharacters = (heroes: IPlayerHero[]) => {
+  return heroes.filter((c: IPlayerHero) => c.selected === true);
 };
 
 export const findReel = (all: IReel[], id: string) => {
@@ -164,21 +136,10 @@ export const findFight = (all: IFight[], id: string) => {
   return res;
 };
 
-export const findStoryCharacters = (
-  heroes: string[],
-  allHeroes: IHero[]
-): IHero[] => {
-  const active = allHeroes.filter((c: IHero) => c.selected === true);
-  const res: IHero[] = findRequiredCharacters(heroes, allHeroes);
-  if (res.length < heroes.length) {
-    const addHeroes = heroes.length - res.length;
-    res.concat(active.slice(0, addHeroes));
-  }
-  //allHeroes.filter((s: Hero) => heroes.indexOf(s.id) !== -1);
-  return res;
-};
-
-export const findCharacter = (characters: IHero[], charId: string) => {
+export const findCharacter = (
+  characters: IHero[] | IPlayerHero[],
+  charId: string
+) => {
   const res = characters.find((c: IHero) => c.id === charId);
   if (!res) throw new Error(`Couldn't find a character ${charId}`);
   return res;

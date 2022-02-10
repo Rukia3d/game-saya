@@ -1,11 +1,12 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import { GameContext, GameContextType } from "../App";
-import { gameState } from "../utils/teststates";
+import { gameState } from "../utils/test_states";
 import userEvent from "@testing-library/user-event";
 import { FightWon } from "../Fight/FightWon";
 import { IResource } from "../utils/types";
-import { enemy, fightstory } from "../utils/testobjects";
+import { enemy, fightstory } from "../utils/test_gameobjects";
+import { playerResources } from "../utils/test_playerobjects";
 
 const context: GameContextType = {
   adventure: null,
@@ -20,9 +21,6 @@ const context: GameContextType = {
 };
 
 test("Renders Winning screen with a button", () => {
-  const playerResources = gameState.resources.map((r: IResource) => {
-    return { ...r, quantity: 1 };
-  });
   render(
     <GameContext.Provider value={context}>
       <FightWon rewards={playerResources} enemy={enemy} />
@@ -34,9 +32,6 @@ test("Renders Winning screen with a button", () => {
 
 test("Throws correct error with no context", () => {
   jest.spyOn(console, "error").mockImplementation(() => jest.fn());
-  const playerResources = gameState.resources.map((r: IResource) => {
-    return { ...r, quantity: 1 };
-  });
   expect(() =>
     render(
       <GameContext.Provider value={{ ...context, story: null }}>

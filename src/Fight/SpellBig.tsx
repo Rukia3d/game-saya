@@ -1,7 +1,13 @@
 import React, { useContext } from "react";
 import "./Fight.scss";
 // Types
-import { colorType, IEnemy, ISpell, schoolType } from "../utils/types";
+import {
+  colorType,
+  IEnemy,
+  IPlayerSpell,
+  ISpell,
+  schoolType,
+} from "../utils/types";
 import {
   calculateSpellMana,
   calculateSpellStrength,
@@ -42,7 +48,7 @@ export const SpellBig = ({
   spell,
 }: {
   transparency?: boolean;
-  spell: ISpell;
+  spell: ISpell | IPlayerSpell;
 }) => {
   const context = useContext(GameContext);
   if (!context || !context.story || !context.setAdditionScreen) {

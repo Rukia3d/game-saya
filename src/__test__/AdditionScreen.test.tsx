@@ -3,9 +3,9 @@ import { render, screen } from "@testing-library/react";
 import { Adventures } from "../Main/Adventures";
 import { GameContext, GameContextType } from "../App";
 import userEvent from "@testing-library/user-event";
-import { gameState } from "../utils/teststates";
+import { gameState } from "../utils/test_states";
 import { AdditionScreen } from "../UI/AdditionScreen";
-import { mayaCard } from "../utils/testobjects";
+import { mayaCard } from "../utils/test_gameobjects";
 
 const context: GameContextType = {
   adventure: null,

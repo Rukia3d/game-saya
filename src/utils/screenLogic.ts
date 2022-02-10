@@ -1,8 +1,8 @@
 import { findCharacter, findUpdate } from "./helpers";
-import { IHero, ISpellUpdate, IStoryAction } from "./types";
+import { IHero, IPlayerHero, ISpellUpdate, IStoryAction } from "./types";
 
 export const displayAddedHero = (
-  playerHeroes: IHero[],
+  playerHeroes: IPlayerHero[],
   allHeroes: IHero[],
   actions: IStoryAction[],
   setAdditionScreen: (s: null | IHero | ISpellUpdate) => void
@@ -16,8 +16,8 @@ export const displayAddedHero = (
     if (!action.data)
       throw new Error("Update action is missing data - hero element");
     const hero = findCharacter(allHeroes, action.id);
-    const res = playerHeroes.indexOf(hero);
-    if (res !== -1) {
+    const res = playerHeroes.find((a: IPlayerHero) => hero.id === a.id);
+    if (res) {
       console.warn(`Trying to add the same ${action.id} hero again`);
       return;
     }

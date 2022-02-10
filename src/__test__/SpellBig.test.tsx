@@ -3,13 +3,14 @@ import { render, screen } from "@testing-library/react";
 import { SpellBig } from "../Fight/SpellBig";
 import userEvent from "@testing-library/user-event";
 
-import { fightstory, mayaCard } from "../utils/testobjects";
-import { ISpell } from "../utils/types";
-import { gameState } from "../utils/teststates";
+import { fightstory, mayaCard } from "../utils/test_gameobjects";
+import { IPlayerSpell, ISpell } from "../utils/types";
+import { gameState, testAdventure } from "../utils/test_states";
 import { GameContext, GameContextType } from "../App";
+import { playerSpell } from "../utils/test_playerobjects";
 
 const context: GameContextType = {
-  adventure: gameState.adventures[0],
+  adventure: testAdventure,
   setAdventure: jest.fn(),
   story: fightstory,
   setStory: jest.fn(),
@@ -21,7 +22,7 @@ const context: GameContextType = {
 };
 
 test("Renders Big Card screen with strength 1 and earth", async () => {
-  const earthCard: ISpell = { ...mayaCard, school: "restoration", strength: 1 };
+  const earthCard: IPlayerSpell = { ...playerSpell, strength: 1 };
   render(
     <GameContext.Provider value={context}>
       <SpellBig spell={earthCard} />
@@ -36,7 +37,7 @@ test("Renders Big Card screen with strength 1 and earth", async () => {
 });
 
 test("Renders Big Card screen with strength 3 and fire", async () => {
-  const earthCard: ISpell = { ...mayaCard, school: "oblation", strength: 3 };
+  const earthCard: ISpell = { ...playerSpell, strength: 3 };
   render(
     <GameContext.Provider value={context}>
       <SpellBig spell={earthCard} />
@@ -51,7 +52,7 @@ test("Renders Big Card screen with strength 3 and fire", async () => {
 });
 
 test("Renders Big Card screen with strength 2 and air", async () => {
-  const earthCard: ISpell = { ...mayaCard, school: "deception", strength: 2 };
+  const earthCard: ISpell = { ...playerSpell, strength: 2 };
   render(
     <GameContext.Provider value={context}>
       <SpellBig spell={earthCard} />
@@ -70,7 +71,7 @@ test("Renders Big Card screen with strength 2 and air", async () => {
 });
 
 test("Renders Big Card screen and shows the info", async () => {
-  const earthCard: ISpell = { ...mayaCard, school: "alteration", strength: 2 };
+  const earthCard: ISpell = { ...playerSpell, strength: 2 };
   const setAdditionScreen = jest.fn();
   render(
     <GameContext.Provider

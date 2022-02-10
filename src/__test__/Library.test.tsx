@@ -3,9 +3,13 @@ import { render, screen } from "@testing-library/react";
 import { Library } from "../Main/Library";
 import { GameContext, GameContextType } from "../App";
 import userEvent from "@testing-library/user-event";
-import { baseCards15 } from "../utils/testobjects";
+import { baseCards15 } from "../utils/test_gameobjects";
 import { GameState, IResource, ISpell, ISpellUpdate } from "../utils/types";
-import { gameState } from "../utils/teststates";
+import { gameState } from "../utils/test_states";
+import {
+  playerResources,
+  playerSpellUpdates,
+} from "../utils/test_playerobjects";
 
 const mayaSpells: ISpell[] = new Array(3).fill(0).map((x, n) => ({
   ...baseCards15[0],
@@ -23,21 +27,13 @@ const taraSpells: ISpell[] = new Array(3).fill(0).map((x, n) => ({
   color: "grey",
 }));
 const newSpells = mayaSpells.concat(taraSpells);
-const playerResources = gameState.resources.map((r: IResource, i: number) => {
-  return { ...r, quantity: 1, school: i < 3 ? "restoration" : "oblation" };
-});
-const playerUpdates = gameState.spellUpdates.map(
-  (s: ISpellUpdate, i: number) => {
-    return { ...s, school: i < 2 ? "restoration" : "oblation" };
-  }
-);
 const newGameState: GameState = {
   ...JSON.parse(JSON.stringify(gameState)),
   player: {
     ...gameState.player,
     spells: newSpells,
     resources: playerResources,
-    spellUpdates: playerUpdates,
+    spellUpdates: playerSpellUpdates,
     heroes: [
       { ...gameState.player.heroes[0], school: "restoration" },
       { ...gameState.player.heroes[1], school: "amplification" },

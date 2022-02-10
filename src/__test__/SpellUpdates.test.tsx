@@ -2,12 +2,16 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import { GameContext, GameContextType } from "../App";
 import userEvent from "@testing-library/user-event";
-import { gameState } from "../utils/teststates";
+import { gameState, testAdventure } from "../utils/test_states";
 import { SpellUpdates } from "../Spells/SpellUpdates";
 import { IResource } from "../utils/types";
+import {
+  playerResources,
+  playerSpellUpdates,
+} from "../utils/test_playerobjects";
 
 const context: GameContextType = {
-  adventure: gameState.adventures[1],
+  adventure: testAdventure,
   setAdventure: jest.fn(),
   story: null,
   setStory: jest.fn(),
@@ -20,16 +24,14 @@ const context: GameContextType = {
 
 test("Renders Element spell updates", async () => {
   const updateSpell = jest.fn();
-  const playerResources = gameState.resources.map((r: IResource) => {
-    return { ...r, quantity: 10 };
-  });
+  const newPlayerResource = { ...playerResources[0], quantity: 10 };
   const newContext = {
     ...context,
     gameState: {
       ...gameState,
       player: {
         ...gameState.player,
-        resources: playerResources,
+        resources: [newPlayerResource],
       },
     },
   };
@@ -37,7 +39,7 @@ test("Renders Element spell updates", async () => {
     <GameContext.Provider value={newContext}>
       <SpellUpdates
         updateSpell={updateSpell}
-        spellUpgrades={gameState.spellUpdates}
+        spellUpgrades={gameState.player.updates}
       />
     </GameContext.Provider>
   );
@@ -52,7 +54,7 @@ test("Throws error if there's a problem with a context", async () => {
       <GameContext.Provider value={newContext}>
         <SpellUpdates
           updateSpell={jest.fn()}
-          spellUpgrades={gameState.spellUpdates}
+          spellUpgrades={gameState.player.updates}
         />
       </GameContext.Provider>
     )
@@ -61,8 +63,8 @@ test("Throws error if there's a problem with a context", async () => {
 });
 
 test("Throws error if can't find the correct resource", async () => {
-  const newUpdate = gameState.spellUpdates[0];
-  newUpdate.resource_base = [["thing", 1]];
+  const newUpdate = playerSpellUpdates[0];
+  newUpdate.resource_base = [{ ...playerResources[0], id: "thing" }];
   jest.spyOn(console, "error").mockImplementation(() => jest.fn());
   expect(() =>
     render(

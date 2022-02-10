@@ -2,8 +2,8 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import { Fight } from "../Fight/Fight";
 import { GameContext, GameContextType } from "../App";
-import { enemy, fightstory } from "../utils/testobjects";
-import { gameState } from "../utils/teststates";
+import { enemy, fightstory } from "../utils/test_gameobjects";
+import { gameState } from "../utils/test_states";
 const context: GameContextType = {
   adventure: null,
   addition: null,
@@ -63,7 +63,7 @@ test("Throws error if no data provided in context", () => {
     )
   ).toThrow("No data in context");
 
-  const fightNoEnemy = { ...gameState.fights[0], enemy: "some" };
+  const fightNoEnemy = { ...fightstory, enemy: "some" };
   const contextNoEmeny = {
     ...context,
     story: fightstory,

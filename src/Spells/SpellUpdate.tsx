@@ -2,17 +2,11 @@ import React, { useContext } from "react";
 import { GameContext } from "../App";
 import "./Spells.scss";
 // Types
-import {
-  IPlayerResource,
-  IResource,
-  ISpellUpdate,
-  ISpellUpdateResource,
-} from "../utils/types";
+import { IPlayerResource, ISpellUpdate } from "../utils/types";
 import { findResource } from "../utils/helpers";
-import { Resource, ResourcesImages } from "./Resources";
+import { ResourcesImages } from "./Resources";
 // Utils
 import useLongPress from "../hooks/useLongPress";
-import { spellUpdates } from "../utils/testobjects";
 // Components
 
 export const SpellUpdate = ({
@@ -34,12 +28,12 @@ export const SpellUpdate = ({
     !context.gameState ||
     !context.gameState.player ||
     !context.gameState.player.resources ||
-    !context.gameState.resources
+    !context.gameState.game.resources
   ) {
     throw new Error("No data in context");
   }
   const playerResources = context.gameState.player.resources;
-  const resources = context.gameState.resources;
+  const resources = context.gameState.game.resources;
 
   const isEnough = (s: ISpellUpdateResource) => {
     const resource = playerResources.find(

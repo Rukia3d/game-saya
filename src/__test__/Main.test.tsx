@@ -1,7 +1,7 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import { GameContext, GameContextType } from "../App";
-import { gameState } from "../utils/teststates";
+import { gameState } from "../utils/test_states";
 import { Main } from "../Main/Main";
 import userEvent from "@testing-library/user-event";
 

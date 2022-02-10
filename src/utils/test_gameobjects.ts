@@ -10,36 +10,63 @@ import {
   ISpellUpdate,
   IReel,
   schoolType,
+  ISchool,
+  IPlayerResource,
+  spellEffectType,
+  ICharacter,
+  IResource,
+  IFight,
 } from "./types";
 
 export const dialogues: IDialogue[] = new Array(3).fill(0).map((x, i) => ({
   id: "dialogue" + i,
   background: "background" + i,
   layout: "single",
-  characters: ["maya"],
+  character_ids: ["maya"],
   lines: [
     {
       id: "id" + i,
       character: "maya",
       image: "excited",
-      pos: "L",
+      position: "L",
       text: "test",
     },
   ],
 }));
+export const school: ISchool = {
+  id: "restoration" as schoolType,
+  description:
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ",
+  name: "Restoration",
+};
+
+export const resource: IResource = {
+  id: "ametyst",
+  name: "Ametyst",
+  school: school,
+  description: "Some Description",
+  commonality: 2,
+};
+
+export const element = {
+  code: "a6009c",
+  color: "violet" as colorType,
+  description: "Some description",
+  school: school,
+};
 
 export const spellUpdates: ISpellUpdate[] = new Array(3)
   .fill(0)
   .map((x, i) => ({
-    action: { action: "health", strength: i },
+    action: { item: "health", data: i },
     description: "Some description" + i,
-    effect: "h_redraw",
-    school: "restoration",
+    effect: "h_redraw" as spellEffectType,
+    school: school,
     id: "fire_" + i,
     mana: 1,
     name: "SomeName" + i,
     price: null,
-    resource_base: [["ash", i + 1]],
+    resource_base: [{ ...resource, quantity: 5, created_at: new Date() }],
   }));
 
 export const stories: IStoryGroup[] = new Array(4).fill(0).map((x, i) => ({
@@ -50,45 +77,45 @@ export const stories: IStoryGroup[] = new Array(4).fill(0).map((x, i) => ({
     {
       id: "dialogue" + i,
       type: "dialogue",
+      name: "dialogue" + i,
       image: "dialogue" + i,
       open: true,
-      action: [],
+      actions: [],
       nextStory: "dialogue" + i + 1,
     },
     {
       id: "dialogue1" + i,
+      name: "dialogue1" + i,
       type: "dialogue",
       image: "dialogue1" + i,
       open: true,
-      action: [],
+      actions: [],
       nextStory: "dialogue" + i + 1,
     },
     {
       id: "arena" + i,
+      name: "arena" + i,
       type: "fight",
       image: "arena" + i,
       open: false,
-      name: "Arena",
-      action: [],
+      actions: [],
       nextStory: "dialogue" + i + 1,
     },
   ],
 }));
 
 export const adventures: IAdventure[] = [];
-const advFormat: [string, boolean][] = [
+[
   ["character", true],
   ["story", true],
   ["arena", false],
   ["tournament", false],
   ["event", false],
-];
-advFormat.forEach((obj: [string, boolean]) =>
+].forEach((obj: any) =>
   adventures.push({
     id: obj[0] as adventureType,
     name: obj[0],
     image: `${obj[0]}.jpg`,
-    open: obj[1],
     type: obj[0],
     storyGroups: stories,
   })
@@ -130,45 +157,36 @@ export const reel: IReel = {
   ],
 };
 
-export const fights = new Array(6).fill(0).map((x, i) => ({
+export const fights: IFight[] = new Array(6).fill(0).map((x, i) => ({
   id: "arena" + i,
   name: "Arena " + i,
   image: "../img/arena_1.png",
-  enemy: "test-dude",
-  characters: ["maya", "tara"],
+  enemy: enemy,
+  hero_elements: ["violet", "grey"],
+  hero_num: 2,
 }));
 
 export const mayaCard: ISpell = {
   id: "base_hit1_maya",
   name: "Maya Hit 1",
+  element: element,
   strength: 1,
-  color: "yellow" as "yellow",
-  school: "alteration" as "alteration",
-  selected: true,
-  owner: "hero" as "hero",
   description:
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ",
-  updates: [],
 };
 
 export const enemyCard: ISpell = {
   id: "base_hit1",
   name: "Base Hit 1",
+  element: element,
   strength: 0,
-  color: "grey" as "grey",
-  school: "restoration" as "restoration",
-  selected: false,
-  owner: "enemy" as "enemy",
   description: "",
-  updates: [],
 };
 
 export const enemy: IEnemy = {
   id: "test-dude",
   name: "Dude",
-  color: "grey" as "grey",
-  school: "restoration",
-  spells: [enemyCard, enemyCard],
+  element: element,
   description:
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 };
@@ -177,49 +195,30 @@ export const baseCards15: ISpell[] = new Array(15).fill(0).map((x, n) => ({
   id: "base_hit" + n,
   name: "Base Hit " + n,
   strength: 1,
-  color: "yellow" as "yellow",
-  school: "alteration" as "alteration",
-  selected: true,
-  owner: "hero" as "hero",
+  element: element,
   description: "",
-  updates: [],
 }));
 
-export const playerNpcs = [
+export const characters: ICharacter[] = [
   {
     id: "maya",
     name: "Maya",
-    image: "../img/maya.png",
-    dial: "dialogue0",
     description:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ",
   },
   {
     id: "tara",
     name: "Tara",
-    image: "../img/tara.png",
-    dial: "dialogue1",
     description:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ",
   },
 ];
 export const heroes: IHero[] = [];
-const heroesFormat: [string, string, string][] = [
-  ["maya", "violet", "restoration"],
-  ["tara", "grey", "amplification"],
-  ["nell", "red", "oblation"],
-  ["dart", "indigo", "alteration"],
-  ["grey", "green", "deception"],
-];
-heroesFormat.forEach((obj: [string, string, string]) =>
+["maya", "tara", "nell", "dart", "grey"].forEach((obj: string) =>
   heroes.push({
-    id: obj[0],
-    selected: false,
-    name: obj[0],
-    code: "000000",
-    image: "",
-    color: obj[1] as colorType,
-    school: obj[2] as schoolType,
+    id: obj,
+    name: obj,
+    element: element,
     description:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
   })
@@ -233,28 +232,25 @@ export const dialogue: IDialogue = {
       character: "olija",
       text: "Line one",
       image: "serious",
+      position: "L",
     },
     {
       character: "maya",
       id: "2",
       image: "sad",
-      pos: "L",
+      position: "L",
       text: "Line two",
     },
   ],
   background: "backg_0.png",
   layout: "double",
-  characters: ["olija", "maya"],
+  character_ids: ["olija", "maya"],
 };
 
 export const characterToAdd: IHero = {
-  color: "red",
   id: "nell",
-  code: "000000",
-  image: "../img/nell.png",
   name: "Nell",
-  selected: false,
-  school: "alteration",
+  element: element,
   description:
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ",
 };

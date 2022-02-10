@@ -156,7 +156,7 @@ export const Dialogue = ({
     !context ||
     !context.gameState ||
     !context.setStory ||
-    !context.gameState.heroes
+    !context.gameState.game.heroes
   ) {
     throw new Error("No data");
   }
@@ -165,17 +165,17 @@ export const Dialogue = ({
 
   const finishDialogue = () => {
     if (context.gameState?.player && context.story) {
-      isValidAction(context.story.action);
+      isValidAction(context.story.actions);
       displayAddedUpdate(
-        context.gameState.player.spellUpdates,
-        context.gameState.spellUpdates,
-        context.story.action,
+        context.gameState.player.updates,
+        context.gameState.game.updates,
+        context.story.actions,
         context.setAdditionScreen
       );
       displayAddedHero(
         context.gameState.player.heroes,
-        context.gameState.heroes,
-        context.story.action,
+        context.gameState.game.heroes,
+        context.story.actions,
         context.setAdditionScreen
       );
       context.setGameState({

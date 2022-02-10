@@ -1,7 +1,12 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import { GameContext, GameContextType } from "../App";
-import { baseCards15, dialogues, dialstory } from "../utils/testobjects";
+import {
+  baseCards15,
+  dialogues,
+  dialstory,
+  element,
+} from "../utils/test_gameobjects";
 import userEvent from "@testing-library/user-event";
 import { Dialogue } from "../Dialogues/Dialogue";
 import {
@@ -10,11 +15,12 @@ import {
   ISpell,
   storyChangeType,
   schoolType,
+  GameState,
 } from "../utils/types";
-import { gameState } from "../utils/teststates";
+import { gameState, testAdventure } from "../utils/test_states";
 
 const context: GameContextType = {
-  adventure: gameState.adventures[0],
+  adventure: testAdventure,
   setAdventure: jest.fn(),
   story: dialstory,
   setStory: jest.fn(),
@@ -50,24 +56,25 @@ test("Renders dialogue page and triggers Character screen", async () => {
     name: "Some Hit " + n,
     color: "red",
   }));
-  const newGameState = {
+  const newGameState: GameState = {
     ...gameState,
     player: {
       ...gameState.player,
       heroes: [
         {
-          color: "yellow" as colorType,
-          school: "restoration" as schoolType,
+          element: element,
           id: "maya",
-          image: "maya",
           name: "Maya",
           selected: true,
           description: "some",
-          code: "",
+          created_at: new Date(),
         },
       ],
     },
-    spells: gameState.spells.concat(nellSpells),
+    game: {
+      ...gameState.game,
+      spells: gameState.game.spells.concat(nellSpells),
+    },
   };
   const newContext = {
     ...context,
@@ -85,7 +92,7 @@ test("Renders dialogue page and triggers Character screen", async () => {
       id: "id1",
       character: "tara",
       image: "excited",
-      pos: "R",
+      position: "R",
       text: "test",
     }),
   };

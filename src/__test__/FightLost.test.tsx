@@ -1,10 +1,10 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import { GameContext, GameContextType } from "../App";
-import { gameState } from "../utils/teststates";
+import { gameState } from "../utils/test_states";
 import userEvent from "@testing-library/user-event";
 import { IResource } from "../utils/types";
-import { enemy, fightstory } from "../utils/testobjects";
+import { enemy, fightstory } from "../utils/test_gameobjects";
 import { FightLost } from "../Fight/FightLost";
 
 const context: GameContextType = {

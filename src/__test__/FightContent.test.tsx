@@ -1,17 +1,17 @@
 import React from "react";
 import { act, render, screen } from "@testing-library/react";
 import { FightContent } from "../Fight/FightContent";
-import { fightState, gameState } from "../utils/teststates";
+import { fightState, gameState, testAdventure } from "../utils/test_states";
 import userEvent from "@testing-library/user-event";
 import { GameContext, GameContextType } from "../App";
-import { fightstory } from "../utils/testobjects";
+import { fightstory } from "../utils/test_gameobjects";
 
 const SHORTANIMATION = 500;
 const LONGANIMATION = 1500;
 const EXTRALONGANIMATION = 3000;
 
 const context: GameContextType = {
-  adventure: gameState.adventures[0],
+  adventure: testAdventure,
   setAdventure: jest.fn(),
   story: fightstory,
   setStory: jest.fn(),

@@ -23,10 +23,9 @@ export type IPlayerSpell = ISpell & {
   copy: number;
   selected: boolean;
   owner: "hero" | "enemy";
-  updates: ISpellUpdate[];
+  updates: IPlayerSpellUpdate[];
   created_at: Date;
 };
-
 export type IPlayerResource = IResource & {
   quantity: number;
   created_at: Date;
@@ -47,17 +46,7 @@ export type IEnemy = ICharacter & {
 
 export type IEnemyFight = IEnemy & { spells: ISpell[] };
 
-export type ISpellUpdateResource = IResource & { quantity: number };
-
-export type ISpellUpdate = ISpellUpdateData & {
-  resource_base: ISpellUpdateResource[];
-};
-
-export type IUpdateAction = {
-  item: spellUpdateEffect;
-  data: number | string;
-};
-export type ISpellUpdateData = {
+export type ISpellUpdate = {
   id: string;
   school: ISchool;
   mana: number;
@@ -66,7 +55,19 @@ export type ISpellUpdateData = {
   price: { action: spellUpdatePrice; strength: number | string } | null;
   name: string;
   description: string;
+  resource_base: IResource[];
 };
+
+export type IPlayerSpellUpdate = ISpellUpdate & {
+  created_at: Date;
+  resource_base: IResource[];
+};
+
+export type IUpdateAction = {
+  item: spellUpdateEffect;
+  data: number | string;
+};
+
 export type PlayerData = {
   id: string;
   experience: number;
@@ -80,9 +81,9 @@ export type PlayerData = {
 export type Player = {
   data: PlayerData;
   npcs: INPC[];
-  heroes: IHero[];
-  spells: ISpell[];
-  spellUpdates: ISpellUpdate[];
+  heroes: IPlayerHero[];
+  spells: IPlayerSpell[];
+  updates: IPlayerSpellUpdate[];
   adventures: IPlayerAdventure[];
   resources: IPlayerResource[];
 };
@@ -146,7 +147,7 @@ export type IReel = {
   id: string;
   type: string;
   imageGroups: IReelGroup[];
-  action: IStoryAction[];
+  actions: IStoryAction[];
 };
 
 export type IReelGroup = {
@@ -193,14 +194,14 @@ export type FightState = {
     mana: number;
     maxMana: number;
   };
-  heroes: IHero[];
-  enemy: IEnemy;
-  heroDeck: ISpell[];
+  heroes: IPlayerHero[];
+  enemy: IEnemyFight;
+  heroDeck: IPlayerSpell[];
   heroCardIndex: number | null;
-  heroDrop: ISpell[];
-  heroHand: ISpell[];
-  enemyDeck: ISpell[];
-  enemyDrop: ISpell[];
+  heroDrop: IPlayerSpell[];
+  heroHand: IPlayerSpell[];
+  enemyDeck: IPlayerSpell[];
+  enemyDrop: IPlayerSpell[];
   enemyCardIndex: number | null;
   element: colorType;
   elements: colorType[];

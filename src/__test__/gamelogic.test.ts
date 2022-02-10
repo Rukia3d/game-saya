@@ -7,8 +7,8 @@ import {
   enemyCard,
   heroes,
   mayaCard,
-} from "../utils/testobjects";
-import { fightState, gameState } from "../utils/teststates";
+} from "../utils/test_gameobjects";
+import { fightState, gameState } from "../utils/test_states";
 import { FightState, ISpell } from "../utils/types";
 
 test("generateDeck function returns correct character cards", () => {

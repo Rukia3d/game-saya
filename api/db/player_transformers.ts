@@ -13,8 +13,9 @@ import {
   ISpellUpdate,
   INPC,
   ICharacter,
+  IPlayerSpellUpdate,
 } from "../../src/utils/types";
-import { findUpdates } from "./helpers";
+import { findPlayerUpdates, findUpdates } from "./helpers";
 import {
   PlayerAdventureDB,
   PlayerDB,
@@ -128,7 +129,7 @@ export const transformPlayerSpells = (
   pS: PlayerSpellDB[],
   pUpd: PlayerSpellAppliedUpdateDB[],
   spells: ISpell[],
-  updates: ISpellUpdate[]
+  updates: IPlayerSpellUpdate[]
 ): IPlayerSpell[] => {
   const res = pS.map((s: PlayerSpellDB) => {
     const spellData = spells.find((a: ISpell) => a.id === s.spell_id);
@@ -144,7 +145,7 @@ export const transformPlayerSpells = (
       created_at: s.created_at,
       selected: s.selected === 1 ? true : false,
       owner: "hero" as "hero",
-      updates: findUpdates(pUpd, updates, s.spell_id, s.copy),
+      updates: findPlayerUpdates(pUpd, updates, s.spell_id, s.copy),
     };
   });
 
@@ -154,7 +155,7 @@ export const transformPlayerSpells = (
 export const transformPlayerUpdates = (
   pDB: PlayerSpellUpdateDB[],
   updates: ISpellUpdate[]
-): ISpellUpdate[] => {
+): IPlayerSpellUpdate[] => {
   const res = pDB.map((u: PlayerSpellUpdateDB) => {
     const updateData = updates.find(
       (up: ISpellUpdate) => u.spellupdate_id === up.id
@@ -171,6 +172,7 @@ export const transformPlayerUpdates = (
       name: updateData.name,
       description: updateData.description,
       resource_base: updateData.resource_base,
+      created_at: u.created_at,
     };
   });
   return res;

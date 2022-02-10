@@ -1,10 +1,15 @@
 import { displayAddedHero, displayAddedUpdate } from "../utils/screenLogic";
-import { gameState } from "../utils/teststates";
-import { storyChangeType } from "../utils/types";
+import { gameState } from "../utils/test_states";
+import { IStoryAction, storyChangeType } from "../utils/types";
 test("displayAddedHero doesn't throw if all arguments are correct", () => {
   const allHeroes = gameState.player.heroes;
-  const actions = [
-    { type: "addHero" as storyChangeType, id: "nell", data: "fire" },
+  const actions: IStoryAction[] = [
+    {
+      type: "addHero" as storyChangeType,
+      id: "addHero3",
+      item: "nell",
+      data: "fire",
+    },
   ];
   const setAdditionScreen = jest.fn();
   expect(() =>
@@ -15,11 +20,21 @@ test("displayAddedHero doesn't throw if all arguments are correct", () => {
 
 test("displayAddedHero throws if actions are incorrect", () => {
   const allHeroes = gameState.player.heroes;
-  const actions1 = [
-    { type: "addHero" as storyChangeType, id: null, data: "fire" },
+  const actions1: IStoryAction[] = [
+    {
+      type: "addHero" as storyChangeType,
+      id: "addHero1",
+      item: "",
+      data: "red",
+    },
   ];
-  const actions2 = [
-    { type: "addHero" as storyChangeType, id: "nell", data: null },
+  const actions2: IStoryAction[] = [
+    {
+      type: "addHero" as storyChangeType,
+      id: "addHero1",
+      item: "nell",
+      data: null,
+    },
   ];
   const setAdditionScreen = jest.fn();
   expect(() =>
@@ -33,9 +48,14 @@ test("displayAddedHero throws if actions are incorrect", () => {
 });
 
 test("displayAddedUpdate doesn't throw if all arguments are correct", () => {
-  const all = gameState.spellUpdates;
-  const actions = [
-    { type: "addUpdate" as storyChangeType, id: "fire", data: "fire_1" },
+  const all = gameState.game.updates;
+  const actions: IStoryAction[] = [
+    {
+      type: "addUpdate" as storyChangeType,
+      id: "addUpdate1",
+      item: "restoration",
+      data: "fire_1",
+    },
   ];
   const setAdditionScreen = jest.fn();
   expect(() =>
@@ -45,12 +65,22 @@ test("displayAddedUpdate doesn't throw if all arguments are correct", () => {
 });
 
 test("displayAddedUpdate throws if actions are incorrect", () => {
-  const all = gameState.spellUpdates;
-  const actions1 = [
-    { type: "addUpdate" as storyChangeType, id: null, data: "fire_1" },
+  const all = gameState.game.updates;
+  const actions1: IStoryAction[] = [
+    {
+      type: "addUpdate" as storyChangeType,
+      id: "addUpdate1",
+      item: "red",
+      data: "fire_1",
+    },
   ];
-  const actions2 = [
-    { type: "addUpdate" as storyChangeType, id: "fire", data: null },
+  const actions2: IStoryAction[] = [
+    {
+      type: "addUpdate" as storyChangeType,
+      id: "addUpdate1",
+      item: "fire",
+      data: null,
+    },
   ];
   const setAdditionScreen = jest.fn();
   expect(() =>

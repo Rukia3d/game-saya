@@ -1,11 +1,12 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import { FightResult } from "../Fight/FightResult";
-import { gameState } from "../utils/teststates";
+import { gameState } from "../utils/test_states";
 import { IResource } from "../utils/types";
 import userEvent from "@testing-library/user-event";
-import { enemy, fightstory } from "../utils/testobjects";
+import { enemy, fightstory } from "../utils/test_gameobjects";
 import { GameContextType, GameContext } from "../App";
+import { playerResources } from "../utils/test_playerobjects";
 
 const context: GameContextType = {
   adventure: null,
@@ -20,9 +21,7 @@ const context: GameContextType = {
 };
 
 test("Renders FightResult screen for Win", async () => {
-  const playerResources = gameState.resources.map((r: IResource) => {
-    return { ...r, quantity: 1 };
-  });
+  const newResources = [{ ...playerResources[0], quantity: 1 }];
   const setGameState = jest.fn();
   render(
     <GameContext.Provider
@@ -32,7 +31,7 @@ test("Renders FightResult screen for Win", async () => {
         setGameState: setGameState,
       }}
     >
-      <FightResult result={"Won"} rewards={playerResources} enemy={enemy} />
+      <FightResult result={"Won"} rewards={newResources} enemy={enemy} />
     </GameContext.Provider>
   );
   expect(screen.getByText(/You Won/)).toBeInTheDocument();
@@ -44,9 +43,7 @@ test("Renders FightResult screen for Win", async () => {
 });
 
 test("Renders FightResult screen for Lost", async () => {
-  const playerResources = gameState.resources.map((r: IResource) => {
-    return { ...r, quantity: 1 };
-  });
+  const newResources = [{ ...playerResources[0], quantity: 1 }];
   const setGameState = jest.fn();
   render(
     <GameContext.Provider
@@ -56,7 +53,7 @@ test("Renders FightResult screen for Lost", async () => {
         setGameState: setGameState,
       }}
     >
-      <FightResult result={"Lost"} rewards={playerResources} enemy={enemy} />{" "}
+      <FightResult result={"Lost"} rewards={newResources} enemy={enemy} />{" "}
     </GameContext.Provider>
   );
   expect(screen.getByText(/You Lost/)).toBeInTheDocument();

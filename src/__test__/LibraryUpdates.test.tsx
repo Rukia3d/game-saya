@@ -1,9 +1,9 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import { LibraryUpdates } from "../Library/LibraryUpdates";
-import { gameState } from "../utils/teststates";
+import { gameState } from "../utils/test_states";
 import { GameContext, GameContextType } from "../App";
-import { heroes } from "../utils/testobjects";
+import { heroes } from "../utils/test_gameobjects";
 const context: GameContextType = {
   adventure: null,
   setAdventure: jest.fn(),

@@ -9,7 +9,7 @@ import { ResourceDatalist } from "../Spells/Resources";
 import { GameContext } from "../App";
 import { calculateSpellMana, updatePlayerSpell } from "../utils/spellslogic";
 import { removeResources } from "../utils/resourceLogic";
-import { spellUpdates } from "../utils/testobjects";
+import { spellUpdates } from "../utils/test_gameobjects";
 
 const ItemCard = ({ item }: { item: ISpell | ISpellUpdate }) => {
   //TODO Replace static img with animation
@@ -60,7 +60,7 @@ const ItemSpellUpdates = ({ item }: { item: ISpell }) => {
   if (!context || !context.gameState?.player) {
     throw new Error("No data in context");
   }
-  const updates = context.gameState.player.spellUpdates;
+  const updates = context.gameState.player.updates;
   const resources = context.gameState.player.resources;
   const applicableUpdates = updates.filter(
     (s: ISpellUpdate) =>

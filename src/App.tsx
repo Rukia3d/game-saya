@@ -4,13 +4,13 @@ import short from "short-uuid";
 import "./App.css";
 // Types
 import {
-  IAdventure,
   IHero,
   GameState,
   IStory,
   ISpellUpdate,
   IEnemy,
   ISpell,
+  IPlayerAdventure,
 } from "./utils/types";
 // Utils
 import { fetcher } from "./utils/helpers";
@@ -26,8 +26,8 @@ import { useSWRConfig } from "swr";
 short.generate(); // 73WakrfVbNJBaAmhQtEeDv
 
 export interface GameContextType {
-  adventure: IAdventure | null;
-  setAdventure: (a: IAdventure) => void;
+  adventure: IPlayerAdventure | null;
+  setAdventure: (a: IPlayerAdventure) => void;
   story: IStory | null;
   setStory: (s: IStory | null) => void;
   gameState: GameState | null;
@@ -55,7 +55,7 @@ function App() {
   window.localStorage.setItem("playerId", playerId);
 
   const [showStart, setShowStart] = useState(true);
-  const [adventure, setAdventure] = useState<null | IAdventure>(null);
+  const [adventure, setAdventure] = useState<null | IPlayerAdventure>(null);
   const [story, setStory] = useState<null | IStory>(null);
   const [gameState, setGameStateOrigin] = useState<GameState>(data);
   const [addition, setAdditionScreen] = useState<

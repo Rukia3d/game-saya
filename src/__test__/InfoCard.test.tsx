@@ -1,11 +1,17 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import { InfoCard } from "../Info/InfoCard";
-import { heroes, mayaCard, spellUpdates } from "../utils/testobjects";
-import { colorType, GameState, ISpell } from "../utils/types";
+import {
+  enemy,
+  heroes,
+  mayaCard,
+  spellUpdates,
+} from "../utils/test_gameobjects";
+import { colorType, GameState, IPlayerSpell, ISpell } from "../utils/types";
 import { GameContext, GameContextType } from "../App";
 import userEvent from "@testing-library/user-event";
-import { gameState } from "../utils/teststates";
+import { gameState } from "../utils/test_states";
+import { playerSpellUpdates } from "../utils/test_playerobjects";
 
 const context: GameContextType = {
   adventure: null,
@@ -44,10 +50,13 @@ test("Renders Item if it's a card", async () => {
 
 test("Renders Item card updates", async () => {
   const setInfo = jest.fn();
-  const fireCard: ISpell = {
+  const fireCard: IPlayerSpell = {
     ...mayaCard,
-    color: "red" as colorType,
-    updates: [spellUpdates[0]],
+    owner: "hero",
+    copy: 1,
+    selected: true,
+    created_at: new Date(),
+    updates: [playerSpellUpdates[0]],
   };
   render(
     <GameContext.Provider value={context}>
@@ -109,7 +118,7 @@ test("Renders Hero if it's a hero", async () => {
 
 test.skip("Renders Enemy if it's an Enemy", async () => {
   const setInfo = jest.fn();
-  render(<InfoCard item={gameState.enemies[0]} setInfo={setInfo} />);
+  render(<InfoCard item={enemy} setInfo={setInfo} />);
   expect(screen.getByText(/Dude/)).toBeInTheDocument();
   expect(screen.getByAltText("enemy_image")).toHaveAttribute(
     "src",

@@ -7,6 +7,9 @@ import {
   IHero,
   ISpell,
   IEnemy,
+  IPlayerSpellUpdate,
+  IPlayerSpell,
+  IPlayerHero,
 } from "./types";
 
 export const getNextElement = (
@@ -31,14 +34,13 @@ export const manaPriceOfUpdates = (updates: ISpellUpdate[]) => {
 };
 
 export const heroIsPresent = (
-  update: ISpellUpdate,
-  spell: ISpell,
-  heroes: IHero[]
+  update: IPlayerSpellUpdate,
+  spell: IPlayerSpell,
+  heroes: IPlayerHero[]
 ) => {
   return (
-    heroes.filter(
-      (h: IHero) => h.school === update.school && spell.color === h.color
-    ).length > 0
+    heroes.filter((h: IPlayerHero) => h.element.school.id === update.school.id)
+      .length > 0
   );
 };
 
@@ -51,20 +53,20 @@ export const findEnemy = (enemies: IEnemy[], enemyId: string) => {
 };
 
 export const initFight = (
-  storyCharacters: IHero[],
-  spells: ISpell[],
-  enemy: IEnemy
+  storyCharacters: IPlayerHero[],
+  spells: IPlayerSpell[],
+  enemySpells: IPlayerSpell[]
 ) => {
   const heroDeck = shuffle(
     generateDeck(
       storyCharacters,
-      spells.filter((s: ISpell) => s.selected)
+      spells.filter((s: IPlayerSpell) => s.selected)
     )
   );
   if (heroDeck.length === 0) {
     throw new Error(`Couldn't generate cards for player`);
   }
-  const enemyDeck = shuffle(generateEnemyDeck(enemy));
+  const enemyDeck = shuffle(generateEnemyDeck(enemySpells));
   if (enemyDeck.length < 1) {
     throw new Error(`Couldn't generate cards for enemy`);
   }
@@ -108,14 +110,14 @@ export const updateDecks = (fightState: FightState): FightState => {
   return newState;
 };
 
-export const changeCardsInDeck = (playerCards: ISpell[], i: number) => {
+export const changeCardsInDeck = (playerCards: IPlayerSpell[], i: number) => {
   const playerCard = playerCards[i];
   if (!playerCard) {
     throw new Error(
       "Can't find the card you're trying to select in player's cards"
     );
   }
-  const currentlySelected = playerCards.filter((c: ISpell) => c.selected);
+  const currentlySelected = playerCards.filter((c: IPlayerSpell) => c.selected);
 
   if (currentlySelected.length >= 15) {
     const firstSelectedIndex = playerCards.indexOf(currentlySelected[0]);
@@ -128,7 +130,10 @@ export const changeCardsInDeck = (playerCards: ISpell[], i: number) => {
   return playerCards;
 };
 
-export const updateHeroDeck = (fightState: FightState, heroCard: ISpell) => {
+export const updateHeroDeck = (
+  fightState: FightState,
+  heroCard: IPlayerSpell
+) => {
   let newDeck = fightState.heroDeck;
   let newDrop = fightState.heroDrop;
   if (fightState.heroDeck.length <= 0) {

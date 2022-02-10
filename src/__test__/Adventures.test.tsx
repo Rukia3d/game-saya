@@ -3,7 +3,7 @@ import { render, screen } from "@testing-library/react";
 import { Adventures } from "../Main/Adventures";
 import { GameContext, GameContextType } from "../App";
 import userEvent from "@testing-library/user-event";
-import { gameState } from "../utils/teststates";
+import { gameState } from "../utils/test_states";
 
 const context: GameContextType = {
   adventure: null,

@@ -1,13 +1,13 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import { stories } from "../utils/testobjects";
+import { stories } from "../utils/test_gameobjects";
 import { GameContext, GameContextType } from "../App";
 import { StoryPanel } from "../Stories/StoryPanel";
-import { gameState } from "../utils/teststates";
+import { gameState, testAdventure } from "../utils/test_states";
 import userEvent from "@testing-library/user-event";
 
 const context: GameContextType = {
-  adventure: gameState.adventures[1],
+  adventure: testAdventure,
   setAdventure: jest.fn(),
   story: null,
   setStory: jest.fn(),

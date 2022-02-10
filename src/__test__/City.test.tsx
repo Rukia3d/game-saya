@@ -2,7 +2,7 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import { City } from "../Main/City";
 import { GameContext, GameContextType } from "../App";
-import { gameState } from "../utils/teststates";
+import { gameState } from "../utils/test_states";
 import userEvent from "@testing-library/user-event";
 
 const newPlayer = { ...gameState.player, heroes: [gameState.player.heroes[0]] };

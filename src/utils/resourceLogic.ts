@@ -4,7 +4,7 @@ import {
   IResource,
   IPlayerResource,
   IEnemy,
-  ISpellUpdateResource,
+  IPlayerSpellUpdate,
 } from "./types";
 
 export const givePlayerResources = (player: Player, resources: IResource[]) => {
@@ -14,7 +14,7 @@ export const givePlayerResources = (player: Player, resources: IResource[]) => {
       (o: IPlayerResource) => o.id === r.id
     );
     if (!playerRes) {
-      player.resources.push({ ...r, quantity: 1 });
+      player.resources.push({ ...r, quantity: 1, created_at: new Date() });
     } else {
       const playerResIndex = existingResources.indexOf(playerRes);
       existingResources[playerResIndex].quantity++;
@@ -31,6 +31,7 @@ const generateSingleRewards = (resources: IResource[]) => {
         id: r.id,
         name: r.name,
         commonality: r.commonality,
+        description: r.description,
         school: r.school,
       });
     }
@@ -53,29 +54,21 @@ export const generateReward = (
   return rewards;
 };
 
-const removeResource = (
-  toRemove: ISpellUpdateResource[],
-  toCheck: IPlayerResource
-) => {
-  const removable = toRemove.find((t: [string, number]) => t[0] === toCheck.id);
-  if (!removable) return { ...toCheck };
-
-  const newQuantity = toCheck.quantity - removable[1];
+const removeResource = (toRemove: number, resource: IPlayerResource) => {
+  const newQuantity = resource.quantity - toRemove;
   if (newQuantity < 0) throw new Error("Cant have negative resource");
-  return { ...toCheck, quantity: toCheck.quantity - removable[1] };
+  return { ...resource, quantity: newQuantity };
 };
 
 export const removeResources = (
-  req: ISpellUpdateResource[],
+  req: IPlayerResource[],
   resources: IPlayerResource[]
 ): IPlayerResource[] => {
-  const missedResource = req.some(
-    (r: ISpellUpdateResource) =>
-      !resources.find((o: IPlayerResource) => o.id === r[0])
-  );
-  if (missedResource) {
-    throw new Error("Trying to remove resource that is not owned");
-  }
-  const newRes = resources.map((r: IPlayerResource) => removeResource(req, r));
+  const newRes = resources.map((r: IPlayerResource) => {
+    const toRemove = req.find((t: IPlayerResource) => r.id === t.id);
+    if (!toRemove)
+      throw new Error("Trying to remove resource that is not owned");
+    return removeResource(toRemove.quantity, r);
+  });
   return newRes;
 };

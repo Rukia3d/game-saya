@@ -271,7 +271,7 @@ export const transformUpdatesData = (
 ): ISpellUpdate[] => {
   const combinedUpdate: ISpellUpdate[] = uDB.map((u: SpellUpdateDB) => {
     const resources = sResDB.filter(
-      (s: SpellUpdateResourceDB) => s.spellupdate_id == u.id
+      (s: SpellUpdateResourceDB) => s.spellupdate_id === u.id
     );
     return {
       id: u.id,

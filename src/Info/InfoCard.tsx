@@ -2,14 +2,26 @@ import React from "react";
 import "./InfoCard.scss";
 // Types
 // Utils
-import { IEnemy, IHero, ISpell, ISpellUpdate } from "../utils/types";
+import {
+  IEnemy,
+  IHero,
+  IPlayerSpell,
+  IPlayerSpellUpdate,
+  ISpell,
+  ISpellUpdate,
+} from "../utils/types";
 // Components
 import { CloseButton } from "../UI/CloseButton";
 import { InfoItem } from "./InfoItem";
 import { InfoHero } from "./InfoHero";
-import { heroes } from "../utils/testobjects";
 
-export type ItemsForCard = IHero | IEnemy | ISpell | ISpellUpdate;
+export type ItemsForCard =
+  | IHero
+  | IEnemy
+  | ISpell
+  | ISpellUpdate
+  | IPlayerSpell
+  | IPlayerSpellUpdate;
 
 type infoScreenState = "update" | "hero";
 

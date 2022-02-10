@@ -1,12 +1,14 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import { GameContext, GameContextType } from "../App";
-import { gameRestrictedCharacters, gameState } from "../utils/teststates";
-import { IHero } from "../utils/types";
+import { gameState, testAdventure } from "../utils/test_states";
+import { IPlayerHero, Player } from "../utils/types";
 import { FightSelection } from "../Fight/FightSelection";
+import { fights, fightstory } from "../utils/test_gameobjects";
+import { playerHeroes } from "../utils/test_playerobjects";
 
 const context: GameContextType = {
-  adventure: gameState.adventures[1],
+  adventure: testAdventure,
   setAdventure: jest.fn(),
   story: null,
   setStory: jest.fn(),
@@ -19,28 +21,22 @@ const context: GameContextType = {
 
 test("Renders HerosSelection if 0 characters", async () => {
   const setSelectionError = jest.fn();
-  gameRestrictedCharacters.player.heroes.map(
-    (h: IHero) => (h.selected = false)
-  );
-  const story =
-    //@ts-ignore
-    gameRestrictedCharacters.adventures[1].storyGroups[0].stories[0];
-  const fight = gameRestrictedCharacters.fights[0];
-  // console.log("Story", story);
-  // console.log("Fight", fight);
+  const noHeroesSelected: IPlayerHero[] = playerHeroes.map((p: IPlayerHero) => {
+    return { ...p, selected: false };
+  });
+  const newPlayer: Player = { ...gameState.player, heroes: noHeroesSelected };
   render(
     <GameContext.Provider
       value={{
         ...context,
-        gameState: gameRestrictedCharacters,
-        adventure: gameRestrictedCharacters.adventures[1],
+        gameState: { ...gameState, player: newPlayer },
       }}
     >
       <FightSelection
         setSelectionError={setSelectionError}
         setSpellSelect={jest.fn()}
-        story={story}
-        fight={fight}
+        story={fightstory}
+        fight={fights[0]}
       />
     </GameContext.Provider>
   );

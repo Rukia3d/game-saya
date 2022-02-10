@@ -63,7 +63,7 @@ export const createPlayer = (gameData: GameStateData): Player => {
     npcs: [],
     heroes: [],
     spells: [],
-    spellUpdates: [],
+    updates: [],
     adventures: [],
     resources: [],
   };
@@ -96,7 +96,10 @@ export const loadPlayer = async (
   const playerAppliedUpdates = await readPlayerAppliedUpdates(id, db);
   const playerUpdates = await readPlayerUpdates(id, db);
   const playerNPCs = await readPlayerCharacters(id, db);
-
+  const transformedUpdates = transformPlayerUpdates(
+    playerUpdates,
+    gameData.updates
+  );
   db.close();
 
   const exampleplayer: Player = {
@@ -107,9 +110,9 @@ export const loadPlayer = async (
       playerSpells,
       playerAppliedUpdates,
       gameData.spells,
-      gameData.updates
+      transformedUpdates
     ),
-    spellUpdates: transformPlayerUpdates(playerUpdates, gameData.updates),
+    updates: transformedUpdates,
     adventures: transformPlayerAdventures(
       playerAdventures,
       playerStories,
