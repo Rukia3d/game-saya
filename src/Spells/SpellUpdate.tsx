@@ -2,7 +2,12 @@ import React, { useContext } from "react";
 import { GameContext } from "../App";
 import "./Spells.scss";
 // Types
-import { IPlayerResource, ISpellUpdate } from "../utils/types";
+import {
+  IPlayerResource,
+  IPlayerSpellUpdate,
+  IResource,
+  ISpellUpdate,
+} from "../utils/types";
 import { findResource } from "../utils/helpers";
 import { ResourcesImages } from "./Resources";
 // Utils
@@ -16,11 +21,11 @@ export const SpellUpdate = ({
   withUpdate,
   updateInfo,
 }: {
-  update: ISpellUpdate;
-  updateSpell?: (s: ISpellUpdate) => void;
-  distructSpell?: (s: ISpellUpdate) => void;
+  update: IPlayerSpellUpdate;
+  updateSpell?: (s: IPlayerSpellUpdate) => void;
+  distructSpell?: (s: IPlayerSpellUpdate) => void;
   withUpdate?: boolean;
-  updateInfo?: (s: ISpellUpdate) => void;
+  updateInfo?: (s: IPlayerSpellUpdate) => void;
 }) => {
   const context = useContext(GameContext);
   if (
@@ -35,20 +40,20 @@ export const SpellUpdate = ({
   const playerResources = context.gameState.player.resources;
   const resources = context.gameState.game.resources;
 
-  const isEnough = (s: ISpellUpdateResource) => {
+  const isEnough = (s: IPlayerResource) => {
     const resource = playerResources.find(
-      (r: IPlayerResource) => r.id === s[0]
+      (r: IPlayerResource) => r.id === s.id
     );
-    const needed = s[1];
+    const needed = s.quantity;
     if (resource && resource.quantity >= needed) {
       return true;
     }
     return false;
   };
 
-  const currentAmount = (s: ISpellUpdateResource) => {
+  const currentAmount = (s: IPlayerResource) => {
     const resource = playerResources.find(
-      (r: IPlayerResource) => r.id === s[0]
+      (r: IPlayerResource) => r.id === s.id
     );
     return resource ? resource.quantity : 0;
   };
@@ -58,16 +63,16 @@ export const SpellUpdate = ({
     return withUpdate && distructSpell && true;
   };
 
-  const readyToUpdate = (u: ISpellUpdate) => {
-    const res: boolean[] = u.resource_base.map((r: ISpellUpdateResource) =>
-      isEnough(r)
-    );
-    const allResources = res.every((r: boolean) => r === true);
-    return allResources && withUpdate && updateSpell;
+  const readyToUpdate = (u: IPlayerSpellUpdate) => {
+    //   const res: boolean[] = u.resource_base.map((r: IResource) => isEnough(r));
+    //   const allResources = res.every((r: boolean) => r === true);
+    //   return allResources && withUpdate && updateSpell;
+    return true;
   };
-  const updateResource = update.resource_base.map((s: ISpellUpdateResource) =>
-    findResource(resources, s)
-  );
+  const updateResource = update.resource_base;
+  // const updateResource = update.resource_base.map((s: IResource) =>
+  //   findResource(resources, s)
+  // );
 
   const onLongPress = () => {
     if (updateInfo) {

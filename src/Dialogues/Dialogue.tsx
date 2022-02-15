@@ -76,8 +76,8 @@ const DialogueDoubleLayout = ({
   const [lChar, setLChar] = useState<IDialogueLine | null>(null);
 
   useEffect(() => {
-    setRChar(line.pos === "R" ? line : null);
-    setLChar(line.pos === "L" ? line : null);
+    setRChar(line.position === "R" ? line : null);
+    setLChar(line.position === "L" ? line : null);
   }, [line]);
 
   const panelImgUrl = `/img/Dialogues/backg_double.jpg`;

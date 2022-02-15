@@ -44,7 +44,7 @@ export type IEnemy = ICharacter & {
   element: IElement;
 };
 
-export type IEnemyFight = IEnemy & { spells: ISpell[] };
+export type IEnemyFight = IEnemy & { spells: IPlayerSpell[] };
 
 export type ISpellUpdate = {
   id: string;
@@ -139,7 +139,7 @@ export type IAdventure = {
   type: string;
   name: string;
   image: string;
-  storyGroups: IStoryGroup[] | null;
+  stories: IStory;
 };
 export type IPlayerAdventure = IAdventure & { open: boolean; created_at: Date };
 

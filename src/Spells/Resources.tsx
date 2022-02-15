@@ -1,11 +1,7 @@
 import React, { useContext } from "react";
 import "./Resources.scss";
 // Types
-import {
-  IResource,
-  IPlayerResource,
-  ISpellUpdateResource,
-} from "../utils/types";
+import { IResource, IPlayerResource } from "../utils/types";
 import { findResource } from "../utils/helpers";
 import { GameContext } from "../App";
 // Utils
@@ -18,7 +14,7 @@ export const ResourceImage = ({ resource }: { resource: IResource }) => {
     !context.gameState ||
     !context.gameState.player ||
     !context.gameState.player.resources ||
-    !context.gameState.resources
+    !context.gameState.game.resources
   ) {
     throw new Error("No data in context");
   }
@@ -62,19 +58,15 @@ export const Resource = ({
   );
 };
 
-export const ResourceData = ({
-  resource,
-}: {
-  resource: ISpellUpdateResource;
-}) => {
+export const ResourceData = ({ resource }: { resource: IResource }) => {
   const context = useContext(GameContext);
-  if (!context || !context.gameState || !context.gameState.resources) {
+  if (!context || !context.gameState || !context.gameState.game.resources) {
     throw new Error("No data in context");
   }
-  const resources = context.gameState.resources;
+  const resources = context.gameState.game.resources;
   const playerResources = context.gameState.player.resources;
   // const owned = findOwnedResource(playerResources, resource);
-  const notOwned = findResource(resources, resource);
+  const notOwned = findResource(resources, resource.id);
   const commonality = () => {
     switch (notOwned.commonality) {
       case 2:
@@ -90,9 +82,9 @@ export const ResourceData = ({
     }
   };
 
-  const currentAmount = (s: ISpellUpdateResource) => {
+  const currentAmount = (s: IResource) => {
     const resource = playerResources.find(
-      (r: IPlayerResource) => r.id === s[0]
+      (r: IPlayerResource) => r.id === s.id
     );
     return resource ? resource.quantity : 0;
   };
@@ -105,7 +97,7 @@ export const ResourceData = ({
           {notOwned.name}: {commonality()}
         </div>
         <div aria-label="resource_requirements">
-          You have {currentAmount(resource)} of {resource[1]} needed
+          You have {currentAmount(resource)} of {resource.id} needed
         </div>
       </div>
     </div>
@@ -114,11 +106,11 @@ export const ResourceData = ({
 export const ResourceDatalist = ({
   spellResources,
 }: {
-  spellResources: ISpellUpdateResource[];
+  spellResources: IPlayerResource[] | IResource[];
 }) => {
   return (
     <div className="ResourcesDataList">
-      {spellResources.map((r: ISpellUpdateResource, i: number) => (
+      {spellResources.map((r: IPlayerResource | IResource, i: number) => (
         <ResourceData resource={r} key={i} />
       ))}
     </div>

@@ -1,9 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
 import "./Fight.scss";
 // Types
-import { IEnemy, FightState, ISpell, IHero } from "../utils/types";
+import { IEnemy, FightState, IHero } from "../utils/types";
 import { GameContext } from "../App";
-import { enemy } from "../utils/testobjects";
 import { AnimatedSpriteCycle } from "../Animations/AnimatedSpriteCycle";
 import { TopMenu } from "../UI/TopMenu";
 // Utils
@@ -21,7 +20,7 @@ const Enemy = ({
       <AnimatedSpriteCycle
         width={500}
         height={500}
-        img={`../img/Enemies/${enemy.color}/${enemy.id}_idle.png`}
+        img={`../img/Enemies/${enemy.element.color}/${enemy.id}_idle.png`}
         frames={10}
         breakpoint={1}
       />
@@ -44,8 +43,8 @@ const EnemyStats = ({ fightState }: { fightState: FightState }) => {
         backgroundImage: `url(${imgUrl})`,
       }}
     >
-      <div data-testid="enemy-name">{enemy.name}: </div>
-      <div data-testid="enemy-element">{enemy.color}: </div>
+      <div data-testid="enemy-name">{fightState.enemy.name}: </div>
+      <div data-testid="enemy-element">{fightState.enemy.element.color}: </div>
       <div data-testid="enemy-life">{fightState.enemyDeck.length}</div>
     </div>
   );

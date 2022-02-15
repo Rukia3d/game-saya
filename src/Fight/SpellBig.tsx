@@ -1,24 +1,15 @@
 import React, { useContext } from "react";
 import "./Fight.scss";
 // Types
-import {
-  colorType,
-  IEnemy,
-  IPlayerSpell,
-  ISpell,
-  schoolType,
-} from "../utils/types";
-import {
-  calculateSpellMana,
-  calculateSpellStrength,
-} from "../utils/spellslogic";
+import { IPlayerSpell, ISchool } from "../utils/types";
+import { calculateSpellStrength } from "../utils/spellslogic";
 import { GameContext } from "../App";
 // Utils
 // Components
 
-const Strength = ({ n, school }: { n: number; school: schoolType }) => {
+const Strength = ({ n, school }: { n: number; school: ISchool }) => {
   const strengthColor = () => {
-    switch (school) {
+    switch (school.id) {
       case "oblation":
         return `rgba(255, 0, 0, 1)`;
       case "restoration":
@@ -48,7 +39,7 @@ export const SpellBig = ({
   spell,
 }: {
   transparency?: boolean;
-  spell: ISpell | IPlayerSpell;
+  spell: IPlayerSpell;
 }) => {
   const context = useContext(GameContext);
   if (!context || !context.story || !context.setAdditionScreen) {
@@ -70,16 +61,16 @@ export const SpellBig = ({
       }}
     >
       <div
-        className={`BigSpell ${spell.school}`}
+        className={`BigSpell ${spell.element.school}`}
         onClick={() => context.setAdditionScreen(spell)}
         aria-label="big-spell"
       >
         {new Array(strength).fill(0).map((x, n) => (
-          <Strength n={n} school={spell.school} key={n} />
+          <Strength n={n} school={spell.element.school} key={n} />
         ))}
         <img
           className="BigSpellImage"
-          src={`../img/Spells/${spell.color}/${spell.id}.png`}
+          src={`../img/Spells/${spell.element.color}/${spell.id}.png`}
           alt={`spellimage_${spell.id}`}
         />
       </div>

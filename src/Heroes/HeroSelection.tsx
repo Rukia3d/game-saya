@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import "./Heroes.scss";
 import { GameContext } from "../App";
 // Types
-import { IHero } from "../utils/types";
+import { IHero, IPlayerHero } from "../utils/types";
 import { ScrollButton } from "../UI/ScrollButton";
 import { Hero } from "./Hero";
 // Utils
@@ -14,8 +14,8 @@ export const HeroSelection = ({
   selectHero,
   required,
 }: {
-  selectHero?: (c: IHero) => void;
-  required?: IHero[];
+  selectHero?: (c: IPlayerHero) => void;
+  required?: IPlayerHero[];
 }) => {
   const context = useContext(GameContext);
   if (!context || !context.gameState || !context.gameState.player.heroes) {
@@ -28,7 +28,7 @@ export const HeroSelection = ({
   const heroes = context.gameState.player.heroes;
   const [startingIndex, setStartingIndex] = useState(0);
 
-  let currentHeroes: IHero[] = [];
+  let currentHeroes: IPlayerHero[] = [];
   if (required) {
     currentHeroes = required;
   } else {
@@ -46,7 +46,7 @@ export const HeroSelection = ({
         direction="r"
       />
       <div className="HeroesList">
-        {currentHeroes.map((c: IHero, i: number) => (
+        {currentHeroes.map((c: IPlayerHero, i: number) => (
           <Hero key={i} hero={c} selectHero={selectHero} />
         ))}
       </div>

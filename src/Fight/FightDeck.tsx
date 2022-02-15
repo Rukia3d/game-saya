@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import "./Fight.scss";
 // Types
-import { colorType, FightState, ISpell } from "../utils/types";
+import { colorType, FightState, IPlayerSpell, ISpell } from "../utils/types";
 // Utils
 // Components
 import { Spell } from "../Spells/Spell";
@@ -39,7 +39,7 @@ const HeroDeck = ({
   }
   return (
     <div className="Deck" aria-label="Deck">
-      {fightState.heroHand.map((h: ISpell, i: number) => (
+      {fightState.heroHand.map((h: IPlayerSpell, i: number) => (
         <Spell
           withBorder
           withName

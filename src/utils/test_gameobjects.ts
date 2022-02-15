@@ -11,7 +11,6 @@ import {
   IReel,
   schoolType,
   ISchool,
-  IPlayerResource,
   spellEffectType,
   ICharacter,
   IResource,
@@ -135,7 +134,7 @@ export const reelstory = {
 export const reel: IReel = {
   id: "reel1",
   type: "reel",
-  action: [],
+  actions: [],
   imageGroups: [
     {
       id: 1,

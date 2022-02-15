@@ -1,5 +1,13 @@
-import { GameState, IReel } from "../src/utils/types";
-import { createPlayer, getGameData, loadPlayer } from "./db/database";
+import { IReel } from "../src/utils/types";
+import {
+  player,
+  playerAdventures,
+  playerCharacters,
+  playerHeroes,
+  playerResources,
+  playerSpells,
+  playerUpdates,
+} from "./engine/engine";
 
 const express = require("express");
 const cors = require("cors");
@@ -72,24 +80,22 @@ const reelsInitialSet: IReel[] = [
 
 app.get("/api/player/", async (req: any, res: any) => {
   console.log("Requesting new player game data", req.query);
-  const gameData = await getGameData();
-  const player = req.query.id
-    ? await loadPlayer(req.query.id, gameData)
-    : await createPlayer(gameData);
-  const gameState: GameState = {
-    player: player,
-    game: gameData,
+  const gameState = {
+    player: await player(req.query.id),
+    adventures: await playerAdventures(req.query.id),
+    heroes: await playerHeroes(req.query.id),
+    npcs: await playerCharacters(req.query.id),
+    spells: await playerSpells(req.query.id),
+    updates: await playerUpdates(req.query.id),
+    resources: await playerResources(req.query.id),
   };
+  console.log("gameState", gameState);
   res.send(gameState);
 });
 
-app.get("/api/rewards/", (req: any, res: any) => {
-  console.log("rewards", req.query);
-});
+app.get("/api/rewards/", (req: any, res: any) => {});
 
-app.get("/api/fights/", (req: any, res: any) => {
-  console.log("fights", req.query);
-});
+app.get("/api/fights/", (req: any, res: any) => {});
 
 app.post("/api/heroes/:id", (req: any, res: any) => {});
 

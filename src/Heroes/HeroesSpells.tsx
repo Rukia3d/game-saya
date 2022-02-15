@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./Heroes.scss";
 // Types
-import { ISpell } from "../utils/types";
+import { IPlayerSpell, ISpell } from "../utils/types";
 // Utils
 // Components
 import { ScrollButton } from "../UI/ScrollButton";
@@ -13,8 +13,8 @@ const SpellsList = ({
   spells,
   setInfo,
 }: {
-  spells: ISpell[];
-  setInfo?: (s: ISpell | null) => void;
+  spells: IPlayerSpell[];
+  setInfo?: (s: IPlayerSpell | null) => void;
 }) => {
   const parsedSpells = [];
   let i,
@@ -52,8 +52,8 @@ export const HeroesSpells = ({
   spells,
   setInfo,
 }: {
-  spells: ISpell[];
-  setInfo?: (s: ISpell | null) => void;
+  spells: IPlayerSpell[];
+  setInfo?: (s: IPlayerSpell | null) => void;
 }) => {
   return (
     <div className="SpellsPreview">

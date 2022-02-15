@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { enemyAttack } from "../utils/hitlogic";
 import { getNextElement, updateDecks } from "../utils/fightlogic";
-import { FightState, ISpell } from "../utils/types";
+import { FightState, IPlayerSpell, ISpell } from "../utils/types";
 
 const SHORTANIMATION = 500;
 const LONGANIMATION = 1500;
@@ -27,16 +27,16 @@ export const useFight = (
   prefightState: FightState,
   setResult: (r: null | string) => void
 ): [
-  ISpell | null,
-  ISpell | null,
+  IPlayerSpell | null,
+  IPlayerSpell | null,
   string | null,
   FightState,
   (index: number) => void,
   (index: number) => void
 ] => {
   const [fightState, setfightState] = useState<FightState>(prefightState);
-  const [enemyCard, setEnemyCard] = useState<ISpell | null>(null);
-  const [heroCard, setHeroCard] = useState<ISpell | null>(null);
+  const [enemyCard, setEnemyCard] = useState<IPlayerSpell | null>(null);
+  const [heroCard, setHeroCard] = useState<IPlayerSpell | null>(null);
   const [animation, setAnimation] = useState<string | null>(null);
   const [nextStep, setNextStep] = useState<keyof typeof steps | null>(
     "loadFight"

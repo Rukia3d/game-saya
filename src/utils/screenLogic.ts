@@ -1,11 +1,19 @@
 import { findCharacter, findUpdate } from "./helpers";
-import { IHero, IPlayerHero, ISpellUpdate, IStoryAction } from "./types";
+import {
+  IHero,
+  IPlayerHero,
+  IPlayerSpellUpdate,
+  ISpellUpdate,
+  IStoryAction,
+} from "./types";
 
 export const displayAddedHero = (
   playerHeroes: IPlayerHero[],
   allHeroes: IHero[],
   actions: IStoryAction[],
-  setAdditionScreen: (s: null | IHero | ISpellUpdate) => void
+  setAdditionScreen: (
+    s: null | IHero | IPlayerHero | IPlayerSpellUpdate
+  ) => void
 ) => {
   //{type: "addHero", id: "nell", data: "fire"}
   const addingHero = actions.filter((a: IStoryAction) => a.type === "addHero");
@@ -29,7 +37,9 @@ export const displayAddedUpdate = (
   playerUpdates: ISpellUpdate[],
   allUpdates: ISpellUpdate[],
   actions: IStoryAction[],
-  setAdditionScreen: (s: null | IHero | ISpellUpdate) => void
+  setAdditionScreen: (
+    s: null | IHero | IPlayerHero | ISpellUpdate | IPlayerSpellUpdate
+  ) => void
 ) => {
   // {type: "addUpdate", id: "earth", data: "earth_2"}
   const addingUpdate = actions.filter(

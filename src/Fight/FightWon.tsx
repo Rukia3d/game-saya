@@ -34,7 +34,7 @@ export const FightWon = ({
   if (!gameState || !story) throw new Error("Can't update the fight results");
   isValidAction(story.actions);
 
-  const backToStories = () => {
+  const backToStories = async () => {
     displayAddedHero(
       gameState.player.heroes,
       gameState.game.heroes,
@@ -50,7 +50,7 @@ export const FightWon = ({
 
     context.setGameState({
       ...gameState,
-      player: finishFight(gameState, story, "Won", enemy, rewards),
+      player: await finishFight(gameState, story, "Won", enemy, rewards),
     });
     context.setStory(null);
   };

@@ -3,9 +3,13 @@ import { GameContext } from "../App";
 import "./FightSelection.scss";
 // Types
 import {
+  colorType,
   herosSelectionError,
+  IEnemyFight,
   IFight,
   IHero,
+  IPlayerHero,
+  IPlayerSpell,
   ISpell,
   IStory,
 } from "../utils/types";
@@ -15,6 +19,7 @@ import { HeroSelection } from "../Heroes/HeroSelection";
 import { findEnemy } from "../utils/fightlogic";
 import { HeroesPreview } from "../Heroes/HeroesPreview";
 import { HeroesSpells } from "../Heroes/HeroesSpells";
+import { element, enemyCard } from "../utils/test_gameobjects";
 // Components
 
 const getHeaderText = (error: herosSelectionError) => {
@@ -30,6 +35,40 @@ const getHeaderText = (error: herosSelectionError) => {
     default:
       return "Select Heroes";
   }
+};
+
+const findRequiredCharacters = (
+  elements: colorType[],
+  heroes: IPlayerHero[]
+): IPlayerHero[] => {
+  const required: IPlayerHero[] = elements.map((e: colorType) => {
+    const res = heroes.find((h: IPlayerHero) => h.element.color === e);
+    if (!res) throw new Error("Can't find required characters");
+    return res;
+  });
+
+  if (!required) throw new Error("Can't find required characters");
+  return required;
+};
+
+const generateEnemy = (): IEnemyFight => {
+  return {
+    id: "test-dude",
+    name: "Dude",
+    element: element,
+    description:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+    spells: [
+      {
+        ...enemyCard,
+        created_at: new Date(),
+        owner: "enemy",
+        copy: 1,
+        selected: true,
+        updates: [],
+      },
+    ],
+  };
 };
 
 export const FightSelection = ({
@@ -49,15 +88,15 @@ export const FightSelection = ({
   }
   const game = context.gameState;
   const requiredCharacters = findRequiredCharacters(
-    fight.characters,
+    fight.hero_elements,
     game.player.heroes
   );
   const [selected, setSelected] = useState(requiredCharacters);
-  const enemy = findEnemy(game.player.enemies, fight.enemy);
-  const spells = game.player.spells.filter((s: ISpell) => s.selected);
+  const enemy = generateEnemy();
+  const spells = game.player.spells.filter((s: IPlayerSpell) => s.selected);
   const [error, setError] = useState(
     checkFightCharactersIds(
-      fight.characters,
+      fight.hero_elements,
       selected.map((s: IHero) => s.id)
     )
   );
@@ -76,15 +115,17 @@ export const FightSelection = ({
     // });
     // setSelected(newActive);
     // setError(checkFightCharactersIds(fight.characters, newActive));
-  }, [context.gameState, fight.characters]);
+  }, [context.gameState, fight.hero_elements]);
 
-  const selectHero = (c: IHero) => {
+  const selectHero = (c: IPlayerHero) => {
     const i = game.player.heroes.indexOf(c);
     const currentlySelected = game.player.heroes.filter(
-      (c: IHero) => c.selected
+      (c: IPlayerHero) => c.selected
     );
     if (currentlySelected.length > 2) {
-      const firstSelected = game.player.heroes.find((c: IHero) => c.selected);
+      const firstSelected = game.player.heroes.find(
+        (c: IPlayerHero) => c.selected
+      );
       if (!firstSelected)
         throw new Error("Can't find another selected character");
       const j = game.player.heroes.indexOf(firstSelected);
@@ -94,7 +135,7 @@ export const FightSelection = ({
     saveSelectionChanges(game.player.heroes);
   };
 
-  const saveSelectionChanges = (heroes: IHero[]) => {
+  const saveSelectionChanges = (heroes: IPlayerHero[]) => {
     const newPlayer = context.gameState && {
       ...context.gameState.player,
       heroes: heroes,
@@ -123,7 +164,7 @@ export const FightSelection = ({
       <HeroesSpells spells={spells} />
       <ReadyToFight
         error={error}
-        characters={fight.characters.length}
+        characters={fight.hero_num}
         checkSelection={checkSelection}
         setSpellSelect={setSpellSelect}
       />
@@ -147,7 +188,9 @@ export const ReadyToFight = ({
     throw new Error("No data in context");
   }
   const game = context.gameState;
-  const selectedSpells = game.player.spells.filter((s: ISpell) => s.selected);
+  const selectedSpells = game.player.spells.filter(
+    (s: IPlayerSpell) => s.selected
+  );
   if (error)
     return (
       <div className="StartFight">

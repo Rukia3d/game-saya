@@ -7,7 +7,10 @@ import {
   IPlayerSpellUpdate,
 } from "./types";
 
-export const givePlayerResources = (player: Player, resources: IResource[]) => {
+export const updatePlayerResources = (
+  player: Player,
+  resources: IResource[]
+) => {
   const existingResources = player.resources;
   resources.forEach((r: IResource) => {
     const playerRes = player.resources.find(

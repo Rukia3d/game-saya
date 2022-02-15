@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { GameContext } from "../App";
 import "./Adventures.scss";
 // Types
-import { IAdventure } from "../utils/types";
+import { IAdventure, IPlayerAdventure } from "../utils/types";
 // Utils
 // Components
 import { Lock } from "../UI/Lock";
@@ -12,8 +12,8 @@ const GenericAdventure = ({
   adventure,
   selectAdventure,
 }: {
-  adventure: IAdventure;
-  selectAdventure: (a: IAdventure) => void;
+  adventure: IPlayerAdventure;
+  selectAdventure: (a: IPlayerAdventure) => void;
 }) => {
   const imgUrl = `/img/Backgrounds/adventure_${adventure.id}_background.jpg`;
   const adventureTitle = capitalizeFirstLetter(adventure.type);
@@ -49,7 +49,7 @@ export const Adventures = () => {
     throw new Error("No data");
   }
 
-  const selectAdventure = (a: IAdventure) => {
+  const selectAdventure = (a: IPlayerAdventure) => {
     if (a.open) {
       context.setAdventure(a);
     }
@@ -73,7 +73,7 @@ export const Adventures = () => {
     >
       <div className="AdventuresList">
         <div className="AdventuresTop">
-          {topAdventures.map((a: IAdventure, i: number) => (
+          {topAdventures.map((a: IPlayerAdventure, i: number) => (
             <GenericAdventure
               adventure={a}
               selectAdventure={selectAdventure}
@@ -82,7 +82,7 @@ export const Adventures = () => {
           ))}
         </div>
         <div className="AdventuresBottom">
-          {bottomAdventures.map((a: IAdventure, i: number) => (
+          {bottomAdventures.map((a: IPlayerAdventure, i: number) => (
             <GenericAdventure
               adventure={a}
               selectAdventure={selectAdventure}

@@ -20,12 +20,15 @@ const MainScreenIcon = ({
   if (!context || !context.gameState) {
     throw new Error("No data in context");
   }
-  const dialogue = findDialogue(context.gameState.dialogues, hero.dial);
+  const dialogue = findDialogue(
+    context.gameState.game.dialogues,
+    hero.dialogue
+  );
   const stateToImage = `../img/Dialogues/Main/${hero.id}_story.jpg`;
   return (
     <div
       className="CityIconBorder"
-      onClick={() => (hero.dial ? setDialogue(dialogue) : null)}
+      onClick={() => (hero.dialogue ? setDialogue(dialogue) : null)}
     >
       <div className="CityIcon">
         <img src={stateToImage} alt={`dialogue-${hero.id}-story`} />
@@ -58,7 +61,7 @@ export const City = () => {
   const heroes = context.gameState.player.heroes;
   const characters = context.gameState.player.npcs;
   const mainScreenHero = heroes[generateInt(heroes.length - 1)];
-  const activeHeroes = characters.filter((c: INPC) => c.dial !== null);
+  const activeHeroes = characters.filter((c: INPC) => c.dialogue !== null);
   const imgUrl = `/img/Backgrounds/main_background.jpg`;
   return (
     <div

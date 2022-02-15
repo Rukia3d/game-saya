@@ -40,7 +40,7 @@ const Story = ({
   }
   const fight =
     story.type === "fight"
-      ? findFight(context.gameState.fights, story.id)
+      ? findFight(context.gameState.game.fights, story.id)
       : null;
 
   return (
@@ -54,7 +54,7 @@ const Story = ({
         className="Story"
         style={{ opacity: story.open ? 1 : 0.3 }}
       />
-      {fight ? <FightIcons characters={fight.characters} /> : null}
+      {fight ? <FightIcons characters={fight.hero_elements} /> : null}
     </div>
   );
 };

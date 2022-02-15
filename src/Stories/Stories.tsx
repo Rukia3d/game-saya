@@ -31,11 +31,11 @@ export const Stories = () => {
     !context ||
     !context.gameState ||
     !context.adventure ||
-    !context.gameState.fights
+    !context.gameState.game.fights
   ) {
     throw new Error("No data in context");
   }
-  const game = context.gameState;
+  const gameState = context.gameState;
   const startingPage = context.adventure.storyGroups
     ? Math.floor(
         findLastOpenStory(context.adventure.storyGroups) / STORIESPERPAGE
@@ -44,14 +44,16 @@ export const Stories = () => {
   const [page, setPage] = useState(startingPage);
   const [story, setStory] = useState<IStory | null>(null);
   const [fight, setFight] = useState<IFight | null>(
-    story && story.type === "fight" ? findFight(game.fights, story.id) : null
+    story && story.type === "fight"
+      ? findFight(gameState.game.fights, story.id)
+      : null
   );
   const [selectionError, setSelectionError] =
     useState<herosSelectionError>(null);
   const [spellSelect, setSpellSelect] = useState(false);
 
   const activeCharactersNames: string[] = filterActiveCharacters(
-    game.player.heroes
+    gameState.player.heroes
   ).map((c: IHero) => {
     return c.id;
   });
@@ -61,10 +63,10 @@ export const Stories = () => {
     if (story.type !== "fight") {
       context.setStory(story);
     } else {
-      const fight = findFight(game.fights, story.id);
+      const fight = findFight(gameState.game.fights, story.id);
       setFight(fight);
       const error = checkFightCharactersIds(
-        fight.characters,
+        fight.hero_elements,
         activeCharactersNames
       );
       setSelectionError(error);
@@ -84,7 +86,7 @@ export const Stories = () => {
     return (
       <div className="Stories" aria-label="story_background">
         <CloseButton onClick={() => setSpellSelect(false)} />
-        <SpellsSelection spells={game.player.spells} />
+        <SpellsSelection spells={gameState.player.spells} />
       </div>
     );
   }

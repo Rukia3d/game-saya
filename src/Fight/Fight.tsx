@@ -26,11 +26,11 @@ export const Fight = () => {
   }
   const prefightState: FightState = initPreFight(
     context.gameState.player,
-    findFight(context.gameState.fights, context.story.id)
+    findFight(context.gameState.game.fights, context.story.id)
   );
   const rewards = generateReward(
     prefightState.enemy,
-    context.gameState.resources
+    context.gameState.game.resources
   );
   const [result, setResult] = useState<null | string>(null);
 

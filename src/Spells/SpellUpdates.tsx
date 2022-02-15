@@ -15,11 +15,11 @@ export const SpellUpdates = ({
   spellUpgrades: IPlayerSpellUpdate[];
   updateSpell?: (s: IPlayerSpellUpdate) => void;
   distructSpell?: (s: IPlayerSpellUpdate) => void;
-  updateInfo?: (s: ISpellUpdate | IPlayerSpellUpdate) => void;
+  updateInfo?: (s: IPlayerSpellUpdate) => void;
 }) => {
   return (
     <div className="SpellUpdates" aria-label="spell-updates">
-      {spellUpgrades.map((s: ISpellUpdate, i: number) => (
+      {spellUpgrades.map((s: IPlayerSpellUpdate, i: number) => (
         <SpellUpdate
           update={s}
           key={i}

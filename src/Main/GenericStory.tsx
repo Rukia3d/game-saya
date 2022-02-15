@@ -18,12 +18,12 @@ export const GenericStory = () => {
   const story = context.story;
   const [dialogue, setDialogue] = useState<IDialogue | null>(
     context.story.type === "dialogue"
-      ? findDialogue(context.gameState.dialogues, context.story.id)
+      ? findDialogue(context.gameState.game.dialogues, context.story.id)
       : null
   );
   const [reel, setReel] = useState<IReel | null>(
     context.story.type === "reel"
-      ? findReel(context.gameState?.reels, context.story.id)
+      ? findReel(context.gameState?.game.reels, context.story.id)
       : null
   );
 

@@ -1,7 +1,7 @@
 import React from "react";
 import "./Heroes.scss";
 // Types
-import { IHero } from "../utils/types";
+import { IPlayerHero } from "../utils/types";
 // Utils
 // Components
 
@@ -9,11 +9,11 @@ export const Hero = ({
   hero,
   selectHero,
 }: {
-  hero: IHero;
-  selectHero?: (h: IHero) => void;
+  hero: IPlayerHero;
+  selectHero?: (h: IPlayerHero) => void;
 }) => {
-  const imgUrl = `../img/Heroes/${hero.image}.png`;
-  const backImgUrl = `/img/Spells/${hero.color}/back.jpg`;
+  const imgUrl = `../img/Heroes/${hero.id}.png`;
+  const backImgUrl = `/img/Spells/${hero.element.color}/back.jpg`;
   return (
     <div className="HeroImageBorder">
       <div

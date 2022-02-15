@@ -1,7 +1,7 @@
 import React from "react";
 import "./Fight.scss";
 // Types
-import { colorType, ISpell } from "../utils/types";
+import { colorType, IPlayerSpell, ISpell } from "../utils/types";
 // Utils
 // Components
 import { SpellBig } from "./SpellBig";
@@ -11,8 +11,8 @@ export const SpellsBig = ({
   heroSpell,
   element,
 }: {
-  enemySpell: ISpell | null;
-  heroSpell: ISpell | null;
+  enemySpell: IPlayerSpell | null;
+  heroSpell: IPlayerSpell | null;
   element: colorType;
 }) => {
   return (

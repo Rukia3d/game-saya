@@ -1,7 +1,7 @@
 import React from "react";
 import "./Spells.scss";
 // Types
-import { colorType, ISpell, ISpellUpdate } from "../utils/types";
+import { colorType, IPlayerSpell, ISpell, ISpellUpdate } from "../utils/types";
 import useLongPress from "../hooks/useLongPress";
 import {
   calculateSpellMana,
@@ -18,13 +18,13 @@ export const Spell = ({
   selectSpell,
   spellInfo,
 }: {
-  spell: ISpell;
+  spell: IPlayerSpell;
   currentElement?: colorType;
   index?: number;
   withName?: boolean;
   withBorder?: boolean;
   selectSpell?: (s: number) => void;
-  spellInfo?: (s: ISpell) => void;
+  spellInfo?: (s: IPlayerSpell) => void;
 }) => {
   const onLongPress = () => {
     console.log("longpress is triggered - SetInfo");
@@ -48,21 +48,21 @@ export const Spell = ({
   const strength = calculateSpellStrength(spell);
   const updates = spell.updates.length;
   const longPressEvent = useLongPress({ onLongPress, onClick }, defaultOptions);
-  const imgUrl = `/img/Spells/${spell.color}/${spell.id}.png`;
+  const imgUrl = `/img/Spells/${spell.element.color}/${spell.id}.png`;
   const backImgUrl =
-    spell.color === currentElement
-      ? `/img/Schools/${spell.school}_black.png`
-      : `/img/Schools/${spell.school}_white.png`;
+    spell.element.color === currentElement
+      ? `/img/Schools/${spell.element.school}_black.png`
+      : `/img/Schools/${spell.element.school}_white.png`;
   return (
     <div
       className={`Spell ${spell.selected ? "active" : "inactive"} ${
-        withBorder ? `border ${spell.school}` : "noborder"
+        withBorder ? `border ${spell.element.school}` : "noborder"
       }`}
       aria-label="spell_card_border"
     >
       <div
         className={`SpellCard ${
-          withBorder ? `border ${spell.school}` : "noborder"
+          withBorder ? `border ${spell.element.school}` : "noborder"
         }`}
         style={{
           backgroundImage: `url(${backImgUrl})`,

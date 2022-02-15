@@ -1,7 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
 import "./InfoCard.scss";
 // Types
-import { ISpell, ISpellUpdate } from "../utils/types";
+import {
+  IPlayerSpell,
+  IPlayerSpellUpdate,
+  ISpell,
+  ISpellUpdate,
+} from "../utils/types";
 // Utils
 // Components
 import { SpellUpdate } from "../Spells/SpellUpdate";
@@ -11,15 +16,15 @@ import { calculateSpellMana, updatePlayerSpell } from "../utils/spellslogic";
 import { removeResources } from "../utils/resourceLogic";
 import { spellUpdates } from "../utils/test_gameobjects";
 
-const ItemCard = ({ item }: { item: ISpell | ISpellUpdate }) => {
+const ItemCard = ({ item }: { item: IPlayerSpell | ISpellUpdate }) => {
   //TODO Replace static img with animation
-  const mana = "updates" in item ? calculateSpellMana(item) : item.mana;
+  const mana = "updates" in item ? calculateSpellMana(item) : 0;
   return (
     <div className="ItemCard">
       <div className="ItemCardHeader">{item.name}</div>
       {"updates" in item ? (
         <img
-          src={`../img/Spells/${item.color}/${item.id}.png`}
+          src={`../img/Spells/${item.element.color}/${item.id}.png`}
           alt="spell_image"
         />
       ) : (
@@ -36,7 +41,7 @@ const ItemCard = ({ item }: { item: ISpell | ISpellUpdate }) => {
   );
 };
 
-const ItemDescription = ({ item }: { item: ISpell | ISpellUpdate }) => {
+const ItemDescription = ({ item }: { item: IPlayerSpell | ISpellUpdate }) => {
   return (
     <div className="ItemDescription">
       <div className="ItemDescriptionImage">
@@ -45,14 +50,13 @@ const ItemDescription = ({ item }: { item: ISpell | ISpellUpdate }) => {
         ) : (
           item.school
         )}
-        {item.school}
       </div>
       <div className="ItemDescriptionText">{item.description}</div>
     </div>
   );
 };
 
-const ItemSpellUpdates = ({ item }: { item: ISpell }) => {
+const ItemSpellUpdates = ({ item }: { item: IPlayerSpell }) => {
   const [updatesToDisplay, setupdatesToDisplay] = useState(item.updates);
   const [selection, setSelection] = useState("applied");
 
@@ -64,7 +68,8 @@ const ItemSpellUpdates = ({ item }: { item: ISpell }) => {
   const resources = context.gameState.player.resources;
   const applicableUpdates = updates.filter(
     (s: ISpellUpdate) =>
-      s.school === item.school && item.updates.indexOf(s) === -1
+      s.school === item.element.school &&
+      item.updates.find((u: IPlayerSpellUpdate) => u.id === s.id)
   );
 
   const select = (s: "applied" | "available") => {
@@ -78,7 +83,7 @@ const ItemSpellUpdates = ({ item }: { item: ISpell }) => {
   };
 
   //TODO move into UpdateSpell screen with the confirmation
-  const updateSpell = (update: ISpellUpdate) => {
+  const updateSpell = (update: IPlayerSpellUpdate) => {
     if (context.gameState && context.gameState.player) {
       const newPlayyerWithSpell = updatePlayerSpell(
         context.gameState.player,
@@ -87,7 +92,7 @@ const ItemSpellUpdates = ({ item }: { item: ISpell }) => {
       );
       const newPlayerRemovedResources = {
         ...newPlayyerWithSpell,
-        resources: removeResources(update.resource_base, resources),
+        //resources: removeResources(update.resource_base, resources),
       };
 
       context.setGameState({
@@ -114,7 +119,7 @@ const ItemSpellUpdates = ({ item }: { item: ISpell }) => {
             Updates
           </button>
         </div>
-        {updatesToDisplay.map((u: ISpellUpdate, i: number) => (
+        {updatesToDisplay.map((u: IPlayerSpellUpdate, i: number) => (
           <SpellUpdate key={i} update={u} />
         ))}
       </div>
@@ -122,7 +127,7 @@ const ItemSpellUpdates = ({ item }: { item: ISpell }) => {
   );
 };
 
-const ItemSpellResources = ({ item }: { item: ISpellUpdate }) => {
+const ItemSpellResources = ({ item }: { item: IPlayerSpellUpdate }) => {
   return (
     <div className="ItemData">
       <div>
@@ -135,11 +140,11 @@ const ItemSpellResources = ({ item }: { item: ISpellUpdate }) => {
   );
 };
 
-const TopCardItem = ({ item }: { item: ISpell | ISpellUpdate }) => {
+const TopCardItem = ({ item }: { item: IPlayerSpell | IPlayerSpellUpdate }) => {
   // Only Spells and Updates have mana
   const imgUrl =
     "updates" in item
-      ? `/img/Spells/${item.color}/${item.id}_back.jpg`
+      ? `/img/Spells/${item.element.color}/${item.id}_back.jpg`
       : `/img/Spells/${item.school}/${item.id}_back.jpg`;
   return (
     <div
@@ -167,19 +172,27 @@ const TopCardItem = ({ item }: { item: ISpell | ISpellUpdate }) => {
   );
 };
 
-const BottomCardItem = ({ item }: { item: ISpell | ISpellUpdate }) => {
+const BottomCardItem = ({
+  item,
+}: {
+  item: IPlayerSpell | IPlayerSpellUpdate;
+}) => {
   return (
     <div className="BottomCard">
       {"updates" in item ? (
-        <ItemSpellUpdates item={item as ISpell} />
+        <ItemSpellUpdates item={item as IPlayerSpell} />
       ) : (
-        <ItemSpellResources item={item as ISpellUpdate} />
+        <ItemSpellResources item={item as IPlayerSpellUpdate} />
       )}
     </div>
   );
 };
 
-export const InfoItem = ({ item }: { item: ISpellUpdate | ISpell }) => {
+export const InfoItem = ({
+  item,
+}: {
+  item: IPlayerSpellUpdate | IPlayerSpell;
+}) => {
   return (
     <div className="InfoCard">
       <TopCardItem item={item} />

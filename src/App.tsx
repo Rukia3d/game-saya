@@ -11,6 +11,10 @@ import {
   IEnemy,
   ISpell,
   IPlayerAdventure,
+  IPlayerHero,
+  IEnemyFight,
+  IPlayerSpell,
+  IPlayerSpellUpdate,
 } from "./utils/types";
 // Utils
 import { fetcher } from "./utils/helpers";
@@ -32,8 +36,16 @@ export interface GameContextType {
   setStory: (s: IStory | null) => void;
   gameState: GameState | null;
   setGameState: (g: GameState) => void;
-  addition: IHero | ISpellUpdate | ISpell | IEnemy | null;
-  setAdditionScreen: (c: IHero | ISpellUpdate | ISpell | IEnemy | null) => void;
+  addition: IHero | IPlayerHero | ISpellUpdate | ISpell | IEnemy | null;
+  setAdditionScreen: (
+    c:
+      | IPlayerHero
+      | IPlayerSpellUpdate
+      | IPlayerSpell
+      | IEnemyFight
+      | IHero
+      | null
+  ) => void;
   backToMain: () => void;
 }
 
@@ -42,12 +54,10 @@ export const GameContext = React.createContext<undefined | GameContextType>(
 );
 
 function App() {
-  let playerId = window.localStorage.getItem("playerId");
+  let playerId: string =
+    window.localStorage.getItem("playerId") || short.generate();
   const { mutate } = useSWRConfig();
-  if (!playerId) {
-    playerId = short.generate();
-    mutate("/api/player", { id: playerId }, false);
-  }
+  mutate("/api/player", { id: playerId }, false);
   const { data, error } = useSWRImmutable(
     `/api/player?id=${playerId}`,
     fetcher

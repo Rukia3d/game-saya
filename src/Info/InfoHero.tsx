@@ -1,13 +1,20 @@
 import React, { useContext } from "react";
 import "./InfoCard.scss";
 // Types
-import { IEnemy, IHero, ISpell } from "../utils/types";
+import {
+  IEnemy,
+  IEnemyFight,
+  IHero,
+  IPlayerHero,
+  IPlayerSpell,
+  ISpell,
+} from "../utils/types";
 import { Spell } from "../Spells/Spell";
 import { GameContext } from "../App";
 // Utils
 // Components
 
-const HeroSkins = ({ item }: { item: IHero }) => {
+const HeroSkins = ({ item }: { item: IPlayerHero | IHero }) => {
   return (
     <div className="ItemData">
       <div className="ItemDataHeader">
@@ -17,7 +24,7 @@ const HeroSkins = ({ item }: { item: IHero }) => {
   );
 };
 
-const HeroSpells = ({ item }: { item: IHero }) => {
+const HeroSpells = ({ item }: { item: IPlayerHero }) => {
   const context = useContext(GameContext);
   if (!context || !context.gameState || !context.gameState.player.spells) {
     throw new Error("No data in context");
@@ -25,7 +32,7 @@ const HeroSpells = ({ item }: { item: IHero }) => {
   const playerSpells = context.gameState.player.spells;
   const spells =
     playerSpells.filter(
-      (s: ISpell) => s.school === item.school && s.color === item.color
+      (s: IPlayerSpell) => s.element.color === item.element.color
     ) || [];
 
   return (
@@ -34,7 +41,7 @@ const HeroSpells = ({ item }: { item: IHero }) => {
         <h3>Spells</h3>
       </div>
       <div className="ItemDataList">
-        {spells.map((s: ISpell, i: number) => (
+        {spells.map((s: IPlayerSpell, i: number) => (
           <Spell spell={s} key={i} withName withBorder />
         ))}
       </div>
@@ -42,12 +49,12 @@ const HeroSpells = ({ item }: { item: IHero }) => {
   );
 };
 
-const EnemySpells = ({ item }: { item: IEnemy }) => {
+const EnemySpells = ({ item }: { item: IEnemyFight }) => {
   return (
     <div className="ItemData">
       <div className="ItemDataHeader">
         <h3>Speels</h3>
-        {item.spells.map((s: ISpell, i: number) => (
+        {item.spells.map((s: IPlayerSpell, i: number) => (
           <Spell spell={s} key={i} />
         ))}
       </div>
@@ -75,7 +82,7 @@ const HeroCard = ({ item }: { item: IHero | IEnemy }) => {
 
 const TopCardHero = ({ item }: { item: IHero | IEnemy }) => {
   // Only Enemy has life
-  const imgUrl = `/img/Spells/${item.color}/back.jpg`;
+  const imgUrl = `/img/Spells/${item.element.color}/back.jpg`;
   return (
     <div className="TopCard">
       <div className="TopLeftBorder">

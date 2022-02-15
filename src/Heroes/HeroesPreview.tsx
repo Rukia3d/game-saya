@@ -1,7 +1,7 @@
 import React from "react";
 import "./Heroes.scss";
 // Types
-import { IEnemy, IHero } from "../utils/types";
+import { IEnemy, IEnemyFight, IHero, IPlayerHero } from "../utils/types";
 // Utils
 // Components
 import { AnimatedSpriteCycle } from "../Animations/AnimatedSpriteCycle";
@@ -10,8 +10,8 @@ export const HeroesPreview = ({
   characters,
   enemy,
 }: {
-  characters: IHero[];
-  enemy: IEnemy;
+  characters: IPlayerHero[];
+  enemy: IEnemyFight;
 }) => {
   return (
     <div className="FightPreview">
@@ -34,7 +34,7 @@ export const HeroesPreview = ({
         <AnimatedSpriteCycle
           width={500}
           height={500}
-          img={`../img/Enemies/${enemy.color}/${enemy.id}_idle.png`}
+          img={`../img/Enemies/${enemy.element.color}/${enemy.id}_idle.png`}
           frames={10}
           breakpoint={1}
         />

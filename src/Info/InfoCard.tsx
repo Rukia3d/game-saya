@@ -4,7 +4,9 @@ import "./InfoCard.scss";
 // Utils
 import {
   IEnemy,
+  IEnemyFight,
   IHero,
+  IPlayerHero,
   IPlayerSpell,
   IPlayerSpellUpdate,
   ISpell,
@@ -16,10 +18,8 @@ import { InfoItem } from "./InfoItem";
 import { InfoHero } from "./InfoHero";
 
 export type ItemsForCard =
-  | IHero
-  | IEnemy
-  | ISpell
-  | ISpellUpdate
+  | IPlayerHero
+  | IEnemyFight
   | IPlayerSpell
   | IPlayerSpellUpdate;
 

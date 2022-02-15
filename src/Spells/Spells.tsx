@@ -2,7 +2,17 @@ import React, { useContext, useState } from "react";
 import { GameContext } from "../App";
 import "./Spells.scss";
 // Types
-import { colorType, IEnemy, IHero, ISpell, ISpellUpdate } from "../utils/types";
+import {
+  colorType,
+  IEnemy,
+  IEnemyFight,
+  IHero,
+  IPlayerHero,
+  IPlayerSpell,
+  IPlayerSpellUpdate,
+  ISpell,
+  ISpellUpdate,
+} from "../utils/types";
 // Utils
 import { changeCardsInDeck } from "../utils/fightlogic";
 // Components
@@ -10,7 +20,7 @@ import { InfoCard } from "../Info/InfoCard";
 import { ScrollButton } from "../UI/ScrollButton";
 import { Spell } from "./Spell";
 
-export const Spells = ({ spells }: { spells: ISpell[] }) => {
+export const Spells = ({ spells }: { spells: IPlayerSpell[] }) => {
   const context = useContext(GameContext);
   if (
     !context ||
@@ -25,7 +35,7 @@ export const Spells = ({ spells }: { spells: ISpell[] }) => {
   const playerSpells = context.gameState.player.spells;
   const gameState = context.gameState;
   const [info, setInfo] = useState<
-    null | ISpell | ISpellUpdate | IEnemy | IHero
+    null | IPlayerSpell | IPlayerSpellUpdate | IEnemyFight | IPlayerHero
   >(null);
 
   // const [forge, setForge] = useState<null | ISpell>(null);
@@ -47,7 +57,7 @@ export const Spells = ({ spells }: { spells: ISpell[] }) => {
           backgroundImage: `url(${imgUrl})`,
         }}
       >
-        {spells.map((s: ISpell, i: number) => (
+        {spells.map((s: IPlayerSpell, i: number) => (
           <Spell
             spell={s}
             index={i}
@@ -63,7 +73,7 @@ export const Spells = ({ spells }: { spells: ISpell[] }) => {
   );
 };
 
-export const SpellsSelection = ({ spells }: { spells: ISpell[] }) => {
+export const SpellsSelection = ({ spells }: { spells: IPlayerSpell[] }) => {
   return (
     <div className="Spells">
       <h2>Spells selection</h2>

@@ -2,7 +2,16 @@ import React, { useContext, useState } from "react";
 import { GameContext } from "../App";
 import "./Library.scss";
 // Types
-import { IEnemy, IHero, ISpell, ISpellUpdate } from "../utils/types";
+import {
+  IEnemy,
+  IEnemyFight,
+  IHero,
+  IPlayerHero,
+  IPlayerSpell,
+  IPlayerSpellUpdate,
+  ISpell,
+  ISpellUpdate,
+} from "../utils/types";
 // Utils
 // Components
 import { HeroSelection } from "../Heroes/HeroSelection";
@@ -17,8 +26,8 @@ type libraryScreenState = "hero" | "spells" | "updates" | "resources";
 
 type LibraryScreensType = {
   [key in libraryScreenState]: React.FC<{
-    hero: IHero;
-    setInfo?: (s: ISpell | ISpellUpdate | null) => void;
+    hero: IPlayerHero;
+    setInfo?: (s: IPlayerSpell | IPlayerSpellUpdate | null) => void;
   }>;
 };
 const mainScreens: LibraryScreensType = {
@@ -33,8 +42,8 @@ const LibraryContent = ({
   setInfo,
   selected,
 }: {
-  hero: IHero;
-  setInfo?: (s: ISpell | ISpellUpdate | null) => void;
+  hero: IPlayerHero;
+  setInfo?: (s: IPlayerSpell | IPlayerSpellUpdate | null) => void;
   selected: libraryScreenState;
 }) => {
   const CurrentScreen = mainScreens[selected];
@@ -80,11 +89,11 @@ export const Library = () => {
   const player = context.gameState.player;
 
   const [info, setInfo] = useState<
-    null | ISpell | ISpellUpdate | IEnemy | IHero
+    null | IPlayerSpell | IPlayerSpellUpdate | IEnemyFight | IPlayerHero
   >(null);
-  const [hero, setHero] = useState<IHero>(player.heroes[0]);
+  const [hero, setHero] = useState<IPlayerHero>(player.heroes[0]);
   const [selected, setSelected] = useState<libraryScreenState>("hero");
-  let required: IHero[] | undefined = undefined;
+  let required: IPlayerHero[] | undefined = undefined;
   if (player.heroes.length < 3) {
     required = player.heroes;
   }

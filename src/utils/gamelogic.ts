@@ -1,6 +1,6 @@
 import { STORIES_PER_PANEL } from "../Stories/Stories";
 import { findCharacter, findUpdate } from "./helpers";
-import { givePlayerResources } from "./resourceLogic";
+import { updatePlayerResources } from "./resourceLogic";
 import {
   IAdventure,
   IHero,
@@ -20,19 +20,29 @@ import {
   IPlayerHero,
   IPlayerSpellUpdate,
 } from "./types";
+const axios = require("axios");
 
-export const updateLostPlayer = (player: Player) => {
+export const updateLostPlayer = async (player: Player) => {
+  await axios.post();
   return {
     ...player,
-    mana: player.data.mana - 1,
+    life: player.data.life - 1,
   };
 };
 
-export const updateWinPlayer = (
+const postWinPlayer = async (id: string) => {
+  try {
+    await axios.post(`/api/win-fight`, { id: id });
+  } catch (error) {
+    throw new Error(` Error ${error}`);
+  }
+};
+
+export const updateWinPlayer = async (
   player: Player,
   enemy: IEnemy,
   resources: IResource[]
-): Player => {
+): Promise<Player> => {
   const DEFAULTEXPERIENCE = 25;
   const newPlayer = {
     ...player,
@@ -41,9 +51,11 @@ export const updateWinPlayer = (
       experience: player.data.experience + DEFAULTEXPERIENCE,
     },
   };
+  const wonResources = updatePlayerResources(player, resources);
+  await postWinPlayer(player.data.id);
   return {
     ...newPlayer,
-    resources: givePlayerResources(player, resources),
+    resources: wonResources,
   };
 };
 
@@ -258,17 +270,19 @@ export const finishStory = (
   return player;
 };
 
-export const finishFight = (
+export const finishFight = async (
   gameState: GameState,
   story: IStory,
   result: string,
   enemy?: IEnemy,
   rewards?: IResource[]
-): Player => {
+): Promise<Player> => {
   const player = finishStory(gameState, story);
   if (result === "Won" && enemy && rewards) {
-    return updateWinPlayer(player, enemy, rewards);
+    const res = await updateWinPlayer(player, enemy, rewards);
+    return res;
   } else {
-    return updateLostPlayer(gameState.player);
+    const res = await updateLostPlayer(gameState.player);
+    return res;
   }
 };

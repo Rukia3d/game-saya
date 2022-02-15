@@ -2,7 +2,13 @@ import React, { useContext } from "react";
 import { GameContext } from "../App";
 import "../Main/Library.scss";
 // Types
-import { IHero, ISpell, ISpellUpdate } from "../utils/types";
+import {
+  IHero,
+  IPlayerSpell,
+  IPlayerSpellUpdate,
+  ISpell,
+  ISpellUpdate,
+} from "../utils/types";
 // Utils
 // Components
 import { HeroesSpells } from "../Heroes/HeroesSpells";
@@ -12,7 +18,7 @@ export const LibrarySpells = ({
   setInfo,
 }: {
   hero: IHero;
-  setInfo?: (s: ISpell | ISpellUpdate | null) => void;
+  setInfo?: (s: IPlayerSpell | IPlayerSpellUpdate | null) => void;
 }) => {
   const context = useContext(GameContext);
   if (!context || !context.gameState) {
@@ -21,7 +27,7 @@ export const LibrarySpells = ({
 
   const allSpells = context.gameState.player.spells;
   const heroSpells = allSpells.filter(
-    (s: ISpell) => s.color === hero.color && s.school === hero.school
+    (s: IPlayerSpell) => s.element.color === hero.element.color
   );
   return (
     <div className="LibrarySpells">

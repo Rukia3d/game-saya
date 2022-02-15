@@ -14,7 +14,7 @@ export const LibraryResources = ({ hero }: { hero: IHero }) => {
   }
   const ownedResources = context.gameState.player.resources;
   const heroResources = ownedResources.filter(
-    (r: IPlayerResource) => r.school === hero.school
+    (r: IPlayerResource) => r.school === hero.element.school
   );
   return (
     <div className="LibraryResources">
