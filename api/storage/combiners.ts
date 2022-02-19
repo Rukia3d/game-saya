@@ -39,8 +39,8 @@ export const combineAdventuresData = (
         ? updatedActions.push({
             id: a.id,
             type: a.type,
-            item: a.item,
-            data: a.data,
+            item_id: a.item_id,
+            data_id: a.data_id,
           })
         : null
     );
@@ -50,7 +50,7 @@ export const combineAdventuresData = (
       adventure_id: s.adventure_id,
       type: s.type,
       name: s.name,
-      next: s.next !== "NULL" ? s.next : null,
+      next_id: s.next_id,
       open: false,
       actions: updatedActions,
     };
@@ -64,7 +64,7 @@ export const combineAdventuresData = (
           id: i.id,
           type: i.type,
           name: i.name,
-          next: i.next,
+          next_id: i.next_id,
           actions: i.actions,
           open: false,
         };
@@ -166,7 +166,7 @@ export const combineUpdateData = (
           name: resource.name,
           description: resource.description,
           commonality: resource.commonality,
-          quantity: ur.quantity,
+          base_quantity: ur.quantity,
         };
       }
     );
@@ -177,8 +177,8 @@ export const combineUpdateData = (
         ? updatedActions.push({
             id: a.id,
             type: a.type,
-            item: a.item,
-            data: a.data,
+            item_id: a.item_id,
+            data_id: a.data_id,
           })
         : null
     );

@@ -5,15 +5,15 @@ export type ISchool = DBSchool;
 export type IAction = {
   id: number;
   type: string;
-  item: string;
-  data: string | null;
+  item_id: number;
+  data_id: number;
 };
 
 export type IStory = {
   id: number;
   type: string;
   name: string;
-  next: string | null;
+  next_id: number | null;
   open: boolean;
   actions: null | IAction[];
 };

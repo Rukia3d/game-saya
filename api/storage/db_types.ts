@@ -3,16 +3,17 @@ export type DBAction = {
   parent_id: number;
   parent_type: string;
   type: string;
-  item: string;
-  data: string | null;
+  item_id: number;
+  data_id: number;
 };
 
 export type DBStory = {
   id: number;
   adventure_id: number;
+  item_id: number;
   type: string;
   name: string;
-  next: string;
+  next_id: number | null;
 };
 
 export type DBAdventure = {

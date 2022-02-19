@@ -1,4 +1,3 @@
-import { Database } from "sqlite3";
 import { IPlayer } from "../engine/types";
 import {
   combineAdventuresData,
@@ -16,7 +15,6 @@ import {
   DBHero,
   DBPAdventure,
   DBPCharacter,
-  DBPHero,
   DBPlayer,
   DBPResource,
   DBPSpell,
@@ -51,7 +49,7 @@ import {
   getAllStories,
   getAllUpdateResources,
   getAllUpdates,
-} from "./static_data";
+} from "./static_data_csv";
 import {
   transformAdventures,
   transformCharacters,
@@ -72,23 +70,11 @@ import {
   ISpell,
   IUpdate,
 } from "./types";
-const sqlite3 = require("sqlite3").verbose();
 
 export const loadAdventures = async (): Promise<IAdventure[]> => {
-  const db: Database = new sqlite3.Database(
-    "./db/game.db",
-    sqlite3.OPEN_READWRITE,
-    (err: Error) => {
-      if (err) {
-        console.error(err.message);
-      }
-      console.log("Connected to the game database.");
-    }
-  );
-  const adventures: DBAdventure[] = await getAllAdventures(db);
-  const stories: DBStory[] = await getAllStories(db);
-  const actions: DBAction[] = await getAllActions(db);
-  db.close();
+  const adventures: DBAdventure[] = await getAllAdventures();
+  const stories: DBStory[] = await getAllStories();
+  const actions: DBAction[] = await getAllActions();
 
   return combineAdventuresData(adventures, stories, actions);
 };
@@ -96,40 +82,15 @@ export const loadAdventures = async (): Promise<IAdventure[]> => {
 export const loadPlayerAdventures = async (
   player_id: string
 ): Promise<IPAdventure[]> => {
-  const db: Database = new sqlite3.Database(
-    "./db/game.db",
-    sqlite3.OPEN_READWRITE,
-    (err: Error) => {
-      if (err) {
-        console.error(err.message);
-      }
-      console.log("Connected to the game database.");
-    }
-  );
-  const playerAdventures: DBPAdventure[] = await getPlayerAdventures(
-    db,
-    player_id
-  );
-  db.close();
+  const playerAdventures: DBPAdventure[] = await getPlayerAdventures(player_id);
   return transformAdventures(playerAdventures);
 };
 
 export const loadHeroes = async (): Promise<IHero[]> => {
-  const db: Database = new sqlite3.Database(
-    "./db/game.db",
-    sqlite3.OPEN_READWRITE,
-    (err: Error) => {
-      if (err) {
-        console.error(err.message);
-      }
-      console.log("Connected to the game database.");
-    }
-  );
-  const characters: DBCharacter[] = await getAllCharacters(db);
-  const heroes: DBHero[] = await getAllHeroes(db);
-  const elements: DBElement[] = await getAllElements(db);
-  const schools: DBSchool[] = await getAllSchools(db);
-  db.close();
+  const characters: DBCharacter[] = await getAllCharacters();
+  const heroes: DBHero[] = await getAllHeroes();
+  const elements: DBElement[] = await getAllElements();
+  const schools: DBSchool[] = await getAllSchools();
 
   return combineHeroesData(heroes, characters, elements, schools);
 };
@@ -137,97 +98,38 @@ export const loadHeroes = async (): Promise<IHero[]> => {
 export const loadPlayerHeroes = async (
   player_id: string
 ): Promise<IPHero[]> => {
-  const db: Database = new sqlite3.Database(
-    "./db/game.db",
-    sqlite3.OPEN_READWRITE,
-    (err: Error) => {
-      if (err) {
-        console.error(err.message);
-      }
-      console.log("Connected to the game database.");
-    }
-  );
-  const playerHeroes = await getPlayerHeroes(db, player_id);
-  db.close();
+  const playerHeroes = await getPlayerHeroes(player_id);
 
   return transformHeroes(playerHeroes);
 };
 
 export const loadCharacters = async (): Promise<DBCharacter[]> => {
-  const db: Database = new sqlite3.Database(
-    "./db/game.db",
-    sqlite3.OPEN_READWRITE,
-    (err: Error) => {
-      if (err) {
-        console.error(err.message);
-      }
-      console.log("Connected to the game database.");
-    }
-  );
-  const characters: DBCharacter[] = await getAllCharacters(db);
-  db.close();
-
+  const characters: DBCharacter[] = await getAllCharacters();
   return characters;
 };
 
 export const loadPlayerCharacters = async (
   player_id: string
 ): Promise<IPCharacter[]> => {
-  const db: Database = new sqlite3.Database(
-    "./db/game.db",
-    sqlite3.OPEN_READWRITE,
-    (err: Error) => {
-      if (err) {
-        console.error(err.message);
-      }
-      console.log("Connected to the game database.");
-    }
-  );
-  const playerCharacters: DBPCharacter[] = await getPlayerCharacters(
-    db,
-    player_id
-  );
-  db.close();
+  const playerCharacters: DBPCharacter[] = await getPlayerCharacters(player_id);
 
   return transformCharacters(playerCharacters);
 };
 
 export const loadSpells = async (): Promise<ISpell[]> => {
-  const db: Database = new sqlite3.Database(
-    "./db/game.db",
-    sqlite3.OPEN_READWRITE,
-    (err: Error) => {
-      if (err) {
-        console.error(err.message);
-      }
-      console.log("Connected to the game database.");
-    }
-  );
-  const spells: DBSpell[] = await getAllSpells(db);
-  const elements: DBElement[] = await getAllElements(db);
-  const schools: DBSchool[] = await getAllSchools(db);
-  db.close();
+  const spells: DBSpell[] = await getAllSpells();
+  const elements: DBElement[] = await getAllElements();
+  const schools: DBSchool[] = await getAllSchools();
 
   return combineSpellData(spells, elements, schools);
 };
 
 export const loadUpdates = async (): Promise<IUpdate[]> => {
-  const db: Database = new sqlite3.Database(
-    "./db/game.db",
-    sqlite3.OPEN_READWRITE,
-    (err: Error) => {
-      if (err) {
-        console.error(err.message);
-      }
-      console.log("Connected to the game database.");
-    }
-  );
-  const updates: DBUpdate[] = await getAllUpdates(db);
-  const update_resources: DBUpdateResource[] = await getAllUpdateResources(db);
-  const resources: DBResource[] = await getAllResources(db);
-  const actions: DBAction[] = await getAllActions(db);
-  const schools: DBSchool[] = await getAllSchools(db);
-  db.close();
+  const updates: DBUpdate[] = await getAllUpdates();
+  const update_resources: DBUpdateResource[] = await getAllUpdateResources();
+  const resources: DBResource[] = await getAllResources();
+  const actions: DBAction[] = await getAllActions();
+  const schools: DBSchool[] = await getAllSchools();
 
   return combineUpdateData(
     updates,
@@ -241,22 +143,10 @@ export const loadUpdates = async (): Promise<IUpdate[]> => {
 export const loadPlayerSpells = async (
   player_id: string
 ): Promise<IPUpdatedSpell[]> => {
-  const db: Database = new sqlite3.Database(
-    "./db/game.db",
-    sqlite3.OPEN_READWRITE,
-    (err: Error) => {
-      if (err) {
-        console.error(err.message);
-      }
-      console.log("Connected to the game database.");
-    }
-  );
   const player_applied_updates: DBPSpellUpdate[] = await getPlayerSpellUpdates(
-    db,
     player_id
   );
-  const player_spells: DBPSpell[] = await getPlayerSpells(db, player_id);
-  db.close();
+  const player_spells: DBPSpell[] = await getPlayerSpells(player_id);
 
   return combinePlayerspells(player_spells, player_applied_updates);
 };
@@ -264,18 +154,7 @@ export const loadPlayerSpells = async (
 export const loadPlayerUpdates = async (
   player_id: string
 ): Promise<IPUpdate[]> => {
-  const db: Database = new sqlite3.Database(
-    "./db/game.db",
-    sqlite3.OPEN_READWRITE,
-    (err: Error) => {
-      if (err) {
-        console.error(err.message);
-      }
-      console.log("Connected to the game database.");
-    }
-  );
-  const player_updates: DBPUpdate[] = await getPlayerUpdates(db, player_id);
-  db.close();
+  const player_updates: DBPUpdate[] = await getPlayerUpdates(player_id);
 
   return transformPlayerUpdates(player_updates);
 };
@@ -283,55 +162,22 @@ export const loadPlayerUpdates = async (
 export const loadPlayerResources = async (
   player_id: string
 ): Promise<IPResource[]> => {
-  const db: Database = new sqlite3.Database(
-    "./db/game.db",
-    sqlite3.OPEN_READWRITE,
-    (err: Error) => {
-      if (err) {
-        console.error(err.message);
-      }
-      console.log("Connected to the game database.");
-    }
-  );
-  const player_updates: DBPResource[] = await getPlayerResources(db, player_id);
-  db.close();
+  const player_updates: DBPResource[] = await getPlayerResources(player_id);
 
   return transformPlayerResources(player_updates);
 };
 
 export const loadResources = async (): Promise<IResource[]> => {
-  const db: Database = new sqlite3.Database(
-    "./db/game.db",
-    sqlite3.OPEN_READWRITE,
-    (err: Error) => {
-      if (err) {
-        console.error(err.message);
-      }
-      console.log("Connected to the game database.");
-    }
-  );
-  const updates: DBResource[] = await getAllResources(db);
-  const schools: DBSchool[] = await getAllSchools(db);
-  db.close();
+  const updates: DBResource[] = await getAllResources();
+  const schools: DBSchool[] = await getAllSchools();
 
   return combineResourceData(updates, schools);
 };
 
 export const loadPlayer = async (player_id: string): Promise<IPlayer> => {
-  const db: Database = new sqlite3.Database(
-    "./db/game.db",
-    sqlite3.OPEN_READWRITE,
-    (err: Error) => {
-      if (err) {
-        console.error(err.message);
-      }
-      console.log("Connected to the game database.");
-    }
-  );
-  const player: DBPlayer = await getPlayer(db, player_id);
+  const player: DBPlayer = await getPlayer(player_id);
   //TODO Create new player
   if (!player) throw new Error(`No player found`);
-  db.close();
 
   return {
     id: player.id,

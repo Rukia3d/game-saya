@@ -30,8 +30,8 @@ export const testActions: IAction[] = actions.map((s: string, i: number) => {
   return {
     id: i,
     type: s,
-    item: "nell",
-    data: i === 0 ? "red" : "dialogue1",
+    item: characters.indexOf("nell"),
+    data: i === 0 ? elements.indexOf("red") : i,
   };
 });
 export const testStories: IStory[] = stories.map((s: string, i: number) => {
