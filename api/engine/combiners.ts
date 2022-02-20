@@ -12,6 +12,7 @@ import {
   IPCharacter,
   IPUpdate,
   IPResource,
+  IDialogue,
 } from "../storage/types";
 import {
   IPlayerAdventure,
@@ -73,15 +74,18 @@ export const combineHeroes = (
 
 export const combineCharacters = (
   characters: DBCharacter[],
+  dialogues: IDialogue[],
   p_characters: IPCharacter[]
 ): IPlayerCharacter[] => {
   const playerCharacters = p_characters.map((p: IPCharacter) => {
     const characterData = characters.find((c: DBCharacter) => c.id === p.id);
     if (!characterData) throw new Error(`Can't find hero data for ${p.id}`);
+    const dialogue = dialogues.find((d: IDialogue) => d.id === p.dialogue_id);
+    if (!dialogue) throw new Error(`Can't find dialogue data for ${p.id}`);
     return {
       ...characterData,
       image: p.image,
-      dialogue_id: p.dialogue_id,
+      dialogue: dialogue,
       created_at: p.created_at,
       expires_at: p.expires_at,
     };

@@ -12,6 +12,11 @@ import {
   DBUpdateResource,
   DBPSpell,
   DBPSpellUpdate,
+  DBDialogue,
+  DBLine,
+  DBFightElement,
+  DBFight,
+  DBPCharacter,
 } from "./db_types";
 import {
   IStory,
@@ -24,15 +29,112 @@ import {
   IUpdateResource,
   IPUpdatedSpell,
   IResource,
+  IDialogue,
+  ILine,
+  IFight,
+  IReel,
+  IPCharacter,
 } from "./types";
 
-type IStoryForAdventure = IStory & { adventure_id: number };
+export const combinedFightsData = (
+  fights: DBFight[],
+  fightElements: DBFightElement[],
+  combinedElements: IElement[],
+  combinedHeroes: IHero[]
+): IFight[] => {
+  const updatedFights: IFight[] = fights.map((f: DBFight) => {
+    const enemy = combinedHeroes.find((c: IHero) => c.id === f.enemy_id);
+    if (!enemy) throw new Error(`Can't find an enemy for ${f.enemy_id}`);
+    const elements = fightElements.map((f: DBFightElement) => {
+      const element = combinedElements.find(
+        (e: IElement) => e.id === f.element_id
+      );
+      if (!element)
+        throw new Error(`Can't find an element for ${f.element_id}`);
+      return element;
+    });
+    return {
+      id: f.id,
+      story_id: f.story_id,
+      base_hero_num: f.base_hero_num,
+      enemy: enemy,
+      background: f.background,
+      base_elements: elements,
+    };
+  });
+  return updatedFights;
+};
+
+export const combineDialoguesData = (
+  dialogues: DBDialogue[],
+  lines: DBLine[],
+  characters: DBCharacter[]
+): IDialogue[] => {
+  const updatedDialogues: IDialogue[] = dialogues.map((d: DBDialogue) => {
+    const updatedLines: ILine[] = lines.map((l: DBLine) => {
+      const character = characters.find(
+        (c: DBCharacter) => c.id === l.character_id
+      );
+      if (!character)
+        throw new Error(`Can't find a character for ${l.character_id}`);
+      return {
+        id: l.id,
+        character: character,
+        image: l.image,
+        position: l.position,
+        text: l.text,
+      };
+    });
+    return {
+      id: d.id,
+      story_id: d.story_id,
+      lines: updatedLines,
+      background: d.background,
+      layout: d.layout,
+    };
+  });
+
+  return updatedDialogues;
+};
+
+export const combineStoriesData = (
+  stories: DBStory[],
+  combinedDialogues: IDialogue[],
+  combinedFigths: IFight[]
+): IStory[] => {
+  const updatedStories = stories.map((s: DBStory) => {
+    let item: IDialogue | IFight | IReel;
+    if (s.type === "fight") {
+      const res = combinedFigths.find((f: IFight) => f.story_id === s.id);
+      if (!res) throw new Error(`Can't find a fight for ${s.id}`);
+      item = res;
+    } else if (s.type === "dialogue") {
+      const res = combinedDialogues.find((d: IDialogue) => d.story_id === s.id);
+      if (!res) throw new Error(`Can't find a dialogue for ${s.id}`);
+      item = res;
+    } else {
+      throw new Error(`Unknown type for ${s.id}`);
+    }
+    return {
+      id: s.id,
+      type: s.type,
+      name: s.name,
+      next_id: s.next_id,
+      open: false,
+      actions: null,
+      item: item,
+      adventure_id: s.adventure_id,
+    };
+  });
+  return updatedStories;
+};
+
 export const combineAdventuresData = (
   adventures: DBAdventure[],
-  stories: DBStory[],
+  stories: IStory[],
   actions: DBAction[]
 ): IAdventure[] => {
-  const updatedStories: IStoryForAdventure[] = stories.map((s: DBStory) => {
+  const updatedStories: IStory[] = stories.map((s: IStory) => {
     const updatedActions: IAction[] | null = [];
     actions.map((a: DBAction) =>
       a.parent_id === s.id && a.parent_type === "story"
@@ -46,11 +148,7 @@ export const combineAdventuresData = (
     );
 
     return {
-      id: s.id,
-      adventure_id: s.adventure_id,
-      type: s.type,
-      name: s.name,
-      next_id: s.next_id,
+      ...s,
       open: false,
       actions: updatedActions,
     };
@@ -58,13 +156,10 @@ export const combineAdventuresData = (
 
   const updatedAdventures: IAdventure[] = adventures.map((a: DBAdventure) => {
     const stories: IStory[] = updatedStories
-      .filter((s: IStoryForAdventure) => s.adventure_id === a.id)
-      .map((i: IStoryForAdventure) => {
+      .filter((s: IStory) => s.adventure_id === a.id)
+      .map((i: IStory) => {
         return {
-          id: i.id,
-          type: i.type,
-          name: i.name,
-          next_id: i.next_id,
+          ...i,
           actions: i.actions,
           open: false,
         };
@@ -83,26 +178,10 @@ export const combineAdventuresData = (
 export const combineHeroesData = (
   heroes: DBHero[],
   characters: DBCharacter[],
-  elements: DBElement[],
-  schools: DBSchool[]
+  elements: IElement[]
 ): IHero[] => {
-  const updatedElements: IElement[] = elements.map((e: DBElement) => {
-    const school = schools.find((s: DBSchool) => s.id === e.school_id);
-    if (!school) throw new Error(`Can't find a school for ${e.name}`);
-
-    return {
-      id: e.id,
-      name: e.name,
-      description: e.description,
-      code: e.code,
-      school: school,
-    };
-  });
-
   const updatedHeroes: IHero[] = heroes.map((h: DBHero) => {
-    const element = updatedElements.find(
-      (e: IElement) => e.id === h.element_id
-    );
+    const element = elements.find((e: IElement) => e.id === h.element_id);
     if (!element)
       throw new Error(`Can't find an element for ${h.character_id}`);
     const character = characters.find(
@@ -118,6 +197,24 @@ export const combineHeroesData = (
     };
   });
   return updatedHeroes;
+};
+
+export const combineElementData = (
+  elements: DBElement[],
+  schools: DBSchool[]
+): IElement[] => {
+  const updatedElements = elements.map((e: DBElement) => {
+    const school = schools.find((s: DBSchool) => s.id === e.school_id);
+    if (!school) throw new Error(`Can't find a school for ${e.name}`);
+    return {
+      id: e.id,
+      name: e.name,
+      description: e.description,
+      code: e.code,
+      school: school,
+    };
+  });
+  return updatedElements;
 };
 
 export const combineSpellData = (

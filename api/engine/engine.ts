@@ -1,6 +1,7 @@
 import {
   loadAdventures,
   loadCharacters,
+  loadDialogues,
   loadHeroes,
   loadPlayer,
   loadPlayerAdventures,
@@ -26,6 +27,7 @@ import {
   IPCharacter,
   IPUpdate,
   IPResource,
+  IDialogue,
 } from "../storage/types";
 import {
   combineAdventures,
@@ -65,8 +67,9 @@ export const playerCharacters = async (
   player_id: string
 ): Promise<IPlayerCharacter[]> => {
   const characters: ICharacter[] = await loadCharacters();
+  const dialogues: IDialogue[] = await loadDialogues();
   const p_characters: IPCharacter[] = await loadPlayerCharacters(player_id);
-  return combineCharacters(characters, p_characters);
+  return combineCharacters(characters, dialogues, p_characters);
 };
 
 export const playerSpells = async (

@@ -1,4 +1,3 @@
-import { IReel } from "../src/utils/types";
 import {
   player,
   playerAdventures,

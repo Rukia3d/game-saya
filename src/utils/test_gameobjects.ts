@@ -17,6 +17,69 @@ import {
   IFight,
 } from "./types";
 
+const reelsInitialSet: IReel[] = [
+  {
+    id: "c1_reel_1",
+    type: "reel",
+    actions: [],
+    imageGroups: [
+      {
+        id: 1,
+        layout: 4,
+        images: [
+          { id: "c1_reel_1_1_img1", image: "storyline", direction: "down" },
+          { id: "c1_reel_1_1_img2", image: "storyline", direction: "up" },
+          { id: "c1_reel_1_1_img3", image: "storyline", direction: "left" },
+          { id: "c1_reel_1_1_img4", image: "storyline", direction: "left" },
+        ],
+      },
+      {
+        id: 2,
+        layout: 1,
+        images: [
+          { id: "c1_reel_1_2_img1", image: "storyline", direction: "left" },
+        ],
+      },
+    ],
+  },
+  {
+    id: "c1_reel_2",
+    type: "reel",
+    actions: [],
+    imageGroups: [
+      {
+        id: 1,
+        layout: 3,
+        images: [
+          {
+            id: "c1_reel_2_1_img1",
+            image: "storyline",
+            direction: "right",
+          },
+          {
+            id: "c1_reel_2_1_img2",
+            image: "storyline",
+            direction: "left",
+          },
+          { id: "c1_reel_2_1_img3", image: "storyline", direction: "left" },
+        ],
+      },
+      {
+        id: 2,
+        layout: 2,
+        images: [
+          {
+            id: "c1_reel_2_2_img1",
+            image: "storyline",
+            direction: "right",
+          },
+          { id: "c1_reel_2_2_img2", image: "storyline", direction: "left" },
+        ],
+      },
+    ],
+  },
+];
+
 export const dialogues: IDialogue[] = new Array(3).fill(0).map((x, i) => ({
   id: "dialogue" + i,
   background: "background" + i,
@@ -116,7 +179,7 @@ export const adventures: IAdventure[] = [];
     name: obj[0],
     image: `${obj[0]}.jpg`,
     type: obj[0],
-    storyGroups: stories,
+    stories: stories,
   })
 );
 

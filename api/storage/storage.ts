@@ -1,18 +1,26 @@
 import { IPlayer } from "../engine/types";
 import {
   combineAdventuresData,
+  combinedFightsData,
+  combineDialoguesData,
+  combineElementData,
   combineHeroesData,
   combinePlayerspells,
   combineResourceData,
   combineSpellData,
+  combineStoriesData,
   combineUpdateData,
 } from "./combiners";
 import {
   DBAction,
   DBAdventure,
   DBCharacter,
+  DBDialogue,
   DBElement,
+  DBFight,
+  DBFightElement,
   DBHero,
+  DBLine,
   DBPAdventure,
   DBPCharacter,
   DBPlayer,
@@ -41,8 +49,12 @@ import {
   getAllActions,
   getAllAdventures,
   getAllCharacters,
+  getAllDialogues,
   getAllElements,
+  getAllFightElements,
+  getAllFights,
   getAllHeroes,
+  getAllLines,
   getAllResources,
   getAllSchools,
   getAllSpells,
@@ -59,6 +71,9 @@ import {
 } from "./transformers";
 import {
   IAdventure,
+  IDialogue,
+  IElement,
+  IFight,
   IHero,
   IPAdventure,
   IPCharacter,
@@ -71,12 +86,40 @@ import {
   IUpdate,
 } from "./types";
 
+export const loadDialogues = async (): Promise<IDialogue[]> => {
+  const dialogues: DBDialogue[] = await getAllDialogues();
+  const lines: DBLine[] = await getAllLines();
+  const characters: DBCharacter[] = await getAllCharacters();
+  return combineDialoguesData(dialogues, lines, characters);
+};
+
+export const loadElements = async (): Promise<IElement[]> => {
+  const elements: DBElement[] = await getAllElements();
+  const schools: DBSchool[] = await getAllSchools();
+  return combineElementData(elements, schools);
+};
+
+export const loadFights = async (): Promise<IFight[]> => {
+  const fights: DBFight[] = await getAllFights();
+  const fightElements: DBFightElement[] = await getAllFightElements();
+  const combinedElements = await loadElements();
+  const heroes = await loadHeroes();
+  return combinedFightsData(fights, fightElements, combinedElements, heroes);
+};
+
 export const loadAdventures = async (): Promise<IAdventure[]> => {
   const adventures: DBAdventure[] = await getAllAdventures();
   const stories: DBStory[] = await getAllStories();
   const actions: DBAction[] = await getAllActions();
 
-  return combineAdventuresData(adventures, stories, actions);
+  const combinedDialogues = await loadDialogues();
+  const combinedFigths = await loadFights();
+  const combinedStories = combineStoriesData(
+    stories,
+    combinedDialogues,
+    combinedFigths
+  );
+  return combineAdventuresData(adventures, combinedStories, actions);
 };
 
 export const loadPlayerAdventures = async (
@@ -89,10 +132,9 @@ export const loadPlayerAdventures = async (
 export const loadHeroes = async (): Promise<IHero[]> => {
   const characters: DBCharacter[] = await getAllCharacters();
   const heroes: DBHero[] = await getAllHeroes();
-  const elements: DBElement[] = await getAllElements();
-  const schools: DBSchool[] = await getAllSchools();
+  const elements = await loadElements();
 
-  return combineHeroesData(heroes, characters, elements, schools);
+  return combineHeroesData(heroes, characters, elements);
 };
 
 export const loadPlayerHeroes = async (

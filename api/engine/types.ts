@@ -1,7 +1,7 @@
 import {
   IAdventure,
+  IDialogue,
   IHero,
-  IPCharacter,
   IResource,
   ISpell,
   IUpdate,
@@ -19,7 +19,13 @@ export type IPlayerHero = IHero & {
   expires_at: Date;
 };
 
-export type IPlayerCharacter = IPCharacter;
+export type IPlayerCharacter = {
+  id: number;
+  image: string;
+  dialogue: IDialogue;
+  created_at: Date;
+  expires_at: Date;
+};
 
 export type IPlayerResource = IResource & {
   created_at: Date;

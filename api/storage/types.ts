@@ -2,20 +2,49 @@ import { DBCharacter, DBPSpell, DBPSpellUpdate, DBSchool } from "./db_types";
 
 export type ISchool = DBSchool;
 
+export type ILine = {
+  id: number;
+  character: ICharacter;
+  image: string;
+  position: string;
+  text: string;
+};
+
+export type IDialogue = {
+  id: number;
+  story_id: number | null;
+  lines: ILine[];
+  background: string;
+  layout: string;
+};
+
+export type IFight = {
+  id: number;
+  story_id: number | null;
+  base_hero_num: number;
+  enemy: IHero;
+  background: string;
+  base_elements: IElement[];
+};
+
+export type IReel = {};
+
 export type IAction = {
   id: number;
   type: string;
   item_id: number;
-  data_id: number;
+  data_id: number | null;
 };
 
 export type IStory = {
   id: number;
+  adventure_id: number;
   type: string;
   name: string;
   next_id: number | null;
   open: boolean;
   actions: null | IAction[];
+  item: IDialogue | IFight | IReel;
 };
 
 export type IAdventure = {

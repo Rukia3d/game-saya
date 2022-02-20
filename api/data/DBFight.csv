@@ -1,0 +1,4 @@
+story_id,id,background,enemy_id,base_hero_num
+3,0,arena_1,10,2
+5,1,arena_2,2,3
+8,2,arena_3,11,3

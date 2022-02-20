@@ -1,0 +1,9 @@
+story_id,id,background,layout
+0,0,backg_1,double
+1,1,backg_2,double
+2,2,backg_3,double
+4,3,backg_0,triple
+6,4,backg_0,triple
+7,5,backg_1,triple
+,6,backg_2,single
+,7,backg_3,single

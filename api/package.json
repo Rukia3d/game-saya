@@ -9,12 +9,14 @@
     "@types/sqlite3": "^3.1.8",
     "cors": "^2.8.5",
     "express": "^4.17.1",
-    "fast-csv": "^4.3.6",
+    "install": "^0.13.0",
     "node-sass": "^6.0.1",
+    "npm": "^8.5.1",
     "short-uuid": "^4.2.0",
     "sqlite3": "^5.0.2",
     "swr": "^1.0.0",
-    "typescript": "^4.1.2"
+    "typescript": "^4.1.2",
+    "csv-parse": "^4.16.3"
   },
   "scripts": {
     "start": "npx ts-node --project tsconfig.json ./scripts.ts",
@@ -43,7 +45,6 @@
   },
   "devDependencies": {
     "@types/jest": "^27.4.0",
-    "csv-parse": "^4.16.0",
     "ts-jest": "^27.1.3"
   }
 }

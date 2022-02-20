@@ -24,7 +24,7 @@ type dbDataType =
 
 const createDb = async (): Promise<Database> => {
   const db: Database = new sqlite3.Database(
-    "./db/game.db",
+    "./db/player.db",
     sqlite3.OPEN_READWRITE,
     (err: Error) => {
       if (err) {
@@ -67,6 +67,7 @@ const readOneLne = async (sql: string): Promise<dbDataType[]> => {
     });
   });
 };
+
 export const getPlayerAdventures = async (
   player_id: string
 ): Promise<DBPAdventure[]> => {

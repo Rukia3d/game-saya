@@ -1,0 +1,16 @@
+id,school_id,name,description,code
+0,0,Herbalist,Herbalist - Violet -  Mauris pretium euismod lorem sit amet condimentum.,a6009c
+1,1,Berserker,Berserker - Red  -  Mauris pretium euismod lorem sit amet condimentum.,ff0000
+2,2,Bladesmit,Bladesmit - Grey -  Mauris pretium euismod lorem sit amet condimentum.,9e9d9d
+3,3,Trickster,Trickster - Green - Mauris pretium euismod lorem sit amet condimentum.,00ce00
+4,4,Illusionist,Illusionist - Indigo - Mauris pretium euismod lorem sit amet condimentum.,4826b6
+5,0,Healer,Healer - White - Mauris pretium euismod lorem sit amet condimentum.,ffffff
+6,2,Runemaster,Runemaster - Blue - Mauris pretium euismod lorem sit amet condimentum.,4436fe
+7,3,Rogue,Rogue - Orange - Mauris pretium euismod lorem sit amet condimentum.,ff9300
+8,1,Barbarian,Barbarian - Yellow - Mauris pretium euismod lorem sit amet condimentum.,feff00
+9,2,Enchanter,Enchanter - Teal - Mauris pretium euismod lorem sit amet condimentum.,00d097
+10,4,Sourcerer,Sourcerer - Lime - Mauris pretium euismod lorem sit amet condimentum.,77ff00
+11,0,Druid,Druid - Rose - Mauris pretium euismod lorem sit amet condimentum.,ecafcc
+12,3,Wanderer,Wanderer - Sand - Mauris pretium euismod lorem sit amet condimentum.,fce89d
+13,1,Warlock,Warlock - Black - Mauris pretium euismod lorem sit amet condimentum.,000000
+14,4,Mystic,Mystic - Brown - Mauris pretium euismod lorem sit amet condimentum.,964B00

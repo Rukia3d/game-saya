@@ -1,0 +1,10 @@
+id,adventure_id,type,item_id,name,next_id
+0,0,dialogue,0,Olija Dialogue,1
+1,0,dialogue,1,Nell Dialogue,2
+2,0,dialogue,2,Dario Dialogue,3
+3,0,fight,0,Arena,4
+4,0,dialogue,3,Tara Dialogue,5
+5,0,fight,1,Arena,6
+6,0,dialogue,4,Tara Dialogue,7
+7,0,dialogue,5,Grey Dialogue,8
+8,0,fight,3,Arena,NULL

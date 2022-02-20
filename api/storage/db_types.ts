@@ -4,8 +4,39 @@ export type DBAction = {
   parent_type: string;
   type: string;
   item_id: number;
-  data_id: number;
+  data_id: number | null;
 };
+
+export type DBFightElement = {
+  element_id: number;
+  fight_id: number;
+};
+
+export type DBLine = {
+  dialogue_id: number;
+  id: number;
+  character_id: number;
+  image: string;
+  position: string;
+  text: string;
+};
+
+export type DBDialogue = {
+  id: number;
+  story_id: number | null;
+  background: string;
+  layout: string;
+};
+
+export type DBFight = {
+  id: number;
+  story_id: number | null;
+  base_hero_num: number;
+  background: string;
+  enemy_id: number;
+};
+
+export type DBReel = {};
 
 export type DBStory = {
   id: number;

@@ -1,4 +1,4 @@
-  id,parent_id,parent_type,type,item_id,data_id
+id,parent_id,parent_type,type,item_id,data_id
 0,0,story,addNpc,6,
 1,0,story,addNpc,0,
 2,1,story,addHero,1,

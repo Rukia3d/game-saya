@@ -11,12 +11,21 @@ import {
   DBUpdate,
   DBUpdateResource,
   DBResource,
+  DBDialogue,
+  DBLine,
+  DBFight,
+  DBReel,
+  DBFightElement,
 } from "./db_types";
 
 const sqlite3 = require("sqlite3").verbose();
 
 type dbDataType =
   | DBAdventure
+  | DBDialogue
+  | DBFight
+  | DBReel
+  | DBLine
   | DBStory
   | DBAction
   | DBCharacter
@@ -59,6 +68,36 @@ const readAllLnes = async (
       resolve(res);
     });
   });
+};
+
+export const getAllFightElements = async (): Promise<DBFightElement[]> => {
+  const fight_elements: DBFightElement[] = [];
+  const sql = `SELECT * from fight_element WHERE deleted_at='NULL'`;
+  return readAllLnes(fight_elements, sql) as unknown as DBFightElement[];
+};
+
+export const getAllDialogues = async (): Promise<DBDialogue[]> => {
+  const dialogues: DBDialogue[] = [];
+  const sql = `SELECT * from dialogue WHERE deleted_at='NULL'`;
+  return readAllLnes(dialogues, sql) as unknown as DBDialogue[];
+};
+
+export const getAllLines = async (): Promise<DBLine[]> => {
+  const lines: DBLine[] = [];
+  const sql = `SELECT * from lines WHERE deleted_at='NULL'`;
+  return readAllLnes(lines, sql) as unknown as DBLine[];
+};
+
+export const getAllFights = async (): Promise<DBFight[]> => {
+  const fights: DBFight[] = [];
+  const sql = `SELECT * from fights WHERE deleted_at='NULL'`;
+  return readAllLnes(fights, sql) as unknown as DBFight[];
+};
+
+export const getAllReels = async (): Promise<DBReel[]> => {
+  const reels: DBReel[] = [];
+  const sql = `SELECT * from reels WHERE deleted_at='NULL'`;
+  return readAllLnes(reels, sql) as unknown as DBReel[];
 };
 
 export const getAllAdventures = async (): Promise<DBAdventure[]> => {
