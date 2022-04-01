@@ -4,7 +4,7 @@ export type DBAction = {
   parent_type: string;
   type: string;
   item_id: number;
-  data_id: number | null;
+  data_id?: number;
 };
 
 export type DBFightElement = {

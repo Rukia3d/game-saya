@@ -1,4 +1,4 @@
-import { Database } from "sqlite3";
+import { readAllLnes, readOneLne } from "./db_helpers";
 import {
   DBPAdventure,
   DBPHero,
@@ -9,64 +9,6 @@ import {
   DBPResource,
   DBPlayer,
 } from "./db_types";
-
-const sqlite3 = require("sqlite3").verbose();
-
-type dbDataType =
-  | DBPlayer
-  | DBPAdventure
-  | DBPHero
-  | DBPCharacter
-  | DBPSpellUpdate
-  | DBPSpell
-  | DBPUpdate
-  | DBPResource;
-
-const createDb = async (): Promise<Database> => {
-  const db: Database = new sqlite3.Database(
-    "./db/player.db",
-    sqlite3.OPEN_READWRITE,
-    (err: Error) => {
-      if (err) {
-        console.error(err.message);
-      }
-      console.log("Connected to the game database.");
-    }
-  );
-  return db;
-};
-
-const readAllLnes = async (
-  res: dbDataType[],
-  sql: string
-): Promise<dbDataType[]> => {
-  const db = await createDb();
-  return new Promise((resolve, reject) => {
-    db.all(sql, [], (err: Error, rows: dbDataType[]) => {
-      db.close();
-      if (err) {
-        reject(err);
-      }
-      rows.forEach((row: dbDataType) => {
-        res.push(row);
-      });
-      resolve(res);
-    });
-  });
-};
-
-const readOneLne = async (sql: string): Promise<dbDataType[]> => {
-  const db = await createDb();
-  return new Promise((resolve, reject) => {
-    db.get(sql, [], (err: Error, row: dbDataType[]) => {
-      db.close();
-      if (err) {
-        reject(err);
-      }
-      resolve(row);
-    });
-  });
-};
 
 export const getPlayerAdventures = async (
   player_id: string

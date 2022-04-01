@@ -126,9 +126,16 @@ export const getAllActions = async (): Promise<DBAction[]> => {
     parent_type: a.parent_type,
     type: a.type,
     item_id: parseInt(a.item_id),
-    data_id: a.data_id.length > 0 ? parseInt(a.item_id) : null,
+    data_id: a.data_id.length > 0 ? parseInt(a.item_id) : undefined,
   }));
   return actions;
+};
+
+export const getAction = async (action_id: string): Promise<DBAction> => {
+  const all = await getAllActions();
+  const res = all.find((a: DBAction) => a.id === parseInt(action_id));
+  if (!res) throw new Error(`Can't find action with id ${action_id}`);
+  return res;
 };
 
 export const getAllCharacters = async (): Promise<DBCharacter[]> => {

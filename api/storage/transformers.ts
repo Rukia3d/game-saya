@@ -1,4 +1,5 @@
 import {
+  DBAction,
   DBPAdventure,
   DBPCharacter,
   DBPHero,
@@ -6,6 +7,7 @@ import {
   DBPUpdate,
 } from "./db_types";
 import {
+  IAction,
   IPAdventure,
   IPCharacter,
   IPHero,
@@ -38,6 +40,15 @@ export const transformHeroes = (playerHeroes: DBPHero[]): IPHero[] => {
     };
   });
   return transformed;
+};
+
+export const transformAction = (action: DBAction): IAction => {
+  return {
+    id: action.id,
+    type: action.type,
+    item_id: action.item_id,
+    data_id: action.data_id ? action.data_id : null,
+  };
 };
 
 export const transformCharacters = (

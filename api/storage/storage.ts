@@ -44,8 +44,16 @@ import {
   getPlayerSpells,
   getPlayerSpellUpdates,
   getPlayerUpdates,
-} from "./dynamic_data";
+} from "./dynamic_data_readers";
 import {
+  addPlayerCharacter,
+  addPlayerHero,
+  createPlayer,
+  createPlayerAdventures,
+  createPlayerSpells,
+} from "./dynamic_data_writers";
+import {
+  getAction,
   getAllActions,
   getAllAdventures,
   getAllCharacters,
@@ -120,6 +128,10 @@ export const loadAdventures = async (): Promise<IAdventure[]> => {
     combinedFigths
   );
   return combineAdventuresData(adventures, combinedStories, actions);
+};
+
+export const getDBAction = async (action_id: string): Promise<DBAction> => {
+  return await getAction(action_id);
 };
 
 export const loadPlayerAdventures = async (
@@ -216,11 +228,30 @@ export const loadResources = async (): Promise<IResource[]> => {
   return combineResourceData(updates, schools);
 };
 
-export const loadPlayer = async (player_id: string): Promise<IPlayer> => {
-  const player: DBPlayer = await getPlayer(player_id);
-  //TODO Create new player
-  if (!player) throw new Error(`No player found`);
+const STARTINGCHARACTERID = 0;
+const STARTINGCHARACTERIMAGE = "maya_story1";
+const STARTINGCHARACTERDIALOGUE = 6;
+export const newPlayer = async (player_id: string): Promise<DBPlayer> => {
+  await createPlayer(player_id);
+  await createPlayerAdventures(player_id);
+  await addPlayerHero(player_id, STARTINGCHARACTERID, true);
+  await addPlayerCharacter(
+    player_id,
+    STARTINGCHARACTERID,
+    STARTINGCHARACTERIMAGE,
+    STARTINGCHARACTERDIALOGUE
+  );
+  await createPlayerSpells(player_id);
+  return await getPlayer(player_id);
+};
 
+export const loadPlayer = async (player_id: string): Promise<IPlayer> => {
+  let player: DBPlayer = await getPlayer(player_id);
+  //TODO Create new player
+  if (!player) {
+    console.log("Creating player");
+    player = await newPlayer(player_id);
+  }
   return {
     id: player.id,
     experience: player.experience,

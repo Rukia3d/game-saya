@@ -57,9 +57,9 @@ function App() {
   let playerId: string =
     window.localStorage.getItem("playerId") || short.generate();
   const { mutate } = useSWRConfig();
-  mutate("/api/player", { id: playerId }, false);
+  mutate("/api/users", { id: playerId }, false);
   const { data, error } = useSWRImmutable(
-    `/api/player?id=${playerId}`,
+    `/api/users/?userId=${playerId}`,
     fetcher
   );
   window.localStorage.setItem("playerId", playerId);

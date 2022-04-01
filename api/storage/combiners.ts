@@ -16,7 +16,6 @@ import {
   DBLine,
   DBFightElement,
   DBFight,
-  DBPCharacter,
 } from "./db_types";
 import {
   IStory,
@@ -33,7 +32,6 @@ import {
   ILine,
   IFight,
   IReel,
-  IPCharacter,
 } from "./types";
 
 export const combinedFightsData = (
@@ -142,7 +140,7 @@ export const combineAdventuresData = (
             id: a.id,
             type: a.type,
             item_id: a.item_id,
-            data_id: a.data_id,
+            data_id: a.data_id ? a.data_id : null,
           })
         : null
     );
@@ -275,7 +273,7 @@ export const combineUpdateData = (
             id: a.id,
             type: a.type,
             item_id: a.item_id,
-            data_id: a.data_id,
+            data_id: a.data_id ? a.data_id : null,
           })
         : null
     );

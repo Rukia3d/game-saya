@@ -118,6 +118,13 @@ export const getAllActions = async (): Promise<DBAction[]> => {
   return readAllLnes(actions, sql) as unknown as DBAction[];
 };
 
+export const getAction = async (action_id: number): Promise<DBAction> => {
+  const all = await getAllActions();
+  const res = all.find((a: DBAction) => a.id === action_id);
+  if (!res) throw new Error(`Can't find action with id ${action_id}`);
+  return res;
+};
+
 export const getAllCharacters = async (): Promise<DBCharacter[]> => {
   const characters: DBCharacter[] = [];
   const sql = `SELECT * from characters WHERE deleted_at='NULL'`;

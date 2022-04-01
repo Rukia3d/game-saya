@@ -1,4 +1,7 @@
+import { DBAction } from "../storage/db_types";
+import { openStory } from "../storage/dynamic_data_modifyers";
 import {
+  getDBAction,
   loadAdventures,
   loadCharacters,
   loadDialogues,
@@ -100,4 +103,16 @@ export const playerResources = async (
 export const player = async (player_id: string): Promise<IPlayer> => {
   const player = await loadPlayer(player_id);
   return player;
+};
+
+export const action = async (player_id: string, action_id: string) => {
+  const action: DBAction = await getDBAction(action_id);
+  console.log("got action", action);
+  switch (action.type) {
+    case "openStory":
+      openStory(player_id, action.parent_id);
+      return;
+    default:
+      throw new Error("Unknown action type");
+  }
 };

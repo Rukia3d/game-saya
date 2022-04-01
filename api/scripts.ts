@@ -1,4 +1,5 @@
 import {
+  action,
   player,
   playerAdventures,
   playerCharacters,
@@ -14,28 +15,53 @@ const app = express();
 const port = 3001;
 app.use(cors());
 
-app.get("/api/player/", async (req: any, res: any) => {
-  console.log("Requesting new player game data", req.query);
+const getData = async (player_id: string) => {
   const gameState = {
-    player: await player(req.query.id),
-    adventures: await playerAdventures(req.query.id),
-    heroes: await playerHeroes(req.query.id),
-    npcs: await playerCharacters(req.query.id),
-    spells: await playerSpells(req.query.id),
-    updates: await playerUpdates(req.query.id),
-    resources: await playerResources(req.query.id),
+    player: {
+      id: 0,
+      experience: 0,
+      life: 7,
+      maxlife: 7,
+      mana: 5,
+      maxmana: 5,
+      created_at: new Date(),
+      rank: 1,
+    },
+    // player: await player(player_id),
+    // adventures: await playerAdventures(player_id),
+    // heroes: await playerHeroes(player_id),
+    // npcs: await playerCharacters(player_id),
+    // spells: await playerSpells(player_id),
+    // updates: await playerUpdates(player_id),
+    // resources: await playerResources(player_id),
   };
+  return gameState;
+};
+
+app.post("/api/users/:userId/story/:storyId", async (req: any, res: any) => {
+  console.log(
+    `Requesting player game data for ${req.query.userId} story ${req.query.storyId}`
+  );
+  const gameState = null;
   console.log("gameState", gameState);
   res.send(gameState);
 });
 
-app.get("/api/rewards/", (req: any, res: any) => {});
+app.post("/api/users/:userId/story/:storyId", async (req: any, res: any) => {
+  console.log(
+    `Requesting player game data for ${req.query.userId} story ${req.query.storyId}`
+  );
+  const gameState = null;
+  console.log("gameState", gameState);
+  res.send(gameState);
+});
 
-app.get("/api/fights/", (req: any, res: any) => {});
-
-app.post("/api/heroes/:id", (req: any, res: any) => {});
-
-app.post("/api/updates/:id", (req: any, res: any) => {});
+app.get("/api/users/:userId", async (req: any, res: any) => {
+  console.log("Requesting new player game data", req.query);
+  const gameState = await getData(req.query.userId);
+  console.log("gameState", gameState);
+  res.send(gameState);
+});
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
