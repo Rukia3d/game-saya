@@ -134,16 +134,6 @@ export const combineAdventuresData = (
 ): IAdventure[] => {
   const updatedStories: IStory[] = stories.map((s: IStory) => {
     const updatedActions: IAction[] | null = [];
-    actions.map((a: DBAction) =>
-      a.parent_id === s.id && a.parent_type === "story"
-        ? updatedActions.push({
-            id: a.id,
-            type: a.type,
-            item_id: a.item_id,
-            data_id: a.data_id ? a.data_id : null,
-          })
-        : null
-    );
 
     return {
       ...s,
@@ -267,16 +257,6 @@ export const combineUpdateData = (
     );
 
     const updatedActions: IAction[] | null = [];
-    actions.map((a: DBAction) =>
-      a.parent_id === u.id && a.parent_type === "spell"
-        ? updatedActions.push({
-            id: a.id,
-            type: a.type,
-            item_id: a.item_id,
-            data_id: a.data_id ? a.data_id : null,
-          })
-        : null
-    );
 
     return {
       id: u.id,

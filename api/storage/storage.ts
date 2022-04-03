@@ -22,11 +22,16 @@ import {
   DBHero,
   DBLine,
   DBPAdventure,
+  DBPAttackSpellEvent,
   DBPCharacter,
+  DBPCreateEvent,
+  DBPEvent,
+  DBPFinishStoryEvent,
   DBPlayer,
   DBPResource,
   DBPSpell,
   DBPSpellUpdate,
+  DBPStartFightEvent,
   DBPUpdate,
   DBResource,
   DBSchool,
@@ -38,11 +43,15 @@ import {
 import {
   getPlayer,
   getPlayerAdventures,
+  getPlayerAttackSpellEvents,
   getPlayerCharacters,
+  getPlayerCreateEvent,
+  getPlayerFinishStoryEvents,
   getPlayerHeroes,
   getPlayerResources,
   getPlayerSpells,
   getPlayerSpellUpdates,
+  getPlayerStartFightEvents,
   getPlayerUpdates,
 } from "./dynamic_data_readers";
 import {
@@ -134,6 +143,23 @@ export const getDBAction = async (action_id: string): Promise<DBAction> => {
   return await getAction(action_id);
 };
 
+export const loadPlayerEvents = async (
+  player_id: string
+): Promise<DBPEvent[]> => {
+  const creationEvent: DBPCreateEvent = await getPlayerCreateEvent(player_id);
+  const finishStoryEvents: DBPFinishStoryEvent[] =
+    await getPlayerFinishStoryEvents(player_id);
+  const startFightEvents: DBPStartFightEvent[] =
+    await getPlayerStartFightEvents(player_id);
+  const attackSpellEvents: DBPAttackSpellEvent[] =
+    await getPlayerAttackSpellEvents(player_id);
+  const eventsData: DBPEvent[] = [creationEvent]
+    .concat(finishStoryEvents)
+    .concat(finishStoryEvents)
+    .concat(startFightEvents)
+    .concat(attackSpellEvents);
+  return eventsData;
+};
 export const loadPlayerAdventures = async (
   player_id: string
 ): Promise<IPAdventure[]> => {

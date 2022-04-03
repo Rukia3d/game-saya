@@ -11,7 +11,7 @@ const createDb = async (): Promise<Database> => {
       if (err) {
         console.error(err.message);
       }
-      console.log("Connected to the game database.");
+      //console.log("Connected to the game database.");
     }
   );
   return db;

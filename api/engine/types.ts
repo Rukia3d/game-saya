@@ -1,3 +1,4 @@
+import { DBPEvent } from "../storage/db_types";
 import {
   IAdventure,
   IDialogue,
@@ -6,6 +7,29 @@ import {
   ISpell,
   IUpdate,
 } from "../storage/types";
+
+export type UserEventType =
+  | "createUser"
+  | "finishStory"
+  | "startFight"
+  | "attackSpell"
+  | "selectHero"
+  | "selectSpell";
+
+export type ActionEventType =
+  | "createUserAction"
+  | "addHero"
+  | "selectSpellAction"
+  | "selectHeroAction"
+  | "openAdventure"
+  | "updateNPC"
+  | "addSpell"
+  | "addResource"
+  | "openStory"
+  | "generateFight"
+  | "startFightAction"
+  | "attackSpell"
+  | "addResource";
 
 export type IPlayerAdventure = IAdventure & {
   open: boolean;
@@ -51,3 +75,5 @@ export type IPlayer = {
   created_at: Date;
   rank: number;
 };
+
+export type IUserEvent = DBPEvent;

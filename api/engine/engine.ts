@@ -1,7 +1,4 @@
-import { DBAction } from "../storage/db_types";
-import { openStory } from "../storage/dynamic_data_modifyers";
 import {
-  getDBAction,
   loadAdventures,
   loadCharacters,
   loadDialogues,
@@ -9,6 +6,7 @@ import {
   loadPlayer,
   loadPlayerAdventures,
   loadPlayerCharacters,
+  loadPlayerEvents,
   loadPlayerHeroes,
   loadPlayerResources,
   loadPlayerSpells,
@@ -48,7 +46,22 @@ import {
   IPlayerUpdate,
   IPlayerResource,
   IPlayer,
+  IUserEvent,
 } from "./types";
+
+export const userEvents = async (player_id: string): Promise<IUserEvent[]> => {
+  const events: IUserEvent[] = await loadPlayerEvents(player_id);
+
+  const res = events.sort(function (a, b) {
+    var keyA = new Date(a.created_at),
+      keyB = new Date(b.created_at);
+    // Compare the 2 dates
+    if (keyA < keyB) return -1;
+    if (keyA > keyB) return 1;
+    return 0;
+  });
+  return res;
+};
 
 export const playerAdventures = async (
   player_id: string
@@ -103,16 +116,4 @@ export const playerResources = async (
 export const player = async (player_id: string): Promise<IPlayer> => {
   const player = await loadPlayer(player_id);
   return player;
-};
-
-export const action = async (player_id: string, action_id: string) => {
-  const action: DBAction = await getDBAction(action_id);
-  console.log("got action", action);
-  switch (action.type) {
-    case "openStory":
-      openStory(player_id, action.parent_id);
-      return;
-    default:
-      throw new Error("Unknown action type");
-  }
 };

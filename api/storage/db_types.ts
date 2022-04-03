@@ -1,9 +1,9 @@
 export type DBAction = {
   id: number;
-  parent_id: number;
-  parent_type: string;
   type: string;
-  item_id: number;
+  event_id: number;
+  event_type: string;
+  item_id?: number;
   data_id?: number;
 };
 
@@ -189,3 +189,50 @@ export type DBPResource = {
   updated_at: string;
   deleted_at: string;
 };
+
+export type DBPCreateEvent = {
+  id: number;
+  event: string;
+  player_id: number;
+  created_at: string;
+  updated_at: string;
+  deleted_at: string;
+};
+
+export type DBPFinishStoryEvent = {
+  id: number;
+  event: string;
+  player_id: number;
+  story_id: number;
+  adventure_id: number;
+  created_at: string;
+  updated_at: string;
+  deleted_at: string;
+};
+
+export type DBPStartFightEvent = {
+  id: number;
+  event: string;
+  player_id: number;
+  fight_id: number;
+  created_at: string;
+  updated_at: string;
+  deleted_at: string;
+};
+
+export type DBPAttackSpellEvent = {
+  id: number;
+  event: string;
+  player_id: number;
+  spell_id: number;
+  spell_index: number;
+  created_at: string;
+  updated_at: string;
+  deleted_at: string;
+};
+
+export type DBPEvent =
+  | DBPCreateEvent
+  | DBPFinishStoryEvent
+  | DBPStartFightEvent
+  | DBPAttackSpellEvent;

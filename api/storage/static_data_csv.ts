@@ -122,11 +122,11 @@ export const getAllActions = async (): Promise<DBAction[]> => {
   const res = await readAllRows(address);
   const actions: DBAction[] = res.map((a: csvType) => ({
     id: parseInt(a.id),
-    parent_id: parseInt(a.parent_id),
-    parent_type: a.parent_type,
     type: a.type,
-    item_id: parseInt(a.item_id),
-    data_id: a.data_id.length > 0 ? parseInt(a.item_id) : undefined,
+    event_id: parseInt(a.parent_id),
+    event_type: a.parent_type,
+    item_id: a.item_id.length > 0 ? parseInt(a.item_id) : undefined,
+    data_id: a.data_id.length > 0 ? parseInt(a.data_id) : undefined,
   }));
   return actions;
 };

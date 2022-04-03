@@ -8,6 +8,7 @@ import {
   DBPSpell,
   DBPUpdate,
   DBPResource,
+  DBPEvent,
 } from "./db_types";
 
 const sqlite3 = require("sqlite3").verbose();
@@ -20,7 +21,8 @@ type dbDataType =
   | DBPSpellUpdate
   | DBPSpell
   | DBPUpdate
-  | DBPResource;
+  | DBPResource
+  | DBPEvent;
 
 const createDb = async (): Promise<Database> => {
   const db: Database = new sqlite3.Database(
