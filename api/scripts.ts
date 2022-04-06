@@ -1,4 +1,5 @@
 import {
+  applyUserEvents,
   player,
   playerAdventures,
   playerCharacters,
@@ -6,7 +7,6 @@ import {
   playerResources,
   playerSpells,
   playerUpdates,
-  userEvents,
 } from "./engine/engine";
 
 import { IPlayer } from "./engine/types";
@@ -16,22 +16,11 @@ const app = express();
 const port = 3001;
 app.use(cors());
 
-const BASEPLAYER: IPlayer = {
-  id: 0,
-  experience: 0,
-  life: 7,
-  maxlife: 7,
-  mana: 5,
-  maxmana: 5,
-  created_at: new Date("2022-04-01"),
-  rank: 1,
-};
-
 const getData = async (player_id: string) => {
-  const events = await userEvents(player_id);
-  console.log("events", events);
+  const player = await applyUserEvents(player_id);
+  console.log("events", player);
   const gameState = {
-    player: BASEPLAYER,
+    player: player,
     // player: await player(player_id),
     // adventures: await playerAdventures(player_id),
     // heroes: await playerHeroes(player_id),

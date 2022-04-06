@@ -30,6 +30,7 @@ import {
   IPResource,
   IDialogue,
 } from "../storage/types";
+import { addHero, openAdventure, selectHeroes } from "./actions";
 import {
   combineAdventures,
   combineHeroes,
@@ -49,7 +50,84 @@ import {
   IUserEvent,
 } from "./types";
 
-export const userEvents = async (player_id: string): Promise<IUserEvent[]> => {
+type IEventPlayer = {
+  player: IPlayer;
+  adventures: IPlayerAdventure[] | null;
+  heroes: IPlayerHero[] | null;
+  spells: null;
+  resources: null;
+  updates: null;
+  npcs: null;
+};
+
+const BASEPLAYER: IPlayer = {
+  id: 0,
+  experience: 0,
+  life: 0,
+  maxlife: 0,
+  mana: 0,
+  maxmana: 0,
+  created_at: new Date(),
+  updated_at: new Date(),
+  rank: 0,
+};
+
+const createUserEvent = async (
+  player: IEventPlayer,
+  event: IUserEvent
+): Promise<IEventPlayer> => {
+  let newPlayer = player;
+  const heroes = await loadHeroes();
+  const adventures = await loadAdventures();
+  const characters = await loadCharacters();
+  const spells = await loadSpells();
+  const resources = await loadResources();
+  newPlayer.player.created_at = new Date(event.created_at);
+  newPlayer.player.updated_at = new Date();
+  newPlayer.heroes = addHero(newPlayer.heroes, heroes, 0);
+  newPlayer.heroes = selectHeroes(newPlayer.heroes, [1], 3);
+  newPlayer.adventures = openAdventure(newPlayer.adventures, adventures, 0);
+  // newPlayer.npcs = updateNPCs(newPlayer.npcs, characters, [{0, 0}]);
+  // newPlayer.spells = addSpells(newPlayer.spells, spells, [0, 1, 2, 3, 4, 5]);
+  // newPlayer.spells = selectSpells(newPlayer.spells, [0, 1, 2, 3, 4, 5]);
+  // newPlayer.resources = addResource(newPlayer.resources, resources, 3, 5);
+  return newPlayer;
+};
+
+export const applyUserEvents = async (
+  player_id: string
+): Promise<IEventPlayer> => {
+  let player: IEventPlayer = {
+    player: BASEPLAYER,
+    adventures: null,
+    heroes: null,
+    spells: null,
+    resources: null,
+    updates: null,
+    npcs: null,
+  };
+  const events: IUserEvent[] = await userEvents(player_id);
+  events.map(async (e: IUserEvent) => {
+    switch (e.event) {
+      case "CREATEUSER":
+        player = await createUserEvent(player, e);
+        //   return;
+        // case "FINISHSTORY":
+        //   player = await createUserEvent(player, e);
+        //   return;
+        // case "STARTFIGHT":
+        //   player = await createUserEvent(player, e);
+        //   return;
+        // case "ATTACKSPELL":
+        //   player = await createUserEvent(player, e);
+        //   return;
+        deafult: throw new Error("Unknown event formap");
+    }
+  });
+  return player;
+};
+
+const userEvents = async (player_id: string): Promise<IUserEvent[]> => {
   const events: IUserEvent[] = await loadPlayerEvents(player_id);
 
   const res = events.sort(function (a, b) {

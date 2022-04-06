@@ -133,12 +133,9 @@ export const combineAdventuresData = (
   actions: DBAction[]
 ): IAdventure[] => {
   const updatedStories: IStory[] = stories.map((s: IStory) => {
-    const updatedActions: IAction[] | null = [];
-
     return {
       ...s,
       open: false,
-      actions: updatedActions,
     };
   });
 
@@ -148,7 +145,6 @@ export const combineAdventuresData = (
       .map((i: IStory) => {
         return {
           ...i,
-          actions: i.actions,
           open: false,
         };
       });

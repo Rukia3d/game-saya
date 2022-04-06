@@ -43,7 +43,6 @@ export type IStory = {
   name: string;
   next_id: number | null;
   open: boolean;
-  actions: null | IAction[];
   item: IDialogue | IFight | IReel;
 };
 
@@ -115,7 +114,6 @@ export type IPCharacter = {
 };
 export type IPAdventure = {
   id: number;
-  last_story_id: number | null;
   open: boolean;
   created_at: Date;
   expires_at: Date;

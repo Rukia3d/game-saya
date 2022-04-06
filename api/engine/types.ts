@@ -34,13 +34,13 @@ export type ActionEventType =
 export type IPlayerAdventure = IAdventure & {
   open: boolean;
   created_at: Date;
-  expires_at: Date;
+  expires_at: Date | null;
 };
 
 export type IPlayerHero = IHero & {
   selected: boolean;
   created_at: Date;
-  expires_at: Date;
+  expires_at: Date | null;
 };
 
 export type IPlayerCharacter = {
@@ -48,7 +48,7 @@ export type IPlayerCharacter = {
   image: string;
   dialogue: IDialogue;
   created_at: Date;
-  expires_at: Date;
+  expires_at: Date | null;
 };
 
 export type IPlayerResource = IResource & {
@@ -59,7 +59,7 @@ export type IPlayerResource = IResource & {
 export type IPlayerSpell = ISpell & {
   copy_id: number;
   created_at: Date;
-  expires_at: Date;
+  expires_at: Date | null;
   updates: IUpdate[] | [];
 };
 
@@ -73,6 +73,7 @@ export type IPlayer = {
   mana: number;
   maxmana: number;
   created_at: Date;
+  updated_at: Date;
   rank: number;
 };
 

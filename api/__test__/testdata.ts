@@ -1,3 +1,4 @@
+import { IPlayerAdventure, IPlayerHero } from "../engine/types";
 import {
   IAction,
   IStory,
@@ -16,8 +17,9 @@ import {
   IPUpdatedSpell,
   IPUpdate,
   IPResource,
+  IDialogue,
+  ILine,
 } from "../storage/types";
-const actions = ["addHero", "addNpc"];
 const stories = ["dialogue", "fight", "reel"];
 const adventures = ["story", "character", "event"];
 const elements = ["red", "blue", "green", "rose"];
@@ -26,24 +28,49 @@ const characters = ["nell", "gabriel", "grey", "solveig"];
 const spells = ["redHit1", "redHit2", "blueHit", "blueHit1", "blueHit2"];
 const updates = ["oblation1", "oblation2", "amplification1"];
 const resurces = ["someRed", "someRed2", "someBlue", "someGreen"];
-export const testActions: IAction[] = actions.map((s: string, i: number) => {
+
+export const testCharacters: ICharacter[] = characters.map(
+  (s: string, i: number) => {
+    return {
+      id: i,
+      name: s,
+      description: s,
+    };
+  }
+);
+
+const testLines: ILine[] = [1, 2, 3].map((n: number) => {
   return {
-    id: i,
-    type: s,
-    item: characters.indexOf("nell"),
-    data: i === 0 ? elements.indexOf("red") : i,
+    id: n,
+    character: testCharacters[n],
+    image: "image",
+    position: "R",
+    text: `${testCharacters[n].name} says something`,
   };
 });
+
+export const testDialogues: IDialogue[] = [1, 2, 3].map((n: number) => {
+  return {
+    id: n,
+    story_id: n === 1 ? null : n,
+    lines: testLines,
+    background: "some image",
+    layout: "double",
+  };
+});
+
 export const testStories: IStory[] = stories.map((s: string, i: number) => {
   return {
     id: i,
     type: s,
     name: s,
-    next: i === 1 ? null : (i + 1).toString(),
+    next_id: i === 1 ? null : i + 1,
     open: i === 2 ? false : true,
-    actions: i === 1 ? testActions : null,
+    adventure_id: 0,
+    item: testDialogues[0],
   };
 });
+
 export const testAdventures: IAdventure[] = adventures.map(
   (s: string, i: number) => {
     return {
@@ -51,7 +78,7 @@ export const testAdventures: IAdventure[] = adventures.map(
       type: s,
       name: s,
       description: s,
-      stories: i === 1 ? null : testStories,
+      stories: testStories,
     };
   }
 );
@@ -73,16 +100,6 @@ export const testElements: IElement[] = elements.map((s: string, i: number) => {
     school: testSchools[i],
   };
 });
-
-export const testCharacters: ICharacter[] = characters.map(
-  (s: string, i: number) => {
-    return {
-      id: i,
-      name: s,
-      description: s,
-    };
-  }
-);
 
 export const testResources: IResource[] = resurces.map(
   (s: string, i: number) => {
@@ -121,23 +138,27 @@ export const testSpells: ISpell[] = spells.map((s: string, i: number) => {
   };
 });
 
-export const testUpdates: IUpdate[] = updates.map((s: string, i: number) => {
-  return {
-    id: i,
-    name: s,
-    description: s,
-    effect: "h_heal",
-    base_mana: 1,
-    school: i < 2 ? testSchools[0] : testSchools[1],
-    resource_base: testUpdateResources.slice(0, 3),
-    actions: i < 2 ? testActions.slice(1, 3) : [testActions[0]],
-  };
-});
+// export const testUpdates: IUpdate[] = updates.map((s: string, i: number) => {
+//   return {
+//     id: i,
+//     name: s,
+//     description: s,
+//     effect: "h_heal",
+//     base_mana: 1,
+//     school: i < 2 ? testSchools[0] : testSchools[1],
+//     resource_base: testUpdateResources.slice(0, 3),
+//     actions: i < 2 ? testActions.slice(1, 3) : [testActions[0]],
+//   };
+// });
 
-export const testPlayerHeroes: IPHero[] = ["nell", "gabriel", "grey"].map(
+export const testPlayerHeroes: IPlayerHero[] = ["nell", "gabriel", "grey"].map(
   (s: string, i: number) => {
+    const original = testHeroes.find((h: IHero) => h.name === s);
+    if (original == undefined) {
+      throw new Error(`Can't create testPlayerHeroes from testHeroes`);
+    }
     return {
-      id: i,
+      ...original,
       selected: i < 2 ? true : false,
       created_at: new Date(),
       expires_at: new Date(),
@@ -145,17 +166,20 @@ export const testPlayerHeroes: IPHero[] = ["nell", "gabriel", "grey"].map(
   }
 );
 
-export const testPlayerAdventures: IPAdventure[] = [
+export const testPlayerAdventures: IPlayerAdventure[] = [
   "story",
   "character",
   "event",
 ].map((s: string, i: number) => {
   return {
     id: i,
-    last_story_id: i < 2 ? 1 : null,
+    type: s,
+    name: s,
+    description: `Adventure ${s} description`,
     open: true,
     created_at: new Date(),
     expires_at: new Date(),
+    stories: testStories,
   };
 });
 

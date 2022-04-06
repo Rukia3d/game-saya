@@ -286,6 +286,7 @@ export const loadPlayer = async (player_id: string): Promise<IPlayer> => {
     mana: player.mana,
     maxmana: player.maxmana,
     created_at: new Date(player.created_at),
+    updated_at: new Date(),
     rank: player.rank,
   };
 };
