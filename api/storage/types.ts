@@ -79,6 +79,8 @@ export type ISpell = {
 
 export type ICharacter = DBCharacter;
 
+export type IDialogueCharacter = ICharacter & { dialogue: IDialogue };
+
 export type IResource = {
   id: number;
   school: ISchool;

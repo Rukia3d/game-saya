@@ -1,4 +1,11 @@
-import { IAdventure, IHero } from "../storage/types";
+import {
+  IAdventure,
+  ICharacter,
+  IDialogue,
+  IDialogueCharacter,
+  IHero,
+  IStory,
+} from "../storage/types";
 import { player } from "./engine";
 import { IPlayerAdventure, IPlayerHero } from "./types";
 const MAXADVENTURES = 5;
@@ -165,14 +172,12 @@ export const openAdventure = (
         return 0;
       });
 
-    console.log("oldestExpAdventure", oldestExpAdventure);
     if (!oldestExpAdventure[0]) {
       throw new Error(
         `Can't add a new adventure with id ${id} - old adventures haven't expired`
       );
     }
-    const oldestAdventureIndex = newAdventures.indexOf(oldestExpAdventure[0]);
-    newAdventures.splice(oldestAdventureIndex, 1);
+    newAdventures.splice(newAdventures.indexOf(oldestExpAdventure[0]), 1);
     newAdventures.push({
       ...adventureToAdd,
       open: true,
@@ -181,4 +186,82 @@ export const openAdventure = (
     });
     return newAdventures;
   }
+};
+
+export const openStory = (
+  playerAdventures: IPlayerAdventure[] | null,
+  adventureId: number,
+  storyId: number
+): IPlayerAdventure[] => {
+  if (!playerAdventures || playerAdventures.length < 1) {
+    throw new Error(`Can't open a story, no adventures provided`);
+  }
+  const newAdventures = playerAdventures;
+  const adventureToEdit = newAdventures.findIndex(
+    (p: IPlayerAdventure) => p.id === adventureId
+  );
+
+  if (adventureToEdit == -1) {
+    throw new Error(
+      `Adventure with id ${adventureId} doesn't exist in player adventures`
+    );
+  }
+  const adventureWithAStory = newAdventures[adventureToEdit];
+
+  if (!adventureWithAStory.stories || adventureWithAStory.stories.length < 1) {
+    throw new Error(
+      `Adventure with id ${adventureId} doesn't contain any stories`
+    );
+  }
+  const storyToOpen = adventureWithAStory.stories.findIndex(
+    (p: IStory) => p.id === storyId
+  );
+
+  if (storyToOpen === -1) {
+    throw new Error(
+      `Story with id ${storyId} doesn't exist in adventure ${adventureId}`
+    );
+  }
+  adventureWithAStory.stories[storyToOpen].open = true;
+  newAdventures[adventureToEdit] = adventureWithAStory;
+  return newAdventures;
+};
+
+export const updateNPCs = (
+  playerCharacters: IDialogueCharacter[] | null,
+  characters: ICharacter[],
+  dialogues: IDialogue[],
+  npc_dialogues: { npc_id: number; dialogue_id: number }[]
+): IDialogueCharacter[] => {
+  let newCharacters = playerCharacters ? playerCharacters : [];
+
+  npc_dialogues.forEach((dial: { npc_id: number; dialogue_id: number }) => {
+    const dialogue = dialogues.find(
+      (d: IDialogue) => d.id === dial.dialogue_id
+    );
+    if (!dialogue) {
+      throw new Error(
+        `Can't find dialogue ${dial.dialogue_id} in dialogue database`
+      );
+    }
+
+    const character = characters.find((c: ICharacter) => c.id === dial.npc_id);
+    if (!character) {
+      throw new Error(
+        `Can't find character ${dial.npc_id} in characters database`
+      );
+    }
+
+    const existingCharacterIndex = newCharacters?.findIndex(
+      (c: IDialogueCharacter) => c.id === dial.npc_id
+    );
+    if (existingCharacterIndex === -1) {
+      // Need to add this character
+      newCharacters.push({ ...character, dialogue: dialogue });
+    } else {
+      // need to replace this character
+      newCharacters[existingCharacterIndex].dialogue = { ...dialogue };
+    }
+  });
+  return newCharacters;
 };

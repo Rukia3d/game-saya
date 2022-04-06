@@ -19,6 +19,7 @@ import {
   IPResource,
   IDialogue,
   ILine,
+  IDialogueCharacter,
 } from "../storage/types";
 const stories = ["dialogue", "fight", "reel"];
 const adventures = ["story", "character", "event"];
@@ -34,7 +35,7 @@ export const testCharacters: ICharacter[] = characters.map(
     return {
       id: i,
       name: s,
-      description: s,
+      description: `Description for a character ${s}`,
     };
   }
 );
@@ -183,19 +184,11 @@ export const testPlayerAdventures: IPlayerAdventure[] = [
   };
 });
 
-export const testPlayerCharacters: IPCharacter[] = [
-  "nell",
-  "gabriel",
-  "grey",
-].map((s: string, i: number) => {
-  return {
-    id: i,
-    image: s + i,
-    dialogue_id: i,
-    created_at: new Date(),
-    expires_at: new Date(),
-  };
-});
+export const testPlayerCharacters: IDialogueCharacter[] = testCharacters.map(
+  (t: ICharacter, n: number) => {
+    return { ...t, dialogue: testDialogues[n] };
+  }
+);
 
 export const testPlayerSpells: IPUpdatedSpell[] = [0, 1, 2].map((i) => {
   return {

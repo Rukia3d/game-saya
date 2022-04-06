@@ -29,8 +29,15 @@ import {
   IPUpdate,
   IPResource,
   IDialogue,
+  IDialogueCharacter,
 } from "../storage/types";
-import { addHero, openAdventure, selectHeroes } from "./actions";
+import {
+  addHero,
+  openAdventure,
+  selectHeroes,
+  openStory,
+  updateNPCs,
+} from "./actions";
 import {
   combineAdventures,
   combineHeroes,
@@ -57,7 +64,7 @@ type IEventPlayer = {
   spells: null;
   resources: null;
   updates: null;
-  npcs: null;
+  npcs: IDialogueCharacter[] | null;
 };
 
 const BASEPLAYER: IPlayer = {
@@ -77,17 +84,26 @@ const createUserEvent = async (
   event: IUserEvent
 ): Promise<IEventPlayer> => {
   let newPlayer = player;
+  const initNPC = { npc_id: 0, dialogue_id: 0 };
+  const initHero = 0;
+  const initAdv = 0;
   const heroes = await loadHeroes();
   const adventures = await loadAdventures();
   const characters = await loadCharacters();
+  const dialogues = await loadDialogues();
   const spells = await loadSpells();
   const resources = await loadResources();
   newPlayer.player.created_at = new Date(event.created_at);
   newPlayer.player.updated_at = new Date();
-  newPlayer.heroes = addHero(newPlayer.heroes, heroes, 0);
-  newPlayer.heroes = selectHeroes(newPlayer.heroes, [1], 3);
-  newPlayer.adventures = openAdventure(newPlayer.adventures, adventures, 0);
-  // newPlayer.npcs = updateNPCs(newPlayer.npcs, characters, [{0, 0}]);
+  newPlayer.heroes = addHero(newPlayer.heroes, heroes, initHero);
+  newPlayer.heroes = selectHeroes(newPlayer.heroes, [initHero], 1);
+  newPlayer.adventures = openAdventure(
+    newPlayer.adventures,
+    adventures,
+    initAdv
+  );
+  newPlayer.adventures = openStory(newPlayer.adventures, initAdv, 0);
+  newPlayer.npcs = updateNPCs(newPlayer.npcs, characters, dialogues, [initNPC]);
   // newPlayer.spells = addSpells(newPlayer.spells, spells, [0, 1, 2, 3, 4, 5]);
   // newPlayer.spells = selectSpells(newPlayer.spells, [0, 1, 2, 3, 4, 5]);
   // newPlayer.resources = addResource(newPlayer.resources, resources, 3, 5);

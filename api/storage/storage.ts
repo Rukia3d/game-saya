@@ -88,6 +88,7 @@ import {
 } from "./transformers";
 import {
   IAdventure,
+  ICharacter,
   IDialogue,
   IElement,
   IFight,
@@ -183,7 +184,7 @@ export const loadPlayerHeroes = async (
   return transformHeroes(playerHeroes);
 };
 
-export const loadCharacters = async (): Promise<DBCharacter[]> => {
+export const loadCharacters = async (): Promise<ICharacter[]> => {
   const characters: DBCharacter[] = await getAllCharacters();
   return characters;
 };
