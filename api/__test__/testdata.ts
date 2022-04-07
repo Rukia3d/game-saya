@@ -1,4 +1,4 @@
-import { IPlayerAdventure, IPlayerHero } from "../engine/types";
+import { IPlayerAdventure, IPlayerHero, IPlayerSpell } from "../engine/types";
 import {
   IAction,
   IStory,
@@ -190,7 +190,18 @@ export const testPlayerCharacters: IDialogueCharacter[] = testCharacters.map(
   }
 );
 
-export const testPlayerSpells: IPUpdatedSpell[] = [0, 1, 2].map((i) => {
+export const testPlayerSpells: IPlayerSpell[] = testSpells.map(
+  (s: ISpell, i: number) => ({
+    ...s,
+    created_at: new Date(),
+    expires_at: null,
+    copy_id: i,
+    updates: [],
+    selected: true,
+  })
+);
+
+export const testPlayerUpdatedSpells: IPUpdatedSpell[] = [0, 1, 2].map((i) => {
   return {
     spell: {
       player_id: 1,

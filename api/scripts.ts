@@ -18,18 +18,8 @@ app.use(cors());
 
 const getData = async (player_id: string) => {
   const player = await applyUserEvents(player_id);
-  console.log("events", player);
-  const gameState = {
-    player: player,
-    // player: await player(player_id),
-    // adventures: await playerAdventures(player_id),
-    // heroes: await playerHeroes(player_id),
-    // npcs: await playerCharacters(player_id),
-    // spells: await playerSpells(player_id),
-    // updates: await playerUpdates(player_id),
-    // resources: await playerResources(player_id),
-  };
-  return gameState;
+  //console.log("getData", player);
+  return player;
 };
 
 app.post("/api/users/:userId/fight/:fightId", async (req: any, res: any) => {
@@ -53,7 +43,6 @@ app.post("/api/users/:userId/story/:storyId", async (req: any, res: any) => {
 app.get("/api/users/:userId", async (req: any, res: any) => {
   console.log("Requesting new player game data", req.params);
   const gameState = await getData(req.params.userId);
-  console.log("gameState", gameState);
   res.send(gameState);
 });
 

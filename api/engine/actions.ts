@@ -4,10 +4,11 @@ import {
   IDialogue,
   IDialogueCharacter,
   IHero,
+  ISpell,
   IStory,
 } from "../storage/types";
 import { player } from "./engine";
-import { IPlayerAdventure, IPlayerHero } from "./types";
+import { IPlayerAdventure, IPlayerHero, IPlayerSpell } from "./types";
 const MAXADVENTURES = 5;
 
 export const addHero = (
@@ -97,25 +98,25 @@ const validateSelectHeroesOutput = (
 };
 export const selectHeroes = (
   playerHeroes: IPlayerHero[] | null,
-  select: number[],
+  indexes: number[],
   max: number
 ): IPlayerHero[] => {
   const newHeroes: IPlayerHero[] = validateSelectHeroesInput(
     playerHeroes,
-    select
+    indexes
   );
 
-  select.forEach((s: number) => (newHeroes[s].selected = true));
+  indexes.forEach((s: number) => (newHeroes[s].selected = true));
 
   while (newHeroes.filter((h: IPlayerHero) => h.selected).length > max) {
     newHeroes.forEach((p: IPlayerHero, i: number) => {
-      if (p.selected && select.indexOf(i) == -1) {
+      if (p.selected && indexes.indexOf(i) == -1) {
         p.selected = false;
       }
     });
   }
 
-  validateSelectHeroesOutput(newHeroes, select, max);
+  validateSelectHeroesOutput(newHeroes, indexes, max);
   return newHeroes;
 };
 
@@ -264,4 +265,62 @@ export const updateNPCs = (
     }
   });
   return newCharacters;
+};
+
+export const addSpells = (
+  playerSpells: IPlayerSpell[] | null,
+  spells: ISpell[],
+  ids: number[],
+  expDate?: Date
+): IPlayerSpell[] => {
+  let newSpells = playerSpells ? playerSpells : [];
+  ids.forEach((id: number) => {
+    const spellToAdd = spells.find((s: ISpell) => s.id === id);
+    if (!spellToAdd) {
+      throw new Error(`Can't find a spell ${id} in spells database`);
+    }
+    const existingSpellLatest = newSpells
+      .filter((s: IPlayerSpell) => s.id === id)
+      .sort(function (curr, next) {
+        if (curr.copy_id > next.copy_id) return -1;
+        if (curr.copy_id < next.copy_id) return 1;
+
+        return 0;
+      });
+    const copy =
+      existingSpellLatest.length < 1 ? 0 : existingSpellLatest[0].copy_id + 1;
+
+    newSpells.push({
+      ...spellToAdd,
+      copy_id: copy,
+      created_at: new Date(),
+      expires_at: expDate ? new Date(expDate) : null,
+      updates: [],
+      selected: false,
+    });
+  });
+  return newSpells;
+};
+
+export const selectSpells = (
+  playerSpells: IPlayerSpell[] | null,
+  indexes: number[],
+  max: number
+): IPlayerSpell[] => {
+  if (!playerSpells || playerSpells.length < max) {
+    throw new Error(`Can't select spells, not enough spells provided`);
+  }
+  if (indexes.length < 1) {
+    throw new Error(`Can't select spells, no spells indexes provided`);
+  }
+  if (!isUnique(indexes)) {
+    throw new Error(`Can't select the same spell twice`);
+  }
+
+  const newSpells: IPlayerSpell[] = playerSpells;
+  newSpells.forEach((s: IPlayerSpell) => (s.selected = false));
+
+  indexes.forEach((s: number) => (newSpells[s].selected = true));
+
+  return newSpells;
 };

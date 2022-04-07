@@ -57,6 +57,7 @@ export type IPlayerResource = IResource & {
 };
 
 export type IPlayerSpell = ISpell & {
+  selected: boolean;
   copy_id: number;
   created_at: Date;
   expires_at: Date | null;
@@ -77,4 +78,48 @@ export type IPlayer = {
   rank: number;
 };
 
-export type IUserEvent = DBPEvent;
+export type IPCreateEvent = {
+  id: number;
+  event: string;
+  player_id: number;
+  created_at: Date;
+  updated_at: Date;
+  deleted_at: Date;
+};
+
+export type IPFinishStoryEvent = {
+  id: number;
+  event: string;
+  player_id: number;
+  story_id: number;
+  adventure_id: number;
+  created_at: Date;
+  updated_at: Date;
+  deleted_at: Date;
+};
+
+export type IPStartFightEvent = {
+  id: number;
+  event: string;
+  player_id: number;
+  fight_id: number;
+  created_at: Date;
+  updated_at: Date;
+  deleted_at: Date;
+};
+
+export type IPAttackSpellEvent = {
+  id: number;
+  event: string;
+  player_id: number;
+  spell_id: number;
+  spell_index: number;
+  created_at: Date;
+  updated_at: Date;
+  deleted_at: Date;
+};
+export type IUserEvent =
+  | IPAttackSpellEvent
+  | IPStartFightEvent
+  | IPFinishStoryEvent
+  | IPCreateEvent;

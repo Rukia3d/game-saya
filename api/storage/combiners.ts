@@ -69,20 +69,22 @@ export const combineDialoguesData = (
   characters: DBCharacter[]
 ): IDialogue[] => {
   const updatedDialogues: IDialogue[] = dialogues.map((d: DBDialogue) => {
-    const updatedLines: ILine[] = lines.map((l: DBLine) => {
-      const character = characters.find(
-        (c: DBCharacter) => c.id === l.character_id
-      );
-      if (!character)
-        throw new Error(`Can't find a character for ${l.character_id}`);
-      return {
-        id: l.id,
-        character: character,
-        image: l.image,
-        position: l.position,
-        text: l.text,
-      };
-    });
+    const updatedLines: ILine[] = lines
+      .filter((l: DBLine) => l.dialogue_id === d.id)
+      .map((l: DBLine) => {
+        const character = characters.find(
+          (c: DBCharacter) => c.id === l.character_id
+        );
+        if (!character)
+          throw new Error(`Can't find a character for ${l.character_id}`);
+        return {
+          id: l.id,
+          character: character,
+          image: l.image,
+          position: l.position,
+          text: l.text,
+        };
+      });
     return {
       id: d.id,
       story_id: d.story_id,
@@ -129,18 +131,10 @@ export const combineStoriesData = (
 
 export const combineAdventuresData = (
   adventures: DBAdventure[],
-  stories: IStory[],
-  actions: DBAction[]
+  stories: IStory[]
 ): IAdventure[] => {
-  const updatedStories: IStory[] = stories.map((s: IStory) => {
-    return {
-      ...s,
-      open: false,
-    };
-  });
-
   const updatedAdventures: IAdventure[] = adventures.map((a: DBAdventure) => {
-    const stories: IStory[] = updatedStories
+    const filteredStories: IStory[] = stories
       .filter((s: IStory) => s.adventure_id === a.id)
       .map((i: IStory) => {
         return {
@@ -153,7 +147,7 @@ export const combineAdventuresData = (
       type: a.type,
       name: a.name,
       description: a.description,
-      stories: stories,
+      stories: filteredStories,
     };
   });
   return updatedAdventures;

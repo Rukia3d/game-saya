@@ -1,4 +1,4 @@
-import { IPlayer } from "../engine/types";
+import { IPlayer, IUserEvent } from "../engine/types";
 import {
   combineAdventuresData,
   combinedFightsData,
@@ -128,7 +128,6 @@ export const loadFights = async (): Promise<IFight[]> => {
 export const loadAdventures = async (): Promise<IAdventure[]> => {
   const adventures: DBAdventure[] = await getAllAdventures();
   const stories: DBStory[] = await getAllStories();
-  const actions: DBAction[] = await getAllActions();
 
   const combinedDialogues = await loadDialogues();
   const combinedFigths = await loadFights();
@@ -137,7 +136,8 @@ export const loadAdventures = async (): Promise<IAdventure[]> => {
     combinedDialogues,
     combinedFigths
   );
-  return combineAdventuresData(adventures, combinedStories, actions);
+  return combineAdventuresData(adventures, combinedStories);
+  return [];
 };
 
 export const getDBAction = async (action_id: string): Promise<DBAction> => {
@@ -146,7 +146,7 @@ export const getDBAction = async (action_id: string): Promise<DBAction> => {
 
 export const loadPlayerEvents = async (
   player_id: string
-): Promise<DBPEvent[]> => {
+): Promise<IUserEvent[]> => {
   const creationEvent: DBPCreateEvent = await getPlayerCreateEvent(player_id);
   const finishStoryEvents: DBPFinishStoryEvent[] =
     await getPlayerFinishStoryEvents(player_id);
@@ -159,7 +159,12 @@ export const loadPlayerEvents = async (
     .concat(finishStoryEvents)
     .concat(startFightEvents)
     .concat(attackSpellEvents);
-  return eventsData;
+  return eventsData.map((e: DBPEvent) => ({
+    ...e,
+    created_at: new Date(parseInt(e.created_at) * 1000),
+    updated_at: new Date(parseInt(e.updated_at) * 1000),
+    deleted_at: new Date(parseInt(e.deleted_at) * 1000),
+  }));
 };
 export const loadPlayerAdventures = async (
   player_id: string

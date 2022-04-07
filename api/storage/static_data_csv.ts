@@ -41,6 +41,7 @@ export const getAllAdventures = async (): Promise<DBAdventure[]> => {
     type: a.type,
     name: a.name,
     description: a.description,
+    expires_at: a.expires,
   }));
   return adventures;
 };

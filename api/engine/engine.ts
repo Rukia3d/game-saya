@@ -37,6 +37,8 @@ import {
   selectHeroes,
   openStory,
   updateNPCs,
+  addSpells,
+  selectSpells,
 } from "./actions";
 import {
   combineAdventures,
@@ -61,7 +63,7 @@ type IEventPlayer = {
   player: IPlayer;
   adventures: IPlayerAdventure[] | null;
   heroes: IPlayerHero[] | null;
-  spells: null;
+  spells: IPlayerSpell[] | null;
   resources: null;
   updates: null;
   npcs: IDialogueCharacter[] | null;
@@ -74,8 +76,8 @@ const BASEPLAYER: IPlayer = {
   maxlife: 0,
   mana: 0,
   maxmana: 0,
-  created_at: new Date(),
-  updated_at: new Date(),
+  created_at: new Date("10-10-2010"),
+  updated_at: new Date("10-10-2010"),
   rank: 0,
 };
 
@@ -83,6 +85,7 @@ const createUserEvent = async (
   player: IEventPlayer,
   event: IUserEvent
 ): Promise<IEventPlayer> => {
+  console.log("createUserEvent");
   let newPlayer = player;
   const initNPC = { npc_id: 0, dialogue_id: 0 };
   const initHero = 0;
@@ -95,6 +98,13 @@ const createUserEvent = async (
   const resources = await loadResources();
   newPlayer.player.created_at = new Date(event.created_at);
   newPlayer.player.updated_at = new Date();
+  newPlayer.player.id = event.player_id;
+  newPlayer.player.life = 10;
+  newPlayer.player.maxlife = 10;
+  newPlayer.player.mana = 10;
+  newPlayer.player.maxmana = 10;
+  newPlayer.player.rank = 1;
+
   newPlayer.heroes = addHero(newPlayer.heroes, heroes, initHero);
   newPlayer.heroes = selectHeroes(newPlayer.heroes, [initHero], 1);
   newPlayer.adventures = openAdventure(
@@ -104,8 +114,8 @@ const createUserEvent = async (
   );
   newPlayer.adventures = openStory(newPlayer.adventures, initAdv, 0);
   newPlayer.npcs = updateNPCs(newPlayer.npcs, characters, dialogues, [initNPC]);
-  // newPlayer.spells = addSpells(newPlayer.spells, spells, [0, 1, 2, 3, 4, 5]);
-  // newPlayer.spells = selectSpells(newPlayer.spells, [0, 1, 2, 3, 4, 5]);
+  newPlayer.spells = addSpells(newPlayer.spells, spells, [0, 1, 2, 3, 4, 5]);
+  newPlayer.spells = selectSpells(newPlayer.spells, [0, 1, 2, 3, 4, 5], 6);
   // newPlayer.resources = addResource(newPlayer.resources, resources, 3, 5);
   return newPlayer;
 };
@@ -123,11 +133,12 @@ export const applyUserEvents = async (
     npcs: null,
   };
   const events: IUserEvent[] = await userEvents(player_id);
-  events.map(async (e: IUserEvent) => {
-    switch (e.event) {
+  console.log("events", events);
+  for (let i = 0; i < events.length; i++) {
+    switch (events[i].event) {
       case "CREATEUSER":
-        player = await createUserEvent(player, e);
-        //   return;
+        player = await createUserEvent(player, events[i]);
+        break;
         // case "FINISHSTORY":
         //   player = await createUserEvent(player, e);
         //   return;
@@ -137,9 +148,9 @@ export const applyUserEvents = async (
         // case "ATTACKSPELL":
         //   player = await createUserEvent(player, e);
         //   return;
-        deafult: throw new Error("Unknown event formap");
+        deafult: throw new Error(`Unknown event format: ${events[i].event}`);
     }
-  });
+  }
   return player;
 };
 

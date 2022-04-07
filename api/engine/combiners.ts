@@ -34,18 +34,8 @@ export const combineAdventures = (
       );
       if (!adventureData)
         throw new Error(`Can't find adventure data for ${p.id}`);
-      const updatedStories: IStory[] | null = adventureData.stories
-        ? adventureData.stories.map((s: IStory) => {
-            if (p.last_story_id !== null && s.id <= p.last_story_id) {
-              return { ...s, open: true };
-            } else {
-              return { ...s, open: false };
-            }
-          })
-        : null;
       return {
         ...adventureData,
-        stories: updatedStories,
         open: p.open,
         created_at: p.created_at,
         expires_at: p.expires_at,
@@ -114,6 +104,7 @@ export const combineSpells = (
       expires_at: new Date(p.spell.expires_at),
       created_at: new Date(p.spell.created_at),
       updates: spellUpdates,
+      selected: false,
     };
   });
   return playerSpells;
