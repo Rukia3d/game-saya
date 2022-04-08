@@ -1,28 +1,9 @@
 import { Database } from "sqlite3";
-import {
-  DBPlayer,
-  DBPAdventure,
-  DBPHero,
-  DBPCharacter,
-  DBPSpellUpdate,
-  DBPSpell,
-  DBPUpdate,
-  DBPResource,
-  DBPEvent,
-} from "./db_types";
+import { DBPEvent } from "./db_types";
 
 const sqlite3 = require("sqlite3").verbose();
 
-type dbDataType =
-  | DBPlayer
-  | DBPAdventure
-  | DBPHero
-  | DBPCharacter
-  | DBPSpellUpdate
-  | DBPSpell
-  | DBPUpdate
-  | DBPResource
-  | DBPEvent;
+type dbDataType = DBPEvent;
 
 const createDb = async (): Promise<Database> => {
   const db: Database = new sqlite3.Database(
@@ -32,7 +13,6 @@ const createDb = async (): Promise<Database> => {
       if (err) {
         console.error(err.message);
       }
-      console.log("Connected to the game database.");
     }
   );
   return db;

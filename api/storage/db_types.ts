@@ -1,12 +1,3 @@
-export type DBAction = {
-  id: number;
-  type: string;
-  event_id: number;
-  event_type: string;
-  item_id?: number;
-  data_id?: number;
-};
-
 export type DBFightElement = {
   element_id: number;
   fight_id: number;
@@ -109,85 +100,6 @@ export type DBUpdate = {
   description: string;
   effect: string;
   base_mana: number;
-};
-
-export type DBPlayer = {
-  id: number;
-  experience: number;
-  life: number;
-  maxlife: number;
-  mana: number;
-  maxmana: number;
-  created_at: string;
-  updated_at: string;
-  deleted_at: string;
-  rank: number;
-};
-
-export type DBPAdventure = {
-  player_id: number;
-  adventure_id: number;
-  last_story_id: number;
-  state: number;
-  created_at: string;
-  updated_at: string;
-  deleted_at: string;
-  expires_at: string;
-};
-
-export type DBPSpell = {
-  player_id: number;
-  spell_id: number;
-  copy_id: number;
-  selected: number;
-  expires_at: string;
-  created_at: string;
-  updated_at: string;
-  deleted_at: string;
-};
-
-export type DBPUpdate = {
-  player_id: number;
-  update_id: number;
-  expires_at: string;
-  created_at: string;
-  updated_at: string;
-  deleted_at: string;
-};
-
-export type DBPSpellUpdate = DBPUpdate & {
-  spell_id: number;
-  copy_id: number;
-};
-
-export type DBPHero = {
-  player_id: number;
-  hero_id: number;
-  selected: number;
-  expires_at: string;
-  created_at: string;
-  updated_at: string;
-  deleted_at: string;
-};
-
-export type DBPCharacter = {
-  player_id: number;
-  character_id: number;
-  image: string;
-  dialogue_id: number;
-  expires_at: string;
-  created_at: string;
-  updated_at: string;
-  deleted_at: string;
-};
-
-export type DBPResource = {
-  player_id: number;
-  resource_id: number;
-  quantity: number;
-  created_at: string;
-  updated_at: string;
-  deleted_at: string;
 };
 
 export type DBPCreateEvent = {

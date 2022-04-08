@@ -1,4 +1,4 @@
-import { DBCharacter, DBPSpell, DBPSpellUpdate, DBSchool } from "./db_types";
+import { DBCharacter, DBSchool } from "./db_types";
 
 export type ISchool = DBSchool;
 
@@ -100,42 +100,4 @@ export type IUpdate = {
   school: ISchool;
   resource_base: IUpdateResource[];
   actions: IAction[];
-};
-
-export type IPUpdatedSpell = {
-  spell: DBPSpell;
-  updates: DBPSpellUpdate[] | [];
-};
-
-export type IPCharacter = {
-  id: number;
-  image: string;
-  dialogue_id: number;
-  created_at: Date;
-  expires_at: Date;
-};
-export type IPAdventure = {
-  id: number;
-  open: boolean;
-  created_at: Date;
-  expires_at: Date;
-};
-
-export type IPHero = {
-  id: number;
-  selected: boolean;
-  created_at: Date;
-  expires_at: Date;
-};
-
-export type IPUpdate = {
-  id: number;
-  expires_at: Date;
-  created_at: Date;
-};
-
-export type IPResource = {
-  id: number;
-  quantity: number;
-  created_at: Date;
 };

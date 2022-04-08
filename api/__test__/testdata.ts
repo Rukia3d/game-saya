@@ -1,22 +1,19 @@
-import { IPlayerAdventure, IPlayerHero, IPlayerSpell } from "../engine/types";
 import {
-  IAction,
+  IPlayerAdventure,
+  IPlayerHero,
+  IPlayerResource,
+  IPlayerSpell,
+} from "../engine/types";
+import {
   IStory,
   IAdventure,
-  IPAdventure,
   ISchool,
   IElement,
   IHero,
-  IPHero,
   ICharacter,
-  IPCharacter,
   ISpell,
-  IUpdate,
   IResource,
   IUpdateResource,
-  IPUpdatedSpell,
-  IPUpdate,
-  IPResource,
   IDialogue,
   ILine,
   IDialogueCharacter,
@@ -201,45 +198,9 @@ export const testPlayerSpells: IPlayerSpell[] = testSpells.map(
   })
 );
 
-export const testPlayerUpdatedSpells: IPUpdatedSpell[] = [0, 1, 2].map((i) => {
+export const testPlayerResources: IPlayerResource[] = testResources.map((i) => {
   return {
-    spell: {
-      player_id: 1,
-      spell_id: i < 2 ? 0 : 3,
-      copy_id: i,
-      selected: 1,
-      expires_at: "",
-      created_at: "",
-      updated_at: "",
-      deleted_at: "",
-    },
-
-    updates: new Array(i).fill(0).map((x, n) => {
-      return {
-        spell_id: n,
-        copy_id: i,
-        player_id: 1,
-        update_id: i,
-        expires_at: "",
-        created_at: "",
-        updated_at: "",
-        deleted_at: "",
-      };
-    }),
-  };
-});
-
-export const testPlayerUpdates: IPUpdate[] = [0, 1].map((i) => {
-  return {
-    id: i,
-    created_at: new Date(),
-    expires_at: new Date(),
-  };
-});
-
-export const testPlayerResources: IPResource[] = [0, 1].map((i) => {
-  return {
-    id: i,
+    ...i,
     quantity: 10,
     created_at: new Date(),
   };

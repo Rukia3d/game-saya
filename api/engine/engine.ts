@@ -3,33 +3,18 @@ import {
   loadCharacters,
   loadDialogues,
   loadHeroes,
-  loadPlayer,
-  loadPlayerAdventures,
-  loadPlayerCharacters,
   loadPlayerEvents,
-  loadPlayerHeroes,
-  loadPlayerResources,
-  loadPlayerSpells,
-  loadPlayerUpdates,
   loadResources,
   loadSpells,
-  loadUpdates,
 } from "../storage/storage";
 import {
   IAdventure,
-  IHero,
-  ISpell,
-  IUpdate,
-  IPUpdatedSpell,
-  IResource,
-  IPAdventure,
-  IPHero,
   ICharacter,
-  IPCharacter,
-  IPUpdate,
-  IPResource,
   IDialogue,
   IDialogueCharacter,
+  IHero,
+  IResource,
+  ISpell,
 } from "../storage/types";
 import {
   addHero,
@@ -39,24 +24,16 @@ import {
   updateNPCs,
   addSpells,
   selectSpells,
+  addResources,
 } from "./actions";
-import {
-  combineAdventures,
-  combineHeroes,
-  combineCharacters,
-  combineSpells,
-  combineUpdates,
-  combineResources,
-} from "./combiners";
 import {
   IPlayerAdventure,
   IPlayerHero,
-  IPlayerCharacter,
   IPlayerSpell,
-  IPlayerUpdate,
   IPlayerResource,
   IPlayer,
   IUserEvent,
+  IPFinishStoryEvent,
 } from "./types";
 
 type IEventPlayer = {
@@ -64,9 +41,18 @@ type IEventPlayer = {
   adventures: IPlayerAdventure[] | null;
   heroes: IPlayerHero[] | null;
   spells: IPlayerSpell[] | null;
-  resources: null;
+  resources: IPlayerResource[] | null;
   updates: null;
   npcs: IDialogueCharacter[] | null;
+};
+
+type IGameData = {
+  heroes: IHero[];
+  adventures: IAdventure[];
+  characters: ICharacter[];
+  dialogues: IDialogue[];
+  spells: ISpell[];
+  resources: IResource[];
 };
 
 const BASEPLAYER: IPlayer = {
@@ -82,20 +68,20 @@ const BASEPLAYER: IPlayer = {
 };
 
 const createUserEvent = async (
+  gameData: IGameData,
   player: IEventPlayer,
   event: IUserEvent
 ): Promise<IEventPlayer> => {
   console.log("createUserEvent");
   let newPlayer = player;
-  const initNPC = { npc_id: 0, dialogue_id: 0 };
+  const initNPC = { npc_id: 0, dialogue_id: 6 };
+  const initResources = [
+    { resource_id: 8, quantity: 5 },
+    { resource_id: 9, quantity: 5 },
+    { resource_id: 5, quantity: 3 },
+  ];
   const initHero = 0;
   const initAdv = 0;
-  const heroes = await loadHeroes();
-  const adventures = await loadAdventures();
-  const characters = await loadCharacters();
-  const dialogues = await loadDialogues();
-  const spells = await loadSpells();
-  const resources = await loadResources();
   newPlayer.player.created_at = new Date(event.created_at);
   newPlayer.player.updated_at = new Date();
   newPlayer.player.id = event.player_id;
@@ -105,19 +91,73 @@ const createUserEvent = async (
   newPlayer.player.maxmana = 10;
   newPlayer.player.rank = 1;
 
-  newPlayer.heroes = addHero(newPlayer.heroes, heroes, initHero);
+  newPlayer.heroes = addHero(newPlayer.heroes, gameData.heroes, initHero);
   newPlayer.heroes = selectHeroes(newPlayer.heroes, [initHero], 1);
   newPlayer.adventures = openAdventure(
     newPlayer.adventures,
-    adventures,
+    gameData.adventures,
     initAdv
   );
   newPlayer.adventures = openStory(newPlayer.adventures, initAdv, 0);
-  newPlayer.npcs = updateNPCs(newPlayer.npcs, characters, dialogues, [initNPC]);
-  newPlayer.spells = addSpells(newPlayer.spells, spells, [0, 1, 2, 3, 4, 5]);
+  newPlayer.npcs = updateNPCs(
+    newPlayer.npcs,
+    gameData.characters,
+    gameData.dialogues,
+    [initNPC]
+  );
+  newPlayer.spells = addSpells(
+    newPlayer.spells,
+    gameData.spells,
+    [7, 7, 7, 8, 8, 9]
+  );
   newPlayer.spells = selectSpells(newPlayer.spells, [0, 1, 2, 3, 4, 5], 6);
-  // newPlayer.resources = addResource(newPlayer.resources, resources, 3, 5);
+  newPlayer.resources = addResources(
+    newPlayer.resources,
+    gameData.resources,
+    initResources
+  );
   return newPlayer;
+};
+
+const finishStory = async (
+  gameData: IGameData,
+  player: IEventPlayer,
+  event: IPFinishStoryEvent
+): Promise<IEventPlayer> => {
+  let newPlayer = player;
+  console.log("finishStoryEvent", event);
+  switch (event.story_id) {
+    case 0:
+      newPlayer.adventures = openStory(newPlayer.adventures, 0, 1);
+      newPlayer.npcs = updateNPCs(
+        newPlayer.npcs,
+        gameData.characters,
+        gameData.dialogues,
+        [
+          { npc_id: 0, dialogue_id: null },
+          { npc_id: 6, dialogue_id: 7 },
+        ]
+      );
+      newPlayer.heroes = addHero(newPlayer.heroes, gameData.heroes, 1);
+      newPlayer.spells = addSpells(
+        newPlayer.spells,
+        gameData.spells,
+        [10, 10, 10, 11, 11, 12]
+      );
+      break;
+  }
+  return newPlayer;
+};
+
+const readGameData = async (): Promise<IGameData> => {
+  const heroes = await loadHeroes();
+  const adventures = await loadAdventures();
+  const characters = await loadCharacters();
+  const dialogues = await loadDialogues();
+  const spells = await loadSpells();
+  const resources = await loadResources();
+
+  return { heroes, adventures, characters, dialogues, spells, resources };
 };
 
 export const applyUserEvents = async (
@@ -132,23 +172,27 @@ export const applyUserEvents = async (
     updates: null,
     npcs: null,
   };
+  const gameData = await readGameData();
   const events: IUserEvent[] = await userEvents(player_id);
-  console.log("events", events);
+
   for (let i = 0; i < events.length; i++) {
     switch (events[i].event) {
       case "CREATEUSER":
-        player = await createUserEvent(player, events[i]);
+        player = await createUserEvent(gameData, player, events[i]);
         break;
-        // case "FINISHSTORY":
-        //   player = await createUserEvent(player, e);
-        //   return;
-        // case "STARTFIGHT":
-        //   player = await createUserEvent(player, e);
-        //   return;
-        // case "ATTACKSPELL":
-        //   player = await createUserEvent(player, e);
-        //   return;
-        deafult: throw new Error(`Unknown event format: ${events[i].event}`);
+      case "FINISHSTORY":
+        player = await finishStory(
+          gameData,
+          player,
+          events[i] as IPFinishStoryEvent
+        );
+        break;
+      case "STARTFIGHT":
+        break;
+      case "ATTACKSPELL":
+        break;
+      default:
+        throw new Error(`Unknown event format: ${events[i].event}`);
     }
   }
   return player;
@@ -166,59 +210,4 @@ const userEvents = async (player_id: string): Promise<IUserEvent[]> => {
     return 0;
   });
   return res;
-};
-
-export const playerAdventures = async (
-  player_id: string
-): Promise<IPlayerAdventure[]> => {
-  const adventures: IAdventure[] = await loadAdventures();
-  const p_adventures: IPAdventure[] = await loadPlayerAdventures(player_id);
-  return combineAdventures(adventures, p_adventures);
-};
-
-export const playerHeroes = async (
-  player_id: string
-): Promise<IPlayerHero[]> => {
-  const heroes: IHero[] = await loadHeroes();
-  const p_heroes: IPHero[] = await loadPlayerHeroes(player_id);
-  return combineHeroes(heroes, p_heroes);
-};
-
-export const playerCharacters = async (
-  player_id: string
-): Promise<IPlayerCharacter[]> => {
-  const characters: ICharacter[] = await loadCharacters();
-  const dialogues: IDialogue[] = await loadDialogues();
-  const p_characters: IPCharacter[] = await loadPlayerCharacters(player_id);
-  return combineCharacters(characters, dialogues, p_characters);
-};
-
-export const playerSpells = async (
-  player_id: string
-): Promise<IPlayerSpell[]> => {
-  const spells: ISpell[] = await loadSpells();
-  const updates: IUpdate[] = await loadUpdates();
-  const p_spells: IPUpdatedSpell[] = await loadPlayerSpells(player_id);
-  return combineSpells(spells, updates, p_spells);
-};
-
-export const playerUpdates = async (
-  player_id: string
-): Promise<IPlayerUpdate[]> => {
-  const updates: IUpdate[] = await loadUpdates();
-  const p_updates: IPUpdate[] = await loadPlayerUpdates(player_id);
-  return combineUpdates(updates, p_updates);
-};
-
-export const playerResources = async (
-  player_id: string
-): Promise<IPlayerResource[]> => {
-  const resources: IResource[] = await loadResources();
-  const p_resources: IPResource[] = await loadPlayerResources(player_id);
-  return combineResources(resources, p_resources);
-};
-
-export const player = async (player_id: string): Promise<IPlayer> => {
-  const player = await loadPlayer(player_id);
-  return player;
 };

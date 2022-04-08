@@ -1,7 +1,6 @@
 import {
   DBAdventure,
   DBStory,
-  DBAction,
   DBCharacter,
   DBElement,
   DBHero,
@@ -10,8 +9,6 @@ import {
   DBResource,
   DBUpdate,
   DBUpdateResource,
-  DBPSpell,
-  DBPSpellUpdate,
   DBDialogue,
   DBLine,
   DBFightElement,
@@ -26,7 +23,6 @@ import {
   ISpell,
   IUpdate,
   IUpdateResource,
-  IPUpdatedSpell,
   IResource,
   IDialogue,
   ILine,
@@ -221,7 +217,6 @@ export const combineUpdateData = (
   updates: DBUpdate[],
   update_resources: DBUpdateResource[],
   resources: DBResource[],
-  actions: DBAction[],
   schools: DBSchool[]
 ): IUpdate[] => {
   const combinedUpdates = updates.map((u: DBUpdate) => {
@@ -260,23 +255,6 @@ export const combineUpdateData = (
     };
   });
   return combinedUpdates;
-};
-
-export const combinePlayerspells = (
-  player_spells: DBPSpell[],
-  player_applied_updates: DBPSpellUpdate[]
-): IPUpdatedSpell[] => {
-  const combinedSpellUpdates = player_spells.map((s: DBPSpell) => {
-    const updates = player_applied_updates.filter(
-      (p: DBPSpellUpdate) =>
-        p.spell_id === s.spell_id && s.copy_id === p.copy_id
-    );
-    return {
-      spell: s,
-      updates: updates ? updates : [],
-    };
-  });
-  return combinedSpellUpdates;
 };
 
 export const combineResourceData = (

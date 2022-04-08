@@ -1,5 +1,4 @@
 import { openAdventure } from "../engine/actions";
-import { playerAdventures } from "../engine/engine";
 import { IPlayerAdventure } from "../engine/types";
 import { testPlayerAdventures, testAdventures } from "./testdata";
 

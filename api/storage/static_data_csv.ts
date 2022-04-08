@@ -3,7 +3,6 @@ import parse from "csv-parse/lib/sync";
 import {
   DBAdventure,
   DBStory,
-  DBAction,
   DBCharacter,
   DBHero,
   DBElement,
@@ -116,27 +115,6 @@ export const getAllStories = async (): Promise<DBStory[]> => {
     next_id: a.next_id.length > 0 ? parseInt(a.next_id) : null,
   }));
   return stories;
-};
-
-export const getAllActions = async (): Promise<DBAction[]> => {
-  const address = "DBAction.csv";
-  const res = await readAllRows(address);
-  const actions: DBAction[] = res.map((a: csvType) => ({
-    id: parseInt(a.id),
-    type: a.type,
-    event_id: parseInt(a.parent_id),
-    event_type: a.parent_type,
-    item_id: a.item_id.length > 0 ? parseInt(a.item_id) : undefined,
-    data_id: a.data_id.length > 0 ? parseInt(a.data_id) : undefined,
-  }));
-  return actions;
-};
-
-export const getAction = async (action_id: string): Promise<DBAction> => {
-  const all = await getAllActions();
-  const res = all.find((a: DBAction) => a.id === parseInt(action_id));
-  if (!res) throw new Error(`Can't find action with id ${action_id}`);
-  return res;
 };
 
 export const getAllCharacters = async (): Promise<DBCharacter[]> => {

@@ -4,11 +4,16 @@ import {
   IDialogue,
   IDialogueCharacter,
   IHero,
+  IResource,
   ISpell,
   IStory,
 } from "../storage/types";
-import { player } from "./engine";
-import { IPlayerAdventure, IPlayerHero, IPlayerSpell } from "./types";
+import {
+  IPlayerAdventure,
+  IPlayerHero,
+  IPlayerResource,
+  IPlayerSpell,
+} from "./types";
 const MAXADVENTURES = 5;
 
 export const addHero = (
@@ -232,38 +237,52 @@ export const updateNPCs = (
   playerCharacters: IDialogueCharacter[] | null,
   characters: ICharacter[],
   dialogues: IDialogue[],
-  npc_dialogues: { npc_id: number; dialogue_id: number }[]
+  npc_dialogues: { npc_id: number; dialogue_id: number | null }[]
 ): IDialogueCharacter[] => {
   let newCharacters = playerCharacters ? playerCharacters : [];
-
-  npc_dialogues.forEach((dial: { npc_id: number; dialogue_id: number }) => {
-    const dialogue = dialogues.find(
-      (d: IDialogue) => d.id === dial.dialogue_id
-    );
-    if (!dialogue) {
-      throw new Error(
-        `Can't find dialogue ${dial.dialogue_id} in dialogue database`
+  npc_dialogues.forEach(
+    (dial: { npc_id: number; dialogue_id: number | null }) => {
+      const existingCharacterIndex = newCharacters?.findIndex(
+        (c: IDialogueCharacter) => c.id === dial.npc_id
       );
-    }
 
-    const character = characters.find((c: ICharacter) => c.id === dial.npc_id);
-    if (!character) {
-      throw new Error(
-        `Can't find character ${dial.npc_id} in characters database`
+      if (dial.dialogue_id == null && existingCharacterIndex === -1) {
+        throw new Error(
+          `Can't delete character ${dial.npc_id} dialogue as it doesn't belong to player`
+        );
+      }
+
+      if (dial.dialogue_id == null && existingCharacterIndex >= 0) {
+        newCharacters.splice(existingCharacterIndex, 1);
+        return;
+      }
+
+      const dialogue = dialogues.find(
+        (d: IDialogue) => d.id === dial.dialogue_id
       );
-    }
+      if (!dialogue) {
+        throw new Error(
+          `Can't find dialogue ${dial.dialogue_id} in dialogue database`
+        );
+      }
+      const character = characters.find(
+        (c: ICharacter) => c.id === dial.npc_id
+      );
+      if (!character) {
+        throw new Error(
+          `Can't find character ${dial.npc_id} in characters database`
+        );
+      }
 
-    const existingCharacterIndex = newCharacters?.findIndex(
-      (c: IDialogueCharacter) => c.id === dial.npc_id
-    );
-    if (existingCharacterIndex === -1) {
-      // Need to add this character
-      newCharacters.push({ ...character, dialogue: dialogue });
-    } else {
-      // need to replace this character
-      newCharacters[existingCharacterIndex].dialogue = { ...dialogue };
+      if (existingCharacterIndex === -1) {
+        // Need to add this character
+        newCharacters.push({ ...character, dialogue: dialogue });
+      } else {
+        // need to replace this character
+        newCharacters[existingCharacterIndex].dialogue = { ...dialogue };
+      }
     }
-  });
+  );
   return newCharacters;
 };
 
@@ -273,6 +292,7 @@ export const addSpells = (
   ids: number[],
   expDate?: Date
 ): IPlayerSpell[] => {
+  // Spells are added based on ID
   let newSpells = playerSpells ? playerSpells : [];
   ids.forEach((id: number) => {
     const spellToAdd = spells.find((s: ISpell) => s.id === id);
@@ -307,6 +327,7 @@ export const selectSpells = (
   indexes: number[],
   max: number
 ): IPlayerSpell[] => {
+  // Spells are selected based on index
   if (!playerSpells || playerSpells.length < max) {
     throw new Error(`Can't select spells, not enough spells provided`);
   }
@@ -323,4 +344,38 @@ export const selectSpells = (
   indexes.forEach((s: number) => (newSpells[s].selected = true));
 
   return newSpells;
+};
+
+export const addResources = (
+  playerResources: IPlayerResource[] | null,
+  resources: IResource[],
+  resources_add: { resource_id: number; quantity: number }[]
+) => {
+  let newResources = playerResources ? playerResources : [];
+
+  resources_add.forEach((res: { resource_id: number; quantity: number }) => {
+    const resource = resources.find((c: IResource) => c.id === res.resource_id);
+    if (!resource) {
+      throw new Error(
+        `Can't find resource ${res.resource_id} in resource database`
+      );
+    }
+
+    const existingCharacterIndex = newResources?.findIndex(
+      (c: IPlayerResource) => c.id === res.resource_id
+    );
+    if (existingCharacterIndex === -1) {
+      // Need to add this character
+      newResources.push({
+        ...resource,
+        created_at: new Date(),
+        quantity: res.quantity,
+      });
+    } else {
+      // need to replace this character
+      newResources[existingCharacterIndex].quantity =
+        newResources[existingCharacterIndex].quantity + res.quantity;
+    }
+  });
+  return newResources;
 };
