@@ -128,7 +128,6 @@ const finishStory = async (
   console.log("finishStoryEvent", event);
   switch (event.story_id) {
     case 0:
-      newPlayer.adventures = openStory(newPlayer.adventures, 0, 1);
       newPlayer.npcs = updateNPCs(
         newPlayer.npcs,
         gameData.characters,
@@ -145,6 +144,12 @@ const finishStory = async (
         [10, 10, 10, 11, 11, 12]
       );
       break;
+    default:
+      newPlayer.adventures = openStory(
+        newPlayer.adventures,
+        event.adventure_id,
+        event.story_id
+      );
   }
   return newPlayer;
 };
