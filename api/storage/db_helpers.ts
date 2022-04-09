@@ -75,14 +75,22 @@ export const writeAllLines = async (table: string, data: any[]) => {
 export const writeOneLine = async (table: string, data: any[]) => {
   const db = await createDb();
   const placeholders = data.map((p) => "?").join(",");
-  const sql = `INSERT INTO ${table} VALUES (${placeholders})`;
+  const sql = `INSERT INTO ${table} VALUES (${placeholders});`;
   return new Promise((resolve, reject) => {
-    db.run(sql, data, (err: Error) => {
-      db.close();
+    db.run(sql, data, function (err: Error) {
       if (err) {
         reject(err);
       }
-      resolve(200);
+      resolve(this.lastID);
     });
   });
+  // return new Promise((resolve, reject) => {
+  //   db.get("SELECT last_insert_rowid()", [], (err: Error, row: any) => {
+  //     db.close();
+  //     if (err) {
+  //       reject(err);
+  //     }
+  //     resolve(row);
+  //   });
+  // });
 };

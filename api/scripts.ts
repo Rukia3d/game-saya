@@ -1,6 +1,7 @@
-import { applyUserEvents } from "./engine/engine";
+import { createSuper } from "typescript";
+import { applyUserEvents, createUser, userEvents } from "./engine/engine";
 
-import { IPlayer } from "./engine/types";
+import { IPlayer, IUserEvent } from "./engine/types";
 const express = require("express");
 const cors = require("cors");
 const app = express();
@@ -26,8 +27,15 @@ app.use(cors());
 // });
 
 app.get("/api/users/:userId", async (req: any, res: any) => {
-  console.log("Requesting new player game data", req.params);
-  const gameState = await applyUserEvents(req.params.userId);
+  let events: IUserEvent[] = await userEvents(req.params.userId);
+  if (events.length === 0) {
+    console.warn(
+      `No events found, new user ${req.params.userId} will be created`
+    );
+    await createUser(req.params.userId);
+    events = await userEvents(req.params.userId);
+  }
+  const gameState = await applyUserEvents(req.params.userId, events);
   res.send(gameState);
 });
 

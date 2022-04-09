@@ -1,35 +1,32 @@
-import { DBPEvent } from "../storage/db_types";
 import {
   IAdventure,
+  ICharacter,
   IDialogue,
+  IDialogueCharacter,
   IHero,
   IResource,
   ISpell,
   IUpdate,
 } from "../storage/types";
 
-export type UserEventType =
-  | "createUser"
-  | "finishStory"
-  | "startFight"
-  | "attackSpell"
-  | "selectHero"
-  | "selectSpell";
+export type IEventPlayer = {
+  player: IPlayer;
+  adventures: IPlayerAdventure[] | null;
+  heroes: IPlayerHero[] | null;
+  spells: IPlayerSpell[] | null;
+  resources: IPlayerResource[] | null;
+  updates: null;
+  npcs: IDialogueCharacter[] | null;
+};
 
-export type ActionEventType =
-  | "createUserAction"
-  | "addHero"
-  | "selectSpellAction"
-  | "selectHeroAction"
-  | "openAdventure"
-  | "updateNPC"
-  | "addSpell"
-  | "addResource"
-  | "openStory"
-  | "generateFight"
-  | "startFightAction"
-  | "attackSpell"
-  | "addResource";
+export type IGameData = {
+  heroes: IHero[];
+  adventures: IAdventure[];
+  characters: ICharacter[];
+  dialogues: IDialogue[];
+  spells: ISpell[];
+  resources: IResource[];
+};
 
 export type IPlayerAdventure = IAdventure & {
   open: boolean;
@@ -93,6 +90,7 @@ export type IPFinishStoryEvent = {
   player_id: number;
   story_id: number;
   adventure_id: number;
+  story_type: string;
   created_at: Date;
   updated_at: Date;
   deleted_at: Date;

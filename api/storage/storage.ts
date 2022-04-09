@@ -4,6 +4,7 @@ import {
   combinedFightsData,
   combineDialoguesData,
   combineElementData,
+  combineEvents,
   combineHeroesData,
   combineResourceData,
   combineSpellData,
@@ -111,10 +112,16 @@ export const loadPlayerEvents = async (
     await getPlayerStartFightEvents(player_id);
   const attackSpellEvents: DBPAttackSpellEvent[] =
     await getPlayerAttackSpellEvents(player_id);
-  const eventsData: DBPEvent[] = [creationEvent]
-    .concat(finishStoryEvents)
-    .concat(startFightEvents)
-    .concat(attackSpellEvents);
+  const eventsData: DBPEvent[] = combineEvents(
+    creationEvent,
+    finishStoryEvents,
+    startFightEvents,
+    attackSpellEvents
+  );
+  //console.log("loadPlayerEvents eventsData", eventsData);
+  if (eventsData.length == 0) {
+    return [];
+  }
   return eventsData.map((e: DBPEvent) => ({
     ...e,
     created_at: new Date(parseInt(e.created_at) * 1000),

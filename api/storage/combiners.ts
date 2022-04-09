@@ -13,6 +13,11 @@ import {
   DBLine,
   DBFightElement,
   DBFight,
+  DBPCreateEvent,
+  DBPFinishStoryEvent,
+  DBPStartFightEvent,
+  DBPAttackSpellEvent,
+  DBPEvent,
 } from "./db_types";
 import {
   IStory,
@@ -29,6 +34,23 @@ import {
   IFight,
   IReel,
 } from "./types";
+
+export const combineEvents = (
+  creationEvent: DBPCreateEvent,
+  finishStoryEvents: DBPFinishStoryEvent[],
+  startFightEvents: DBPStartFightEvent[],
+  attackSpellEvents: DBPAttackSpellEvent[]
+) => {
+  let allEvents: DBPEvent[] = [];
+  if (creationEvent) allEvents = [creationEvent];
+  if (finishStoryEvents.length > 0)
+    allEvents = allEvents.concat(finishStoryEvents);
+  if (startFightEvents.length > 0)
+    allEvents = allEvents.concat(startFightEvents);
+  if (attackSpellEvents.length > 0)
+    allEvents = allEvents.concat(attackSpellEvents);
+  return allEvents;
+};
 
 export const combinedFightsData = (
   fights: DBFight[],

@@ -21,7 +21,7 @@ export const getPlayerFinishStoryEvents = async (
 ): Promise<DBPFinishStoryEvent[]> => {
   const events: DBPFinishStoryEvent[] = [];
   const sql = `SELECT player_event_id as id, player_event.event, player_event.player_id, story_id, adventure_id,
-  player_event.created_at, player_event.updated_at, player_event.deleted_at FROM player_event
+  story_type, player_event.created_at, player_event.updated_at, player_event.deleted_at FROM player_event
     JOIN player_event_finishstory on player_event.player_id = player_event_finishstory.player_id
     AND player_event.id=player_event_finishstory.player_event_id WHERE player_event.player_id='${player_id}';`;
   return readAllLnes(events, sql) as unknown as DBPFinishStoryEvent[];

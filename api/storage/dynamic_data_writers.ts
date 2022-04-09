@@ -1,22 +1,16 @@
 import { writeAllLines, writeOneLine } from "./db_helpers";
 
-export const createPlayer = async (player_id: string) => {
+export const createPlayer = async (player_id: number) => {
+  console.log("createPlayer");
   const currentDate = Date.now();
-  const table =
-    "player(id, experience, life, mana, maxlife, maxmana, rank, created_at, updated_at, deleted_at)";
-  const newPlayer = [
-    player_id,
-    0,
-    7,
-    5,
-    7,
-    5,
-    1,
-    currentDate,
-    currentDate,
-    "NULL",
-  ];
-  await writeOneLine(table, newPlayer);
+  const player_event =
+    "player_event(event, player_id, created_at, updated_at, deleted_at)";
+  const newPlayer = ["CREATEUSER", player_id, currentDate, currentDate, "null"];
+  const event_id = await writeOneLine(player_event, newPlayer);
+  const event_createuser =
+    "player_event_createuser(player_id, player_event_id)";
+  const newEvent = [player_id, event_id];
+  await writeOneLine(event_createuser, newEvent);
 };
 
 export const createPlayerAdventures = async (player_id: string) => {
