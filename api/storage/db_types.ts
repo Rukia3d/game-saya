@@ -137,7 +137,7 @@ export type DBPAttackSpellEvent = {
   event: string;
   player_id: number;
   spell_id: number;
-  spell_index: number;
+  spell_copy: number;
   created_at: string;
   updated_at: string;
   deleted_at: string;

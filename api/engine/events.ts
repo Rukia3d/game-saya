@@ -1,4 +1,4 @@
-import { IResource } from "../storage/types";
+import { IResource, IStory } from "../storage/types";
 import {
   addHero,
   selectHeroes,
@@ -14,6 +14,7 @@ import {
   IEventPlayer,
   IUserEvent,
   IPFinishStoryEvent,
+  IPlayerAdventure,
 } from "./types";
 
 export const createUserEvent = async (
@@ -101,19 +102,28 @@ const generateLoot = (input: Date, resources: IResource[]) => {
   return generated;
 };
 
-export const finishStory = async (
+export const finishStoryEvent = async (
   gameData: IGameData,
   player: IEventPlayer,
   event: IPFinishStoryEvent
 ): Promise<IEventPlayer> => {
   let newPlayer = player;
   console.log("finishStoryEvent");
-  if (event.story_type === "fight") {
-    console.log("fight event", event);
-    const veryCommon = gameData.resources.filter(
+  const story = player.adventures
+    ?.find((a: IPlayerAdventure) => a.id == event.adventure_id)
+    ?.stories?.find((s: IStory) => s.id === event.story_id);
+
+  if (!story) {
+    throw new Error(
+      `Can't apply finish story event, can't find story ${event.story_id} in adventure ${event.adventure_id}`
+    );
+  }
+  if (story.type === "fight") {
+    console.log("applying a fight result");
+    const common = gameData.resources.filter(
       (r: IResource) => r.commonality == 10 && r.school.id < 5
     );
-    const loot = generateLoot(event.created_at, veryCommon);
+    const loot = generateLoot(event.created_at, common);
     player.resources = addResources(player.resources, gameData.resources, loot);
   }
   switch (event.story_id) {
@@ -127,18 +137,30 @@ export const finishStory = async (
           { npc_id: 6, dialogue_id: 7 },
         ]
       );
+      newPlayer.adventures = openStory(
+        newPlayer.adventures,
+        event.adventure_id,
+        event.story_id + 1
+      );
+      break;
+    case 1:
       newPlayer.heroes = addHero(newPlayer.heroes, gameData.heroes, 1);
       newPlayer.spells = addSpells(
         newPlayer.spells,
         gameData.spells,
         [10, 10, 10, 11, 11, 12]
       );
+      newPlayer.adventures = openStory(
+        newPlayer.adventures,
+        event.adventure_id,
+        event.story_id + 1
+      );
       break;
     default:
       newPlayer.adventures = openStory(
         newPlayer.adventures,
         event.adventure_id,
-        event.story_id
+        event.story_id + 1
       );
   }
   return newPlayer;

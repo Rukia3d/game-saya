@@ -80,8 +80,8 @@ export type IPCreateEvent = {
   event: string;
   player_id: number;
   created_at: Date;
-  updated_at: Date;
-  deleted_at: Date;
+  updated_at: Date | null;
+  deleted_at: Date | null;
 };
 
 export type IPFinishStoryEvent = {
@@ -90,10 +90,9 @@ export type IPFinishStoryEvent = {
   player_id: number;
   story_id: number;
   adventure_id: number;
-  story_type: string;
   created_at: Date;
-  updated_at: Date;
-  deleted_at: Date;
+  updated_at: Date | null;
+  deleted_at: Date | null;
 };
 
 export type IPStartFightEvent = {
@@ -102,8 +101,8 @@ export type IPStartFightEvent = {
   player_id: number;
   fight_id: number;
   created_at: Date;
-  updated_at: Date;
-  deleted_at: Date;
+  updated_at: Date | null;
+  deleted_at: Date | null;
 };
 
 export type IPAttackSpellEvent = {
@@ -111,10 +110,10 @@ export type IPAttackSpellEvent = {
   event: string;
   player_id: number;
   spell_id: number;
-  spell_index: number;
+  spell_copy: number;
   created_at: Date;
-  updated_at: Date;
-  deleted_at: Date;
+  updated_at: Date | null;
+  deleted_at: Date | null;
 };
 export type IUserEvent =
   | IPAttackSpellEvent

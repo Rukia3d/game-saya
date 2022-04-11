@@ -1,7 +1,6 @@
-import { createSuper } from "typescript";
-import { applyUserEvents, createUser, userEvents } from "./engine/engine";
-
-import { IPlayer, IUserEvent } from "./engine/types";
+import { applyUserEvents } from "./engine/engine";
+import createDb from "./storage/db_setup";
+import { writeFinishStory } from "./storage/dynamic_data_writers";
 const express = require("express");
 const cors = require("cors");
 const app = express();
@@ -17,25 +16,29 @@ app.use(cors());
 //   res.send(gameState);
 // });
 
-// app.post("/api/users/:userId/story/:storyId", async (req: any, res: any) => {
-//   console.log(
-//     `Requesting player game data for ${req.query.userId} story ${req.query.storyId}`
-//   );
-//   const gameState = null;
-//   console.log("gameState", gameState);
-//   res.send(gameState);
-// });
+app.post(
+  "/api/users/:userId/adventure/:advId/story/:storyId",
+  async (req: any, res: any) => {
+    console.log(
+      `Requesting player game data for ${req.params.userId} adventure ${req.params.advId} story ${req.params.storyId}`
+    );
+    const db = await createDb();
+    await writeFinishStory(
+      req.params.userId,
+      req.params.advId,
+      req.params.storyId,
+      db
+    );
+    const gameState = await applyUserEvents(req.params.userId, db);
+    db.close();
+    res.send(gameState);
+  }
+);
 
 app.get("/api/users/:userId", async (req: any, res: any) => {
-  let events: IUserEvent[] = await userEvents(req.params.userId);
-  if (events.length === 0) {
-    console.warn(
-      `No events found, new user ${req.params.userId} will be created`
-    );
-    await createUser(req.params.userId);
-    events = await userEvents(req.params.userId);
-  }
-  const gameState = await applyUserEvents(req.params.userId, events);
+  const db = await createDb();
+  const gameState = await applyUserEvents(req.params.userId, db);
+  db.close();
   res.send(gameState);
 });
 

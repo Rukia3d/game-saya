@@ -2,7 +2,6 @@ import { Database } from "sqlite3";
 import {
   DBAdventure,
   DBStory,
-  DBAction,
   DBCharacter,
   DBHero,
   DBElement,
@@ -27,7 +26,6 @@ type dbDataType =
   | DBReel
   | DBLine
   | DBStory
-  | DBAction
   | DBCharacter
   | DBHero
   | DBElement
@@ -110,19 +108,6 @@ export const getAllStories = async (): Promise<DBStory[]> => {
   const stories: DBStory[] = [];
   const sql = `SELECT * from story WHERE deleted_at='NULL'`;
   return readAllLnes(stories, sql) as unknown as DBStory[];
-};
-
-export const getAllActions = async (): Promise<DBAction[]> => {
-  const actions: DBAction[] = [];
-  const sql = `SELECT * from story WHERE deleted_at='NULL'`;
-  return readAllLnes(actions, sql) as unknown as DBAction[];
-};
-
-export const getAction = async (action_id: number): Promise<DBAction> => {
-  const all = await getAllActions();
-  const res = all.find((a: DBAction) => a.id === action_id);
-  if (!res) throw new Error(`Can't find action with id ${action_id}`);
-  return res;
 };
 
 export const getAllCharacters = async (): Promise<DBCharacter[]> => {

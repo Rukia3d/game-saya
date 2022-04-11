@@ -154,10 +154,10 @@ export const combineAdventuresData = (
   const updatedAdventures: IAdventure[] = adventures.map((a: DBAdventure) => {
     const filteredStories: IStory[] = stories
       .filter((s: IStory) => s.adventure_id === a.id)
-      .map((i: IStory) => {
+      .map((i: IStory, n: number) => {
         return {
           ...i,
-          open: false,
+          open: n === 0 ? true : false,
         };
       });
     return {

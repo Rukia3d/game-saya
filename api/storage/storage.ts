@@ -1,3 +1,4 @@
+import { Database } from "sqlite3";
 import { IPlayer, IUserEvent } from "../engine/types";
 import {
   combineAdventuresData,
@@ -99,27 +100,31 @@ export const loadAdventures = async (): Promise<IAdventure[]> => {
     combinedFigths
   );
   return combineAdventuresData(adventures, combinedStories);
-  return [];
 };
 
 export const loadPlayerEvents = async (
-  player_id: string
+  player_id: string,
+  db: Database
 ): Promise<IUserEvent[]> => {
-  const creationEvent: DBPCreateEvent = await getPlayerCreateEvent(player_id);
+  console.log("loadPlayerEvents");
+  const creationEvent: DBPCreateEvent = await getPlayerCreateEvent(
+    player_id,
+    db
+  );
   const finishStoryEvents: DBPFinishStoryEvent[] =
-    await getPlayerFinishStoryEvents(player_id);
+    await getPlayerFinishStoryEvents(player_id, db);
   const startFightEvents: DBPStartFightEvent[] =
-    await getPlayerStartFightEvents(player_id);
+    await getPlayerStartFightEvents(player_id, db);
   const attackSpellEvents: DBPAttackSpellEvent[] =
-    await getPlayerAttackSpellEvents(player_id);
+    await getPlayerAttackSpellEvents(player_id, db);
   const eventsData: DBPEvent[] = combineEvents(
     creationEvent,
     finishStoryEvents,
     startFightEvents,
     attackSpellEvents
   );
-  //console.log("loadPlayerEvents eventsData", eventsData);
-  if (eventsData.length == 0) {
+  console.log("loadPlayerEvents eventsData", eventsData);
+  if (eventsData.length === 0) {
     return [];
   }
   return eventsData.map((e: DBPEvent) => ({

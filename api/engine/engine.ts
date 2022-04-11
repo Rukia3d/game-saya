@@ -1,5 +1,9 @@
 import { Console } from "console";
-import { createPlayer } from "../storage/dynamic_data_writers";
+import { Database } from "sqlite3";
+import {
+  writeCreatePlayer,
+  writeFinishStory,
+} from "../storage/dynamic_data_writers";
 import {
   loadAdventures,
   loadCharacters,
@@ -9,7 +13,7 @@ import {
   loadResources,
   loadSpells,
 } from "../storage/storage";
-import { createUserEvent, finishStory } from "./events";
+import { createUserEvent, finishStoryEvent } from "./events";
 import {
   IUserEvent,
   IPFinishStoryEvent,
@@ -28,9 +32,12 @@ const BASEPLAYER = {
   rank: 0,
 };
 
-export const userEvents = async (player_id: string): Promise<IUserEvent[]> => {
-  const events: IUserEvent[] = await loadPlayerEvents(player_id);
-  // console.log("userEvents from DB", events);
+export const userEvents = async (
+  player_id: string,
+  db: Database
+): Promise<IUserEvent[]> => {
+  const events: IUserEvent[] = await loadPlayerEvents(player_id, db);
+  console.log("userEvents from DB", events);
   const res = events.sort(function (a, b) {
     var keyA = new Date(a.created_at),
       keyB = new Date(b.created_at);
@@ -55,7 +62,7 @@ const staticGameData = async (): Promise<IGameData> => {
 
 export const applyUserEvents = async (
   player_id: string,
-  events: IUserEvent[]
+  db: Database
 ): Promise<IEventPlayer> => {
   let player: IEventPlayer = {
     player: { ...BASEPLAYER, id: parseInt(player_id) },
@@ -67,6 +74,12 @@ export const applyUserEvents = async (
     npcs: null,
   };
   const gameData = await staticGameData();
+  const events = await userEvents(player_id, db);
+  if (events.length === 0) {
+    console.warn(`No events found, new user ${player_id} will be created`);
+    await writeCreatePlayer(parseInt(player_id), db);
+  }
+  console.log("events", events);
 
   for (let i = 0; i < events.length; i++) {
     switch (events[i].event) {
@@ -74,7 +87,7 @@ export const applyUserEvents = async (
         player = await createUserEvent(gameData, player, events[i]);
         break;
       case "FINISHSTORY":
-        player = await finishStory(
+        player = await finishStoryEvent(
           gameData,
           player,
           events[i] as IPFinishStoryEvent
@@ -89,8 +102,4 @@ export const applyUserEvents = async (
     }
   }
   return player;
-};
-
-export const createUser = async (player_id: number) => {
-  await createPlayer(player_id);
 };

@@ -3,6 +3,7 @@ import {
   IPlayerHero,
   IPlayerResource,
   IPlayerSpell,
+  IUserEvent,
 } from "../engine/types";
 import {
   IStory,
@@ -26,6 +27,32 @@ const characters = ["nell", "gabriel", "grey", "solveig"];
 const spells = ["redHit1", "redHit2", "blueHit", "blueHit1", "blueHit2"];
 const updates = ["oblation1", "oblation2", "amplification1"];
 const resurces = ["someRed", "someRed2", "someBlue", "someGreen"];
+const events = [
+  "CREATEUSER",
+  "FINISHSTORY",
+  "FINISHSTORY",
+  "STARTFIGHT",
+  "ATTACKSPELL",
+];
+
+export const playerTestEvents: IUserEvent[] = events.map(
+  (s: string, i: number) => {
+    return {
+      id: i,
+      event: s,
+      player_id: 1,
+      adventure_id: 0,
+      story_id: i,
+      story_type: i < 2 ? "story" : "fight",
+      spell_id: 1,
+      spell_index: 1,
+      fight_id: 1,
+      created_at: new Date("2022-04-04T01:18:54.000Z"),
+      updated_at: new Date("2022-04-04T01:18:54.000Z"),
+      deleted_at: null,
+    };
+  }
+);
 
 export const testCharacters: ICharacter[] = characters.map(
   (s: string, i: number) => {
