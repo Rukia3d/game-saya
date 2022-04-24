@@ -1,3 +1,5 @@
+import { IHero, ISpell } from "./types";
+
 export type DBFightElement = {
   element_id: number;
   fight_id: number;
@@ -111,36 +113,20 @@ export type DBPCreateEvent = {
   deleted_at: string;
 };
 
-export type DBPFinishStoryEvent = {
-  id: number;
-  event: string;
-  player_id: number;
-  story_id: number;
+export type DBPFinishStoryEvent = DBPCreateEvent & {
   adventure_id: number;
-  created_at: string;
-  updated_at: string;
-  deleted_at: string;
+  story_id: number;
 };
 
-export type DBPStartFightEvent = {
-  id: number;
-  event: string;
-  player_id: number;
+export type DBPStartFightEvent = DBPCreateEvent & {
   fight_id: number;
-  created_at: string;
-  updated_at: string;
-  deleted_at: string;
+  heroes: string;
+  spells: string;
 };
 
-export type DBPAttackSpellEvent = {
-  id: number;
-  event: string;
-  player_id: number;
+export type DBPAttackSpellEvent = DBPCreateEvent & {
   spell_id: number;
   spell_copy: number;
-  created_at: string;
-  updated_at: string;
-  deleted_at: string;
 };
 
 export type DBPEvent =

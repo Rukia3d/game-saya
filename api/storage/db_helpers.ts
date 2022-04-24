@@ -2,7 +2,7 @@ import { DBPEvent } from "./db_types";
 import { Database } from "sqlite3";
 
 type dbDataType = DBPEvent;
-export const readAllLnes = async (
+export const readAllLnes = (
   res: dbDataType[],
   sql: string,
   db: Database
@@ -20,7 +20,7 @@ export const readAllLnes = async (
   });
 };
 
-export const readOneLne = async (
+export const readOneLne = (
   sql: string,
   db: Database
 ): Promise<dbDataType[]> => {
@@ -34,11 +34,7 @@ export const readOneLne = async (
   });
 };
 
-export const writeAllLines = async (
-  table: string,
-  data: any[],
-  db: Database
-) => {
+export const writeAllLines = (table: string, data: any[], db: Database) => {
   const flat: any[] = [];
   data.forEach((arr) => {
     arr.forEach((item: any) => {
@@ -58,11 +54,7 @@ export const writeAllLines = async (
   });
 };
 
-export const writeOneLine = async (
-  table: string,
-  data: any[],
-  db: Database
-) => {
+export const writeOneLine = (table: string, data: any[], db: Database) => {
   const placeholders = data.map((p) => "?").join(",");
   const sql = `INSERT INTO ${table} VALUES (${placeholders});`;
   return new Promise((resolve, reject) => {

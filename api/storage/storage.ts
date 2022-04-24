@@ -1,5 +1,5 @@
 import { Database } from "sqlite3";
-import { IPlayer, IUserEvent } from "../engine/types";
+import { IUserEvent } from "../engine/types";
 import {
   combineAdventuresData,
   combinedFightsData,
@@ -11,6 +11,10 @@ import {
   combineSpellData,
   combineStoriesData,
   combineUpdateData,
+  transformAttackSpellEvents,
+  transformCreatePlayerEvent,
+  transformFinishStoryEvents,
+  transformStartFightEvents,
 } from "./combiners";
 import {
   DBAdventure,
@@ -35,7 +39,7 @@ import {
 } from "./db_types";
 import {
   getPlayerAttackSpellEvents,
-  getPlayerCreateEvent,
+  getPlayerEvents,
   getPlayerFinishStoryEvents,
   getPlayerStartFightEvents,
 } from "./dynamic_data_readers";
@@ -103,36 +107,26 @@ export const loadAdventures = async (): Promise<IAdventure[]> => {
 };
 
 export const loadPlayerEvents = async (
-  player_id: string,
+  player_id: number,
   db: Database
 ): Promise<IUserEvent[]> => {
-  console.log("loadPlayerEvents");
-  const creationEvent: DBPCreateEvent = await getPlayerCreateEvent(
-    player_id,
-    db
-  );
+  //console.log("loadPlayerEvents");
+  const creationEvents: DBPCreateEvent[] = await getPlayerEvents(player_id, db);
   const finishStoryEvents: DBPFinishStoryEvent[] =
     await getPlayerFinishStoryEvents(player_id, db);
   const startFightEvents: DBPStartFightEvent[] =
     await getPlayerStartFightEvents(player_id, db);
   const attackSpellEvents: DBPAttackSpellEvent[] =
     await getPlayerAttackSpellEvents(player_id, db);
-  const eventsData: DBPEvent[] = combineEvents(
-    creationEvent,
-    finishStoryEvents,
-    startFightEvents,
-    attackSpellEvents
+
+  const eventsData: IUserEvent[] = combineEvents(
+    transformCreatePlayerEvent(creationEvents),
+    transformFinishStoryEvents(finishStoryEvents),
+    transformStartFightEvents(startFightEvents),
+    transformAttackSpellEvents(attackSpellEvents)
   );
-  console.log("loadPlayerEvents eventsData", eventsData);
-  if (eventsData.length === 0) {
-    return [];
-  }
-  return eventsData.map((e: DBPEvent) => ({
-    ...e,
-    created_at: new Date(parseInt(e.created_at) * 1000),
-    updated_at: new Date(parseInt(e.updated_at) * 1000),
-    deleted_at: new Date(parseInt(e.deleted_at) * 1000),
-  }));
+  //console.log("loadPlayerEvents eventsData", eventsData);
+  return eventsData;
 };
 
 export const loadHeroes = async (): Promise<IHero[]> => {

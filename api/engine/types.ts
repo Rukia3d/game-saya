@@ -11,12 +11,12 @@ import {
 
 export type IEventPlayer = {
   player: IPlayer;
-  adventures: IPlayerAdventure[] | null;
-  heroes: IPlayerHero[] | null;
-  spells: IPlayerSpell[] | null;
-  resources: IPlayerResource[] | null;
+  adventures: IPlayerAdventure[];
+  heroes: IPlayerHero[];
+  spells: IPlayerSpell[];
+  resources: IPlayerResource[];
   updates: null;
-  npcs: IDialogueCharacter[] | null;
+  npcs: IDialogueCharacter[];
 };
 
 export type IGameData = {
@@ -75,48 +75,33 @@ export type IPlayer = {
   rank: number;
 };
 
-export type IPCreateEvent = {
+export type IPCreatePlayerEvent = {
   id: number;
-  event: string;
   player_id: number;
+  event: string;
   created_at: Date;
   updated_at: Date | null;
   deleted_at: Date | null;
 };
 
-export type IPFinishStoryEvent = {
-  id: number;
-  event: string;
-  player_id: number;
-  story_id: number;
+export type IPFinishStoryEvent = IPCreatePlayerEvent & {
   adventure_id: number;
-  created_at: Date;
-  updated_at: Date | null;
-  deleted_at: Date | null;
+  story_id: number;
 };
 
-export type IPStartFightEvent = {
-  id: number;
-  event: string;
-  player_id: number;
+export type IPStartFightEvent = IPCreatePlayerEvent & {
   fight_id: number;
-  created_at: Date;
-  updated_at: Date | null;
-  deleted_at: Date | null;
+  heroes: number[];
+  spells: { spell: number; copy: number }[];
 };
 
-export type IPAttackSpellEvent = {
-  id: number;
-  event: string;
-  player_id: number;
+export type IPAttackSpellEvent = IPCreatePlayerEvent & {
   spell_id: number;
   spell_copy: number;
-  created_at: Date;
-  updated_at: Date | null;
-  deleted_at: Date | null;
 };
+
 export type IUserEvent =
+  | IPCreatePlayerEvent
   | IPAttackSpellEvent
   | IPStartFightEvent
-  | IPFinishStoryEvent
-  | IPCreateEvent;
+  | IPFinishStoryEvent;

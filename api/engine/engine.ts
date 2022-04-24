@@ -1,9 +1,5 @@
-import { Console } from "console";
 import { Database } from "sqlite3";
-import {
-  writeCreatePlayer,
-  writeFinishStory,
-} from "../storage/dynamic_data_writers";
+import { writeCreatePlayer } from "../storage/dynamic_data_writers";
 import {
   loadAdventures,
   loadCharacters,
@@ -36,8 +32,8 @@ export const userEvents = async (
   player_id: string,
   db: Database
 ): Promise<IUserEvent[]> => {
-  const events: IUserEvent[] = await loadPlayerEvents(player_id, db);
-  console.log("userEvents from DB", events);
+  const events: IUserEvent[] = await loadPlayerEvents(parseInt(player_id), db);
+  //console.log("userEvents from DB", events);
   const res = events.sort(function (a, b) {
     var keyA = new Date(a.created_at),
       keyB = new Date(b.created_at);
@@ -66,20 +62,21 @@ export const applyUserEvents = async (
 ): Promise<IEventPlayer> => {
   let player: IEventPlayer = {
     player: { ...BASEPLAYER, id: parseInt(player_id) },
-    adventures: null,
-    heroes: null,
-    spells: null,
-    resources: null,
+    adventures: [],
+    heroes: [],
+    spells: [],
+    resources: [],
     updates: null,
-    npcs: null,
+    npcs: [],
   };
   const gameData = await staticGameData();
-  const events = await userEvents(player_id, db);
+  let events = await userEvents(player_id, db);
   if (events.length === 0) {
     console.warn(`No events found, new user ${player_id} will be created`);
     await writeCreatePlayer(parseInt(player_id), db);
+    events = await userEvents(player_id, db);
   }
-  console.log("events", events);
+  //console.log("events", events);
 
   for (let i = 0; i < events.length; i++) {
     switch (events[i].event) {

@@ -1,128 +1,116 @@
 import React, { useEffect, useState } from "react";
-import useSWRImmutable from "swr/immutable";
 import short from "short-uuid";
+import useSWR from "swr";
 import "./App.css";
 // Types
 import {
-  IHero,
-  GameState,
-  IStory,
-  ISpellUpdate,
-  IEnemy,
-  ISpell,
+  IPlayer,
   IPlayerAdventure,
   IPlayerHero,
-  IEnemyFight,
+  IPlayerResource,
   IPlayerSpell,
-  IPlayerSpellUpdate,
-} from "./utils/types";
+} from "../api/engine/types";
 // Utils
 import { fetcher } from "./utils/helpers";
+import { IStory } from "../api/storage/types";
+import axios from "axios";
 // Components
-import { AdditionScreen } from "./UI/AdditionScreen";
-import { Main } from "./Main/Main";
-import { Start } from "./Main/Start";
-import { Stories } from "./Stories/Stories";
-import { GenericStory } from "./Main/GenericStory";
-import { useSWRConfig } from "swr";
 
-// Quick start with flickrBase58 format
-short.generate(); // 73WakrfVbNJBaAmhQtEeDv
-
-export interface GameContextType {
-  adventure: IPlayerAdventure | null;
-  setAdventure: (a: IPlayerAdventure) => void;
-  story: IStory | null;
-  setStory: (s: IStory | null) => void;
-  gameState: GameState | null;
-  setGameState: (g: GameState) => void;
-  addition: IHero | IPlayerHero | ISpellUpdate | ISpell | IEnemy | null;
-  setAdditionScreen: (
-    c:
-      | IPlayerHero
-      | IPlayerSpellUpdate
-      | IPlayerSpell
-      | IEnemyFight
-      | IHero
-      | null
-  ) => void;
-  backToMain: () => void;
-}
-
-export const GameContext = React.createContext<undefined | GameContextType>(
-  undefined
-);
-
-function App() {
-  let playerId: string =
-    window.localStorage.getItem("playerId") || short.generate();
-  const { mutate } = useSWRConfig();
-  mutate("/api/users", { id: playerId }, false);
-  const { data, error } = useSWRImmutable(
-    `/api/users/?userId=${playerId}`,
-    fetcher
-  );
-  window.localStorage.setItem("playerId", playerId);
-
-  const [showStart, setShowStart] = useState(true);
-  const [adventure, setAdventure] = useState<null | IPlayerAdventure>(null);
-  const [story, setStory] = useState<null | IStory>(null);
-  const [gameState, setGameStateOrigin] = useState<GameState>(data);
-  const [addition, setAdditionScreen] = useState<
-    IHero | ISpellUpdate | ISpell | IEnemy | null
-  >(null);
-
-  const setGameState = (state: GameState) => {
-    if (state) {
-      // console.log(
-      //   //@ts-ignore
-      //   "LOG",
-      //   JSON.parse(JSON.stringify(state.player))
-      // );
-      setGameStateOrigin(state);
-    }
-  };
-
+const Player = ({ playerId }: { playerId: string }) => {
+  const { data, error, mutate } = useSWR(`/api/users/${playerId}`, fetcher);
+  const [nextStory, setNextStory] = useState<null | IStory>(null);
   useEffect(() => {
-    setGameState(data);
+    if (data) {
+      setNextStory(
+        data.adventures[0].stories.find((s: IStory) => s.open === false)
+      );
+    }
   }, [data]);
 
-  const backToMain = () => {
-    setAdventure(null);
-    setStory(null);
+  const finishStory = async () => {
+    console.log(
+      "finishStory",
+      data.player.id,
+      nextStory?.adventure_id,
+      nextStory?.id
+    );
+    if (nextStory) {
+      await axios.post(
+        `/api/users/${data.player.id}/adventure/${
+          nextStory.adventure_id
+        }/story/${nextStory.id - 1}`
+      );
+      mutate();
+    }
   };
-
-  const context: GameContextType = {
-    adventure: adventure,
-    setAdventure: setAdventure,
-    story: story,
-    setStory: setStory,
-    gameState: gameState,
-    setGameState: setGameState,
-    addition: addition,
-    setAdditionScreen: setAdditionScreen,
-    backToMain: backToMain,
-  };
-
   if (error || !data) {
     return (
-      <GameContext.Provider value={context}>
-        <div className="App">
-          <Start setShowStart={setShowStart} />
-        </div>
-      </GameContext.Provider>
+      <div className="App">
+        <h1>ERROR</h1>
+      </div>
     );
   }
-
+  const player: IPlayer = data.player;
   return (
-    <GameContext.Provider value={context}>
-      <div className="App">
-        {showStart ? <Start setShowStart={setShowStart} /> : <Main />}
-        {story ? <GenericStory /> : null}
-        {adventure ? <Stories /> : null}
-        {addition ? <AdditionScreen /> : null}
+    <div>
+      <h2>Actions</h2>
+      <button onClick={finishStory}>Finish story</button>
+      <h2>Player: {player.id}</h2>
+      <div>{JSON.stringify(player).split(",").join(" | ")}</div>
+      <hr />
+      <div>
+        Current adventure:{" "}
+        {data.adventures.map((a: IPlayerAdventure) => (
+          <span>
+            {a.name} (id: {a.id}), story:{nextStory ? nextStory.id - 1 : "null"}
+          </span>
+        ))}
       </div>
-    </GameContext.Provider>
+      <hr />
+      <div>
+        Current heroes:{" "}
+        {data.heroes.map((a: IPlayerHero) => (
+          <div>
+            {a.name} (id: {a.id}), active: {a.selected ? "true" : "false"}
+          </div>
+        ))}
+      </div>
+      <hr />
+      <div>
+        Current spells:{" "}
+        {data.spells.map((a: IPlayerSpell) => (
+          <div>
+            {a.name} (id: {a.id}), active: {a.selected ? "true" : "false"}
+          </div>
+        ))}
+      </div>
+      <hr />
+      <div>
+        Current resources:{" "}
+        {data.resources.map((a: IPlayerResource) => (
+          <div>
+            {a.name} (id: {a.id}), rarity:{a.commonality}, quantity:{a.quantity}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+function App() {
+  //window.localStorage.getItem("playerId") || short.generate();
+  const [playerId, setPlayerId] = useState("1");
+
+  const changePlayer = (id: string) => {
+    setPlayerId(id);
+  };
+  return (
+    <div className="App">
+      <h1>Game</h1>
+      <button onClick={() => changePlayer("1")}>Player 1</button>
+      <button onClick={() => changePlayer("2")}>Player 2</button>
+      <Player playerId={playerId} />
+    </div>
   );
 }
 

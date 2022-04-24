@@ -6,7 +6,8 @@ const createDb = async (): Promise<Database> => {
   console.log("Mock DB");
   const db: Database = new sqlite3.Database(
     ":memory:",
-    sqlite3.OPEN_READWRITE,
+    //"state.db",
+    sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE,
     (err: Error) => {
       if (err) {
         console.error(err.message);

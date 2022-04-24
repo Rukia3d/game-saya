@@ -1,3 +1,4 @@
+import seedrandom from "seedrandom";
 import { IResource, IStory } from "../storage/types";
 import {
   addHero,
@@ -60,7 +61,7 @@ export const createUserEvent = async (
     gameData.spells,
     [7, 7, 7, 8, 8, 9]
   );
-  newPlayer.spells = selectSpells(newPlayer.spells, [0, 1, 2, 3, 4, 5], 6);
+  newPlayer.spells = selectSpells(newPlayer.spells, [0, 1, 3, 4, 5], 5);
   newPlayer.resources = addResources(
     newPlayer.resources,
     gameData.resources,
@@ -70,7 +71,7 @@ export const createUserEvent = async (
 };
 
 const getHash = (input: string) => {
-  var hash = 0,
+  let hash = 0,
     len = input.length;
   for (var i = 0; i < len; i++) {
     hash = (hash << 5) - hash + input.charCodeAt(i);
@@ -79,25 +80,30 @@ const getHash = (input: string) => {
   return hash;
 };
 
-const generateLoot = (input: Date, resources: IResource[]) => {
+const generateLoot = (seed: string, resources: IResource[]) => {
   //generate loot based on event creation date
   if (resources.length !== 10)
     throw new Error(`Can't generate reward, requires 10 resources options`);
-  const hash = getHash(`${input}`)
-    .toString()
-    .match(/.{1,2}/g)
-    ?.slice(0, 3);
-  if (!hash)
-    throw new Error(`Can't generate hash for rewards from event creation date`);
+
+  console.log("generate loot imput", seed);
+  const rng = seedrandom(seed);
+  const items: number[] = [];
+  for (let i = 0; i < 3; i++) {
+    let rand = Math.round(rng() * 9);
+    while (items.indexOf(rand) !== -1) {
+      rand = Math.round(rng() * 9);
+    }
+    items.push(rand);
+  }
+  console.log("items", items);
   const generated = [];
-  for (let i = 0; i < hash?.length; i++) {
-    const resource = resources[parseInt(hash[i][0])];
+  for (let i = 0; i < items.length; i++) {
+    const resource = resources[items[i]];
     generated[i] = {
       resource_id: resource.id,
-      quantity: parseInt(hash[i][1]) == 0 ? 1 : parseInt(hash[i][1]),
+      quantity: Math.round(rng() * 8) + 1,
     };
   }
-  console.log("hash", hash);
   console.log("generated reward", generated);
   return generated;
 };
@@ -110,7 +116,7 @@ export const finishStoryEvent = async (
   let newPlayer = player;
   console.log("finishStoryEvent");
   const story = player.adventures
-    ?.find((a: IPlayerAdventure) => a.id == event.adventure_id)
+    ?.find((a: IPlayerAdventure) => a.id === event.adventure_id)
     ?.stories?.find((s: IStory) => s.id === event.story_id);
 
   if (!story) {
@@ -121,9 +127,14 @@ export const finishStoryEvent = async (
   if (story.type === "fight") {
     console.log("applying a fight result");
     const common = gameData.resources.filter(
-      (r: IResource) => r.commonality == 10 && r.school.id < 5
+      (r: IResource) => r.commonality === 10 && r.school.id < 5
     );
-    const loot = generateLoot(event.created_at, common);
+    console.log("common", common.length);
+    const loot = generateLoot(
+      `${event.id}${event.player_id}${event.adventure_id}${event.story_id}`,
+      common
+    );
+    console.log("loot", loot);
     player.resources = addResources(player.resources, gameData.resources, loot);
   }
   switch (event.story_id) {
@@ -153,7 +164,7 @@ export const finishStoryEvent = async (
       newPlayer.adventures = openStory(
         newPlayer.adventures,
         event.adventure_id,
-        event.story_id + 1
+        story.next_id ? story.next_id : 1
       );
       break;
     default:
