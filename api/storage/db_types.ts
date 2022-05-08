@@ -113,13 +113,14 @@ export type DBPCreateEvent = {
   deleted_at: string;
 };
 
-export type DBPFinishStoryEvent = DBPCreateEvent & {
+export type DBPStoryEvent = DBPCreateEvent & {
   adventure_id: number;
   story_id: number;
 };
 
 export type DBPStartFightEvent = DBPCreateEvent & {
   fight_id: number;
+  adventure_id: number;
   heroes: string;
   spells: string;
 };
@@ -131,6 +132,6 @@ export type DBPAttackSpellEvent = DBPCreateEvent & {
 
 export type DBPEvent =
   | DBPCreateEvent
-  | DBPFinishStoryEvent
+  | DBPStoryEvent
   | DBPStartFightEvent
   | DBPAttackSpellEvent;

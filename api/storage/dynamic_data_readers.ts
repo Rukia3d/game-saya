@@ -2,7 +2,7 @@ import { Database } from "sqlite3";
 import { readAllLnes } from "./db_helpers";
 import {
   DBPCreateEvent,
-  DBPFinishStoryEvent,
+  DBPStoryEvent,
   DBPStartFightEvent,
   DBPAttackSpellEvent,
 } from "./db_types";
@@ -16,16 +16,52 @@ export const getPlayerEvents = async (
   return readAllLnes(events, sql, db) as unknown as DBPCreateEvent[];
 };
 
-export const getPlayerFinishStoryEvents = async (
+export const getPlayerFinishDialogueEvents = async (
   player_id: number,
   db: Database
-): Promise<DBPFinishStoryEvent[]> => {
-  const events: DBPFinishStoryEvent[] = [];
-  const sql = `SELECT event, player_id, created_at, deleted_at, updated_at, event_id, story_id, adventure_id
-  FROM player_event JOIN player_event_finishstory
-  ON player_event.id=player_event_finishstory.event_id
+): Promise<DBPStoryEvent[]> => {
+  const events: DBPStoryEvent[] = [];
+  const sql = `SELECT player_event.id as id, event, player_id, created_at, deleted_at, updated_at, event_id, story_id, adventure_id
+  FROM player_event JOIN player_event_finishdialogue
+  ON player_event.id=player_event_finishdialogue.event_id
   WHERE player_event.player_id='${player_id}';`;
-  return readAllLnes(events, sql, db) as unknown as DBPFinishStoryEvent[];
+  return readAllLnes(events, sql, db) as unknown as DBPStoryEvent[];
+};
+
+export const getPlayerFinishReelEvents = async (
+  player_id: number,
+  db: Database
+): Promise<DBPStoryEvent[]> => {
+  const events: DBPStoryEvent[] = [];
+  const sql = `SELECT player_event.id as id, event, player_id, created_at, deleted_at, updated_at, event_id, story_id, adventure_id
+  FROM player_event JOIN player_event_finishreel
+  ON player_event.id=player_event_finishreel.event_id
+  WHERE player_event.player_id='${player_id}';`;
+  return readAllLnes(events, sql, db) as unknown as DBPStoryEvent[];
+};
+
+export const getPlayerWinFightEvents = async (
+  player_id: number,
+  db: Database
+): Promise<DBPStoryEvent[]> => {
+  const events: DBPStoryEvent[] = [];
+  const sql = `SELECT player_event.id as id, event, player_id, created_at, deleted_at, updated_at, event_id, story_id, adventure_id
+  FROM player_event JOIN player_event_winfight
+  ON player_event.id=player_event_winfight.event_id
+  WHERE player_event.player_id='${player_id}';`;
+  return readAllLnes(events, sql, db) as unknown as DBPStoryEvent[];
+};
+
+export const getPlayerLooseFightEvents = async (
+  player_id: number,
+  db: Database
+): Promise<DBPStoryEvent[]> => {
+  const events: DBPStoryEvent[] = [];
+  const sql = `SELECT player_event.id as id, event, player_id, created_at, deleted_at, updated_at, event_id, story_id, adventure_id
+  FROM player_event JOIN player_event_loosefight
+  ON player_event.id=player_event_loosefight.event_id
+  WHERE player_event.player_id='${player_id}';`;
+  return readAllLnes(events, sql, db) as unknown as DBPStoryEvent[];
 };
 
 export const getPlayerStartFightEvents = async (
@@ -33,7 +69,7 @@ export const getPlayerStartFightEvents = async (
   db: Database
 ): Promise<DBPStartFightEvent[]> => {
   const events: DBPStartFightEvent[] = [];
-  const sql = `SELECT event, player_id, created_at, updated_at, deleted_at, event_id, fight_id, heroes, spells
+  const sql = `SELECT player_event.id as id, event, player_id, created_at, updated_at, deleted_at, event_id, fight_id, adventure_id, heroes, spells
   FROM player_event JOIN player_event_startfight
   ON player_event.id=player_event_startfight.event_id
   WHERE player_event.player_id='${player_id}';`;
@@ -45,9 +81,8 @@ export const getPlayerAttackSpellEvents = async (
   db: Database
 ): Promise<DBPAttackSpellEvent[]> => {
   const events: DBPAttackSpellEvent[] = [];
-  const sql = `SELECT player_event_id as id, player_event.event, player_event.player_id, spell_id, spell_copy,
+  const sql = `SELECT player_event.id as id, event, player_id, spell_id, spell_copy,
   player_event.created_at, player_event.updated_at, player_event.deleted_at FROM player_event
-    JOIN player_event_attackspell on player_event.player_id = player_event_attackspell.player_id
-    AND player_event.id=player_event_attackspell.player_event_id WHERE player_event.player_id='${player_id}';`;
+    JOIN player_event_attackspell on player_event.id=player_event_attackspell.event_id WHERE player_event.player_id='${player_id}';`;
   return readAllLnes(events, sql, db) as unknown as DBPAttackSpellEvent[];
 };

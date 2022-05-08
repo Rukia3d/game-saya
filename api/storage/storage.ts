@@ -13,8 +13,8 @@ import {
   combineUpdateData,
   transformAttackSpellEvents,
   transformCreatePlayerEvent,
-  transformFinishStoryEvents,
   transformStartFightEvents,
+  transformStoryEvents,
 } from "./combiners";
 import {
   DBAdventure,
@@ -27,9 +27,8 @@ import {
   DBLine,
   DBPAttackSpellEvent,
   DBPCreateEvent,
-  DBPEvent,
-  DBPFinishStoryEvent,
   DBPStartFightEvent,
+  DBPStoryEvent,
   DBResource,
   DBSchool,
   DBSpell,
@@ -40,8 +39,11 @@ import {
 import {
   getPlayerAttackSpellEvents,
   getPlayerEvents,
-  getPlayerFinishStoryEvents,
+  getPlayerFinishDialogueEvents,
+  getPlayerFinishReelEvents,
+  getPlayerLooseFightEvents,
   getPlayerStartFightEvents,
+  getPlayerWinFightEvents,
 } from "./dynamic_data_readers";
 import {
   getAllAdventures,
@@ -112,18 +114,39 @@ export const loadPlayerEvents = async (
 ): Promise<IUserEvent[]> => {
   //console.log("loadPlayerEvents");
   const creationEvents: DBPCreateEvent[] = await getPlayerEvents(player_id, db);
-  const finishStoryEvents: DBPFinishStoryEvent[] =
-    await getPlayerFinishStoryEvents(player_id, db);
-  const startFightEvents: DBPStartFightEvent[] =
-    await getPlayerStartFightEvents(player_id, db);
-  const attackSpellEvents: DBPAttackSpellEvent[] =
-    await getPlayerAttackSpellEvents(player_id, db);
+  const fightEvents: DBPStartFightEvent[] = await getPlayerStartFightEvents(
+    player_id,
+    db
+  );
+  const attackEvents: DBPAttackSpellEvent[] = await getPlayerAttackSpellEvents(
+    player_id,
+    db
+  );
+  const dialogueEvents: DBPStoryEvent[] = await getPlayerFinishDialogueEvents(
+    player_id,
+    db
+  );
+  const reelEvents: DBPStoryEvent[] = await getPlayerFinishReelEvents(
+    player_id,
+    db
+  );
+  const looseEvents: DBPStoryEvent[] = await getPlayerLooseFightEvents(
+    player_id,
+    db
+  );
+  const winEvents: DBPStoryEvent[] = await getPlayerWinFightEvents(
+    player_id,
+    db
+  );
 
   const eventsData: IUserEvent[] = combineEvents(
     transformCreatePlayerEvent(creationEvents),
-    transformFinishStoryEvents(finishStoryEvents),
-    transformStartFightEvents(startFightEvents),
-    transformAttackSpellEvents(attackSpellEvents)
+    transformStartFightEvents(fightEvents),
+    transformAttackSpellEvents(attackEvents),
+    transformStoryEvents(dialogueEvents),
+    transformStoryEvents(reelEvents),
+    transformStoryEvents(winEvents),
+    transformStoryEvents(looseEvents)
   );
   //console.log("loadPlayerEvents eventsData", eventsData);
   return eventsData;

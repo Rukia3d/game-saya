@@ -1,7 +1,7 @@
 import { applyUserEvents } from "./engine/engine";
 import createDb from "./storage/db_setup";
 import {
-  writeFinishStory,
+  writeFinishDialogue,
   writeStartFight,
 } from "./storage/dynamic_data_writers";
 const bodyParser = require("body-parser");
@@ -70,7 +70,7 @@ app.post("/api/users/:userId/story", async (req: any, res: any) => {
     `Requesting player game data for ${req.params.userId} adventure ${adventure} story ${story}`
   );
   const db = await createDb();
-  await writeFinishStory(req.params.userId, adventure, story, db);
+  await writeFinishDialogue(req.params.userId, adventure, story, db);
   const gameState = await applyUserEvents(req.params.userId, db);
   db.close();
   res.send(gameState);

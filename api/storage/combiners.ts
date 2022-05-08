@@ -1,8 +1,11 @@
 import {
   IPAttackSpellEvent,
-  IPCreatePlayerEvent,
-  IPFinishStoryEvent,
+  IPFinishDialogueEvent,
+  IPFinishReelEvent,
+  IPlayerEvent,
+  IPLooseFightEvent,
   IPStartFightEvent,
+  IPWinFightEvent,
   IUserEvent,
 } from "../engine/types";
 import {
@@ -21,12 +24,10 @@ import {
   DBFightElement,
   DBFight,
   DBPCreateEvent,
-  DBPFinishStoryEvent,
+  DBPStoryEvent,
   DBPStartFightEvent,
   DBPAttackSpellEvent,
-  DBPEvent,
 } from "./db_types";
-import { loadHeroes } from "./storage";
 import {
   IStory,
   IAdventure,
@@ -44,15 +45,23 @@ import {
 } from "./types";
 
 export const combineEvents = (
-  creationEvent: IPCreatePlayerEvent,
-  finishStoryEvents: IPFinishStoryEvent[],
+  creationEvent: IPlayerEvent,
   startFightEvents: IPStartFightEvent[],
-  attackSpellEvents: IPAttackSpellEvent[]
+  attackSpellEvents: IPAttackSpellEvent[],
+  finishDialogueEvents: IPFinishDialogueEvent[],
+  finishReelEvents: IPFinishReelEvent[],
+  looseFightEvents: IPLooseFightEvent[],
+  winFightEvents: IPWinFightEvent[]
 ) => {
   let allEvents: IUserEvent[] = [];
   if (creationEvent) allEvents = [creationEvent];
-  if (finishStoryEvents.length > 0)
-    allEvents = allEvents.concat(finishStoryEvents);
+  if (finishDialogueEvents.length > 0)
+    allEvents = allEvents.concat(finishDialogueEvents);
+  if (finishReelEvents.length > 0)
+    allEvents = allEvents.concat(finishReelEvents);
+  if (looseFightEvents.length > 0)
+    allEvents = allEvents.concat(looseFightEvents);
+  if (winFightEvents.length > 0) allEvents = allEvents.concat(winFightEvents);
   if (startFightEvents.length > 0)
     allEvents = allEvents.concat(startFightEvents);
   if (attackSpellEvents.length > 0)
@@ -307,7 +316,7 @@ export const combineResourceData = (
 
 export const transformCreatePlayerEvent = (
   events: DBPCreateEvent[]
-): IPCreatePlayerEvent => {
+): IPlayerEvent => {
   if (events.length > 1)
     throw new Error(
       `More than one player creation events found for a player ${events[0].player_id}`
@@ -325,20 +334,30 @@ export const transformCreatePlayerEvent = (
   };
 };
 
-export const transformFinishStoryEvents = (
-  events: DBPFinishStoryEvent[]
-): IPFinishStoryEvent[] => {
-  const newEvents: IPFinishStoryEvent[] = [];
-  events.forEach((e: DBPFinishStoryEvent) =>
+export const transformStoryEvents = (
+  events: DBPStoryEvent[]
+):
+  | IPFinishDialogueEvent[]
+  | IPFinishReelEvent[]
+  | IPWinFightEvent[]
+  | IPLooseFightEvent[] => {
+  const newEvents: IUserEvent[] = [];
+  events.forEach((e: DBPStoryEvent) =>
     newEvents.push({
       ...e,
+      event_id: e.id,
       created_at: new Date(parseInt(e.created_at) * 1000),
       updated_at: new Date(parseInt(e.updated_at) * 1000),
       deleted_at: e.deleted_at ? new Date(parseInt(e.deleted_at) * 1000) : null,
     })
   );
-  return newEvents;
+  return newEvents as
+    | IPFinishDialogueEvent[]
+    | IPFinishReelEvent[]
+    | IPWinFightEvent[]
+    | IPLooseFightEvent[];
 };
+
 export const transformStartFightEvents = (
   events: DBPStartFightEvent[]
 ): IPStartFightEvent[] => {
@@ -346,11 +365,12 @@ export const transformStartFightEvents = (
   events.forEach((e: DBPStartFightEvent) => {
     const heroes = e.heroes.split(",");
     const spells = e.spells.split(",").map((s: string) => {
-      const res = s.split("c");
+      const res = s.split(":");
       return { spell: parseInt(res[0]), copy: parseInt(res[1]) };
     });
     newEvents.push({
       ...e,
+      event_id: e.id,
       heroes: heroes.map((h: string) => parseInt(h)),
       spells: spells,
       created_at: new Date(parseInt(e.created_at) * 1000),
@@ -368,6 +388,7 @@ export const transformAttackSpellEvents = (
   events.forEach((e: DBPAttackSpellEvent) =>
     newEvents.push({
       ...e,
+      event_id: e.id,
       created_at: new Date(parseInt(e.created_at) * 1000),
       updated_at: new Date(parseInt(e.updated_at) * 1000),
       deleted_at: e.deleted_at ? new Date(parseInt(e.deleted_at) * 1000) : null,

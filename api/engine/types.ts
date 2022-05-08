@@ -75,7 +75,7 @@ export type IPlayer = {
   rank: number;
 };
 
-export type IPCreatePlayerEvent = {
+export type IPlayerEvent = {
   id: number;
   player_id: number;
   event: string;
@@ -84,24 +84,49 @@ export type IPCreatePlayerEvent = {
   deleted_at: Date | null;
 };
 
-export type IPFinishStoryEvent = IPCreatePlayerEvent & {
+export type IPFinishDialogueEvent = IPlayerEvent & {
+  event_id: number;
   adventure_id: number;
   story_id: number;
 };
 
-export type IPStartFightEvent = IPCreatePlayerEvent & {
+export type IPFinishReelEvent = IPlayerEvent & {
+  event_id: number;
+  adventure_id: number;
+  story_id: number;
+};
+
+export type IPLooseFightEvent = IPlayerEvent & {
+  event_id: number;
+  adventure_id: number;
+  story_id: number;
+};
+
+export type IPWinFightEvent = IPlayerEvent & {
+  event_id: number;
+  adventure_id: number;
+  story_id: number;
+};
+
+export type IPStartFightEvent = IPlayerEvent & {
+  event_id: number;
   fight_id: number;
+  adventure_id: number;
   heroes: number[];
   spells: { spell: number; copy: number }[];
 };
 
-export type IPAttackSpellEvent = IPCreatePlayerEvent & {
+export type IPAttackSpellEvent = IPlayerEvent & {
+  event_id: number;
   spell_id: number;
   spell_copy: number;
 };
 
 export type IUserEvent =
-  | IPCreatePlayerEvent
+  | IPlayerEvent
   | IPAttackSpellEvent
   | IPStartFightEvent
-  | IPFinishStoryEvent;
+  | IPFinishDialogueEvent
+  | IPFinishReelEvent
+  | IPLooseFightEvent
+  | IPWinFightEvent;

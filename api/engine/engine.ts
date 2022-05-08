@@ -9,12 +9,19 @@ import {
   loadResources,
   loadSpells,
 } from "../storage/storage";
-import { createUserEvent, finishStoryEvent } from "./events";
+import {
+  createUserEvent,
+  finishDialogueEvent,
+  finishReelEvent,
+  startFightEvent,
+} from "./events";
 import {
   IUserEvent,
-  IPFinishStoryEvent,
   IGameData,
   IEventPlayer,
+  IPStartFightEvent,
+  IPFinishDialogueEvent,
+  IPFinishReelEvent,
 } from "./types";
 
 const BASEPLAYER = {
@@ -83,16 +90,32 @@ export const applyUserEvents = async (
       case "CREATEUSER":
         player = await createUserEvent(gameData, player, events[i]);
         break;
-      case "FINISHSTORY":
-        player = await finishStoryEvent(
+      case "FINISHDIALOGUE":
+        player = await finishDialogueEvent(
           gameData,
           player,
-          events[i] as IPFinishStoryEvent
+          events[i] as IPFinishDialogueEvent
+        );
+        break;
+      case "FINISHREEL":
+        player = await finishReelEvent(
+          gameData,
+          player,
+          events[i] as IPFinishReelEvent
         );
         break;
       case "STARTFIGHT":
+        player = await startFightEvent(
+          gameData,
+          player,
+          events[i] as IPStartFightEvent
+        );
         break;
       case "ATTACKSPELL":
+        break;
+      case "WINFIGHT":
+        break;
+      case "LOSEFIGHT":
         break;
       default:
         throw new Error(`Unknown event format: ${events[i].event}`);
