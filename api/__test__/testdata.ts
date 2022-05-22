@@ -1,4 +1,6 @@
 import {
+  IEventPlayer,
+  IGameData,
   IPlayerAdventure,
   IPlayerHero,
   IPlayerResource,
@@ -18,19 +20,27 @@ import {
   IDialogue,
   ILine,
   IDialogueCharacter,
+  IFight,
 } from "../storage/types";
 const stories = ["dialogue", "fight", "reel"];
 const adventures = ["story", "character", "event"];
 const elements = ["red", "blue", "green", "rose"];
 const schools = ["oblation", "amplification", "deception", "restoration"];
 const characters = ["nell", "gabriel", "grey", "solveig"];
-const spells = ["redHit1", "redHit2", "blueHit", "blueHit1", "blueHit2"];
+const spells = [
+  "redHit",
+  "redHit1",
+  "redHit2",
+  "blueHit",
+  "blueHit1",
+  "blueHit2",
+];
 const updates = ["oblation1", "oblation2", "amplification1"];
 const resurces = ["someRed", "someRed2", "someBlue", "someGreen"];
 const events = [
   "CREATEUSER",
-  "FINISHSTORY",
-  "FINISHSTORY",
+  "FINISHDIALOGUE",
+  "FINISHDIALOGUE",
   "STARTFIGHT",
   "ATTACKSPELL",
 ];
@@ -64,6 +74,24 @@ export const testCharacters: ICharacter[] = characters.map(
   }
 );
 
+export const testSchools: ISchool[] = schools.map((s: string, i: number) => {
+  return {
+    id: i,
+    name: s,
+    description: s,
+  };
+});
+
+export const testElements: IElement[] = elements.map((s: string, i: number) => {
+  return {
+    id: i,
+    name: s,
+    description: s,
+    code: s,
+    school: testSchools[i],
+  };
+});
+
 const testLines: ILine[] = [1, 2, 3].map((n: number) => {
   return {
     id: n,
@@ -84,6 +112,22 @@ export const testDialogues: IDialogue[] = [1, 2, 3].map((n: number) => {
   };
 });
 
+export const testFights: IFight[] = [1, 2, 3].map((n: number) => {
+  return {
+    id: n,
+    story_id: n,
+    base_hero_num: n < 3 ? n + 1 : n,
+    enemy: {
+      id: n,
+      name: "testEnemy",
+      description: "testEnemy",
+      element: testElements[n],
+    },
+    background: "some",
+    base_elements: testElements,
+  };
+});
+
 export const testStories: IStory[] = stories.map((s: string, i: number) => {
   return {
     id: i,
@@ -92,7 +136,7 @@ export const testStories: IStory[] = stories.map((s: string, i: number) => {
     next_id: i === 1 ? null : i + 1,
     open: i === 2 ? false : true,
     adventure_id: 0,
-    item: testDialogues[0],
+    item: s === "fight" ? testFights[0] : testDialogues[0],
   };
 });
 
@@ -107,24 +151,6 @@ export const testAdventures: IAdventure[] = adventures.map(
     };
   }
 );
-
-export const testSchools: ISchool[] = schools.map((s: string, i: number) => {
-  return {
-    id: i,
-    name: s,
-    description: s,
-  };
-});
-
-export const testElements: IElement[] = elements.map((s: string, i: number) => {
-  return {
-    id: i,
-    name: s,
-    description: s,
-    code: s,
-    school: testSchools[i],
-  };
-});
 
 export const testResources: IResource[] = resurces.map(
   (s: string, i: number) => {
@@ -163,6 +189,16 @@ export const testSpells: ISpell[] = spells.map((s: string, i: number) => {
   };
 });
 
+export const testGameData: IGameData = {
+  heroes: testHeroes,
+  adventures: testAdventures,
+  characters: testCharacters,
+  dialogues: testDialogues,
+  spells: testSpells,
+  updates: null,
+  resources: testResources,
+};
+
 // export const testUpdates: IUpdate[] = updates.map((s: string, i: number) => {
 //   return {
 //     id: i,
@@ -179,7 +215,7 @@ export const testSpells: ISpell[] = spells.map((s: string, i: number) => {
 export const testPlayerHeroes: IPlayerHero[] = ["nell", "gabriel", "grey"].map(
   (s: string, i: number) => {
     const original = testHeroes.find((h: IHero) => h.name === s);
-    if (original == undefined) {
+    if (original === undefined) {
       throw new Error(`Can't create testPlayerHeroes from testHeroes`);
     }
     return {
@@ -214,16 +250,27 @@ export const testPlayerCharacters: IDialogueCharacter[] = testCharacters.map(
   }
 );
 
-export const testPlayerSpells: IPlayerSpell[] = testSpells.map(
-  (s: ISpell, i: number) => ({
-    ...s,
-    created_at: new Date(),
-    expires_at: null,
-    copy_id: i,
-    updates: [],
-    selected: true,
-  })
-);
+export const testPlayerSpells: IPlayerSpell[] = [
+  [0, 0],
+  [0, 1],
+  [0, 2],
+  [1, 0],
+  [1, 1],
+  [2, 0],
+  [3, 0],
+  [3, 1],
+  [3, 2],
+  [4, 0],
+  [4, 1],
+  [5, 0],
+].map((n: number[]) => ({
+  ...testSpells[n[0]],
+  created_at: new Date(),
+  expires_at: null,
+  copy_id: n[1],
+  updates: [],
+  selected: true,
+}));
 
 export const testPlayerResources: IPlayerResource[] = testResources.map((i) => {
   return {
@@ -232,3 +279,24 @@ export const testPlayerResources: IPlayerResource[] = testResources.map((i) => {
     created_at: new Date(),
   };
 });
+
+export const testPlayer: IEventPlayer = {
+  player: {
+    id: 0,
+    experience: 0,
+    life: 7,
+    maxlife: 7,
+    mana: 5,
+    maxmana: 5,
+    created_at: new Date("10-10-2010"),
+    updated_at: new Date("10-10-2010"),
+    rank: 0,
+  },
+  adventures: testPlayerAdventures,
+  heroes: testPlayerHeroes,
+  spells: testPlayerSpells,
+  resources: testPlayerResources,
+  updates: null,
+  npcs: testPlayerCharacters,
+  currentfight: null,
+};

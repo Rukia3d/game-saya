@@ -60,7 +60,15 @@ const staticGameData = async (): Promise<IGameData> => {
   const spells = await loadSpells();
   const resources = await loadResources();
 
-  return { heroes, adventures, characters, dialogues, spells, resources };
+  return {
+    heroes,
+    adventures,
+    characters,
+    dialogues,
+    spells,
+    resources,
+    updates: null,
+  };
 };
 
 export const applyUserEvents = async (
@@ -75,6 +83,7 @@ export const applyUserEvents = async (
     resources: [],
     updates: null,
     npcs: [],
+    currentfight: null,
   };
   const gameData = await staticGameData();
   let events = await userEvents(player_id, db);

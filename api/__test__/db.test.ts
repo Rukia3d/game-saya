@@ -186,7 +186,6 @@ test("requesting user 0", async () => {
     db
   );
   const event4 = await applyUserEvents("0", db);
-  console.log("event4", event4);
 
   /*
   await writeFinishStory(0, 0, 3, db);

@@ -1,20 +1,28 @@
+import seedrandom from "seedrandom";
 import {
   IAdventure,
   ICharacter,
   IDialogue,
   IDialogueCharacter,
+  IFight,
   IHero,
   IResource,
   ISpell,
   IStory,
 } from "../storage/types";
+import { shuffle } from "./shuffle";
 import {
+  IEventPlayer,
+  IFightEnemy,
+  IGameData,
+  IGeneratedFight,
   IPlayerAdventure,
   IPlayerHero,
   IPlayerResource,
   IPlayerSpell,
 } from "./types";
 const MAXADVENTURES = 5;
+const MAXCARDSPERHERO = 5;
 
 export const addHero = (
   playerHeroes: IPlayerHero[] | null,
@@ -95,7 +103,7 @@ const validateSelectHeroesOutput = (
     throw new Error(`Can't select the same hero twice`);
   }
 
-  if (currentlySelected.length != max) {
+  if (currentlySelected.length !== max) {
     throw new Error(
       `Not enough heroes, ${currentlySelected.length} is selected, max is ${max} `
     );
@@ -378,4 +386,129 @@ export const addResources = (
     }
   });
   return newResources;
+};
+
+export const generateDeck = (
+  spells: IPlayerSpell[],
+  selected: { spell: number; copy: number }[],
+  eventId: number
+): IPlayerSpell[] => {
+  const res: IPlayerSpell[] = [];
+  selected.forEach((i: { spell: number; copy: number }) => {
+    const add = spells.find(
+      (s: IPlayerSpell) => s.copy_id === i.copy && s.id === i.spell
+    );
+    if (!add) {
+      throw new Error(`Can't find spell ${i.spell} : ${i.copy}`);
+    }
+    res.push(add);
+  });
+  return shuffle("player" + eventId, res);
+};
+
+export const generateEnemy = (
+  fight: IFight,
+  experience: number
+): IFightEnemy => {
+  const maxCards = fight.base_hero_num * MAXCARDSPERHERO;
+  const enemy: IFightEnemy = {
+    ...fight.enemy,
+    maxCards: maxCards,
+    maxUpdates: 0,
+  };
+  return enemy;
+};
+
+export const generateEnemyDeck = (
+  allSpells: ISpell[],
+  allUpdates: any,
+  enemy: IFightEnemy,
+  eventId: number
+): IPlayerSpell[] => {
+  const spells = allSpells.filter(
+    (s: ISpell) => s.element.id === enemy.element.id
+  );
+  const rng = seedrandom(enemy.name + enemy.id + eventId);
+  const generated: IPlayerSpell[] = [];
+  const indexes = [];
+  for (let i = 0; i < enemy.maxCards; i++) {
+    let rand = Math.round(rng() * (spells.length - 1));
+    indexes.push(rand);
+  }
+  for (let j = 0; j < enemy.maxCards; j++) {
+    const index: number = indexes[j];
+    const spellToAdd = spells[index];
+    const exists = generated.filter(
+      (g: IPlayerSpell) => g.id === spellToAdd.id
+    );
+    if (exists.length > 0) {
+      generated.push({
+        ...spellToAdd,
+        copy_id: exists[exists.length - 1].copy_id + 1,
+        selected: true,
+        created_at: new Date(),
+        expires_at: null,
+        updates: [],
+      });
+    } else {
+      generated.push({
+        ...spellToAdd,
+        copy_id: 0,
+        selected: true,
+        created_at: new Date(),
+        expires_at: null,
+        updates: [],
+      });
+    }
+  }
+  console.log("indexes", indexes);
+  console.log("generated", generated.length);
+  // TODO apply updates when relevant
+  return generated;
+};
+
+export const generateFight = (
+  gameData: IGameData,
+  player: IEventPlayer,
+  adventureId: number,
+  fightId: number,
+  eventHeroes: number[],
+  eventSpells: { spell: number; copy: number }[],
+  eventId: number
+): IGeneratedFight => {
+  const story = player.adventures
+    ?.find((a: IPlayerAdventure) => a.id === adventureId)
+    ?.stories?.find((s: IStory) => s.id === fightId);
+
+  if (!story) {
+    throw new Error(
+      `Can't start fight event, can't find story ${fightId} in adventure ${adventureId}`
+    );
+  }
+  if (eventSpells.length / MAXCARDSPERHERO !== eventHeroes.length) {
+    throw new Error(
+      `Can't generate cards for player - incorrect number of spells selected`
+    );
+  }
+  if ("base_elements" in story.item) {
+    // we have a fight story type
+
+    const enemy = generateEnemy(story.item, player.player.experience);
+    const fight: IGeneratedFight = {
+      heroes: selectHeroes(
+        player.heroes,
+        eventHeroes,
+        story.item.base_hero_num
+      ).filter((i: IPlayerHero) => i.selected),
+      heroDeck: generateDeck(player.spells, eventSpells, eventId),
+      enemy: story.item.enemy,
+      enemyDeck: generateEnemyDeck(gameData.spells, gameData, enemy, eventId),
+      elements: story.item.base_elements,
+    };
+    return fight;
+  } else {
+    throw new Error(
+      `Can't start fight event, story ${fightId} in adventure ${adventureId} is not a fight type`
+    );
+  }
 };

@@ -26,25 +26,22 @@ test("addSpell adds several new spells correctly", () => {
 
 test("addSpell adds a spell with a new copy_id", () => {
   const newPlayerSpells = JSON.parse(
-    JSON.stringify(testPlayerSpells.slice(0, 3))
+    JSON.stringify(testPlayerSpells.slice(0, 4))
   );
-  newPlayerSpells[2].copy_id = 0;
-  const res = addSpells(newPlayerSpells, testSpells, [2]);
-  expect(res.length).toBe(4);
-  expect(res[3].id).toEqual(2);
-  expect(res[3].copy_id).toEqual(1);
+  const res = addSpells(newPlayerSpells, testSpells, [3]);
+  expect(res.length).toBe(5);
+  expect(res[4].id).toEqual(3);
+  expect(res[4].copy_id).toEqual(0);
 });
 
 test("addSpell adds a spell with a new copy_id if several copies exists", () => {
   const newPlayerSpells = JSON.parse(
     JSON.stringify(testPlayerSpells.slice(0, 3))
   );
-  newPlayerSpells[2].copy_id = 0;
-  newPlayerSpells.push({ ...newPlayerSpells[2], copy_id: 4 });
-  const res = addSpells(newPlayerSpells, testSpells, [2]);
-  expect(res.length).toBe(5);
-  expect(res[4].id).toEqual(2);
-  expect(res[4].copy_id).toEqual(5);
+  const res = addSpells(newPlayerSpells, testSpells, [0]);
+  expect(res.length).toBe(4);
+  expect(res[3].id).toEqual(0);
+  expect(res[3].copy_id).toEqual(3);
 });
 
 test("addSpell adds several spells with the expiration date", () => {

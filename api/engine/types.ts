@@ -3,6 +3,7 @@ import {
   ICharacter,
   IDialogue,
   IDialogueCharacter,
+  IElement,
   IHero,
   IResource,
   ISpell,
@@ -17,6 +18,7 @@ export type IEventPlayer = {
   resources: IPlayerResource[];
   updates: null;
   npcs: IDialogueCharacter[];
+  currentfight: null | IGeneratedFight;
 };
 
 export type IGameData = {
@@ -25,6 +27,7 @@ export type IGameData = {
   characters: ICharacter[];
   dialogues: IDialogue[];
   spells: ISpell[];
+  updates: null;
   resources: IResource[];
 };
 
@@ -120,6 +123,15 @@ export type IPAttackSpellEvent = IPlayerEvent & {
   event_id: number;
   spell_id: number;
   spell_copy: number;
+};
+
+export type IFightEnemy = IHero & { maxCards: number; maxUpdates: number };
+export type IGeneratedFight = {
+  heroes: IHero[];
+  heroDeck: IPlayerSpell[];
+  enemy: IHero;
+  enemyDeck: IPlayerSpell[];
+  elements: IElement[];
 };
 
 export type IUserEvent =

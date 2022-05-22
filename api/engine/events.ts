@@ -1,6 +1,6 @@
 import seedrandom from "seedrandom";
 import { NumberLiteralType } from "typescript";
-import { IResource, IStory } from "../storage/types";
+import { IHero, IResource, IStory } from "../storage/types";
 import {
   addHero,
   selectHeroes,
@@ -10,6 +10,10 @@ import {
   addSpells,
   selectSpells,
   addResources,
+  generateDeck,
+  generateEnemy,
+  generateEnemyDeck,
+  generateFight,
 } from "./actions";
 import {
   IGameData,
@@ -90,7 +94,7 @@ const generateLoot = (seed: string, resources: IResource[]) => {
   if (resources.length !== 10)
     throw new Error(`Can't generate reward, requires 10 resources options`);
 
-  console.log("generate loot imput, seed:", seed);
+  // console.log("generate loot imput, seed:", seed);
   const rng = seedrandom(seed);
   const items: number[] = [];
   for (let i = 0; i < 3; i++) {
@@ -100,7 +104,7 @@ const generateLoot = (seed: string, resources: IResource[]) => {
     }
     items.push(rand);
   }
-  console.log("items", items);
+  // console.log("items", items);
   const generated = [];
   for (let i = 0; i < items.length; i++) {
     const resource = resources[items[i]];
@@ -109,7 +113,7 @@ const generateLoot = (seed: string, resources: IResource[]) => {
       quantity: Math.round(rng() * 8) + 1,
     };
   }
-  console.log("generated reward", generated);
+  // console.log("generated reward", generated);
   return generated;
 };
 
@@ -119,7 +123,15 @@ export const startFightEvent = async (
   event: IPStartFightEvent
 ): Promise<IEventPlayer> => {
   let newPlayer = player;
-  console.log("startFightEvent", event);
+  newPlayer.currentfight = generateFight(
+    gameData,
+    player,
+    event.adventure_id,
+    event.fight_id,
+    event.heroes,
+    event.spells,
+    event.id
+  );
   return newPlayer;
 };
 
@@ -134,7 +146,7 @@ export const finishDialogueEvent = async (
     event.adventure_id,
     event.story_id
   );
-  console.log("finishDialogueEvent", event);
+  // console.log("finishDialogueEvent", event);
   return newPlayer;
 };
 
@@ -149,7 +161,7 @@ export const finishReelEvent = async (
     event.adventure_id,
     event.story_id
   );
-  console.log("finishReelEvent", event);
+  // console.log("finishReelEvent", event);
   return newPlayer;
 };
 
@@ -160,7 +172,7 @@ export const finishStory = async (
   story_id: number
 ): Promise<IEventPlayer> => {
   let newPlayer = player;
-  console.log("finishStory");
+  // console.log("finishStory");
   const story = player.adventures
     ?.find((a: IPlayerAdventure) => a.id === adventure_id)
     ?.stories?.find((s: IStory) => s.id === story_id);
@@ -172,6 +184,8 @@ export const finishStory = async (
   }
   // if (story.type === "fight") {
   //   console.log("applying a fight result");
+  // Calculate experience. Sort enemy cards based on amount on updates. Give 1 for every non-updated card, 1x3 for every 1updated, 1x5 for every 2 updated and 1x8 for every 3 updated.
+  // Possible multpliers - no redraw (+5), no damage (+10)
   //   const common = gameData.resources.filter(
   //     (r: IResource) => r.commonality === 10 && r.school.id < 5
   //   );
@@ -180,6 +194,7 @@ export const finishStory = async (
   //     common
   //   );
   //   console.log("loot", loot);
+  // TODO Modifiers have to improve your loot
   //   player.resources = addResources(player.resources, gameData.resources, loot);
   // }
   switch (story_id) {
