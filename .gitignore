@@ -17,8 +17,7 @@
 
 # files
 public/
-src/data/
-/api/db/game*
+
 
 npm-debug.log*
 yarn-debug.log*

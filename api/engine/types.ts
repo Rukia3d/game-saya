@@ -1,144 +1,61 @@
-import {
-  IAdventure,
-  ICharacter,
-  IDialogue,
-  IDialogueCharacter,
-  IElement,
-  IHero,
-  IResource,
-  ISpell,
-  IUpdate,
-} from "../storage/types";
+export interface ISpell {
+  id: number;
+  element: elementName;
+  strength: number;
+  symbol: ""; // Unknown for now
+  state: spellState;
+}
 
-export type IEventPlayer = {
-  player: IPlayer;
-  adventures: IPlayerAdventure[];
-  heroes: IPlayerHero[];
-  spells: IPlayerSpell[];
-  resources: IPlayerResource[];
-  updates: null;
-  npcs: IDialogueCharacter[];
-  currentfight: null | IGeneratedFight;
-};
+export type ISpellListing = ISpell & { price: number; owner: number };
 
-export type IGameData = {
-  heroes: IHero[];
-  adventures: IAdventure[];
+export interface IMaterial {
+  id: number;
+  name: string;
+}
+
+export type IMaterialOwned = IMaterial & { quantity: number };
+
+export interface IQuest {
+  id: number;
+  state: questState;
+  levels: []; //Unknown for now
+}
+
+export type IQuestListing = IQuest & { price: number; owner: number };
+
+export interface IEvent {
+  id: number;
+  level: ""; //Unknown for now
+}
+
+export interface IStory {
+  id: number;
+  name: string;
+  level: "";
+}
+
+export interface ICharacter {
+  element: elementName;
+  id: number;
+  name: string;
+  story: IStory[]; //Unknown for now
+  currentQuests: []; //Unknown for now
+  currentTournament: IEvent;
+  currentTower: IEvent;
+}
+
+export interface IPlayer {
+  id: number;
+  name: string;
+  exprience: number;
+  energy: number;
+  maxEnergy: number;
+  loungeId: number | null;
+  materials: IMaterialOwned[];
   characters: ICharacter[];
-  dialogues: IDialogue[];
   spells: ISpell[];
-  updates: null;
-  resources: IResource[];
-};
+}
 
-export type IPlayerAdventure = IAdventure & {
-  open: boolean;
-  created_at: Date;
-  expires_at: Date | null;
-};
-
-export type IPlayerHero = IHero & {
-  selected: boolean;
-  created_at: Date;
-  expires_at: Date | null;
-};
-
-export type IPlayerCharacter = {
-  id: number;
-  image: string;
-  dialogue: IDialogue;
-  created_at: Date;
-  expires_at: Date | null;
-};
-
-export type IPlayerResource = IResource & {
-  created_at: Date;
-  quantity: number;
-};
-
-export type IPlayerSpell = ISpell & {
-  selected: boolean;
-  copy_id: number;
-  created_at: Date;
-  expires_at: Date | null;
-  updates: IUpdate[] | [];
-};
-
-export type IPlayerUpdate = IUpdate & { created_at: Date; expires_at: Date };
-
-export type IPlayer = {
-  id: number;
-  experience: number;
-  life: number;
-  maxlife: number;
-  mana: number;
-  maxmana: number;
-  created_at: Date;
-  updated_at: Date;
-  rank: number;
-};
-
-export type IPlayerEvent = {
-  id: number;
-  player_id: number;
-  event: string;
-  created_at: Date;
-  updated_at: Date | null;
-  deleted_at: Date | null;
-};
-
-export type IPFinishDialogueEvent = IPlayerEvent & {
-  event_id: number;
-  adventure_id: number;
-  story_id: number;
-};
-
-export type IPFinishReelEvent = IPlayerEvent & {
-  event_id: number;
-  adventure_id: number;
-  story_id: number;
-};
-
-export type IPLooseFightEvent = IPlayerEvent & {
-  event_id: number;
-  adventure_id: number;
-  story_id: number;
-};
-
-export type IPWinFightEvent = IPlayerEvent & {
-  event_id: number;
-  adventure_id: number;
-  story_id: number;
-};
-
-export type IPStartFightEvent = IPlayerEvent & {
-  event_id: number;
-  fight_id: number;
-  adventure_id: number;
-  heroes: number[];
-  spells: { spell: number; copy: number }[];
-};
-
-export type IPAttackSpellEvent = IPlayerEvent & {
-  event_id: number;
-  spell_id: number;
-  spell_copy: number;
-};
-
-export type IFightEnemy = IHero & { maxCards: number; maxUpdates: number };
-export type IGeneratedFight = {
-  heroes: IHero[];
-  heroDeck: IPlayerSpell[];
-  enemy: IHero;
-  enemyDeck: IPlayerSpell[];
-  elements: IElement[];
-};
-
-export type IUserEvent =
-  | IPlayerEvent
-  | IPAttackSpellEvent
-  | IPStartFightEvent
-  | IPFinishDialogueEvent
-  | IPFinishReelEvent
-  | IPLooseFightEvent
-  | IPWinFightEvent;
+export type elementName = "fire" | "water" | "air" | "stone" | "metal";
+export type spellState = "closed" | "open" | "listed";
+export type questState = "open" | "rented" | "new";

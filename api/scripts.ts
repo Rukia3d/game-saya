@@ -1,9 +1,5 @@
-import { applyUserEvents } from "./engine/engine";
-import createDb from "./storage/db_setup";
-import {
-  writeFinishDialogue,
-  writeStartFight,
-} from "./storage/dynamic_data_writers";
+import { elementName, ICharacter, IPlayer } from "./engine/types";
+
 const bodyParser = require("body-parser");
 const express = require("express");
 const cors = require("cors");
@@ -12,75 +8,53 @@ const port = 3001;
 app.use(cors());
 app.use(bodyParser.json());
 
-// app.post("/api/users/:userId/fight/:fightId", async (req: any, res: any) => {
-//   console.log(
-//     `Requesting player game data for ${req.query.userId} fight ${req.query.fightId}`
-//   );
-//   const gameState = null;
-//   console.log("gameState", gameState);
-//   res.send(gameState);
-// });
+const characters: ICharacter[] = [
+  {
+    element: "air" as elementName,
+    id: 0,
+    name: "Saya",
+    story: [],
+    currentQuests: [],
+    currentTournament: { id: 0, level: "" },
+    currentTower: { id: 0, level: "" },
+  },
+  {
+    element: "fire" as elementName,
+    id: 1,
+    name: "Nell",
+    story: [],
+    currentQuests: [],
+    currentTournament: { id: 0, level: "" },
+    currentTower: { id: 0, level: "" },
+  },
+];
 
-// app.post(
-//   "/api/users/:userId/adventure/:advId/fight/:fightId",
-//   async (req: any, res: any) => {
-//     console.log(
-//       `Requesting player game data for ${req.params.userId} adventure ${req.params.advId} fight ${req.params.fightId} was ${req.query.result}`
-//     );
-//     const db = await createDb();
-//     await writeFinishFight(
-//       req.params.userId,
-//       req.params.advId,
-//       req.params.storyId,
-//       req.query.result,
-//       db
-//     );
-//     const gameState = await applyUserEvents(req.params.userId, db);
-//     db.close();
-//     res.send(gameState);
-//   }
-// );
+const materials = [
+  { id: 0, name: "Coin", quantity: 10 },
+  { id: 1, name: "Black Soul Stone", quantity: 5 },
+  { id: 1, name: "White Soul Stone", quantity: 7 },
+];
 
-app.post("/api/users/:userId/fight", async (req: any, res: any) => {
-  const adventure = req.body.advId;
-  const fight = req.body.fightId;
-  const heroes = req.body.heroes;
-  const spells = req.body.spells;
-  console.log(
-    `Requesting player game data for ${req.params.userId} adventure ${adventure} fight ${req.body.fightId}`
-  );
-  const db = await createDb();
-  await writeStartFight(
-    req.params.userId,
-    adventure,
-    fight,
-    heroes,
-    spells,
-    db
-  );
-  const gameState = await applyUserEvents(req.params.userId, db);
-  db.close();
-  res.send(gameState);
-});
-
-app.post("/api/users/:userId/story", async (req: any, res: any) => {
-  const adventure = req.body.advId;
-  const story = req.body.storyId;
-  console.log(
-    `Requesting player game data for ${req.params.userId} adventure ${adventure} story ${story}`
-  );
-  const db = await createDb();
-  await writeFinishDialogue(req.params.userId, adventure, story, db);
-  const gameState = await applyUserEvents(req.params.userId, db);
-  db.close();
-  res.send(gameState);
-});
-
-app.get("/api/users/:userId", async (req: any, res: any) => {
-  const db = await createDb();
-  const gameState = await applyUserEvents(req.params.userId, db);
-  db.close();
-  res.send(gameState);
+app.get("/api/players/:id", async (req: any, res: any) => {
+  const player: IPlayer = {
+    id: 1,
+    name: "player1 name",
+    exprience: 0,
+    energy: 10,
+    maxEnergy: 10,
+    loungeId: null,
+    materials: materials,
+    characters: characters,
+    spells: [],
+  };
+  if (req.params.id === 2) {
+    player.id = 2;
+    player.name = "player2 name";
+    player.loungeId = 5;
+    player.energy = 15;
+    player.maxEnergy = 20;
+  }
+  res.send(player);
 });
 
 app.listen(port, () => {
