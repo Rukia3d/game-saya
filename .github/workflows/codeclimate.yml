@@ -6,7 +6,7 @@ jobs:
     name: Test Coverage
     runs-on: ubuntu-latest
     env:
-      CC_TEST_REPORTER_ID: some
+      CC_TEST_REPORTER_ID: ef0e6453cf12528a4ea901eeaa7aa7c06e72e077664f46d52006b138c474f448
     steps:
       - name: Checkout
         uses: actions/checkout@v2
