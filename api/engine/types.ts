@@ -28,11 +28,18 @@ export interface IEvent {
   level: ""; //Unknown for now
 }
 
+export interface IAllowedRewards {
+  id: number;
+  upTo: number;
+}
+
 export interface IStory {
   id: number;
   name: string;
   state: "open" | "closed" | "complete";
   level: "";
+  allowedRewards: IAllowedRewards[];
+  experience: number;
 }
 
 export interface ICharacter {
