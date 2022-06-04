@@ -31,6 +31,7 @@ export interface IEvent {
 export interface IStory {
   id: number;
   name: string;
+  state: "open" | "closed" | "complete";
   level: "";
 }
 
