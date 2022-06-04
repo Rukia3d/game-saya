@@ -38,10 +38,25 @@ export interface ICharacter {
   element: elementName;
   id: number;
   name: string;
-  story: IStory[]; //Unknown for now
-  currentQuests: []; //Unknown for now
+  legend: string[];
+  stories: IStory[]; //Unknown for now
+  currentQuests: IStory[]; //Unknown for now
   currentTournament: IEvent;
   currentTower: IEvent;
+}
+
+export interface IMessage {
+  header: string;
+  text: string;
+  read: boolean;
+  reward?: IMaterial[];
+}
+
+export interface IMission {
+  name: string;
+  reward: IMaterial;
+  completed: boolean;
+  progress: number;
 }
 
 export interface IPlayer {
@@ -54,6 +69,8 @@ export interface IPlayer {
   materials: IMaterialOwned[];
   characters: ICharacter[];
   spells: ISpell[];
+  missions: [];
+  messages: [];
 }
 
 export type elementName = "fire" | "water" | "air" | "stone" | "metal";

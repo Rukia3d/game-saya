@@ -13,8 +13,12 @@ const characters: ICharacter[] = [
     element: "air" as elementName,
     id: 0,
     name: "Saya",
-    story: [],
-    currentQuests: [],
+    stories: [],
+    legend: ["Saya story line 1", "Saya story line 2"],
+    currentQuests: [
+      { id: 0, level: "", name: "air some0" },
+      { id: 1, level: "", name: "air some1" },
+    ],
     currentTournament: { id: 0, level: "" },
     currentTower: { id: 0, level: "" },
   },
@@ -22,8 +26,12 @@ const characters: ICharacter[] = [
     element: "fire" as elementName,
     id: 1,
     name: "Nell",
-    story: [],
-    currentQuests: [],
+    stories: [],
+    legend: ["Nell story line 1", "Nell story line 2"],
+    currentQuests: [
+      { id: 0, level: "", name: "fire some0" },
+      { id: 1, level: "", name: "fire some1" },
+    ],
     currentTournament: { id: 0, level: "" },
     currentTower: { id: 0, level: "" },
   },
@@ -46,6 +54,8 @@ app.get("/api/players/:id", async (req: any, res: any) => {
     materials: materials,
     characters: characters,
     spells: [],
+    missions: [],
+    messages: [],
   };
   if (req.params.id === 2) {
     player.id = 2;

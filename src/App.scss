@@ -1,0 +1,17 @@
+body,
+html,
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.App {
+  text-align: center;
+  width: 1218px;
+  height: 562px;
+  background-color: red;
+}
