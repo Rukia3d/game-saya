@@ -2,7 +2,7 @@ import { characters, materials } from "../db/testDB";
 import { addExperience, openNextLevel, rewardPlayer } from "../engine/actions";
 import { IMaterial } from "../engine/types";
 
-test("rewardPlayer generates correct rewards", async () => {
+test.only("rewardPlayer generates correct rewards", async () => {
   const playerMaterials = JSON.parse(JSON.stringify(materials)).map(
     (m: IMaterial) => {
       return { ...m, quantity: 1 };
