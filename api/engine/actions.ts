@@ -30,24 +30,16 @@ export const rewardPlayer = (
 ): IMaterialOwned[] => {
   const [charIndex, levelIndex] = findLevelIndex(event, characters);
   const level = characters[charIndex].stories[levelIndex];
-  console.log("materials before", materials);
   level.allowedRewards.forEach((r: IAllowedRewards) => {
     const rng = seedrandom(
-      event.characterId + event.mode + event.eventId + event.time
+      event.eventId + event.characterId + event.mode + event.levelId
     );
     let rand = Math.round(rng() * r.upTo);
     if (level.state === "open") {
       rand = rand * 2;
     }
-    console.log("materials[r.id].quantity", materials[r.id].quantity);
-    console.log("rand", rand);
-    console.log(
-      "materials[r.id].quantity + rand",
-      materials[r.id].quantity + rand
-    );
     materials[r.id].quantity = materials[r.id].quantity + rand;
   });
-  console.log("materials after", materials);
   return materials;
 };
 

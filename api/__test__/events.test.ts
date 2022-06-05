@@ -63,7 +63,7 @@ test("eventWinLevel for player 1", async () => {
     }
   );
   expect(res.exprience).toEqual(10);
-  expect(res.materials[0].quantity).toEqual(15);
+  expect(res.materials[0].quantity).toEqual(13);
   expect(res.materials[3].quantity).toEqual(5);
   expect(res.characters[0].stories[0].state).toEqual("complete");
   expect(res.characters[0].stories[1].state).toEqual("open");

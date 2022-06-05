@@ -2,7 +2,7 @@ import { characters, materials } from "../db/testDB";
 import { addExperience, openNextLevel, rewardPlayer } from "../engine/actions";
 import { IMaterial } from "../engine/types";
 
-test.only("rewardPlayer generates correct rewards", async () => {
+test("rewardPlayer generates correct rewards", async () => {
   const playerMaterials = JSON.parse(JSON.stringify(materials)).map(
     (m: IMaterial) => {
       return { ...m, quantity: 1 };
@@ -37,8 +37,8 @@ test.only("rewardPlayer generates correct rewards", async () => {
     JSON.parse(JSON.stringify(res)),
     playerCharacters
   );
-  expect(res2[0].quantity).toEqual(16);
-  expect(res2[3].quantity).toEqual(5);
+  expect(res2[0].quantity).toEqual(13);
+  expect(res2[3].quantity).toEqual(4);
 });
 
 test("openNextLevel opens next level correctly", async () => {
