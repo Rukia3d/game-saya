@@ -1,4 +1,5 @@
-import { applyEvents, readEvents } from "./engine/engine";
+import { readEvents } from "./db/readers";
+import { applyEvents } from "./engine/engine";
 
 const bodyParser = require("body-parser");
 const express = require("express");

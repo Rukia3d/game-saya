@@ -1,15 +1,10 @@
-import { eventCreatePlayer, eventStartLevel, eventWinLevel } from "./events";
 import {
-  createPlayerEvents,
-  ICreatePlayerEvent,
-  IPlayerEvent,
-  IStartLevelEvent,
-  IWinLevelEvent,
-  playerEvents,
-  startLevelEvents,
-  winLevelEvents,
-} from "./testDB";
-import { IPlayer } from "./types";
+  readCreatePlayerEvent,
+  readStartLevelEvent,
+  readWinLevelEvent,
+} from "../db/readers";
+import { eventCreatePlayer, eventStartLevel, eventWinLevel } from "./events";
+import { IPlayer, IPlayerEvent } from "./types";
 
 const basePlayer: IPlayer = {
   id: 0,
@@ -23,43 +18,6 @@ const basePlayer: IPlayer = {
   spells: [],
   missions: [],
   messages: [],
-};
-
-export const readEvents = (playerId: number) => {
-  // Find events for a player
-  const events = playerEvents.filter(
-    (p: IPlayerEvent) => p.playerId === playerId
-  );
-
-  if (events.length === 0) {
-    //TODO CREATE PLAYER
-  }
-
-  return events;
-};
-
-const readCreatePlayerEvent = (eventId: number) => {
-  const createPlayer = createPlayerEvents.find(
-    (e: ICreatePlayerEvent) => e.eventId === eventId
-  );
-  if (!createPlayer) throw new Error("No create player event");
-  return createPlayer;
-};
-
-const readStartLevelEvent = (eventId: number) => {
-  const startLevel = startLevelEvents.find(
-    (e: IStartLevelEvent) => e.eventId === eventId
-  );
-  if (!startLevel) throw new Error("No start level event");
-  return startLevel;
-};
-
-const readWinLevelEvent = (eventId: number) => {
-  const winLevel = winLevelEvents.find(
-    (e: IWinLevelEvent) => e.eventId === eventId
-  );
-  if (!winLevel) throw new Error("No start level event");
-  return winLevel;
 };
 
 export const applyEvents = (events: IPlayerEvent[]): IPlayer => {

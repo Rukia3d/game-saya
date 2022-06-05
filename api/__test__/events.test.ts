@@ -1,5 +1,16 @@
-import { eventCreatePlayer } from "../engine/events";
-import { IMaterialOwned, IPlayer } from "../engine/types";
+import { characters, materials } from "../db/testDB";
+import { applyEvents } from "../engine/engine";
+import {
+  eventCreatePlayer,
+  eventStartLevel,
+  eventWinLevel,
+} from "../engine/events";
+import {
+  IMaterial,
+  IMaterialOwned,
+  IPlayer,
+  IPlayerEvent,
+} from "../engine/types";
 
 const basePlayer: IPlayer = {
   id: 0,
@@ -15,13 +26,38 @@ const basePlayer: IPlayer = {
   messages: [],
 };
 
+test.skip("tutorial e2e: apply sequence of events", async () => {
+  const events: IPlayerEvent[] = [
+    {
+      playerId: 1,
+      eventId: 0,
+      type: "CREATEPLAYER",
+      created: new Date(1654347193),
+    },
+    {
+      playerId: 1,
+      eventId: 0,
+      type: "STARTLEVEL",
+      created: new Date(1654347300),
+    },
+    {
+      playerId: 1,
+      eventId: 0,
+      type: "WINLEVEL",
+      created: new Date(1654347302),
+    },
+  ];
+  const res = applyEvents(events);
+  console.log("res", res);
+});
+
 test("eventCreatePlayer for player 1", async () => {
   const res = eventCreatePlayer(
-    { eventId: 0, playerName: "player 0 name", playerId: 1 },
+    { eventId: 0, playerName: "player 1 name", playerId: 1 },
     basePlayer
   );
   expect(res.id).toEqual(1);
-  expect(res.name).toEqual("player 0 name");
+  expect(res.name).toEqual("player 1 name");
   expect(res.energy).toEqual(50);
   expect(res.exprience).toEqual(0);
   expect(res.characters.length).toEqual(1);
@@ -30,4 +66,36 @@ test("eventCreatePlayer for player 1", async () => {
   expect(res.characters[0].stories.length).toEqual(3);
   expect(res.characters[0].stories[0].state).toEqual("open");
   expect(res.characters[0].stories[1].state).toEqual("closed");
+});
+
+test("eventStartLevel for player 1", async () => {
+  const res = eventStartLevel(
+    { eventId: 0, energyPrice: 10 },
+    { ...basePlayer, energy: 100 }
+  );
+  expect(res.energy).toEqual(90);
+});
+
+test("eventWinLevel for player 1", async () => {
+  const res = eventWinLevel(
+    {
+      eventId: 1,
+      mode: "story",
+      characterId: 0,
+      levelId: 0,
+      time: new Date(1654347902),
+    },
+    {
+      ...basePlayer,
+      characters: JSON.parse(JSON.stringify(characters)),
+      materials: JSON.parse(JSON.stringify(materials)).map((m: IMaterial) => {
+        return { ...m, quantity: 1 };
+      }),
+    }
+  );
+  expect(res.exprience).toEqual(10);
+  expect(res.materials[0].quantity).toEqual(15);
+  expect(res.materials[3].quantity).toEqual(5);
+  expect(res.characters[0].stories[0].state).toEqual("complete");
+  expect(res.characters[0].stories[1].state).toEqual("open");
 });

@@ -81,6 +81,35 @@ export interface IPlayer {
   messages: [];
 }
 
+export type IPlayerEvent = {
+  playerId: number;
+  eventId: number;
+  type: "CREATEPLAYER" | "STARTLEVEL" | "WINLEVEL";
+  created: Date;
+};
+
+export type ICreatePlayerEvent = {
+  eventId: number;
+  playerName: string;
+};
+
+export type IStartLevelEvent = {
+  eventId: number;
+  energyPrice: number;
+  //   mode: string;
+  //   characterId: number;
+  //   levelId: number;
+};
+
+export type IWinLevelEvent = {
+  eventId: number;
+  mode: "story" | "quest";
+  characterId: number;
+  levelId: number;
+};
+export type IWinLevelEventTimed = IWinLevelEvent & { time: Date };
+export type ICreatePlayerEventId = ICreatePlayerEvent & { playerId: number };
+
 export type elementName = "fire" | "water" | "air" | "stone" | "metal";
 export type spellState = "closed" | "open" | "listed";
 export type questState = "open" | "rented" | "new";
