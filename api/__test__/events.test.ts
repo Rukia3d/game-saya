@@ -26,31 +26,6 @@ const basePlayer: IPlayer = {
   messages: [],
 };
 
-test.skip("tutorial e2e: apply sequence of events", async () => {
-  const events: IPlayerEvent[] = [
-    {
-      playerId: 1,
-      eventId: 0,
-      type: "CREATEPLAYER",
-      created: new Date(1654347193),
-    },
-    {
-      playerId: 1,
-      eventId: 0,
-      type: "STARTLEVEL",
-      created: new Date(1654347300),
-    },
-    {
-      playerId: 1,
-      eventId: 0,
-      type: "WINLEVEL",
-      created: new Date(1654347302),
-    },
-  ];
-  const res = applyEvents(events);
-  console.log("res", res);
-});
-
 test("eventCreatePlayer for player 1", async () => {
   const res = eventCreatePlayer(
     { eventId: 0, playerName: "player 1 name", playerId: 1 },
