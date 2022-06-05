@@ -20,7 +20,6 @@ test("rewardPlayer generates correct rewards", async () => {
     playerMaterials,
     playerCharacters
   );
-  console.log("res", res);
   expect(res[0].name).toEqual("Coin");
   expect(res[0].quantity).toEqual(9);
   expect(res[3].name).toEqual("Air essence");
@@ -37,6 +36,8 @@ test("rewardPlayer generates correct rewards", async () => {
     res,
     playerCharacters
   );
+  console.log("res", res);
+  console.log("res2", res2);
   expect(res2[0].quantity).toEqual(23);
   expect(res2[3].quantity).toEqual(7);
 });
