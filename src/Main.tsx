@@ -5,9 +5,8 @@ import { fetcher } from "./utils/helpers";
 import "./Main.scss";
 import { TopMenu } from "./UIElements/TopMenu";
 import { CharacterScreen } from "./Character";
-import { BigPopup } from "./UIElements/UIButtons";
 
-export const Game = ({
+export const Menu = ({
   player,
   setCharacter,
 }: {
@@ -15,7 +14,7 @@ export const Game = ({
   setCharacter: (s: number | null) => void;
 }) => {
   return (
-    <div className="Game">
+    <div className="Menu">
       <div className="Chars">
         {player.characters.map((c: ICharacter, i: number) => (
           <div className="Character" key={i} onClick={() => setCharacter(i)}>
@@ -55,7 +54,7 @@ export const Main = ({ playerId }: { playerId: string }) => {
     <div className="Main">
       <TopMenu materials={player.materials} energy={player.energy} />
       {charIndex == null ? (
-        <Game player={player} setCharacter={setCharIndex} />
+        <Menu player={player} setCharacter={setCharIndex} />
       ) : (
         <CharacterScreen
           character={player.characters[charIndex]}

@@ -7,6 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       CC_TEST_REPORTER_ID: ef0e6453cf12528a4ea901eeaa7aa7c06e72e077664f46d52006b138c474f448
+      NODE_ENV: development
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -19,7 +20,7 @@ jobs:
           node-version: 16
 
       - name: Install packages frontend
-        run: npm install
+        run: cd api && npm install
 
       - name: Run tests and build a report
         run: |
