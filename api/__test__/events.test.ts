@@ -1,16 +1,10 @@
 import { characters, materials } from "../db/testDB";
-import { applyEvents } from "../engine/engine";
 import {
   eventCreatePlayer,
   eventStartLevel,
   eventWinLevel,
 } from "../engine/events";
-import {
-  IMaterial,
-  IMaterialOwned,
-  IPlayer,
-  IPlayerEvent,
-} from "../engine/types";
+import { IMaterial, IMaterialOwned, IPlayer } from "../engine/types";
 
 const basePlayer: IPlayer = {
   id: 0,
