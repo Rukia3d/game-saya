@@ -39,6 +39,12 @@ export const rewardPlayer = (
     if (level.state === "open") {
       rand = rand * 2;
     }
+    console.log("materials[r.id].quantity", materials[r.id].quantity);
+    console.log("rand", rand);
+    console.log(
+      "materials[r.id].quantity + rand",
+      materials[r.id].quantity + rand
+    );
     materials[r.id].quantity = materials[r.id].quantity + rand;
   });
   console.log("materials after", materials);
