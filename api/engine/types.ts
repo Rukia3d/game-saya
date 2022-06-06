@@ -40,12 +40,13 @@ export interface IStory {
   level: "";
   allowedRewards: IAllowedRewards[];
   experience: number;
+  energy: number;
 }
 
-export interface ICharacter {
+export interface IElement {
   element: elementName;
   id: number;
-  name: string;
+  characterName: string;
   legend: string[];
   stories: IStory[]; //Unknown for now
   currentQuests: IStory[]; //Unknown for now
@@ -75,7 +76,7 @@ export interface IPlayer {
   maxEnergy: number;
   loungeId: number | null;
   materials: IMaterialOwned[];
-  characters: ICharacter[];
+  elements: IElement[];
   spells: ISpell[];
   missions: [];
   messages: [];
@@ -95,16 +96,15 @@ export type ICreatePlayerEvent = {
 
 export type IStartLevelEvent = {
   eventId: number;
-  energyPrice: number;
-  //   mode: string;
-  //   characterId: number;
-  //   levelId: number;
+  mode: gameMode;
+  elementId: number;
+  levelId: number;
 };
 
 export type IWinLevelEvent = {
   eventId: number;
-  mode: "story" | "quest";
-  characterId: number;
+  mode: gameMode;
+  elementId: number;
   levelId: number;
 };
 export type IWinLevelEventTimed = IWinLevelEvent & { time: Date };
@@ -113,3 +113,4 @@ export type ICreatePlayerEventId = ICreatePlayerEvent & { playerId: number };
 export type elementName = "fire" | "water" | "air" | "stone" | "metal";
 export type spellState = "closed" | "open" | "listed";
 export type questState = "open" | "rented" | "new";
+export type gameMode = "story" | "quest";

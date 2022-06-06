@@ -4,8 +4,8 @@ import {
   IStartLevelEvent,
   IWinLevelEvent,
   elementName,
-  ICharacter,
   IMaterial,
+  IElement,
 } from "../engine/types";
 
 export const materials: IMaterial[] = [
@@ -19,11 +19,11 @@ export const materials: IMaterial[] = [
   { id: 7, name: "Water essence" },
 ];
 
-export const characters: ICharacter[] = [
+export const elements: IElement[] = [
   {
     element: "air" as elementName,
     id: 0,
-    name: "Saya",
+    characterName: "Saya",
     stories: [
       {
         id: 0,
@@ -35,6 +35,7 @@ export const characters: ICharacter[] = [
           { id: 3, upTo: 3 },
         ],
         experience: 10,
+        energy: 5,
       },
       {
         id: 1,
@@ -47,6 +48,7 @@ export const characters: ICharacter[] = [
           { id: 4, upTo: 3 },
         ],
         experience: 10,
+        energy: 5,
       },
       {
         id: 2,
@@ -59,6 +61,7 @@ export const characters: ICharacter[] = [
           { id: 4, upTo: 3 },
         ],
         experience: 10,
+        energy: 5,
       },
     ],
     legend: ["Saya story line 1", "Saya story line 2"],
@@ -69,7 +72,7 @@ export const characters: ICharacter[] = [
   {
     element: "fire" as elementName,
     id: 1,
-    name: "Nell",
+    characterName: "Nell",
     stories: [
       {
         id: 0,
@@ -82,6 +85,7 @@ export const characters: ICharacter[] = [
           { id: 4, upTo: 3 },
         ],
         experience: 10,
+        energy: 5,
       },
       {
         id: 1,
@@ -93,6 +97,7 @@ export const characters: ICharacter[] = [
           { id: 3, upTo: 3 },
           { id: 4, upTo: 3 },
         ],
+        energy: 5,
         experience: 10,
       },
     ],
@@ -131,9 +136,9 @@ export const createPlayerEvents: ICreatePlayerEvent[] = [
 ];
 
 export const startLevelEvents: IStartLevelEvent[] = [
-  { eventId: 0, energyPrice: 10 },
+  { eventId: 0, elementId: 0, mode: "story", levelId: 0 },
 ];
 
 export const winLevelEvents: IWinLevelEvent[] = [
-  { eventId: 0, characterId: 0, mode: "story", levelId: 0 },
+  { eventId: 0, elementId: 0, mode: "story", levelId: 0 },
 ];

@@ -1,22 +1,19 @@
 import seedrandom from "seedrandom";
 import {
   IMaterialOwned,
-  ICharacter,
+  IElement,
   IAllowedRewards,
   IStory,
   IWinLevelEventTimed,
 } from "./types";
 
-const findLevelIndex = (
-  event: IWinLevelEventTimed,
-  characters: ICharacter[]
-) => {
-  const charIndex = characters.findIndex(
-    (c: ICharacter) => c.id === event.characterId
+const findLevelIndex = (event: IWinLevelEventTimed, elements: IElement[]) => {
+  const charIndex = elements.findIndex(
+    (c: IElement) => c.id === event.elementId
   );
   if (charIndex === -1)
-    throw new Error(`No character ${event.characterId} found`);
-  const levelIndex = characters[charIndex].stories.findIndex(
+    throw new Error(`No character ${event.elementId} found`);
+  const levelIndex = elements[charIndex].stories.findIndex(
     (s: IStory) => s.id === event.levelId
   );
   if (levelIndex === -1) throw new Error(`No level ${event.levelId} found`);
@@ -26,13 +23,13 @@ const findLevelIndex = (
 export const rewardPlayer = (
   event: IWinLevelEventTimed,
   materials: IMaterialOwned[],
-  characters: ICharacter[]
+  elements: IElement[]
 ): IMaterialOwned[] => {
-  const [charIndex, levelIndex] = findLevelIndex(event, characters);
-  const level = characters[charIndex].stories[levelIndex];
+  const [charIndex, levelIndex] = findLevelIndex(event, elements);
+  const level = elements[charIndex].stories[levelIndex];
   level.allowedRewards.forEach((r: IAllowedRewards) => {
     const rng = seedrandom(
-      event.eventId + event.characterId + event.mode + event.levelId
+      event.eventId + event.elementId + event.mode + event.levelId
     );
     let rand = Math.round(rng() * r.upTo);
     if (level.state === "open") {
@@ -45,23 +42,23 @@ export const rewardPlayer = (
 
 export const openNextLevel = (
   event: IWinLevelEventTimed,
-  characters: ICharacter[]
-): ICharacter[] => {
-  const [charIndex, levelIndex] = findLevelIndex(event, characters);
-  if (levelIndex < characters[charIndex].stories.length) {
-    characters[charIndex].stories[event.levelId + 1].state = "open";
+  elements: IElement[]
+): IElement[] => {
+  const [charIndex, levelIndex] = findLevelIndex(event, elements);
+  if (levelIndex < elements[charIndex].stories.length) {
+    elements[charIndex].stories[event.levelId + 1].state = "open";
   }
-  characters[charIndex].stories[event.levelId].state = "complete";
-  return characters;
+  elements[charIndex].stories[event.levelId].state = "complete";
+  return elements;
 };
 
 export const addExperience = (
   event: IWinLevelEventTimed,
   exp: number,
-  characters: ICharacter[]
+  elements: IElement[]
 ): number => {
-  const [charIndex, levelIndex] = findLevelIndex(event, characters);
-  const level = characters[charIndex].stories[levelIndex];
+  const [charIndex, levelIndex] = findLevelIndex(event, elements);
+  const level = elements[charIndex].stories[levelIndex];
   if (level.state === "open") {
     return exp + level.experience;
   }

@@ -11,9 +11,25 @@ import {
   winLevelEvents,
 } from "./testDB";
 
-export const readEvents = (playerId: number) => {
+export const readAllPlayerEvents = () => {
+  return playerEvents;
+};
+
+export const readAllCreatePlayerEvents = () => {
+  return createPlayerEvents;
+};
+
+export const readAllStartLevelEvents = () => {
+  return startLevelEvents;
+};
+
+export const readAllWinLevelEvents = () => {
+  return winLevelEvents;
+};
+
+export const readPlayerEvents = (playerId: number) => {
   // Find events for a player
-  const events = playerEvents.filter(
+  const events = readAllPlayerEvents().filter(
     (p: IPlayerEvent) => p.playerId === playerId
   );
 
@@ -25,7 +41,7 @@ export const readEvents = (playerId: number) => {
 };
 
 export const readCreatePlayerEvent = (eventId: number) => {
-  const createPlayer = createPlayerEvents.find(
+  const createPlayer = readAllCreatePlayerEvents().find(
     (e: ICreatePlayerEvent) => e.eventId === eventId
   );
   if (!createPlayer) throw new Error("No create player event");
@@ -33,7 +49,7 @@ export const readCreatePlayerEvent = (eventId: number) => {
 };
 
 export const readStartLevelEvent = (eventId: number) => {
-  const startLevel = startLevelEvents.find(
+  const startLevel = readAllStartLevelEvents().find(
     (e: IStartLevelEvent) => e.eventId === eventId
   );
   if (!startLevel) throw new Error("No start level event");
@@ -41,7 +57,7 @@ export const readStartLevelEvent = (eventId: number) => {
 };
 
 export const readWinLevelEvent = (eventId: number) => {
-  const winLevel = winLevelEvents.find(
+  const winLevel = readAllWinLevelEvents().find(
     (e: IWinLevelEvent) => e.eventId === eventId
   );
   if (!winLevel) throw new Error("No start level event");

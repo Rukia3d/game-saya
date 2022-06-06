@@ -1,4 +1,4 @@
-import { characters, materials } from "../db/testDB";
+import { elements, materials } from "../db/testDB";
 import { addExperience, openNextLevel, rewardPlayer } from "../engine/actions";
 import { IMaterial } from "../engine/types";
 
@@ -8,12 +8,12 @@ test("rewardPlayer generates correct rewards", async () => {
       return { ...m, quantity: 1 };
     }
   );
-  const playerCharacters = JSON.parse(JSON.stringify(characters));
+  const playerCharacters = JSON.parse(JSON.stringify(elements));
   const res = rewardPlayer(
     {
       eventId: 5,
       mode: "story",
-      characterId: 0,
+      elementId: 0,
       levelId: 0,
       time: new Date(1654347302),
     },
@@ -30,7 +30,7 @@ test("rewardPlayer generates correct rewards", async () => {
     {
       eventId: 6,
       mode: "story",
-      characterId: 0,
+      elementId: 0,
       levelId: 0,
       time: new Date(1654347302),
     },
@@ -42,12 +42,12 @@ test("rewardPlayer generates correct rewards", async () => {
 });
 
 test("openNextLevel opens next level correctly", async () => {
-  const playerCharacters = [JSON.parse(JSON.stringify(characters[0]))];
+  const playerCharacters = [JSON.parse(JSON.stringify(elements[0]))];
   const res = openNextLevel(
     {
       eventId: 0,
       mode: "story",
-      characterId: 0,
+      elementId: 0,
       levelId: 0,
       time: new Date(1654347302),
     },
@@ -61,7 +61,7 @@ test("openNextLevel opens next level correctly", async () => {
     {
       eventId: 1,
       mode: "story",
-      characterId: 0,
+      elementId: 0,
       levelId: 1,
       time: new Date(1654347302),
     },
@@ -73,12 +73,12 @@ test("openNextLevel opens next level correctly", async () => {
 });
 
 test("addExperience correctly adds experience", async () => {
-  const playerCharacters = [JSON.parse(JSON.stringify(characters[0]))];
+  const playerCharacters = [JSON.parse(JSON.stringify(elements[0]))];
   const res = addExperience(
     {
       eventId: 0,
       mode: "story",
-      characterId: 0,
+      elementId: 0,
       levelId: 0,
       time: new Date(1654347302),
     },
@@ -92,7 +92,7 @@ test("addExperience correctly adds experience", async () => {
     {
       eventId: 1,
       mode: "story",
-      characterId: 0,
+      elementId: 0,
       levelId: 1,
       time: new Date(1654347302),
     },
