@@ -32,7 +32,7 @@ const getNextStartLevelEventId = () => {
   return latestEvents[latestEvents.length - 1].eventId + 1;
 };
 
-export const writeCreatePlayerEvent = (name: string) => {
+export const writeCreatePlayerEvent = (name: string): number => {
   const nextPlayerId = getNextPlayerId();
   const nextCreateEventId = getNextCreatePlayerEventId();
   playerEvents.push({

@@ -17,12 +17,13 @@ app.use(bodyParser.json());
 const playerEventsApplication = (playerId: number) => {
   const events = readPlayerEvents(playerId);
   const player = applyEvents(events);
+  console.log("events", events);
   return player;
 };
 
 app.get("/api/players/:id", async (req: any, res: any) => {
-  let playerId = req.params.id;
-  if (playerId === "null") {
+  let playerId: number = parseInt(req.params.id);
+  if (req.params.id === "null") {
     if (!req.query.name)
       throw new Error("User name is required to create new user");
     playerId = writeCreatePlayerEvent(req.query.name);
@@ -34,9 +35,9 @@ app.post("/api/players/:id/startLevel", async (req: any, res: any) => {
   let playerId = req.params.id;
   writeStartLevelEvent(
     req.params.id,
-    req.query.element,
-    req.query.mode,
-    req.query.level
+    req.body.element,
+    req.body.mode,
+    req.body.level
   );
   res.send(playerEventsApplication(playerId));
 });

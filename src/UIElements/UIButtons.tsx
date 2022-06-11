@@ -1,8 +1,15 @@
 import "./UIButtons.scss";
-const SmallPopup = ({ onClick, content }: { onClick: any; content: any }) => {
+export const SmallPopup = ({
+  onClick,
+  content,
+}: {
+  onClick: any;
+  content: React.ReactNode;
+}) => {
   return (
     <div className="SmallPopup">
       <CloseButton onClick={onClick} />
+      {content}
     </div>
   );
 };

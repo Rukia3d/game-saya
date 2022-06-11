@@ -8,6 +8,17 @@ import {
   IElement,
 } from "../engine/types";
 
+// const testLevel = new Array(131).fill(new Array(9));
+// for (let i = 0; i < testLevel.length; i++) {
+//   for (let j = 0; j < testLevel[i].length; i++) {
+//     testLevel[i][j] = "o";
+//     if (i === 50 || i === 95 || i === 131) {
+//       testLevel[i][j] = "t";
+//     }
+//   }
+// }
+// console.log(testLevel);
+
 export const materials: IMaterial[] = [
   { id: 0, name: "Coin" },
   { id: 1, name: "Black Soul Stone" },
@@ -66,8 +77,8 @@ export const elements: IElement[] = [
     ],
     legend: ["Saya story line 1", "Saya story line 2"],
     currentQuests: [],
-    currentTournament: { id: 0, level: "" },
-    currentTower: { id: 0, level: "" },
+    currentTournament: { id: 0, level: "", type: "tournament" },
+    currentTower: { id: 0, level: "", type: "tower" },
   },
   {
     element: "fire" as elementName,
@@ -103,8 +114,8 @@ export const elements: IElement[] = [
     ],
     legend: ["Nell story line 1", "Nell story line 2"],
     currentQuests: [],
-    currentTournament: { id: 0, level: "" },
-    currentTower: { id: 0, level: "" },
+    currentTournament: { id: 0, level: "", type: "tournament" },
+    currentTower: { id: 0, level: "", type: "tower" },
   },
 ];
 

@@ -1,13 +1,9 @@
 import React, { useState } from "react";
-import { ICharacter, IMaterialOwned, IPlayer } from "../api/engine/types";
-import axios from "axios";
-import useSWR from "swr";
 import "./App.scss";
 // Types
 // Utils
-import { fetcher } from "./utils/helpers";
-import { Main } from "./Main";
 // Components
+import { Main } from "./Main";
 
 function App() {
   //window.localStorage.getItem("playerId") || short.generate();

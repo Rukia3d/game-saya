@@ -25,6 +25,7 @@ export type IQuestListing = IQuest & { price: number; owner: number };
 
 export interface IEvent {
   id: number;
+  type: arenaMode;
   level: ""; //Unknown for now
 }
 
@@ -114,3 +115,4 @@ export type elementName = "fire" | "water" | "air" | "stone" | "metal";
 export type spellState = "closed" | "open" | "listed";
 export type questState = "open" | "rented" | "new";
 export type gameMode = "story" | "quest";
+export type arenaMode = "tower" | "tournament";
