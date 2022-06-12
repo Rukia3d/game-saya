@@ -14,10 +14,10 @@ const port = 3001;
 app.use(cors());
 app.use(bodyParser.json());
 
-const playerEventsApplication = (playerId: number) => {
+export const playerEventsApplication = (playerId: number) => {
   const events = readPlayerEvents(playerId);
   const player = applyEvents(events);
-  console.log("events", events);
+  //console.log("events", events);
   return player;
 };
 
