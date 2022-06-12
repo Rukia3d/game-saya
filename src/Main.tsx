@@ -1,55 +1,48 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import useSWR, { KeyedMutator } from "swr";
-import { IElement, IPlayer } from "../api/engine/types";
+import { IPlayer } from "../api/engine/types";
 import { fetcher } from "./utils/helpers";
 import "./Main.scss";
 import { TopMenu } from "./UIElements/TopMenu";
 import { ElementScreen } from "./Element";
+import { Menu } from "./Menu";
 
 export interface GameContextType {
   player: IPlayer;
   mutate: KeyedMutator<any>;
+  changeScreen: (s: mainScreenState) => void;
+  setElement: (e: number | null) => void;
+  element: number | null;
 }
 
 export const GameContext = React.createContext<undefined | GameContextType>(
   undefined
 );
 
-export const Menu = ({
-  setElement,
-}: {
-  setElement: (s: number | null) => void;
-}) => {
-  const context = useContext(GameContext);
-  if (!context || !context.player) {
-    throw new Error("No data in context");
-  }
-  return (
-    <div className="Menu">
-      <div className="Chars">
-        {context.player.elements.map((c: IElement, i: number) => (
-          <div className="Character" key={i} onClick={() => setElement(i)}>
-            {c.characterName}
-          </div>
-        ))}
-      </div>
-      <div className="Sections">
-        <div className="Section">Arena</div>
-        <div className="Section">Longe</div>
-        <div className="Section">Shop</div>
-      </div>
-      <div className="Additional">
-        <div className="Button">INV</div>
-        <div className="Button">MIS</div>
-        <div className="Button">MES</div>
-      </div>
-    </div>
-  );
+type mainScreenState = "main" | "element"; //| "arena" | "lounge" | "shop";
+
+type MainScreensType = {
+  [key in mainScreenState]: React.FC;
+};
+const mainScreens: MainScreensType = {
+  main: Menu,
+  element: ElementScreen,
+  // arena: ArenaScreen,
+  // lounge: LoungeScreen,
+  // shop: ShopScreen,
 };
 
 export const Main = ({ playerId }: { playerId: string }) => {
   const { data, error, mutate } = useSWR(`/api/players/${playerId}`, fetcher);
   const [element, setElement] = useState<number | null>(null);
+  const [selected, setSelected] = useState<mainScreenState>("main");
+
+  const changeScreen = (screen: mainScreenState) => {
+    console.log("change to", screen);
+    setSelected(screen);
+  };
+
+  const CurrentScreen = mainScreens[selected];
 
   if (error || !data) {
     console.log(data);
@@ -62,16 +55,16 @@ export const Main = ({ playerId }: { playerId: string }) => {
   const context: GameContextType = {
     player: data,
     mutate: mutate,
+    changeScreen: changeScreen,
+    setElement: setElement,
+    element: element,
   };
 
   return (
     <GameContext.Provider value={context}>
       <div className="Main">
         <TopMenu />
-        <Menu setElement={setElement} />
-        {element !== null ? (
-          <ElementScreen element={element} setElement={setElement} />
-        ) : null}
+        <CurrentScreen />
       </div>
     </GameContext.Provider>
   );

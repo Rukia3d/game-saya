@@ -84,12 +84,15 @@ const player: IPlayer = {
 const context = {
   mutate: jest.fn(),
   player: player,
+  element: 0,
+  setElement: jest.fn(),
+  changeScreen: jest.fn(),
 };
 
 test("Renders ElementScreen correctly for player 1 element 0", () => {
   render(
     <GameContext.Provider value={context}>
-      <ElementScreen element={0} setElement={jest.fn()} />
+      <ElementScreen />
     </GameContext.Provider>
   );
   expect(screen.getByTestId("element-screen")).toBeInTheDocument();

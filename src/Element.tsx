@@ -69,15 +69,9 @@ const ElementQuest = ({ quests }: { quests: IStory[] }) => {
   );
 };
 
-export const ElementScreen = ({
-  element,
-  setElement,
-}: {
-  element: number;
-  setElement: (s: number | null) => void;
-}) => {
+export const ElementScreen = () => {
   const context = useContext(GameContext);
-  if (!context || !context.player) {
+  if (!context || !context.player || !context.setElement) {
     throw new Error("No data in context");
   }
 
@@ -85,18 +79,29 @@ export const ElementScreen = ({
   const [game, setGame] = useState<IStory | IEvent | null>(null);
   const [gameSelect, setGameSelect] = useState(false);
 
+  const backToMain = () => {
+    context.setElement(null);
+    context.changeScreen("main");
+    setPopup(false);
+    setGameSelect(false);
+  };
+
+  if (context.element === null) {
+    throw new Error("OMG");
+  }
+
   if (gameSelect)
     return (
       <GameLevels
         setGame={setGame}
         setGameSelect={setGameSelect}
-        element={element}
+        element={context.element}
       />
     );
   if (game)
     return (
       <Game
-        element={element}
+        element={context.element}
         game={game}
         setGame={setGame}
         setGameSelect={setGameSelect}
@@ -105,12 +110,14 @@ export const ElementScreen = ({
 
   return (
     <div className="Element" data-testid="element-screen">
-      {popup && element ? (
-        <div className="Main">
-          <BigPopup onClick={() => setPopup(false)}>
+      {popup ? (
+        <div className="Content">
+          <BigPopup onClick={backToMain}>
             <div>
-              <div>{context.player.elements[element].characterName}</div>
-              {context.player.elements[element].legend.map(
+              <div>
+                {context.player.elements[context.element].characterName}
+              </div>
+              {context.player.elements[context.element].legend.map(
                 (s: string, i: number) => (
                   <div key={i}>{s}</div>
                 )
@@ -120,22 +127,22 @@ export const ElementScreen = ({
         </div>
       ) : (
         <>
-          <CloseButton onClick={() => setElement(null)} />
+          <CloseButton onClick={backToMain} />
           <div className="Content">
             <ElementStatic
-              element={element}
+              element={context.element}
               setPopup={setPopup}
               setGameSelect={setGameSelect}
             />
             <ElementEvent
               events={[
-                context.player.elements[element].currentTournament,
-                context.player.elements[element].currentTower,
+                context.player.elements[context.element].currentTournament,
+                context.player.elements[context.element].currentTower,
               ]}
               setGame={setGame}
             />
             <ElementQuest
-              quests={context.player.elements[element].currentQuests}
+              quests={context.player.elements[context.element].currentQuests}
             />
           </div>
         </>
