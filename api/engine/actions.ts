@@ -1,24 +1,11 @@
 import seedrandom from "seedrandom";
+import { findLevelIndex } from "./helpers";
 import {
   IMaterialOwned,
   IElement,
   IAllowedRewards,
-  IStory,
   IWinLevelEventTimed,
 } from "./types";
-
-const findLevelIndex = (event: IWinLevelEventTimed, elements: IElement[]) => {
-  const charIndex = elements.findIndex(
-    (c: IElement) => c.id === event.elementId
-  );
-  if (charIndex === -1)
-    throw new Error(`No character ${event.elementId} found`);
-  const levelIndex = elements[charIndex].stories.findIndex(
-    (s: IStory) => s.id === event.levelId
-  );
-  if (levelIndex === -1) throw new Error(`No level ${event.levelId} found`);
-  return [charIndex, levelIndex];
-};
 
 export const rewardPlayer = (
   event: IWinLevelEventTimed,

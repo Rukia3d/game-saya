@@ -24,8 +24,11 @@ const ElementStatic = ({
       <div className="Info" onClick={() => setGameSelect(true)}>
         {context.player.elements[element].characterName} Main Quest
       </div>
-      {/* <div className="Info">{context.player.elements[element]} story</div>
-      <div className="Info">{context.player.elements[element]} spells</div> */}
+      <div
+        className="Info"
+        onClick={() => setPopup(true)}
+      >{`${context.player.elements[element].characterName} story`}</div>
+      <div className="Info">{`${context.player.elements[element].characterName} spells`}</div>
     </div>
   );
 };
@@ -90,7 +93,15 @@ export const ElementScreen = ({
         element={element}
       />
     );
-  if (game) return <Game element={element} game={game} setGame={setGame} />;
+  if (game)
+    return (
+      <Game
+        element={element}
+        game={game}
+        setGame={setGame}
+        setGameSelect={setGameSelect}
+      />
+    );
 
   return (
     <div className="Element">

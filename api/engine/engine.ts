@@ -3,7 +3,6 @@ import {
   readStartLevelEvent,
   readWinLevelEvent,
 } from "../db/readers";
-import { elements } from "../db/testDB";
 import { eventCreatePlayer, eventStartLevel, eventWinLevel } from "./events";
 import { IPlayer, IPlayerEvent } from "./types";
 
@@ -19,17 +18,6 @@ const basePlayer: IPlayer = {
   spells: [],
   missions: [],
   messages: [],
-};
-
-export const findEnergyPrice = (
-  element: number,
-  mode: string,
-  level: number
-) => {
-  if (mode === "story") {
-    return elements[element].stories[level].energy;
-  }
-  throw new Error("Unknown mode");
 };
 
 export const applyEvents = (events: IPlayerEvent[]): IPlayer => {

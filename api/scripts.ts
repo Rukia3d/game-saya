@@ -44,11 +44,12 @@ app.post("/api/players/:id/startLevel", async (req: any, res: any) => {
 
 app.post("/api/players/:id/winLevel", async (req: any, res: any) => {
   let playerId = req.params.id;
+  console.log("WIN PLAYER", req.body);
   writeWinLevelEvent(
     req.params.id,
-    req.query.element,
-    req.query.mode,
-    req.query.level
+    req.body.element,
+    req.body.mode,
+    req.body.level
   );
   res.send(playerEventsApplication(playerId));
 });

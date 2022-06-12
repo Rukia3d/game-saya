@@ -26,7 +26,7 @@ export type IQuestListing = IQuest & { price: number; owner: number };
 export interface IEvent {
   id: number;
   type: arenaMode;
-  level: ""; //Unknown for now
+  level: string; //Unknown for now
 }
 
 export interface IAllowedRewards {
@@ -37,8 +37,8 @@ export interface IAllowedRewards {
 export interface IStory {
   id: number;
   name: string;
-  state: "open" | "closed" | "complete";
-  level: "";
+  state: levelState;
+  level: string;
   allowedRewards: IAllowedRewards[];
   experience: number;
   energy: number;
@@ -116,3 +116,4 @@ export type spellState = "closed" | "open" | "listed";
 export type questState = "open" | "rented" | "new";
 export type gameMode = "story" | "quest";
 export type arenaMode = "tower" | "tournament";
+export type levelState = "open" | "closed" | "complete";

@@ -1,6 +1,7 @@
 import { elements, materials } from "../db/testDB";
 import { addExperience, rewardPlayer, openNextLevel } from "./actions";
-import { findEnergyPrice } from "./engine";
+import { findEnergyPrice } from "./helpers";
+
 import {
   ICreatePlayerEventId,
   IMaterial,

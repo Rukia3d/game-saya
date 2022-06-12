@@ -30,6 +30,8 @@ export const GameStartPopup = ({
   if (!context || !context.player) {
     throw new Error("No data in context");
   }
+
+  const energyPrice = context.player.elements[element].stories[story].energy;
   const startStory = async (i: number | null) => {
     console.log("startStory");
     setGameSelect(false);
@@ -44,11 +46,8 @@ export const GameStartPopup = ({
       context.mutate();
     }
   };
-  if (
-    context.player.energy -
-      context.player.elements[element].stories[story].energy <
-    0
-  ) {
+
+  if (context.player.energy - energyPrice < 0) {
     return (
       <div className="GameStartPopup">
         NOT ENOUGH ENERGY
@@ -57,6 +56,7 @@ export const GameStartPopup = ({
       </div>
     );
   }
+
   return (
     <div className="GameStartPopup">
       Confirm level start
@@ -126,19 +126,41 @@ export const Game = ({
   element,
   game,
   setGame,
+  setGameSelect,
 }: {
   element: number;
   game: IStory | IEvent;
   setGame: (s: IStory | null) => void;
+  setGameSelect: (s: boolean) => void;
 }) => {
-  const winStory = async (i: number | null) => {};
-  const loseStory = async () => {};
+  const context = useContext(GameContext);
+  if (!context || !context.player) {
+    throw new Error("No data in context");
+  }
+
+  const winStory = async () => {
+    console.log("winStory");
+    await axios.post(`/api/players/${context.player.id}/winLevel`, {
+      element: element,
+      mode: "story",
+      level: game.id,
+    });
+    setGame(null);
+    setGameSelect(true);
+    context.mutate();
+  };
+
+  const loseStory = () => {
+    console.log("loseStory");
+    setGame(null);
+    setGameSelect(true);
+  };
   return (
     <div className="Game">
       <CloseButton onClick={() => setGame(null)} />
       <br />
-      <button>Win me</button>
-      <button>Lose me</button>
+      <button onClick={winStory}>Win me</button>
+      <button onClick={loseStory}>Lose me</button>
     </div>
   );
 };

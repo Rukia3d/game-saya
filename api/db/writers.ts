@@ -77,7 +77,7 @@ export const writeWinLevelEvent = (
   playerEvents.push({
     playerId: playerId,
     eventId: nextCreateEventId,
-    type: "STARTLEVEL",
+    type: "WINLEVEL",
     created: new Date(),
   });
   winLevelEvents.push({

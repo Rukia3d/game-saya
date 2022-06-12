@@ -6,7 +6,7 @@ import "./Main.scss";
 import { TopMenu } from "./UIElements/TopMenu";
 import { ElementScreen } from "./Element";
 
-interface GameContextType {
+export interface GameContextType {
   player: IPlayer;
   mutate: KeyedMutator<any>;
 }
@@ -67,11 +67,10 @@ export const Main = ({ playerId }: { playerId: string }) => {
     <GameContext.Provider value={context}>
       <div className="Main">
         <TopMenu />
-        {element == null ? (
-          <Menu setElement={setElement} />
-        ) : (
+        <Menu setElement={setElement} />
+        {element !== null ? (
           <ElementScreen element={element} setElement={setElement} />
-        )}
+        ) : null}
       </div>
     </GameContext.Provider>
   );
