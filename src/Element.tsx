@@ -104,7 +104,7 @@ export const ElementScreen = ({
     );
 
   return (
-    <div className="Element">
+    <div className="Element" data-testid="element-screen">
       {popup && element ? (
         <div className="Main">
           <BigPopup onClick={() => setPopup(false)}>

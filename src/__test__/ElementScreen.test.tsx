@@ -7,6 +7,7 @@ import {
   IPlayer,
   levelState,
 } from "../../api/engine/types";
+import { ElementScreen } from "../Element";
 
 const player: IPlayer = {
   id: 1,
@@ -85,10 +86,11 @@ const context = {
   player: player,
 };
 
-test("Renders Main", () => {
+test("Renders ElementScreen correctly for player 1 element 0", () => {
   render(
     <GameContext.Provider value={context}>
-      <Main playerId={"1"} />
+      <ElementScreen element={0} setElement={jest.fn()} />
     </GameContext.Provider>
   );
+  expect(screen.getByTestId("element-screen")).toBeInTheDocument();
 });

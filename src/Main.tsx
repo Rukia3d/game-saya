@@ -52,6 +52,7 @@ export const Main = ({ playerId }: { playerId: string }) => {
   const [element, setElement] = useState<number | null>(null);
 
   if (error || !data) {
+    console.log(data);
     return (
       <div className="Main">
         <h1>ERROR</h1>
