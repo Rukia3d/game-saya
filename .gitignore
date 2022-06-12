@@ -4,6 +4,7 @@
 
 # coverage
 /coverage
+/api/coverage
 
 # production
 /build
