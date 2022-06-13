@@ -1,96 +1,76 @@
 import { useContext, useState } from "react";
-import { IStory, IEvent } from "../../api/engine/types";
-import { GameLevels, Game } from "../Game";
-import { GameContext } from "../Main";
-import { BigPopup, CloseButton } from "../UIElements/UIButtons";
+import { IEvent, IStory } from "../../api/engine/types";
+import { GameContext } from "../App";
+import { Game } from "../Game/Game";
+import { GameLevels } from "../Game/GameLevels";
+import { CloseButton } from "../UIElements/UIButtons";
+
 import { ElementEvent } from "./ElementEvent";
+import { ElementLegend } from "./ElementLegend";
 import { ElementQuest } from "./ElementQuests";
 import { ElementSpells } from "./ElementSpells";
-import { ElementStory } from "./ElementsStory";
+import { ElementStory } from "./ElementStory";
 
-export const Elements = () => {
+export const Element = () => {
   const context = useContext(GameContext);
-  if (!context || !context.player || !context.setElement) {
+  if (
+    !context ||
+    !context.player ||
+    !context.setElement ||
+    context.element === null
+  ) {
     throw new Error("No data in context");
   }
 
-  const [popup, setPopup] = useState(false);
-  const [game, setGame] = useState<IStory | IEvent | null>(null);
-  const [gameSelect, setGameSelect] = useState(false);
-  const [spells, setSpells] = useState(false);
-
-  const backToMain = () => {
+  const close = () => {
     context.setElement(null);
-    context.changeScreen("main");
-    setPopup(false);
-    setGameSelect(false);
+    context.changeMainScreen("main");
   };
-
-  const backToStory = () => {
-    context.changeScreen("element");
-    setPopup(false);
-    setGameSelect(false);
-  };
-
-  if (context.element === null) {
-    throw new Error("OMG HOW DID WE GET HERE");
-  }
-
-  if (gameSelect)
-    return (
-      <GameLevels
-        setGame={setGame}
-        setGameSelect={setGameSelect}
-        element={context.element}
-      />
-    );
-  if (game)
-    return (
-      <Game
-        element={context.element}
-        game={game}
-        setGame={setGame}
-        setGameSelect={setGameSelect}
-      />
-    );
-
-  if (spells) return <ElementSpells setSpells={setSpells} />;
-
-  if (popup && context.element !== null) {
-    return (
-      <div className="Element" data-testid="element-screen">
-        <div className="Content">
-          <BigPopup onClick={backToStory}>
-            <div>
-              <div>
-                {context.player.elements[context.element].characterName}
-              </div>
-              {context.player.elements[context.element].legend.map(
-                (s: string, i: number) => (
-                  <div key={i}>{s}</div>
-                )
-              )}
-            </div>
-          </BigPopup>
-        </div>
+  return (
+    <>
+      <CloseButton onClick={close} />
+      <div className="Content">
+        <ElementStory />
+        <ElementEvent />
+        <ElementQuest />
       </div>
-    );
-  }
+    </>
+  );
+};
 
+export type elementScreenState =
+  | "game"
+  | "gameLevels"
+  | "spells"
+  | "legend"
+  | "element";
+
+type ElementScreensType = {
+  [key in elementScreenState]: React.FC;
+};
+const elementScreens: ElementScreensType = {
+  element: Element,
+  game: Game,
+  gameLevels: GameLevels,
+  spells: ElementSpells,
+  legend: ElementLegend,
+};
+
+export const Elements = () => {
+  const [selected, setSelected] = useState<elementScreenState>("element");
+  const [game, setGame] = useState<IStory | IEvent | null>(null);
+  const context = useContext(GameContext);
+  if (!context || !context.player) {
+    throw new Error("No data in context");
+  }
+  context.changeElementScreen = setSelected;
+  context.game = game;
+  context.setGame = setGame;
+
+  const CurrentScreen = elementScreens[selected];
   return (
     <div className="Element" data-testid="element-screen">
-      <>
-        <CloseButton onClick={backToMain} />
-        <div className="Content">
-          <ElementStory
-            setPopup={setPopup}
-            setSpells={setSpells}
-            setGameSelect={setGameSelect}
-          />
-          <ElementEvent setGame={setGame} />
-          <ElementQuest />
-        </div>
-      </>
+      <CurrentScreen />
     </div>
   );
 };

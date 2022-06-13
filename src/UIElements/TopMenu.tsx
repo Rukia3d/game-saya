@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { IMaterialQuant } from "../../api/engine/types";
-import { GameContext } from "../Main";
+import { GameContext } from "../App";
 import "./TopMenu.scss";
 
 export const TopMenu = () => {

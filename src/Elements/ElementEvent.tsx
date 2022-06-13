@@ -1,13 +1,9 @@
 import { useContext } from "react";
-import { IStory, IEvent } from "../../api/engine/types";
-import { GameContext } from "../Main";
+import { GameContext } from "../App";
+
 import "./Elements.scss";
 
-export const ElementEvent = ({
-  setGame,
-}: {
-  setGame: (s: IStory | IEvent | null) => void;
-}) => {
+export const ElementEvent = () => {
   const context = useContext(GameContext);
   if (!context || !context.player || context.element === null) {
     throw new Error("No data in context");
@@ -16,10 +12,10 @@ export const ElementEvent = ({
   const tower = context.player.elements[context.element].currentTower;
   return (
     <div className="Event">
-      <div className="EventType" onClick={() => setGame(tournament)}>
+      <div className="EventType" onClick={() => context.setGame(tournament)}>
         Tournament Lv{tournament.id}
       </div>
-      <div className="EventType" onClick={() => setGame(tower)}>
+      <div className="EventType" onClick={() => context.setGame(tower)}>
         Tower Lv{tower.id}
       </div>
     </div>

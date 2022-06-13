@@ -1,9 +1,27 @@
 import React, { useState } from "react";
-import "./App.scss";
+import { KeyedMutator } from "swr";
 // Types
+import { IEvent, IPlayer, IStory } from "../api/engine/types";
+import { elementScreenState } from "./Elements/Elements";
 // Utils
+import "./App.scss";
 // Components
-import { Main } from "./Main";
+import { Main, mainScreenState } from "./Main";
+
+export interface GameContextType {
+  player: IPlayer;
+  mutate: KeyedMutator<any>;
+  changeMainScreen: (s: mainScreenState) => void;
+  changeElementScreen: (s: elementScreenState) => void;
+  element: number | null;
+  setElement: (e: number | null) => void;
+  game: IEvent | IStory | null;
+  setGame: (e: IEvent | IStory | null) => void;
+}
+
+export const GameContext = React.createContext<undefined | GameContextType>(
+  undefined
+);
 
 function App() {
   //window.localStorage.getItem("playerId") || short.generate();

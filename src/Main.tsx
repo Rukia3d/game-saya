@@ -1,25 +1,13 @@
 import React, { useState } from "react";
-import useSWR, { KeyedMutator } from "swr";
-import { IPlayer } from "../api/engine/types";
+import useSWR from "swr";
 import { fetcher } from "./utils/helpers";
 import "./Main.scss";
 import { TopMenu } from "./UIElements/TopMenu";
 import { Menu } from "./Menu";
 import { Elements } from "./Elements/Elements";
+import { GameContextType, GameContext } from "./App";
 
-export interface GameContextType {
-  player: IPlayer;
-  mutate: KeyedMutator<any>;
-  changeScreen: (s: mainScreenState) => void;
-  setElement: (e: number | null) => void;
-  element: number | null;
-}
-
-export const GameContext = React.createContext<undefined | GameContextType>(
-  undefined
-);
-
-type mainScreenState = "main" | "element"; //| "arena" | "lounge" | "shop";
+export type mainScreenState = "main" | "element"; //| "arena" | "lounge" | "shop";
 
 type MainScreensType = {
   [key in mainScreenState]: React.FC;
@@ -54,9 +42,12 @@ export const Main = ({ playerId }: { playerId: string }) => {
   const context: GameContextType = {
     player: data,
     mutate: mutate,
-    changeScreen: changeScreen,
+    changeMainScreen: changeScreen,
     setElement: setElement,
     element: element,
+    game: null,
+    changeElementScreen: () => {},
+    setGame: () => {},
   };
 
   return (

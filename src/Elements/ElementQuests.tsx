@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { IStory } from "../../api/engine/types";
-import { GameContext } from "../Main";
+import { GameContext } from "../App";
 import "./Elements.scss";
 
 export const ElementQuest = () => {

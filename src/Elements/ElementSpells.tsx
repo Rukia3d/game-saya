@@ -1,21 +1,12 @@
 import { useContext } from "react";
 import { ISpell } from "../../api/engine/types";
-import { GameContext } from "../Main";
+import { GameContext } from "../App";
 import { CloseButton } from "../UIElements/UIButtons";
 import "./Elements";
 
-export const ElementSpells = ({
-  setSpells,
-}: {
-  setSpells: (b: boolean) => void;
-}) => {
+export const ElementSpells = () => {
   const context = useContext(GameContext);
-  if (
-    !context ||
-    !context.player ||
-    !context.changeScreen ||
-    context.element === null
-  ) {
+  if (!context || !context.player || context.element === null) {
     throw new Error("No data in context");
   }
   const spells = context.player.spells.filter(
@@ -23,7 +14,7 @@ export const ElementSpells = ({
   );
   return (
     <div>
-      <CloseButton onClick={() => setSpells(false)} />
+      <CloseButton onClick={() => context.changeElementScreen("element")} />
       <div>
         <div>{context.player.elements[context.element].element}</div>
         {spells.map((s: ISpell, i: number) => (

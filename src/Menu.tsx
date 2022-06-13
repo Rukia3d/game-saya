@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { IElement } from "../api/engine/types";
-import { GameContext } from "./Main";
+import { GameContext } from "./App";
 import "./Menu.scss";
 export const Menu = () => {
   const context = useContext(GameContext);
@@ -10,7 +10,7 @@ export const Menu = () => {
 
   const selectElement = (i: number) => {
     context.setElement(i);
-    context.changeScreen("element");
+    context.changeMainScreen("element");
   };
   return (
     <div className="Menu">

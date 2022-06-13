@@ -1,6 +1,5 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import { GameContext } from "../Main";
 import {
   arenaMode,
   elementName,
@@ -8,6 +7,7 @@ import {
   levelState,
 } from "../../api/engine/types";
 import { Elements } from "../Elements/Elements";
+import { GameContext, GameContextType } from "../App";
 
 const player: IPlayer = {
   id: 1,
@@ -82,12 +82,15 @@ const player: IPlayer = {
   messages: [] as IPlayer["messages"],
   currentState: { state: "MAIN" },
 };
-const context = {
+const context: GameContextType = {
   mutate: jest.fn(),
   player: player,
   element: 0,
   setElement: jest.fn(),
-  changeScreen: jest.fn(),
+  setGame: jest.fn(),
+  game: null,
+  changeMainScreen: jest.fn(),
+  changeElementScreen: jest.fn(),
 };
 
 test("Renders ElementScreen correctly for player 1 element 0", () => {
