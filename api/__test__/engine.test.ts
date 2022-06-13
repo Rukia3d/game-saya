@@ -10,7 +10,7 @@ test("Series of events applies correctly", () => {
   expect(res.id).toEqual(1);
   expect(res.name).toEqual(`player 0 name`);
   expect(res.exprience).toEqual(10);
-  expect(res.energy).toEqual(45);
+  expect(res.energy).toEqual(50);
   expect(res.materials.length).toEqual(8);
   expect(res.materials[0].quantity).toEqual(18);
   expect(res.materials[1].quantity).toEqual(0);

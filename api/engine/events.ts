@@ -32,17 +32,16 @@ export const eventStartLevel = (
   event: IStartLevelEvent,
   player: IPlayer
 ): IPlayer => {
-  const energyPrice = findEnergyPrice(
-    event.elementId,
-    event.mode,
-    event.levelId
-  );
+  let energyPrice = findEnergyPrice(event.elementId, event.mode, event.levelId);
+  if (event.mode === "story" && event.elementId === 0 && event.levelId < 2) {
+    energyPrice = 0;
+  }
   const state = {
     state: "PLAY" as currentState,
     level: {
       elementId: event.elementId,
       mode: event.mode,
-      levelId: event.elementId,
+      levelId: event.levelId,
     },
   };
   return {

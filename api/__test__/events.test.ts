@@ -38,15 +38,27 @@ test("eventCreatePlayer for player 1", async () => {
   expect(res.elements[0].stories[1].state).toEqual("closed");
 });
 
-test("eventStartLevel for player 1", async () => {
+test("eventStartLevel for player 1 within tutorial", async () => {
   const res = eventStartLevel(
     { eventId: 0, mode: "story", elementId: 0, levelId: 0 },
+    { ...basePlayer, energy: 100 }
+  );
+  expect(res.energy).toEqual(100);
+  expect(res.currentState.state).toEqual("PLAY");
+  expect(res.currentState.level?.elementId).toEqual(0);
+  expect(res.currentState.level?.levelId).toEqual(0);
+  expect(res.currentState.level?.mode).toEqual("story");
+});
+
+test("eventStartLevel for player 1 outside tutorial", async () => {
+  const res = eventStartLevel(
+    { eventId: 0, mode: "story", elementId: 0, levelId: 2 },
     { ...basePlayer, energy: 100 }
   );
   expect(res.energy).toEqual(95);
   expect(res.currentState.state).toEqual("PLAY");
   expect(res.currentState.level?.elementId).toEqual(0);
-  expect(res.currentState.level?.levelId).toEqual(0);
+  expect(res.currentState.level?.levelId).toEqual(2);
   expect(res.currentState.level?.mode).toEqual("story");
 });
 
