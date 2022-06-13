@@ -90,7 +90,7 @@ export interface IPlayer {
   loungeId: number | null;
   materials: IMaterialQuant[];
   elements: IElement[];
-  spells: ISpell[];
+  spells: ISpell[] | ISpellClosed[];
   missions: [];
   messages: [];
   currentState: ICurrentState;
@@ -99,7 +99,7 @@ export interface IPlayer {
 export type IPlayerEvent = {
   playerId: number;
   eventId: number;
-  type: "CREATEPLAYER" | "STARTLEVEL" | "WINLEVEL";
+  type: "CREATEPLAYER" | "STARTLEVEL" | "WINLEVEL" | "OPENSPELL";
   created: Date;
 };
 

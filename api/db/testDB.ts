@@ -6,7 +6,7 @@ import {
   elementName,
   IMaterial,
   IElement,
-  ISpell,
+  ISpellClosed,
 } from "../engine/types";
 
 // const testLevel = new Array(131).fill(new Array(9));
@@ -31,15 +31,19 @@ export const materials: IMaterial[] = [
   { id: 7, name: "Water essence" },
 ];
 
-export const spells: ISpell[] = [
+export const spells: ISpellClosed[] = [
   {
     id: 0,
     elementId: 0,
     enemy: "air",
     strength: 1,
     symbol: "some", // Unknown for now
-    state: "open",
+    state: "closed",
     name: "Air spell 1",
+    price: [
+      { id: 0, name: "Coin", quantity: 50 },
+      { id: 3, name: "Air essence", quantity: 1 },
+    ],
   },
   {
     id: 1,
@@ -49,6 +53,10 @@ export const spells: ISpell[] = [
     symbol: "some", // Unknown for now
     state: "closed",
     name: "Air spell 2",
+    price: [
+      { id: 0, name: "Coin", quantity: 100 },
+      { id: 3, name: "Air essence", quantity: 10 },
+    ],
   },
   {
     id: 2,
@@ -56,8 +64,12 @@ export const spells: ISpell[] = [
     enemy: "fire",
     strength: 1,
     symbol: "some", // Unknown for now
-    state: "open",
+    state: "closed",
     name: "Fire spell 1",
+    price: [
+      { id: 0, name: "Coin", quantity: 50 },
+      { id: 4, name: "Fire essence", quantity: 1 },
+    ],
   },
   {
     id: 3,
@@ -67,6 +79,10 @@ export const spells: ISpell[] = [
     symbol: "some", // Unknown for now
     state: "closed",
     name: "Fire spell 2",
+    price: [
+      { id: 0, name: "Coin", quantity: 100 },
+      { id: 4, name: "Fire essence", quantity: 10 },
+    ],
   },
 ];
 

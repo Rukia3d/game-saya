@@ -10,15 +10,18 @@ export const ElementSpells = () => {
     throw new Error("No data in context");
   }
   const spells = context.player.spells.filter(
-    (s: ISpell) => s.elementId === context.element
+    (s: ISpell) => s.elementId == context.element
   );
+  console.log("spells", context.player.spells);
   return (
     <div>
       <CloseButton onClick={() => context.changeElementScreen("element")} />
       <div>
         <div>{context.player.elements[context.element].element}</div>
         {spells.map((s: ISpell, i: number) => (
-          <div key={i}>{s.name}</div>
+          <div className="Spell" key={i}>
+            {s.name}
+          </div>
         ))}
       </div>
     </div>
