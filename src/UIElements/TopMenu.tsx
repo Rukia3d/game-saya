@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { IMaterialOwned } from "../../api/engine/types";
+import { IMaterialQuant } from "../../api/engine/types";
 import { GameContext } from "../Main";
 import "./TopMenu.scss";
 
@@ -11,7 +11,7 @@ export const TopMenu = () => {
   return (
     <div className="Top">
       <div>Energy: {context.player.energy}</div>
-      {context.player.materials.map((m: IMaterialOwned, i: number) => (
+      {context.player.materials.map((m: IMaterialQuant, i: number) => (
         <div key={i}>
           {m.name}: {m.quantity}
         </div>

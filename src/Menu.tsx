@@ -8,18 +8,15 @@ export const Menu = () => {
     throw new Error("No data in context");
   }
 
+  const selectElement = (i: number) => {
+    context.setElement(i);
+    context.changeScreen("element");
+  };
   return (
     <div className="Menu">
       <div className="Chars">
         {context.player.elements.map((c: IElement, i: number) => (
-          <div
-            className="Character"
-            key={i}
-            onClick={() => {
-              context.changeScreen("element");
-              context.setElement(i);
-            }}
-          >
+          <div className="Character" key={i} onClick={() => selectElement(i)}>
             {c.characterName}
           </div>
         ))}

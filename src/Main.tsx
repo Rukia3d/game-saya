@@ -4,8 +4,8 @@ import { IPlayer } from "../api/engine/types";
 import { fetcher } from "./utils/helpers";
 import "./Main.scss";
 import { TopMenu } from "./UIElements/TopMenu";
-import { ElementScreen } from "./Element";
 import { Menu } from "./Menu";
+import { Elements } from "./Elements/Elements";
 
 export interface GameContextType {
   player: IPlayer;
@@ -26,7 +26,7 @@ type MainScreensType = {
 };
 const mainScreens: MainScreensType = {
   main: Menu,
-  element: ElementScreen,
+  element: Elements,
   // arena: ArenaScreen,
   // lounge: LoungeScreen,
   // shop: ShopScreen,
@@ -45,7 +45,6 @@ export const Main = ({ playerId }: { playerId: string }) => {
   const CurrentScreen = mainScreens[selected];
 
   if (error || !data) {
-    console.log(data);
     return (
       <div className="Main">
         <h1>ERROR</h1>

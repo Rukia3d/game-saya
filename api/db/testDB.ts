@@ -6,6 +6,7 @@ import {
   elementName,
   IMaterial,
   IElement,
+  ISpell,
 } from "../engine/types";
 
 // const testLevel = new Array(131).fill(new Array(9));
@@ -28,6 +29,45 @@ export const materials: IMaterial[] = [
   { id: 5, name: "Metal essence" },
   { id: 6, name: "Stone essence" },
   { id: 7, name: "Water essence" },
+];
+
+export const spells: ISpell[] = [
+  {
+    id: 0,
+    elementId: 0,
+    enemy: "air",
+    strength: 1,
+    symbol: "some", // Unknown for now
+    state: "open",
+    name: "Air spell 1",
+  },
+  {
+    id: 1,
+    elementId: 0,
+    enemy: "fire",
+    strength: 1,
+    symbol: "some", // Unknown for now
+    state: "closed",
+    name: "Air spell 2",
+  },
+  {
+    id: 2,
+    elementId: 1,
+    enemy: "fire",
+    strength: 1,
+    symbol: "some", // Unknown for now
+    state: "open",
+    name: "Fire spell 1",
+  },
+  {
+    id: 3,
+    elementId: 1,
+    enemy: "stone",
+    strength: 1,
+    symbol: "some", // Unknown for now
+    state: "closed",
+    name: "Fire spell 2",
+  },
 ];
 
 export const elements: IElement[] = [

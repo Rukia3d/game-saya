@@ -84,7 +84,12 @@ export const GameLevels = ({
 
   return (
     <div className="GameSelect">
-      <CloseButton onClick={() => setStory(null)} />
+      <CloseButton
+        onClick={() => {
+          setStory(null);
+          setGameSelect(false);
+        }}
+      />
       {story !== null ? (
         <SmallPopup
           onClick={() => {

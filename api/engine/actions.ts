@@ -1,7 +1,7 @@
 import seedrandom from "seedrandom";
 import { findLevelIndex } from "./helpers";
 import {
-  IMaterialOwned,
+  IMaterialQuant,
   IElement,
   IAllowedRewards,
   IWinLevelEventTimed,
@@ -9,9 +9,9 @@ import {
 
 export const rewardPlayer = (
   event: IWinLevelEventTimed,
-  materials: IMaterialOwned[],
+  materials: IMaterialQuant[],
   elements: IElement[]
-): IMaterialOwned[] => {
+): IMaterialQuant[] => {
   const [charIndex, levelIndex] = findLevelIndex(event, elements);
   const level = elements[charIndex].stories[levelIndex];
   level.allowedRewards.forEach((r: IAllowedRewards) => {

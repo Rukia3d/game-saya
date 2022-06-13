@@ -4,7 +4,7 @@ import {
   eventStartLevel,
   eventWinLevel,
 } from "../engine/events";
-import { IMaterial, IMaterialOwned, IPlayer } from "../engine/types";
+import { IMaterial, IMaterialQuant, IPlayer } from "../engine/types";
 
 const basePlayer: IPlayer = {
   id: 0,
@@ -32,7 +32,7 @@ test("eventCreatePlayer for player 1", async () => {
   expect(res.exprience).toEqual(0);
   expect(res.elements.length).toEqual(1);
   expect(res.materials.length).toEqual(8);
-  res.materials.forEach((r: IMaterialOwned) => expect(r.quantity).toEqual(0));
+  res.materials.forEach((r: IMaterialQuant) => expect(r.quantity).toEqual(0));
   expect(res.elements[0].stories.length).toEqual(3);
   expect(res.elements[0].stories[0].state).toEqual("open");
   expect(res.elements[0].stories[1].state).toEqual("closed");

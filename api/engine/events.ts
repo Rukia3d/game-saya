@@ -1,4 +1,4 @@
-import { elements, materials } from "../db/testDB";
+import { elements, materials, spells } from "../db/testDB";
 import { addExperience, rewardPlayer, openNextLevel } from "./actions";
 import { findEnergyPrice, foundStartLevelToWin } from "./helpers";
 
@@ -7,6 +7,7 @@ import {
   ICreatePlayerEventId,
   IMaterial,
   IPlayer,
+  ISpell,
   IStartLevelEvent,
   IWinLevelEventTimed,
 } from "./types";

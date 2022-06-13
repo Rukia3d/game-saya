@@ -1,11 +1,14 @@
 export interface ISpell {
   id: number;
-  element: elementName;
+  elementId: number;
+  enemy: elementName;
   strength: number;
-  symbol: ""; // Unknown for now
+  symbol: string; // Unknown for now
   state: spellState;
+  name: string;
 }
 
+export type ISpellClosed = ISpell & { price: IMaterialQuant[] };
 export type ISpellListing = ISpell & { price: number; owner: number };
 
 export interface IMaterial {
@@ -13,7 +16,7 @@ export interface IMaterial {
   name: string;
 }
 
-export type IMaterialOwned = IMaterial & { quantity: number };
+export type IMaterialQuant = IMaterial & { quantity: number };
 
 export interface IQuest {
   id: number;
@@ -85,7 +88,7 @@ export interface IPlayer {
   energy: number;
   maxEnergy: number;
   loungeId: number | null;
-  materials: IMaterialOwned[];
+  materials: IMaterialQuant[];
   elements: IElement[];
   spells: ISpell[];
   missions: [];
