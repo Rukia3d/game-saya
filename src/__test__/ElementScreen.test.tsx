@@ -1,6 +1,6 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import { GameContext, GameContextType, Main } from "../Main";
+import { GameContext } from "../Main";
 import {
   arenaMode,
   elementName,
@@ -80,6 +80,7 @@ const player: IPlayer = {
   spells: [],
   missions: [] as IPlayer["missions"],
   messages: [] as IPlayer["messages"],
+  currentState: { state: "MAIN" },
 };
 const context = {
   mutate: jest.fn(),

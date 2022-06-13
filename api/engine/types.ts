@@ -69,6 +69,15 @@ export interface IMission {
   progress: number;
 }
 
+export interface ICurrentState {
+  state: currentState;
+  level?: {
+    levelId: number;
+    mode: gameMode;
+    elementId: number;
+  };
+}
+
 export interface IPlayer {
   id: number;
   name: string;
@@ -81,6 +90,7 @@ export interface IPlayer {
   spells: ISpell[];
   missions: [];
   messages: [];
+  currentState: ICurrentState;
 }
 
 export type IPlayerEvent = {
@@ -117,3 +127,4 @@ export type questState = "open" | "rented" | "new";
 export type gameMode = "story" | "quest";
 export type arenaMode = "tower" | "tournament";
 export type levelState = "open" | "closed" | "complete";
+export type currentState = "MAIN" | "PLAY";

@@ -1,8 +1,9 @@
 import { elements, materials } from "../db/testDB";
 import { addExperience, rewardPlayer, openNextLevel } from "./actions";
-import { findEnergyPrice } from "./helpers";
+import { findEnergyPrice, foundStartLevelToWin } from "./helpers";
 
 import {
+  currentState,
   ICreatePlayerEventId,
   IMaterial,
   IPlayer,
@@ -36,7 +37,19 @@ export const eventStartLevel = (
     event.mode,
     event.levelId
   );
-  return { ...player, energy: player.energy - energyPrice };
+  const state = {
+    state: "PLAY" as currentState,
+    level: {
+      elementId: event.elementId,
+      mode: event.mode,
+      levelId: event.elementId,
+    },
+  };
+  return {
+    ...player,
+    energy: player.energy - energyPrice,
+    currentState: state,
+  };
 };
 
 export const eventWinLevel = (
@@ -47,7 +60,10 @@ export const eventWinLevel = (
   let newElements = player.elements;
   let newExperience = player.exprience;
 
-  if (event.mode === "story") {
+  if (
+    event.mode === "story" &&
+    foundStartLevelToWin(event, player.currentState)
+  ) {
     newExperience = addExperience(event, player.exprience, player.elements);
     newMaterials = rewardPlayer(event, player.materials, player.elements);
     newElements = openNextLevel(event, player.elements);
@@ -58,5 +74,6 @@ export const eventWinLevel = (
     materials: newMaterials,
     elements: newElements,
     exprience: newExperience,
+    currentState: { state: "MAIN" },
   };
 };

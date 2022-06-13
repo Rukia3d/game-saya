@@ -18,6 +18,7 @@ const basePlayer: IPlayer = {
   spells: [],
   missions: [],
   messages: [],
+  currentState: { state: "MAIN" },
 };
 
 export const applyEvents = (events: IPlayerEvent[]): IPlayer => {

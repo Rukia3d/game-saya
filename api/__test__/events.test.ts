@@ -18,6 +18,7 @@ const basePlayer: IPlayer = {
   spells: [],
   missions: [],
   messages: [],
+  currentState: { state: "MAIN" },
 };
 
 test("eventCreatePlayer for player 1", async () => {
@@ -43,6 +44,10 @@ test("eventStartLevel for player 1", async () => {
     { ...basePlayer, energy: 100 }
   );
   expect(res.energy).toEqual(95);
+  expect(res.currentState.state).toEqual("PLAY");
+  expect(res.currentState.level?.elementId).toEqual(0);
+  expect(res.currentState.level?.levelId).toEqual(0);
+  expect(res.currentState.level?.mode).toEqual("story");
 });
 
 test("eventWinLevel for player 1", async () => {
@@ -56,6 +61,10 @@ test("eventWinLevel for player 1", async () => {
     },
     {
       ...basePlayer,
+      currentState: {
+        state: "PLAY",
+        level: { mode: "story", elementId: 0, levelId: 0 },
+      },
       elements: JSON.parse(JSON.stringify(elements)),
       materials: JSON.parse(JSON.stringify(materials)).map((m: IMaterial) => {
         return { ...m, quantity: 1 };
@@ -67,4 +76,5 @@ test("eventWinLevel for player 1", async () => {
   expect(res.materials[3].quantity).toEqual(5);
   expect(res.elements[0].stories[0].state).toEqual("complete");
   expect(res.elements[0].stories[1].state).toEqual("open");
+  expect(res.currentState.state).toEqual("MAIN");
 });

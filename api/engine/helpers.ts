@@ -1,5 +1,5 @@
 import { elements } from "../db/testDB";
-import { IElement, IStory, IWinLevelEventTimed } from "./types";
+import { ICurrentState, IElement, IStory, IWinLevelEventTimed } from "./types";
 
 export const findEnergyPrice = (
   element: number,
@@ -26,4 +26,25 @@ export const findLevelIndex = (
   );
   if (levelIndex === -1) throw new Error(`No level ${event.levelId} found`);
   return [charIndex, levelIndex];
+};
+
+const correctStateForWin = (
+  event: IWinLevelEventTimed,
+  currentState: ICurrentState
+) => {
+  return (
+    event.mode === currentState.level?.mode &&
+    event.levelId === currentState.level?.levelId &&
+    event.elementId === currentState.level?.elementId
+  );
+};
+export const foundStartLevelToWin = (
+  event: IWinLevelEventTimed,
+  currentState: ICurrentState
+) => {
+  if ("level" in currentState) {
+    return correctStateForWin(event, currentState);
+  } else {
+    throw new Error("Incorrect state: can't finish level you haven't started");
+  }
 };
