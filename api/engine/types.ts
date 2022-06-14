@@ -148,4 +148,4 @@ export type questState = "open" | "rented" | "new";
 export type gameMode = "story" | "quest";
 export type arenaMode = "tower" | "tournament";
 export type levelState = "open" | "closed" | "complete";
-export type currentState = "MAIN" | "PLAY";
+export type currentState = "MAIN" | "PLAY" | "SPELLS";

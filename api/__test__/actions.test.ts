@@ -1,6 +1,11 @@
 import { elements, materials } from "../db/testDB";
-import { addExperience, openNextLevel, rewardPlayer } from "../engine/actions";
-import { IMaterial } from "../engine/types";
+import {
+  addExperience,
+  openNextLevel,
+  removeMaterials,
+  rewardPlayer,
+} from "../engine/actions";
+import { IMaterial, IMaterialQuant } from "../engine/types";
 
 test("rewardPlayer generates correct rewards", async () => {
   const playerMaterials = JSON.parse(JSON.stringify(materials)).map(
@@ -100,4 +105,18 @@ test("addExperience correctly adds experience", async () => {
     playerCharacters
   );
   expect(res2).toEqual(10);
+});
+
+test("Removes materials correctly", async () => {
+  const owned: IMaterialQuant[] = materials.map((m: IMaterial) => {
+    return { ...m, quantity: 10 };
+  });
+
+  const price: IMaterialQuant[] = [
+    { ...materials[0], quantity: 5 },
+    { ...materials[3], quantity: 7 },
+  ];
+  const res = removeMaterials(owned, price);
+  expect(res[0].quantity).toEqual(5);
+  expect(res[3].quantity).toEqual(3);
 });

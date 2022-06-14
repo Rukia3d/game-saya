@@ -1,6 +1,7 @@
-import { elements, materials } from "../db/testDB";
+import { elements, materials, spells } from "../db/testDB";
 import {
   eventCreatePlayer,
+  eventOpenSpell,
   eventStartLevel,
   eventWinLevel,
 } from "../engine/events";
@@ -89,4 +90,53 @@ test("eventWinLevel for player 1", async () => {
   expect(res.elements[0].stories[0].state).toEqual("complete");
   expect(res.elements[0].stories[1].state).toEqual("open");
   expect(res.currentState.state).toEqual("MAIN");
+});
+
+test("openSpell for player 1", async () => {
+  const playerSpells = [
+    {
+      ...spells[0],
+      price: [
+        { ...materials[0], quantity: 5 },
+        { ...materials[1], quantity: 7 },
+      ],
+    },
+    {
+      ...spells[1],
+      price: [
+        { ...materials[0], quantity: 3 },
+        { ...materials[2], quantity: 3 },
+      ],
+    },
+  ];
+  const playerMaterials = materials.map((m: IMaterial) => {
+    return { ...m, quantity: 10 };
+  });
+  const res = eventOpenSpell(
+    { eventId: 0, elementId: 0, spellId: 0 },
+    {
+      ...basePlayer,
+      materials: playerMaterials,
+      spells: playerSpells,
+    }
+  );
+  expect(res.spells.length).toEqual(2);
+  expect(res.spells[0]).not.toHaveProperty("price");
+  expect(res.spells[1]).toHaveProperty("price");
+  expect(res.materials[0].quantity).toEqual(5);
+  expect(res.materials[1].quantity).toEqual(3);
+  expect(res.currentState.state).toEqual("SPELLS");
+
+  jest.spyOn(console, "error").mockImplementation(() => jest.fn());
+  expect(() =>
+    eventOpenSpell(
+      { eventId: 0, elementId: 0, spellId: 1 },
+      {
+        ...basePlayer,
+        materials: playerMaterials,
+        spells: [playerSpells[0], { ...spells[1] }],
+      }
+    )
+  ).toThrow("Spell to open doesn't have a price");
+  jest.restoreAllMocks();
 });

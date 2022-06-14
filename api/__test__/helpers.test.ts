@@ -63,20 +63,9 @@ test("Can pay for a spell returns  error if material doesn't exist", async () =>
   const owned: IMaterialQuant[] = materials.map((m: IMaterial) => {
     return { ...m, quantity: 10 };
   });
-  const price: IMaterialQuant[] = [
-    { ...materials[0], quantity: 5 },
-    { ...materials[1], quantity: 7 },
-  ];
-  const res = canBuySpell(owned, price);
-  expect(res).toBeTruthy();
-  const res2 = canBuySpell(
-    owned,
-    price.concat([{ ...materials[2], quantity: 15 }])
-  );
-  expect(res2).toBeFalsy();
-
+  jest.spyOn(console, "error").mockImplementation(() => jest.fn());
   expect(() =>
-    canBuySpell(owned, price.concat([{ id: 55, name: "Coin", quantity: 1 }]))
+    canBuySpell(owned, [{ id: 55, name: "Coin", quantity: 1 }])
   ).toThrow("Price of an item contains non-existant materia");
   jest.restoreAllMocks();
 });

@@ -95,10 +95,10 @@ export const eventOpenSpell = (
     (s: ISpell | ISpellClosed) =>
       s.elementId == event.elementId && s.id == event.spellId
   );
-  if (
-    newPlayerSpells[indexToChange].price &&
-    canBuySpell(player.materials, newPlayerSpells[indexToChange].price)
-  ) {
+  if (!newPlayerSpells[indexToChange].price) {
+    throw new Error("Spell to open doesn't have a price");
+  }
+  if (canBuySpell(player.materials, newPlayerSpells[indexToChange].price)) {
     let newMaterials = removeMaterials(
       JSON.parse(JSON.stringify(player.materials)),
       newPlayerSpells[indexToChange].price
@@ -113,8 +113,14 @@ export const eventOpenSpell = (
       state: newPlayerSpells[indexToChange].state,
       name: newPlayerSpells[indexToChange].name,
     };
-    return { ...player, materials: newMaterials, spells: newPlayerSpells };
+    return {
+      ...player,
+      materials: newMaterials,
+      spells: newPlayerSpells,
+      currentState: { state: "SPELLS" },
+    };
   } else {
-    throw new Error("Spell to open doesn't have a price");
+    console.warn("Not enough materials to buy a spell");
+    return { ...player, currentState: { state: "SPELLS" } };
   }
 };
