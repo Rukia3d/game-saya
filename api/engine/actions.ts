@@ -51,3 +51,17 @@ export const addExperience = (
   }
   return exp;
 };
+
+export const removeMaterials = (
+  materials: IMaterialQuant[],
+  price: IMaterialQuant[]
+): IMaterialQuant[] => {
+  price.forEach((p: IMaterialQuant) => {
+    const materialIndex = materials.findIndex(
+      (m: IMaterialQuant) => m.id === p.id
+    );
+    materials[materialIndex].quantity =
+      materials[materialIndex].quantity - p.quantity;
+  });
+  return materials;
+};

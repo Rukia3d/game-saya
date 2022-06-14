@@ -1,13 +1,20 @@
 import { elements, materials, spells } from "../db/testDB";
-import { addExperience, rewardPlayer, openNextLevel } from "./actions";
-import { findEnergyPrice, foundStartLevelToWin } from "./helpers";
+import {
+  addExperience,
+  rewardPlayer,
+  openNextLevel,
+  removeMaterials,
+} from "./actions";
+import { canBuySpell, findEnergyPrice, foundStartLevelToWin } from "./helpers";
 
 import {
   currentState,
   ICreatePlayerEventId,
   IMaterial,
+  IOpenSpellEvent,
   IPlayer,
   ISpell,
+  ISpellClosed,
   IStartLevelEvent,
   IWinLevelEventTimed,
 } from "./types";
@@ -76,4 +83,38 @@ export const eventWinLevel = (
     exprience: newExperience,
     currentState: { state: "MAIN" },
   };
+};
+
+export const eventOpenSpell = (
+  event: IOpenSpellEvent,
+  player: IPlayer
+): IPlayer => {
+  const newPlayerSpells = JSON.parse(JSON.stringify(player.spells));
+
+  const indexToChange = newPlayerSpells.findIndex(
+    (s: ISpell | ISpellClosed) =>
+      s.elementId == event.elementId && s.id == event.spellId
+  );
+  if (
+    newPlayerSpells[indexToChange].price &&
+    canBuySpell(player.materials, newPlayerSpells[indexToChange].price)
+  ) {
+    let newMaterials = removeMaterials(
+      JSON.parse(JSON.stringify(player.materials)),
+      newPlayerSpells[indexToChange].price
+    );
+
+    newPlayerSpells[indexToChange] = {
+      id: newPlayerSpells[indexToChange].id,
+      elementId: newPlayerSpells[indexToChange].elementId,
+      enemy: newPlayerSpells[indexToChange].enemy,
+      strength: newPlayerSpells[indexToChange].strength,
+      symbol: newPlayerSpells[indexToChange].symbol,
+      state: newPlayerSpells[indexToChange].state,
+      name: newPlayerSpells[indexToChange].name,
+    };
+    return { ...player, materials: newMaterials, spells: newPlayerSpells };
+  } else {
+    throw new Error("Spell to open doesn't have a price");
+  }
 };

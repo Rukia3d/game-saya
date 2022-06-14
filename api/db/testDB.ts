@@ -6,7 +6,9 @@ import {
   elementName,
   IMaterial,
   IElement,
-  ISpellClosed,
+  ISpellPrice,
+  IOpenSpellEvent,
+  ISpell,
 } from "../engine/types";
 
 // const testLevel = new Array(131).fill(new Array(9));
@@ -31,7 +33,17 @@ export const materials: IMaterial[] = [
   { id: 7, name: "Water essence" },
 ];
 
-export const spells: ISpellClosed[] = [
+export const spellPrices: ISpellPrice[] = [
+  {
+    spellId: 0,
+    elementId: 0,
+    price: [
+      { id: 0, name: "Coin", quantity: 50 },
+      { id: 3, name: "Air essence", quantity: 1 },
+    ],
+  },
+];
+export const spells: ISpell[] = [
   {
     id: 0,
     elementId: 0,
@@ -40,10 +52,6 @@ export const spells: ISpellClosed[] = [
     symbol: "some", // Unknown for now
     state: "closed",
     name: "Air spell 1",
-    price: [
-      { id: 0, name: "Coin", quantity: 50 },
-      { id: 3, name: "Air essence", quantity: 1 },
-    ],
   },
   {
     id: 1,
@@ -53,10 +61,6 @@ export const spells: ISpellClosed[] = [
     symbol: "some", // Unknown for now
     state: "closed",
     name: "Air spell 2",
-    price: [
-      { id: 0, name: "Coin", quantity: 100 },
-      { id: 3, name: "Air essence", quantity: 10 },
-    ],
   },
   {
     id: 2,
@@ -66,10 +70,6 @@ export const spells: ISpellClosed[] = [
     symbol: "some", // Unknown for now
     state: "closed",
     name: "Fire spell 1",
-    price: [
-      { id: 0, name: "Coin", quantity: 50 },
-      { id: 4, name: "Fire essence", quantity: 1 },
-    ],
   },
   {
     id: 3,
@@ -79,10 +79,6 @@ export const spells: ISpellClosed[] = [
     symbol: "some", // Unknown for now
     state: "closed",
     name: "Fire spell 2",
-    price: [
-      { id: 0, name: "Coin", quantity: 100 },
-      { id: 4, name: "Fire essence", quantity: 10 },
-    ],
   },
 ];
 
@@ -189,6 +185,7 @@ export const playerEvents: IPlayerEvent[] = [
     created: new Date(1654347300),
   },
   { playerId: 1, eventId: 0, type: "WINLEVEL", created: new Date(1654347302) },
+  { playerId: 1, eventId: 0, type: "OPENSPELL", created: new Date(1654347302) },
   {
     playerId: 2,
     eventId: 1,
@@ -208,4 +205,12 @@ export const startLevelEvents: IStartLevelEvent[] = [
 
 export const winLevelEvents: IWinLevelEvent[] = [
   { eventId: 0, elementId: 0, mode: "story", levelId: 0 },
+];
+
+export const openSpellEvents: IOpenSpellEvent[] = [
+  {
+    eventId: 0,
+    elementId: 0,
+    spellId: 0,
+  },
 ];

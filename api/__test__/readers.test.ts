@@ -8,7 +8,7 @@ import { IPlayerEvent } from "../engine/types";
 
 test("Reads player events correctly", () => {
   const res = readPlayerEvents(1);
-  expect(res.length).toEqual(3);
+  expect(res.length).toEqual(4);
   res.forEach((r: IPlayerEvent) => r.playerId === 1);
 
   jest.spyOn(console, "error").mockImplementation(() => jest.fn());
@@ -46,6 +46,6 @@ test("Reads win player events correctly", () => {
   expect(res.mode).toEqual("story");
 
   jest.spyOn(console, "error").mockImplementation(() => jest.fn());
-  expect(() => readWinLevelEvent(3)).toThrow("No start level event");
+  expect(() => readWinLevelEvent(3)).toThrow("No win level event");
   jest.restoreAllMocks();
 });

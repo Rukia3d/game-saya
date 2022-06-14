@@ -3,9 +3,8 @@ import { applyEvents } from "../engine/engine";
 import { IPlayerEvent } from "../engine/types";
 
 test("Series of events applies correctly", () => {
-  const newEvents = JSON.parse(
-    JSON.stringify(playerEvents.filter((p: IPlayerEvent) => p.playerId === 1))
-  );
+  const newEvents = JSON.parse(JSON.stringify(playerEvents)).slice(0, 3);
+  //console.log(newEvents);
   const res = applyEvents(newEvents);
   expect(res.id).toEqual(1);
   expect(res.name).toEqual(`player 0 name`);

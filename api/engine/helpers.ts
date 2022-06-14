@@ -1,5 +1,13 @@
 import { elements } from "../db/testDB";
-import { ICurrentState, IElement, IStory, IWinLevelEventTimed } from "./types";
+import {
+  ICurrentState,
+  IElement,
+  IMaterial,
+  IMaterialQuant,
+  ISpellClosed,
+  IStory,
+  IWinLevelEventTimed,
+} from "./types";
 
 export const findEnergyPrice = (
   element: number,
@@ -47,4 +55,21 @@ export const foundStartLevelToWin = (
   } else {
     throw new Error("Incorrect state: can't finish level you haven't started");
   }
+};
+
+export const canBuySpell = (
+  materials: IMaterialQuant[],
+  price: IMaterialQuant[]
+): boolean => {
+  let canBuy = true;
+  price.forEach((p: IMaterialQuant) => {
+    const material = materials.find((m: IMaterialQuant) => m.id === p.id);
+    if (!material)
+      throw new Error("Price of an item contains non-existant material");
+    if (p.quantity > material.quantity) {
+      canBuy = false;
+    }
+  });
+
+  return canBuy;
 };

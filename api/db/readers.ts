@@ -1,11 +1,13 @@
 import {
   ICreatePlayerEvent,
+  IOpenSpellEvent,
   IPlayerEvent,
   IStartLevelEvent,
   IWinLevelEvent,
 } from "../engine/types";
 import {
   createPlayerEvents,
+  openSpellEvents,
   playerEvents,
   startLevelEvents,
   winLevelEvents,
@@ -25,6 +27,10 @@ export const readAllStartLevelEvents = () => {
 
 export const readAllWinLevelEvents = () => {
   return winLevelEvents;
+};
+
+export const readAllOpenSpellEvents = () => {
+  return openSpellEvents;
 };
 
 export const readPlayerEvents = (playerId: number) => {
@@ -59,6 +65,14 @@ export const readWinLevelEvent = (eventId: number) => {
   const winLevel = readAllWinLevelEvents().find(
     (e: IWinLevelEvent) => e.eventId == eventId
   );
-  if (!winLevel) throw new Error("No start level event");
+  if (!winLevel) throw new Error("No win level event");
+  return winLevel;
+};
+
+export const readOpenSpellEvent = (eventId: number) => {
+  const winLevel = readAllOpenSpellEvents().find(
+    (e: IOpenSpellEvent) => e.eventId == eventId
+  );
+  if (!winLevel) throw new Error("No open spell event");
   return winLevel;
 };

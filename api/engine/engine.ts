@@ -1,10 +1,16 @@
 import {
   readCreatePlayerEvent,
+  readOpenSpellEvent,
   readStartLevelEvent,
   readWinLevelEvent,
 } from "../db/readers";
 import { spells } from "../db/testDB";
-import { eventCreatePlayer, eventStartLevel, eventWinLevel } from "./events";
+import {
+  eventCreatePlayer,
+  eventOpenSpell,
+  eventStartLevel,
+  eventWinLevel,
+} from "./events";
 import { IPlayer, IPlayerEvent } from "./types";
 
 const basePlayer: IPlayer = {
@@ -43,6 +49,8 @@ export const applyEvents = (events: IPlayerEvent[]): IPlayer => {
           player
         );
         continue;
+      case "OPENSPELL":
+        player = eventOpenSpell(readOpenSpellEvent(event.eventId), player);
     }
   }
   return player;

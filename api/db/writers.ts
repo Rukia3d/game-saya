@@ -1,11 +1,13 @@
 import { gameMode } from "../engine/types";
 import {
   readAllCreatePlayerEvents,
+  readAllOpenSpellEvents,
   readAllPlayerEvents,
   readAllStartLevelEvents,
 } from "./readers";
 import {
   createPlayerEvents,
+  openSpellEvents,
   playerEvents,
   startLevelEvents,
   winLevelEvents,
@@ -27,6 +29,13 @@ const getNextCreatePlayerEventId = () => {
 
 const getNextStartLevelEventId = () => {
   const latestEvents = readAllStartLevelEvents().sort(
+    (a, b) => a.eventId - b.eventId
+  );
+  return latestEvents[latestEvents.length - 1].eventId + 1;
+};
+
+const getNextOpenSpellEventId = () => {
+  const latestEvents = readAllOpenSpellEvents().sort(
     (a, b) => a.eventId - b.eventId
   );
   return latestEvents[latestEvents.length - 1].eventId + 1;
@@ -85,6 +94,26 @@ export const writeWinLevelEvent = (
     elementId: element,
     mode: mode as gameMode,
     levelId: level,
+  });
+  return nextCreateEventId;
+};
+
+export const writeOpenSpellEvent = (
+  playerId: number,
+  element: number,
+  spellId: number
+) => {
+  const nextCreateEventId = getNextOpenSpellEventId();
+  playerEvents.push({
+    playerId: playerId,
+    eventId: nextCreateEventId,
+    type: "OPENSPELL",
+    created: new Date(),
+  });
+  openSpellEvents.push({
+    eventId: nextCreateEventId,
+    elementId: element,
+    spellId: spellId,
   });
   return nextCreateEventId;
 };

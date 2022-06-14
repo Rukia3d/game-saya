@@ -1,6 +1,7 @@
 import { readPlayerEvents } from "./db/readers";
 import {
   writeCreatePlayerEvent,
+  writeOpenSpellEvent,
   writeStartLevelEvent,
   writeWinLevelEvent,
 } from "./db/writers";
@@ -51,6 +52,13 @@ app.post("/api/players/:id/winLevel", async (req: any, res: any) => {
     req.body.mode,
     req.body.level
   );
+  res.send(playerEventsApplication(playerId));
+});
+
+app.post("", async (req: any, res: any) => {
+  let playerId = req.params.id;
+  console.log("OPEN SPELL", req.body);
+  writeOpenSpellEvent(req.params.id, req.body.spell, req.body.element);
   res.send(playerEventsApplication(playerId));
 });
 

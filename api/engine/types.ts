@@ -8,8 +8,20 @@ export interface ISpell {
   name: string;
 }
 
+export type ISpellListing = {
+  spellId: number;
+  spellElementId: number;
+  price: number;
+  owner: number;
+};
+
+export type ISpellPrice = {
+  spellId: number;
+  elementId: number;
+  price: IMaterialQuant[];
+};
+
 export type ISpellClosed = ISpell & { price: IMaterialQuant[] };
-export type ISpellListing = ISpell & { price: number; owner: number };
 
 export interface IMaterial {
   id: number;
@@ -90,7 +102,7 @@ export interface IPlayer {
   loungeId: number | null;
   materials: IMaterialQuant[];
   elements: IElement[];
-  spells: ISpell[] | ISpellClosed[];
+  spells: (ISpell | ISpellClosed)[];
   missions: [];
   messages: [];
   currentState: ICurrentState;
@@ -120,6 +132,12 @@ export type IWinLevelEvent = {
   mode: gameMode;
   elementId: number;
   levelId: number;
+};
+
+export type IOpenSpellEvent = {
+  eventId: number;
+  elementId: number;
+  spellId: number;
 };
 export type IWinLevelEventTimed = IWinLevelEvent & { time: Date };
 export type ICreatePlayerEventId = ICreatePlayerEvent & { playerId: number };

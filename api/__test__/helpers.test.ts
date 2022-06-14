@@ -1,6 +1,14 @@
-import { elements } from "../db/testDB";
-import { findEnergyPrice, findLevelIndex } from "../engine/helpers";
-import { IWinLevelEventTimed } from "../engine/types";
+import { elements, materials } from "../db/testDB";
+import {
+  canBuySpell,
+  findEnergyPrice,
+  findLevelIndex,
+} from "../engine/helpers";
+import {
+  IMaterial,
+  IMaterialQuant,
+  IWinLevelEventTimed,
+} from "../engine/types";
 
 test("energy price is found for a correct mode", async () => {
   const res = findEnergyPrice(0, "story", 0);
@@ -31,5 +39,44 @@ test("finds correct index", async () => {
   expect(() =>
     findLevelIndex({ ...winLevelEvent, levelId: 7 }, elements)
   ).toThrow("No level 7 found");
+  jest.restoreAllMocks();
+});
+
+test("Can pay for a spell returns correct result", async () => {
+  const owned: IMaterialQuant[] = materials.map((m: IMaterial) => {
+    return { ...m, quantity: 10 };
+  });
+  const price: IMaterialQuant[] = [
+    { ...materials[0], quantity: 5 },
+    { ...materials[1], quantity: 7 },
+  ];
+  const res = canBuySpell(owned, price);
+  expect(res).toBeTruthy();
+  const res2 = canBuySpell(
+    owned,
+    price.concat([{ ...materials[2], quantity: 15 }])
+  );
+  expect(res2).toBeFalsy();
+});
+
+test("Can pay for a spell returns  error if material doesn't exist", async () => {
+  const owned: IMaterialQuant[] = materials.map((m: IMaterial) => {
+    return { ...m, quantity: 10 };
+  });
+  const price: IMaterialQuant[] = [
+    { ...materials[0], quantity: 5 },
+    { ...materials[1], quantity: 7 },
+  ];
+  const res = canBuySpell(owned, price);
+  expect(res).toBeTruthy();
+  const res2 = canBuySpell(
+    owned,
+    price.concat([{ ...materials[2], quantity: 15 }])
+  );
+  expect(res2).toBeFalsy();
+
+  expect(() =>
+    canBuySpell(owned, price.concat([{ id: 55, name: "Coin", quantity: 1 }]))
+  ).toThrow("Price of an item contains non-existant materia");
   jest.restoreAllMocks();
 });
