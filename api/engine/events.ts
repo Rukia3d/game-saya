@@ -122,7 +122,9 @@ export const eventOpenSpell = (
     );
 
     let nextUpdate = spellUpdates.find(
-      (u: ISpellUpdate) => u.spellId == newPlayerSpells[indexToChange].id
+      (u: ISpellUpdate) =>
+        u.spellId == newPlayerSpells[indexToChange].id &&
+        u.requiredStrength == newPlayerSpells[indexToChange].strength
     );
 
     newPlayerSpells[indexToChange] = {

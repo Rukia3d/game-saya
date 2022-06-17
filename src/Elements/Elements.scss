@@ -4,9 +4,13 @@
 
   .Spell {
     margin: 1em;
-    width: 100px;
-    height: 100px;
+    width: 150px;
+    height: 150px;
     background-color: mediumorchid;
+
+    .SpellPrice {
+      font-size: small;
+    }
   }
 
   .Content {
