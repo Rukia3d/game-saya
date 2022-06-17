@@ -21,7 +21,18 @@ export type ISpellPrice = {
   price: IMaterialQuant[];
 };
 
+export type ISpellUpdate = {
+  spellId: number;
+  elementId: number;
+  updatePrice: IMaterialQuant[];
+  requiredStrength: number;
+};
+
 export type ISpellClosed = ISpell & { price: IMaterialQuant[] };
+export type ISpellOpen = ISpell & {
+  updatePrice: IMaterialQuant[];
+  requiredStrength: number;
+};
 
 export interface IMaterial {
   id: number;
@@ -102,7 +113,7 @@ export interface IPlayer {
   loungeId: number | null;
   materials: IMaterialQuant[];
   elements: IElement[];
-  spells: (ISpell | ISpellClosed)[];
+  spells: (ISpellOpen | ISpellClosed | ISpell)[];
   missions: [];
   messages: [];
   currentState: ICurrentState;

@@ -55,7 +55,7 @@ app.post("/api/players/:id/winLevel", async (req: any, res: any) => {
   res.send(playerEventsApplication(playerId));
 });
 
-app.post("", async (req: any, res: any) => {
+app.post("/api/players/:id/openSpell", async (req: any, res: any) => {
   let playerId = req.params.id;
   console.log("OPEN SPELL", req.body);
   writeOpenSpellEvent(req.params.id, req.body.spell, req.body.element);

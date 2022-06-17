@@ -1,6 +1,5 @@
-import { playerEvents } from "../db/testDB";
+import { playerEvents } from "../db/testDBPlayer";
 import { applyEvents } from "../engine/engine";
-import { IPlayerEvent } from "../engine/types";
 
 test("Series of events applies correctly", () => {
   const newEvents = JSON.parse(JSON.stringify(playerEvents)).slice(0, 3);

@@ -1,4 +1,5 @@
-import { elements, materials, spells } from "../db/testDB";
+import { elements, materials } from "../db/testDBPlayer";
+import { spells } from "../db/testDBSpells";
 import {
   eventCreatePlayer,
   eventOpenSpell,
@@ -40,9 +41,13 @@ test("eventCreatePlayer for player 1", async () => {
 });
 
 test("eventStartLevel for player 1 within tutorial", async () => {
+  const player = eventCreatePlayer(
+    { eventId: 0, playerName: "player 1 name", playerId: 1 },
+    basePlayer
+  );
   const res = eventStartLevel(
     { eventId: 0, mode: "story", elementId: 0, levelId: 0 },
-    { ...basePlayer, energy: 100 }
+    { ...player, energy: 100 }
   );
   expect(res.energy).toEqual(100);
   expect(res.currentState.state).toEqual("PLAY");
@@ -52,9 +57,13 @@ test("eventStartLevel for player 1 within tutorial", async () => {
 });
 
 test("eventStartLevel for player 1 outside tutorial", async () => {
+  const player = eventCreatePlayer(
+    { eventId: 0, playerName: "player 1 name", playerId: 1 },
+    basePlayer
+  );
   const res = eventStartLevel(
     { eventId: 0, mode: "story", elementId: 0, levelId: 2 },
-    { ...basePlayer, energy: 100 }
+    { ...player, energy: 100 }
   );
   expect(res.energy).toEqual(95);
   expect(res.currentState.state).toEqual("PLAY");

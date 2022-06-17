@@ -1,4 +1,4 @@
-import { elements, materials } from "../db/testDB";
+import { elements, materials } from "../db/testDBPlayer";
 import {
   canBuySpell,
   findEnergyPrice,

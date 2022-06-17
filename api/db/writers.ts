@@ -11,7 +11,7 @@ import {
   playerEvents,
   startLevelEvents,
   winLevelEvents,
-} from "./testDB";
+} from "./testDBPlayer";
 
 const getNextPlayerId = () => {
   const latestEvents = readAllPlayerEvents().sort(

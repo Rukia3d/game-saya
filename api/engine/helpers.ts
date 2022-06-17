@@ -1,10 +1,8 @@
-import { elements } from "../db/testDB";
+import { elements } from "../db/testDBPlayer";
 import {
   ICurrentState,
   IElement,
-  IMaterial,
   IMaterialQuant,
-  ISpellClosed,
   IStory,
   IWinLevelEventTimed,
 } from "./types";

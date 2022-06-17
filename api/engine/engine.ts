@@ -4,7 +4,6 @@ import {
   readStartLevelEvent,
   readWinLevelEvent,
 } from "../db/readers";
-import { spells } from "../db/testDB";
 import {
   eventCreatePlayer,
   eventOpenSpell,
@@ -22,7 +21,7 @@ const basePlayer: IPlayer = {
   loungeId: null,
   materials: [],
   elements: [],
-  spells: JSON.parse(JSON.stringify(spells)),
+  spells: [],
   missions: [],
   messages: [],
   currentState: { state: "MAIN" },

@@ -1,11 +1,13 @@
 import {
   readCreatePlayerEvent,
+  readOpenSpellEvent,
   readPlayerEvents,
   readStartLevelEvent,
   readWinLevelEvent,
 } from "../db/readers";
 import {
   writeCreatePlayerEvent,
+  writeOpenSpellEvent,
   writeStartLevelEvent,
   writeWinLevelEvent,
 } from "../db/writers";
@@ -47,4 +49,17 @@ test("Writes win level events correctly", () => {
   expect(startEvent.elementId).toEqual(0);
   expect(startEvent.mode).toEqual(`story`);
   expect(startEvent.levelId).toEqual(0);
+});
+
+test("Writes open spell events correctly", () => {
+  const res = writeOpenSpellEvent(3, 0, 0);
+  expect(res).toEqual(1);
+  const playerEvents = readPlayerEvents(3);
+  expect(playerEvents[3].playerId).toEqual(3);
+  expect(playerEvents[3].eventId).toEqual(1);
+  expect(playerEvents[3].type).toEqual(`OPENSPELL`);
+  const startEvent = readOpenSpellEvent(1);
+  expect(startEvent.eventId).toEqual(1);
+  expect(startEvent.elementId).toEqual(0);
+  expect(startEvent.spellId).toEqual(0);
 });

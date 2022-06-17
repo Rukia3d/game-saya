@@ -11,7 +11,7 @@ import {
   playerEvents,
   startLevelEvents,
   winLevelEvents,
-} from "./testDB";
+} from "./testDBPlayer";
 
 export const readAllPlayerEvents = () => {
   return playerEvents;

@@ -1,4 +1,5 @@
-import { elements, materials, spells } from "../db/testDB";
+import { elements, materials } from "../db/testDBPlayer";
+import { spellPrices, spells, spellUpdates } from "../db/testDBSpells";
 import {
   addExperience,
   rewardPlayer,
@@ -15,6 +16,9 @@ import {
   IPlayer,
   ISpell,
   ISpellClosed,
+  ISpellOpen,
+  ISpellPrice,
+  ISpellUpdate,
   IStartLevelEvent,
   IWinLevelEventTimed,
 } from "./types";
@@ -29,6 +33,11 @@ export const eventCreatePlayer = (
     name: event.playerName,
     maxEnergy: 50,
     energy: 50,
+    spells: spells.map((s: ISpell) => {
+      const price = spellPrices.find((p: ISpellPrice) => p.spellId == s.id);
+      if (!price) throw new Error("Can't find a price for a spell");
+      return { ...s, price: price.price };
+    }),
     elements: [JSON.parse(JSON.stringify(elements[0]))],
     materials: JSON.parse(JSON.stringify(materials)).map((m: IMaterial) => {
       return { ...m, quantity: 0 };
@@ -41,7 +50,16 @@ export const eventStartLevel = (
   player: IPlayer
 ): IPlayer => {
   let energyPrice = findEnergyPrice(event.elementId, event.mode, event.levelId);
-  if (event.mode === "story" && event.elementId === 0 && event.levelId < 2) {
+  const firstTime =
+    player.elements[event.elementId].stories[event.levelId].state !==
+    "complete";
+  if (
+    event.mode === "story" &&
+    event.elementId === 0 &&
+    event.levelId < 2 &&
+    player.elements &&
+    firstTime
+  ) {
     energyPrice = 0;
   }
   const state = {
@@ -90,9 +108,8 @@ export const eventOpenSpell = (
   player: IPlayer
 ): IPlayer => {
   const newPlayerSpells = JSON.parse(JSON.stringify(player.spells));
-
   const indexToChange = newPlayerSpells.findIndex(
-    (s: ISpell | ISpellClosed) =>
+    (s: ISpellOpen | ISpellClosed | ISpell) =>
       s.elementId == event.elementId && s.id == event.spellId
   );
   if (!newPlayerSpells[indexToChange].price) {
@@ -104,6 +121,10 @@ export const eventOpenSpell = (
       newPlayerSpells[indexToChange].price
     );
 
+    let nextUpdate = spellUpdates.find(
+      (u: ISpellUpdate) => u.spellId == newPlayerSpells[indexToChange].id
+    );
+
     newPlayerSpells[indexToChange] = {
       id: newPlayerSpells[indexToChange].id,
       elementId: newPlayerSpells[indexToChange].elementId,
@@ -113,6 +134,16 @@ export const eventOpenSpell = (
       state: newPlayerSpells[indexToChange].state,
       name: newPlayerSpells[indexToChange].name,
     };
+
+    if (nextUpdate) {
+      newPlayerSpells[indexToChange] = {
+        ...newPlayerSpells[indexToChange],
+        updatePrice: nextUpdate.updatePrice,
+        requiredStrength: nextUpdate.requiredStrength,
+      };
+    } else {
+      console.warn(`Spell number${indexToChange} doesn't have updates in DB`);
+    }
     return {
       ...player,
       materials: newMaterials,
