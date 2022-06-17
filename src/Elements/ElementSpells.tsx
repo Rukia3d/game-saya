@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useContext } from "react";
 import {
   IMaterialQuant,
@@ -46,9 +47,11 @@ const canUpdateSpell = (
 export const SpellPurchase = ({
   spell,
   materials,
+  spellAction,
 }: {
   spell: ISpellOpen | ISpellClosed | ISpell;
   materials: IMaterialQuant[];
+  spellAction: (i: number, action: "open" | "update") => void;
 }) => {
   if ("price" in spell) {
     const available = canBuySpell(materials, spell.price);
@@ -59,7 +62,7 @@ export const SpellPurchase = ({
           <div key={i}>{`${m.name}: ${m.quantity} `}</div>
         ))}
         {available ? (
-          <button>Open</button>
+          <button onClick={() => spellAction(spell.id, "open")}>Open</button>
         ) : (
           <div>Not enough materials to open</div>
         )}
@@ -74,7 +77,9 @@ export const SpellPurchase = ({
           <div key={i}>{`${m.name}: ${m.quantity} `}</div>
         ))}
         {updatable ? (
-          <button>Update</button>
+          <button onClick={() => spellAction(spell.id, "update")}>
+            Update
+          </button>
         ) : (
           <div>Not enough materials to update</div>
         )}
@@ -93,6 +98,22 @@ export const ElementSpells = () => {
     (s: ISpellOpen | ISpellClosed | ISpell) => s.elementId == context.element
   );
 
+  const spellAction = async (spellId: number, action: "update" | "open") => {
+    console.log("spell action");
+    if (action === "open") {
+      await axios.post(`/api/players/${context.player.id}/openSpell`, {
+        element: context.element,
+        spell: spellId,
+      });
+    } else {
+      await axios.post(`/api/players/${context.player.id}/updateSpell`, {
+        element: context.element,
+        spell: spellId,
+      });
+    }
+    context.mutate();
+  };
+
   return (
     <div>
       <CloseButton onClick={() => context.changeElementScreen("element")} />
@@ -101,7 +122,11 @@ export const ElementSpells = () => {
         {spells.map((s: ISpellOpen | ISpellClosed | ISpell, i: number) => (
           <div className="Spell" key={i}>
             {`${s.name}, element: ${s.enemy}, strength: ${s.strength}`}
-            <SpellPurchase spell={s} materials={context.player.materials} />
+            <SpellPurchase
+              spell={s}
+              materials={context.player.materials}
+              spellAction={spellAction}
+            />
           </div>
         ))}
       </div>

@@ -62,6 +62,13 @@ app.post("/api/players/:id/openSpell", async (req: any, res: any) => {
   res.send(playerEventsApplication(playerId));
 });
 
+app.post("/api/players/:id/updateSpell", async (req: any, res: any) => {
+  let playerId = req.params.id;
+  console.log("UPDATE SPELL", req.body);
+  // writeOpenSpellEvent(req.params.id, req.body.spell, req.body.element);
+  // res.send(playerEventsApplication(playerId));
+});
+
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
 });
