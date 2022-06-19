@@ -15,7 +15,10 @@ export const findEnergyPrice = (
   if (mode === "story") {
     return elements[element].stories[level].energy;
   }
-  throw new Error("Unknown mode");
+  if (mode === "tower" || mode === "tournament") {
+    return elements[element].currentEvents[level].energy;
+  }
+  throw new Error(`Unknown mode ${mode}`);
 };
 
 export const findLevelIndex = (

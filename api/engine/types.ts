@@ -52,12 +52,8 @@ export type IQuestListing = IQuest & { price: number; owner: number };
 export interface IEvent {
   id: number;
   type: arenaMode;
+  energy: number;
   level: string; //Unknown for now
-}
-
-export interface IAllowedRewards {
-  id: number;
-  upTo: number;
 }
 
 export interface IStory {
@@ -70,6 +66,11 @@ export interface IStory {
   energy: number;
 }
 
+export interface IAllowedRewards {
+  id: number;
+  upTo: number;
+}
+
 export interface IElement {
   element: elementName;
   id: number;
@@ -77,8 +78,7 @@ export interface IElement {
   legend: string[];
   stories: IStory[]; //Unknown for now
   currentQuests: IStory[]; //Unknown for now
-  currentTournament: IEvent;
-  currentTower: IEvent;
+  currentEvents: IEvent[];
 }
 
 export interface IMessage {

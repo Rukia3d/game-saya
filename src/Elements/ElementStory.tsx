@@ -12,12 +12,6 @@ export const ElementStory = () => {
     <div className="Static">
       <div
         className="Info"
-        onClick={() => context.changeElementScreen("gameLevels")}
-      >
-        {context.player.elements[context.element].characterName} Main Quest
-      </div>
-      <div
-        className="Info"
         onClick={() => context.changeElementScreen("legend")}
       >{`${context.player.elements[context.element].characterName} story`}</div>
       <div

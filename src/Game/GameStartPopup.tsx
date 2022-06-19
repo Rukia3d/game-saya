@@ -17,19 +17,22 @@ export const GameStartPopup = ({
   const element = context.element;
   const energyPrice = context.player.elements[element].stories[story].energy;
 
-  const startStory = async (i: number | null) => {
+  const startStory = async (i: number) => {
     console.log("startStory");
     context.changeElementScreen("game");
     setStory(null);
-    if (i !== null) {
-      context.setGame(context.player.elements[element].stories[story]);
-      await axios.post(`/api/players/${context.player.id}/startLevel`, {
-        element: element,
-        mode: "story",
-        level: story,
-      });
-      context.mutate();
-    }
+    context.setGame(context.player.elements[element].stories[story]);
+    await axios.post(`/api/players/${context.player.id}/startLevel`, {
+      element: element,
+      mode: "story",
+      level: story,
+    });
+    context.mutate();
+  };
+
+  const cancelStory = () => {
+    setStory(null);
+    context.changeElementScreen("gameLevels");
   };
 
   if (context.player.energy - energyPrice < 0) {
@@ -37,7 +40,7 @@ export const GameStartPopup = ({
       <div className="GameStartPopup">
         NOT ENOUGH ENERGY
         <br />
-        <button onClick={() => startStory(null)}>Got it</button>
+        <button onClick={cancelStory}>Got it</button>
       </div>
     );
   }
@@ -47,7 +50,7 @@ export const GameStartPopup = ({
       Confirm level start
       <br />
       <button onClick={() => startStory(story)}>Yes play</button>
-      <button onClick={() => startStory(null)}>No, dont</button>
+      <button onClick={cancelStory}>No, dont</button>
     </div>
   );
 };

@@ -27,13 +27,16 @@ export const Game = () => {
   const winStory = async () => {
     if (context.game) {
       console.log("winStory");
+      const mode = "type" in context.game ? context.game.type : "story";
       await axios.post(`/api/players/${context.player.id}/winLevel`, {
         element: context.element,
-        mode: "story",
+        mode: mode,
         level: context.game.id,
       });
       context.setGame(null);
-      context.changeElementScreen("gameLevels");
+      "type" in context.game
+        ? context.changeElementScreen("endlessLevels")
+        : context.changeElementScreen("gameLevels");
       context.mutate();
     } else throw new Error("Trying to win a story with no game in context");
   };
@@ -41,7 +44,11 @@ export const Game = () => {
   const loseStory = () => {
     console.log("loseStory");
     context.setGame(null);
-    context.changeElementScreen("gameLevels");
+    if (context.game) {
+      "type" in context.game
+        ? context.changeElementScreen("endlessLevels")
+        : context.changeElementScreen("gameLevels");
+    }
   };
   return (
     <div className="Game">

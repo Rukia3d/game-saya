@@ -81,3 +81,11 @@ export const readOpenSpellEvent = (eventId: number) => {
   if (!winLevel) throw new Error("No open spell event");
   return winLevel;
 };
+
+export const readUpdateSpellEvent = (eventId: number) => {
+  const winLevel = readAllUpdateSpellEvents().find(
+    (e: IOpenSpellEvent) => e.eventId == eventId
+  );
+  if (!winLevel) throw new Error("No update spell event");
+  return winLevel;
+};

@@ -1,6 +1,7 @@
 import {
   readCreatePlayerEvent,
   readOpenSpellEvent,
+  readUpdateSpellEvent,
   readStartLevelEvent,
   readWinLevelEvent,
 } from "../db/readers";
@@ -53,7 +54,7 @@ export const applyEvents = (events: IPlayerEvent[]): IPlayer => {
         player = eventOpenSpell(readOpenSpellEvent(event.eventId), player);
         continue;
       case "UPDATESPELL":
-        player = eventUpdateSpell(readOpenSpellEvent(event.eventId), player);
+        player = eventUpdateSpell(readUpdateSpellEvent(event.eventId), player);
         continue;
     }
   }

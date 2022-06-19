@@ -73,8 +73,10 @@ const player: IPlayer = {
       ],
       legend: ["Saya story line 1", "Saya story line 2"],
       currentQuests: [],
-      currentTournament: { id: 0, level: "", type: "tournament" as arenaMode },
-      currentTower: { id: 0, level: "", type: "tower" as arenaMode },
+      currentEvents: [
+        { id: 0, level: "", type: "tournament" as arenaMode, energy: 10 },
+        { id: 0, level: "", type: "tower" as arenaMode, energy: 10 },
+      ],
     },
   ],
   spells: [],

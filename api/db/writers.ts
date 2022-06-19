@@ -12,6 +12,7 @@ import {
   playerEvents,
   startLevelEvents,
   winLevelEvents,
+  updateSpellEvents,
 } from "./testDBPlayer";
 
 const getNextPlayerId = () => {
@@ -138,7 +139,7 @@ export const writeUpdateSpellEvent = (
     type: "UPDATESPELL",
     created: new Date(),
   });
-  openSpellEvents.push({
+  updateSpellEvents.push({
     eventId: nextCreateEventId,
     elementId: element,
     spellId: spellId,

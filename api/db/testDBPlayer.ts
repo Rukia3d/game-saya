@@ -79,8 +79,10 @@ export const elements: IElement[] = [
     ],
     legend: ["Saya story line 1", "Saya story line 2"],
     currentQuests: [],
-    currentTournament: { id: 0, level: "", type: "tournament" },
-    currentTower: { id: 0, level: "", type: "tower" },
+    currentEvents: [
+      { id: 0, level: "", type: "tournament", energy: 10 },
+      { id: 0, level: "", type: "tower", energy: 10 },
+    ],
   },
   {
     element: "fire" as elementName,
@@ -116,8 +118,10 @@ export const elements: IElement[] = [
     ],
     legend: ["Nell story line 1", "Nell story line 2"],
     currentQuests: [],
-    currentTournament: { id: 0, level: "", type: "tournament" },
-    currentTower: { id: 0, level: "", type: "tower" },
+    currentEvents: [
+      { id: 0, level: "", type: "tournament", energy: 10 },
+      { id: 0, level: "", type: "tower", energy: 10 },
+    ],
   },
 ];
 
@@ -151,10 +155,12 @@ export const createPlayerEvents: ICreatePlayerEvent[] = [
 
 export const startLevelEvents: IStartLevelEvent[] = [
   { eventId: 0, elementId: 0, mode: "story", levelId: 0 },
+  { eventId: 1, elementId: 0, mode: "story", levelId: 1 },
 ];
 
 export const winLevelEvents: IWinLevelEvent[] = [
   { eventId: 0, elementId: 0, mode: "story", levelId: 0 },
+  { eventId: 1, elementId: 0, mode: "story", levelId: 1 },
 ];
 
 export const openSpellEvents: IOpenSpellEvent[] = [

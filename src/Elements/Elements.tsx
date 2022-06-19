@@ -3,6 +3,7 @@ import { IEvent, IStory } from "../../api/engine/types";
 import { GameContext } from "../App";
 import { Game } from "../Game/Game";
 import { GameLevels } from "../Game/GameLevels";
+import { EndlessLevels } from "../Game/EndlessLevels";
 import { CloseButton } from "../UIElements/UIButtons";
 
 import { ElementEvent } from "./ElementEvent";
@@ -41,6 +42,7 @@ export const Element = () => {
 export type elementScreenState =
   | "game"
   | "gameLevels"
+  | "endlessLevels"
   | "spells"
   | "legend"
   | "element";
@@ -52,6 +54,7 @@ const elementScreens: ElementScreensType = {
   element: Element,
   game: Game,
   gameLevels: GameLevels,
+  endlessLevels: EndlessLevels,
   spells: ElementSpells,
   legend: ElementLegend,
 };

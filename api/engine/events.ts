@@ -178,7 +178,7 @@ export const eventUpdateSpell = (
     throw new Error("Spell to open doesn't have a required strength");
   }
   if (
-    canBuySpell(player.materials, newPlayerSpells[indexToChange].price) &&
+    canBuySpell(player.materials, newPlayerSpells[indexToChange].updatePrice) &&
     canUpdateSpell(
       newPlayerSpells[indexToChange].requiredStrength,
       newPlayerSpells[indexToChange].strength
@@ -186,18 +186,19 @@ export const eventUpdateSpell = (
   ) {
     let newMaterials = removeMaterials(
       JSON.parse(JSON.stringify(player.materials)),
-      newPlayerSpells[indexToChange].price
+      newPlayerSpells[indexToChange].updatePrice
     );
 
     let nextUpdate = spellUpdates.find(
       (u: ISpellUpdate) =>
         u.spellId == newPlayerSpells[indexToChange].id &&
-        u.requiredStrength == newPlayerSpells[indexToChange].strength
+        u.requiredStrength == newPlayerSpells[indexToChange].strength + 1
     );
 
     if (nextUpdate) {
       newPlayerSpells[indexToChange] = {
         ...newPlayerSpells[indexToChange],
+        strength: newPlayerSpells[indexToChange].strength + 1,
         updatePrice: nextUpdate.updatePrice,
         requiredStrength: nextUpdate.requiredStrength,
       };

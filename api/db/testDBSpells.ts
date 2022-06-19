@@ -5,10 +5,8 @@ export const spellUpdates: ISpellUpdate[] = [
     spellId: 0,
     elementId: 0,
     updatePrice: [
-      { id: 0, name: "Coin", quantity: 5000 },
-      { id: 3, name: "Air essence", quantity: 500 },
-      { id: 1, name: "Black Soul Stone", quantity: 50 },
-      { id: 2, name: "White Soul Stone", quantity: 100 },
+      { id: 0, name: "Coin", quantity: 5 },
+      { id: 3, name: "Air essence", quantity: 1 },
     ],
     requiredStrength: 1,
   },

@@ -34,6 +34,7 @@ app.get("/api/players/:id", async (req: any, res: any) => {
 });
 
 app.post("/api/players/:id/startLevel", async (req: any, res: any) => {
+  console.log("start level", req.body.mode);
   let playerId = req.params.id;
   writeStartLevelEvent(
     req.params.id,
