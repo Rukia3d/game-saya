@@ -139,7 +139,7 @@ export const eventOpenSpell = (
       newPlayerSpells[indexToChange] = {
         id: newPlayerSpells[indexToChange].id,
         elementId: newPlayerSpells[indexToChange].elementId,
-        enemy: newPlayerSpells[indexToChange].elementName,
+        enemy: newPlayerSpells[indexToChange].enemy,
         strength: newPlayerSpells[indexToChange].strength,
         symbol: newPlayerSpells[indexToChange].symbol,
         state: "open",

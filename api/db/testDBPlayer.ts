@@ -6,10 +6,7 @@ import {
   elementName,
   IMaterial,
   IElement,
-  ISpellPrice,
   IOpenSpellEvent,
-  ISpell,
-  ISpellUpdate,
   IUpdateSpellEvent,
 } from "../engine/types";
 
