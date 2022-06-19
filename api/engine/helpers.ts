@@ -71,3 +71,10 @@ export const canBuySpell = (
 
   return canBuy;
 };
+
+export const canUpdateSpell = (
+  requiredStrength: number,
+  strength: number
+): boolean => {
+  return requiredStrength === strength;
+};

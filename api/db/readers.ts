@@ -10,6 +10,7 @@ import {
   openSpellEvents,
   playerEvents,
   startLevelEvents,
+  updateSpellEvents,
   winLevelEvents,
 } from "./testDBPlayer";
 
@@ -31,6 +32,10 @@ export const readAllWinLevelEvents = () => {
 
 export const readAllOpenSpellEvents = () => {
   return openSpellEvents;
+};
+
+export const readAllUpdateSpellEvents = () => {
+  return updateSpellEvents;
 };
 
 export const readPlayerEvents = (playerId: number) => {

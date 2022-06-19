@@ -122,7 +122,12 @@ export interface IPlayer {
 export type IPlayerEvent = {
   playerId: number;
   eventId: number;
-  type: "CREATEPLAYER" | "STARTLEVEL" | "WINLEVEL" | "OPENSPELL";
+  type:
+    | "CREATEPLAYER"
+    | "STARTLEVEL"
+    | "WINLEVEL"
+    | "OPENSPELL"
+    | "UPDATESPELL";
   created: Date;
 };
 
@@ -150,6 +155,13 @@ export type IOpenSpellEvent = {
   elementId: number;
   spellId: number;
 };
+
+export type IUpdateSpellEvent = {
+  eventId: number;
+  elementId: number;
+  spellId: number;
+};
+
 export type IWinLevelEventTimed = IWinLevelEvent & { time: Date };
 export type ICreatePlayerEventId = ICreatePlayerEvent & { playerId: number };
 

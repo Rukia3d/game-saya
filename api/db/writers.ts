@@ -4,6 +4,7 @@ import {
   readAllOpenSpellEvents,
   readAllPlayerEvents,
   readAllStartLevelEvents,
+  readAllUpdateSpellEvents,
 } from "./readers";
 import {
   createPlayerEvents,
@@ -36,6 +37,13 @@ const getNextStartLevelEventId = () => {
 
 const getNextOpenSpellEventId = () => {
   const latestEvents = readAllOpenSpellEvents().sort(
+    (a, b) => a.eventId - b.eventId
+  );
+  return latestEvents[latestEvents.length - 1].eventId + 1;
+};
+
+const getNextUpdateSpellEventId = () => {
+  const latestEvents = readAllUpdateSpellEvents().sort(
     (a, b) => a.eventId - b.eventId
   );
   return latestEvents[latestEvents.length - 1].eventId + 1;
@@ -108,6 +116,26 @@ export const writeOpenSpellEvent = (
     playerId: playerId,
     eventId: nextCreateEventId,
     type: "OPENSPELL",
+    created: new Date(),
+  });
+  openSpellEvents.push({
+    eventId: nextCreateEventId,
+    elementId: element,
+    spellId: spellId,
+  });
+  return nextCreateEventId;
+};
+
+export const writeUpdateSpellEvent = (
+  playerId: number,
+  element: number,
+  spellId: number
+) => {
+  const nextCreateEventId = getNextUpdateSpellEventId();
+  playerEvents.push({
+    playerId: playerId,
+    eventId: nextCreateEventId,
+    type: "UPDATESPELL",
     created: new Date(),
   });
   openSpellEvents.push({

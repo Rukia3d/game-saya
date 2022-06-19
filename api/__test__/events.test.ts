@@ -135,6 +135,9 @@ test("openSpell for player 1", async () => {
   expect(res.materials[0].quantity).toEqual(5);
   expect(res.materials[1].quantity).toEqual(3);
   expect(res.currentState.state).toEqual("SPELLS");
+  expect(res.spells[0].state).toEqual("open");
+  expect(res.spells[0]).toHaveProperty("updatePrice");
+  expect(res.spells[0]).toHaveProperty("requiredStrength");
 
   jest.spyOn(console, "error").mockImplementation(() => jest.fn());
   expect(() =>

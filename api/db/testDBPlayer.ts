@@ -10,6 +10,7 @@ import {
   IOpenSpellEvent,
   ISpell,
   ISpellUpdate,
+  IUpdateSpellEvent,
 } from "../engine/types";
 
 // const testLevel = new Array(131).fill(new Array(9));
@@ -160,6 +161,14 @@ export const winLevelEvents: IWinLevelEvent[] = [
 ];
 
 export const openSpellEvents: IOpenSpellEvent[] = [
+  {
+    eventId: 0,
+    elementId: 0,
+    spellId: 0,
+  },
+];
+
+export const updateSpellEvents: IUpdateSpellEvent[] = [
   {
     eventId: 0,
     elementId: 0,

@@ -8,6 +8,7 @@ import {
   eventCreatePlayer,
   eventOpenSpell,
   eventStartLevel,
+  eventUpdateSpell,
   eventWinLevel,
 } from "./events";
 import { IPlayer, IPlayerEvent } from "./types";
@@ -50,6 +51,10 @@ export const applyEvents = (events: IPlayerEvent[]): IPlayer => {
         continue;
       case "OPENSPELL":
         player = eventOpenSpell(readOpenSpellEvent(event.eventId), player);
+        continue;
+      case "UPDATESPELL":
+        player = eventUpdateSpell(readOpenSpellEvent(event.eventId), player);
+        continue;
     }
   }
   return player;
