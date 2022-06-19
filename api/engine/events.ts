@@ -1,4 +1,3 @@
-import e from "express";
 import { elements, materials } from "../db/testDBPlayer";
 import { spellPrices, spells, spellUpdates } from "../db/testDBSpells";
 import {
