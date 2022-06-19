@@ -27,16 +27,12 @@ export const Game = () => {
   const winStory = async () => {
     if (context.game) {
       console.log("winStory");
-      const mode = "type" in context.game ? context.game.type : "story";
       await axios.post(`/api/players/${context.player.id}/winLevel`, {
         element: context.element,
-        mode: mode,
         level: context.game.id,
       });
       context.setGame(null);
-      "type" in context.game
-        ? context.changeElementScreen("endlessLevels")
-        : context.changeElementScreen("gameLevels");
+      context.changeElementScreen("gameLevels");
       context.mutate();
     } else throw new Error("Trying to win a story with no game in context");
   };
@@ -44,18 +40,37 @@ export const Game = () => {
   const loseStory = () => {
     console.log("loseStory");
     context.setGame(null);
-    if (context.game) {
-      "type" in context.game
-        ? context.changeElementScreen("endlessLevels")
-        : context.changeElementScreen("gameLevels");
-    }
   };
+
+  const passCheckpoint = async (n: number) => {
+    console.log("passCheckpoint");
+  };
+
+  const looseCheckpoint = async (n: number) => {
+    console.log("looseCheckpoint");
+    context.changeElementScreen("endlessLevels");
+    context.setGame(null);
+  };
+
   return (
     <div className="Game">
       <CloseButton onClick={loseStory} />
-      <br />
-      <button onClick={winStory}>Win me</button>
-      <button onClick={loseStory}>Lose me</button>
+      {"mode" in context.game ? (
+        <div>
+          <br />
+          <button onClick={() => passCheckpoint(0)}>Pass checkpoint 0</button>
+          <button onClick={() => looseCheckpoint(0)}>Fail after 0</button>
+          <button onClick={() => passCheckpoint(1)}>Pass checkpoint 1</button>
+          <button onClick={() => looseCheckpoint(1)}>Fail after 1</button>
+          <button onClick={() => passCheckpoint(2)}>Pass checkpoint 2</button>
+          <button onClick={() => looseCheckpoint(3)}>Fail after 2</button>
+        </div>
+      ) : (
+        <div>
+          <button onClick={winStory}>Win me</button>
+          <button onClick={loseStory}>Lose me</button>
+        </div>
+      )}
     </div>
   );
 };

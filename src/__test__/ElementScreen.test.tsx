@@ -1,8 +1,8 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import {
-  arenaMode,
   elementName,
+  gameMode,
   IPlayer,
   levelState,
 } from "../../api/engine/types";
@@ -74,8 +74,20 @@ const player: IPlayer = {
       legend: ["Saya story line 1", "Saya story line 2"],
       currentQuests: [],
       currentEvents: [
-        { id: 0, level: "", type: "tournament" as arenaMode, energy: 10 },
-        { id: 0, level: "", type: "tower" as arenaMode, energy: 10 },
+        {
+          id: 0,
+          level: "",
+          mode: "tournament" as gameMode,
+          energy: 10,
+          checkpoint: 0,
+        },
+        {
+          id: 0,
+          level: "",
+          mode: "tower" as gameMode,
+          energy: 10,
+          checkpoint: 0,
+        },
       ],
     },
   ],

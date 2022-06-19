@@ -4,10 +4,12 @@ import {
   readUpdateSpellEvent,
   readStartLevelEvent,
   readWinLevelEvent,
+  readStartEndlessEvent,
 } from "../db/readers";
 import {
   eventCreatePlayer,
   eventOpenSpell,
+  eventStartEndless,
   eventStartLevel,
   eventUpdateSpell,
   eventWinLevel,
@@ -55,6 +57,12 @@ export const applyEvents = (events: IPlayerEvent[]): IPlayer => {
         continue;
       case "UPDATESPELL":
         player = eventUpdateSpell(readUpdateSpellEvent(event.eventId), player);
+        continue;
+      case "STARTENDLESS":
+        player = eventStartEndless(
+          readStartEndlessEvent(event.eventId),
+          player
+        );
         continue;
     }
   }

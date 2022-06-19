@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import { IEvent, IStory } from "../../api/engine/types";
+import { IEvent } from "../../api/engine/types";
 import { GameContext } from "../App";
 import { CloseButton, SmallPopup } from "../UIElements/UIButtons";
 import { EndlessStartPopup } from "./EndlessStartPopup";
@@ -41,7 +41,7 @@ export const EndlessLevels = () => {
             {context.player.elements[element].currentEvents.map(
               (s: IEvent, i: number) => (
                 <div className="EndlessMode" key={i}>
-                  {s.type}, price: {s.energy} <br />
+                  {s.mode}, price: {s.energy} <br />
                   <button onClick={() => setMode(i)}>Play</button>
                 </div>
               )

@@ -17,22 +17,22 @@ export const EndlessStartPopup = ({
   const element = context.element;
   const currentMode = context.player.elements[element].currentEvents[mode];
 
-  const startStory = async (i: number | null) => {
-    console.log("startStory");
+  const startEndless = async (i: number | null) => {
+    console.log("startEndless");
     context.changeElementScreen("game");
     setMode(null);
     if (i !== null) {
       context.setGame(context.player.elements[element].currentEvents[i]);
-      await axios.post(`/api/players/${context.player.id}/startLevel`, {
+      await axios.post(`/api/players/${context.player.id}/startEndless`, {
         element: element,
-        mode: currentMode.type,
+        mode: context.player.elements[element].currentEvents[i].mode,
         level: i,
       });
       context.mutate();
     }
   };
 
-  const cancelStory = () => {
+  const cancelEndless = () => {
     setMode(null);
     context.changeElementScreen("endlessLevels");
   };
@@ -42,17 +42,17 @@ export const EndlessStartPopup = ({
       <div className="GameStartPopup">
         NOT ENOUGH ENERGY
         <br />
-        <button onClick={cancelStory}>Got it</button>
+        <button onClick={cancelEndless}>Got it</button>
       </div>
     );
   }
 
   return (
     <div className="GameStartPopup">
-      You are playing a mode {currentMode.type}
+      You are playing a mode {currentMode.mode}
       <br />
-      <button onClick={() => startStory(mode)}>Yes play</button>
-      <button onClick={cancelStory}>No, dont</button>
+      <button onClick={() => startEndless(mode)}>Yes play</button>
+      <button onClick={cancelEndless}>No, dont</button>
     </div>
   );
 };

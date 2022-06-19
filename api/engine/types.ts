@@ -51,9 +51,16 @@ export type IQuestListing = IQuest & { price: number; owner: number };
 
 export interface IEvent {
   id: number;
-  type: arenaMode;
+  mode: gameMode;
   energy: number;
+  checkpoint: number;
   level: string; //Unknown for now
+}
+
+export interface IEventReward {
+  id: number;
+  elementId: number;
+  reward: IMaterialQuant[];
 }
 
 export interface IStory {
@@ -127,7 +134,9 @@ export type IPlayerEvent = {
     | "STARTLEVEL"
     | "WINLEVEL"
     | "OPENSPELL"
-    | "UPDATESPELL";
+    | "UPDATESPELL"
+    | "STARTENDLESS"
+    | "PASSCHECKPOINT";
   created: Date;
 };
 
@@ -138,15 +147,15 @@ export type ICreatePlayerEvent = {
 
 export type IStartLevelEvent = {
   eventId: number;
-  mode: gameMode;
   elementId: number;
+  mode: gameMode;
   levelId: number;
 };
 
 export type IWinLevelEvent = {
   eventId: number;
-  mode: gameMode;
   elementId: number;
+  mode: gameMode;
   levelId: number;
 };
 
@@ -162,13 +171,18 @@ export type IUpdateSpellEvent = {
   spellId: number;
 };
 
+export type IStartEndlessEvent = {
+  eventId: number;
+  elementId: number;
+  mode: gameMode;
+};
+
 export type IWinLevelEventTimed = IWinLevelEvent & { time: Date };
 export type ICreatePlayerEventId = ICreatePlayerEvent & { playerId: number };
 
 export type elementName = "fire" | "water" | "air" | "stone" | "metal";
 export type spellState = "closed" | "open" | "listed";
 export type questState = "open" | "rented" | "new";
-export type gameMode = "story" | "quest";
-export type arenaMode = "tower" | "tournament";
+export type gameMode = "story" | "quest" | "tower" | "tournament";
 export type levelState = "open" | "closed" | "complete";
 export type currentState = "MAIN" | "PLAY" | "SPELLS";

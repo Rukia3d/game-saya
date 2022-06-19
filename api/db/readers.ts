@@ -2,6 +2,7 @@ import {
   ICreatePlayerEvent,
   IOpenSpellEvent,
   IPlayerEvent,
+  IStartEndlessEvent,
   IStartLevelEvent,
   IWinLevelEvent,
 } from "../engine/types";
@@ -12,6 +13,7 @@ import {
   startLevelEvents,
   updateSpellEvents,
   winLevelEvents,
+  startEldessEvents,
 } from "./testDBPlayer";
 
 export const readAllPlayerEvents = () => {
@@ -24,6 +26,10 @@ export const readAllCreatePlayerEvents = () => {
 
 export const readAllStartLevelEvents = () => {
   return startLevelEvents;
+};
+
+export const readAllStartEndlessEvents = () => {
+  return startEldessEvents;
 };
 
 export const readAllWinLevelEvents = () => {
@@ -80,6 +86,14 @@ export const readOpenSpellEvent = (eventId: number) => {
   );
   if (!winLevel) throw new Error("No open spell event");
   return winLevel;
+};
+
+export const readStartEndlessEvent = (eventId: number) => {
+  const startEndless = readAllStartEndlessEvents().find(
+    (e: IStartEndlessEvent) => e.eventId == eventId
+  );
+  if (!startEndless) throw new Error("No start endless event");
+  return startEndless;
 };
 
 export const readUpdateSpellEvent = (eventId: number) => {

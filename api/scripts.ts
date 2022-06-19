@@ -5,6 +5,7 @@ import {
   writeStartLevelEvent,
   writeUpdateSpellEvent,
   writeWinLevelEvent,
+  writeStartEndlessEvent,
 } from "./db/writers";
 import { applyEvents } from "./engine/engine";
 
@@ -55,6 +56,37 @@ app.post("/api/players/:id/winLevel", async (req: any, res: any) => {
     req.body.level
   );
   res.send(playerEventsApplication(playerId));
+});
+
+app.post("/api/players/:id/startEndless", async (req: any, res: any) => {
+  console.log("STARTENDLESS", req.body.mode);
+  let playerId = req.params.id;
+  writeStartEndlessEvent(req.params.id, req.body.element, req.body.mode);
+  res.send(playerEventsApplication(playerId));
+});
+
+app.post("/api/players/:id/passCheckpoint", async (req: any, res: any) => {
+  let playerId = req.params.id;
+  console.log("PASSCHECKPOINT", req.body);
+  // writeWinLevelEvent(
+  //   req.params.id,
+  //   req.body.element,
+  //   req.body.mode,
+  //   req.body.level
+  // );
+  // res.send(playerEventsApplication(playerId));
+});
+
+app.post("/api/players/:id/missCheckpoint", async (req: any, res: any) => {
+  let playerId = req.params.id;
+  console.log("MISS CHECKPOINT", req.body);
+  // writeWinLevelEvent(
+  //   req.params.id,
+  //   req.body.element,
+  //   req.body.mode,
+  //   req.body.level
+  // );
+  // res.send(playerEventsApplication(playerId));
 });
 
 app.post("/api/players/:id/openSpell", async (req: any, res: any) => {

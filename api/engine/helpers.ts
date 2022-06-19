@@ -42,7 +42,6 @@ const correctStateForWin = (
   currentState: ICurrentState
 ) => {
   return (
-    event.mode === currentState.level?.mode &&
     event.levelId === currentState.level?.levelId &&
     event.elementId === currentState.level?.elementId
   );

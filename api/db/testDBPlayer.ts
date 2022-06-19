@@ -8,6 +8,7 @@ import {
   IElement,
   IOpenSpellEvent,
   IUpdateSpellEvent,
+  IStartEndlessEvent,
 } from "../engine/types";
 
 // const testLevel = new Array(131).fill(new Array(9));
@@ -80,8 +81,8 @@ export const elements: IElement[] = [
     legend: ["Saya story line 1", "Saya story line 2"],
     currentQuests: [],
     currentEvents: [
-      { id: 0, level: "", type: "tournament", energy: 10 },
-      { id: 0, level: "", type: "tower", energy: 10 },
+      { id: 0, level: "", mode: "tournament", energy: 10, checkpoint: 0 },
+      { id: 0, level: "", mode: "tower", energy: 10, checkpoint: 0 },
     ],
   },
   {
@@ -119,8 +120,8 @@ export const elements: IElement[] = [
     legend: ["Nell story line 1", "Nell story line 2"],
     currentQuests: [],
     currentEvents: [
-      { id: 0, level: "", type: "tournament", energy: 10 },
-      { id: 0, level: "", type: "tower", energy: 10 },
+      { id: 0, level: "", mode: "tournament", energy: 10, checkpoint: 0 },
+      { id: 0, level: "", mode: "tower", energy: 10, checkpoint: 0 },
     ],
   },
 ];
@@ -154,13 +155,13 @@ export const createPlayerEvents: ICreatePlayerEvent[] = [
 ];
 
 export const startLevelEvents: IStartLevelEvent[] = [
-  { eventId: 0, elementId: 0, mode: "story", levelId: 0 },
-  { eventId: 1, elementId: 0, mode: "story", levelId: 1 },
+  { eventId: 0, elementId: 0, levelId: 0, mode: "story" },
+  { eventId: 1, elementId: 0, levelId: 1, mode: "story" },
 ];
 
 export const winLevelEvents: IWinLevelEvent[] = [
-  { eventId: 0, elementId: 0, mode: "story", levelId: 0 },
-  { eventId: 1, elementId: 0, mode: "story", levelId: 1 },
+  { eventId: 0, elementId: 0, levelId: 0, mode: "story" },
+  { eventId: 1, elementId: 0, levelId: 1, mode: "story" },
 ];
 
 export const openSpellEvents: IOpenSpellEvent[] = [
@@ -170,11 +171,18 @@ export const openSpellEvents: IOpenSpellEvent[] = [
     spellId: 0,
   },
 ];
-
 export const updateSpellEvents: IUpdateSpellEvent[] = [
   {
     eventId: 0,
     elementId: 0,
     spellId: 0,
+  },
+];
+
+export const startEldessEvents: IStartEndlessEvent[] = [
+  {
+    eventId: 0,
+    elementId: 0,
+    mode: "tournament",
   },
 ];

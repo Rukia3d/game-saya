@@ -24,7 +24,6 @@ export const GameStartPopup = ({
     context.setGame(context.player.elements[element].stories[story]);
     await axios.post(`/api/players/${context.player.id}/startLevel`, {
       element: element,
-      mode: "story",
       level: story,
     });
     context.mutate();

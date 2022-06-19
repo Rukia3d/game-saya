@@ -13,6 +13,7 @@ import {
   startLevelEvents,
   winLevelEvents,
   updateSpellEvents,
+  startEldessEvents,
 } from "./testDBPlayer";
 
 const getNextPlayerId = () => {
@@ -30,6 +31,13 @@ const getNextCreatePlayerEventId = () => {
 };
 
 const getNextStartLevelEventId = () => {
+  const latestEvents = readAllStartLevelEvents().sort(
+    (a, b) => a.eventId - b.eventId
+  );
+  return latestEvents[latestEvents.length - 1].eventId + 1;
+};
+
+const getNextStartEndlessEventId = () => {
   const latestEvents = readAllStartLevelEvents().sort(
     (a, b) => a.eventId - b.eventId
   );
@@ -66,7 +74,7 @@ export const writeCreatePlayerEvent = (name: string): number => {
 export const writeStartLevelEvent = (
   playerId: number,
   element: number,
-  mode: string,
+  mode: gameMode,
   level: number
 ) => {
   const nextCreateEventId = getNextStartLevelEventId();
@@ -79,8 +87,8 @@ export const writeStartLevelEvent = (
   startLevelEvents.push({
     eventId: nextCreateEventId,
     elementId: element,
-    mode: mode as gameMode,
     levelId: level,
+    mode: mode,
   });
   return nextCreateEventId;
 };
@@ -88,7 +96,7 @@ export const writeStartLevelEvent = (
 export const writeWinLevelEvent = (
   playerId: number,
   element: number,
-  mode: string,
+  mode: gameMode,
   level: number
 ) => {
   const nextCreateEventId = getNextStartLevelEventId();
@@ -101,8 +109,28 @@ export const writeWinLevelEvent = (
   winLevelEvents.push({
     eventId: nextCreateEventId,
     elementId: element,
-    mode: mode as gameMode,
     levelId: level,
+    mode: mode,
+  });
+  return nextCreateEventId;
+};
+
+export const writeStartEndlessEvent = (
+  playerId: number,
+  element: number,
+  mode: gameMode
+) => {
+  const nextCreateEventId = getNextStartEndlessEventId();
+  playerEvents.push({
+    playerId: playerId,
+    eventId: nextCreateEventId,
+    type: "STARTENDLESS",
+    created: new Date(),
+  });
+  startEldessEvents.push({
+    eventId: nextCreateEventId,
+    elementId: element,
+    mode: mode,
   });
   return nextCreateEventId;
 };

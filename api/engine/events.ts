@@ -15,6 +15,7 @@ import {
 
 import {
   currentState,
+  gameMode,
   ICreatePlayerEventId,
   IMaterial,
   IOpenSpellEvent,
@@ -24,6 +25,7 @@ import {
   ISpellOpen,
   ISpellPrice,
   ISpellUpdate,
+  IStartEndlessEvent,
   IStartLevelEvent,
   IUpdateSpellEvent,
   IWinLevelEventTimed,
@@ -55,12 +57,11 @@ export const eventStartLevel = (
   event: IStartLevelEvent,
   player: IPlayer
 ): IPlayer => {
-  let energyPrice = findEnergyPrice(event.elementId, event.mode, event.levelId);
+  let energyPrice = findEnergyPrice(event.elementId, "story", event.levelId);
   const firstTime =
     player.elements[event.elementId].stories[event.levelId].state !==
     "complete";
   if (
-    event.mode === "story" &&
     event.elementId === 0 &&
     event.levelId < 2 &&
     player.elements &&
@@ -72,8 +73,30 @@ export const eventStartLevel = (
     state: "PLAY" as currentState,
     level: {
       elementId: event.elementId,
-      mode: event.mode,
+      mode: "story" as gameMode,
       levelId: event.levelId,
+    },
+  };
+  return {
+    ...player,
+    energy: player.energy - energyPrice,
+    currentState: state,
+  };
+};
+
+export const eventStartEndless = (
+  event: IStartEndlessEvent,
+  player: IPlayer
+): IPlayer => {
+  // This assumes there are only 2 endless types
+  const endlessIndex = event.mode === "tournament" ? 0 : 1;
+  let energyPrice = findEnergyPrice(event.elementId, event.mode, endlessIndex);
+  const state = {
+    state: "PLAY" as currentState,
+    level: {
+      elementId: event.elementId,
+      mode: event.mode as gameMode,
+      levelId: endlessIndex,
     },
   };
   return {
@@ -91,10 +114,7 @@ export const eventWinLevel = (
   let newElements = player.elements;
   let newExperience = player.exprience;
 
-  if (
-    event.mode === "story" &&
-    foundStartLevelToWin(event, player.currentState)
-  ) {
+  if (foundStartLevelToWin(event, player.currentState)) {
     newExperience = addExperience(event, player.exprience, player.elements);
     newMaterials = rewardPlayer(event, player.materials, player.elements);
     newElements = openNextLevel(event, player.elements);
