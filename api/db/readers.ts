@@ -1,3 +1,4 @@
+import { ensure } from "../engine/helpers";
 import {
   ICreatePlayerEvent,
   IOpenSpellEvent,
@@ -46,8 +47,8 @@ export const readAllUpdateSpellEvents = () => {
 
 export const readPlayerEvents = (playerId: number) => {
   // Find events for a player
-  const events = readAllPlayerEvents().filter(
-    (p: IPlayerEvent) => p.playerId == playerId
+  const events = ensure(
+    readAllPlayerEvents().filter((p: IPlayerEvent) => p.playerId == playerId)
   );
   if (events.length === 0) {
     throw new Error(`No events found for ${playerId}`);
@@ -57,49 +58,57 @@ export const readPlayerEvents = (playerId: number) => {
 };
 
 export const readCreatePlayerEvent = (eventId: number) => {
-  const createPlayer = readAllCreatePlayerEvents().find(
-    (e: ICreatePlayerEvent) => e.eventId == eventId
+  const createPlayer = ensure(
+    readAllCreatePlayerEvents().find(
+      (e: ICreatePlayerEvent) => e.eventId == eventId
+    ),
+    "No create player event"
   );
-  if (!createPlayer) throw new Error("No create player event");
   return createPlayer;
 };
 
 export const readStartLevelEvent = (eventId: number) => {
-  const startLevel = readAllStartLevelEvents().find(
-    (e: IStartLevelEvent) => e.eventId == eventId
+  const startLevel = ensure(
+    readAllStartLevelEvents().find(
+      (e: IStartLevelEvent) => e.eventId == eventId
+    ),
+    "No start level event"
   );
-  if (!startLevel) throw new Error("No start level event");
   return startLevel;
 };
 
 export const readWinLevelEvent = (eventId: number) => {
-  const winLevel = readAllWinLevelEvents().find(
-    (e: IWinLevelEvent) => e.eventId == eventId
+  const winLevel = ensure(
+    readAllWinLevelEvents().find((e: IWinLevelEvent) => e.eventId == eventId),
+    "No win level event"
   );
-  if (!winLevel) throw new Error("No win level event");
   return winLevel;
 };
 
 export const readOpenSpellEvent = (eventId: number) => {
-  const winLevel = readAllOpenSpellEvents().find(
-    (e: IOpenSpellEvent) => e.eventId == eventId
+  const winLevel = ensure(
+    readAllOpenSpellEvents().find((e: IOpenSpellEvent) => e.eventId == eventId),
+    "No open spell event"
   );
-  if (!winLevel) throw new Error("No open spell event");
   return winLevel;
 };
 
 export const readStartEndlessEvent = (eventId: number) => {
-  const startEndless = readAllStartEndlessEvents().find(
-    (e: IStartEndlessEvent) => e.eventId == eventId
+  const startEndless = ensure(
+    readAllStartEndlessEvents().find(
+      (e: IStartEndlessEvent) => e.eventId == eventId
+    ),
+    "No start endless event"
   );
-  if (!startEndless) throw new Error("No start endless event");
   return startEndless;
 };
 
 export const readUpdateSpellEvent = (eventId: number) => {
-  const winLevel = readAllUpdateSpellEvents().find(
-    (e: IOpenSpellEvent) => e.eventId == eventId
+  const update = ensure(
+    readAllUpdateSpellEvents().find(
+      (e: IOpenSpellEvent) => e.eventId == eventId
+    ),
+    "No update spell event"
   );
-  if (!winLevel) throw new Error("No update spell event");
-  return winLevel;
+  return update;
 };

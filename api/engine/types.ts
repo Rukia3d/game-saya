@@ -55,12 +55,20 @@ export interface IEvent {
   energy: number;
   checkpoint: number;
   level: string; //Unknown for now
+  allowedRewards: IAllowedRewards[];
+}
+
+export interface IStoryReward {
+  id: number;
+  elementId: number;
+  storyId: number;
+  reward: IAllowedRewards[];
 }
 
 export interface IEventReward {
   id: number;
   elementId: number;
-  reward: IMaterialQuant[];
+  reward: IAllowedRewards[];
 }
 
 export interface IStory {
@@ -79,7 +87,7 @@ export interface IAllowedRewards {
 }
 
 export interface IElement {
-  element: elementName;
+  elementName: elementName;
   id: number;
   characterName: string;
   legend: string[];
