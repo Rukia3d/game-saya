@@ -1,15 +1,23 @@
-import { gameMode } from "../engine/types";
 import {
-  readAllCreatePlayerEvents,
-  readAllOpenSpellEvents,
-  readAllPlayerEvents,
-  readAllStartLevelEvents,
-  readAllUpdateSpellEvents,
-} from "./readers";
+  canBuySpell,
+  canUpdateSpell,
+  enoughEnergyToPlay,
+  foundStartLevelToWin,
+} from "../engine/helpers";
+import {
+  eventType,
+  gameMode,
+  IPlayer,
+  IPlayerEvent,
+  ISpell,
+  ISpellClosed,
+  ISpellOpen,
+} from "../engine/types";
+import * as readers from "./readers";
 import {
   createPlayerEvents,
   openSpellEvents,
-  playerEvents,
+  allEvents,
   startLevelEvents,
   winLevelEvents,
   updateSpellEvents,
@@ -17,102 +25,143 @@ import {
 } from "./testDBPlayer";
 
 const getNextPlayerId = () => {
-  const latestEvents = readAllPlayerEvents().sort(
-    (a, b) => a.playerId - b.playerId
-  );
+  const latestEvents = readers
+    .allPlayerEvents()
+    .sort((a, b) => a.playerId - b.playerId);
   return latestEvents[latestEvents.length - 1].playerId + 1;
 };
 
 const getNextCreatePlayerEventId = () => {
-  const latestEvents = readAllCreatePlayerEvents().sort(
-    (a, b) => a.eventId - b.eventId
-  );
+  const latestEvents = readers
+    .allCreatePlayerEvents()
+    .sort((a, b) => a.eventId - b.eventId);
   return latestEvents[latestEvents.length - 1].eventId + 1;
 };
 
 const getNextStartLevelEventId = () => {
-  const latestEvents = readAllStartLevelEvents().sort(
-    (a, b) => a.eventId - b.eventId
-  );
+  const latestEvents = readers
+    .allStartLevelEvents()
+    .sort((a, b) => a.eventId - b.eventId);
   return latestEvents[latestEvents.length - 1].eventId + 1;
 };
 
 const getNextStartEndlessEventId = () => {
-  const latestEvents = readAllStartLevelEvents().sort(
-    (a, b) => a.eventId - b.eventId
-  );
+  const latestEvents = readers
+    .allStartLevelEvents()
+    .sort((a, b) => a.eventId - b.eventId);
+  return latestEvents[latestEvents.length - 1].eventId + 1;
+};
+
+const getNextWinLevelEventId = () => {
+  const latestEvents = readers
+    .allWinLevelEvents()
+    .sort((a, b) => a.eventId - b.eventId);
   return latestEvents[latestEvents.length - 1].eventId + 1;
 };
 
 const getNextOpenSpellEventId = () => {
-  const latestEvents = readAllOpenSpellEvents().sort(
-    (a, b) => a.eventId - b.eventId
-  );
+  const latestEvents = readers
+    .allOpenSpellEvents()
+    .sort((a, b) => a.eventId - b.eventId);
   return latestEvents[latestEvents.length - 1].eventId + 1;
 };
 
 const getNextUpdateSpellEventId = () => {
-  const latestEvents = readAllUpdateSpellEvents().sort(
-    (a, b) => a.eventId - b.eventId
-  );
+  const latestEvents = readers
+    .allUpdateSpellEvents()
+    .sort((a, b) => a.eventId - b.eventId);
   return latestEvents[latestEvents.length - 1].eventId + 1;
 };
 
-export const writeCreatePlayerEvent = (name: string): number => {
+export const createPlayerEvent = (event: {
+  created: Date;
+  type: eventType;
+  data: {
+    name: string;
+  };
+}): IPlayerEvent => {
   const nextPlayerId = getNextPlayerId();
   const nextCreateEventId = getNextCreatePlayerEventId();
-  playerEvents.push({
+  const newEvent = {
     playerId: nextPlayerId,
     eventId: nextCreateEventId,
-    type: "CREATEPLAYER",
-    created: new Date(),
+    type: "CREATEPLAYER" as eventType,
+    created: event.created,
+  };
+  allEvents.push(newEvent);
+  createPlayerEvents.push({
+    eventId: nextCreateEventId,
+    playerName: event.data.name,
   });
-  createPlayerEvents.push({ eventId: nextCreateEventId, playerName: name });
-  return nextPlayerId;
+  return newEvent;
 };
 
-export const writeStartLevelEvent = (
-  playerId: number,
-  element: number,
-  mode: gameMode,
-  level: number
-) => {
+export const startLevelEvent = (
+  player: IPlayer,
+  event: {
+    playerId: number;
+    created: Date;
+    type: eventType;
+    data: {
+      elementId: number;
+      mode: gameMode;
+      levelId: number;
+    };
+  }
+): IPlayerEvent => {
   const nextCreateEventId = getNextStartLevelEventId();
-  playerEvents.push({
-    playerId: playerId,
-    eventId: nextCreateEventId,
-    type: "STARTLEVEL",
-    created: new Date(),
-  });
-  startLevelEvents.push({
-    eventId: nextCreateEventId,
-    elementId: element,
-    levelId: level,
-    mode: mode,
-  });
-  return nextCreateEventId;
+  if (enoughEnergyToPlay(player, event.data)) {
+    const newEvent = {
+      playerId: event.playerId,
+      eventId: nextCreateEventId,
+      type: "STARTLEVEL" as eventType,
+      created: event.created,
+    };
+    allEvents.push(newEvent);
+    startLevelEvents.push({
+      eventId: nextCreateEventId,
+      elementId: event.data.elementId,
+      levelId: event.data.levelId,
+      mode: event.data.mode,
+    });
+    return newEvent;
+  } else {
+    throw new Error("Can't generate startLevelEvent");
+  }
 };
 
-export const writeWinLevelEvent = (
-  playerId: number,
-  element: number,
-  mode: gameMode,
-  level: number
+export const winLevelEvent = (
+  player: IPlayer,
+  event: {
+    playerId: number;
+    created: Date;
+    type: eventType;
+    data: {
+      elementId: number;
+      mode: gameMode;
+      levelId: number;
+    };
+  }
 ) => {
-  const nextCreateEventId = getNextStartLevelEventId();
-  playerEvents.push({
-    playerId: playerId,
-    eventId: nextCreateEventId,
-    type: "WINLEVEL",
-    created: new Date(),
-  });
-  winLevelEvents.push({
-    eventId: nextCreateEventId,
-    elementId: element,
-    levelId: level,
-    mode: mode,
-  });
-  return nextCreateEventId;
+  const nextCreateEventId = getNextWinLevelEventId();
+  if (foundStartLevelToWin(event.data, player.currentState)) {
+    const newEvent = {
+      playerId: event.playerId,
+      eventId: nextCreateEventId,
+      type: "WINLEVEL" as eventType,
+      created: event.created,
+    };
+    allEvents.push(newEvent);
+    winLevelEvents.push({
+      eventId: nextCreateEventId,
+      elementId: event.data.elementId,
+      levelId: event.data.levelId,
+      mode: event.data.mode,
+    });
+    return newEvent;
+  } else {
+    throw new Error("Can't generate winLevelEvent");
+  }
 };
 
 export const writeStartEndlessEvent = (
@@ -121,7 +170,7 @@ export const writeStartEndlessEvent = (
   mode: gameMode
 ) => {
   const nextCreateEventId = getNextStartEndlessEventId();
-  playerEvents.push({
+  allEvents.push({
     playerId: playerId,
     eventId: nextCreateEventId,
     type: "STARTENDLESS",
@@ -135,42 +184,93 @@ export const writeStartEndlessEvent = (
   return nextCreateEventId;
 };
 
-export const writeOpenSpellEvent = (
-  playerId: number,
-  element: number,
-  spellId: number
+export const writePassCheckpointEvent = () => {};
+
+export const openSpellEvent = (
+  player: IPlayer,
+  event: {
+    playerId: number;
+    created: Date;
+    type: eventType;
+    data: {
+      elementId: number;
+      spellId: number;
+    };
+  }
 ) => {
   const nextCreateEventId = getNextOpenSpellEventId();
-  playerEvents.push({
-    playerId: playerId,
-    eventId: nextCreateEventId,
-    type: "OPENSPELL",
-    created: new Date(),
-  });
-  openSpellEvents.push({
-    eventId: nextCreateEventId,
-    elementId: element,
-    spellId: spellId,
-  });
-  return nextCreateEventId;
+  const newPlayerSpells = JSON.parse(JSON.stringify(player.spells));
+  const indexToChange = newPlayerSpells.findIndex(
+    (s: ISpellOpen | ISpellClosed | ISpell) =>
+      s.elementId == event.data.elementId && s.id == event.data.spellId
+  );
+  if (!newPlayerSpells[indexToChange].price) {
+    throw new Error("Spell to open doesn't have a price");
+  }
+  if (canBuySpell(player.materials, newPlayerSpells[indexToChange].price)) {
+    const newEvent = {
+      playerId: event.playerId,
+      eventId: nextCreateEventId,
+      type: "OPENSPELL" as eventType,
+      created: event.created,
+    };
+    allEvents.push(newEvent);
+    openSpellEvents.push({
+      eventId: nextCreateEventId,
+      elementId: event.data.elementId,
+      spellId: event.data.spellId,
+    });
+    return newEvent;
+  } else {
+    throw new Error("Can't generate openSpellEvent");
+  }
 };
 
-export const writeUpdateSpellEvent = (
-  playerId: number,
-  element: number,
-  spellId: number
+export const updateSpellEvent = (
+  player: IPlayer,
+  event: {
+    playerId: number;
+    created: Date;
+    type: eventType;
+    data: {
+      elementId: number;
+      spellId: number;
+    };
+  }
 ) => {
   const nextCreateEventId = getNextUpdateSpellEventId();
-  playerEvents.push({
-    playerId: playerId,
-    eventId: nextCreateEventId,
-    type: "UPDATESPELL",
-    created: new Date(),
-  });
-  updateSpellEvents.push({
-    eventId: nextCreateEventId,
-    elementId: element,
-    spellId: spellId,
-  });
-  return nextCreateEventId;
+  const newPlayerSpells = JSON.parse(JSON.stringify(player.spells));
+  const indexToChange = newPlayerSpells.findIndex(
+    (s: ISpellOpen | ISpellClosed | ISpell) =>
+      s.elementId == event.data.elementId && s.id == event.data.spellId
+  );
+  if (!newPlayerSpells[indexToChange].updatePrice) {
+    throw new Error("Spell to open doesn't have a price");
+  }
+  if (!newPlayerSpells[indexToChange].requiredStrength) {
+    throw new Error("Spell to open doesn't have a required strength");
+  }
+  if (
+    canBuySpell(player.materials, newPlayerSpells[indexToChange].updatePrice) &&
+    canUpdateSpell(
+      newPlayerSpells[indexToChange].requiredStrength,
+      newPlayerSpells[indexToChange].strength
+    )
+  ) {
+    const newEvent = {
+      playerId: event.playerId,
+      eventId: nextCreateEventId,
+      type: "UPDATESPELL" as eventType,
+      created: event.created,
+    };
+    allEvents.push(newEvent);
+    updateSpellEvents.push({
+      eventId: nextCreateEventId,
+      elementId: event.data.elementId,
+      spellId: event.data.spellId,
+    });
+    return newEvent;
+  } else {
+    throw new Error("Can't generate openSpellEvent");
+  }
 };

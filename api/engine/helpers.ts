@@ -1,8 +1,10 @@
 import { elements } from "../db/testDBPlayer";
 import {
+  gameMode,
   ICurrentState,
   IElement,
   IMaterialQuant,
+  IPlayer,
   IStory,
   IWinLevelEventTimed,
 } from "./types";
@@ -38,16 +40,25 @@ export const findLevelIndex = (
 };
 
 const correctStateForWin = (
-  event: IWinLevelEventTimed,
+  event: {
+    elementId: number;
+    mode: gameMode;
+    levelId: number;
+  },
   currentState: ICurrentState
 ) => {
   return (
     event.levelId === currentState.level?.levelId &&
-    event.elementId === currentState.level?.elementId
+    event.elementId === currentState.level?.elementId &&
+    event.mode === currentState.level?.mode
   );
 };
 export const foundStartLevelToWin = (
-  event: IWinLevelEventTimed,
+  event: {
+    elementId: number;
+    mode: gameMode;
+    levelId: number;
+  },
   currentState: ICurrentState
 ) => {
   if ("level" in currentState) {
@@ -55,6 +66,28 @@ export const foundStartLevelToWin = (
   } else {
     throw new Error("Incorrect state: can't finish level you haven't started");
   }
+};
+
+export const enoughEnergyToPlay = (
+  player: IPlayer,
+  data: {
+    elementId: number;
+    mode: gameMode;
+    levelId: number;
+  }
+) => {
+  let energyPrice = findEnergyPrice(data.elementId, "story", data.levelId);
+  const firstTime =
+    player.elements[data.elementId].stories[data.levelId].state !== "complete";
+  if (
+    data.elementId === 0 &&
+    data.levelId < 2 &&
+    player.elements &&
+    firstTime
+  ) {
+    energyPrice = 0;
+  }
+  return player.energy - energyPrice >= 0;
 };
 
 export const canBuySpell = (

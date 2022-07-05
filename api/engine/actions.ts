@@ -11,9 +11,10 @@ export const rewardPlayer = (
   event: IWinLevelEventTimed,
   materials: IMaterialQuant[],
   elements: IElement[]
-): IMaterialQuant[] => {
+): { all: IMaterialQuant[]; new: IMaterialQuant[] } => {
   const [charIndex, levelIndex] = findLevelIndex(event, elements);
   const level = elements[charIndex].stories[levelIndex];
+  const newOnly: IMaterialQuant[] = [];
   level.allowedRewards.forEach((r: IAllowedRewards) => {
     const rng = seedrandom(
       event.eventId + event.elementId + event.mode + event.levelId
@@ -23,8 +24,9 @@ export const rewardPlayer = (
       rand = rand * 2;
     }
     materials[r.id].quantity = materials[r.id].quantity + rand;
+    newOnly.push(materials[r.id]);
   });
-  return materials;
+  return { all: materials, new: newOnly };
 };
 
 export const openNextLevel = (

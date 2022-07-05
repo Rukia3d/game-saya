@@ -118,7 +118,7 @@ export const ElementSpells = () => {
     <div>
       <CloseButton onClick={() => context.changeElementScreen("element")} />
       <div>
-        <div>{context.player.elements[context.element].element}</div>
+        <div>{context.player.elements[context.element].elementName}</div>
         {spells.map((s: ISpellOpen | ISpellClosed | ISpell, i: number) => (
           <div className="Spell" key={i}>
             {`${s.name}, element: ${s.enemy}, strength: ${s.strength}`}

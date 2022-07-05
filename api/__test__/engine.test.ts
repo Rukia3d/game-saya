@@ -1,101 +1,59 @@
-import { writeStartLevelEvent, writeWinLevelEvent } from "../db/writers";
-import { applyEvents } from "../engine/engine";
-import { IPlayerEvent } from "../engine/types";
+import { elements, materials } from "../db/testDBPlayer";
+import { applyEvent } from "../engine/engine";
+import { IMaterial, IPlayer, IPlayerEvent } from "../engine/types";
 
-test("Series of 3 basic events applies correctly", () => {
-  const newEvents: IPlayerEvent[] = [
-    {
-      playerId: 1,
-      eventId: 0,
-      type: "CREATEPLAYER",
-      created: new Date(1654347193),
-    },
-    {
-      playerId: 1,
-      eventId: 0,
-      type: "STARTLEVEL",
-      created: new Date(1654347300),
-    },
-    {
-      playerId: 1,
-      eventId: 0,
-      type: "WINLEVEL",
-      created: new Date(1654347302),
-    },
-  ];
-  const res = applyEvents(newEvents);
-  expect(res.id).toEqual(1);
-  expect(res.name).toEqual(`player 0 name`);
-  expect(res.exprience).toEqual(10);
-  expect(res.energy).toEqual(50);
-  expect(res.materials.length).toEqual(8);
-  expect(res.materials[0].quantity).toEqual(18);
-  expect(res.materials[1].quantity).toEqual(0);
-  expect(res.materials[3].quantity).toEqual(6);
-  expect(res.elements.length).toEqual(1);
-  expect(res.elements[0].id).toEqual(0);
-  expect(res.elements[0].characterName).toEqual(`Saya`);
-  expect(res.elements[0].stories.length).toEqual(3);
-  expect(res.elements[0].stories[0].state).toEqual(`complete`);
-  expect(res.elements[0].stories[1].state).toEqual(`open`);
-  expect(res.elements[0].stories[2].state).toEqual(`closed`);
+const basePlayer: IPlayer = {
+  id: 1,
+  name: "",
+  exprience: 0,
+  energy: 0,
+  maxEnergy: 0,
+  loungeId: null,
+  materials: [],
+  elements: [],
+  spells: [],
+  missions: [],
+  messages: [],
+  currentState: { state: "MAIN" },
+};
+
+test("Applies a single event correctly", () => {
+  const newPlayer = { ...basePlayer, elements: elements };
+  const startLevelEvent: IPlayerEvent = {
+    playerId: 1,
+    eventId: 0,
+    type: "STARTLEVEL",
+    created: new Date(),
+  };
+  const res = applyEvent(newPlayer, startLevelEvent);
+  expect(res.currentState.state).toEqual("PLAY");
+  expect(res.currentState.level?.elementId).toEqual(0);
+  expect(res.currentState.level?.mode).toEqual("story");
+  expect(res.currentState.level?.levelId).toEqual(0);
 });
 
-test("Series of 5 advanced events applies correctly", () => {
-  writeStartLevelEvent(1, 0, "story", 1);
-  writeWinLevelEvent(1, 0, "story", 1);
-  const newEvents: IPlayerEvent[] = [
-    {
-      playerId: 5,
-      eventId: 0,
-      type: "CREATEPLAYER",
-      created: new Date(1654347193),
-    },
-    {
-      playerId: 5,
-      eventId: 0,
-      type: "STARTLEVEL",
-      created: new Date(1654347300),
-    },
-    {
-      playerId: 5,
-      eventId: 0,
-      type: "WINLEVEL",
-      created: new Date(1654347302),
-    },
-    {
-      playerId: 5,
-      eventId: 0,
-      type: "OPENSPELL",
-      created: new Date(1654347302),
-    },
-    {
-      playerId: 5,
-      eventId: 1,
-      type: "STARTLEVEL",
-      created: new Date(1654347300),
-    },
-    {
-      playerId: 5,
-      eventId: 1,
-      type: "WINLEVEL",
-      created: new Date(1654347302),
-    },
-    {
-      playerId: 1,
-      eventId: 0,
-      type: "UPDATESPELL",
-      created: new Date(1654347302),
-    },
-  ];
-  const res = applyEvents(newEvents);
-  expect(res.id).toEqual(5);
-  expect(res.name).toEqual(`player 0 name`);
-  expect(res.exprience).toEqual(20);
-  expect(res.energy).toEqual(50);
-  expect(res.materials[0].quantity).toEqual(24);
-  expect(res.materials[3].quantity).toEqual(4);
-  expect(res.spells[0].strength).toEqual(2);
-  expect(res.spells[0]).toHaveProperty("updatePrice");
-  expect(res.spells[0]).toHaveProperty("requiredStrength");
+test("Applies a series of events correctly", () => {
+  const newPlayer = {
+    ...basePlayer,
+    elements: elements,
+    materials: materials.map((m: IMaterial) => {
+      return { ...m, quantity: 0 };
+    }),
+  };
+  const startLevelEvent: IPlayerEvent = {
+    playerId: 1,
+    eventId: 0,
+    type: "STARTLEVEL",
+    created: new Date(),
+  };
+  const winLevelEvent: IPlayerEvent = {
+    playerId: 1,
+    eventId: 0,
+    type: "WINLEVEL",
+    created: new Date(),
+  };
+  const resMiddle = applyEvent(newPlayer, startLevelEvent);
+  const res = applyEvent(resMiddle, winLevelEvent);
+  expect(res.currentState.state).toEqual("WINMATERIAL");
+  expect(res.currentState.materials?.length).toEqual(2);
 });

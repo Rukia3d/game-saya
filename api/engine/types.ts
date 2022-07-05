@@ -1,3 +1,5 @@
+import { EventType } from "@testing-library/user-event/dist/types/event";
+
 export interface ISpell {
   id: number;
   elementId: number;
@@ -117,6 +119,7 @@ export interface ICurrentState {
     mode: gameMode;
     elementId: number;
   };
+  materials?: IMaterialQuant[];
 }
 
 export interface IPlayer {
@@ -134,17 +137,17 @@ export interface IPlayer {
   currentState: ICurrentState;
 }
 
+export type IGenericEvent = {
+  playerId: number;
+  created: Date;
+  type: eventType;
+  data: any;
+};
+
 export type IPlayerEvent = {
   playerId: number;
   eventId: number;
-  type:
-    | "CREATEPLAYER"
-    | "STARTLEVEL"
-    | "WINLEVEL"
-    | "OPENSPELL"
-    | "UPDATESPELL"
-    | "STARTENDLESS"
-    | "PASSCHECKPOINT";
+  type: eventType;
   created: Date;
 };
 
@@ -193,4 +196,12 @@ export type spellState = "closed" | "open" | "listed";
 export type questState = "open" | "rented" | "new";
 export type gameMode = "story" | "quest" | "tower" | "tournament";
 export type levelState = "open" | "closed" | "complete";
-export type currentState = "MAIN" | "PLAY" | "SPELLS";
+export type currentState = "MAIN" | "PLAY" | "SPELLS" | "WINMATERIAL";
+export type eventType =
+  | "CREATEPLAYER"
+  | "STARTLEVEL"
+  | "WINLEVEL"
+  | "OPENSPELL"
+  | "UPDATESPELL"
+  | "STARTENDLESS"
+  | "PASSCHECKPOINT";

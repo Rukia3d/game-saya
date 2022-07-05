@@ -1,72 +1,151 @@
-import {
-  readCreatePlayerEvent,
-  readOpenSpellEvent,
-  readPlayerEvents,
-  readStartLevelEvent,
-  readUpdateSpellEvent,
-  readWinLevelEvent,
-} from "../db/readers";
-import {
-  writeCreatePlayerEvent,
-  writeOpenSpellEvent,
-  writeStartLevelEvent,
-  writeUpdateSpellEvent,
-  writeWinLevelEvent,
-} from "../db/writers";
+import * as readers from "../db/readers";
+import { elements, materials } from "../db/testDBPlayer";
+import { spells } from "../db/testDBSpells";
+import * as writers from "../db/writers";
+import { currentState, gameMode, IMaterial, IPlayer } from "../engine/types";
 
-test("Writes a series of events correctly", () => {
-  const create = writeCreatePlayerEvent("new test player");
-  expect(create).toEqual(3);
-  const created = readPlayerEvents(3);
-  expect(created[0].playerId).toEqual(3);
-  expect(created[0].eventId).toEqual(2);
-  expect(created[0].type).toEqual(`CREATEPLAYER`);
-  const creationEvent = readCreatePlayerEvent(2);
-  expect(creationEvent.playerName).toEqual("new test player");
+const basePlayer: IPlayer = {
+  id: 3,
+  name: "",
+  exprience: 0,
+  energy: 0,
+  maxEnergy: 0,
+  loungeId: null,
+  materials: [],
+  elements: [],
+  spells: [],
+  missions: [],
+  messages: [],
+  currentState: { state: "MAIN" },
+};
 
-  const start0 = writeStartLevelEvent(3, 0, "story", 0);
-  expect(start0).toEqual(2);
-  const started0 = readPlayerEvents(3);
-  expect(started0[1].playerId).toEqual(3);
-  expect(started0[1].eventId).toEqual(2);
-  expect(started0[1].type).toEqual(`STARTLEVEL`);
-  const startEvent0 = readStartLevelEvent(2);
-  expect(startEvent0.eventId).toEqual(2);
-  expect(startEvent0.elementId).toEqual(0);
-  expect(startEvent0.mode).toEqual(`story`);
-  expect(startEvent0.levelId).toEqual(0);
+test("Writes createPlayerEvent correctly", () => {
+  const res = writers.createPlayerEvent({
+    created: new Date(),
+    type: "CREATEPLAYER",
+    data: { name: "Created player test" },
+  });
+  expect(res.playerId).toEqual(3);
+  expect(res.eventId).toEqual(2);
+  expect(res.type).toEqual("CREATEPLAYER");
+  const res2 = readers.createPlayerEvent(res.eventId);
+  expect(res2.eventId).toEqual(2);
+  expect(res2.playerName).toEqual("Created player test");
+});
 
-  const win0 = writeWinLevelEvent(3, 0, "story", 0);
-  expect(win0).toEqual(3);
-  const won0 = readPlayerEvents(3);
-  expect(won0[2].playerId).toEqual(3);
-  expect(won0[2].eventId).toEqual(3);
-  expect(won0[2].type).toEqual(`WINLEVEL`);
-  const winEvent0 = readWinLevelEvent(3);
-  expect(winEvent0.eventId).toEqual(3);
-  expect(winEvent0.elementId).toEqual(0);
-  expect(winEvent0.mode).toEqual(`story`);
-  expect(winEvent0.levelId).toEqual(0);
+test("Writes startLevelEvent correctly", () => {
+  const newPlayer = {
+    ...basePlayer,
+    elements: JSON.parse(JSON.stringify(elements)),
+  };
+  const res = writers.startLevelEvent(newPlayer, {
+    playerId: 3,
+    created: new Date(),
+    type: "STARTLEVEL",
+    data: { elementId: 0, levelId: 0, mode: "story" },
+  });
+  expect(res.playerId).toEqual(3);
+  expect(res.eventId).toEqual(1);
+  expect(res.type).toEqual("STARTLEVEL");
+  const res2 = readers.startLevelEvent(res.eventId);
+  expect(res2.eventId).toEqual(1);
+  expect(res2.elementId).toEqual(0);
+  expect(res2.levelId).toEqual(0);
+  expect(res2.mode).toEqual("story");
+});
 
-  const open0 = writeOpenSpellEvent(3, 0, 0);
-  expect(open0).toEqual(1);
-  const opened0 = readPlayerEvents(3);
-  expect(opened0[3].playerId).toEqual(3);
-  expect(opened0[3].eventId).toEqual(1);
-  expect(opened0[3].type).toEqual(`OPENSPELL`);
-  const openEvent = readOpenSpellEvent(1);
-  expect(openEvent.eventId).toEqual(1);
-  expect(openEvent.elementId).toEqual(0);
-  expect(openEvent.spellId).toEqual(0);
+test("Writes winLevelEvent correctly", () => {
+  const newPlayer = {
+    ...basePlayer,
+    elements: JSON.parse(JSON.stringify(elements)),
+    currentState: {
+      state: "PLAY" as currentState,
+      level: { elementId: 0, levelId: 0, mode: "story" as gameMode },
+    },
+  };
+  const res = writers.winLevelEvent(newPlayer, {
+    playerId: 3,
+    created: new Date(),
+    type: "WINLEVEL",
+    data: { elementId: 0, levelId: 0, mode: "story" },
+  });
+  expect(res.playerId).toEqual(3);
+  expect(res.eventId).toEqual(1);
+  expect(res.type).toEqual("WINLEVEL");
+  const res2 = readers.winLevelEvent(res.eventId);
+  expect(res2.eventId).toEqual(1);
+  expect(res2.elementId).toEqual(0);
+  expect(res2.levelId).toEqual(0);
+  expect(res2.mode).toEqual("story");
+});
 
-  const update0 = writeUpdateSpellEvent(3, 0, 0);
-  expect(update0).toEqual(1);
-  const updated0 = readPlayerEvents(3);
-  expect(updated0[4].playerId).toEqual(3);
-  expect(updated0[4].eventId).toEqual(1);
-  expect(updated0[4].type).toEqual(`UPDATESPELL`);
-  const updateEvent = readUpdateSpellEvent(1);
-  expect(updateEvent.eventId).toEqual(1);
-  expect(updateEvent.elementId).toEqual(0);
-  expect(updateEvent.spellId).toEqual(0);
+test("Writest openSpellEvent correctly", () => {
+  const newPlayer = {
+    ...basePlayer,
+    elements: JSON.parse(JSON.stringify(elements)),
+    spells: JSON.parse(JSON.stringify(spells)),
+    materials: JSON.parse(
+      JSON.stringify(
+        materials.map((m: IMaterial) => {
+          return { ...m, quantity: 10 };
+        })
+      )
+    ),
+  };
+  newPlayer.spells[0].price = [
+    { id: 0, name: "Coin", quantity: 5 },
+    { id: 3, name: "Air essence", quantity: 1 },
+  ];
+
+  const res = writers.openSpellEvent(newPlayer, {
+    playerId: 3,
+    created: new Date(),
+    type: "OPENSPELL",
+    data: { elementId: 0, spellId: 0 },
+  });
+  expect(res.playerId).toEqual(3);
+  expect(res.eventId).toEqual(1);
+  expect(res.type).toEqual("OPENSPELL");
+  const res2 = readers.openSpellEvent(res.eventId);
+  expect(res2.eventId).toEqual(1);
+  expect(res2.elementId).toEqual(0);
+  expect(res2.spellId).toEqual(0);
+});
+
+test("Writest updateSpellEvent correctly", () => {
+  const newPlayer = {
+    ...basePlayer,
+    elements: JSON.parse(JSON.stringify(elements)),
+    spells: JSON.parse(JSON.stringify(spells)),
+    materials: JSON.parse(
+      JSON.stringify(
+        materials.map((m: IMaterial) => {
+          return { ...m, quantity: 10 };
+        })
+      )
+    ),
+  };
+  newPlayer.spells[0].price = [
+    { id: 0, name: "Coin", quantity: 5 },
+    { id: 3, name: "Air essence", quantity: 1 },
+  ];
+  newPlayer.spells[0].updatePrice = [
+    { id: 0, name: "Coin", quantity: 5 },
+    { id: 3, name: "Air essence", quantity: 1 },
+  ];
+  newPlayer.spells[0].requiredStrength = 1;
+
+  const res = writers.updateSpellEvent(newPlayer, {
+    playerId: 3,
+    created: new Date(),
+    type: "UPDATESPELL",
+    data: { elementId: 0, spellId: 0 },
+  });
+  expect(res.playerId).toEqual(3);
+  expect(res.eventId).toEqual(1);
+  expect(res.type).toEqual("UPDATESPELL");
+  const res2 = readers.openSpellEvent(res.eventId);
+  expect(res2.eventId).toEqual(1);
+  expect(res2.elementId).toEqual(0);
+  expect(res2.spellId).toEqual(0);
 });

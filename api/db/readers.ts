@@ -10,45 +10,45 @@ import {
 import {
   createPlayerEvents,
   openSpellEvents,
-  playerEvents,
+  allEvents,
   startLevelEvents,
   updateSpellEvents,
   winLevelEvents,
   startEldessEvents,
 } from "./testDBPlayer";
 
-export const readAllPlayerEvents = () => {
-  return playerEvents;
+export const allPlayerEvents = () => {
+  return allEvents;
 };
 
-export const readAllCreatePlayerEvents = () => {
+export const allCreatePlayerEvents = () => {
   return createPlayerEvents;
 };
 
-export const readAllStartLevelEvents = () => {
+export const allStartLevelEvents = () => {
   return startLevelEvents;
 };
 
-export const readAllStartEndlessEvents = () => {
+export const allStartEndlessEvents = () => {
   return startEldessEvents;
 };
 
-export const readAllWinLevelEvents = () => {
+export const allWinLevelEvents = () => {
   return winLevelEvents;
 };
 
-export const readAllOpenSpellEvents = () => {
+export const allOpenSpellEvents = () => {
   return openSpellEvents;
 };
 
-export const readAllUpdateSpellEvents = () => {
+export const allUpdateSpellEvents = () => {
   return updateSpellEvents;
 };
 
-export const readPlayerEvents = (playerId: number) => {
+export const playerEvents = (playerId: number) => {
   // Find events for a player
   const events = ensure(
-    readAllPlayerEvents().filter((p: IPlayerEvent) => p.playerId == playerId)
+    allPlayerEvents().filter((p: IPlayerEvent) => p.playerId == playerId)
   );
   if (events.length === 0) {
     throw new Error(`No events found for ${playerId}`);
@@ -57,9 +57,9 @@ export const readPlayerEvents = (playerId: number) => {
   return events;
 };
 
-export const readCreatePlayerEvent = (eventId: number) => {
+export const createPlayerEvent = (eventId: number) => {
   const createPlayer = ensure(
-    readAllCreatePlayerEvents().find(
+    allCreatePlayerEvents().find(
       (e: ICreatePlayerEvent) => e.eventId == eventId
     ),
     "No create player event"
@@ -67,35 +67,33 @@ export const readCreatePlayerEvent = (eventId: number) => {
   return createPlayer;
 };
 
-export const readStartLevelEvent = (eventId: number) => {
+export const startLevelEvent = (eventId: number) => {
   const startLevel = ensure(
-    readAllStartLevelEvents().find(
-      (e: IStartLevelEvent) => e.eventId == eventId
-    ),
+    allStartLevelEvents().find((e: IStartLevelEvent) => e.eventId == eventId),
     "No start level event"
   );
   return startLevel;
 };
 
-export const readWinLevelEvent = (eventId: number) => {
+export const winLevelEvent = (eventId: number) => {
   const winLevel = ensure(
-    readAllWinLevelEvents().find((e: IWinLevelEvent) => e.eventId == eventId),
+    allWinLevelEvents().find((e: IWinLevelEvent) => e.eventId == eventId),
     "No win level event"
   );
   return winLevel;
 };
 
-export const readOpenSpellEvent = (eventId: number) => {
+export const openSpellEvent = (eventId: number) => {
   const winLevel = ensure(
-    readAllOpenSpellEvents().find((e: IOpenSpellEvent) => e.eventId == eventId),
+    allOpenSpellEvents().find((e: IOpenSpellEvent) => e.eventId == eventId),
     "No open spell event"
   );
   return winLevel;
 };
 
-export const readStartEndlessEvent = (eventId: number) => {
+export const startEndlessEvent = (eventId: number) => {
   const startEndless = ensure(
-    readAllStartEndlessEvents().find(
+    allStartEndlessEvents().find(
       (e: IStartEndlessEvent) => e.eventId == eventId
     ),
     "No start endless event"
@@ -103,11 +101,9 @@ export const readStartEndlessEvent = (eventId: number) => {
   return startEndless;
 };
 
-export const readUpdateSpellEvent = (eventId: number) => {
+export const updateSpellEvent = (eventId: number) => {
   const update = ensure(
-    readAllUpdateSpellEvents().find(
-      (e: IOpenSpellEvent) => e.eventId == eventId
-    ),
+    allUpdateSpellEvents().find((e: IOpenSpellEvent) => e.eventId == eventId),
     "No update spell event"
   );
   return update;

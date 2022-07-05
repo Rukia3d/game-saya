@@ -28,7 +28,7 @@ const player: IPlayer = {
   ],
   elements: [
     {
-      element: "air" as elementName,
+      elementName: "air" as elementName,
       id: 0,
       characterName: "Saya",
       stories: [
@@ -80,6 +80,11 @@ const player: IPlayer = {
           mode: "tournament" as gameMode,
           energy: 10,
           checkpoint: 0,
+          allowedRewards: [
+            { id: 0, upTo: 50 },
+            { id: 3, upTo: 3 },
+            { id: 4, upTo: 3 },
+          ],
         },
         {
           id: 0,
@@ -87,6 +92,11 @@ const player: IPlayer = {
           mode: "tower" as gameMode,
           energy: 10,
           checkpoint: 0,
+          allowedRewards: [
+            { id: 0, upTo: 50 },
+            { id: 3, upTo: 3 },
+            { id: 4, upTo: 3 },
+          ],
         },
       ],
     },

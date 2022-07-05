@@ -184,7 +184,7 @@ export const elements: IElement[] = [
   },
 ];
 
-export const playerEvents: IPlayerEvent[] = [
+export const allEvents: IPlayerEvent[] = [
   {
     playerId: 1,
     eventId: 0,
@@ -208,18 +208,16 @@ export const playerEvents: IPlayerEvent[] = [
 ];
 
 export const createPlayerEvents: ICreatePlayerEvent[] = [
-  { eventId: 0, playerName: "player 0 name" },
-  { eventId: 1, playerName: "player 1 name" },
+  { eventId: 0, playerName: "player 1 name" },
+  { eventId: 1, playerName: "player 2 name" },
 ];
 
 export const startLevelEvents: IStartLevelEvent[] = [
   { eventId: 0, elementId: 0, levelId: 0, mode: "story" },
-  { eventId: 1, elementId: 0, levelId: 1, mode: "story" },
 ];
 
 export const winLevelEvents: IWinLevelEvent[] = [
   { eventId: 0, elementId: 0, levelId: 0, mode: "story" },
-  { eventId: 1, elementId: 0, levelId: 1, mode: "story" },
 ];
 
 export const openSpellEvents: IOpenSpellEvent[] = [

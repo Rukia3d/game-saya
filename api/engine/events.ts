@@ -6,12 +6,7 @@ import {
   openNextLevel,
   removeMaterials,
 } from "./actions";
-import {
-  canBuySpell,
-  canUpdateSpell,
-  findEnergyPrice,
-  foundStartLevelToWin,
-} from "./helpers";
+import { findEnergyPrice } from "./helpers";
 
 import {
   currentState,
@@ -31,7 +26,7 @@ import {
   IWinLevelEventTimed,
 } from "./types";
 
-export const eventCreatePlayer = (
+export const createPlayer = (
   event: ICreatePlayerEventId,
   player: IPlayer
 ): IPlayer => {
@@ -53,7 +48,7 @@ export const eventCreatePlayer = (
   };
 };
 
-export const eventStartLevel = (
+export const startLevel = (
   event: IStartLevelEvent,
   player: IPlayer
 ): IPlayer => {
@@ -84,7 +79,7 @@ export const eventStartLevel = (
   };
 };
 
-export const eventStartEndless = (
+export const startEndless = (
   event: IStartEndlessEvent,
   player: IPlayer
 ): IPlayer => {
@@ -106,33 +101,25 @@ export const eventStartEndless = (
   };
 };
 
-export const eventWinLevel = (
+export const winLevel = (
   event: IWinLevelEventTimed,
   player: IPlayer
 ): IPlayer => {
-  let newMaterials = player.materials;
-  let newElements = player.elements;
-  let newExperience = player.exprience;
-
-  if (foundStartLevelToWin(event, player.currentState)) {
-    newExperience = addExperience(event, player.exprience, player.elements);
-    newMaterials = rewardPlayer(event, player.materials, player.elements);
-    newElements = openNextLevel(event, player.elements);
-  }
+  const newMaterials = rewardPlayer(event, player.materials, player.elements);
+  // need to add experience before we open the next level
+  const newExperience = addExperience(event, player.exprience, player.elements);
 
   return {
     ...player,
-    materials: newMaterials,
-    elements: newElements,
+    materials: newMaterials.all,
+    elements: openNextLevel(event, player.elements),
     exprience: newExperience,
-    currentState: { state: "MAIN" },
+    // TODO Check if this is correct
+    currentState: { state: "WINMATERIAL", materials: newMaterials.new },
   };
 };
 
-export const eventOpenSpell = (
-  event: IOpenSpellEvent,
-  player: IPlayer
-): IPlayer => {
+export const openSpell = (event: IOpenSpellEvent, player: IPlayer): IPlayer => {
   const newPlayerSpells = JSON.parse(JSON.stringify(player.spells));
   const indexToChange = newPlayerSpells.findIndex(
     (s: ISpellOpen | ISpellClosed | ISpell) =>
@@ -141,47 +128,42 @@ export const eventOpenSpell = (
   if (!newPlayerSpells[indexToChange].price) {
     throw new Error("Spell to open doesn't have a price");
   }
-  if (canBuySpell(player.materials, newPlayerSpells[indexToChange].price)) {
-    let newMaterials = removeMaterials(
-      JSON.parse(JSON.stringify(player.materials)),
-      newPlayerSpells[indexToChange].price
-    );
+  let newMaterials = removeMaterials(
+    JSON.parse(JSON.stringify(player.materials)),
+    newPlayerSpells[indexToChange].price
+  );
 
-    // Open spell should have an update
-    let nextUpdate = spellUpdates.find(
-      (u: ISpellUpdate) =>
-        u.spellId == newPlayerSpells[indexToChange].id &&
-        u.requiredStrength == newPlayerSpells[indexToChange].strength
-    );
+  // Open spell should have an update
+  let nextUpdate = spellUpdates.find(
+    (u: ISpellUpdate) =>
+      u.spellId == newPlayerSpells[indexToChange].id &&
+      u.requiredStrength == newPlayerSpells[indexToChange].strength
+  );
 
-    if (nextUpdate) {
-      newPlayerSpells[indexToChange] = {
-        id: newPlayerSpells[indexToChange].id,
-        elementId: newPlayerSpells[indexToChange].elementId,
-        enemy: newPlayerSpells[indexToChange].enemy,
-        strength: newPlayerSpells[indexToChange].strength,
-        symbol: newPlayerSpells[indexToChange].symbol,
-        state: "open",
-        name: newPlayerSpells[indexToChange].name,
-        updatePrice: nextUpdate.updatePrice,
-        requiredStrength: nextUpdate.requiredStrength,
-      };
-    } else {
-      console.warn(`Spell number${indexToChange} doesn't have updates in DB`);
-    }
-    return {
-      ...player,
-      materials: newMaterials,
-      spells: newPlayerSpells,
-      currentState: { state: "SPELLS" },
+  if (nextUpdate) {
+    newPlayerSpells[indexToChange] = {
+      id: newPlayerSpells[indexToChange].id,
+      elementId: newPlayerSpells[indexToChange].elementId,
+      enemy: newPlayerSpells[indexToChange].enemy,
+      strength: newPlayerSpells[indexToChange].strength,
+      symbol: newPlayerSpells[indexToChange].symbol,
+      state: "open",
+      name: newPlayerSpells[indexToChange].name,
+      updatePrice: nextUpdate.updatePrice,
+      requiredStrength: nextUpdate.requiredStrength,
     };
   } else {
-    console.warn("Not enough materials to buy a spell");
-    return { ...player, currentState: { state: "SPELLS" } };
+    console.warn(`Spell number${indexToChange} doesn't have updates in DB`);
   }
+  return {
+    ...player,
+    materials: newMaterials,
+    spells: newPlayerSpells,
+    currentState: { state: "SPELLS" },
+  };
 };
 
-export const eventUpdateSpell = (
+export const updateSpell = (
   event: IUpdateSpellEvent,
   player: IPlayer
 ): IPlayer => {
@@ -196,42 +178,31 @@ export const eventUpdateSpell = (
   if (!newPlayerSpells[indexToChange].requiredStrength) {
     throw new Error("Spell to open doesn't have a required strength");
   }
-  if (
-    canBuySpell(player.materials, newPlayerSpells[indexToChange].updatePrice) &&
-    canUpdateSpell(
-      newPlayerSpells[indexToChange].requiredStrength,
-      newPlayerSpells[indexToChange].strength
-    )
-  ) {
-    let newMaterials = removeMaterials(
-      JSON.parse(JSON.stringify(player.materials)),
-      newPlayerSpells[indexToChange].updatePrice
-    );
+  let newMaterials = removeMaterials(
+    JSON.parse(JSON.stringify(player.materials)),
+    newPlayerSpells[indexToChange].updatePrice
+  );
 
-    let nextUpdate = spellUpdates.find(
-      (u: ISpellUpdate) =>
-        u.spellId == newPlayerSpells[indexToChange].id &&
-        u.requiredStrength == newPlayerSpells[indexToChange].strength + 1
-    );
+  let nextUpdate = spellUpdates.find(
+    (u: ISpellUpdate) =>
+      u.spellId == newPlayerSpells[indexToChange].id &&
+      u.requiredStrength == newPlayerSpells[indexToChange].strength + 1
+  );
 
-    if (nextUpdate) {
-      newPlayerSpells[indexToChange] = {
-        ...newPlayerSpells[indexToChange],
-        strength: newPlayerSpells[indexToChange].strength + 1,
-        updatePrice: nextUpdate.updatePrice,
-        requiredStrength: nextUpdate.requiredStrength,
-      };
-    } else {
-      console.warn(`Spell number${indexToChange} doesn't have updates in DB`);
-    }
-    return {
-      ...player,
-      materials: newMaterials,
-      spells: newPlayerSpells,
-      currentState: { state: "SPELLS" },
+  if (nextUpdate) {
+    newPlayerSpells[indexToChange] = {
+      ...newPlayerSpells[indexToChange],
+      strength: newPlayerSpells[indexToChange].strength + 1,
+      updatePrice: nextUpdate.updatePrice,
+      requiredStrength: nextUpdate.requiredStrength,
     };
   } else {
-    console.warn("This spell can not be updated");
-    return { ...player, currentState: { state: "SPELLS" } };
+    console.warn(`Spell number${indexToChange} doesn't have updates in DB`);
   }
+  return {
+    ...player,
+    materials: newMaterials,
+    spells: newPlayerSpells,
+    currentState: { state: "SPELLS" },
+  };
 };

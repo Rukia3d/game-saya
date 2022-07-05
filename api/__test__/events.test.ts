@@ -1,11 +1,6 @@
 import { elements, materials } from "../db/testDBPlayer";
 import { spells } from "../db/testDBSpells";
-import {
-  eventCreatePlayer,
-  eventOpenSpell,
-  eventStartLevel,
-  eventWinLevel,
-} from "../engine/events";
+import * as events from "../engine/events";
 import { IMaterial, IMaterialQuant, IPlayer } from "../engine/types";
 
 const basePlayer: IPlayer = {
@@ -24,7 +19,7 @@ const basePlayer: IPlayer = {
 };
 
 test("eventCreatePlayer for player 1", async () => {
-  const res = eventCreatePlayer(
+  const res = events.createPlayer(
     { eventId: 0, playerName: "player 1 name", playerId: 1 },
     basePlayer
   );
@@ -41,11 +36,11 @@ test("eventCreatePlayer for player 1", async () => {
 });
 
 test("eventStartLevel for player 1 within tutorial", async () => {
-  const player = eventCreatePlayer(
+  const player = events.createPlayer(
     { eventId: 0, playerName: "player 1 name", playerId: 1 },
     basePlayer
   );
-  const res = eventStartLevel(
+  const res = events.startLevel(
     { eventId: 0, mode: "story", elementId: 0, levelId: 0 },
     { ...player, energy: 100 }
   );
@@ -57,11 +52,11 @@ test("eventStartLevel for player 1 within tutorial", async () => {
 });
 
 test("eventStartLevel for player 1 outside tutorial", async () => {
-  const player = eventCreatePlayer(
+  const player = events.createPlayer(
     { eventId: 0, playerName: "player 1 name", playerId: 1 },
     basePlayer
   );
-  const res = eventStartLevel(
+  const res = events.startLevel(
     { eventId: 0, mode: "story", elementId: 0, levelId: 2 },
     { ...player, energy: 100 }
   );
@@ -73,7 +68,7 @@ test("eventStartLevel for player 1 outside tutorial", async () => {
 });
 
 test("eventWinLevel for player 1", async () => {
-  const res = eventWinLevel(
+  const res = events.winLevel(
     {
       eventId: 1,
       mode: "story",
@@ -98,7 +93,8 @@ test("eventWinLevel for player 1", async () => {
   expect(res.materials[3].quantity).toEqual(5);
   expect(res.elements[0].stories[0].state).toEqual("complete");
   expect(res.elements[0].stories[1].state).toEqual("open");
-  expect(res.currentState.state).toEqual("MAIN");
+  expect(res.currentState.state).toEqual("WINMATERIAL");
+  expect(res.currentState.materials?.length).toEqual(2);
 });
 
 test("openSpell for player 1", async () => {
@@ -121,7 +117,7 @@ test("openSpell for player 1", async () => {
   const playerMaterials = materials.map((m: IMaterial) => {
     return { ...m, quantity: 10 };
   });
-  const res = eventOpenSpell(
+  const res = events.openSpell(
     { eventId: 0, elementId: 0, spellId: 0 },
     {
       ...basePlayer,
@@ -141,7 +137,7 @@ test("openSpell for player 1", async () => {
 
   jest.spyOn(console, "error").mockImplementation(() => jest.fn());
   expect(() =>
-    eventOpenSpell(
+    events.openSpell(
       { eventId: 0, elementId: 0, spellId: 1 },
       {
         ...basePlayer,

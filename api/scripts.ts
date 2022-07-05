@@ -1,13 +1,6 @@
-import { readPlayerEvents } from "./db/readers";
-import {
-  writeCreatePlayerEvent,
-  writeOpenSpellEvent,
-  writeStartLevelEvent,
-  writeUpdateSpellEvent,
-  writeWinLevelEvent,
-  writeStartEndlessEvent,
-} from "./db/writers";
-import { applyEvents } from "./engine/engine";
+import * as readers from "./db/readers";
+import * as engine from "./engine/engine";
+import { eventType, IGenericEvent, IPlayer } from "./engine/types";
 
 const bodyParser = require("body-parser");
 const express = require("express");
@@ -18,57 +11,165 @@ app.use(cors());
 app.use(bodyParser.json());
 
 export const playerEventsApplication = (playerId: number) => {
-  const events = readPlayerEvents(playerId);
-  const player = applyEvents(events);
+  const events = readers.playerEvents(playerId);
+  const player = engine.applyEvents(events);
   //console.log("events", events);
   return player;
 };
 
 app.get("/api/players/:id", async (req: any, res: any) => {
-  let playerId: number = parseInt(req.params.id);
-  if (req.params.id === "null") {
-    if (!req.query.name)
-      throw new Error("User name is required to create new user");
-    playerId = writeCreatePlayerEvent(req.query.name);
+  try {
+    const player = playerEventsApplication(parseInt(req.params.id));
+    res.send(player);
+  } catch (error) {
+    res.send(error);
   }
-  res.send(playerEventsApplication(playerId));
+});
+
+/*
+  const player = playerEventsApplication(playerId)
+  const event = { type: 'StartEndlessEvent', data: {
+    id, element, mode
+  }};
+
+  try {
+    const updatePlayer = engine.applyEvent(player, event);
+    res.send(updatePlayer);
+  } catch (error) {
+    res.send(error);
+  }
+
+  // applyEvent = writeStartEndlessEvent
+  //
+    // applyEvent:
+    //  \- validate event for current player state
+    //     |- if invalid - raise/return error
+    //     |- if valid - raise/return error
+    //        \- write event to db
+    //        \- rebuild and return player
+    //
+
+
+*/
+
+app.post("/api/players/new", async (req: any, res: any) => {
+  const event = {
+    playerId: 0,
+    created: new Date(),
+    type: "CREATEPLAYER" as eventType,
+    data: {
+      name: req.query.name,
+    },
+  };
+  try {
+    const basePlayer: IPlayer = {
+      id: 0,
+      name: "",
+      exprience: 0,
+      energy: 0,
+      maxEnergy: 0,
+      loungeId: null,
+      materials: [],
+      elements: [],
+      spells: [],
+      missions: [],
+      messages: [],
+      currentState: { state: "MAIN" },
+    };
+    const updatePlayer = engine.processEvent(basePlayer, event);
+    res.send(updatePlayer);
+  } catch (error) {
+    res.send(error);
+  }
 });
 
 app.post("/api/players/:id/startLevel", async (req: any, res: any) => {
-  console.log("start level", req.body.mode);
-  let playerId = req.params.id;
-  writeStartLevelEvent(
-    req.params.id,
-    req.body.element,
-    req.body.mode,
-    req.body.level
-  );
-  res.send(playerEventsApplication(playerId));
+  const player = playerEventsApplication(parseInt(req.params.id));
+  const event: IGenericEvent = {
+    playerId: req.params.id,
+    created: new Date(),
+    type: "STARTLEVEL",
+    data: {
+      element: req.body.element,
+      mode: req.body.mode,
+      level: req.body.level,
+    },
+  };
+  try {
+    const updatePlayer = engine.processEvent(player, event);
+    res.send(updatePlayer);
+  } catch (error) {
+    res.send(error);
+  }
 });
 
 app.post("/api/players/:id/winLevel", async (req: any, res: any) => {
-  let playerId = req.params.id;
-  console.log("WIN PLAYER", req.body);
-  writeWinLevelEvent(
-    req.params.id,
-    req.body.element,
-    req.body.mode,
-    req.body.level
-  );
-  res.send(playerEventsApplication(playerId));
+  const player = playerEventsApplication(parseInt(req.params.id));
+  const event = {
+    playerId: 0,
+    created: new Date(),
+    type: "WINLEVEL" as eventType,
+    data: {
+      element: req.body.element,
+      mode: req.body.mode,
+      level: req.body.level,
+    },
+  };
+  try {
+    const updatePlayer = engine.processEvent(player, event);
+    res.send(updatePlayer);
+  } catch (error) {
+    res.send(error);
+  }
+});
+
+app.post("/api/players/:id/openSpell", async (req: any, res: any) => {
+  const player = playerEventsApplication(parseInt(req.params.id));
+  const event = {
+    playerId: 0,
+    created: new Date(),
+    type: "OPENSPELL" as eventType,
+    data: {
+      element: req.body.element,
+      spell: req.body.spell,
+    },
+  };
+  try {
+    const updatePlayer = engine.processEvent(player, event);
+    res.send(updatePlayer);
+  } catch (error) {
+    res.send(error);
+  }
+});
+
+app.post("/api/players/:id/updateSpell", async (req: any, res: any) => {
+  const player = playerEventsApplication(parseInt(req.params.id));
+  const event = {
+    playerId: 0,
+    created: new Date(),
+    type: "UPDATESPELL" as eventType,
+    data: {
+      element: req.body.element,
+      spell: req.body.spell,
+    },
+  };
+  try {
+    const updatePlayer = engine.processEvent(player, event);
+    res.send(updatePlayer);
+  } catch (error) {
+    res.send(error);
+  }
 });
 
 app.post("/api/players/:id/startEndless", async (req: any, res: any) => {
   console.log("STARTENDLESS", req.body.mode);
   let playerId = req.params.id;
-  writeStartEndlessEvent(req.params.id, req.body.element, req.body.mode);
-  res.send(playerEventsApplication(playerId));
 });
 
 app.post("/api/players/:id/passCheckpoint", async (req: any, res: any) => {
   let playerId = req.params.id;
   console.log("PASSCHECKPOINT", req.body);
-  // writeWinLevelEvent(
+  // writePassCheckpointEvent(
   //   req.params.id,
   //   req.body.element,
   //   req.body.mode,
@@ -80,6 +181,7 @@ app.post("/api/players/:id/passCheckpoint", async (req: any, res: any) => {
 app.post("/api/players/:id/missCheckpoint", async (req: any, res: any) => {
   let playerId = req.params.id;
   console.log("MISS CHECKPOINT", req.body);
+  // Just change state???
   // writeWinLevelEvent(
   //   req.params.id,
   //   req.body.element,
@@ -87,20 +189,6 @@ app.post("/api/players/:id/missCheckpoint", async (req: any, res: any) => {
   //   req.body.level
   // );
   // res.send(playerEventsApplication(playerId));
-});
-
-app.post("/api/players/:id/openSpell", async (req: any, res: any) => {
-  let playerId = req.params.id;
-  console.log("OPEN SPELL", req.body);
-  writeOpenSpellEvent(req.params.id, req.body.spell, req.body.element);
-  res.send(playerEventsApplication(playerId));
-});
-
-app.post("/api/players/:id/updateSpell", async (req: any, res: any) => {
-  let playerId = req.params.id;
-  console.log("UPDATE SPELL", req.body);
-  writeUpdateSpellEvent(req.params.id, req.body.spell, req.body.element);
-  res.send(playerEventsApplication(playerId));
 });
 
 app.listen(port, () => {

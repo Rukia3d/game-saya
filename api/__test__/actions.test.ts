@@ -25,10 +25,10 @@ test("rewardPlayer generates correct rewards", async () => {
     playerMaterials,
     playerCharacters
   );
-  expect(res[0].name).toEqual("Coin");
-  expect(res[0].quantity).toEqual(9);
-  expect(res[3].name).toEqual("Air essence");
-  expect(res[3].quantity).toEqual(3);
+  expect(res.all[0].name).toEqual("Coin");
+  expect(res.all[0].quantity).toEqual(9);
+  expect(res.all[3].name).toEqual("Air essence");
+  expect(res.all[3].quantity).toEqual(3);
   // Rewards are added 2nd time to the same materials (level replayed)
   playerCharacters[0].stories[0].state = "complete";
   const res2 = rewardPlayer(
@@ -39,11 +39,11 @@ test("rewardPlayer generates correct rewards", async () => {
       levelId: 0,
       time: new Date(1654347302),
     },
-    JSON.parse(JSON.stringify(res)),
+    JSON.parse(JSON.stringify(res.all)),
     playerCharacters
   );
-  expect(res2[0].quantity).toEqual(13);
-  expect(res2[3].quantity).toEqual(4);
+  expect(res2.all[0].quantity).toEqual(13);
+  expect(res2.all[3].quantity).toEqual(4);
 });
 
 test("openNextLevel opens next level correctly", async () => {
@@ -79,6 +79,7 @@ test("openNextLevel opens next level correctly", async () => {
 
 test("addExperience correctly adds experience", async () => {
   const playerCharacters = [JSON.parse(JSON.stringify(elements[0]))];
+  playerCharacters[0].stories[0].state = "open";
   const res = addExperience(
     {
       eventId: 0,
