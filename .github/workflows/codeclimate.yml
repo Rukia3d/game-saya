@@ -28,7 +28,8 @@ jobs:
           curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
           chmod +x ./cc-test-reporter
           ./cc-test-reporter before-build 
-          npm run coverage
+          npm run test
+          npm run coverage || true
           ./cc-test-reporter format-coverage -t lcov -o cc.coverage ./coverage/lcov.info
           ./cc-test-reporter -i cc.coverage upload-coverage
 
