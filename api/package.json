@@ -23,7 +23,7 @@
     "build": "react-scripts build",
     "test": "jest",
     "eject": "react-scripts eject",
-    "coverage": "npm test -- --verbose --watchAll=false"
+    "coverage": "jest --watchAll=false"
   },
   "eslintConfig": {
     "extends": [
