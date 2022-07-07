@@ -83,14 +83,12 @@ export const startEndless = (
   player: IPlayer
 ): IPlayer => {
   // This assumes there are only 2 endless types
-  const endlessIndex = event.mode === "tournament" ? 0 : 1;
-  let energyPrice = findEnergyPrice(event.arcanaId, event.mode, endlessIndex);
+  let energyPrice = findEnergyPrice(event.arcanaId, event.mode);
   const state = {
     state: "PLAY" as currentState,
     level: {
       arcanaId: event.arcanaId,
       mode: event.mode as gameMode,
-      levelId: endlessIndex,
     },
   };
   return {

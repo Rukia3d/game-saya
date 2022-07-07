@@ -26,6 +26,10 @@ export const processEvent = (
     case "UPDATESPELL":
       const updateSpellEvent = writers.updateSpellEvent(newPlayer, event);
       return applyEvent(newPlayer, updateSpellEvent);
+    case "STARTENDLESS":
+      const startEndlessEvent = writers.startEndlessEvent(newPlayer, event);
+      console.log("startEndlessEvent", startEndlessEvent);
+      return applyEvent(newPlayer, startEndlessEvent);
     default:
       throw new Error("Unknown event type");
   }
@@ -60,11 +64,11 @@ export const applyEvent = (player: IPlayer, event: IPlayerEvent): IPlayer => {
         readers.updateSpellEvent(event.eventId),
         newPlayer
       );
-    // case "STARTENDLESS":
-    //   return event.startEndless(
-    //     readers.startEndlessEvent(event.eventId),
-    //     newPlayer
-    //   );
+    case "STARTENDLESS":
+      return events.startEndless(
+        readers.startEndlessEvent(event.eventId),
+        newPlayer
+      );
   }
   return newPlayer;
 };

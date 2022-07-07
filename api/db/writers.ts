@@ -164,24 +164,36 @@ export const winLevelEvent = (
   }
 };
 
-export const writeStartEndlessEvent = (
-  playerId: number,
-  arcana: number,
-  mode: gameMode
+export const startEndlessEvent = (
+  player: IPlayer,
+  event: {
+    playerId: number;
+    created: Date;
+    type: eventType;
+    data: {
+      arcana: number;
+      mode: gameMode;
+    };
+  }
 ) => {
   const nextCreateEventId = getNextStartEndlessEventId();
-  allEvents.push({
-    playerId: playerId,
-    eventId: nextCreateEventId,
-    type: "STARTENDLESS",
-    created: new Date(),
-  });
-  startEldessEvents.push({
-    eventId: nextCreateEventId,
-    arcanaId: arcana,
-    mode: mode,
-  });
-  return nextCreateEventId;
+  if (enoughEnergyToPlay(player, event.data)) {
+    const newEvent = {
+      playerId: event.playerId,
+      eventId: nextCreateEventId,
+      type: "STARTENDLESS" as eventType,
+      created: new Date(),
+    };
+    allEvents.push(newEvent);
+    startEldessEvents.push({
+      eventId: nextCreateEventId,
+      arcanaId: event.data.arcana,
+      mode: event.data.mode,
+    });
+    return newEvent;
+  } else {
+    throw new Error("Can't generate startEndlessEvent");
+  }
 };
 
 export const writePassCheckpointEvent = () => {};

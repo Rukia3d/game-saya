@@ -114,7 +114,7 @@ export interface IMission {
 export interface ICurrentState {
   state: currentState;
   level?: {
-    levelId: number;
+    levelId?: number;
     mode: gameMode;
     arcanaId: number;
   };

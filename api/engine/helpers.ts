@@ -12,13 +12,16 @@ import {
 export const findEnergyPrice = (
   arcana: number,
   mode: string,
-  level: number
+  level?: number
 ) => {
-  if (mode === "story") {
+  if (mode === "story" && level) {
     return arcanas[arcana].stories[level].energy;
   }
-  if (mode === "tower" || mode === "tournament") {
-    return arcanas[arcana].currentEvents[level].energy;
+  if (mode === "tournament") {
+    return arcanas[arcana].currentEvents[0].energy;
+  }
+  if (mode === "tower") {
+    return arcanas[arcana].currentEvents[1].energy;
   }
   throw new Error(`Unknown mode ${mode}`);
 };
@@ -70,14 +73,20 @@ export const enoughEnergyToPlay = (
   data: {
     arcana: number;
     mode: gameMode;
-    level: number;
+    level?: number;
   }
 ) => {
-  let energyPrice = findEnergyPrice(data.arcana, data.mode, data.level);
-  const firstTime =
-    player.arcanas[data.arcana].stories[data.level].state !== "complete";
-  if (data.arcana === 0 && data.level < 2 && player.arcanas && firstTime) {
-    energyPrice = 0;
+  let energyPrice = 0;
+  if (data.mode === "story" && data.level) {
+    energyPrice = findEnergyPrice(data.arcana, data.mode, data.level);
+    const firstTime =
+      player.arcanas[data.arcana].stories[data.level].state !== "complete";
+    if (data.arcana === 0 && data.level < 2 && player.arcanas && firstTime) {
+      energyPrice = 0;
+    }
+  }
+  if (data.mode === "tournament" || "tower") {
+    energyPrice = findEnergyPrice(data.arcana, data.mode, data.level);
   }
   return player.energy - energyPrice >= 0;
 };

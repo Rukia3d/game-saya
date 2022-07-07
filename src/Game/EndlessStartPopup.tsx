@@ -26,7 +26,6 @@ export const EndlessStartPopup = ({
       await axios.post(`/api/players/${context.player.id}/startEndless`, {
         arcana: arcana,
         mode: context.player.arcanas[arcana].currentEvents[i].mode,
-        level: i,
       });
       context.mutate();
     }

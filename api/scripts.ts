@@ -172,8 +172,24 @@ app.post("/api/players/:id/updateSpell", async (req: any, res: any) => {
 });
 
 app.post("/api/players/:id/startEndless", async (req: any, res: any) => {
-  console.log("STARTENDLESS", req.body.mode);
+  console.log("STARTENDLESS", req.body);
   const playerId = parseInt(req.params.id);
+  const player = playerEventsApplication(playerId);
+  const event = {
+    playerId: playerId,
+    created: new Date(),
+    type: "STARTENDLESS" as eventType,
+    data: {
+      arcana: req.body.arcana,
+      mode: req.body.mode,
+    },
+  };
+  try {
+    const updatePlayer = engine.processEvent(player, event);
+    res.send(updatePlayer);
+  } catch (error) {
+    res.send(error);
+  }
 });
 
 app.post("/api/players/:id/passCheckpoint", async (req: any, res: any) => {
