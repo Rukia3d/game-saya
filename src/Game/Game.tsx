@@ -18,20 +18,21 @@ export const GameEndful = () => {
   if (
     !context ||
     !context.player ||
-    context.element === null ||
+    context.arcana === null ||
     context.game === null
   ) {
     throw new Error("No data in context");
   }
   const winStory = async () => {
     if (context.game) {
-      console.log("winStory");
+      console.log("winStory", context.player.id, context.game.id);
       await axios.post(`/api/players/${context.player.id}/winLevel`, {
-        element: context.element,
+        arcana: context.arcana,
+        mode: context.game.mode,
         level: context.game.id,
       });
       context.setGame(null);
-      context.changeElementScreen("gameLevels");
+      context.changeArcanaScreen("gameLevels");
       context.mutate();
     } else throw new Error("Trying to win a story with no game in context");
   };
@@ -49,7 +50,7 @@ export const GameEndless = () => {
   if (
     !context ||
     !context.player ||
-    context.element === null ||
+    context.arcana === null ||
     context.game === null
   ) {
     throw new Error("No data in context");
@@ -60,7 +61,7 @@ export const GameEndless = () => {
 
   const looseCheckpoint = async (n: number) => {
     console.log("looseCheckpoint");
-    context.changeElementScreen("endlessLevels");
+    context.changeArcanaScreen("endlessLevels");
     context.setGame(null);
   };
   return (
@@ -81,7 +82,7 @@ export const Game = () => {
   if (
     !context ||
     !context.player ||
-    context.element === null ||
+    context.arcana === null ||
     context.game === null
   ) {
     throw new Error("No data in context");
@@ -90,7 +91,7 @@ export const Game = () => {
   return (
     <div className="Game">
       <CloseButton onClick={() => context.setGame(null)} />
-      {"mode" in context.game ? <GameEndless /> : <GameEndful />}
+      {context.game.mode === "story" ? <GameEndful /> : <GameEndless />}
     </div>
   );
 };

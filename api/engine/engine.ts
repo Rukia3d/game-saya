@@ -8,25 +8,29 @@ export const processEvent = (
   event: IGenericEvent
 ): IPlayer => {
   let newPlayer = JSON.parse(JSON.stringify(player));
+  console.log("Process Event", event.type);
   switch (event.type) {
     case "CREATEPLAYER":
       const createPlayerEvent = writers.createPlayerEvent(event);
-      return applyEvent(player, createPlayerEvent);
+      return applyEvent(newPlayer, createPlayerEvent);
     case "STARTLEVEL":
-      const startLevelEvent = writers.startLevelEvent(player, event);
-      return applyEvent(player, startLevelEvent);
+      const startLevelEvent = writers.startLevelEvent(newPlayer, event);
+      const res = applyEvent(newPlayer, startLevelEvent);
+      return res;
     case "WINLEVEL":
-      const winLevelEvent = writers.winLevelEvent(player, event);
-      return applyEvent(player, winLevelEvent);
+      const winLevelEvent = writers.winLevelEvent(newPlayer, event);
+      return applyEvent(newPlayer, winLevelEvent);
     case "OPENSPELL":
-      const openSpellEvent = writers.openSpellEvent(player, event);
-      return applyEvent(player, openSpellEvent);
+      const openSpellEvent = writers.openSpellEvent(newPlayer, event);
+      return applyEvent(newPlayer, openSpellEvent);
+    default:
+      throw new Error("Unknown event type");
   }
-  return newPlayer;
 };
 
 export const applyEvent = (player: IPlayer, event: IPlayerEvent): IPlayer => {
   let newPlayer = JSON.parse(JSON.stringify(player));
+  console.log("Apply Event", event);
   switch (event.type) {
     case "CREATEPLAYER":
       return events.createPlayer(
@@ -72,7 +76,7 @@ export const applyEvents = (events: IPlayerEvent[]): IPlayer => {
     maxEnergy: 0,
     loungeId: null,
     materials: [],
-    elements: [],
+    arcanas: [],
     spells: [],
     missions: [],
     messages: [],

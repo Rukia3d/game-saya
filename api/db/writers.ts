@@ -103,9 +103,9 @@ export const startLevelEvent = (
     created: Date;
     type: eventType;
     data: {
-      elementId: number;
+      arcana: number;
       mode: gameMode;
-      levelId: number;
+      level: number;
     };
   }
 ): IPlayerEvent => {
@@ -120,8 +120,8 @@ export const startLevelEvent = (
     allEvents.push(newEvent);
     startLevelEvents.push({
       eventId: nextCreateEventId,
-      elementId: event.data.elementId,
-      levelId: event.data.levelId,
+      arcanaId: event.data.arcana,
+      levelId: event.data.level,
       mode: event.data.mode,
     });
     return newEvent;
@@ -137,9 +137,9 @@ export const winLevelEvent = (
     created: Date;
     type: eventType;
     data: {
-      elementId: number;
+      arcana: number;
       mode: gameMode;
-      levelId: number;
+      level: number;
     };
   }
 ) => {
@@ -154,8 +154,8 @@ export const winLevelEvent = (
     allEvents.push(newEvent);
     winLevelEvents.push({
       eventId: nextCreateEventId,
-      elementId: event.data.elementId,
-      levelId: event.data.levelId,
+      arcanaId: event.data.arcana,
+      levelId: event.data.level,
       mode: event.data.mode,
     });
     return newEvent;
@@ -166,7 +166,7 @@ export const winLevelEvent = (
 
 export const writeStartEndlessEvent = (
   playerId: number,
-  element: number,
+  arcana: number,
   mode: gameMode
 ) => {
   const nextCreateEventId = getNextStartEndlessEventId();
@@ -178,7 +178,7 @@ export const writeStartEndlessEvent = (
   });
   startEldessEvents.push({
     eventId: nextCreateEventId,
-    elementId: element,
+    arcanaId: arcana,
     mode: mode,
   });
   return nextCreateEventId;
@@ -193,7 +193,7 @@ export const openSpellEvent = (
     created: Date;
     type: eventType;
     data: {
-      elementId: number;
+      arcanaId: number;
       spellId: number;
     };
   }
@@ -202,7 +202,7 @@ export const openSpellEvent = (
   const newPlayerSpells = JSON.parse(JSON.stringify(player.spells));
   const indexToChange = newPlayerSpells.findIndex(
     (s: ISpellOpen | ISpellClosed | ISpell) =>
-      s.elementId == event.data.elementId && s.id == event.data.spellId
+      s.arcanaId == event.data.arcanaId && s.id == event.data.spellId
   );
   if (!newPlayerSpells[indexToChange].price) {
     throw new Error("Spell to open doesn't have a price");
@@ -217,7 +217,7 @@ export const openSpellEvent = (
     allEvents.push(newEvent);
     openSpellEvents.push({
       eventId: nextCreateEventId,
-      elementId: event.data.elementId,
+      arcanaId: event.data.arcanaId,
       spellId: event.data.spellId,
     });
     return newEvent;
@@ -233,7 +233,7 @@ export const updateSpellEvent = (
     created: Date;
     type: eventType;
     data: {
-      elementId: number;
+      arcanaId: number;
       spellId: number;
     };
   }
@@ -242,7 +242,7 @@ export const updateSpellEvent = (
   const newPlayerSpells = JSON.parse(JSON.stringify(player.spells));
   const indexToChange = newPlayerSpells.findIndex(
     (s: ISpellOpen | ISpellClosed | ISpell) =>
-      s.elementId == event.data.elementId && s.id == event.data.spellId
+      s.arcanaId == event.data.arcanaId && s.id == event.data.spellId
   );
   if (!newPlayerSpells[indexToChange].updatePrice) {
     throw new Error("Spell to open doesn't have a price");
@@ -266,7 +266,7 @@ export const updateSpellEvent = (
     allEvents.push(newEvent);
     updateSpellEvents.push({
       eventId: nextCreateEventId,
-      elementId: event.data.elementId,
+      arcanaId: event.data.arcanaId,
       spellId: event.data.spellId,
     });
     return newEvent;

@@ -4,17 +4,17 @@ import { fetcher } from "./utils/helpers";
 import "./Main.scss";
 import { TopMenu } from "./UIElements/TopMenu";
 import { Menu } from "./Menu";
-import { Elements } from "./Elements/Elements";
 import { GameContextType, GameContext } from "./App";
+import { Arcanas } from "./Arcanas/Arcanas";
 
-export type mainScreenState = "main" | "element"; //| "arena" | "lounge" | "shop";
+export type mainScreenState = "main" | "arcana"; //| "arena" | "lounge" | "shop";
 
 type MainScreensType = {
   [key in mainScreenState]: React.FC;
 };
 const mainScreens: MainScreensType = {
   main: Menu,
-  element: Elements,
+  arcana: Arcanas,
   // arena: ArenaScreen,
   // lounge: LoungeScreen,
   // shop: ShopScreen,
@@ -22,7 +22,7 @@ const mainScreens: MainScreensType = {
 
 export const Main = ({ playerId }: { playerId: string }) => {
   const { data, error, mutate } = useSWR(`/api/players/${playerId}`, fetcher);
-  const [element, setElement] = useState<number | null>(null);
+  const [arcana, setArcana] = useState<number | null>(null);
   const [selected, setSelected] = useState<mainScreenState>("main");
 
   const changeScreen = (screen: mainScreenState) => {
@@ -43,10 +43,10 @@ export const Main = ({ playerId }: { playerId: string }) => {
     player: data,
     mutate: mutate,
     changeMainScreen: changeScreen,
-    setElement: setElement,
-    element: element,
+    setArcana: setArcana,
+    arcana: arcana,
     game: null,
-    changeElementScreen: () => {},
+    changeArcanaScreen: () => {},
     setGame: () => {},
   };
 

@@ -6,73 +6,75 @@ import { GameLevels } from "../Game/GameLevels";
 import { EndlessLevels } from "../Game/EndlessLevels";
 import { CloseButton } from "../UIElements/UIButtons";
 
-import { ElementEvent } from "./ElementEvent";
-import { ElementLegend } from "./ElementLegend";
-import { ElementQuest } from "./ElementQuests";
-import { ElementSpells } from "./ElementSpells";
-import { ElementStory } from "./ElementStory";
+import "./Arcanas.scss";
 
-export const Element = () => {
+import { ArcanaStory } from "../Arcanas/ArcanaStory";
+import { ArcanaEvent } from "../Arcanas/ArcanaEvent";
+import { ArcanaQuests } from "../Arcanas/ArcanaQuests";
+import { ArcanaSpells } from "../Arcanas/ArcanaSpells";
+import { ArcanaLegend } from "../Arcanas/ArcanaLegend";
+
+export const Arcana = () => {
   const context = useContext(GameContext);
   if (
     !context ||
     !context.player ||
-    !context.setElement ||
-    context.element === null
+    !context.setArcana ||
+    context.arcana === null
   ) {
     throw new Error("No data in context");
   }
 
   const close = () => {
-    context.setElement(null);
+    context.setArcana(null);
     context.changeMainScreen("main");
   };
   return (
     <>
       <CloseButton onClick={close} />
       <div className="Content">
-        <ElementStory />
-        <ElementEvent />
-        <ElementQuest />
+        <ArcanaStory />
+        <ArcanaEvent />
+        <ArcanaQuests />
       </div>
     </>
   );
 };
 
-export type elementScreenState =
+export type arcanaScreenState =
   | "game"
   | "gameLevels"
   | "endlessLevels"
   | "spells"
   | "legend"
-  | "element";
+  | "arcana";
 
-type ElementScreensType = {
-  [key in elementScreenState]: React.FC;
+type arcanaScreensType = {
+  [key in arcanaScreenState]: React.FC;
 };
-const elementScreens: ElementScreensType = {
-  element: Element,
+const arcanaScreens: arcanaScreensType = {
+  arcana: Arcana,
   game: Game,
   gameLevels: GameLevels,
   endlessLevels: EndlessLevels,
-  spells: ElementSpells,
-  legend: ElementLegend,
+  spells: ArcanaSpells,
+  legend: ArcanaLegend,
 };
 
-export const Elements = () => {
-  const [selected, setSelected] = useState<elementScreenState>("element");
+export const Arcanas = () => {
+  const [selected, setSelected] = useState<arcanaScreenState>("arcana");
   const [game, setGame] = useState<IStory | IEvent | null>(null);
   const context = useContext(GameContext);
   if (!context || !context.player) {
     throw new Error("No data in context");
   }
-  context.changeElementScreen = setSelected;
+  context.changeArcanaScreen = setSelected;
   context.game = game;
   context.setGame = setGame;
 
-  const CurrentScreen = elementScreens[selected];
+  const CurrentScreen = arcanaScreens[selected];
   return (
-    <div className="Element" data-testid="element-screen">
+    <div className="arcana" data-testid="arcana-screen">
       <CurrentScreen />
     </div>
   );

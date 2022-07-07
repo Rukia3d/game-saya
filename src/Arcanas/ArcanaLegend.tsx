@@ -1,19 +1,19 @@
 import { useContext } from "react";
 import { GameContext } from "../App";
 import { BigPopup } from "../UIElements/UIButtons";
-import "./Elements";
+import "./Arcanas.scss";
 
-export const ElementLegend = () => {
+export const ArcanaLegend = () => {
   const context = useContext(GameContext);
-  if (!context || !context.player || context.element === null) {
+  if (!context || !context.player || context.arcana === null) {
     throw new Error("No data in context");
   }
   return (
     <div className="Content">
-      <BigPopup onClick={() => context.changeElementScreen("element")}>
+      <BigPopup onClick={() => context.changeArcanaScreen("arcana")}>
         <div>
-          <div>{context.player.elements[context.element].characterName}</div>
-          {context.player.elements[context.element].legend.map(
+          <div>{context.player.arcanas[context.arcana].characterName}</div>
+          {context.player.arcanas[context.arcana].legend.map(
             (s: string, i: number) => (
               <div key={i}>{s}</div>
             )

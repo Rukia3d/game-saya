@@ -1,12 +1,12 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import {
-  elementName,
+  arcanaName,
   gameMode,
   IPlayer,
   levelState,
 } from "../../api/engine/types";
-import { Elements } from "../Elements/Elements";
+import { Arcanas } from "../Arcanas/Arcanas";
 import { GameContext, GameContextType } from "../App";
 
 const player: IPlayer = {
@@ -20,22 +20,23 @@ const player: IPlayer = {
     { id: 0, name: "Coin", quantity: 18 },
     { id: 1, name: "Black Soul Stone", quantity: 0 },
     { id: 2, name: "White Soul Stone", quantity: 0 },
-    { id: 3, name: "Air essence", quantity: 6 },
-    { id: 4, name: "Fire essence", quantity: 0 },
-    { id: 5, name: "Metal essence", quantity: 0 },
-    { id: 6, name: "Stone essence", quantity: 0 },
-    { id: 7, name: "Water essence", quantity: 0 },
+    { id: 3, name: "Rings", quantity: 6 },
+    { id: 4, name: "Wands", quantity: 0 },
+    { id: 5, name: "Swords", quantity: 0 },
+    { id: 6, name: "Cups", quantity: 0 },
+    { id: 7, name: "Dimonds", quantity: 0 },
   ],
-  elements: [
+  arcanas: [
     {
-      elementName: "air" as elementName,
+      arcanaName: "rings" as arcanaName,
       id: 0,
       characterName: "Saya",
       stories: [
         {
           id: 0,
           level: "",
-          name: "air story0",
+          name: "Saya story 0",
+          mode: "story",
           state: "complete" as levelState,
           allowedRewards: [
             { id: 0, upTo: 10 },
@@ -47,7 +48,8 @@ const player: IPlayer = {
         {
           id: 1,
           level: "",
-          name: "air story1",
+          name: "Saya story 1",
+          mode: "story",
           state: "open" as levelState,
           allowedRewards: [
             { id: 0, upTo: 50 },
@@ -60,7 +62,8 @@ const player: IPlayer = {
         {
           id: 2,
           level: "",
-          name: "air story2",
+          name: "Saya story 2",
+          mode: "story",
           state: "closed" as levelState,
           allowedRewards: [
             { id: 0, upTo: 50 },
@@ -109,19 +112,19 @@ const player: IPlayer = {
 const context: GameContextType = {
   mutate: jest.fn(),
   player: player,
-  element: 0,
-  setElement: jest.fn(),
+  arcana: 0,
+  setArcana: jest.fn(),
   setGame: jest.fn(),
   game: null,
   changeMainScreen: jest.fn(),
-  changeElementScreen: jest.fn(),
+  changeArcanaScreen: jest.fn(),
 };
 
-test("Renders ElementScreen correctly for player 1 element 0", () => {
+test("Renders arcanaScreen correctly for player 1 arcana 0", () => {
   render(
     <GameContext.Provider value={context}>
-      <Elements />
+      <Arcanas />
     </GameContext.Provider>
   );
-  expect(screen.getByTestId("element-screen")).toBeInTheDocument();
+  expect(screen.getByTestId("arcana-screen")).toBeInTheDocument();
 });

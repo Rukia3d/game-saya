@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { KeyedMutator } from "swr";
 // Types
 import { IEvent, IPlayer, IStory } from "../api/engine/types";
-import { elementScreenState } from "./Elements/Elements";
+import { arcanaScreenState } from "./Arcanas/Arcanas";
 // Utils
 import "./App.scss";
 // Components
@@ -12,9 +12,9 @@ export interface GameContextType {
   player: IPlayer;
   mutate: KeyedMutator<any>;
   changeMainScreen: (s: mainScreenState) => void;
-  changeElementScreen: (s: elementScreenState) => void;
-  element: number | null;
-  setElement: (e: number | null) => void;
+  changeArcanaScreen: (s: arcanaScreenState) => void;
+  arcana: number | null;
+  setArcana: (e: number | null) => void;
   game: IEvent | IStory | null;
   setGame: (e: IEvent | IStory | null) => void;
 }

@@ -1,9 +1,7 @@
-import { EventType } from "@testing-library/user-event/dist/types/event";
-
 export interface ISpell {
   id: number;
-  elementId: number;
-  enemy: elementName;
+  arcanaId: number;
+  enemy: arcanaName;
   strength: number;
   symbol: string; // Unknown for now
   state: spellState;
@@ -12,20 +10,20 @@ export interface ISpell {
 
 export type ISpellListing = {
   spellId: number;
-  spellElementId: number;
+  spellarcanaId: number;
   price: number;
   owner: number;
 };
 
 export type ISpellPrice = {
   spellId: number;
-  elementId: number;
+  arcanaId: number;
   price: IMaterialQuant[];
 };
 
 export type ISpellUpdate = {
   spellId: number;
-  elementId: number;
+  arcanaId: number;
   updatePrice: IMaterialQuant[];
   requiredStrength: number;
 };
@@ -62,19 +60,20 @@ export interface IEvent {
 
 export interface IStoryReward {
   id: number;
-  elementId: number;
+  arcanaId: number;
   storyId: number;
   reward: IAllowedRewards[];
 }
 
 export interface IEventReward {
   id: number;
-  elementId: number;
+  arcanaId: number;
   reward: IAllowedRewards[];
 }
 
 export interface IStory {
   id: number;
+  mode: gameMode;
   name: string;
   state: levelState;
   level: string;
@@ -88,8 +87,8 @@ export interface IAllowedRewards {
   upTo: number;
 }
 
-export interface IElement {
-  elementName: elementName;
+export interface IArcana {
+  arcanaName: arcanaName;
   id: number;
   characterName: string;
   legend: string[];
@@ -117,7 +116,7 @@ export interface ICurrentState {
   level?: {
     levelId: number;
     mode: gameMode;
-    elementId: number;
+    arcanaId: number;
   };
   materials?: IMaterialQuant[];
 }
@@ -130,7 +129,7 @@ export interface IPlayer {
   maxEnergy: number;
   loungeId: number | null;
   materials: IMaterialQuant[];
-  elements: IElement[];
+  arcanas: IArcana[];
   spells: (ISpellOpen | ISpellClosed | ISpell)[];
   missions: [];
   messages: [];
@@ -158,40 +157,40 @@ export type ICreatePlayerEvent = {
 
 export type IStartLevelEvent = {
   eventId: number;
-  elementId: number;
+  arcanaId: number;
   mode: gameMode;
   levelId: number;
 };
 
 export type IWinLevelEvent = {
   eventId: number;
-  elementId: number;
+  arcanaId: number;
   mode: gameMode;
   levelId: number;
 };
 
 export type IOpenSpellEvent = {
   eventId: number;
-  elementId: number;
+  arcanaId: number;
   spellId: number;
 };
 
 export type IUpdateSpellEvent = {
   eventId: number;
-  elementId: number;
+  arcanaId: number;
   spellId: number;
 };
 
 export type IStartEndlessEvent = {
   eventId: number;
-  elementId: number;
+  arcanaId: number;
   mode: gameMode;
 };
 
 export type IWinLevelEventTimed = IWinLevelEvent & { time: Date };
 export type ICreatePlayerEventId = ICreatePlayerEvent & { playerId: number };
 
-export type elementName = "fire" | "water" | "air" | "stone" | "metal";
+export type arcanaName = "rings" | "cups" | "wands" | "swords" | "dimonds";
 export type spellState = "closed" | "open" | "listed";
 export type questState = "open" | "rented" | "new";
 export type gameMode = "story" | "quest" | "tower" | "tournament";

@@ -2,7 +2,7 @@ import seedrandom from "seedrandom";
 import { findLevelIndex } from "./helpers";
 import {
   IMaterialQuant,
-  IElement,
+  IArcana,
   IAllowedRewards,
   IWinLevelEventTimed,
 } from "./types";
@@ -10,14 +10,14 @@ import {
 export const rewardPlayer = (
   event: IWinLevelEventTimed,
   materials: IMaterialQuant[],
-  elements: IElement[]
+  arcanas: IArcana[]
 ): { all: IMaterialQuant[]; new: IMaterialQuant[] } => {
-  const [charIndex, levelIndex] = findLevelIndex(event, elements);
-  const level = elements[charIndex].stories[levelIndex];
+  const [charIndex, levelIndex] = findLevelIndex(event, arcanas);
+  const level = arcanas[charIndex].stories[levelIndex];
   const newOnly: IMaterialQuant[] = [];
   level.allowedRewards.forEach((r: IAllowedRewards) => {
     const rng = seedrandom(
-      event.eventId + event.elementId + event.mode + event.levelId
+      event.eventId + event.arcanaId + event.mode + event.levelId
     );
     let rand = Math.round(rng() * r.upTo);
     if (level.state === "open") {
@@ -31,23 +31,23 @@ export const rewardPlayer = (
 
 export const openNextLevel = (
   event: IWinLevelEventTimed,
-  elements: IElement[]
-): IElement[] => {
-  const [charIndex, levelIndex] = findLevelIndex(event, elements);
-  if (levelIndex < elements[charIndex].stories.length) {
-    elements[charIndex].stories[event.levelId + 1].state = "open";
+  arcanas: IArcana[]
+): IArcana[] => {
+  const [charIndex, levelIndex] = findLevelIndex(event, arcanas);
+  if (levelIndex < arcanas[charIndex].stories.length) {
+    arcanas[charIndex].stories[event.levelId + 1].state = "open";
   }
-  elements[charIndex].stories[event.levelId].state = "complete";
-  return elements;
+  arcanas[charIndex].stories[event.levelId].state = "complete";
+  return arcanas;
 };
 
 export const addExperience = (
   event: IWinLevelEventTimed,
   exp: number,
-  elements: IElement[]
+  arcanas: IArcana[]
 ): number => {
-  const [charIndex, levelIndex] = findLevelIndex(event, elements);
-  const level = elements[charIndex].stories[levelIndex];
+  const [charIndex, levelIndex] = findLevelIndex(event, arcanas);
+  const level = arcanas[charIndex].stories[levelIndex];
   if (level.state === "open") {
     return exp + level.experience;
   }

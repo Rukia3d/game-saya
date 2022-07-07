@@ -8,29 +8,26 @@ import "./Game.scss";
 
 export const EndlessLevels = () => {
   const context = useContext(GameContext);
-  if (!context || !context.player || context.element == null) {
+  if (!context || !context.player || context.arcana == null) {
     throw new Error("No data in context");
   }
   // Mode is an index of the event
   const [mode, setMode] = useState<number | null>(null);
-  const element = context.element;
-  console.log(
-    "context.player.elements[element]",
-    context.player.elements[element]
-  );
+  const arcana = context.arcana;
+  console.log("context.player.arcanas[arcana]", context.player.arcanas[arcana]);
   return (
     <div className="GameSelect">
       <CloseButton
         onClick={() => {
           context.setGame(null);
-          context.changeElementScreen("element");
+          context.changeArcanaScreen("arcana");
         }}
       />
       {mode !== null ? (
         <SmallPopup
           onClick={() => {
             context.setGame(null);
-            context.changeElementScreen("element");
+            context.changeArcanaScreen("arcana");
           }}
           content={<EndlessStartPopup mode={mode} setMode={setMode} />}
         />
@@ -38,7 +35,7 @@ export const EndlessLevels = () => {
         <>
           <div className="GameLevels">Endless levels</div>
           <div className="EndlessSelection">
-            {context.player.elements[element].currentEvents.map(
+            {context.player.arcanas[arcana].currentEvents.map(
               (s: IEvent, i: number) => (
                 <div className="EndlessMode" key={i}>
                   {s.mode}, price: {s.energy} <br />

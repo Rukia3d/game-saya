@@ -1,4 +1,4 @@
-import { elements, materials } from "../db/testDBPlayer";
+import { arcanas, materials } from "../db/testDBPlayer";
 import { spellPrices, spells, spellUpdates } from "../db/testDBSpells";
 import {
   addExperience,
@@ -41,7 +41,7 @@ export const createPlayer = (
       if (!price) throw new Error("Can't find a price for a spell");
       return { ...s, price: price.price };
     }),
-    elements: [JSON.parse(JSON.stringify(elements[0]))],
+    arcanas: [JSON.parse(JSON.stringify(arcanas[0]))],
     materials: JSON.parse(JSON.stringify(materials)).map((m: IMaterial) => {
       return { ...m, quantity: 0 };
     }),
@@ -52,14 +52,13 @@ export const startLevel = (
   event: IStartLevelEvent,
   player: IPlayer
 ): IPlayer => {
-  let energyPrice = findEnergyPrice(event.elementId, "story", event.levelId);
+  let energyPrice = findEnergyPrice(event.arcanaId, "story", event.levelId);
   const firstTime =
-    player.elements[event.elementId].stories[event.levelId].state !==
-    "complete";
+    player.arcanas[event.arcanaId].stories[event.levelId].state !== "complete";
   if (
-    event.elementId === 0 &&
+    event.arcanaId === 0 &&
     event.levelId < 2 &&
-    player.elements &&
+    player.arcanas &&
     firstTime
   ) {
     energyPrice = 0;
@@ -67,7 +66,7 @@ export const startLevel = (
   const state = {
     state: "PLAY" as currentState,
     level: {
-      elementId: event.elementId,
+      arcanaId: event.arcanaId,
       mode: "story" as gameMode,
       levelId: event.levelId,
     },
@@ -85,11 +84,11 @@ export const startEndless = (
 ): IPlayer => {
   // This assumes there are only 2 endless types
   const endlessIndex = event.mode === "tournament" ? 0 : 1;
-  let energyPrice = findEnergyPrice(event.elementId, event.mode, endlessIndex);
+  let energyPrice = findEnergyPrice(event.arcanaId, event.mode, endlessIndex);
   const state = {
     state: "PLAY" as currentState,
     level: {
-      elementId: event.elementId,
+      arcanaId: event.arcanaId,
       mode: event.mode as gameMode,
       levelId: endlessIndex,
     },
@@ -105,14 +104,14 @@ export const winLevel = (
   event: IWinLevelEventTimed,
   player: IPlayer
 ): IPlayer => {
-  const newMaterials = rewardPlayer(event, player.materials, player.elements);
+  const newMaterials = rewardPlayer(event, player.materials, player.arcanas);
   // need to add experience before we open the next level
-  const newExperience = addExperience(event, player.exprience, player.elements);
+  const newExperience = addExperience(event, player.exprience, player.arcanas);
 
   return {
     ...player,
     materials: newMaterials.all,
-    elements: openNextLevel(event, player.elements),
+    arcanas: openNextLevel(event, player.arcanas),
     exprience: newExperience,
     // TODO Check if this is correct
     currentState: { state: "WINMATERIAL", materials: newMaterials.new },
@@ -123,7 +122,7 @@ export const openSpell = (event: IOpenSpellEvent, player: IPlayer): IPlayer => {
   const newPlayerSpells = JSON.parse(JSON.stringify(player.spells));
   const indexToChange = newPlayerSpells.findIndex(
     (s: ISpellOpen | ISpellClosed | ISpell) =>
-      s.elementId == event.elementId && s.id == event.spellId
+      s.arcanaId == event.arcanaId && s.id == event.spellId
   );
   if (!newPlayerSpells[indexToChange].price) {
     throw new Error("Spell to open doesn't have a price");
@@ -143,7 +142,7 @@ export const openSpell = (event: IOpenSpellEvent, player: IPlayer): IPlayer => {
   if (nextUpdate) {
     newPlayerSpells[indexToChange] = {
       id: newPlayerSpells[indexToChange].id,
-      elementId: newPlayerSpells[indexToChange].elementId,
+      arcanaId: newPlayerSpells[indexToChange].arcanaId,
       enemy: newPlayerSpells[indexToChange].enemy,
       strength: newPlayerSpells[indexToChange].strength,
       symbol: newPlayerSpells[indexToChange].symbol,
@@ -170,7 +169,7 @@ export const updateSpell = (
   const newPlayerSpells = JSON.parse(JSON.stringify(player.spells));
   const indexToChange = newPlayerSpells.findIndex(
     (s: ISpellOpen | ISpellClosed | ISpell) =>
-      s.elementId == event.elementId && s.id == event.spellId
+      s.arcanaId == event.arcanaId && s.id == event.spellId
   );
   if (!newPlayerSpells[indexToChange].updatePrice) {
     throw new Error("Spell to open doesn't have a price");

@@ -11,21 +11,21 @@ export const EndlessStartPopup = ({
   setMode: (n: number | null) => void;
 }) => {
   const context = useContext(GameContext);
-  if (!context || !context.player || context.element == null) {
+  if (!context || !context.player || context.arcana == null) {
     throw new Error("No data in context");
   }
-  const element = context.element;
-  const currentMode = context.player.elements[element].currentEvents[mode];
+  const arcana = context.arcana;
+  const currentMode = context.player.arcanas[arcana].currentEvents[mode];
 
   const startEndless = async (i: number | null) => {
     console.log("startEndless");
-    context.changeElementScreen("game");
+    context.changeArcanaScreen("game");
     setMode(null);
     if (i !== null) {
-      context.setGame(context.player.elements[element].currentEvents[i]);
+      context.setGame(context.player.arcanas[arcana].currentEvents[i]);
       await axios.post(`/api/players/${context.player.id}/startEndless`, {
-        element: element,
-        mode: context.player.elements[element].currentEvents[i].mode,
+        arcana: arcana,
+        mode: context.player.arcanas[arcana].currentEvents[i].mode,
         level: i,
       });
       context.mutate();
@@ -34,7 +34,7 @@ export const EndlessStartPopup = ({
 
   const cancelEndless = () => {
     setMode(null);
-    context.changeElementScreen("endlessLevels");
+    context.changeArcanaScreen("endlessLevels");
   };
 
   if (context.player.energy - currentMode.energy < 0) {

@@ -1,4 +1,4 @@
-import { elements, materials } from "../db/testDBPlayer";
+import { arcanas, materials } from "../db/testDBPlayer";
 import {
   canBuySpell,
   findEnergyPrice,
@@ -22,22 +22,22 @@ test("energy price is found for a correct mode", async () => {
 test("finds correct index", async () => {
   const winLevelEvent: IWinLevelEventTimed = {
     eventId: 0,
-    elementId: 1,
+    arcanaId: 1,
     mode: "story",
     levelId: 0,
     time: new Date(),
   };
-  const res = findLevelIndex(winLevelEvent, elements);
+  const res = findLevelIndex(winLevelEvent, arcanas);
   expect(res[0]).toEqual(1);
   expect(res[1]).toEqual(0);
 
   jest.spyOn(console, "error").mockImplementation(() => jest.fn());
   expect(() =>
-    findLevelIndex({ ...winLevelEvent, elementId: 7 }, elements)
+    findLevelIndex({ ...winLevelEvent, arcanaId: 7 }, arcanas)
   ).toThrow("No character 7 found");
 
   expect(() =>
-    findLevelIndex({ ...winLevelEvent, levelId: 7 }, elements)
+    findLevelIndex({ ...winLevelEvent, levelId: 7 }, arcanas)
   ).toThrow("No level 7 found");
   jest.restoreAllMocks();
 });

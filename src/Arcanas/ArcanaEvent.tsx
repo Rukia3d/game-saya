@@ -1,11 +1,11 @@
 import { useContext } from "react";
 import { GameContext } from "../App";
 
-import "./Elements.scss";
+import "./Arcanas.scss";
 
-export const ElementEvent = () => {
+export const ArcanaEvent = () => {
   const context = useContext(GameContext);
-  if (!context || !context.player || context.element === null) {
+  if (!context || !context.player || context.arcana === null) {
     throw new Error("No data in context");
   }
 
@@ -13,13 +13,13 @@ export const ElementEvent = () => {
     <div className="Event">
       <div
         className="EventType"
-        onClick={() => context.changeElementScreen("gameLevels")}
+        onClick={() => context.changeArcanaScreen("gameLevels")}
       >
-        {context.player.elements[context.element].characterName} Main Quest
+        {context.player.arcanas[context.arcana].characterName} Main Quest
       </div>
       <div
         className="EventType"
-        onClick={() => context.changeElementScreen("endlessLevels")}
+        onClick={() => context.changeArcanaScreen("endlessLevels")}
       >
         Endless Events
       </div>

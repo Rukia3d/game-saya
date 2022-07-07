@@ -3,19 +3,19 @@ import { ISpellUpdate, ISpellPrice, ISpell } from "../engine/types";
 export const spellUpdates: ISpellUpdate[] = [
   {
     spellId: 0,
-    elementId: 0,
+    arcanaId: 0,
     updatePrice: [
       { id: 0, name: "Coin", quantity: 5 },
-      { id: 3, name: "Air essence", quantity: 1 },
+      { id: 3, name: "Rings", quantity: 1 },
     ],
     requiredStrength: 1,
   },
   {
     spellId: 0,
-    elementId: 0,
+    arcanaId: 0,
     updatePrice: [
       { id: 0, name: "Coin", quantity: 50000 },
-      { id: 3, name: "Air essence", quantity: 5000 },
+      { id: 3, name: "Rings", quantity: 5000 },
       { id: 1, name: "Black Soul Stone", quantity: 500 },
       { id: 2, name: "White Soul Stone", quantity: 1000 },
     ],
@@ -23,10 +23,10 @@ export const spellUpdates: ISpellUpdate[] = [
   },
   {
     spellId: 1,
-    elementId: 0,
+    arcanaId: 0,
     updatePrice: [
       { id: 0, name: "Coin", quantity: 5000 },
-      { id: 3, name: "Air essence", quantity: 500 },
+      { id: 3, name: "Rings", quantity: 500 },
       { id: 1, name: "Black Soul Stone", quantity: 50 },
       { id: 2, name: "White Soul Stone", quantity: 100 },
     ],
@@ -34,10 +34,10 @@ export const spellUpdates: ISpellUpdate[] = [
   },
   {
     spellId: 1,
-    elementId: 0,
+    arcanaId: 0,
     updatePrice: [
       { id: 0, name: "Coin", quantity: 50000 },
-      { id: 3, name: "Air essence", quantity: 5000 },
+      { id: 3, name: "Rings", quantity: 5000 },
       { id: 1, name: "Black Soul Stone", quantity: 500 },
       { id: 2, name: "White Soul Stone", quantity: 1000 },
     ],
@@ -48,35 +48,35 @@ export const spellUpdates: ISpellUpdate[] = [
 export const spellPrices: ISpellPrice[] = [
   {
     spellId: 0,
-    elementId: 0,
+    arcanaId: 0,
     price: [
       { id: 0, name: "Coin", quantity: 5 },
-      { id: 3, name: "Air essence", quantity: 1 },
+      { id: 3, name: "Rings", quantity: 1 },
     ],
   },
   {
     spellId: 1,
-    elementId: 0,
+    arcanaId: 0,
     price: [
       { id: 0, name: "Coin", quantity: 500 },
-      { id: 3, name: "Air essence", quantity: 10 },
+      { id: 3, name: "Rings", quantity: 10 },
       { id: 1, name: "White Soul Stone", quantity: 1 },
     ],
   },
   {
     spellId: 2,
-    elementId: 1,
+    arcanaId: 1,
     price: [
       { id: 0, name: "Coin", quantity: 10 },
-      { id: 4, name: "Fire essence", quantity: 5 },
+      { id: 4, name: "Wands", quantity: 5 },
     ],
   },
   {
     spellId: 3,
-    elementId: 1,
+    arcanaId: 1,
     price: [
       { id: 0, name: "Coin", quantity: 500 },
-      { id: 4, name: "Fire essence", quantity: 10 },
+      { id: 4, name: "Wands", quantity: 10 },
       { id: 1, name: "White Soul Stone", quantity: 1 },
     ],
   },
@@ -84,38 +84,38 @@ export const spellPrices: ISpellPrice[] = [
 export const spells: ISpell[] = [
   {
     id: 0,
-    elementId: 0,
-    enemy: "air",
+    arcanaId: 0,
+    enemy: "rings",
     strength: 1,
     symbol: "some", // Unknown for now
     state: "closed",
-    name: "Air spell 1",
+    name: "Rings spell 1",
   },
   {
     id: 1,
-    elementId: 0,
-    enemy: "fire",
+    arcanaId: 0,
+    enemy: "rings",
     strength: 1,
     symbol: "some", // Unknown for now
     state: "closed",
-    name: "Air spell 2",
+    name: "Rings spell 2",
   },
   {
     id: 2,
-    elementId: 1,
-    enemy: "fire",
+    arcanaId: 1,
+    enemy: "wands",
     strength: 1,
     symbol: "some", // Unknown for now
     state: "closed",
-    name: "Fire spell 1",
+    name: "Wands spell 1",
   },
   {
     id: 3,
-    elementId: 1,
-    enemy: "stone",
+    arcanaId: 1,
+    enemy: "wands",
     strength: 1,
     symbol: "some", // Unknown for now
     state: "closed",
-    name: "Fire spell 2",
+    name: "Wands spell 2",
   },
 ];

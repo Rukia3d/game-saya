@@ -1,8 +1,8 @@
-import { elements } from "../db/testDBPlayer";
+import { arcanas } from "../db/testDBPlayer";
 import {
   gameMode,
   ICurrentState,
-  IElement,
+  IArcana,
   IMaterialQuant,
   IPlayer,
   IStory,
@@ -10,29 +10,26 @@ import {
 } from "./types";
 
 export const findEnergyPrice = (
-  element: number,
+  arcana: number,
   mode: string,
   level: number
 ) => {
   if (mode === "story") {
-    return elements[element].stories[level].energy;
+    return arcanas[arcana].stories[level].energy;
   }
   if (mode === "tower" || mode === "tournament") {
-    return elements[element].currentEvents[level].energy;
+    return arcanas[arcana].currentEvents[level].energy;
   }
   throw new Error(`Unknown mode ${mode}`);
 };
 
 export const findLevelIndex = (
   event: IWinLevelEventTimed,
-  elements: IElement[]
+  arcanas: IArcana[]
 ) => {
-  const charIndex = elements.findIndex(
-    (c: IElement) => c.id === event.elementId
-  );
-  if (charIndex === -1)
-    throw new Error(`No character ${event.elementId} found`);
-  const levelIndex = elements[charIndex].stories.findIndex(
+  const charIndex = arcanas.findIndex((c: IArcana) => c.id === event.arcanaId);
+  if (charIndex === -1) throw new Error(`No character ${event.arcanaId} found`);
+  const levelIndex = arcanas[charIndex].stories.findIndex(
     (s: IStory) => s.id === event.levelId
   );
   if (levelIndex === -1) throw new Error(`No level ${event.levelId} found`);
@@ -41,23 +38,23 @@ export const findLevelIndex = (
 
 const correctStateForWin = (
   event: {
-    elementId: number;
+    arcana: number;
     mode: gameMode;
-    levelId: number;
+    level: number;
   },
   currentState: ICurrentState
 ) => {
   return (
-    event.levelId === currentState.level?.levelId &&
-    event.elementId === currentState.level?.elementId &&
+    event.level === currentState.level?.levelId &&
+    event.arcana === currentState.level?.arcanaId &&
     event.mode === currentState.level?.mode
   );
 };
 export const foundStartLevelToWin = (
   event: {
-    elementId: number;
+    arcana: number;
     mode: gameMode;
-    levelId: number;
+    level: number;
   },
   currentState: ICurrentState
 ) => {
@@ -71,20 +68,15 @@ export const foundStartLevelToWin = (
 export const enoughEnergyToPlay = (
   player: IPlayer,
   data: {
-    elementId: number;
+    arcana: number;
     mode: gameMode;
-    levelId: number;
+    level: number;
   }
 ) => {
-  let energyPrice = findEnergyPrice(data.elementId, "story", data.levelId);
+  let energyPrice = findEnergyPrice(data.arcana, data.mode, data.level);
   const firstTime =
-    player.elements[data.elementId].stories[data.levelId].state !== "complete";
-  if (
-    data.elementId === 0 &&
-    data.levelId < 2 &&
-    player.elements &&
-    firstTime
-  ) {
+    player.arcanas[data.arcana].stories[data.level].state !== "complete";
+  if (data.arcana === 0 && data.level < 2 && player.arcanas && firstTime) {
     energyPrice = 0;
   }
   return player.energy - energyPrice >= 0;

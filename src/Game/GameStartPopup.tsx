@@ -11,19 +11,20 @@ export const GameStartPopup = ({
   setStory: (a: number | null) => void;
 }) => {
   const context = useContext(GameContext);
-  if (!context || !context.player || context.element == null) {
+  if (!context || !context.player || context.arcana == null) {
     throw new Error("No data in context");
   }
-  const element = context.element;
-  const energyPrice = context.player.elements[element].stories[story].energy;
+  const arcana = context.arcana;
+  const energyPrice = context.player.arcanas[arcana].stories[story].energy;
 
   const startStory = async (i: number) => {
-    console.log("startStory");
-    context.changeElementScreen("game");
+    console.log("startStory", i);
+    context.changeArcanaScreen("game");
     setStory(null);
-    context.setGame(context.player.elements[element].stories[story]);
+    context.setGame(context.player.arcanas[arcana].stories[i]);
     await axios.post(`/api/players/${context.player.id}/startLevel`, {
-      element: element,
+      arcana: arcana,
+      mode: context.player.arcanas[arcana].stories[i].mode,
       level: story,
     });
     context.mutate();
@@ -31,7 +32,7 @@ export const GameStartPopup = ({
 
   const cancelStory = () => {
     setStory(null);
-    context.changeElementScreen("gameLevels");
+    context.changeArcanaScreen("gameLevels");
   };
 
   if (context.player.energy - energyPrice < 0) {

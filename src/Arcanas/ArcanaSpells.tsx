@@ -1,5 +1,7 @@
 import axios from "axios";
 import { useContext } from "react";
+import "./Arcanas.scss";
+
 import {
   IMaterialQuant,
   ISpell,
@@ -8,7 +10,6 @@ import {
 } from "../../api/engine/types";
 import { GameContext } from "../App";
 import { CloseButton } from "../UIElements/UIButtons";
-import "./Elements";
 
 const canBuySpell = (
   materials: IMaterialQuant[],
@@ -89,25 +90,25 @@ export const SpellPurchase = ({
     return <div>Owned</div>;
   }
 };
-export const ElementSpells = () => {
+export const ArcanaSpells = () => {
   const context = useContext(GameContext);
-  if (!context || !context.player || context.element === null) {
+  if (!context || !context.player || context.arcana === null) {
     throw new Error("No data in context");
   }
   const spells = context.player.spells.filter(
-    (s: ISpellOpen | ISpellClosed | ISpell) => s.elementId == context.element
+    (s: ISpellOpen | ISpellClosed | ISpell) => s.arcanaId === context.arcana
   );
 
   const spellAction = async (spellId: number, action: "update" | "open") => {
     console.log("spell action");
     if (action === "open") {
       await axios.post(`/api/players/${context.player.id}/openSpell`, {
-        element: context.element,
+        arcana: context.arcana,
         spell: spellId,
       });
     } else {
       await axios.post(`/api/players/${context.player.id}/updateSpell`, {
-        element: context.element,
+        arcana: context.arcana,
         spell: spellId,
       });
     }
@@ -116,12 +117,12 @@ export const ElementSpells = () => {
 
   return (
     <div>
-      <CloseButton onClick={() => context.changeElementScreen("element")} />
+      <CloseButton onClick={() => context.changeArcanaScreen("arcana")} />
       <div>
-        <div>{context.player.elements[context.element].elementName}</div>
+        <div>{context.player.arcanas[context.arcana].arcanaName}</div>
         {spells.map((s: ISpellOpen | ISpellClosed | ISpell, i: number) => (
           <div className="Spell" key={i}>
-            {`${s.name}, element: ${s.enemy}, strength: ${s.strength}`}
+            {`${s.name}, arcana: ${s.enemy}, strength: ${s.strength}`}
             <SpellPurchase
               spell={s}
               materials={context.player.materials}

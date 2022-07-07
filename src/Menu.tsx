@@ -1,22 +1,22 @@
 import { useContext } from "react";
-import { IElement } from "../api/engine/types";
+import { IArcana } from "../api/engine/types";
 import { GameContext } from "./App";
 import "./Menu.scss";
 export const Menu = () => {
   const context = useContext(GameContext);
-  if (!context || !context.player || !context.setElement) {
+  if (!context || !context.player || !context.setArcana) {
     throw new Error("No data in context");
   }
 
-  const selectElement = (i: number) => {
-    context.setElement(i);
-    context.changeMainScreen("element");
+  const selectArcana = (i: number) => {
+    context.setArcana(i);
+    context.changeMainScreen("arcana");
   };
   return (
     <div className="Menu">
       <div className="Chars">
-        {context.player.elements.map((c: IElement, i: number) => (
-          <div className="Character" key={i} onClick={() => selectElement(i)}>
+        {context.player.arcanas.map((c: IArcana, i: number) => (
+          <div className="Character" key={i} onClick={() => selectArcana(i)}>
             {c.characterName}
           </div>
         ))}

@@ -13,13 +13,14 @@ app.use(bodyParser.json());
 export const playerEventsApplication = (playerId: number) => {
   const events = readers.playerEvents(playerId);
   const player = engine.applyEvents(events);
-  //console.log("events", events);
+  console.log("playerEventsApplication events", events);
   return player;
 };
 
 app.get("/api/players/:id", async (req: any, res: any) => {
+  const playerId = parseInt(req.params.id);
   try {
-    const player = playerEventsApplication(parseInt(req.params.id));
+    const player = playerEventsApplication(playerId);
     res.send(player);
   } catch (error) {
     res.send(error);
@@ -29,7 +30,7 @@ app.get("/api/players/:id", async (req: any, res: any) => {
 /*
   const player = playerEventsApplication(playerId)
   const event = { type: 'StartEndlessEvent', data: {
-    id, element, mode
+    id, arcana, mode
   }};
 
   try {
@@ -70,7 +71,7 @@ app.post("/api/players/new", async (req: any, res: any) => {
       maxEnergy: 0,
       loungeId: null,
       materials: [],
-      elements: [],
+      arcanas: [],
       spells: [],
       missions: [],
       messages: [],
@@ -84,17 +85,20 @@ app.post("/api/players/new", async (req: any, res: any) => {
 });
 
 app.post("/api/players/:id/startLevel", async (req: any, res: any) => {
-  const player = playerEventsApplication(parseInt(req.params.id));
+  console.log("STARTLEVEL", req.params.id, req.body);
+  const playerId = parseInt(req.params.id);
+  const player = playerEventsApplication(playerId);
   const event: IGenericEvent = {
-    playerId: req.params.id,
+    playerId: playerId,
     created: new Date(),
-    type: "STARTLEVEL",
+    type: "STARTLEVEL" as eventType,
     data: {
-      element: req.body.element,
+      arcana: req.body.arcana,
       mode: req.body.mode,
       level: req.body.level,
     },
   };
+  console.log("generated event", event);
   try {
     const updatePlayer = engine.processEvent(player, event);
     res.send(updatePlayer);
@@ -104,17 +108,20 @@ app.post("/api/players/:id/startLevel", async (req: any, res: any) => {
 });
 
 app.post("/api/players/:id/winLevel", async (req: any, res: any) => {
-  const player = playerEventsApplication(parseInt(req.params.id));
+  console.log("WINLEVEL", req.params.id, req.body);
+  const playerId = parseInt(req.params.id);
+  const player = playerEventsApplication(playerId);
   const event = {
-    playerId: 0,
+    playerId: playerId,
     created: new Date(),
     type: "WINLEVEL" as eventType,
     data: {
-      element: req.body.element,
+      arcana: req.body.arcana,
       mode: req.body.mode,
       level: req.body.level,
     },
   };
+  console.log("winLevel event", event);
   try {
     const updatePlayer = engine.processEvent(player, event);
     res.send(updatePlayer);
@@ -124,13 +131,15 @@ app.post("/api/players/:id/winLevel", async (req: any, res: any) => {
 });
 
 app.post("/api/players/:id/openSpell", async (req: any, res: any) => {
-  const player = playerEventsApplication(parseInt(req.params.id));
+  console.log("OPENSPELL", req.params.id, req.body);
+  const playerId = parseInt(req.params.id);
+  const player = playerEventsApplication(playerId);
   const event = {
-    playerId: 0,
+    playerId: playerId,
     created: new Date(),
     type: "OPENSPELL" as eventType,
     data: {
-      element: req.body.element,
+      arcana: req.body.arcana,
       spell: req.body.spell,
     },
   };
@@ -143,13 +152,14 @@ app.post("/api/players/:id/openSpell", async (req: any, res: any) => {
 });
 
 app.post("/api/players/:id/updateSpell", async (req: any, res: any) => {
-  const player = playerEventsApplication(parseInt(req.params.id));
+  const playerId = parseInt(req.params.id);
+  const player = playerEventsApplication(playerId);
   const event = {
-    playerId: 0,
+    playerId: playerId,
     created: new Date(),
     type: "UPDATESPELL" as eventType,
     data: {
-      element: req.body.element,
+      arcana: req.body.arcana,
       spell: req.body.spell,
     },
   };
@@ -163,15 +173,15 @@ app.post("/api/players/:id/updateSpell", async (req: any, res: any) => {
 
 app.post("/api/players/:id/startEndless", async (req: any, res: any) => {
   console.log("STARTENDLESS", req.body.mode);
-  let playerId = req.params.id;
+  const playerId = parseInt(req.params.id);
 });
 
 app.post("/api/players/:id/passCheckpoint", async (req: any, res: any) => {
-  let playerId = req.params.id;
   console.log("PASSCHECKPOINT", req.body);
+  const playerId = parseInt(req.params.id);
   // writePassCheckpointEvent(
   //   req.params.id,
-  //   req.body.element,
+  //   req.body.arcana,
   //   req.body.mode,
   //   req.body.level
   // );
@@ -179,12 +189,12 @@ app.post("/api/players/:id/passCheckpoint", async (req: any, res: any) => {
 });
 
 app.post("/api/players/:id/missCheckpoint", async (req: any, res: any) => {
-  let playerId = req.params.id;
   console.log("MISS CHECKPOINT", req.body);
+  const playerId = parseInt(req.params.id);
   // Just change state???
   // writeWinLevelEvent(
   //   req.params.id,
-  //   req.body.element,
+  //   req.body.arcana,
   //   req.body.mode,
   //   req.body.level
   // );

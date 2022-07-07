@@ -1,4 +1,4 @@
-import { elements, materials } from "../db/testDBPlayer";
+import { arcanas, materials } from "../db/testDBPlayer";
 import { applyEvent } from "../engine/engine";
 import { IMaterial, IPlayer, IPlayerEvent } from "../engine/types";
 
@@ -10,7 +10,7 @@ const basePlayer: IPlayer = {
   maxEnergy: 0,
   loungeId: null,
   materials: [],
-  elements: [],
+  arcanas: [],
   spells: [],
   missions: [],
   messages: [],
@@ -18,7 +18,7 @@ const basePlayer: IPlayer = {
 };
 
 test("Applies a single event correctly", () => {
-  const newPlayer = { ...basePlayer, elements: elements };
+  const newPlayer = { ...basePlayer, arcanas: arcanas };
   const startLevelEvent: IPlayerEvent = {
     playerId: 1,
     eventId: 0,
@@ -27,7 +27,7 @@ test("Applies a single event correctly", () => {
   };
   const res = applyEvent(newPlayer, startLevelEvent);
   expect(res.currentState.state).toEqual("PLAY");
-  expect(res.currentState.level?.elementId).toEqual(0);
+  expect(res.currentState.level?.arcanaId).toEqual(0);
   expect(res.currentState.level?.mode).toEqual("story");
   expect(res.currentState.level?.levelId).toEqual(0);
 });
@@ -35,7 +35,7 @@ test("Applies a single event correctly", () => {
 test("Applies a series of events correctly", () => {
   const newPlayer = {
     ...basePlayer,
-    elements: elements,
+    arcanas: arcanas,
     materials: materials.map((m: IMaterial) => {
       return { ...m, quantity: 0 };
     }),
