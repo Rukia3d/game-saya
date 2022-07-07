@@ -23,6 +23,9 @@ export const processEvent = (
     case "OPENSPELL":
       const openSpellEvent = writers.openSpellEvent(newPlayer, event);
       return applyEvent(newPlayer, openSpellEvent);
+    case "UPDATESPELL":
+      const updateSpellEvent = writers.updateSpellEvent(newPlayer, event);
+      return applyEvent(newPlayer, updateSpellEvent);
     default:
       throw new Error("Unknown event type");
   }

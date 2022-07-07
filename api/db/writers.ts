@@ -193,8 +193,8 @@ export const openSpellEvent = (
     created: Date;
     type: eventType;
     data: {
-      arcanaId: number;
-      spellId: number;
+      arcana: number;
+      spell: number;
     };
   }
 ) => {
@@ -202,7 +202,7 @@ export const openSpellEvent = (
   const newPlayerSpells = JSON.parse(JSON.stringify(player.spells));
   const indexToChange = newPlayerSpells.findIndex(
     (s: ISpellOpen | ISpellClosed | ISpell) =>
-      s.arcanaId == event.data.arcanaId && s.id == event.data.spellId
+      s.arcanaId === event.data.arcana && s.id === event.data.spell
   );
   if (!newPlayerSpells[indexToChange].price) {
     throw new Error("Spell to open doesn't have a price");
@@ -217,8 +217,8 @@ export const openSpellEvent = (
     allEvents.push(newEvent);
     openSpellEvents.push({
       eventId: nextCreateEventId,
-      arcanaId: event.data.arcanaId,
-      spellId: event.data.spellId,
+      arcanaId: event.data.arcana,
+      spellId: event.data.spell,
     });
     return newEvent;
   } else {
@@ -233,8 +233,8 @@ export const updateSpellEvent = (
     created: Date;
     type: eventType;
     data: {
-      arcanaId: number;
-      spellId: number;
+      arcana: number;
+      spell: number;
     };
   }
 ) => {
@@ -242,7 +242,7 @@ export const updateSpellEvent = (
   const newPlayerSpells = JSON.parse(JSON.stringify(player.spells));
   const indexToChange = newPlayerSpells.findIndex(
     (s: ISpellOpen | ISpellClosed | ISpell) =>
-      s.arcanaId == event.data.arcanaId && s.id == event.data.spellId
+      s.arcanaId === event.data.arcana && s.id === event.data.spell
   );
   if (!newPlayerSpells[indexToChange].updatePrice) {
     throw new Error("Spell to open doesn't have a price");
@@ -266,8 +266,8 @@ export const updateSpellEvent = (
     allEvents.push(newEvent);
     updateSpellEvents.push({
       eventId: nextCreateEventId,
-      arcanaId: event.data.arcanaId,
-      spellId: event.data.spellId,
+      arcanaId: event.data.arcana,
+      spellId: event.data.spell,
     });
     return newEvent;
   } else {
