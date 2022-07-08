@@ -17,6 +17,7 @@ export const GameLevels = () => {
     <div className="GameSelect">
       <CloseButton
         onClick={() => {
+          context.setWin(false);
           setStory(null);
           context.changeArcanaScreen("arcana");
         }}
@@ -24,6 +25,7 @@ export const GameLevels = () => {
       {story !== null ? (
         <SmallPopup
           onClick={() => {
+            context.setWin(false);
             setStory(null);
             context.changeArcanaScreen("arcana");
           }}

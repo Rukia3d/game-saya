@@ -11,6 +11,8 @@ import {
   IStartEndlessEvent,
   IEventReward,
   IStoryReward,
+  IPassCheckpointEvent,
+  IMissCheckpointEvent,
 } from "../engine/types";
 import { eventTowerRewards, storyRewards } from "./testDBLevels";
 
@@ -106,7 +108,7 @@ export const arcanas: IArcana[] = [
         level: "",
         mode: "tournament",
         energy: 10,
-        checkpoint: 0,
+        checkpoint: -1,
         allowedRewards: ensure(
           eventTowerRewards.find(
             (s: IEventReward) => s.id === 0 && s.arcanaId === 0
@@ -118,7 +120,7 @@ export const arcanas: IArcana[] = [
         level: "",
         mode: "tower",
         energy: 10,
-        checkpoint: 0,
+        checkpoint: -1,
         allowedRewards: [
           { id: 0, upTo: 5 },
           { id: 3, upTo: 1 },
@@ -168,7 +170,7 @@ export const arcanas: IArcana[] = [
         level: "",
         mode: "tournament",
         energy: 10,
-        checkpoint: 0,
+        checkpoint: -1,
         allowedRewards: [
           { id: 0, upTo: 5 },
           { id: 3, upTo: 1 },
@@ -179,7 +181,7 @@ export const arcanas: IArcana[] = [
         level: "",
         mode: "tower",
         energy: 10,
-        checkpoint: 0,
+        checkpoint: -1,
         allowedRewards: [
           { id: 0, upTo: 5 },
           { id: 3, upTo: 1 },
@@ -241,6 +243,23 @@ export const updateSpellEvents: IUpdateSpellEvent[] = [
 ];
 
 export const startEldessEvents: IStartEndlessEvent[] = [
+  {
+    eventId: 0,
+    arcanaId: 0,
+    mode: "tournament",
+  },
+];
+
+export const passCheckpointEvents: IPassCheckpointEvent[] = [
+  {
+    eventId: 0,
+    arcanaId: 0,
+    mode: "tournament",
+    checkpoint: 0,
+  },
+];
+
+export const missCheckpointEvents: IMissCheckpointEvent[] = [
   {
     eventId: 0,
     arcanaId: 0,

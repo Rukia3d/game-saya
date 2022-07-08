@@ -14,7 +14,6 @@ export const EndlessLevels = () => {
   // Mode is an index of the event
   const [mode, setMode] = useState<number | null>(null);
   const arcana = context.arcana;
-  console.log("context.player.arcanas[arcana]", context.player.arcanas[arcana]);
   return (
     <div className="GameSelect">
       <CloseButton

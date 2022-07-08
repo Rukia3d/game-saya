@@ -11,6 +11,7 @@ export const TopMenu = () => {
   return (
     <div className="Top">
       <div>Energy: {context.player.energy}</div>
+      <div>Exp: {context.player.exprience}</div>
       {context.player.materials.map((m: IMaterialQuant, i: number) => (
         <div key={i}>
           {m.name}: {m.quantity}

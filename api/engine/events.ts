@@ -6,14 +6,16 @@ import {
   openNextLevel,
   removeMaterials,
 } from "./actions";
-import { findEnergyPrice } from "./helpers";
+import { findEnergyPrice, findLastCheckpoint } from "./helpers";
 
 import {
   currentState,
   gameMode,
   ICreatePlayerEventId,
   IMaterial,
+  IMissCheckpointEvent,
   IOpenSpellEvent,
+  IPassCheckpointEvent,
   IPlayer,
   ISpell,
   ISpellClosed,
@@ -37,7 +39,7 @@ export const createPlayer = (
     maxEnergy: 50,
     energy: 50,
     spells: spells.map((s: ISpell) => {
-      const price = spellPrices.find((p: ISpellPrice) => p.spellId == s.id);
+      const price = spellPrices.find((p: ISpellPrice) => p.spellId === s.id);
       if (!price) throw new Error("Can't find a price for a spell");
       return { ...s, price: price.price };
     }),
@@ -66,9 +68,9 @@ export const startLevel = (
   const state = {
     state: "PLAY" as currentState,
     level: {
-      arcanaId: event.arcanaId,
+      arcana: event.arcanaId,
       mode: "story" as gameMode,
-      levelId: event.levelId,
+      level: event.levelId,
     },
   };
   return {
@@ -82,12 +84,11 @@ export const startEndless = (
   event: IStartEndlessEvent,
   player: IPlayer
 ): IPlayer => {
-  // This assumes there are only 2 endless types
   let energyPrice = findEnergyPrice(event.arcanaId, event.mode);
   const state = {
     state: "PLAY" as currentState,
     level: {
-      arcanaId: event.arcanaId,
+      arcana: event.arcanaId,
       mode: event.mode as gameMode,
     },
   };
@@ -98,21 +99,58 @@ export const startEndless = (
   };
 };
 
+export const passCheckpoint = (
+  event: IPassCheckpointEvent,
+  player: IPlayer
+): IPlayer => {
+  const newArcanas = JSON.parse(JSON.stringify(player.arcanas));
+
+  const eventIndex = event.mode === "tournament" ? 0 : 1;
+  newArcanas[event.arcanaId].currentEvents[eventIndex].checkpoint =
+    event.checkpoint;
+
+  return {
+    ...player,
+    arcanas: newArcanas,
+  };
+};
+
+export const missCheckpoint = (
+  event: IMissCheckpointEvent,
+  player: IPlayer
+): IPlayer => {
+  const newMaterials = rewardPlayer(event, player.materials, player.arcanas);
+  const newExperience = addExperience(event, player);
+  const newState = {
+    state: "WINMATERIAL" as currentState,
+    materials: newMaterials.new,
+  };
+  return {
+    ...player,
+    materials: newMaterials.all,
+    exprience: newExperience,
+    currentState: newState,
+  };
+};
+
 export const winLevel = (
   event: IWinLevelEventTimed,
   player: IPlayer
 ): IPlayer => {
   const newMaterials = rewardPlayer(event, player.materials, player.arcanas);
   // need to add experience before we open the next level
-  const newExperience = addExperience(event, player.exprience, player.arcanas);
-
+  const newExperience = addExperience(event, player);
+  const newState = {
+    state: "WINMATERIAL" as currentState,
+    materials: newMaterials.new,
+  };
   return {
     ...player,
     materials: newMaterials.all,
     arcanas: openNextLevel(event, player.arcanas),
     exprience: newExperience,
     // TODO Check if this is correct
-    currentState: { state: "WINMATERIAL", materials: newMaterials.new },
+    currentState: newState,
   };
 };
 
@@ -120,7 +158,7 @@ export const openSpell = (event: IOpenSpellEvent, player: IPlayer): IPlayer => {
   const newPlayerSpells = JSON.parse(JSON.stringify(player.spells));
   const indexToChange = newPlayerSpells.findIndex(
     (s: ISpellOpen | ISpellClosed | ISpell) =>
-      s.arcanaId == event.arcanaId && s.id == event.spellId
+      s.arcanaId === event.arcanaId && s.id === event.spellId
   );
   if (!newPlayerSpells[indexToChange].price) {
     throw new Error("Spell to open doesn't have a price");
@@ -133,8 +171,8 @@ export const openSpell = (event: IOpenSpellEvent, player: IPlayer): IPlayer => {
   // Open spell should have an update
   let nextUpdate = spellUpdates.find(
     (u: ISpellUpdate) =>
-      u.spellId == newPlayerSpells[indexToChange].id &&
-      u.requiredStrength == newPlayerSpells[indexToChange].strength
+      u.spellId === newPlayerSpells[indexToChange].id &&
+      u.requiredStrength === newPlayerSpells[indexToChange].strength
   );
 
   if (nextUpdate) {
@@ -167,7 +205,7 @@ export const updateSpell = (
   const newPlayerSpells = JSON.parse(JSON.stringify(player.spells));
   const indexToChange = newPlayerSpells.findIndex(
     (s: ISpellOpen | ISpellClosed | ISpell) =>
-      s.arcanaId == event.arcanaId && s.id == event.spellId
+      s.arcanaId === event.arcanaId && s.id === event.spellId
   );
   if (!newPlayerSpells[indexToChange].updatePrice) {
     throw new Error("Spell to open doesn't have a price");
@@ -182,8 +220,8 @@ export const updateSpell = (
 
   let nextUpdate = spellUpdates.find(
     (u: ISpellUpdate) =>
-      u.spellId == newPlayerSpells[indexToChange].id &&
-      u.requiredStrength == newPlayerSpells[indexToChange].strength + 1
+      u.spellId === newPlayerSpells[indexToChange].id &&
+      u.requiredStrength === newPlayerSpells[indexToChange].strength + 1
   );
 
   if (nextUpdate) {

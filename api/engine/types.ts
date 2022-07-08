@@ -114,9 +114,9 @@ export interface IMission {
 export interface ICurrentState {
   state: currentState;
   level?: {
-    levelId?: number;
+    level?: number;
     mode: gameMode;
-    arcanaId: number;
+    arcana: number;
   };
   materials?: IMaterialQuant[];
 }
@@ -187,6 +187,19 @@ export type IStartEndlessEvent = {
   mode: gameMode;
 };
 
+export type IPassCheckpointEvent = {
+  eventId: number;
+  arcanaId: number;
+  mode: gameMode;
+  checkpoint: number;
+};
+
+export type IMissCheckpointEvent = {
+  eventId: number;
+  arcanaId: number;
+  mode: gameMode;
+};
+
 export type IWinLevelEventTimed = IWinLevelEvent & { time: Date };
 export type ICreatePlayerEventId = ICreatePlayerEvent & { playerId: number };
 
@@ -203,4 +216,5 @@ export type eventType =
   | "OPENSPELL"
   | "UPDATESPELL"
   | "STARTENDLESS"
-  | "PASSCHECKPOINT";
+  | "PASSCHECKPOINT"
+  | "MISSCHECKPOINT";

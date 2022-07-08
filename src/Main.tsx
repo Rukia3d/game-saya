@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import useSWR from "swr";
 import { fetcher } from "./utils/helpers";
 import "./Main.scss";
@@ -48,8 +48,9 @@ export const Main = ({ playerId }: { playerId: string }) => {
     game: null,
     changeArcanaScreen: () => {},
     setGame: () => {},
+    setWin: () => {},
   };
-
+  console.log("current player", context.player);
   return (
     <GameContext.Provider value={context}>
       <div className="Main">

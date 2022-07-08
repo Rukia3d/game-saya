@@ -1,10 +1,10 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { IEvent, IStory } from "../../api/engine/types";
 import { GameContext } from "../App";
 import { Game } from "../Game/Game";
 import { GameLevels } from "../Game/GameLevels";
 import { EndlessLevels } from "../Game/EndlessLevels";
-import { CloseButton } from "../UIElements/UIButtons";
+import { CloseButton, SmallPopup } from "../UIElements/UIButtons";
 
 import "./Arcanas.scss";
 
@@ -13,6 +13,7 @@ import { ArcanaEvent } from "../Arcanas/ArcanaEvent";
 import { ArcanaQuests } from "../Arcanas/ArcanaQuests";
 import { ArcanaSpells } from "../Arcanas/ArcanaSpells";
 import { ArcanaLegend } from "../Arcanas/ArcanaLegend";
+import { WonMaterials } from "../UIElements/WonMaterials";
 
 export const Arcana = () => {
   const context = useContext(GameContext);
@@ -64,6 +65,7 @@ const arcanaScreens: arcanaScreensType = {
 export const Arcanas = () => {
   const [selected, setSelected] = useState<arcanaScreenState>("arcana");
   const [game, setGame] = useState<IStory | IEvent | null>(null);
+  const [win, setWin] = useState(false);
   const context = useContext(GameContext);
   if (!context || !context.player) {
     throw new Error("No data in context");
@@ -71,11 +73,25 @@ export const Arcanas = () => {
   context.changeArcanaScreen = setSelected;
   context.game = game;
   context.setGame = setGame;
+  context.setWin = setWin;
 
+  const closeWin = () => {
+    context.setWin(false);
+    if (context.game?.mode === "story") {
+      context.changeArcanaScreen("gameLevels");
+    }
+    if (context.game?.mode === "tower" || context.game?.mode === "tournament") {
+      context.changeArcanaScreen("endlessLevels");
+    }
+  };
   const CurrentScreen = arcanaScreens[selected];
   return (
     <div className="arcana" data-testid="arcana-screen">
-      <CurrentScreen />
+      {win ? (
+        <SmallPopup onClick={closeWin} content={<WonMaterials />} />
+      ) : (
+        <CurrentScreen />
+      )}
     </div>
   );
 };

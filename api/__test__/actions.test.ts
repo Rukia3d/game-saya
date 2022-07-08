@@ -5,7 +5,22 @@ import {
   removeMaterials,
   rewardPlayer,
 } from "../engine/actions";
-import { IMaterial, IMaterialQuant } from "../engine/types";
+import { IMaterial, IMaterialQuant, IPlayer } from "../engine/types";
+
+const basePlayer: IPlayer = {
+  id: 1,
+  name: "",
+  exprience: 0,
+  energy: 0,
+  maxEnergy: 0,
+  loungeId: null,
+  materials: [],
+  arcanas: [],
+  spells: [],
+  missions: [],
+  messages: [],
+  currentState: { state: "MAIN" },
+};
 
 test("rewardPlayer generates correct rewards", async () => {
   const playerMaterials = JSON.parse(JSON.stringify(materials)).map(
@@ -27,7 +42,7 @@ test("rewardPlayer generates correct rewards", async () => {
   );
   expect(res.all[0].name).toEqual("Coin");
   expect(res.all[0].quantity).toEqual(9);
-  expect(res.all[3].name).toEqual("Air essence");
+  expect(res.all[3].name).toEqual("Rings");
   expect(res.all[3].quantity).toEqual(3);
   // Rewards are added 2nd time to the same materials (level replayed)
   playerCharacters[0].stories[0].state = "complete";
@@ -88,8 +103,7 @@ test("addExperience correctly adds experience", async () => {
       levelId: 0,
       time: new Date(1654347302),
     },
-    10,
-    playerCharacters
+    { ...basePlayer, arcanas: playerCharacters, exprience: 10 }
   );
   expect(res).toEqual(20);
   // For the level that was already completed exp is not granted
@@ -102,8 +116,7 @@ test("addExperience correctly adds experience", async () => {
       levelId: 1,
       time: new Date(1654347302),
     },
-    10,
-    playerCharacters
+    { ...basePlayer, arcanas: playerCharacters, exprience: 10 }
   );
   expect(res2).toEqual(10);
 });

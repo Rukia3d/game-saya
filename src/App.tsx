@@ -17,6 +17,7 @@ export interface GameContextType {
   setArcana: (e: number | null) => void;
   game: IEvent | IStory | null;
   setGame: (e: IEvent | IStory | null) => void;
+  setWin: (w: boolean) => void;
 }
 
 export const GameContext = React.createContext<undefined | GameContextType>(

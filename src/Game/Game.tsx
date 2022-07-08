@@ -31,9 +31,9 @@ export const GameEndful = () => {
         mode: context.game.mode,
         level: context.game.id,
       });
-      context.setGame(null);
       context.changeArcanaScreen("gameLevels");
-      context.mutate();
+      await context.mutate();
+      context.setWin(true);
     } else throw new Error("Trying to win a story with no game in context");
   };
 
@@ -56,23 +56,37 @@ export const GameEndless = () => {
     throw new Error("No data in context");
   }
   const passCheckpoint = async (n: number) => {
-    console.log("passCheckpoint");
+    if (context.game) {
+      console.log("passCheckpoint", context.player.id, context.game.id);
+      await axios.post(`/api/players/${context.player.id}/passCheckpoint`, {
+        arcana: context.arcana,
+        mode: context.game.mode,
+        checkpoint: n,
+      });
+      context.mutate();
+    } else throw new Error("Trying to pass checkpoint with no game in context");
   };
 
-  const looseCheckpoint = async (n: number) => {
-    console.log("looseCheckpoint");
-    context.changeArcanaScreen("endlessLevels");
-    context.setGame(null);
+  const missCheckpoint = async () => {
+    if (context.game) {
+      console.log("missCheckpoint", context.player.id, context.game.id);
+      await axios.post(`/api/players/${context.player.id}/missCheckpoint`, {
+        arcana: context.arcana,
+        mode: context.game.mode,
+      });
+      context.changeArcanaScreen("endlessLevels");
+      await context.mutate();
+      console.log("context.player.currentState", context.player.currentState);
+      context.setWin(true);
+    } else throw new Error("Trying to miss checkpoint with no game in context");
   };
   return (
     <div>
       <br />
+      <button onClick={missCheckpoint}>Fail</button>
       <button onClick={() => passCheckpoint(0)}>Pass checkpoint 0</button>
-      <button onClick={() => looseCheckpoint(0)}>Fail after 0</button>
       <button onClick={() => passCheckpoint(1)}>Pass checkpoint 1</button>
-      <button onClick={() => looseCheckpoint(1)}>Fail after 1</button>
       <button onClick={() => passCheckpoint(2)}>Pass checkpoint 2</button>
-      <button onClick={() => looseCheckpoint(3)}>Fail after 2</button>
     </div>
   );
 };
@@ -88,9 +102,21 @@ export const Game = () => {
     throw new Error("No data in context");
   }
 
+  // const closeGame = () => {
+  //   if (context.game && context.game.mode === "story") {
+  //     context.changeArcanaScreen("gameLevels");
+  //   }
+  //   if (
+  //     context.game &&
+  //     (context.game.mode === "tournament" || context.game.mode === "tower")
+  //   ) {
+  //     context.changeArcanaScreen("endlessLevels");
+  //   }
+  //   context.setGame(null);
+  // };
+
   return (
     <div className="Game">
-      <CloseButton onClick={() => context.setGame(null)} />
       {context.game.mode === "story" ? <GameEndful /> : <GameEndless />}
     </div>
   );

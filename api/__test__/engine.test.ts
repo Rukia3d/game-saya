@@ -27,9 +27,9 @@ test("Applies a single event correctly", () => {
   };
   const res = applyEvent(newPlayer, startLevelEvent);
   expect(res.currentState.state).toEqual("PLAY");
-  expect(res.currentState.level?.arcanaId).toEqual(0);
+  expect(res.currentState.level?.arcana).toEqual(0);
   expect(res.currentState.level?.mode).toEqual("story");
-  expect(res.currentState.level?.levelId).toEqual(0);
+  expect(res.currentState.level?.level).toEqual(0);
 });
 
 test("Applies a series of events correctly", () => {

@@ -28,8 +28,13 @@ export const processEvent = (
       return applyEvent(newPlayer, updateSpellEvent);
     case "STARTENDLESS":
       const startEndlessEvent = writers.startEndlessEvent(newPlayer, event);
-      console.log("startEndlessEvent", startEndlessEvent);
       return applyEvent(newPlayer, startEndlessEvent);
+    case "PASSCHECKPOINT":
+      const passCheckpointEvent = writers.passCheckpointEvent(newPlayer, event);
+      return applyEvent(newPlayer, passCheckpointEvent);
+    case "MISSCHECKPOINT":
+      const missCheckpointEvent = writers.missCheckpointEvent(newPlayer, event);
+      return applyEvent(newPlayer, missCheckpointEvent);
     default:
       throw new Error("Unknown event type");
   }
@@ -37,7 +42,7 @@ export const processEvent = (
 
 export const applyEvent = (player: IPlayer, event: IPlayerEvent): IPlayer => {
   let newPlayer = JSON.parse(JSON.stringify(player));
-  console.log("Apply Event", event);
+  console.log("Apply Event", event.type);
   switch (event.type) {
     case "CREATEPLAYER":
       return events.createPlayer(
@@ -67,6 +72,16 @@ export const applyEvent = (player: IPlayer, event: IPlayerEvent): IPlayer => {
     case "STARTENDLESS":
       return events.startEndless(
         readers.startEndlessEvent(event.eventId),
+        newPlayer
+      );
+    case "PASSCHECKPOINT":
+      return events.passCheckpoint(
+        readers.passCheckpointEvent(event.eventId),
+        newPlayer
+      );
+    case "MISSCHECKPOINT":
+      return events.missCheckpoint(
+        readers.missCheckpointEvent(event.eventId),
         newPlayer
       );
   }

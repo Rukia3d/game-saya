@@ -19,7 +19,7 @@ const basePlayer: IPlayer = {
 };
 
 test("eventCreatePlayer for player 1", async () => {
-  const res = events.createPlayer(
+  const res: IPlayer = events.createPlayer(
     { eventId: 0, playerName: "player 1 name", playerId: 1 },
     basePlayer
   );
@@ -36,39 +36,39 @@ test("eventCreatePlayer for player 1", async () => {
 });
 
 test("eventStartLevel for player 1 within tutorial", async () => {
-  const player = events.createPlayer(
+  const player: IPlayer = events.createPlayer(
     { eventId: 0, playerName: "player 1 name", playerId: 1 },
     basePlayer
   );
-  const res = events.startLevel(
+  const res: IPlayer = events.startLevel(
     { eventId: 0, mode: "story", arcanaId: 0, levelId: 0 },
     { ...player, energy: 100 }
   );
   expect(res.energy).toEqual(100);
   expect(res.currentState.state).toEqual("PLAY");
-  expect(res.currentState.level?.arcanaId).toEqual(0);
-  expect(res.currentState.level?.levelId).toEqual(0);
+  expect(res.currentState.level?.arcana).toEqual(0);
+  expect(res.currentState.level?.level).toEqual(0);
   expect(res.currentState.level?.mode).toEqual("story");
 });
 
 test("eventStartLevel for player 1 outside tutorial", async () => {
-  const player = events.createPlayer(
+  const player: IPlayer = events.createPlayer(
     { eventId: 0, playerName: "player 1 name", playerId: 1 },
     basePlayer
   );
-  const res = events.startLevel(
+  const res: IPlayer = events.startLevel(
     { eventId: 0, mode: "story", arcanaId: 0, levelId: 2 },
     { ...player, energy: 100 }
   );
   expect(res.energy).toEqual(95);
   expect(res.currentState.state).toEqual("PLAY");
-  expect(res.currentState.level?.arcanaId).toEqual(0);
-  expect(res.currentState.level?.levelId).toEqual(2);
+  expect(res.currentState.level?.arcana).toEqual(0);
+  expect(res.currentState.level?.level).toEqual(2);
   expect(res.currentState.level?.mode).toEqual("story");
 });
 
 test("eventWinLevel for player 1", async () => {
-  const res = events.winLevel(
+  const res: IPlayer = events.winLevel(
     {
       eventId: 1,
       mode: "story",
@@ -80,7 +80,7 @@ test("eventWinLevel for player 1", async () => {
       ...basePlayer,
       currentState: {
         state: "PLAY",
-        level: { mode: "story", arcanaId: 0, levelId: 0 },
+        level: { mode: "story", arcana: 0, level: 0 },
       },
       arcanas: JSON.parse(JSON.stringify(arcanas)),
       materials: JSON.parse(JSON.stringify(materials)).map((m: IMaterial) => {
@@ -117,7 +117,7 @@ test("openSpell for player 1", async () => {
   const playerMaterials = materials.map((m: IMaterial) => {
     return { ...m, quantity: 10 };
   });
-  const res = events.openSpell(
+  const res: IPlayer = events.openSpell(
     { eventId: 0, arcanaId: 0, spellId: 0 },
     {
       ...basePlayer,

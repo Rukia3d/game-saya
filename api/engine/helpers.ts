@@ -7,6 +7,8 @@ import {
   IPlayer,
   IStory,
   IWinLevelEventTimed,
+  IMissCheckpointEvent,
+  IEvent,
 } from "./types";
 
 export const findEnergyPrice = (
@@ -14,7 +16,7 @@ export const findEnergyPrice = (
   mode: string,
   level?: number
 ) => {
-  if (mode === "story" && level) {
+  if (mode === "story" && level !== undefined) {
     return arcanas[arcana].stories[level].energy;
   }
   if (mode === "tournament") {
@@ -39,6 +41,24 @@ export const findLevelIndex = (
   return [charIndex, levelIndex];
 };
 
+export const findLevelForStory = (
+  event: IWinLevelEventTimed,
+  arcanas: IArcana[]
+): IStory => {
+  const [charIndex, levelIndex] = findLevelIndex(event, arcanas);
+  const level = arcanas[charIndex].stories[levelIndex];
+  return level;
+};
+
+export const findLevelForEndless = (
+  event: IMissCheckpointEvent,
+  arcanas: IArcana[]
+): IEvent => {
+  const eventIndex = event.mode === "tournament" ? 0 : 1;
+  const level = arcanas[event.arcanaId].currentEvents[eventIndex];
+  return level;
+};
+
 const correctStateForWin = (
   event: {
     arcana: number;
@@ -48,24 +68,51 @@ const correctStateForWin = (
   currentState: ICurrentState
 ) => {
   return (
-    event.level === currentState.level?.levelId &&
-    event.arcana === currentState.level?.arcanaId &&
+    event.level === currentState.level?.level &&
+    event.arcana === currentState.level?.arcana &&
     event.mode === currentState.level?.mode
   );
 };
 export const foundStartLevelToWin = (
+  currentState: ICurrentState,
   event: {
     arcana: number;
     mode: gameMode;
     level: number;
-  },
-  currentState: ICurrentState
+  }
 ) => {
   if ("level" in currentState) {
     return correctStateForWin(event, currentState);
   } else {
     throw new Error("Incorrect state: can't finish level you haven't started");
   }
+};
+
+export const findLastCheckpoint = (
+  player: IPlayer,
+  mode: gameMode,
+  arcana: number
+) => {
+  if (mode !== "tournament" && mode !== "tower") {
+    throw new Error("Unknown game mode");
+  }
+  const eventIndex = mode === "tournament" ? 0 : 1;
+  const lastCheckpoint =
+    player.arcanas[arcana].currentEvents[eventIndex].checkpoint;
+  return lastCheckpoint;
+};
+
+export const correctCheckpoint = (
+  player: IPlayer,
+  data: {
+    arcana: number;
+    mode: gameMode;
+    checkpoint: number;
+  }
+) => {
+  return (
+    data.checkpoint === findLastCheckpoint(player, data.mode, data.arcana) + 1
+  );
 };
 
 export const enoughEnergyToPlay = (

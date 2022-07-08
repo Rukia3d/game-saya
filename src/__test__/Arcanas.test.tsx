@@ -115,6 +115,7 @@ const context: GameContextType = {
   arcana: 0,
   setArcana: jest.fn(),
   setGame: jest.fn(),
+  setWin: jest.fn(),
   game: null,
   changeMainScreen: jest.fn(),
   changeArcanaScreen: jest.fn(),

@@ -36,13 +36,14 @@ test("Writes createPlayerEvent correctly", () => {
 test("Writes startLevelEvent correctly", () => {
   const newPlayer = {
     ...basePlayer,
+    energy: 100,
     arcanas: JSON.parse(JSON.stringify(arcanas)),
   };
   const res = writers.startLevelEvent(newPlayer, {
     playerId: 3,
     created: new Date(),
     type: "STARTLEVEL",
-    data: { arcanaId: 0, levelId: 0, mode: "story" },
+    data: { arcana: 0, level: 0, mode: "story" },
   });
   expect(res.playerId).toEqual(3);
   expect(res.eventId).toEqual(1);
@@ -60,14 +61,14 @@ test("Writes winLevelEvent correctly", () => {
     arcanas: JSON.parse(JSON.stringify(arcanas)),
     currentState: {
       state: "PLAY" as currentState,
-      level: { arcanaId: 0, levelId: 0, mode: "story" as gameMode },
+      level: { arcana: 0, level: 0, mode: "story" as gameMode },
     },
   };
   const res = writers.winLevelEvent(newPlayer, {
     playerId: 3,
     created: new Date(),
     type: "WINLEVEL",
-    data: { arcanaId: 0, levelId: 0, mode: "story" },
+    data: { arcana: 0, level: 0, mode: "story" },
   });
   expect(res.playerId).toEqual(3);
   expect(res.eventId).toEqual(1);
@@ -79,7 +80,7 @@ test("Writes winLevelEvent correctly", () => {
   expect(res2.mode).toEqual("story");
 });
 
-test("Writest openSpellEvent correctly", () => {
+test("Writes openSpellEvent correctly", () => {
   const newPlayer = {
     ...basePlayer,
     arcanas: JSON.parse(JSON.stringify(arcanas)),
@@ -101,7 +102,7 @@ test("Writest openSpellEvent correctly", () => {
     playerId: 3,
     created: new Date(),
     type: "OPENSPELL",
-    data: { arcanaId: 0, spellId: 0 },
+    data: { arcana: 0, spell: 0 },
   });
   expect(res.playerId).toEqual(3);
   expect(res.eventId).toEqual(1);
@@ -139,7 +140,7 @@ test("Writest updateSpellEvent correctly", () => {
     playerId: 3,
     created: new Date(),
     type: "UPDATESPELL",
-    data: { arcanaId: 0, spellId: 0 },
+    data: { arcana: 0, spell: 0 },
   });
   expect(res.playerId).toEqual(3);
   expect(res.eventId).toEqual(1);
@@ -148,4 +149,69 @@ test("Writest updateSpellEvent correctly", () => {
   expect(res2.eventId).toEqual(1);
   expect(res2.arcanaId).toEqual(0);
   expect(res2.spellId).toEqual(0);
+});
+
+test("Writes startEndlessEvent correctly", () => {
+  const newPlayer = {
+    ...basePlayer,
+    energy: 100,
+    arcanas: JSON.parse(JSON.stringify(arcanas)),
+  };
+  const res = writers.startEndlessEvent(newPlayer, {
+    playerId: 3,
+    created: new Date(),
+    type: "STARTENDLESS",
+    data: { arcana: 0, mode: "tournament" },
+  });
+  expect(res.playerId).toEqual(3);
+  expect(res.eventId).toEqual(2);
+  expect(res.type).toEqual("STARTENDLESS");
+  const res2 = readers.startEndlessEvent(res.eventId);
+  expect(res2.eventId).toEqual(2);
+  expect(res2.arcanaId).toEqual(0);
+  expect(res2.mode).toEqual("tournament");
+});
+
+test("Writes passCheckpoint event correctly", () => {
+  const newPlayer = {
+    ...basePlayer,
+    energy: 100,
+    arcanas: JSON.parse(JSON.stringify(arcanas)),
+  };
+  const res = writers.passCheckpointEvent(newPlayer, {
+    playerId: 3,
+    created: new Date(),
+    type: "PASSCHECKPOINT",
+    data: { arcana: 0, mode: "tournament", checkpoint: 0 },
+  });
+  expect(res.playerId).toEqual(3);
+  expect(res.eventId).toEqual(1);
+  expect(res.type).toEqual("PASSCHECKPOINT");
+  const res2 = readers.passCheckpointEvent(res.eventId);
+  expect(res2.eventId).toEqual(1);
+  expect(res2.arcanaId).toEqual(0);
+  expect(res2.checkpoint).toEqual(0);
+  expect(res2.mode).toEqual("tournament");
+});
+
+test("Writes missCheckpointEvent event correctly", () => {
+  const newPlayer = {
+    ...basePlayer,
+    energy: 100,
+    arcanas: JSON.parse(JSON.stringify(arcanas)),
+  };
+  const res = writers.missCheckpointEvent(newPlayer, {
+    playerId: 3,
+    created: new Date(),
+    type: "MISSCHECKPOINT",
+    data: { arcana: 0, mode: "tournament" },
+  });
+  expect(res.playerId).toEqual(3);
+  expect(res.eventId).toEqual(1);
+  expect(res.type).toEqual("MISSCHECKPOINT");
+  const res2 = readers.passCheckpointEvent(res.eventId);
+  expect(res2.eventId).toEqual(1);
+  expect(res2.arcanaId).toEqual(0);
+  expect(res2.checkpoint).toEqual(0);
+  expect(res2.mode).toEqual("tournament");
 });

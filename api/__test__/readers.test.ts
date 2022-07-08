@@ -35,3 +35,25 @@ test("Reads update spell player events correctly", () => {
   expect(() => readers.updateSpellEvent(3)).toThrow("No update spell event");
   jest.restoreAllMocks();
 });
+
+test("Reads start endless events correctly", () => {
+  jest.spyOn(console, "error").mockImplementation(() => jest.fn());
+  expect(() => readers.startEndlessEvent(3)).toThrow("No start endless event");
+  jest.restoreAllMocks();
+});
+
+test("Reads pass checkpoint events correctly", () => {
+  jest.spyOn(console, "error").mockImplementation(() => jest.fn());
+  expect(() => readers.passCheckpointEvent(3)).toThrow(
+    "No pass checkpoint event"
+  );
+  jest.restoreAllMocks();
+});
+
+test("Reads miss checkpoint events correctly", () => {
+  jest.spyOn(console, "error").mockImplementation(() => jest.fn());
+  expect(() => readers.missCheckpointEvent(3)).toThrow(
+    "No miss checkpoint event"
+  );
+  jest.restoreAllMocks();
+});

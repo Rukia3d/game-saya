@@ -1,7 +1,9 @@
 import { ensure } from "../engine/helpers";
 import {
   ICreatePlayerEvent,
+  IMissCheckpointEvent,
   IOpenSpellEvent,
+  IPassCheckpointEvent,
   IPlayerEvent,
   IStartEndlessEvent,
   IStartLevelEvent,
@@ -15,6 +17,8 @@ import {
   updateSpellEvents,
   winLevelEvents,
   startEldessEvents,
+  passCheckpointEvents,
+  missCheckpointEvents,
 } from "./testDBPlayer";
 
 export const allPlayerEvents = () => {
@@ -43,6 +47,14 @@ export const allOpenSpellEvents = () => {
 
 export const allUpdateSpellEvents = () => {
   return updateSpellEvents;
+};
+
+export const allPassCheckpointEvents = () => {
+  return passCheckpointEvents;
+};
+
+export const allMissCheckpointEvents = () => {
+  return missCheckpointEvents;
 };
 
 export const playerEvents = (playerId: number) => {
@@ -99,6 +111,26 @@ export const startEndlessEvent = (eventId: number) => {
     "No start endless event"
   );
   return startEndless;
+};
+
+export const passCheckpointEvent = (eventId: number) => {
+  const passCheckpoint = ensure(
+    allPassCheckpointEvents().find(
+      (e: IPassCheckpointEvent) => e.eventId == eventId
+    ),
+    "No pass checkpoint event"
+  );
+  return passCheckpoint;
+};
+
+export const missCheckpointEvent = (eventId: number) => {
+  const missCheckpoint = ensure(
+    allMissCheckpointEvents().find(
+      (e: IMissCheckpointEvent) => e.eventId == eventId
+    ),
+    "No miss checkpoint event"
+  );
+  return missCheckpoint;
 };
 
 export const updateSpellEvent = (eventId: number) => {

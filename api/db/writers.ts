@@ -1,6 +1,7 @@
 import {
   canBuySpell,
   canUpdateSpell,
+  correctCheckpoint,
   enoughEnergyToPlay,
   foundStartLevelToWin,
 } from "../engine/helpers";
@@ -22,6 +23,8 @@ import {
   winLevelEvents,
   updateSpellEvents,
   startEldessEvents,
+  passCheckpointEvents,
+  missCheckpointEvents,
 } from "./testDBPlayer";
 
 const getNextPlayerId = () => {
@@ -48,6 +51,20 @@ const getNextStartLevelEventId = () => {
 const getNextStartEndlessEventId = () => {
   const latestEvents = readers
     .allStartLevelEvents()
+    .sort((a, b) => a.eventId - b.eventId);
+  return latestEvents[latestEvents.length - 1].eventId + 1;
+};
+
+const getNextPassCheckpointEventId = () => {
+  const latestEvents = readers
+    .allPassCheckpointEvents()
+    .sort((a, b) => a.eventId - b.eventId);
+  return latestEvents[latestEvents.length - 1].eventId + 1;
+};
+
+const getNextMissCheckpointEventId = () => {
+  const latestEvents = readers
+    .allMissCheckpointEvents()
     .sort((a, b) => a.eventId - b.eventId);
   return latestEvents[latestEvents.length - 1].eventId + 1;
 };
@@ -144,7 +161,7 @@ export const winLevelEvent = (
   }
 ) => {
   const nextCreateEventId = getNextWinLevelEventId();
-  if (foundStartLevelToWin(event.data, player.currentState)) {
+  if (foundStartLevelToWin(player.currentState, event.data)) {
     const newEvent = {
       playerId: event.playerId,
       eventId: nextCreateEventId,
@@ -196,7 +213,67 @@ export const startEndlessEvent = (
   }
 };
 
-export const writePassCheckpointEvent = () => {};
+export const passCheckpointEvent = (
+  player: IPlayer,
+  event: {
+    playerId: number;
+    created: Date;
+    type: eventType;
+    data: {
+      arcana: number;
+      mode: gameMode;
+      checkpoint: number;
+    };
+  }
+) => {
+  const nextCreateEventId = getNextPassCheckpointEventId();
+  if (correctCheckpoint(player, event.data)) {
+    const newEvent = {
+      playerId: event.playerId,
+      eventId: nextCreateEventId,
+      type: "PASSCHECKPOINT" as eventType,
+      created: new Date(),
+    };
+    allEvents.push(newEvent);
+    passCheckpointEvents.push({
+      eventId: nextCreateEventId,
+      arcanaId: event.data.arcana,
+      mode: event.data.mode,
+      checkpoint: event.data.checkpoint,
+    });
+    return newEvent;
+  } else {
+    throw new Error("Can't generate passCheckpointEvent");
+  }
+};
+
+export const missCheckpointEvent = (
+  player: IPlayer,
+  event: {
+    playerId: number;
+    created: Date;
+    type: eventType;
+    data: {
+      arcana: number;
+      mode: gameMode;
+    };
+  }
+) => {
+  const nextCreateEventId = getNextMissCheckpointEventId();
+  const newEvent = {
+    playerId: event.playerId,
+    eventId: nextCreateEventId,
+    type: "MISSCHECKPOINT" as eventType,
+    created: new Date(),
+  };
+  allEvents.push(newEvent);
+  missCheckpointEvents.push({
+    eventId: nextCreateEventId,
+    arcanaId: event.data.arcana,
+    mode: event.data.mode,
+  });
+  return newEvent;
+};
 
 export const openSpellEvent = (
   player: IPlayer,
@@ -283,6 +360,6 @@ export const updateSpellEvent = (
     });
     return newEvent;
   } else {
-    throw new Error("Can't generate openSpellEvent");
+    throw new Error("Can't generate updateSpellEvent");
   }
 };

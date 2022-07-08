@@ -195,26 +195,44 @@ app.post("/api/players/:id/startEndless", async (req: any, res: any) => {
 app.post("/api/players/:id/passCheckpoint", async (req: any, res: any) => {
   console.log("PASSCHECKPOINT", req.body);
   const playerId = parseInt(req.params.id);
-  // writePassCheckpointEvent(
-  //   req.params.id,
-  //   req.body.arcana,
-  //   req.body.mode,
-  //   req.body.level
-  // );
-  // res.send(playerEventsApplication(playerId));
+  const player = playerEventsApplication(playerId);
+  const event = {
+    playerId: playerId,
+    created: new Date(),
+    type: "PASSCHECKPOINT" as eventType,
+    data: {
+      arcana: req.body.arcana,
+      mode: req.body.mode,
+      checkpoint: req.body.checkpoint,
+    },
+  };
+  try {
+    const updatePlayer = engine.processEvent(player, event);
+    res.send(updatePlayer);
+  } catch (error) {
+    res.send(error);
+  }
 });
 
 app.post("/api/players/:id/missCheckpoint", async (req: any, res: any) => {
   console.log("MISS CHECKPOINT", req.body);
   const playerId = parseInt(req.params.id);
-  // Just change state???
-  // writeWinLevelEvent(
-  //   req.params.id,
-  //   req.body.arcana,
-  //   req.body.mode,
-  //   req.body.level
-  // );
-  // res.send(playerEventsApplication(playerId));
+  const player = playerEventsApplication(playerId);
+  const event = {
+    playerId: playerId,
+    created: new Date(),
+    type: "MISSCHECKPOINT" as eventType,
+    data: {
+      arcana: req.body.arcana,
+      mode: req.body.mode,
+    },
+  };
+  try {
+    const updatePlayer = engine.processEvent(player, event);
+    res.send(updatePlayer);
+  } catch (error) {
+    res.send(error);
+  }
 });
 
 app.listen(port, () => {
