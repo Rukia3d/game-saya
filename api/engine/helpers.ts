@@ -1,3 +1,4 @@
+import seedrandom from "seedrandom";
 import { arcanas } from "../db/testDBPlayer";
 import {
   gameMode,
@@ -9,7 +10,30 @@ import {
   IWinLevelEventTimed,
   IMissCheckpointEvent,
   IEvent,
+  IAllowedRewards,
 } from "./types";
+
+export const getRandomRewardNum = (
+  event: IWinLevelEventTimed | IMissCheckpointEvent,
+  level: IStory | IEvent,
+  r: IAllowedRewards
+) => {
+  const addition = "levelId" in event ? event.levelId : 0;
+  const rng = seedrandom(
+    event.eventId + event.arcanaId + event.mode + addition
+  );
+  // rand shouldn't be 0 unless specified that's the case
+  let rand = Math.round(rng() * r.upTo) + 1;
+  // Story levels for the first time give double rewards
+  if ("state" in level && level.state === "open") {
+    rand = rand * 2;
+  }
+  // Tournaments and Tower won't reward for fail before reaching any checkpoint
+  if ("checkpoint" in level && level.checkpoint === null) {
+    rand = 0;
+  }
+  return rand;
+};
 
 export const findEnergyPrice = (
   arcana: number,
