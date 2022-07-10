@@ -1,6 +1,7 @@
 # dependencies
 /node_modules
 /api/node_modules
+/api/.env
 
 # coverage
 /coverage
