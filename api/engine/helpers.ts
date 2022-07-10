@@ -99,6 +99,9 @@ export const findLastCheckpoint = (
   const eventIndex = mode === "tournament" ? 0 : 1;
   const lastCheckpoint =
     player.arcanas[arcana].currentEvents[eventIndex].checkpoint;
+  if (lastCheckpoint === null) {
+    return -1;
+  }
   return lastCheckpoint;
 };
 
@@ -110,9 +113,8 @@ export const correctCheckpoint = (
     checkpoint: number;
   }
 ) => {
-  return (
-    data.checkpoint === findLastCheckpoint(player, data.mode, data.arcana) + 1
-  );
+  const last = findLastCheckpoint(player, data.mode, data.arcana) || 0;
+  return data.checkpoint === last + 1;
 };
 
 export const enoughEnergyToPlay = (

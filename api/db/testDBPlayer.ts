@@ -108,7 +108,7 @@ export const arcanas: IArcana[] = [
         level: "",
         mode: "tournament",
         energy: 10,
-        checkpoint: -1,
+        checkpoint: null,
         allowedRewards: ensure(
           eventTowerRewards.find(
             (s: IEventReward) => s.id === 0 && s.arcanaId === 0
@@ -120,7 +120,7 @@ export const arcanas: IArcana[] = [
         level: "",
         mode: "tower",
         energy: 10,
-        checkpoint: -1,
+        checkpoint: null,
         allowedRewards: [
           { id: 0, upTo: 5 },
           { id: 3, upTo: 1 },
@@ -170,7 +170,7 @@ export const arcanas: IArcana[] = [
         level: "",
         mode: "tournament",
         energy: 10,
-        checkpoint: -1,
+        checkpoint: null,
         allowedRewards: [
           { id: 0, upTo: 5 },
           { id: 3, upTo: 1 },
@@ -181,7 +181,7 @@ export const arcanas: IArcana[] = [
         level: "",
         mode: "tower",
         energy: 10,
-        checkpoint: -1,
+        checkpoint: null,
         allowedRewards: [
           { id: 0, upTo: 5 },
           { id: 3, upTo: 1 },

@@ -1,3 +1,4 @@
+import { eventTowerRewards } from "../db/testDBLevels";
 import { arcanas, materials } from "../db/testDBPlayer";
 import { spellPrices, spells, spellUpdates } from "../db/testDBSpells";
 import {
@@ -6,12 +7,13 @@ import {
   openNextLevel,
   removeMaterials,
 } from "./actions";
-import { findEnergyPrice, findLastCheckpoint } from "./helpers";
+import { ensure, findEnergyPrice, findLastCheckpoint } from "./helpers";
 
 import {
   currentState,
   gameMode,
   ICreatePlayerEventId,
+  IEventReward,
   IMaterial,
   IMissCheckpointEvent,
   IOpenSpellEvent,
@@ -104,14 +106,25 @@ export const passCheckpoint = (
   player: IPlayer
 ): IPlayer => {
   const newArcanas = JSON.parse(JSON.stringify(player.arcanas));
-
   const eventIndex = event.mode === "tournament" ? 0 : 1;
-  newArcanas[event.arcanaId].currentEvents[eventIndex].checkpoint =
-    event.checkpoint;
+  const newAllowedRewards = ensure(
+    eventTowerRewards.find(
+      (s: IEventReward) =>
+        s.id === event.checkpoint && s.arcanaId === event.arcanaId
+    )
+  ).reward;
+  // -1 allows us to cover a spread between level start and 0 trigger
+  const last = findLastCheckpoint(player, event.mode, event.arcanaId);
+  newArcanas[event.arcanaId].currentEvents[eventIndex].checkpoint = last + 1;
+  newArcanas[event.arcanaId].currentEvents[eventIndex].allowedRewards =
+    newAllowedRewards;
+
+  const newExperience = addExperience(event, player);
 
   return {
     ...player,
     arcanas: newArcanas,
+    exprience: newExperience,
   };
 };
 
@@ -120,15 +133,13 @@ export const missCheckpoint = (
   player: IPlayer
 ): IPlayer => {
   const newMaterials = rewardPlayer(event, player.materials, player.arcanas);
-  const newExperience = addExperience(event, player);
-  const newState = {
+  let newState = {
     state: "WINMATERIAL" as currentState,
     materials: newMaterials.new,
   };
   return {
     ...player,
     materials: newMaterials.all,
-    exprience: newExperience,
     currentState: newState,
   };
 };

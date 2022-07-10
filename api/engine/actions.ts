@@ -29,13 +29,14 @@ export const rewardPlayer = (
     const rng = seedrandom(
       event.eventId + event.arcanaId + event.mode + addition
     );
-    let rand = Math.round(rng() * r.upTo);
+    // rand shouldn't be 0 unless specified that's the case
+    let rand = Math.round(rng() * r.upTo) + 1;
     // Story levels for the first time give double rewards
     if ("state" in level && level.state === "open") {
       rand = rand * 2;
     }
     // Tournaments and Tower won't reward for fail before reaching any checkpoint
-    if ("checkpoint" in level && level.checkpoint < 0) {
+    if ("checkpoint" in level && level.checkpoint === null) {
       rand = 0;
     }
     materials[r.id].quantity = materials[r.id].quantity + rand;
@@ -68,14 +69,9 @@ export const addExperience = (
     return player.exprience + level.experience;
   }
   if (event.mode === "tournament" || event.mode === "tower") {
-    // Checkpoint 0 is a valid checkpoint so we add 1 to multiplier
-    const multiplier =
-      findLastCheckpoint(player, event.mode, event.arcanaId) + 1;
-    if (multiplier > 0) {
-      return multiplier * 10;
-    } else {
-      return 0;
-    }
+    // if it is the first time the last checkpoint will return -1
+    const last = findLastCheckpoint(player, event.mode, event.arcanaId);
+    return player.exprience + (last <= 0 ? 1 : last) * 10;
   }
   return player.exprience;
 };

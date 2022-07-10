@@ -53,7 +53,7 @@ export interface IEvent {
   id: number;
   mode: gameMode;
   energy: number;
-  checkpoint: number;
+  checkpoint: number | null;
   level: string; //Unknown for now
   allowedRewards: IAllowedRewards[];
 }

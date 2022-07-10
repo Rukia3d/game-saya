@@ -8,7 +8,7 @@ export const processEvent = (
   event: IGenericEvent
 ): IPlayer => {
   let newPlayer = JSON.parse(JSON.stringify(player));
-  console.log("Process Event", event.type);
+  //console.log("Process Event", event.type);
   switch (event.type) {
     case "CREATEPLAYER":
       const createPlayerEvent = writers.createPlayerEvent(event);
@@ -42,7 +42,7 @@ export const processEvent = (
 
 export const applyEvent = (player: IPlayer, event: IPlayerEvent): IPlayer => {
   let newPlayer = JSON.parse(JSON.stringify(player));
-  console.log("Apply Event", event.type);
+  //console.log("Apply Event", event.type);
   switch (event.type) {
     case "CREATEPLAYER":
       return events.createPlayer(

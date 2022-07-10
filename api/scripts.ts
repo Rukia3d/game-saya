@@ -13,7 +13,6 @@ app.use(bodyParser.json());
 export const playerEventsApplication = (playerId: number) => {
   const events = readers.playerEvents(playerId);
   const player = engine.applyEvents(events);
-  console.log("playerEventsApplication events", events);
   return player;
 };
 
