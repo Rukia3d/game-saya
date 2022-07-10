@@ -4,6 +4,7 @@ import {
   findLevelForEndless,
   findLevelForStory,
   findLevelIndex,
+  generateRandom,
 } from "./helpers";
 import {
   IMaterialQuant,
@@ -25,20 +26,7 @@ export const rewardPlayer = (
       : findLevelForEndless(event, arcanas);
   const newOnly: IMaterialQuant[] = [];
   level.allowedRewards.forEach((r: IAllowedRewards) => {
-    const addition = "levelId" in event ? event.levelId : 0;
-    const rng = seedrandom(
-      event.eventId + event.arcanaId + event.mode + addition
-    );
-    // rand shouldn't be 0 unless specified that's the case
-    let rand = Math.round(rng() * r.upTo) + 1;
-    // Story levels for the first time give double rewards
-    if ("state" in level && level.state === "open") {
-      rand = rand * 2;
-    }
-    // Tournaments and Tower won't reward for fail before reaching any checkpoint
-    if ("checkpoint" in level && level.checkpoint === null) {
-      rand = 0;
-    }
+    const rand = generateRandom(event, level, r);
     materials[r.id].quantity = materials[r.id].quantity + rand;
     newOnly.push({ ...materials[r.id], quantity: rand });
   });
