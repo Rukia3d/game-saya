@@ -41,7 +41,7 @@ test("rewardPlayer generates correct rewards", async () => {
     playerCharacters
   );
   expect(res.all[0].name).toEqual("Coin");
-  expect(res.all[0].quantity).toEqual(9);
+  expect(res.all[0].quantity).toEqual(11);
   expect(res.all[3].name).toEqual("Rings");
   expect(res.all[3].quantity).toEqual(3);
   // Rewards are added 2nd time to the same materials (level replayed)

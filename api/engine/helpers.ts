@@ -156,11 +156,18 @@ export const enoughEnergyToPlay = (
   }
 ) => {
   let energyPrice = 0;
-  if (data.mode === "story" && data.level) {
+  if (data.mode === "story" && ensure(data.level) >= 0) {
     energyPrice = findEnergyPrice(data.arcana, data.mode, data.level);
+    console.log("energyPrice", energyPrice);
     const firstTime =
-      player.arcanas[data.arcana].stories[data.level].state !== "complete";
-    if (data.arcana === 0 && data.level < 2 && player.arcanas && firstTime) {
+      player.arcanas[data.arcana].stories[ensure(data.level)].state !==
+      "complete";
+    if (
+      data.arcana === 0 &&
+      ensure(data.level) < 2 &&
+      player.arcanas &&
+      firstTime
+    ) {
       energyPrice = 0;
     }
   }
