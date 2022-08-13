@@ -1,5 +1,5 @@
 import { eventTowerRewards } from "../db/testDBLevels";
-import { arcanas, materials } from "../db/testDBPlayer";
+import { arcanas, materials, arenas } from "../db/testDBPlayer";
 import { spellPrices, spells, spellUpdates } from "../db/testDBSpells";
 import {
   addExperience,
@@ -40,6 +40,7 @@ export const createPlayer = (
     name: event.playerName,
     maxEnergy: 50,
     energy: 50,
+    arena: JSON.parse(JSON.stringify(arenas)),
     spells: spells.map((s: ISpell) => {
       const price = spellPrices.find((p: ISpellPrice) => p.spellId === s.id);
       if (!price) throw new Error("Can't find a price for a spell");

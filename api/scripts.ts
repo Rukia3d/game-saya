@@ -71,6 +71,7 @@ app.post("/api/players/new", async (req: any, res: any) => {
       loungeId: null,
       materials: [],
       arcanas: [],
+      arena: [],
       spells: [],
       missions: [],
       messages: [],

@@ -16,6 +16,30 @@ const player: IPlayer = {
   energy: 45,
   maxEnergy: 50,
   loungeId: null,
+  arena: [
+    {
+      type: "run",
+      levels: [
+        { stake: 25, level: "some", reward: 250 },
+        { stake: 50, level: "some", reward: 500 },
+        { stake: 100, level: "some", reward: 1000 },
+      ],
+      resultTime: new Date(
+        new Date().setTime(new Date().getTime() + 5 * 60 * 60 * 1000)
+      ),
+    },
+    {
+      type: "fight",
+      levels: [
+        { stake: 25, level: "some", reward: 250 },
+        { stake: 50, level: "some", reward: 500 },
+        { stake: 100, level: "some", reward: 1000 },
+      ],
+      resultTime: new Date(
+        new Date().setTime(new Date().getTime() + 5 * 60 * 60 * 1000)
+      ),
+    },
+  ],
   materials: [
     { id: 0, name: "Coin", quantity: 18 },
     { id: 1, name: "Black Soul Stone", quantity: 0 },

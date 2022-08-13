@@ -99,6 +99,7 @@ export const applyEvents = (events: IPlayerEvent[]): IPlayer => {
     loungeId: null,
     materials: [],
     arcanas: [],
+    arena: [],
     spells: [],
     missions: [],
     messages: [],

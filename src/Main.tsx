@@ -6,8 +6,9 @@ import { TopMenu } from "./UIElements/TopMenu";
 import { Menu } from "./Menu";
 import { GameContextType, GameContext } from "./App";
 import { Arcanas } from "./Arcanas/Arcanas";
+import { Arena } from "./Arena/Arena";
 
-export type mainScreenState = "main" | "arcana"; //| "arena" | "lounge" | "shop";
+export type mainScreenState = "main" | "arcana" | "arena"; // | "lounge" | "shop";
 
 type MainScreensType = {
   [key in mainScreenState]: React.FC;
@@ -15,7 +16,7 @@ type MainScreensType = {
 const mainScreens: MainScreensType = {
   main: Menu,
   arcana: Arcanas,
-  // arena: ArenaScreen,
+  arena: Arena,
   // lounge: LoungeScreen,
   // shop: ShopScreen,
 };
@@ -26,6 +27,7 @@ export const Main = ({ playerId }: { playerId: string }) => {
   const [selected, setSelected] = useState<mainScreenState>("main");
 
   const changeScreen = (screen: mainScreenState) => {
+    console.log("current selected", selected);
     console.log("change to", screen);
     setSelected(screen);
   };

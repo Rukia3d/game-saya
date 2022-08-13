@@ -13,6 +13,7 @@ import {
   IStoryReward,
   IPassCheckpointEvent,
   IMissCheckpointEvent,
+  IArena,
 } from "../engine/types";
 import { eventTowerRewards, storyRewards } from "./testDBLevels";
 
@@ -188,6 +189,29 @@ export const arcanas: IArcana[] = [
         ],
       },
     ],
+  },
+];
+
+export const arenas: IArena[] = [
+  {
+    type: "run",
+    levels: [
+      { stake: 25, level: "some", reward: 250 },
+      { stake: 50, level: "some", reward: 500 },
+      { stake: 100, level: "some", reward: 1000 },
+    ],
+    resultTime:
+      new Date(new Date().valueOf() + 5 * 60 * 60 * 1000).valueOf() + 250,
+  },
+  {
+    type: "fight",
+    levels: [
+      { stake: 25, level: "some", reward: 250 },
+      { stake: 50, level: "some", reward: 500 },
+      { stake: 100, level: "some", reward: 1000 },
+    ],
+    resultTime:
+      new Date(new Date().valueOf() + 5 * 60 * 60 * 1000).valueOf() + 350,
   },
 ];
 

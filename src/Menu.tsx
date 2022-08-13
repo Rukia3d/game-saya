@@ -22,7 +22,12 @@ export const Menu = () => {
         ))}
       </div>
       <div className="Sections">
-        <div className="Section">Arena</div>
+        <div
+          className="Section"
+          onClick={() => context.changeMainScreen("arena")}
+        >
+          Arena
+        </div>
         <div className="Section">Longe</div>
         <div className="Section">Shop</div>
       </div>

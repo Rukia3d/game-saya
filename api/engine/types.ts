@@ -97,6 +97,18 @@ export interface IArcana {
   currentEvents: IEvent[];
 }
 
+export interface IArena {
+  type: "run" | "fight";
+  levels: IArenaLevel[];
+  resultTime: number;
+}
+
+export interface IArenaLevel {
+  stake: number;
+  level: string; //Unknown for now
+  reward: number;
+}
+
 export interface IMessage {
   header: string;
   text: string;
@@ -130,6 +142,7 @@ export interface IPlayer {
   loungeId: number | null;
   materials: IMaterialQuant[];
   arcanas: IArcana[];
+  arena: IArena[];
   spells: (ISpellOpen | ISpellClosed | ISpell)[];
   missions: [];
   messages: [];

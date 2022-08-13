@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { IEvent, IStory } from "../../api/engine/types";
 import { GameContext } from "../App";
 import { Game } from "../Game/Game";
