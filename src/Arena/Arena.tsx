@@ -1,9 +1,12 @@
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
 import { useContext, useEffect, useState } from "react";
 import { IArena } from "../../api/engine/types";
 import { GameContext } from "../App";
-import { CloseButton, SmallPopup } from "../UIElements/UIButtons";
+import { CloseButton } from "../UIElements/UIButtons";
 
 import "./Arena.scss";
+dayjs.extend(relativeTime);
 
 export const Arena = () => {
   const context = useContext(GameContext);
@@ -48,33 +51,37 @@ export const ArenaTypes = ({ close }: { close: () => void }) => {
   );
 };
 
+const fromNowTillTime = (now: dayjs.Dayjs, time: number) => {
+  let diffDate = dayjs(time).diff(now, "second");
+  let diffSec = diffDate % 60;
+  let diffMins = Math.floor((diffDate / 60) % 60);
+  let diffHrs = Math.floor(diffDate / 3600);
+  return diffHrs + "h, " + diffMins + "min, " + diffSec + "sec";
+};
+
+const stillInFuture = (time: number) => {
+  const d = dayjs();
+  if (d.isBefore(dayjs(time))) {
+    return d;
+  } else {
+    return null;
+  }
+};
+
 export const ArenaType = ({ arena }: { arena: IArena }) => {
-  let timeNow = new Date().valueOf();
-  var diffMs = new Date(arena.resultTime).valueOf() - timeNow; // milliseconds between now & Christmas
-  var diffDays = Math.floor(diffMs / 86400000); // days
-  var diffHrs = Math.floor((diffMs % 86400000) / 3600000); // hours
-  var diffMins = Math.floor(((diffMs % 86400000) % 3600000) / 60000); // minutes
-  var diffSec = Math.floor(((diffMs % 86400000) % 3600000) / 60000 / 60000); // minutes
-  const res =
-    diffDays +
-    "d, " +
-    diffHrs +
-    "h, " +
-    diffMins +
-    "min, " +
-    diffSec +
-    "sec until result";
-  console.log(
-    `Now is ${new Date(timeNow)} and the result is in ${new Date(
-      arena.resultTime
-    )}`
+  const [now, setNow] = useState<dayjs.Dayjs | null>(
+    stillInFuture(arena.resultTime)
   );
 
-  //   useEffect(() => {
-  //     const timeDiffMS = arena.resultTime.getTime() - new Date().getTime();
-  //     console.log("newTimeDiff", newTimeDiff);
-  //   }, []);
+  setTimeout(() => {
+    setNow(stillInFuture(arena.resultTime));
+  }, 1000);
 
+  if (now === null) {
+    return <div className="ArenaType">CALCULATING ARENA RESULTS</div>;
+  }
+
+  const res = fromNowTillTime(now, arena.resultTime);
   return (
     <div className="ArenaType">
       ARENA {arena.type} result in {res}

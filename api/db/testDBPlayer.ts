@@ -196,22 +196,20 @@ export const arenas: IArena[] = [
   {
     type: "run",
     levels: [
-      { stake: 25, level: "some", reward: 250 },
-      { stake: 50, level: "some", reward: 500 },
-      { stake: 100, level: "some", reward: 1000 },
+      { stake: 25, level: "some", rewardPool: 0, participants: 0 },
+      { stake: 50, level: "some", rewardPool: 0, participants: 0 },
+      { stake: 100, level: "some", rewardPool: 0, participants: 0 },
     ],
-    resultTime:
-      new Date(new Date().valueOf() + 5 * 60 * 60 * 1000).valueOf() + 250,
+    resultTime: new Date(new Date().valueOf() + 20 * 1000).valueOf(),
   },
   {
     type: "fight",
     levels: [
-      { stake: 25, level: "some", reward: 250 },
-      { stake: 50, level: "some", reward: 500 },
-      { stake: 100, level: "some", reward: 1000 },
+      { stake: 25, level: "some", rewardPool: 0, participants: 0 },
+      { stake: 50, level: "some", rewardPool: 0, participants: 0 },
+      { stake: 100, level: "some", rewardPool: 0, participants: 0 },
     ],
-    resultTime:
-      new Date(new Date().valueOf() + 5 * 60 * 60 * 1000).valueOf() + 350,
+    resultTime: new Date(new Date().valueOf() + 4 * 60 * 60 * 1000).valueOf(),
   },
 ];
 

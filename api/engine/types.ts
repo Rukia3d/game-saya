@@ -106,7 +106,8 @@ export interface IArena {
 export interface IArenaLevel {
   stake: number;
   level: string; //Unknown for now
-  reward: number;
+  rewardPool: number;
+  participants: number;
 }
 
 export interface IMessage {
