@@ -1,7 +1,7 @@
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { useContext, useEffect, useState } from "react";
-import { IArena } from "../../api/engine/types";
+import { IArena, IArenaLevel } from "../../api/engine/types";
 import { GameContext } from "../App";
 import { CloseButton } from "../UIElements/UIButtons";
 
@@ -10,13 +10,14 @@ dayjs.extend(relativeTime);
 
 export const Arena = () => {
   const context = useContext(GameContext);
-  const [arena, setArena] = useState(true);
+  const [showArena, setShowArena] = useState(true);
+  const [event, setEvent] = useState<null | IArena>(null);
   if (!context || !context.player) {
     throw new Error("No data in context");
   }
 
   const close = () => {
-    setArena(false);
+    setShowArena(false);
     context.changeMainScreen("main");
   };
 
@@ -27,12 +28,12 @@ export const Arena = () => {
       ) : (
         <CurrentScreen />
       )} */}
-      <ArenaTypes close={close} />
+      <ArenaEvents close={close} />
     </div>
   );
 };
 
-export const ArenaTypes = ({ close }: { close: () => void }) => {
+export const ArenaEvents = ({ close }: { close: () => void }) => {
   const context = useContext(GameContext);
   if (!context || !context.player || !context.player.arena) {
     throw new Error("No data in context");
@@ -44,7 +45,7 @@ export const ArenaTypes = ({ close }: { close: () => void }) => {
       <CloseButton onClick={close} />
       <div className="Content">
         {arenas.map((a: IArena, i: number) => (
-          <ArenaType key={i} arena={a} />
+          <ArenaEvent key={i} arena={a} />
         ))}
       </div>
     </>
@@ -68,23 +69,42 @@ const stillInFuture = (time: number) => {
   }
 };
 
-export const ArenaType = ({ arena }: { arena: IArena }) => {
+export const ArenaEvent = ({ arena }: { arena: IArena }) => {
+  const context = useContext(GameContext);
   const [now, setNow] = useState<dayjs.Dayjs | null>(
     stillInFuture(arena.resultTime)
   );
+
+  if (!context || !context.player || !context.player.arena) {
+    throw new Error("No data in context");
+  }
+  const playerCoins = context.player.materials[0].quantity;
 
   setTimeout(() => {
     setNow(stillInFuture(arena.resultTime));
   }, 1000);
 
   if (now === null) {
-    return <div className="ArenaType">CALCULATING ARENA RESULTS</div>;
+    return <div className="ArenaEvent">CALCULATING ARENA RESULTS</div>;
   }
 
   const res = fromNowTillTime(now, arena.resultTime);
   return (
-    <div className="ArenaType">
-      ARENA {arena.type} result in {res}
+    <div className="ArenaEvent">
+      <div>
+        ARENA {arena.type} result in {res}
+      </div>
+      <div className="Stakes">
+        {arena.levels.map((l: IArenaLevel) => (
+          <div
+            className={`Stake ${playerCoins < l.stake ? "Inactive" : "Active"}`}
+          >
+            <h3>Stake {l.stake}</h3>
+            Participants: {l.participants} <br />
+            Reward Pool: {l.rewardPool}
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
