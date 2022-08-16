@@ -107,7 +107,7 @@ export const arcanas: IArcana[] = [
       {
         id: 0,
         level: "",
-        mode: "tournament",
+        mode: "run",
         energy: 10,
         checkpoint: null,
         allowedRewards: ensure(
@@ -119,7 +119,7 @@ export const arcanas: IArcana[] = [
       {
         id: 0,
         level: "",
-        mode: "tower",
+        mode: "fight",
         energy: 10,
         checkpoint: null,
         allowedRewards: [
@@ -169,7 +169,7 @@ export const arcanas: IArcana[] = [
       {
         id: 0,
         level: "",
-        mode: "tournament",
+        mode: "run",
         energy: 10,
         checkpoint: null,
         allowedRewards: [
@@ -180,7 +180,7 @@ export const arcanas: IArcana[] = [
       {
         id: 0,
         level: "",
-        mode: "tower",
+        mode: "fight",
         energy: 10,
         checkpoint: null,
         allowedRewards: [
@@ -196,18 +196,60 @@ export const arenas: IArena[] = [
   {
     type: "run",
     levels: [
-      { stake: 25, level: "some", rewardPool: 0, participants: 0 },
-      { stake: 50, level: "some", rewardPool: 0, participants: 0 },
-      { stake: 100, level: "some", rewardPool: 0, participants: 0 },
+      {
+        id: 0,
+        stake: 25,
+        level: "some",
+        rewardPool: 0,
+        participants: 0,
+        type: "run",
+      },
+      {
+        id: 1,
+        stake: 50,
+        level: "some",
+        rewardPool: 0,
+        participants: 0,
+        type: "run",
+      },
+      {
+        id: 2,
+        stake: 100,
+        level: "some",
+        rewardPool: 0,
+        participants: 0,
+        type: "run",
+      },
     ],
     resultTime: new Date(new Date().valueOf() + 20 * 1000).valueOf(),
   },
   {
     type: "fight",
     levels: [
-      { stake: 25, level: "some", rewardPool: 0, participants: 0 },
-      { stake: 50, level: "some", rewardPool: 0, participants: 0 },
-      { stake: 100, level: "some", rewardPool: 0, participants: 0 },
+      {
+        id: 0,
+        stake: 25,
+        level: "some",
+        rewardPool: 0,
+        participants: 0,
+        type: "fight",
+      },
+      {
+        id: 1,
+        stake: 50,
+        level: "some",
+        rewardPool: 0,
+        participants: 0,
+        type: "fight",
+      },
+      {
+        id: 2,
+        stake: 100,
+        level: "some",
+        rewardPool: 0,
+        participants: 0,
+        type: "fight",
+      },
     ],
     resultTime: new Date(new Date().valueOf() + 4 * 60 * 60 * 1000).valueOf(),
   },
@@ -268,7 +310,7 @@ export const startEldessEvents: IStartEndlessEvent[] = [
   {
     eventId: 0,
     arcanaId: 0,
-    mode: "tournament",
+    mode: "run",
   },
 ];
 
@@ -276,7 +318,7 @@ export const passCheckpointEvents: IPassCheckpointEvent[] = [
   {
     eventId: 0,
     arcanaId: 0,
-    mode: "tournament",
+    mode: "run",
     checkpoint: 0,
   },
 ];
@@ -285,6 +327,6 @@ export const missCheckpointEvents: IMissCheckpointEvent[] = [
   {
     eventId: 0,
     arcanaId: 0,
-    mode: "tournament",
+    mode: "run",
   },
 ];

@@ -98,12 +98,14 @@ export interface IArcana {
 }
 
 export interface IArena {
-  type: "run" | "fight";
+  type: arenaType;
   levels: IArenaLevel[];
   resultTime: number;
 }
 
 export interface IArenaLevel {
+  id: number;
+  type: arenaType;
   stake: number;
   level: string; //Unknown for now
   rewardPool: number;
@@ -220,8 +222,9 @@ export type ICreatePlayerEventId = ICreatePlayerEvent & { playerId: number };
 export type arcanaName = "rings" | "cups" | "wands" | "swords" | "dimonds";
 export type spellState = "closed" | "open" | "listed";
 export type questState = "open" | "rented" | "new";
-export type gameMode = "story" | "quest" | "tower" | "tournament";
+export type gameMode = "story" | "quest" | "run" | "fight";
 export type levelState = "open" | "closed" | "complete";
+export type arenaType = "run" | "fight";
 export type currentState = "MAIN" | "PLAY" | "SPELLS" | "WINMATERIAL";
 export type eventType =
   | "CREATEPLAYER"

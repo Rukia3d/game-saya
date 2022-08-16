@@ -107,7 +107,7 @@ export const passCheckpoint = (
   player: IPlayer
 ): IPlayer => {
   const newArcanas = JSON.parse(JSON.stringify(player.arcanas));
-  const eventIndex = event.mode === "tournament" ? 0 : 1;
+  const eventIndex = event.mode === "run" ? 0 : 1;
   const newAllowedRewards = ensure(
     eventTowerRewards.find(
       (s: IEventReward) =>
