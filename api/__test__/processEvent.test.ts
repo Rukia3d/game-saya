@@ -1,4 +1,5 @@
-import { arcanas, materials } from "../db/testDBPlayer";
+import { arcanas } from "../db/testDBArcanes";
+import { materials } from "../db/testDBPlayer";
 import { spells } from "../db/testDBSpells";
 import { processEvent } from "../engine/engine";
 import {
@@ -19,7 +20,8 @@ const basePlayer: IPlayer = {
   loungeId: null,
   materials: [],
   arcanas: [],
-  arena: [],
+  arenaRun: { events: [], resultTime: 0, type: "run" },
+  arenaFight: { events: [], resultTime: 0, type: "fight" },
   spells: [],
   missions: [],
   messages: [],

@@ -71,7 +71,8 @@ app.post("/api/players/new", async (req: any, res: any) => {
       loungeId: null,
       materials: [],
       arcanas: [],
-      arena: [],
+      arenaRun: { events: [], resultTime: 0, type: "run" },
+      arenaFight: { events: [], resultTime: 0, type: "fight" },
       spells: [],
       missions: [],
       messages: [],
@@ -225,6 +226,27 @@ app.post("/api/players/:id/missCheckpoint", async (req: any, res: any) => {
     data: {
       arcana: req.body.arcana,
       mode: req.body.mode,
+    },
+  };
+  try {
+    const updatePlayer = engine.processEvent(player, event);
+    res.send(updatePlayer);
+  } catch (error) {
+    res.send(error);
+  }
+});
+
+app.post("/api/players/:id/arena", async (req: any, res: any) => {
+  console.log("ARENA START", req.body);
+  const playerId = parseInt(req.params.id);
+  const player = playerEventsApplication(playerId);
+  const event = {
+    playerId: playerId,
+    created: new Date(),
+    type: "ARENASTART" as eventType,
+    data: {
+      eventMode: req.body.eventType,
+      eventIndx: req.body.eventIndex,
     },
   };
   try {

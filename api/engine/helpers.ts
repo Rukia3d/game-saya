@@ -1,5 +1,7 @@
 import seedrandom from "seedrandom";
-import { arcanas } from "../db/testDBPlayer";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+import { arcanas } from "../db/testDBArcanes";
 import {
   gameMode,
   ICurrentState,
@@ -11,7 +13,9 @@ import {
   IMissCheckpointEvent,
   IEvent,
   IAllowedRewards,
+  IArena,
 } from "./types";
+dayjs.extend(relativeTime);
 
 export const generateSeed = (
   event: IWinLevelEventTimed | IMissCheckpointEvent,
@@ -43,16 +47,16 @@ export const generateRandom = (
 
 export const findEnergyPrice = (
   arcana: number,
-  mode: string,
+  mode: gameMode,
   level?: number
 ) => {
   if (mode === "story" && level !== undefined) {
     return arcanas[arcana].stories[level].energy;
   }
-  if (mode === "tournament") {
+  if (mode === "run") {
     return arcanas[arcana].currentEvents[0].energy;
   }
-  if (mode === "tower") {
+  if (mode === "fight") {
     return arcanas[arcana].currentEvents[1].energy;
   }
   throw new Error(`Unknown mode ${mode}`);
@@ -84,7 +88,7 @@ export const findLevelForEndless = (
   event: IMissCheckpointEvent,
   arcanas: IArcana[]
 ): IEvent => {
-  const eventIndex = event.mode === "tournament" ? 0 : 1;
+  const eventIndex = event.mode === "run" ? 0 : 1;
   const level = arcanas[event.arcanaId].currentEvents[eventIndex];
   return level;
 };
@@ -123,10 +127,10 @@ export const findLastCheckpoint = (
   mode: gameMode,
   arcana: number
 ) => {
-  if (mode !== "tournament" && mode !== "tower") {
+  if (mode !== "run" && mode !== "fight") {
     throw new Error("Unknown game mode");
   }
-  const eventIndex = mode === "tournament" ? 0 : 1;
+  const eventIndex = mode === "run" ? 0 : 1;
   const lastCheckpoint =
     player.arcanas[arcana].currentEvents[eventIndex].checkpoint;
   if (lastCheckpoint === null) {
@@ -171,16 +175,16 @@ export const enoughEnergyToPlay = (
       energyPrice = 0;
     }
   }
-  if (data.mode === "tournament" || "tower") {
+  if (data.mode === "run" || "fight") {
     energyPrice = findEnergyPrice(data.arcana, data.mode, data.level);
   }
   return player.energy - energyPrice >= 0;
 };
 
-export const canBuySpell = (
+export const enoughToPay = (
   materials: IMaterialQuant[],
   price: IMaterialQuant[]
-): boolean => {
+) => {
   let canBuy = true;
   price.forEach((p: IMaterialQuant) => {
     const material = materials.find((m: IMaterialQuant) => m.id === p.id);
@@ -192,6 +196,17 @@ export const canBuySpell = (
   });
 
   return canBuy;
+};
+
+export const allowParticipation = (created: Date, resultTime: number) => {
+  let diffDate = dayjs(created).diff(resultTime, "second");
+  let diffMins = Math.floor((diffDate / 60) % 60);
+  let diffHrs = Math.floor(diffDate / 3600);
+  let block = true;
+  if (diffHrs > 0) block = false;
+  if (diffMins >= 5) block = false;
+  console.log("allow participation", block);
+  return block;
 };
 
 export const canUpdateSpell = (

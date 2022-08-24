@@ -1,3 +1,5 @@
+import { IMaterialQuant } from "../../api/engine/types";
+
 //@ts-ignore
 export const fetcher = (...args) => fetch(...args).then((res) => res.json());
 
@@ -17,6 +19,23 @@ export const removeFromArray = (arrArg: any[], item: any) => {
     throw new Error("Can't find the item to remove from array");
   arrArg.splice(index, 1);
   return arrArg;
+};
+
+export const enoughToPay = (
+  materials: IMaterialQuant[],
+  price: IMaterialQuant[]
+): boolean => {
+  let canBuy = true;
+  price.forEach((p: IMaterialQuant) => {
+    const material = materials.find((m: IMaterialQuant) => m.id === p.id);
+    if (!material)
+      throw new Error("Price of an item contains non-existant material");
+    if (p.quantity > material.quantity) {
+      canBuy = false;
+    }
+  });
+
+  return canBuy;
 };
 
 export const shuffle = (array: any) => array.sort(() => Math.random() - 0.5);

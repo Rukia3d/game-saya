@@ -162,7 +162,7 @@ test("Writes startEndlessEvent correctly", () => {
     playerId: 3,
     created: new Date(),
     type: "STARTENDLESS",
-    data: { arcana: 0, mode: "tournament" },
+    data: { arcana: 0, mode: "run" },
   });
   expect(res.playerId).toEqual(3);
   expect(res.eventId).toEqual(2);
@@ -170,7 +170,7 @@ test("Writes startEndlessEvent correctly", () => {
   const res2 = readers.startEndlessEvent(res.eventId);
   expect(res2.eventId).toEqual(2);
   expect(res2.arcanaId).toEqual(0);
-  expect(res2.mode).toEqual("tournament");
+  expect(res2.mode).toEqual("run");
 });
 
 test("Writes passCheckpoint event correctly", () => {
@@ -183,7 +183,7 @@ test("Writes passCheckpoint event correctly", () => {
     playerId: 3,
     created: new Date(),
     type: "PASSCHECKPOINT",
-    data: { arcana: 0, mode: "tournament", checkpoint: 0 },
+    data: { arcana: 0, mode: "run", checkpoint: 0 },
   });
   expect(res.playerId).toEqual(3);
   expect(res.eventId).toEqual(1);
@@ -192,7 +192,7 @@ test("Writes passCheckpoint event correctly", () => {
   expect(res2.eventId).toEqual(1);
   expect(res2.arcanaId).toEqual(0);
   expect(res2.checkpoint).toEqual(0);
-  expect(res2.mode).toEqual("tournament");
+  expect(res2.mode).toEqual("run");
 });
 
 test("Writes missCheckpointEvent event correctly", () => {
@@ -205,7 +205,7 @@ test("Writes missCheckpointEvent event correctly", () => {
     playerId: 3,
     created: new Date(),
     type: "MISSCHECKPOINT",
-    data: { arcana: 0, mode: "tournament" },
+    data: { arcana: 0, mode: "run" },
   });
   expect(res.playerId).toEqual(3);
   expect(res.eventId).toEqual(1);
@@ -214,5 +214,5 @@ test("Writes missCheckpointEvent event correctly", () => {
   expect(res2.eventId).toEqual(1);
   expect(res2.arcanaId).toEqual(0);
   expect(res2.checkpoint).toEqual(0);
-  expect(res2.mode).toEqual("tournament");
+  expect(res2.mode).toEqual("run");
 });

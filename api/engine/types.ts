@@ -98,18 +98,18 @@ export interface IArcana {
 }
 
 export interface IArena {
-  type: arenaType;
-  levels: IArenaLevel[];
+  events: IArenaEvent[];
   resultTime: number;
-}
-
-export interface IArenaLevel {
-  id: number;
   type: arenaType;
-  stake: number;
+}
+export interface IArenaEvent {
+  index: number;
+  stake: IMaterialQuant[];
+  mode: gameMode;
   level: string; //Unknown for now
-  rewardPool: number;
+  rewardPool: IMaterialQuant[];
   participants: number;
+  results: { playerName: string; time: number }[] | null;
 }
 
 export interface IMessage {
@@ -145,7 +145,8 @@ export interface IPlayer {
   loungeId: number | null;
   materials: IMaterialQuant[];
   arcanas: IArcana[];
-  arena: IArena[];
+  arenaRun: IArena;
+  arenaFight: IArena;
   spells: (ISpellOpen | ISpellClosed | ISpell)[];
   missions: [];
   messages: [];
@@ -216,7 +217,14 @@ export type IMissCheckpointEvent = {
   mode: gameMode;
 };
 
+export type IArenaStartEvent = {
+  eventId: number;
+  index: number;
+  mode: gameMode;
+};
+
 export type IWinLevelEventTimed = IWinLevelEvent & { time: Date };
+export type IArenaStartEventTimed = IArenaStartEvent & { time: Date };
 export type ICreatePlayerEventId = ICreatePlayerEvent & { playerId: number };
 
 export type arcanaName = "rings" | "cups" | "wands" | "swords" | "dimonds";
@@ -225,7 +233,12 @@ export type questState = "open" | "rented" | "new";
 export type gameMode = "story" | "quest" | "run" | "fight";
 export type levelState = "open" | "closed" | "complete";
 export type arenaType = "run" | "fight";
-export type currentState = "MAIN" | "PLAY" | "SPELLS" | "WINMATERIAL";
+export type currentState =
+  | "MAIN"
+  | "PLAY"
+  | "SPELLS"
+  | "WINMATERIAL"
+  | "ARENAPLAY";
 export type eventType =
   | "CREATEPLAYER"
   | "STARTLEVEL"
@@ -234,4 +247,5 @@ export type eventType =
   | "UPDATESPELL"
   | "STARTENDLESS"
   | "PASSCHECKPOINT"
-  | "MISSCHECKPOINT";
+  | "MISSCHECKPOINT"
+  | "ARENASTART";

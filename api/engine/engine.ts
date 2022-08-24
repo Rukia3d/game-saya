@@ -35,6 +35,9 @@ export const processEvent = (
     case "MISSCHECKPOINT":
       const missCheckpointEvent = writers.missCheckpointEvent(newPlayer, event);
       return applyEvent(newPlayer, missCheckpointEvent);
+    case "ARENASTART":
+      const arenaStartEvent = writers.arenaStartEvent(newPlayer, event);
+      return applyEvent(newPlayer, arenaStartEvent);
     default:
       throw new Error("Unknown event type");
   }
@@ -84,6 +87,11 @@ export const applyEvent = (player: IPlayer, event: IPlayerEvent): IPlayer => {
         readers.missCheckpointEvent(event.eventId),
         newPlayer
       );
+    case "ARENASTART":
+      return events.arenaStart(
+        readers.arenaStartEvent(event.eventId),
+        newPlayer
+      );
   }
   return newPlayer;
 };
@@ -99,7 +107,9 @@ export const applyEvents = (events: IPlayerEvent[]): IPlayer => {
     loungeId: null,
     materials: [],
     arcanas: [],
-    arena: [],
+    // Need to fill current events correctly
+    arenaRun: { events: [], resultTime: 0, type: "run" },
+    arenaFight: { events: [], resultTime: 0, type: "fight" },
     spells: [],
     missions: [],
     messages: [],

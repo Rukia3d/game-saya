@@ -10,23 +10,7 @@ import {
 } from "../../api/engine/types";
 import { GameContext } from "../App";
 import { CloseButton } from "../UIElements/UIButtons";
-
-const canBuySpell = (
-  materials: IMaterialQuant[],
-  price: IMaterialQuant[]
-): boolean => {
-  let canBuy = true;
-  price.forEach((p: IMaterialQuant) => {
-    const material = materials.find((m: IMaterialQuant) => m.id === p.id);
-    if (!material)
-      throw new Error("Price of an item contains non-existant material");
-    if (p.quantity > material.quantity) {
-      canBuy = false;
-    }
-  });
-
-  return canBuy;
-};
+import { enoughToPay } from "../utils/helpers";
 
 const canUpdateSpell = (
   materials: IMaterialQuant[],
@@ -55,7 +39,7 @@ export const SpellPurchase = ({
   spellAction: (i: number, action: "open" | "update") => void;
 }) => {
   if ("price" in spell) {
-    const available = canBuySpell(materials, spell.price);
+    const available = enoughToPay(materials, spell.price);
     return (
       <div className="SpellPrice">
         <b>To open:</b>

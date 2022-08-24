@@ -1,5 +1,6 @@
 import { ensure } from "../engine/helpers";
 import {
+  IArenaStartEvent,
   ICreatePlayerEvent,
   IMissCheckpointEvent,
   IOpenSpellEvent,
@@ -19,6 +20,7 @@ import {
   startEldessEvents,
   passCheckpointEvents,
   missCheckpointEvents,
+  arenaStartEvents,
 } from "./testDBPlayer";
 
 export const allPlayerEvents = () => {
@@ -55,6 +57,10 @@ export const allPassCheckpointEvents = () => {
 
 export const allMissCheckpointEvents = () => {
   return missCheckpointEvents;
+};
+
+export const allArenaStartEvents = () => {
+  return arenaStartEvents;
 };
 
 export const playerEvents = (playerId: number) => {
@@ -137,6 +143,14 @@ export const updateSpellEvent = (eventId: number) => {
   const update = ensure(
     allUpdateSpellEvents().find((e: IOpenSpellEvent) => e.eventId == eventId),
     "No update spell event"
+  );
+  return update;
+};
+
+export const arenaStartEvent = (eventId: number) => {
+  const update = ensure(
+    allArenaStartEvents().find((e: IArenaStartEvent) => e.eventId == eventId),
+    "No arena start event"
   );
   return update;
 };

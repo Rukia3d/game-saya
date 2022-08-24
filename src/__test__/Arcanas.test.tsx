@@ -16,7 +16,8 @@ const player: IPlayer = {
   energy: 45,
   maxEnergy: 50,
   loungeId: null,
-  arena: [],
+  arenaRun: { type: "run", resultTime: 0, events: [] },
+  arenaFight: { type: "fight", resultTime: 0, events: [] },
   materials: [
     { id: 0, name: "Coin", quantity: 18 },
     { id: 1, name: "Black Soul Stone", quantity: 0 },

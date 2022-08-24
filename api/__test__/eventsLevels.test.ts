@@ -11,6 +11,7 @@ const basePlayer: IPlayer = {
   maxEnergy: 0,
   loungeId: null,
   materials: [],
+  arena: [],
   arcanas: [],
   spells: [],
   missions: [],
@@ -70,15 +71,15 @@ test("Endless flow tournament for player 1", async () => {
     basePlayer
   );
   const startEvent = events.startEndless(
-    { eventId: 1, arcanaId: 0, mode: "tournament" },
+    { eventId: 1, arcanaId: 0, mode: "run" },
     { ...player }
   );
   expect(startEvent.energy).toEqual(40);
   expect(startEvent.currentState.state).toEqual("PLAY");
   expect(startEvent.currentState.level?.arcana).toEqual(0);
-  expect(startEvent.currentState.level?.mode).toEqual("tournament");
+  expect(startEvent.currentState.level?.mode).toEqual("run");
   const passChec0 = events.passCheckpoint(
-    { eventId: 2, checkpoint: 0, mode: "tournament", arcanaId: 0 },
+    { eventId: 2, checkpoint: 0, mode: "run", arcanaId: 0 },
     { ...startEvent }
   );
   expect(passChec0.arcanas[0].currentEvents[0].checkpoint).toEqual(0);
@@ -90,7 +91,7 @@ test("Endless flow tournament for player 1", async () => {
     1
   );
   const passChec1 = events.passCheckpoint(
-    { eventId: 3, checkpoint: 1, mode: "tournament", arcanaId: 0 },
+    { eventId: 3, checkpoint: 1, mode: "run", arcanaId: 0 },
     { ...passChec0 }
   );
   expect(passChec1.exprience).toEqual(20);
@@ -102,7 +103,7 @@ test("Endless flow tournament for player 1", async () => {
     5
   );
   const missCheck = events.missCheckpoint(
-    { eventId: 1, mode: "tournament", arcanaId: 0 },
+    { eventId: 1, mode: "run", arcanaId: 0 },
     passChec1
   );
   expect(missCheck.exprience).toEqual(20);

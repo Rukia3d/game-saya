@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import { IEvent, IStory } from "../../api/engine/types";
+import { IArenaEvent, IEvent, IStory } from "../../api/engine/types";
 import { GameContext } from "../App";
 import { Game } from "../Game/Game";
 import { GameLevels } from "../Game/GameLevels";
@@ -64,7 +64,7 @@ const arcanaScreens: arcanaScreensType = {
 
 export const Arcanas = () => {
   const [selected, setSelected] = useState<arcanaScreenState>("arcana");
-  const [game, setGame] = useState<IStory | IEvent | null>(null);
+  const [game, setGame] = useState<IStory | IEvent | IArenaEvent | null>(null);
   const [win, setWin] = useState(false);
   const context = useContext(GameContext);
   if (!context || !context.player) {
@@ -80,7 +80,7 @@ export const Arcanas = () => {
     if (context.game?.mode === "story") {
       context.changeArcanaScreen("gameLevels");
     }
-    if (context.game?.mode === "tower" || context.game?.mode === "tournament") {
+    if (context.game?.mode === "run" || context.game?.mode === "fight") {
       context.changeArcanaScreen("endlessLevels");
     }
   };

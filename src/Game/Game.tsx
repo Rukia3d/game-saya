@@ -13,6 +13,29 @@ export const GameFight = () => {
   return <div className="Fight"></div>;
 };
 
+export const GameArena = () => {
+  const context = useContext(GameContext);
+  if (!context || !context.player || context.game === null) {
+    throw new Error("No data in context");
+  }
+  const endRun = async () => {
+    if (context.game && "index" in context.game) {
+      await axios.post(`/api/players/${context.player.id}/endArena`, {
+        mode: context.game.mode,
+        index: context.game.index,
+      });
+      await context.mutate();
+      context.changeMainScreen("arena");
+    } else throw new Error("Trying to end game arena with incorrect context");
+  };
+
+  return (
+    <div>
+      <button onClick={endRun}>End Me</button>
+    </div>
+  );
+};
+
 export const GameEndful = () => {
   const context = useContext(GameContext);
   if (
@@ -24,7 +47,7 @@ export const GameEndful = () => {
     throw new Error("No data in context");
   }
   const winStory = async () => {
-    if (context.game) {
+    if (context.game && "id" in context.game) {
       console.log("winStory", context.player.id, context.game.id);
       await axios.post(`/api/players/${context.player.id}/winLevel`, {
         arcana: context.arcana,
@@ -127,7 +150,11 @@ export const Game = () => {
 
   return (
     <div className="Game">
-      {context.game.mode === "story" ? <GameEndful /> : <GameEndless />}
+      {context.game.mode === "run" && "index" in context.game ? (
+        <GameArena />
+      ) : null}
+      {context.game.mode === "run" ? <GameEndless /> : null}
+      {context.game.mode === "story" ? <GameEndful /> : null}
     </div>
   );
 };

@@ -1,6 +1,6 @@
 import { arcanas, materials } from "../db/testDBPlayer";
 import {
-  canBuySpell,
+  enoughToPay,
   findEnergyPrice,
   findLevelForEndless,
   findLevelForStory,
@@ -16,11 +16,11 @@ test("energy price is found for a correct mode", async () => {
   const res = findEnergyPrice(0, "story", 0);
   expect(res).toEqual(5);
 
-  const res2 = findEnergyPrice(0, "tower", 0);
+  const res2 = findEnergyPrice(0, "run", 0);
   expect(res2).toEqual(10);
 
   jest.spyOn(console, "error").mockImplementation(() => jest.fn());
-  expect(() => findEnergyPrice(0, "some", 5)).toThrow("Unknown mode");
+  expect(() => findEnergyPrice(0, "quest", 5)).toThrow("Unknown mode");
   jest.restoreAllMocks();
 });
 
@@ -55,9 +55,9 @@ test("Can pay for a spell returns correct result", async () => {
     { ...materials[0], quantity: 5 },
     { ...materials[1], quantity: 7 },
   ];
-  const res = canBuySpell(owned, price);
+  const res = enoughToPay(owned, price);
   expect(res).toBeTruthy();
-  const res2 = canBuySpell(
+  const res2 = enoughToPay(
     owned,
     price.concat([{ ...materials[2], quantity: 15 }])
   );
@@ -70,7 +70,7 @@ test("Can pay for a spell returns  error if material doesn't exist", async () =>
   });
   jest.spyOn(console, "error").mockImplementation(() => jest.fn());
   expect(() =>
-    canBuySpell(owned, [{ id: 55, name: "Coin", quantity: 1 }])
+    enoughToPay(owned, [{ id: 55, name: "Coin", quantity: 1 }])
   ).toThrow("Price of an item contains non-existant materia");
   jest.restoreAllMocks();
 });
@@ -88,9 +88,9 @@ test("Finds correct level for story", () => {
 test("Finds correct level for tournament", () => {
   const playerArcanas = JSON.parse(JSON.stringify(arcanas));
   const res = findLevelForEndless(
-    { eventId: 0, arcanaId: 0, mode: "tournament" },
+    { eventId: 0, arcanaId: 0, mode: "run" },
     playerArcanas
   );
   expect(res.id).toEqual(0);
-  expect(res.mode).toEqual("tournament");
+  expect(res.mode).toEqual("run");
 });

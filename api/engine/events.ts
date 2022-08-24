@@ -1,17 +1,21 @@
+import { arcanas } from "../db/testDBArcanes";
+import { arenaFight, arenaRun } from "../db/testDBArena";
 import { eventTowerRewards } from "../db/testDBLevels";
-import { arcanas, materials, arenas } from "../db/testDBPlayer";
+import { materials } from "../db/testDBPlayer";
 import { spellPrices, spells, spellUpdates } from "../db/testDBSpells";
 import {
   addExperience,
   rewardPlayer,
   openNextLevel,
   removeMaterials,
+  updateRewardPool,
 } from "./actions";
 import { ensure, findEnergyPrice, findLastCheckpoint } from "./helpers";
 
 import {
   currentState,
   gameMode,
+  IArenaStartEvent,
   ICreatePlayerEventId,
   IEventReward,
   IMaterial,
@@ -40,7 +44,8 @@ export const createPlayer = (
     name: event.playerName,
     maxEnergy: 50,
     energy: 50,
-    arena: JSON.parse(JSON.stringify(arenas)),
+    arenaRun: JSON.parse(JSON.stringify(arenaRun)),
+    arenaFight: JSON.parse(JSON.stringify(arenaFight)),
     spells: spells.map((s: ISpell) => {
       const price = spellPrices.find((p: ISpellPrice) => p.spellId === s.id);
       if (!price) throw new Error("Can't find a price for a spell");
@@ -251,5 +256,27 @@ export const updateSpell = (
     materials: newMaterials,
     spells: newPlayerSpells,
     currentState: { state: "SPELLS" },
+  };
+};
+
+export const arenaStart = (
+  event: IArenaStartEvent,
+  player: IPlayer
+): IPlayer => {
+  const arenaEvent =
+    event.mode === "run"
+      ? player.arenaRun.events[event.index]
+      : player.arenaFight.events[event.index];
+  const newMaterials = removeMaterials(player.materials, arenaEvent.stake);
+  const newArenaEvent = updateRewardPool(arenaEvent, arenaEvent.stake);
+  const newState = {
+    state: "ARENAPLAY" as currentState,
+  };
+  return {
+    ...player,
+    arenaFight: event.mode === "fight" ? newArenaEvent : player.arenaFight,
+    arenaRun: event.mode === "run" ? newArenaEvent : player.arenaRun,
+    materials: newMaterials,
+    currentState: newState,
   };
 };

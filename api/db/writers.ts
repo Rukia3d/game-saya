@@ -1,8 +1,9 @@
 import {
-  canBuySpell,
+  allowParticipation,
   canUpdateSpell,
   correctCheckpoint,
   enoughEnergyToPlay,
+  enoughToPay,
   foundStartLevelToWin,
 } from "../engine/helpers";
 import {
@@ -25,6 +26,7 @@ import {
   startEldessEvents,
   passCheckpointEvents,
   missCheckpointEvents,
+  arenaStartEvents,
 } from "./testDBPlayer";
 
 const getNextPlayerId = () => {
@@ -86,6 +88,13 @@ const getNextOpenSpellEventId = () => {
 const getNextUpdateSpellEventId = () => {
   const latestEvents = readers
     .allUpdateSpellEvents()
+    .sort((a, b) => a.eventId - b.eventId);
+  return latestEvents[latestEvents.length - 1].eventId + 1;
+};
+
+const getNextArenaStartEvent = () => {
+  const latestEvents = readers
+    .allArenaStartEvents()
     .sort((a, b) => a.eventId - b.eventId);
   return latestEvents[latestEvents.length - 1].eventId + 1;
 };
@@ -296,7 +305,7 @@ export const openSpellEvent = (
   if (!newPlayerSpells[indexToChange].price) {
     throw new Error("Spell to open doesn't have a price");
   }
-  if (canBuySpell(player.materials, newPlayerSpells[indexToChange].price)) {
+  if (enoughToPay(player.materials, newPlayerSpells[indexToChange].price)) {
     const newEvent = {
       playerId: event.playerId,
       eventId: nextCreateEventId,
@@ -340,7 +349,7 @@ export const updateSpellEvent = (
     throw new Error("Spell to open doesn't have a required strength");
   }
   if (
-    canBuySpell(player.materials, newPlayerSpells[indexToChange].updatePrice) &&
+    enoughToPay(player.materials, newPlayerSpells[indexToChange].updatePrice) &&
     canUpdateSpell(
       newPlayerSpells[indexToChange].requiredStrength,
       newPlayerSpells[indexToChange].strength
@@ -361,5 +370,42 @@ export const updateSpellEvent = (
     return newEvent;
   } else {
     throw new Error("Can't generate updateSpellEvent");
+  }
+};
+
+export const arenaStartEvent = (
+  player: IPlayer,
+  event: {
+    playerId: number;
+    created: Date;
+    type: eventType;
+    data: {
+      mode: gameMode;
+      index: number;
+    };
+  }
+) => {
+  const arenaEvent =
+    event.data.mode === "run" ? player.arenaRun : player.arenaFight;
+  if (
+    enoughToPay(player.materials, arenaEvent.events[event.data.index].stake) &&
+    allowParticipation(event.created, arenaEvent.resultTime)
+  ) {
+    const nextArenaStartEventId = getNextArenaStartEvent();
+    const newEvent = {
+      playerId: event.playerId,
+      eventId: nextArenaStartEventId,
+      type: "ARENASTART" as eventType,
+      created: new Date(),
+    };
+    allEvents.push(newEvent);
+    arenaStartEvents.push({
+      eventId: nextArenaStartEventId,
+      mode: event.data.mode,
+      index: event.data.index,
+    });
+    return newEvent;
+  } else {
+    throw new Error("Can't generate arenaStartEvent");
   }
 };

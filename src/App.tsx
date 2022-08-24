@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { KeyedMutator } from "swr";
 // Types
-import { IEvent, IPlayer, IStory } from "../api/engine/types";
+import { IArenaEvent, IEvent, IPlayer, IStory } from "../api/engine/types";
 import { arcanaScreenState } from "./Arcanas/Arcanas";
 // Utils
 import "./App.scss";
@@ -15,8 +15,8 @@ export interface GameContextType {
   changeArcanaScreen: (s: arcanaScreenState) => void;
   arcana: number | null;
   setArcana: (e: number | null) => void;
-  game: IEvent | IStory | null;
-  setGame: (e: IEvent | IStory | null) => void;
+  game: IEvent | IStory | IArenaEvent | null;
+  setGame: (e: IEvent | IStory | IArenaEvent | null) => void;
   setWin: (w: boolean) => void;
 }
 

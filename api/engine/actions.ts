@@ -13,6 +13,7 @@ import {
   IWinLevelEventTimed,
   IMissCheckpointEvent,
   IPlayer,
+  IArenaEvent,
 } from "./types";
 
 export const rewardPlayer = (
@@ -56,7 +57,7 @@ export const addExperience = (
   if ("state" in level && level.state === "open") {
     return player.exprience + level.experience;
   }
-  if (event.mode === "tournament" || event.mode === "tower") {
+  if (event.mode === "run" || event.mode === "fight") {
     // if it is the first time the last checkpoint will return -1
     const last = findLastCheckpoint(player, event.mode, event.arcanaId);
     return player.exprience + (last <= 0 ? 1 : last) * 10;
@@ -76,4 +77,23 @@ export const removeMaterials = (
       materials[materialIndex].quantity - p.quantity;
   });
   return materials;
+};
+
+export const updateRewardPool = (
+  event: IArenaEvent,
+  stake: IMaterialQuant[]
+) => {
+  const newEvent = JSON.parse(JSON.stringify(event));
+  stake.forEach((s: IMaterialQuant) => {
+    const materialIndex = newEvent.rewardPool.findIndex(
+      (m: IMaterialQuant) => m.id === s.id
+    );
+    if (materialIndex >= 0) {
+      newEvent.rewardPool[materialIndex].quantity =
+        newEvent.rewardPool[materialIndex].quantity + s.quantity;
+    } else {
+      newEvent.rewardPool.push(s);
+    }
+  });
+  return newEvent;
 };
