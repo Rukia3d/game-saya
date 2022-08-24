@@ -64,7 +64,7 @@ const arcanaScreens: arcanaScreensType = {
 
 export const Arcanas = () => {
   const [selected, setSelected] = useState<arcanaScreenState>("arcana");
-  const [game, setGame] = useState<IStory | IEvent | IArenaEvent | null>(null);
+  const [game, setGame] = useState<IStory | IEvent | null>(null);
   const [win, setWin] = useState(false);
   const context = useContext(GameContext);
   if (!context || !context.player) {

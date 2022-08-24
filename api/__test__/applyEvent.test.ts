@@ -1,4 +1,5 @@
-import { arcanas, materials } from "../db/testDBPlayer";
+import { arcanas } from "../db/testDBArcanes";
+import { materials } from "../db/testDBPlayer";
 import { applyEvent } from "../engine/engine";
 import { IMaterial, IPlayer, IPlayerEvent } from "../engine/types";
 
@@ -11,7 +12,8 @@ const basePlayer: IPlayer = {
   loungeId: null,
   materials: [],
   arcanas: [],
-  arena: [],
+  arenaRun: { events: [], resultTime: 0, type: "run" },
+  arenaFight: { events: [], resultTime: 0, type: "fight" },
   spells: [],
   missions: [],
   messages: [],
@@ -24,7 +26,7 @@ test("Applies a single event correctly", () => {
     playerId: 1,
     eventId: 0,
     type: "STARTLEVEL",
-    created: new Date(),
+    created: new Date().valueOf(),
   };
   const res = applyEvent(newPlayer, startLevelEvent);
   expect(res.currentState.state).toEqual("PLAY");
@@ -45,13 +47,13 @@ test("Applies a series of events correctly", () => {
     playerId: 1,
     eventId: 0,
     type: "STARTLEVEL",
-    created: new Date(),
+    created: new Date().valueOf(),
   };
   const winLevelEvent: IPlayerEvent = {
     playerId: 1,
     eventId: 0,
     type: "WINLEVEL",
-    created: new Date(),
+    created: new Date().valueOf(),
   };
   const resMiddle = applyEvent(newPlayer, startLevelEvent);
   const res = applyEvent(resMiddle, winLevelEvent);

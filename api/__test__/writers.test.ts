@@ -1,5 +1,6 @@
 import * as readers from "../db/readers";
-import { arcanas, materials } from "../db/testDBPlayer";
+import { arcanas } from "../db/testDBArcanes";
+import { materials } from "../db/testDBPlayer";
 import { spells } from "../db/testDBSpells";
 import * as writers from "../db/writers";
 import { currentState, gameMode, IMaterial, IPlayer } from "../engine/types";
@@ -13,7 +14,8 @@ const basePlayer: IPlayer = {
   loungeId: null,
   materials: [],
   arcanas: [],
-  arena: [],
+  arenaRun: { events: [], resultTime: 0, type: "run" },
+  arenaFight: { events: [], resultTime: 0, type: "fight" },
   spells: [],
   missions: [],
   messages: [],
@@ -22,7 +24,7 @@ const basePlayer: IPlayer = {
 
 test("Writes createPlayerEvent correctly", () => {
   const res = writers.createPlayerEvent({
-    created: new Date(),
+    created: new Date().valueOf(),
     type: "CREATEPLAYER",
     data: { name: "Created player test" },
   });
@@ -42,7 +44,7 @@ test("Writes startLevelEvent correctly", () => {
   };
   const res = writers.startLevelEvent(newPlayer, {
     playerId: 3,
-    created: new Date(),
+    created: new Date().valueOf(),
     type: "STARTLEVEL",
     data: { arcana: 0, level: 0, mode: "story" },
   });
@@ -67,7 +69,7 @@ test("Writes winLevelEvent correctly", () => {
   };
   const res = writers.winLevelEvent(newPlayer, {
     playerId: 3,
-    created: new Date(),
+    created: new Date().valueOf(),
     type: "WINLEVEL",
     data: { arcana: 0, level: 0, mode: "story" },
   });
@@ -101,7 +103,7 @@ test("Writes openSpellEvent correctly", () => {
 
   const res = writers.openSpellEvent(newPlayer, {
     playerId: 3,
-    created: new Date(),
+    created: new Date().valueOf(),
     type: "OPENSPELL",
     data: { arcana: 0, spell: 0 },
   });
@@ -139,7 +141,7 @@ test("Writest updateSpellEvent correctly", () => {
 
   const res = writers.updateSpellEvent(newPlayer, {
     playerId: 3,
-    created: new Date(),
+    created: new Date().valueOf(),
     type: "UPDATESPELL",
     data: { arcana: 0, spell: 0 },
   });
@@ -160,7 +162,7 @@ test("Writes startEndlessEvent correctly", () => {
   };
   const res = writers.startEndlessEvent(newPlayer, {
     playerId: 3,
-    created: new Date(),
+    created: new Date().valueOf(),
     type: "STARTENDLESS",
     data: { arcana: 0, mode: "run" },
   });
@@ -181,7 +183,7 @@ test("Writes passCheckpoint event correctly", () => {
   };
   const res = writers.passCheckpointEvent(newPlayer, {
     playerId: 3,
-    created: new Date(),
+    created: new Date().valueOf(),
     type: "PASSCHECKPOINT",
     data: { arcana: 0, mode: "run", checkpoint: 0 },
   });
@@ -203,7 +205,7 @@ test("Writes missCheckpointEvent event correctly", () => {
   };
   const res = writers.missCheckpointEvent(newPlayer, {
     playerId: 3,
-    created: new Date(),
+    created: new Date().valueOf(),
     type: "MISSCHECKPOINT",
     data: { arcana: 0, mode: "run" },
   });

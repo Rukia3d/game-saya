@@ -55,7 +55,7 @@ app.get("/api/players/:id", async (req: any, res: any) => {
 app.post("/api/players/new", async (req: any, res: any) => {
   const event = {
     playerId: 0,
-    created: new Date(),
+    created: new Date().valueOf(),
     type: "CREATEPLAYER" as eventType,
     data: {
       name: req.query.name,
@@ -91,7 +91,7 @@ app.post("/api/players/:id/startLevel", async (req: any, res: any) => {
   const player = playerEventsApplication(playerId);
   const event: IGenericEvent = {
     playerId: playerId,
-    created: new Date(),
+    created: new Date().valueOf(),
     type: "STARTLEVEL" as eventType,
     data: {
       arcana: req.body.arcana,
@@ -114,7 +114,7 @@ app.post("/api/players/:id/winLevel", async (req: any, res: any) => {
   const player = playerEventsApplication(playerId);
   const event = {
     playerId: playerId,
-    created: new Date(),
+    created: new Date().valueOf(),
     type: "WINLEVEL" as eventType,
     data: {
       arcana: req.body.arcana,
@@ -137,7 +137,7 @@ app.post("/api/players/:id/openSpell", async (req: any, res: any) => {
   const player = playerEventsApplication(playerId);
   const event = {
     playerId: playerId,
-    created: new Date(),
+    created: new Date().valueOf(),
     type: "OPENSPELL" as eventType,
     data: {
       arcana: req.body.arcana,
@@ -157,7 +157,7 @@ app.post("/api/players/:id/updateSpell", async (req: any, res: any) => {
   const player = playerEventsApplication(playerId);
   const event = {
     playerId: playerId,
-    created: new Date(),
+    created: new Date().valueOf(),
     type: "UPDATESPELL" as eventType,
     data: {
       arcana: req.body.arcana,
@@ -178,7 +178,7 @@ app.post("/api/players/:id/startEndless", async (req: any, res: any) => {
   const player = playerEventsApplication(playerId);
   const event = {
     playerId: playerId,
-    created: new Date(),
+    created: new Date().valueOf(),
     type: "STARTENDLESS" as eventType,
     data: {
       arcana: req.body.arcana,
@@ -199,7 +199,7 @@ app.post("/api/players/:id/passCheckpoint", async (req: any, res: any) => {
   const player = playerEventsApplication(playerId);
   const event = {
     playerId: playerId,
-    created: new Date(),
+    created: new Date().valueOf(),
     type: "PASSCHECKPOINT" as eventType,
     data: {
       arcana: req.body.arcana,
@@ -221,7 +221,7 @@ app.post("/api/players/:id/missCheckpoint", async (req: any, res: any) => {
   const player = playerEventsApplication(playerId);
   const event = {
     playerId: playerId,
-    created: new Date(),
+    created: new Date().valueOf(),
     type: "MISSCHECKPOINT" as eventType,
     data: {
       arcana: req.body.arcana,
@@ -242,8 +242,29 @@ app.post("/api/players/:id/arena", async (req: any, res: any) => {
   const player = playerEventsApplication(playerId);
   const event = {
     playerId: playerId,
-    created: new Date(),
+    created: new Date().valueOf(),
     type: "ARENASTART" as eventType,
+    data: {
+      eventMode: req.body.eventType,
+      eventIndx: req.body.eventIndex,
+    },
+  };
+  try {
+    const updatePlayer = engine.processEvent(player, event);
+    res.send(updatePlayer);
+  } catch (error) {
+    res.send(error);
+  }
+});
+
+app.post("/api/players/:id/endArena", async (req: any, res: any) => {
+  console.log("ARENA END", req.body);
+  const playerId = parseInt(req.params.id);
+  const player = playerEventsApplication(playerId);
+  const event = {
+    playerId: playerId,
+    created: new Date().valueOf(),
+    type: "ARENAEND" as eventType,
     data: {
       eventMode: req.body.eventType,
       eventIndx: req.body.eventIndex,

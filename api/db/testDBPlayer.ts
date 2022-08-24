@@ -10,6 +10,7 @@ import {
   IPassCheckpointEvent,
   IMissCheckpointEvent,
   IArenaStartEvent,
+  IArenaEndEvent,
 } from "../engine/types";
 
 // const testLevel = new Array(131).fill(new Array(9));
@@ -39,21 +40,21 @@ export const allEvents: IPlayerEvent[] = [
     playerId: 1,
     eventId: 0,
     type: "CREATEPLAYER",
-    created: new Date(1654347193),
+    created: 1654347193,
   },
   {
     playerId: 1,
     eventId: 0,
     type: "STARTLEVEL",
-    created: new Date(1654347300),
+    created: 1654347300,
   },
-  { playerId: 1, eventId: 0, type: "WINLEVEL", created: new Date(1654347302) },
-  { playerId: 1, eventId: 0, type: "OPENSPELL", created: new Date(1654347302) },
+  { playerId: 1, eventId: 0, type: "WINLEVEL", created: 1654347302 },
+  { playerId: 1, eventId: 0, type: "OPENSPELL", created: 1654347302 },
   {
     playerId: 2,
     eventId: 1,
     type: "CREATEPLAYER",
-    created: new Date(1654347310),
+    created: 1654347310,
   },
 ];
 
@@ -111,6 +112,14 @@ export const missCheckpointEvents: IMissCheckpointEvent[] = [
 ];
 
 export const arenaStartEvents: IArenaStartEvent[] = [
+  {
+    eventId: 0,
+    index: 0,
+    mode: "run",
+  },
+];
+
+export const arenaEndEvents: IArenaEndEvent[] = [
   {
     eventId: 0,
     index: 0,

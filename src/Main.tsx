@@ -27,8 +27,6 @@ export const Main = ({ playerId }: { playerId: string }) => {
   const [selected, setSelected] = useState<mainScreenState>("main");
 
   const changeScreen = (screen: mainScreenState) => {
-    console.log("current selected", selected);
-    console.log("change to", screen);
     setSelected(screen);
   };
 

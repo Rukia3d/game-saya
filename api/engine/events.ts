@@ -9,13 +9,22 @@ import {
   openNextLevel,
   removeMaterials,
   updateRewardPool,
+  updateArenaResults,
 } from "./actions";
-import { ensure, findEnergyPrice, findLastCheckpoint } from "./helpers";
+import {
+  calculateResult,
+  ensure,
+  findEnergyPrice,
+  findLastCheckpoint,
+} from "./helpers";
 
 import {
   currentState,
   gameMode,
-  IArenaStartEvent,
+  IArena,
+  IArenaEndEventTimed,
+  IArenaEvent,
+  IArenaStartEventTimed,
   ICreatePlayerEventId,
   IEventReward,
   IMaterial,
@@ -260,10 +269,12 @@ export const updateSpell = (
 };
 
 export const arenaStart = (
-  event: IArenaStartEvent,
+  event: IArenaStartEventTimed,
   player: IPlayer
 ): IPlayer => {
-  const arenaEvent =
+  const newArena: IArena =
+    event.mode === "run" ? player.arenaRun : player.arenaFight;
+  const arenaEvent: IArenaEvent =
     event.mode === "run"
       ? player.arenaRun.events[event.index]
       : player.arenaFight.events[event.index];
@@ -271,12 +282,45 @@ export const arenaStart = (
   const newArenaEvent = updateRewardPool(arenaEvent, arenaEvent.stake);
   const newState = {
     state: "ARENAPLAY" as currentState,
+    arena: { mode: event.mode, index: event.index, time: event.time },
   };
+  newArena.events[event.index] = newArenaEvent;
   return {
     ...player,
-    arenaFight: event.mode === "fight" ? newArenaEvent : player.arenaFight,
-    arenaRun: event.mode === "run" ? newArenaEvent : player.arenaRun,
+    arenaFight: event.mode === "fight" ? newArena : player.arenaFight,
+    arenaRun: event.mode === "run" ? newArena : player.arenaRun,
     materials: newMaterials,
+    currentState: newState,
+  };
+};
+
+export const arenaEnd = (
+  event: IArenaEndEventTimed,
+  player: IPlayer
+): IPlayer => {
+  if (!player.currentState.arena) {
+    throw new Error("Can't end arena event withouth the starting time");
+  }
+  const newArena: IArena =
+    event.mode === "run" ? player.arenaRun : player.arenaFight;
+  const arenaEvent =
+    event.mode === "run"
+      ? player.arenaRun.events[event.index]
+      : player.arenaFight.events[event.index];
+  const resultTime = calculateResult(
+    player.currentState.arena?.time,
+    event.time
+  );
+  const newArenaEvent = updateArenaResults(arenaEvent, resultTime, player);
+  const newState = {
+    state: "ARENAEND" as currentState,
+    timeResult: resultTime,
+  };
+  newArena.events[event.index] = newArenaEvent;
+  return {
+    ...player,
+    arenaFight: event.mode === "fight" ? newArena : player.arenaFight,
+    arenaRun: event.mode === "run" ? newArena : player.arenaRun,
     currentState: newState,
   };
 };

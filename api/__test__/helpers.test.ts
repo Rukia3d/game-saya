@@ -1,4 +1,5 @@
-import { arcanas, materials } from "../db/testDBPlayer";
+import { arcanas } from "../db/testDBArcanes";
+import { materials } from "../db/testDBPlayer";
 import {
   enoughToPay,
   findEnergyPrice,
@@ -30,7 +31,7 @@ test("finds correct index", async () => {
     arcanaId: 1,
     mode: "story",
     levelId: 0,
-    time: new Date(),
+    time: new Date().valueOf(),
   };
   const res = findLevelIndex(winLevelEvent, arcanas);
   expect(res[0]).toEqual(1);
@@ -78,7 +79,13 @@ test("Can pay for a spell returns  error if material doesn't exist", async () =>
 test("Finds correct level for story", () => {
   const playerArcanas = JSON.parse(JSON.stringify(arcanas));
   const res = findLevelForStory(
-    { eventId: 0, arcanaId: 0, mode: "story", levelId: 1, time: new Date() },
+    {
+      eventId: 0,
+      arcanaId: 0,
+      mode: "story",
+      levelId: 1,
+      time: new Date().valueOf(),
+    },
     playerArcanas
   );
   expect(res.id).toEqual(1);

@@ -1,9 +1,11 @@
+import * as readers from "./readers";
 import {
   allowParticipation,
   canUpdateSpell,
   correctCheckpoint,
   enoughEnergyToPlay,
   enoughToPay,
+  foundArenaStartEvent,
   foundStartLevelToWin,
 } from "../engine/helpers";
 import {
@@ -15,7 +17,6 @@ import {
   ISpellClosed,
   ISpellOpen,
 } from "../engine/types";
-import * as readers from "./readers";
 import {
   createPlayerEvents,
   openSpellEvents,
@@ -27,6 +28,7 @@ import {
   passCheckpointEvents,
   missCheckpointEvents,
   arenaStartEvents,
+  arenaEndEvents,
 } from "./testDBPlayer";
 
 const getNextPlayerId = () => {
@@ -99,8 +101,15 @@ const getNextArenaStartEvent = () => {
   return latestEvents[latestEvents.length - 1].eventId + 1;
 };
 
+const getNextArenaEndEvent = () => {
+  const latestEvents = readers
+    .allArenaEndEvents()
+    .sort((a, b) => a.eventId - b.eventId);
+  return latestEvents[latestEvents.length - 1].eventId + 1;
+};
+
 export const createPlayerEvent = (event: {
-  created: Date;
+  created: number;
   type: eventType;
   data: {
     name: string;
@@ -126,7 +135,7 @@ export const startLevelEvent = (
   player: IPlayer,
   event: {
     playerId: number;
-    created: Date;
+    created: number;
     type: eventType;
     data: {
       arcana: number;
@@ -160,7 +169,7 @@ export const winLevelEvent = (
   player: IPlayer,
   event: {
     playerId: number;
-    created: Date;
+    created: number;
     type: eventType;
     data: {
       arcana: number;
@@ -194,7 +203,7 @@ export const startEndlessEvent = (
   player: IPlayer,
   event: {
     playerId: number;
-    created: Date;
+    created: number;
     type: eventType;
     data: {
       arcana: number;
@@ -208,7 +217,7 @@ export const startEndlessEvent = (
       playerId: event.playerId,
       eventId: nextCreateEventId,
       type: "STARTENDLESS" as eventType,
-      created: new Date(),
+      created: new Date().valueOf(),
     };
     allEvents.push(newEvent);
     startEldessEvents.push({
@@ -226,7 +235,7 @@ export const passCheckpointEvent = (
   player: IPlayer,
   event: {
     playerId: number;
-    created: Date;
+    created: number;
     type: eventType;
     data: {
       arcana: number;
@@ -241,7 +250,7 @@ export const passCheckpointEvent = (
       playerId: event.playerId,
       eventId: nextCreateEventId,
       type: "PASSCHECKPOINT" as eventType,
-      created: new Date(),
+      created: new Date().valueOf(),
     };
     allEvents.push(newEvent);
     passCheckpointEvents.push({
@@ -260,7 +269,7 @@ export const missCheckpointEvent = (
   player: IPlayer,
   event: {
     playerId: number;
-    created: Date;
+    created: number;
     type: eventType;
     data: {
       arcana: number;
@@ -273,7 +282,7 @@ export const missCheckpointEvent = (
     playerId: event.playerId,
     eventId: nextCreateEventId,
     type: "MISSCHECKPOINT" as eventType,
-    created: new Date(),
+    created: new Date().valueOf(),
   };
   allEvents.push(newEvent);
   missCheckpointEvents.push({
@@ -288,7 +297,7 @@ export const openSpellEvent = (
   player: IPlayer,
   event: {
     playerId: number;
-    created: Date;
+    created: number;
     type: eventType;
     data: {
       arcana: number;
@@ -328,7 +337,7 @@ export const updateSpellEvent = (
   player: IPlayer,
   event: {
     playerId: number;
-    created: Date;
+    created: number;
     type: eventType;
     data: {
       arcana: number;
@@ -377,7 +386,7 @@ export const arenaStartEvent = (
   player: IPlayer,
   event: {
     playerId: number;
-    created: Date;
+    created: number;
     type: eventType;
     data: {
       mode: gameMode;
@@ -396,7 +405,7 @@ export const arenaStartEvent = (
       playerId: event.playerId,
       eventId: nextArenaStartEventId,
       type: "ARENASTART" as eventType,
-      created: new Date(),
+      created: new Date().valueOf(),
     };
     allEvents.push(newEvent);
     arenaStartEvents.push({
@@ -407,5 +416,37 @@ export const arenaStartEvent = (
     return newEvent;
   } else {
     throw new Error("Can't generate arenaStartEvent");
+  }
+};
+
+export const arenaEndEvent = (
+  player: IPlayer,
+  event: {
+    playerId: number;
+    created: number;
+    type: eventType;
+    data: {
+      mode: gameMode;
+      index: number;
+    };
+  }
+) => {
+  if (foundArenaStartEvent(player.currentState, event.data)) {
+    const nextArenaEndEventId = getNextArenaEndEvent();
+    const newEvent = {
+      playerId: event.playerId,
+      eventId: nextArenaEndEventId,
+      type: "ARENAEND" as eventType,
+      created: new Date().valueOf(),
+    };
+    allEvents.push(newEvent);
+    arenaEndEvents.push({
+      eventId: nextArenaEndEventId,
+      mode: event.data.mode,
+      index: event.data.index,
+    });
+    return newEvent;
+  } else {
+    throw new Error("Can't generate arenaEndEvent");
   }
 };

@@ -11,25 +11,31 @@ import { enoughToPay } from "../utils/helpers";
 import "./Arena.scss";
 dayjs.extend(relativeTime);
 
+export const ArenaResult = () => {
+  return <div>YOUR RESULT</div>;
+};
+
 export const Arena = () => {
   const context = useContext(GameContext);
   if (!context || !context.player) {
     throw new Error("No data in context");
   }
   const [arenaEvent, setArenaEvent] = useState<IArenaEvent | null>(null);
+  const [game, setGame] = useState<IArenaEvent | null>(null);
+  const [win, setWin] = useState(false);
 
   const close = () => {
     setArenaEvent(null);
     context.changeMainScreen("main");
   };
-  console.log("Is there a game", context.game);
-  if (
-    context &&
-    context.game &&
-    context.game.mode === "run" &&
-    "index" in context.game
-  ) {
-    return <GameArena />;
+
+  if (game) {
+    return (
+      <>
+        {win ? <SmallPopup onClick={close} content={<ArenaResult />} /> : null}
+        <GameArena game={game} setWin={setWin} />
+      </>
+    );
   }
 
   return (
@@ -46,6 +52,7 @@ export const Arena = () => {
               <ArenaStartPopup
                 setArenaEvent={setArenaEvent}
                 arenaEvent={arenaEvent}
+                setGame={setGame}
               />
             }
           />
@@ -119,7 +126,7 @@ export const ArenaStake = ({
           </h3>
         ))}
       </div>
-      <div>Participants: {arenaEvent.participants}</div>
+      <div>Tries: {arenaEvent.results?.length}</div>
       <div>
         {arenaEvent.rewardPool.map((s: IMaterialQuant, n: number) => (
           <div key={n}>

@@ -38,6 +38,9 @@ export const processEvent = (
     case "ARENASTART":
       const arenaStartEvent = writers.arenaStartEvent(newPlayer, event);
       return applyEvent(newPlayer, arenaStartEvent);
+    case "ARENAEND":
+      const arenaEndEvent = writers.arenaEndEvent(newPlayer, event);
+      return applyEvent(newPlayer, arenaEndEvent);
     default:
       throw new Error("Unknown event type");
   }
@@ -89,7 +92,12 @@ export const applyEvent = (player: IPlayer, event: IPlayerEvent): IPlayer => {
       );
     case "ARENASTART":
       return events.arenaStart(
-        readers.arenaStartEvent(event.eventId),
+        { ...readers.arenaStartEvent(event.eventId), time: event.created },
+        newPlayer
+      );
+    case "ARENAEND":
+      return events.arenaEnd(
+        { ...readers.arenaEndEvent(event.eventId), time: event.created },
         newPlayer
       );
   }

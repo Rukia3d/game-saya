@@ -21,6 +21,7 @@ import {
   passCheckpointEvents,
   missCheckpointEvents,
   arenaStartEvents,
+  arenaEndEvents,
 } from "./testDBPlayer";
 
 export const allPlayerEvents = () => {
@@ -61,6 +62,10 @@ export const allMissCheckpointEvents = () => {
 
 export const allArenaStartEvents = () => {
   return arenaStartEvents;
+};
+
+export const allArenaEndEvents = () => {
+  return arenaEndEvents;
 };
 
 export const playerEvents = (playerId: number) => {
@@ -148,9 +153,17 @@ export const updateSpellEvent = (eventId: number) => {
 };
 
 export const arenaStartEvent = (eventId: number) => {
-  const update = ensure(
+  const arenastart = ensure(
     allArenaStartEvents().find((e: IArenaStartEvent) => e.eventId == eventId),
     "No arena start event"
   );
-  return update;
+  return arenastart;
+};
+
+export const arenaEndEvent = (eventId: number) => {
+  const arenaend = ensure(
+    allArenaEndEvents().find((e: IArenaStartEvent) => e.eventId == eventId),
+    "No arena end event"
+  );
+  return arenaend;
 };

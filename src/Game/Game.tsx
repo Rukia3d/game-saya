@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useContext, useState } from "react";
+import { IArenaEvent } from "../../api/engine/types";
 import { GameContext } from "../App";
 import { CloseButton } from "../UIElements/UIButtons";
 
@@ -13,20 +14,25 @@ export const GameFight = () => {
   return <div className="Fight"></div>;
 };
 
-export const GameArena = () => {
+export const GameArena = ({
+  game,
+  setWin,
+}: {
+  game: IArenaEvent;
+  setWin: (b: boolean) => void;
+}) => {
   const context = useContext(GameContext);
-  if (!context || !context.player || context.game === null) {
+  if (!context || !context.player) {
     throw new Error("No data in context");
   }
   const endRun = async () => {
-    if (context.game && "index" in context.game) {
-      await axios.post(`/api/players/${context.player.id}/endArena`, {
-        mode: context.game.mode,
-        index: context.game.index,
-      });
-      await context.mutate();
-      context.changeMainScreen("arena");
-    } else throw new Error("Trying to end game arena with incorrect context");
+    await axios.post(`/api/players/${context.player.id}/endArena`, {
+      mode: game.mode,
+      index: game.index,
+    });
+    await context.mutate();
+    context.changeMainScreen("arena");
+    setWin(true);
   };
 
   return (
@@ -150,9 +156,6 @@ export const Game = () => {
 
   return (
     <div className="Game">
-      {context.game.mode === "run" && "index" in context.game ? (
-        <GameArena />
-      ) : null}
       {context.game.mode === "run" ? <GameEndless /> : null}
       {context.game.mode === "story" ? <GameEndful /> : null}
     </div>

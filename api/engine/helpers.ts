@@ -13,7 +13,6 @@ import {
   IMissCheckpointEvent,
   IEvent,
   IAllowedRewards,
-  IArena,
 } from "./types";
 dayjs.extend(relativeTime);
 
@@ -107,6 +106,20 @@ const correctStateForWin = (
     event.mode === currentState.level?.mode
   );
 };
+
+const correctStateForArena = (
+  arena: {
+    mode: gameMode;
+    index: number;
+  },
+  currentState: ICurrentState
+) => {
+  return (
+    arena.mode === currentState.arena?.mode &&
+    arena.index === currentState.arena?.index
+  );
+};
+
 export const foundStartLevelToWin = (
   currentState: ICurrentState,
   event: {
@@ -117,6 +130,20 @@ export const foundStartLevelToWin = (
 ) => {
   if ("level" in currentState) {
     return correctStateForWin(event, currentState);
+  } else {
+    throw new Error("Incorrect state: can't finish level you haven't started");
+  }
+};
+
+export const foundArenaStartEvent = (
+  currentState: ICurrentState,
+  event: {
+    mode: gameMode;
+    index: number;
+  }
+) => {
+  if ("arena" in currentState) {
+    return correctStateForArena(event, currentState);
   } else {
     throw new Error("Incorrect state: can't finish level you haven't started");
   }
@@ -162,7 +189,6 @@ export const enoughEnergyToPlay = (
   let energyPrice = 0;
   if (data.mode === "story" && ensure(data.level) >= 0) {
     energyPrice = findEnergyPrice(data.arcana, data.mode, data.level);
-    console.log("energyPrice", energyPrice);
     const firstTime =
       player.arcanas[data.arcana].stories[ensure(data.level)].state !==
       "complete";
@@ -198,14 +224,18 @@ export const enoughToPay = (
   return canBuy;
 };
 
-export const allowParticipation = (created: Date, resultTime: number) => {
+export const calculateResult = (created: number, resultTime: number) => {
+  let diffDate = dayjs(resultTime).diff(dayjs(created), "milliseconds");
+  return diffDate;
+};
+
+export const allowParticipation = (created: number, resultTime: number) => {
   let diffDate = dayjs(created).diff(resultTime, "second");
   let diffMins = Math.floor((diffDate / 60) % 60);
   let diffHrs = Math.floor(diffDate / 3600);
   let block = true;
   if (diffHrs > 0) block = false;
   if (diffMins >= 5) block = false;
-  console.log("allow participation", block);
   return block;
 };
 

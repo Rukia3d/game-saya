@@ -27,7 +27,7 @@ export const GameStartPopup = ({
       mode: context.player.arcanas[arcana].stories[i].mode,
       level: story,
     });
-    context.mutate();
+    await context.mutate();
   };
 
   const cancelStory = () => {

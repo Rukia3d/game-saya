@@ -5,9 +5,11 @@ import { GameContext } from "../App";
 
 export const ArenaStartPopup = ({
   setArenaEvent,
+  setGame,
   arenaEvent,
 }: {
   setArenaEvent: (a: IArenaEvent | null) => void;
+  setGame: (a: IArenaEvent | null) => void;
   arenaEvent: IArenaEvent;
 }) => {
   const context = useContext(GameContext);
@@ -22,9 +24,8 @@ export const ArenaStartPopup = ({
       eventMode: arenaEvent.mode,
       eventIndx: arenaEvent.index,
     });
+    setGame(arenaEvent);
     await context.mutate();
-    context.setGame(arenaEvent);
-    console.log("context game", context.game);
   };
 
   return (

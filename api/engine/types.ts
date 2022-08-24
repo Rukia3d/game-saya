@@ -108,8 +108,7 @@ export interface IArenaEvent {
   mode: gameMode;
   level: string; //Unknown for now
   rewardPool: IMaterialQuant[];
-  participants: number;
-  results: { playerName: string; time: number }[] | null;
+  results: { playerName: string; playerId: number; time: number }[];
 }
 
 export interface IMessage {
@@ -134,6 +133,11 @@ export interface ICurrentState {
     arcana: number;
   };
   materials?: IMaterialQuant[];
+  arena?: {
+    mode: gameMode;
+    index: number;
+    time: number;
+  };
 }
 
 export interface IPlayer {
@@ -155,7 +159,7 @@ export interface IPlayer {
 
 export type IGenericEvent = {
   playerId: number;
-  created: Date;
+  created: number;
   type: eventType;
   data: any;
 };
@@ -164,7 +168,7 @@ export type IPlayerEvent = {
   playerId: number;
   eventId: number;
   type: eventType;
-  created: Date;
+  created: number;
 };
 
 export type ICreatePlayerEvent = {
@@ -223,8 +227,15 @@ export type IArenaStartEvent = {
   mode: gameMode;
 };
 
-export type IWinLevelEventTimed = IWinLevelEvent & { time: Date };
-export type IArenaStartEventTimed = IArenaStartEvent & { time: Date };
+export type IArenaEndEvent = {
+  eventId: number;
+  index: number;
+  mode: gameMode;
+};
+
+export type IWinLevelEventTimed = IWinLevelEvent & { time: number };
+export type IArenaStartEventTimed = IArenaStartEvent & { time: number };
+export type IArenaEndEventTimed = IArenaEndEvent & { time: number };
 export type ICreatePlayerEventId = ICreatePlayerEvent & { playerId: number };
 
 export type arcanaName = "rings" | "cups" | "wands" | "swords" | "dimonds";
@@ -248,4 +259,5 @@ export type eventType =
   | "STARTENDLESS"
   | "PASSCHECKPOINT"
   | "MISSCHECKPOINT"
-  | "ARENASTART";
+  | "ARENASTART"
+  | "ARENAEND";

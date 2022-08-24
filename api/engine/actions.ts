@@ -82,7 +82,7 @@ export const removeMaterials = (
 export const updateRewardPool = (
   event: IArenaEvent,
   stake: IMaterialQuant[]
-) => {
+): IArenaEvent => {
   const newEvent = JSON.parse(JSON.stringify(event));
   stake.forEach((s: IMaterialQuant) => {
     const materialIndex = newEvent.rewardPool.findIndex(
@@ -95,5 +95,20 @@ export const updateRewardPool = (
       newEvent.rewardPool.push(s);
     }
   });
+  return newEvent;
+};
+
+export const updateArenaResults = (
+  event: IArenaEvent,
+  timeInSec: number,
+  player: IPlayer
+) => {
+  const newEvent: IArenaEvent = JSON.parse(JSON.stringify(event));
+  newEvent.results.push({
+    playerName: player.name,
+    playerId: player.id,
+    time: timeInSec,
+  });
+  newEvent.results = newEvent.results.sort((a, b) => a.time - b.time);
   return newEvent;
 };

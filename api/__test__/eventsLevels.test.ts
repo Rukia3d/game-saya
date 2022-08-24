@@ -1,5 +1,5 @@
-import exp from "constants";
-import { arcanas, materials } from "../db/testDBPlayer";
+import { arcanas } from "../db/testDBArcanes";
+import { materials } from "../db/testDBPlayer";
 import * as events from "../engine/events";
 import { IMaterial, IPlayer } from "../engine/types";
 
@@ -11,7 +11,8 @@ const basePlayer: IPlayer = {
   maxEnergy: 0,
   loungeId: null,
   materials: [],
-  arena: [],
+  arenaRun: { events: [], resultTime: 0, type: "run" },
+  arenaFight: { events: [], resultTime: 0, type: "fight" },
   arcanas: [],
   spells: [],
   missions: [],
@@ -42,7 +43,7 @@ test("eventWinLevel for player 1", async () => {
       mode: "story",
       arcanaId: 0,
       levelId: 0,
-      time: new Date(1654347902),
+      time: 1654347902,
     },
     {
       ...basePlayer,

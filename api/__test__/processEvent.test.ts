@@ -1,4 +1,6 @@
+import dayjs from "dayjs";
 import { arcanas } from "../db/testDBArcanes";
+import { arenaRun } from "../db/testDBArena";
 import { materials } from "../db/testDBPlayer";
 import { spells } from "../db/testDBSpells";
 import { processEvent } from "../engine/engine";
@@ -34,7 +36,7 @@ test("Process CREATEPLAYER event correctly", () => {
     playerId: 3,
     data: { name: "Player 3 name" },
     type: "CREATEPLAYER",
-    created: new Date(),
+    created: new Date().valueOf(),
   };
   const res = processEvent(newPlayer, event);
   expect(res.id).toEqual(3);
@@ -56,7 +58,7 @@ test("Process STARTLEVEL event correctly", () => {
     playerId: 3,
     data: { arcana: 0, mode: "story", level: 0 },
     type: "STARTLEVEL",
-    created: new Date(),
+    created: new Date().valueOf(),
   };
   const res = processEvent(newPlayer, event);
   expect(res.id).toEqual(3);
@@ -85,7 +87,7 @@ test("Process WINLEVEL event correctly", () => {
     playerId: 3,
     data: { arcana: 0, mode: "story", level: 0 },
     type: "WINLEVEL",
-    created: new Date(),
+    created: new Date().valueOf(),
   };
   const res = processEvent(newPlayer, event);
   expect(res.id).toEqual(3);
@@ -116,7 +118,7 @@ test("Process OPENSPELL event correctly", () => {
     playerId: 3,
     data: { arcana: 0, spell: 0 },
     type: "OPENSPELL",
-    created: new Date(),
+    created: new Date().valueOf(),
   };
   const res = processEvent(newPlayer, event);
   expect(res.id).toEqual(3);
@@ -124,4 +126,63 @@ test("Process OPENSPELL event correctly", () => {
   expect(res.spells[0]).toBeDefined();
   expect(res.spells[0]).toHaveProperty("updatePrice");
   expect(res.spells[0]).toHaveProperty("requiredStrength");
+});
+
+test("Process ARENASTART event correctly", () => {
+  const newPlayer: IPlayer = {
+    ...basePlayer,
+    id: 3,
+    arcanas: arcanas,
+    arenaRun: arenaRun,
+    materials: materials.map((m: IMaterial) => {
+      return { ...m, quantity: 50 };
+    }),
+  };
+  const event: IGenericEvent = {
+    playerId: 3,
+    data: { mode: "run", index: 0 },
+    type: "ARENASTART",
+    created: new Date().valueOf(),
+  };
+  const res = processEvent(newPlayer, event);
+  expect(res.materials[0].quantity).toEqual(25);
+  expect(res.materials[3].quantity).toEqual(45);
+  expect(res.currentState.state).toEqual("ARENAPLAY");
+  expect(res.currentState.arena?.index).toEqual(0);
+  expect(res.currentState.arena?.mode).toEqual("run");
+  expect(res.arenaRun.events[0].rewardPool.length).toEqual(2);
+});
+
+test("Process ARENAEND event correctly", () => {
+  const newArenaRun = JSON.parse(JSON.stringify(arenaRun));
+  const runEnd = new Date().valueOf();
+  const runStart = dayjs(runEnd).subtract(191436, "millisecond").valueOf();
+  newArenaRun.events[0].rewardPool = [
+    { id: 0, name: "Coin", quantity: 25 },
+    { id: 3, name: "Rings", quantity: 5 },
+  ];
+  const newPlayer: IPlayer = {
+    ...basePlayer,
+    name: "Base player",
+    id: 3,
+    arcanas: arcanas,
+    arenaRun: newArenaRun,
+    materials: materials.map((m: IMaterial) => {
+      return { ...m, quantity: 50 };
+    }),
+    currentState: {
+      state: "ARENAPLAY",
+      arena: { mode: "run", index: 0, time: runStart },
+    },
+  };
+  const event: IGenericEvent = {
+    playerId: 3,
+    data: { mode: "run", index: 0 },
+    type: "ARENAEND",
+    created: runEnd,
+  };
+  const res = processEvent(newPlayer, event);
+  expect(res.arenaRun.events[0].results.length).toEqual(1);
+  expect(res.arenaRun.events[0].results[0].playerName).toEqual("Base player");
+  expect(res.arenaRun.events[0].results[0].time).toEqual(191436);
 });

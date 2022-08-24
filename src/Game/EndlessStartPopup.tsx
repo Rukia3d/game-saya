@@ -27,7 +27,7 @@ export const EndlessStartPopup = ({
         arcana: arcana,
         mode: context.player.arcanas[arcana].currentEvents[i].mode,
       });
-      context.mutate();
+      await context.mutate();
     }
   };
 

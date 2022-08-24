@@ -1,4 +1,5 @@
-import { arcanas, materials } from "../db/testDBPlayer";
+import { arcanas } from "../db/testDBArcanes";
+import { materials } from "../db/testDBPlayer";
 import {
   addExperience,
   openNextLevel,
@@ -16,7 +17,8 @@ const basePlayer: IPlayer = {
   loungeId: null,
   materials: [],
   arcanas: [],
-  arena: [],
+  arenaRun: { events: [], resultTime: 0, type: "run" },
+  arenaFight: { events: [], resultTime: 0, type: "fight" },
   spells: [],
   missions: [],
   messages: [],
@@ -36,7 +38,7 @@ test("rewardPlayer generates correct rewards", async () => {
       mode: "story",
       arcanaId: 0,
       levelId: 0,
-      time: new Date(1654347302),
+      time: 1654347302,
     },
     playerMaterials,
     playerCharacters
@@ -53,7 +55,7 @@ test("rewardPlayer generates correct rewards", async () => {
       mode: "story",
       arcanaId: 0,
       levelId: 0,
-      time: new Date(1654347302),
+      time: 1654347302,
     },
     JSON.parse(JSON.stringify(res.all)),
     playerCharacters
@@ -70,7 +72,7 @@ test("openNextLevel opens next level correctly", async () => {
       mode: "story",
       arcanaId: 0,
       levelId: 0,
-      time: new Date(1654347302),
+      time: 1654347302,
     },
     playerCharacters
   );
@@ -84,7 +86,7 @@ test("openNextLevel opens next level correctly", async () => {
       mode: "story",
       arcanaId: 0,
       levelId: 1,
-      time: new Date(1654347302),
+      time: 1654347302,
     },
     res
   );
@@ -102,7 +104,7 @@ test("addExperience correctly adds experience", async () => {
       mode: "story",
       arcanaId: 0,
       levelId: 0,
-      time: new Date(1654347302),
+      time: 1654347302,
     },
     { ...basePlayer, arcanas: playerCharacters, exprience: 10 }
   );
@@ -115,7 +117,7 @@ test("addExperience correctly adds experience", async () => {
       mode: "story",
       arcanaId: 0,
       levelId: 1,
-      time: new Date(1654347302),
+      time: 1654347302,
     },
     { ...basePlayer, arcanas: playerCharacters, exprience: 10 }
   );
