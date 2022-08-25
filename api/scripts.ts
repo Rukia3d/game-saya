@@ -99,7 +99,6 @@ app.post("/api/players/:id/startLevel", async (req: any, res: any) => {
       level: req.body.level,
     },
   };
-  console.log("generated event", event);
   try {
     const updatePlayer = engine.processEvent(player, event);
     res.send(updatePlayer);
@@ -122,7 +121,6 @@ app.post("/api/players/:id/winLevel", async (req: any, res: any) => {
       level: req.body.level,
     },
   };
-  console.log("winLevel event", event);
   try {
     const updatePlayer = engine.processEvent(player, event);
     res.send(updatePlayer);
@@ -245,8 +243,8 @@ app.post("/api/players/:id/arena", async (req: any, res: any) => {
     created: new Date().valueOf(),
     type: "ARENASTART" as eventType,
     data: {
-      eventMode: req.body.eventType,
-      eventIndx: req.body.eventIndex,
+      mode: req.body.eventMode,
+      index: req.body.eventIndx,
     },
   };
   try {

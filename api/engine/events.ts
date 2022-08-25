@@ -62,7 +62,7 @@ export const createPlayer = (
     }),
     arcanas: [JSON.parse(JSON.stringify(arcanas[0]))],
     materials: JSON.parse(JSON.stringify(materials)).map((m: IMaterial) => {
-      return { ...m, quantity: 0 };
+      return { ...m, quantity: 50 };
     }),
   };
 };

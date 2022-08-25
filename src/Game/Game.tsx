@@ -2,7 +2,6 @@ import axios from "axios";
 import { useContext, useState } from "react";
 import { IArenaEvent } from "../../api/engine/types";
 import { GameContext } from "../App";
-import { CloseButton } from "../UIElements/UIButtons";
 
 import "./Game.scss";
 

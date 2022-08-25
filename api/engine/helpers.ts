@@ -220,7 +220,6 @@ export const enoughToPay = (
       canBuy = false;
     }
   });
-
   return canBuy;
 };
 

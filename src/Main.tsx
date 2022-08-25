@@ -50,7 +50,6 @@ export const Main = ({ playerId }: { playerId: string }) => {
     setGame: () => {},
     setWin: () => {},
   };
-  console.log("current player", context.player);
   return (
     <GameContext.Provider value={context}>
       <div className="Main">
