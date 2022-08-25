@@ -18,7 +18,6 @@ export const EndlessStartPopup = ({
   const currentMode = context.player.arcanas[arcana].currentEvents[mode];
 
   const startEndless = async (i: number | null) => {
-    console.log("startEndless");
     context.changeArcanaScreen("game");
     setMode(null);
     if (i !== null) {

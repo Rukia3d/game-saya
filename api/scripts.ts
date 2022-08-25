@@ -1,6 +1,7 @@
 import * as readers from "./db/readers";
 import * as engine from "./engine/engine";
-import { eventType, IGenericEvent, IPlayer } from "./engine/types";
+import * as cronjobs from "./cronjobs";
+import { eventType, IGenericPlayerEvent, IPlayer } from "./engine/types";
 
 const bodyParser = require("body-parser");
 const express = require("express");
@@ -89,7 +90,7 @@ app.post("/api/players/:id/startLevel", async (req: any, res: any) => {
   console.log("STARTLEVEL", req.params.id, req.body);
   const playerId = parseInt(req.params.id);
   const player = playerEventsApplication(playerId);
-  const event: IGenericEvent = {
+  const event: IGenericPlayerEvent = {
     playerId: playerId,
     created: new Date().valueOf(),
     type: "STARTLEVEL" as eventType,
@@ -264,8 +265,8 @@ app.post("/api/players/:id/endArena", async (req: any, res: any) => {
     created: new Date().valueOf(),
     type: "ARENAEND" as eventType,
     data: {
-      eventMode: req.body.eventType,
-      eventIndx: req.body.eventIndex,
+      mode: req.body.eventMode,
+      index: req.body.eventIndx,
     },
   };
   try {
@@ -274,6 +275,11 @@ app.post("/api/players/:id/endArena", async (req: any, res: any) => {
   } catch (error) {
     res.send(error);
   }
+});
+
+app.post("/api/debug/arenaResult", async (req: any, res: any) => {
+  console.log("Trigger arena results");
+  cronjobs.endArenaRun();
 });
 
 app.listen(port, () => {

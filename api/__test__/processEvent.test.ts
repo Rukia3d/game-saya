@@ -7,7 +7,7 @@ import { processEvent } from "../engine/engine";
 import {
   currentState,
   gameMode,
-  IGenericEvent,
+  IGenericPlayerEvent,
   IMaterial,
   IPlayer,
   ISpell,
@@ -32,7 +32,7 @@ const basePlayer: IPlayer = {
 
 test("Process CREATEPLAYER event correctly", () => {
   const newPlayer: IPlayer = { ...basePlayer, arcanas: arcanas };
-  const event: IGenericEvent = {
+  const event: IGenericPlayerEvent = {
     playerId: 3,
     data: { name: "Player 3 name" },
     type: "CREATEPLAYER",
@@ -54,7 +54,7 @@ test("Process STARTLEVEL event correctly", () => {
     arcanas: arcanas,
     energy: 50,
   };
-  const event: IGenericEvent = {
+  const event: IGenericPlayerEvent = {
     playerId: 3,
     data: { arcana: 0, mode: "story", level: 0 },
     type: "STARTLEVEL",
@@ -83,7 +83,7 @@ test("Process WINLEVEL event correctly", () => {
     energy: 50,
     currentState: playState,
   };
-  const event: IGenericEvent = {
+  const event: IGenericPlayerEvent = {
     playerId: 3,
     data: { arcana: 0, mode: "story", level: 0 },
     type: "WINLEVEL",
@@ -114,7 +114,7 @@ test("Process OPENSPELL event correctly", () => {
       };
     }),
   };
-  const event: IGenericEvent = {
+  const event: IGenericPlayerEvent = {
     playerId: 3,
     data: { arcana: 0, spell: 0 },
     type: "OPENSPELL",
@@ -138,7 +138,7 @@ test("Process ARENASTART event correctly", () => {
       return { ...m, quantity: 50 };
     }),
   };
-  const event: IGenericEvent = {
+  const event: IGenericPlayerEvent = {
     playerId: 3,
     data: { mode: "run", index: 0 },
     type: "ARENASTART",
@@ -175,7 +175,7 @@ test("Process ARENAEND event correctly", () => {
       arena: { mode: "run", index: 0, time: runStart },
     },
   };
-  const event: IGenericEvent = {
+  const event: IGenericPlayerEvent = {
     playerId: 3,
     data: { mode: "run", index: 0 },
     type: "ARENAEND",

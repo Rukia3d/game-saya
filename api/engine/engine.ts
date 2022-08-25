@@ -1,11 +1,11 @@
 import * as readers from "../db/readers";
 import * as writers from "../db/writers";
 import * as events from "./events";
-import { IGenericEvent, IPlayer, IPlayerEvent } from "./types";
+import { IGenericPlayerEvent, IPlayer, IPlayerEvent } from "./types";
 
 export const processEvent = (
   player: IPlayer,
-  event: IGenericEvent
+  event: IGenericPlayerEvent
 ): IPlayer => {
   let newPlayer = JSON.parse(JSON.stringify(player));
   //console.log("Process Event", event.type);
@@ -41,6 +41,9 @@ export const processEvent = (
     case "ARENAEND":
       const arenaEndEvent = writers.arenaEndEvent(newPlayer, event);
       return applyEvent(newPlayer, arenaEndEvent);
+    case "MATERIALADD":
+      const materialAdd = writers.arenaEndEvent(newPlayer, event);
+      return applyEvent(newPlayer, materialAdd);
     default:
       throw new Error("Unknown event type");
   }

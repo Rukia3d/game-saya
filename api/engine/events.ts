@@ -26,6 +26,7 @@ import {
   IArenaEvent,
   IArenaStartEventTimed,
   ICreatePlayerEventId,
+  ICurrentState,
   IEventReward,
   IMaterial,
   IMissCheckpointEvent,
@@ -312,9 +313,12 @@ export const arenaEnd = (
     event.time
   );
   const newArenaEvent = updateArenaResults(arenaEvent, resultTime, player);
-  const newState = {
+  const newState: ICurrentState = {
     state: "ARENAEND" as currentState,
-    timeResult: resultTime,
+    arenaResult: {
+      results: newArenaEvent.results,
+      result: resultTime,
+    },
   };
   newArena.events[event.index] = newArenaEvent;
   return {

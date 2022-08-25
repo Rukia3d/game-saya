@@ -102,13 +102,20 @@ export interface IArena {
   resultTime: number;
   type: arenaType;
 }
+
 export interface IArenaEvent {
   index: number;
   stake: IMaterialQuant[];
   mode: gameMode;
   level: string; //Unknown for now
   rewardPool: IMaterialQuant[];
-  results: { playerName: string; playerId: number; time: number }[];
+  results: IArenaResult[];
+}
+
+export interface IArenaResult {
+  playerName: string;
+  playerId: number;
+  time: number;
 }
 
 export interface IMessage {
@@ -138,6 +145,10 @@ export interface ICurrentState {
     index: number;
     time: number;
   };
+  arenaResult?: {
+    results: IArenaResult[];
+    result: number;
+  };
 }
 
 export interface IPlayer {
@@ -157,7 +168,7 @@ export interface IPlayer {
   currentState: ICurrentState;
 }
 
-export type IGenericEvent = {
+export type IGenericPlayerEvent = {
   playerId: number;
   created: number;
   type: eventType;
@@ -260,4 +271,5 @@ export type eventType =
   | "PASSCHECKPOINT"
   | "MISSCHECKPOINT"
   | "ARENASTART"
-  | "ARENAEND";
+  | "ARENAEND"
+  | "MATERIALADD";

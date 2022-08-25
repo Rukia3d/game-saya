@@ -1,7 +1,12 @@
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { useContext, useState } from "react";
-import { IArena, IArenaEvent, IMaterialQuant } from "../../api/engine/types";
+import {
+  IArena,
+  IArenaEvent,
+  IArenaResult,
+  IMaterialQuant,
+} from "../../api/engine/types";
 import { GameContext } from "../App";
 import { ArenaStartPopup } from "../Game/ArenaStartPopup";
 import { GameArena } from "../Game/Game";
@@ -11,8 +16,44 @@ import { enoughToPay } from "../utils/helpers";
 import "./Arena.scss";
 dayjs.extend(relativeTime);
 
+export const displayPlayerTime = (timeResult: number) => {
+  let leftMlSec = timeResult % 1000;
+  let allInSec = Math.floor(timeResult / 1000);
+  let leftSec = allInSec % 60;
+  let allInMin = Math.floor(allInSec / 60);
+  return `${allInMin}m ${leftSec}.${leftMlSec}sec`;
+};
+
 export const ArenaResult = () => {
-  return <div>YOUR RESULT</div>;
+  const context = useContext(GameContext);
+  if (!context || !context.player) {
+    throw new Error("No data in context");
+  }
+  if (!context.player.currentState.arenaResult) {
+    throw new Error(
+      "No time found for a player result, something went very wrong"
+    );
+  }
+  const closeResult = () => {
+    context.changeMainScreen("arena");
+  };
+
+  return (
+    <div>
+      <h3>
+        YOUR RESULT:{" "}
+        {displayPlayerTime(context.player.currentState.arenaResult?.result)}
+      </h3>
+      <h4>Top 3</h4>
+      <div>
+        {context.player.currentState.arenaResult?.results.map(
+          (r: IArenaResult, n: number) => (
+            <div>{r.playerName + ": " + displayPlayerTime(r.time)}</div>
+          )
+        )}
+      </div>
+    </div>
+  );
 };
 
 export const Arena = () => {
@@ -28,7 +69,6 @@ export const Arena = () => {
     setArenaEvent(null);
     context.changeMainScreen("main");
   };
-
   if (game) {
     return (
       <>

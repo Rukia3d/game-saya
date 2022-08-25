@@ -26,11 +26,10 @@ export const GameArena = ({
   }
   const endRun = async () => {
     await axios.post(`/api/players/${context.player.id}/endArena`, {
-      mode: game.mode,
-      index: game.index,
+      eventMode: game.mode,
+      eventIndx: game.index,
     });
     await context.mutate();
-    context.changeMainScreen("arena");
     setWin(true);
   };
 
