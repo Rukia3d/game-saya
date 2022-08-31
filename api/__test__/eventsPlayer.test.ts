@@ -11,8 +11,6 @@ const basePlayer: IPlayer = {
   maxEnergy: 0,
   loungeId: null,
   materials: [],
-  arenaRun: { events: [], resultTime: 0, type: "run" },
-  arenaFight: { events: [], resultTime: 0, type: "fight" },
   arcanas: [],
   spells: [],
   missions: [],

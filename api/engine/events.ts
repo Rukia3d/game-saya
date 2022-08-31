@@ -54,8 +54,6 @@ export const createPlayer = (
     name: event.playerName,
     maxEnergy: 50,
     energy: 50,
-    arenaRun: JSON.parse(JSON.stringify(arenaRun)),
-    arenaFight: JSON.parse(JSON.stringify(arenaFight)),
     spells: spells.map((s: ISpell) => {
       const price = spellPrices.find((p: ISpellPrice) => p.spellId === s.id);
       if (!price) throw new Error("Can't find a price for a spell");
@@ -63,7 +61,7 @@ export const createPlayer = (
     }),
     arcanas: [JSON.parse(JSON.stringify(arcanas[0]))],
     materials: JSON.parse(JSON.stringify(materials)).map((m: IMaterial) => {
-      return { ...m, quantity: 50 };
+      return { ...m, quantity: 0 };
     }),
   };
 };
@@ -268,7 +266,7 @@ export const updateSpell = (
     currentState: { state: "SPELLS" },
   };
 };
-
+/*
 export const arenaStart = (
   event: IArenaStartEventTimed,
   player: IPlayer
@@ -328,3 +326,4 @@ export const arenaEnd = (
     currentState: newState,
   };
 };
+*/

@@ -13,7 +13,7 @@ import {
 import {
   createPlayerEvents,
   openSpellEvents,
-  allEvents,
+  allPEvents,
   startLevelEvents,
   updateSpellEvents,
   winLevelEvents,
@@ -22,10 +22,19 @@ import {
   missCheckpointEvents,
   arenaStartEvents,
   arenaEndEvents,
+  allSEvents,
 } from "./testDBPlayer";
 
+export const allEvents = () => {
+  return;
+};
+
+export const allServerEvents = () => {
+  return allSEvents;
+};
+
 export const allPlayerEvents = () => {
-  return allEvents;
+  return allPEvents;
 };
 
 export const allCreatePlayerEvents = () => {
@@ -66,6 +75,18 @@ export const allArenaStartEvents = () => {
 
 export const allArenaEndEvents = () => {
   return arenaEndEvents;
+};
+
+export const serverEvents = (playerId: number) => {
+  // Find events for a player
+  const events = ensure(
+    allPlayerEvents().filter((p: IPlayerEvent) => p.playerId == playerId)
+  );
+  if (events.length === 0) {
+    throw new Error(`No events found for ${playerId}`);
+  }
+
+  return events;
 };
 
 export const playerEvents = (playerId: number) => {

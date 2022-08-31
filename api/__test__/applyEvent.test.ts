@@ -1,7 +1,7 @@
 import { arcanas } from "../db/testDBArcanes";
 import { materials } from "../db/testDBPlayer";
 import { applyEvent } from "../engine/engine";
-import { IMaterial, IPlayer, IPlayerEvent } from "../engine/types";
+import { IMaterial, IPlayer, IPlayerEvent, IServer } from "../engine/types";
 
 const basePlayer: IPlayer = {
   id: 1,
@@ -12,27 +12,33 @@ const basePlayer: IPlayer = {
   loungeId: null,
   materials: [],
   arcanas: [],
-  arenaRun: { events: [], resultTime: 0, type: "run" },
-  arenaFight: { events: [], resultTime: 0, type: "fight" },
   spells: [],
   missions: [],
   messages: [],
   currentState: { state: "MAIN" },
 };
+const baseServer: IServer = {
+  arenaRun: { events: [], resultTime: 0, type: "run" },
+  arenaFight: { events: [], resultTime: 0, type: "fight" },
+};
 
 test("Applies a single event correctly", () => {
   const newPlayer = { ...basePlayer, arcanas: arcanas };
+  const newServer = { ...baseServer };
   const startLevelEvent: IPlayerEvent = {
     playerId: 1,
     eventId: 0,
     type: "STARTLEVEL",
     created: new Date().valueOf(),
   };
-  const res = applyEvent(newPlayer, startLevelEvent);
-  expect(res.currentState.state).toEqual("PLAY");
-  expect(res.currentState.level?.arcana).toEqual(0);
-  expect(res.currentState.level?.mode).toEqual("story");
-  expect(res.currentState.level?.level).toEqual(0);
+  const res = applyEvent(
+    { server: newServer, player: newPlayer },
+    startLevelEvent
+  );
+  expect(res.player.currentState.state).toEqual("PLAY");
+  expect(res.player.currentState.level?.arcana).toEqual(0);
+  expect(res.player.currentState.level?.mode).toEqual("story");
+  expect(res.player.currentState.level?.level).toEqual(0);
 });
 
 test("Applies a series of events correctly", () => {
@@ -43,6 +49,7 @@ test("Applies a series of events correctly", () => {
       return { ...m, quantity: 0 };
     }),
   };
+  const newServer = { ...baseServer };
   const startLevelEvent: IPlayerEvent = {
     playerId: 1,
     eventId: 0,
@@ -55,8 +62,11 @@ test("Applies a series of events correctly", () => {
     type: "WINLEVEL",
     created: new Date().valueOf(),
   };
-  const resMiddle = applyEvent(newPlayer, startLevelEvent);
+  const resMiddle = applyEvent(
+    { server: newServer, player: newPlayer },
+    startLevelEvent
+  );
   const res = applyEvent(resMiddle, winLevelEvent);
-  expect(res.currentState.state).toEqual("WINMATERIAL");
-  expect(res.currentState.materials?.length).toEqual(2);
+  expect(res.player.currentState.state).toEqual("WINMATERIAL");
+  expect(res.player.currentState.materials?.length).toEqual(2);
 });

@@ -18,7 +18,6 @@ export const GameStartPopup = ({
   const energyPrice = context.player.arcanas[arcana].stories[story].energy;
 
   const startStory = async (i: number) => {
-    console.log("startStory", i);
     context.changeArcanaScreen("game");
     setStory(null);
     context.setGame(context.player.arcanas[arcana].stories[i]);

@@ -11,6 +11,7 @@ import {
   IMissCheckpointEvent,
   IArenaStartEvent,
   IArenaEndEvent,
+  IServerEvent,
 } from "../engine/types";
 
 // const testLevel = new Array(131).fill(new Array(9));
@@ -35,7 +36,9 @@ export const materials: IMaterial[] = [
   { id: 7, name: "Dimonds" },
 ];
 
-export const allEvents: IPlayerEvent[] = [
+export const allSEvents: IServerEvent[] = [];
+
+export const allPEvents: IPlayerEvent[] = [
   {
     playerId: 1,
     eventId: 0,

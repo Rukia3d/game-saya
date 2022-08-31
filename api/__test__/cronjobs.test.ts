@@ -27,7 +27,6 @@ test("detectWinners works correctly with doubles", async () => {
     { playerName: "Winner 5", playerId: 5, time: 20000000 },
   ];
   const res = detectWinners(winners);
-  console.log("res", res);
   expect(res.length).toEqual(3);
   expect(res[0][0].playerName).toEqual(winners[0].playerName);
   expect(res[0][0].time).toEqual(winners[0].time);

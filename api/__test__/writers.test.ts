@@ -3,7 +3,13 @@ import { arcanas } from "../db/testDBArcanes";
 import { materials } from "../db/testDBPlayer";
 import { spells } from "../db/testDBSpells";
 import * as writers from "../db/writers";
-import { currentState, gameMode, IMaterial, IPlayer } from "../engine/types";
+import {
+  currentState,
+  gameMode,
+  IMaterial,
+  IPlayer,
+  IServer,
+} from "../engine/types";
 
 const basePlayer: IPlayer = {
   id: 3,
@@ -14,12 +20,14 @@ const basePlayer: IPlayer = {
   loungeId: null,
   materials: [],
   arcanas: [],
-  arenaRun: { events: [], resultTime: 0, type: "run" },
-  arenaFight: { events: [], resultTime: 0, type: "fight" },
   spells: [],
   missions: [],
   messages: [],
   currentState: { state: "MAIN" },
+};
+const baseServer: IServer = {
+  arenaRun: { events: [], resultTime: 0, type: "run" },
+  arenaFight: { events: [], resultTime: 0, type: "fight" },
 };
 
 test("Writes createPlayerEvent correctly", () => {
@@ -42,6 +50,7 @@ test("Writes startLevelEvent correctly", () => {
     energy: 100,
     arcanas: JSON.parse(JSON.stringify(arcanas)),
   };
+  const newServer = { ...baseServer };
   const res = writers.startLevelEvent(newPlayer, {
     playerId: 3,
     created: new Date().valueOf(),
@@ -67,6 +76,7 @@ test("Writes winLevelEvent correctly", () => {
       level: { arcana: 0, level: 0, mode: "story" as gameMode },
     },
   };
+  const newServer = { ...baseServer };
   const res = writers.winLevelEvent(newPlayer, {
     playerId: 3,
     created: new Date().valueOf(),
@@ -96,6 +106,7 @@ test("Writes openSpellEvent correctly", () => {
       )
     ),
   };
+  const newServer = { ...baseServer };
   newPlayer.spells[0].price = [
     { id: 0, name: "Coin", quantity: 5 },
     { id: 3, name: "Air essence", quantity: 1 },
@@ -129,6 +140,7 @@ test("Writest updateSpellEvent correctly", () => {
       )
     ),
   };
+  const newServer = { ...baseServer };
   newPlayer.spells[0].price = [
     { id: 0, name: "Coin", quantity: 5 },
     { id: 3, name: "Air essence", quantity: 1 },
@@ -160,6 +172,7 @@ test("Writes startEndlessEvent correctly", () => {
     energy: 100,
     arcanas: JSON.parse(JSON.stringify(arcanas)),
   };
+  const newServer = { ...baseServer };
   const res = writers.startEndlessEvent(newPlayer, {
     playerId: 3,
     created: new Date().valueOf(),
@@ -181,6 +194,7 @@ test("Writes passCheckpoint event correctly", () => {
     energy: 100,
     arcanas: JSON.parse(JSON.stringify(arcanas)),
   };
+  const newServer = { ...baseServer };
   const res = writers.passCheckpointEvent(newPlayer, {
     playerId: 3,
     created: new Date().valueOf(),
@@ -203,6 +217,7 @@ test("Writes missCheckpointEvent event correctly", () => {
     energy: 100,
     arcanas: JSON.parse(JSON.stringify(arcanas)),
   };
+  const newServer = { ...baseServer };
   const res = writers.missCheckpointEvent(newPlayer, {
     playerId: 3,
     created: new Date().valueOf(),

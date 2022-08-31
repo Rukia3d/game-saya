@@ -84,7 +84,6 @@ export const ArcanaSpells = () => {
   );
 
   const spellAction = async (spellId: number, action: "update" | "open") => {
-    console.log("spell action");
     if (action === "open") {
       await axios.post(`/api/players/${context.player.id}/openSpell`, {
         arcana: context.arcana,

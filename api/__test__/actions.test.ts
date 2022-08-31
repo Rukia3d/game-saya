@@ -17,8 +17,6 @@ const basePlayer: IPlayer = {
   loungeId: null,
   materials: [],
   arcanas: [],
-  arenaRun: { events: [], resultTime: 0, type: "run" },
-  arenaFight: { events: [], resultTime: 0, type: "fight" },
   spells: [],
   missions: [],
   messages: [],

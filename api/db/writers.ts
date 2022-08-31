@@ -11,6 +11,7 @@ import {
 import {
   eventType,
   gameMode,
+  IGame,
   IPlayer,
   IPlayerEvent,
   ISpell,
@@ -20,7 +21,7 @@ import {
 import {
   createPlayerEvents,
   openSpellEvents,
-  allEvents,
+  allPEvents,
   startLevelEvents,
   winLevelEvents,
   updateSpellEvents,
@@ -123,7 +124,7 @@ export const createPlayerEvent = (event: {
     type: "CREATEPLAYER" as eventType,
     created: event.created,
   };
-  allEvents.push(newEvent);
+  allPEvents.push(newEvent);
   createPlayerEvents.push({
     eventId: nextCreateEventId,
     playerName: event.data.name,
@@ -152,7 +153,7 @@ export const startLevelEvent = (
       type: "STARTLEVEL" as eventType,
       created: event.created,
     };
-    allEvents.push(newEvent);
+    allPEvents.push(newEvent);
     startLevelEvents.push({
       eventId: nextCreateEventId,
       arcanaId: event.data.arcana,
@@ -186,7 +187,7 @@ export const winLevelEvent = (
       type: "WINLEVEL" as eventType,
       created: event.created,
     };
-    allEvents.push(newEvent);
+    allPEvents.push(newEvent);
     winLevelEvents.push({
       eventId: nextCreateEventId,
       arcanaId: event.data.arcana,
@@ -219,7 +220,7 @@ export const startEndlessEvent = (
       type: "STARTENDLESS" as eventType,
       created: new Date().valueOf(),
     };
-    allEvents.push(newEvent);
+    allPEvents.push(newEvent);
     startEldessEvents.push({
       eventId: nextCreateEventId,
       arcanaId: event.data.arcana,
@@ -252,7 +253,7 @@ export const passCheckpointEvent = (
       type: "PASSCHECKPOINT" as eventType,
       created: new Date().valueOf(),
     };
-    allEvents.push(newEvent);
+    allPEvents.push(newEvent);
     passCheckpointEvents.push({
       eventId: nextCreateEventId,
       arcanaId: event.data.arcana,
@@ -284,7 +285,7 @@ export const missCheckpointEvent = (
     type: "MISSCHECKPOINT" as eventType,
     created: new Date().valueOf(),
   };
-  allEvents.push(newEvent);
+  allPEvents.push(newEvent);
   missCheckpointEvents.push({
     eventId: nextCreateEventId,
     arcanaId: event.data.arcana,
@@ -321,7 +322,7 @@ export const openSpellEvent = (
       type: "OPENSPELL" as eventType,
       created: event.created,
     };
-    allEvents.push(newEvent);
+    allPEvents.push(newEvent);
     openSpellEvents.push({
       eventId: nextCreateEventId,
       arcanaId: event.data.arcana,
@@ -370,7 +371,7 @@ export const updateSpellEvent = (
       type: "UPDATESPELL" as eventType,
       created: event.created,
     };
-    allEvents.push(newEvent);
+    allPEvents.push(newEvent);
     updateSpellEvents.push({
       eventId: nextCreateEventId,
       arcanaId: event.data.arcana,
@@ -382,6 +383,7 @@ export const updateSpellEvent = (
   }
 };
 
+/*
 export const arenaStartEvent = (
   player: IPlayer,
   event: {
@@ -407,7 +409,7 @@ export const arenaStartEvent = (
       type: "ARENASTART" as eventType,
       created: new Date().valueOf(),
     };
-    allEvents.push(newEvent);
+    allPEvents.push(newEvent);
     arenaStartEvents.push({
       eventId: nextArenaStartEventId,
       mode: event.data.mode,
@@ -439,7 +441,7 @@ export const arenaEndEvent = (
       type: "ARENAEND" as eventType,
       created: new Date().valueOf(),
     };
-    allEvents.push(newEvent);
+    allPEvents.push(newEvent);
     arenaEndEvents.push({
       eventId: nextArenaEndEventId,
       mode: event.data.mode,
@@ -450,3 +452,4 @@ export const arenaEndEvent = (
     throw new Error("Can't generate arenaEndEvent");
   }
 };
+*/

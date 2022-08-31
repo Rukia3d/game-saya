@@ -52,7 +52,6 @@ export const GameEndful = () => {
   }
   const winStory = async () => {
     if (context.game && "id" in context.game) {
-      console.log("winStory", context.player.id, context.game.id);
       await axios.post(`/api/players/${context.player.id}/winLevel`, {
         arcana: context.arcana,
         mode: context.game.mode,
@@ -86,10 +85,8 @@ export const GameEndless = () => {
   const [checkpoint, setCheckpoint] = useState(
     context.game.checkpoint !== null ? context.game.checkpoint : -1
   );
-  console.log("GameEndless", context.game.checkpoint);
 
   const passCheckpoint = async (n: number) => {
-    console.log("Sending pass checkpoint", n);
     setCheckpoint(n);
     if (context.game) {
       await axios.post(`/api/players/${context.player.id}/passCheckpoint`, {

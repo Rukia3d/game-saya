@@ -2,7 +2,6 @@ import { arenaRun, arenaFight } from "./db/testDBArena";
 import { IArenaEvent, IArenaResult } from "./engine/types";
 
 export const detectWinners = (winners: IArenaResult[]) => {
-  console.log(winners);
   let res: { [time: number]: IArenaResult[] } = {};
 
   for (const winner of winners) {

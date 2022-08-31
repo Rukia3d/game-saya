@@ -40,7 +40,8 @@ export const Main = ({ playerId }: { playerId: string }) => {
     );
   }
   const context: GameContextType = {
-    player: data,
+    player: data.player,
+    server: data.server,
     mutate: mutate,
     changeMainScreen: changeScreen,
     setArcana: setArcana,

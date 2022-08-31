@@ -151,6 +151,16 @@ export interface ICurrentState {
   };
 }
 
+export interface IServer {
+  arenaRun: IArena;
+  arenaFight: IArena;
+}
+
+export interface IGame {
+  server: IServer;
+  player: IPlayer;
+}
+
 export interface IPlayer {
   id: number;
   name: string;
@@ -160,19 +170,26 @@ export interface IPlayer {
   loungeId: number | null;
   materials: IMaterialQuant[];
   arcanas: IArcana[];
-  arenaRun: IArena;
-  arenaFight: IArena;
   spells: (ISpellOpen | ISpellClosed | ISpell)[];
   missions: [];
   messages: [];
   currentState: ICurrentState;
 }
 
-export type IGenericPlayerEvent = {
+export type IPlayerDataEvent = {
   playerId: number;
   created: number;
   type: eventType;
   data: any;
+};
+
+export type IGenericEvent = IPlayerEvent | IServerEvent;
+
+export type IServerEvent = {
+  id: number;
+  eventId: number;
+  type: eventType;
+  created: number;
 };
 
 export type IPlayerEvent = {
@@ -261,7 +278,9 @@ export type currentState =
   | "SPELLS"
   | "WINMATERIAL"
   | "ARENAPLAY";
-export type eventType =
+export type eventType = genericEventType | playerEventType;
+export type genericEventType = "CREATEARENARUN";
+export type playerEventType =
   | "CREATEPLAYER"
   | "STARTLEVEL"
   | "WINLEVEL"

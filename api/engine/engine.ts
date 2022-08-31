@@ -1,134 +1,146 @@
 import * as readers from "../db/readers";
 import * as writers from "../db/writers";
 import * as events from "./events";
-import { IGenericPlayerEvent, IPlayer, IPlayerEvent } from "./types";
+import { IGame, IPlayerDataEvent, IPlayerEvent } from "./types";
 
-export const processEvent = (
-  player: IPlayer,
-  event: IGenericPlayerEvent
-): IPlayer => {
-  let newPlayer = JSON.parse(JSON.stringify(player));
-  //console.log("Process Event", event.type);
+export const processEvent = (game: IGame, event: IPlayerDataEvent): IGame => {
+  let newPlayer = JSON.parse(JSON.stringify(game.player));
+  let newServer = JSON.parse(JSON.stringify(game.server));
+  let eventToWrite: any = {};
   switch (event.type) {
     case "CREATEPLAYER":
-      const createPlayerEvent = writers.createPlayerEvent(event);
-      return applyEvent(newPlayer, createPlayerEvent);
+      eventToWrite = writers.createPlayerEvent(event);
+      break;
     case "STARTLEVEL":
-      const startLevelEvent = writers.startLevelEvent(newPlayer, event);
-      const res = applyEvent(newPlayer, startLevelEvent);
-      return res;
+      eventToWrite = writers.startLevelEvent(newPlayer, event);
+      break;
     case "WINLEVEL":
-      const winLevelEvent = writers.winLevelEvent(newPlayer, event);
-      return applyEvent(newPlayer, winLevelEvent);
+      eventToWrite = writers.winLevelEvent(newPlayer, event);
+      break;
     case "OPENSPELL":
-      const openSpellEvent = writers.openSpellEvent(newPlayer, event);
-      return applyEvent(newPlayer, openSpellEvent);
+      eventToWrite = writers.openSpellEvent(newPlayer, event);
+      break;
     case "UPDATESPELL":
-      const updateSpellEvent = writers.updateSpellEvent(newPlayer, event);
-      return applyEvent(newPlayer, updateSpellEvent);
+      eventToWrite = writers.updateSpellEvent(newPlayer, event);
+      break;
     case "STARTENDLESS":
-      const startEndlessEvent = writers.startEndlessEvent(newPlayer, event);
-      return applyEvent(newPlayer, startEndlessEvent);
+      eventToWrite = writers.startEndlessEvent(newPlayer, event);
+      break;
     case "PASSCHECKPOINT":
-      const passCheckpointEvent = writers.passCheckpointEvent(newPlayer, event);
-      return applyEvent(newPlayer, passCheckpointEvent);
+      eventToWrite = writers.passCheckpointEvent(newPlayer, event);
+      break;
     case "MISSCHECKPOINT":
-      const missCheckpointEvent = writers.missCheckpointEvent(newPlayer, event);
-      return applyEvent(newPlayer, missCheckpointEvent);
-    case "ARENASTART":
-      const arenaStartEvent = writers.arenaStartEvent(newPlayer, event);
-      return applyEvent(newPlayer, arenaStartEvent);
-    case "ARENAEND":
-      const arenaEndEvent = writers.arenaEndEvent(newPlayer, event);
-      return applyEvent(newPlayer, arenaEndEvent);
-    case "MATERIALADD":
-      const materialAdd = writers.arenaEndEvent(newPlayer, event);
-      return applyEvent(newPlayer, materialAdd);
+      eventToWrite = writers.missCheckpointEvent(newPlayer, event);
+      break;
+    // case "ARENASTART":
+    //   eventToWrite = writers.arenaStartEvent(newPlayer, event);
+    //   break;
+    // case "ARENAEND":
+    //   eventToWrite = writers.arenaEndEvent(newPlayer, event);
+    //   break;
     default:
       throw new Error("Unknown event type");
   }
+  return applyEvent({ player: newPlayer, server: newServer }, eventToWrite);
 };
 
-export const applyEvent = (player: IPlayer, event: IPlayerEvent): IPlayer => {
-  let newPlayer = JSON.parse(JSON.stringify(player));
+export const applyEvent = (game: IGame, event: IPlayerEvent): IGame => {
+  let newPlayer = JSON.parse(JSON.stringify(game.player));
+  let newServer = JSON.parse(JSON.stringify(game.server));
   //console.log("Apply Event", event.type);
   switch (event.type) {
     case "CREATEPLAYER":
-      return events.createPlayer(
+      newPlayer = events.createPlayer(
         {
           ...readers.createPlayerEvent(event.eventId),
           playerId: event.playerId,
         },
         newPlayer
       );
+      break;
     case "STARTLEVEL":
-      return events.startLevel(
+      newPlayer = events.startLevel(
         readers.startLevelEvent(event.eventId),
         newPlayer
       );
+      break;
     case "WINLEVEL":
-      return events.winLevel(
+      newPlayer = events.winLevel(
         { ...readers.winLevelEvent(event.eventId), time: event.created },
         newPlayer
       );
+      break;
     case "OPENSPELL":
-      return events.openSpell(readers.openSpellEvent(event.eventId), newPlayer);
+      newPlayer = events.openSpell(
+        readers.openSpellEvent(event.eventId),
+        newPlayer
+      );
+      break;
     case "UPDATESPELL":
-      return events.updateSpell(
+      newPlayer = events.updateSpell(
         readers.updateSpellEvent(event.eventId),
         newPlayer
       );
+      break;
     case "STARTENDLESS":
-      return events.startEndless(
+      newPlayer = events.startEndless(
         readers.startEndlessEvent(event.eventId),
         newPlayer
       );
+      break;
     case "PASSCHECKPOINT":
-      return events.passCheckpoint(
+      newPlayer = events.passCheckpoint(
         readers.passCheckpointEvent(event.eventId),
         newPlayer
       );
+      break;
     case "MISSCHECKPOINT":
-      return events.missCheckpoint(
+      newPlayer = events.missCheckpoint(
         readers.missCheckpointEvent(event.eventId),
         newPlayer
       );
-    case "ARENASTART":
-      return events.arenaStart(
-        { ...readers.arenaStartEvent(event.eventId), time: event.created },
-        newPlayer
-      );
-    case "ARENAEND":
-      return events.arenaEnd(
-        { ...readers.arenaEndEvent(event.eventId), time: event.created },
-        newPlayer
-      );
+      break;
+    // case "ARENASTART":
+    //   newPlayer = events.arenaStart(
+    //     { ...readers.arenaStartEvent(event.eventId), time: event.created },
+    //     newPlayer
+    //   );
+    //   break;
+    // case "ARENAEND":
+    //   newPlayer = events.arenaEnd(
+    //     { ...readers.arenaEndEvent(event.eventId), time: event.created },
+    //     newPlayer
+    //   );
+    //   break;
   }
-  return newPlayer;
+  return { player: newPlayer, server: newServer };
 };
 
-export const applyEvents = (events: IPlayerEvent[]): IPlayer => {
+export const applyEvents = (events: IPlayerEvent[]): IGame => {
   // Apply events assuming they are sorted
-  let player: IPlayer = {
-    id: 0,
-    name: "",
-    exprience: 0,
-    energy: 0,
-    maxEnergy: 0,
-    loungeId: null,
-    materials: [],
-    arcanas: [],
-    // Need to fill current events correctly
-    arenaRun: { events: [], resultTime: 0, type: "run" },
-    arenaFight: { events: [], resultTime: 0, type: "fight" },
-    spells: [],
-    missions: [],
-    messages: [],
-    currentState: { state: "MAIN" },
+  let game: IGame = {
+    player: {
+      id: 0,
+      name: "",
+      exprience: 0,
+      energy: 0,
+      maxEnergy: 0,
+      loungeId: null,
+      materials: [],
+      arcanas: [],
+      spells: [],
+      missions: [],
+      messages: [],
+      currentState: { state: "MAIN" },
+    },
+    server: {
+      arenaRun: { events: [], resultTime: 0, type: "run" },
+      arenaFight: { events: [], resultTime: 0, type: "fight" },
+    },
   };
   for (let i = 0; i < events.length; i++) {
     const event = events[i];
-    player = applyEvent(player, event);
+    game = applyEvent(game, event);
   }
-  return player;
+  return game;
 };

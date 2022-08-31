@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { KeyedMutator } from "swr";
 // Types
-import { IEvent, IPlayer, IStory } from "../api/engine/types";
+import { IEvent, IPlayer, IServer, IStory } from "../api/engine/types";
 import { arcanaScreenState } from "./Arcanas/Arcanas";
 // Utils
 import "./App.scss";
@@ -10,6 +10,7 @@ import { Main, mainScreenState } from "./Main";
 
 export interface GameContextType {
   player: IPlayer;
+  server: IServer;
   mutate: KeyedMutator<any>;
   changeMainScreen: (s: mainScreenState) => void;
   changeArcanaScreen: (s: arcanaScreenState) => void;

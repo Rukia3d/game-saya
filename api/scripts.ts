@@ -1,7 +1,13 @@
 import * as readers from "./db/readers";
 import * as engine from "./engine/engine";
 import * as cronjobs from "./cronjobs";
-import { eventType, IGenericPlayerEvent, IPlayer } from "./engine/types";
+import {
+  eventType,
+  IGame,
+  IPlayer,
+  IPlayerDataEvent,
+  IServer,
+} from "./engine/types";
 
 const bodyParser = require("body-parser");
 const express = require("express");
@@ -11,47 +17,21 @@ const port = 3001;
 app.use(cors());
 app.use(bodyParser.json());
 
-export const playerEventsApplication = (playerId: number) => {
+export const eventsApplication = (playerId: number) => {
   const events = readers.playerEvents(playerId);
-  const player = engine.applyEvents(events);
-  return player;
+  const game = engine.applyEvents(events);
+  return game;
 };
 
 app.get("/api/players/:id", async (req: any, res: any) => {
   const playerId = parseInt(req.params.id);
   try {
-    const player = playerEventsApplication(playerId);
-    res.send(player);
+    const game = eventsApplication(playerId);
+    res.send(game);
   } catch (error) {
     res.send(error);
   }
 });
-
-/*
-  const player = playerEventsApplication(playerId)
-  const event = { type: 'StartEndlessEvent', data: {
-    id, arcana, mode
-  }};
-
-  try {
-    const updatePlayer = engine.applyEvent(player, event);
-    res.send(updatePlayer);
-  } catch (error) {
-    res.send(error);
-  }
-
-  // applyEvent = writeStartEndlessEvent
-  //
-    // applyEvent:
-    //  \- validate event for current player state
-    //     |- if invalid - raise/return error
-    //     |- if valid - raise/return error
-    //        \- write event to db
-    //        \- rebuild and return player
-    //
-
-
-*/
 
 app.post("/api/players/new", async (req: any, res: any) => {
   const event = {
@@ -72,15 +52,20 @@ app.post("/api/players/new", async (req: any, res: any) => {
       loungeId: null,
       materials: [],
       arcanas: [],
-      arenaRun: { events: [], resultTime: 0, type: "run" },
-      arenaFight: { events: [], resultTime: 0, type: "fight" },
       spells: [],
       missions: [],
       messages: [],
       currentState: { state: "MAIN" },
     };
-    const updatePlayer = engine.processEvent(basePlayer, event);
-    res.send(updatePlayer);
+    const baseServer: IServer = {
+      arenaRun: { events: [], resultTime: 0, type: "run" },
+      arenaFight: { events: [], resultTime: 0, type: "fight" },
+    };
+    const game = engine.processEvent(
+      { player: basePlayer, server: baseServer },
+      event
+    );
+    res.send(game);
   } catch (error) {
     res.send(error);
   }
@@ -89,8 +74,8 @@ app.post("/api/players/new", async (req: any, res: any) => {
 app.post("/api/players/:id/startLevel", async (req: any, res: any) => {
   console.log("STARTLEVEL", req.params.id, req.body);
   const playerId = parseInt(req.params.id);
-  const player = playerEventsApplication(playerId);
-  const event: IGenericPlayerEvent = {
+  const game = eventsApplication(playerId);
+  const event: IPlayerDataEvent = {
     playerId: playerId,
     created: new Date().valueOf(),
     type: "STARTLEVEL" as eventType,
@@ -101,8 +86,8 @@ app.post("/api/players/:id/startLevel", async (req: any, res: any) => {
     },
   };
   try {
-    const updatePlayer = engine.processEvent(player, event);
-    res.send(updatePlayer);
+    const updateGame = engine.processEvent(game, event);
+    res.send(updateGame);
   } catch (error) {
     res.send(error);
   }
@@ -111,7 +96,7 @@ app.post("/api/players/:id/startLevel", async (req: any, res: any) => {
 app.post("/api/players/:id/winLevel", async (req: any, res: any) => {
   console.log("WINLEVEL", req.params.id, req.body);
   const playerId = parseInt(req.params.id);
-  const player = playerEventsApplication(playerId);
+  const game = eventsApplication(playerId);
   const event = {
     playerId: playerId,
     created: new Date().valueOf(),
@@ -123,8 +108,8 @@ app.post("/api/players/:id/winLevel", async (req: any, res: any) => {
     },
   };
   try {
-    const updatePlayer = engine.processEvent(player, event);
-    res.send(updatePlayer);
+    const updateGame = engine.processEvent(game, event);
+    res.send(updateGame);
   } catch (error) {
     res.send(error);
   }
@@ -133,7 +118,7 @@ app.post("/api/players/:id/winLevel", async (req: any, res: any) => {
 app.post("/api/players/:id/openSpell", async (req: any, res: any) => {
   console.log("OPENSPELL", req.params.id, req.body);
   const playerId = parseInt(req.params.id);
-  const player = playerEventsApplication(playerId);
+  const game = eventsApplication(playerId);
   const event = {
     playerId: playerId,
     created: new Date().valueOf(),
@@ -144,8 +129,8 @@ app.post("/api/players/:id/openSpell", async (req: any, res: any) => {
     },
   };
   try {
-    const updatePlayer = engine.processEvent(player, event);
-    res.send(updatePlayer);
+    const updateGame = engine.processEvent(game, event);
+    res.send(updateGame);
   } catch (error) {
     res.send(error);
   }
@@ -153,7 +138,7 @@ app.post("/api/players/:id/openSpell", async (req: any, res: any) => {
 
 app.post("/api/players/:id/updateSpell", async (req: any, res: any) => {
   const playerId = parseInt(req.params.id);
-  const player = playerEventsApplication(playerId);
+  const game = eventsApplication(playerId);
   const event = {
     playerId: playerId,
     created: new Date().valueOf(),
@@ -164,8 +149,8 @@ app.post("/api/players/:id/updateSpell", async (req: any, res: any) => {
     },
   };
   try {
-    const updatePlayer = engine.processEvent(player, event);
-    res.send(updatePlayer);
+    const updateGame = engine.processEvent(game, event);
+    res.send(updateGame);
   } catch (error) {
     res.send(error);
   }
@@ -174,7 +159,7 @@ app.post("/api/players/:id/updateSpell", async (req: any, res: any) => {
 app.post("/api/players/:id/startEndless", async (req: any, res: any) => {
   console.log("STARTENDLESS", req.body);
   const playerId = parseInt(req.params.id);
-  const player = playerEventsApplication(playerId);
+  const game = eventsApplication(playerId);
   const event = {
     playerId: playerId,
     created: new Date().valueOf(),
@@ -185,8 +170,8 @@ app.post("/api/players/:id/startEndless", async (req: any, res: any) => {
     },
   };
   try {
-    const updatePlayer = engine.processEvent(player, event);
-    res.send(updatePlayer);
+    const updateGame = engine.processEvent(game, event);
+    res.send(updateGame);
   } catch (error) {
     res.send(error);
   }
@@ -195,7 +180,7 @@ app.post("/api/players/:id/startEndless", async (req: any, res: any) => {
 app.post("/api/players/:id/passCheckpoint", async (req: any, res: any) => {
   console.log("PASSCHECKPOINT", req.body);
   const playerId = parseInt(req.params.id);
-  const player = playerEventsApplication(playerId);
+  const game = eventsApplication(playerId);
   const event = {
     playerId: playerId,
     created: new Date().valueOf(),
@@ -207,8 +192,8 @@ app.post("/api/players/:id/passCheckpoint", async (req: any, res: any) => {
     },
   };
   try {
-    const updatePlayer = engine.processEvent(player, event);
-    res.send(updatePlayer);
+    const updateGame = engine.processEvent(game, event);
+    res.send(updateGame);
   } catch (error) {
     res.send(error);
   }
@@ -217,7 +202,7 @@ app.post("/api/players/:id/passCheckpoint", async (req: any, res: any) => {
 app.post("/api/players/:id/missCheckpoint", async (req: any, res: any) => {
   console.log("MISS CHECKPOINT", req.body);
   const playerId = parseInt(req.params.id);
-  const player = playerEventsApplication(playerId);
+  const game = eventsApplication(playerId);
   const event = {
     playerId: playerId,
     created: new Date().valueOf(),
@@ -228,8 +213,8 @@ app.post("/api/players/:id/missCheckpoint", async (req: any, res: any) => {
     },
   };
   try {
-    const updatePlayer = engine.processEvent(player, event);
-    res.send(updatePlayer);
+    const updateGame = engine.processEvent(game, event);
+    res.send(updateGame);
   } catch (error) {
     res.send(error);
   }
@@ -238,7 +223,7 @@ app.post("/api/players/:id/missCheckpoint", async (req: any, res: any) => {
 app.post("/api/players/:id/arena", async (req: any, res: any) => {
   console.log("ARENA START", req.body);
   const playerId = parseInt(req.params.id);
-  const player = playerEventsApplication(playerId);
+  const game = eventsApplication(playerId);
   const event = {
     playerId: playerId,
     created: new Date().valueOf(),
@@ -249,8 +234,8 @@ app.post("/api/players/:id/arena", async (req: any, res: any) => {
     },
   };
   try {
-    const updatePlayer = engine.processEvent(player, event);
-    res.send(updatePlayer);
+    const updateGame = engine.processEvent(game, event);
+    res.send(updateGame);
   } catch (error) {
     res.send(error);
   }
@@ -259,7 +244,7 @@ app.post("/api/players/:id/arena", async (req: any, res: any) => {
 app.post("/api/players/:id/endArena", async (req: any, res: any) => {
   console.log("ARENA END", req.body);
   const playerId = parseInt(req.params.id);
-  const player = playerEventsApplication(playerId);
+  const game = eventsApplication(playerId);
   const event = {
     playerId: playerId,
     created: new Date().valueOf(),
@@ -270,8 +255,8 @@ app.post("/api/players/:id/endArena", async (req: any, res: any) => {
     },
   };
   try {
-    const updatePlayer = engine.processEvent(player, event);
-    res.send(updatePlayer);
+    const updateGame = engine.processEvent(game, event);
+    res.send(updateGame);
   } catch (error) {
     res.send(error);
   }

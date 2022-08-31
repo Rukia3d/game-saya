@@ -5,7 +5,6 @@ import "./WonMaterials.scss";
 
 export const WonMaterials = () => {
   const context = useContext(GameContext);
-  console.log("Won Materials", context?.player.currentState);
   if (!context || !context.player || !context.player.currentState.materials) {
     throw new Error("No data in context");
   }
