@@ -4,6 +4,7 @@ import {
   arcanaName,
   gameMode,
   IPlayer,
+  IServer,
   levelState,
 } from "../../api/engine/types";
 import { Arcanas } from "../Arcanas/Arcanas";
@@ -16,8 +17,6 @@ const player: IPlayer = {
   energy: 45,
   maxEnergy: 50,
   loungeId: null,
-  arenaRun: { type: "run", resultTime: 0, events: [] },
-  arenaFight: { type: "fight", resultTime: 0, events: [] },
   materials: [
     { id: 0, name: "Coin", quantity: 18 },
     { id: 1, name: "Black Soul Stone", quantity: 0 },
@@ -111,9 +110,15 @@ const player: IPlayer = {
   messages: [] as IPlayer["messages"],
   currentState: { state: "MAIN" },
 };
+
+const server: IServer = {
+  arenaRun: { events: [], resultTime: 0, type: "run" },
+  arenaFight: { events: [], resultTime: 0, type: "fight" },
+};
 const context: GameContextType = {
   mutate: jest.fn(),
   player: player,
+  server: server,
   arcana: 0,
   setArcana: jest.fn(),
   setGame: jest.fn(),

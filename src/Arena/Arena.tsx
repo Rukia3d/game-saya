@@ -26,7 +26,7 @@ export const displayPlayerTime = (timeResult: number) => {
 
 export const ArenaResult = () => {
   const context = useContext(GameContext);
-  if (!context || !context.player) {
+  if (!context || !context.player || !context.server) {
     throw new Error("No data in context");
   }
   if (!context.player.currentState.arenaResult) {
@@ -99,11 +99,11 @@ export const Arena = () => {
         ) : (
           <>
             <ArenaEvent
-              arena={context.player.arenaRun}
+              arena={context.server.arenaRun}
               setArenaEvent={setArenaEvent}
             />
             <ArenaEvent
-              arena={context.player.arenaFight}
+              arena={context.server.arenaFight}
               setArenaEvent={setArenaEvent}
             />
           </>
@@ -193,8 +193,8 @@ export const ArenaEvent = ({
   if (
     !context ||
     !context.player ||
-    !context.player.arenaRun ||
-    !context.player.arenaFight
+    !context.server.arenaRun ||
+    !context.server.arenaFight
   ) {
     throw new Error("No data in context");
   }
