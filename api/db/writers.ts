@@ -11,12 +11,35 @@ import {
 import {
   eventType,
   gameMode,
+  ICreatePlayerData,
+  ICreatePlayerDB,
+  ICreatePlayerEvent,
   IGame,
+  IMissCheckpointData,
+  IMissCheckpointDB,
+  IMissCheckpointEvent,
+  IOpenSpellData,
+  IOpenSpellDB,
+  IOpenSpellEvent,
+  IPassCheckpointData,
+  IPassCheckpointEvent,
   IPlayer,
-  IPlayerEvent,
+  IPlayerEventDB,
   ISpell,
   ISpellClosed,
   ISpellOpen,
+  IStartEndlessData,
+  IStartEndlessDB,
+  IStartEndlessEvent,
+  IStartLevelData,
+  IStartLevelDB,
+  IStartLevelEvent,
+  IUpdateSpellData,
+  IUpdateSpellDB,
+  IUpdateSpellEvent,
+  IWinLevelData,
+  IWinLevelDB,
+  IWinLevelEvent,
 } from "../engine/types";
 import {
   createPlayerEvents,
@@ -109,248 +132,245 @@ const getNextArenaEndEvent = () => {
   return latestEvents[latestEvents.length - 1].eventId + 1;
 };
 
-export const createPlayerEvent = (event: {
-  created: number;
-  type: eventType;
-  data: {
-    name: string;
-  };
-}): IPlayerEvent => {
+export const createPlayerEvent = (
+  event: ICreatePlayerData
+): ICreatePlayerEvent => {
   const nextPlayerId = getNextPlayerId();
   const nextCreateEventId = getNextCreatePlayerEventId();
-  const newEvent = {
+  const newEvent: IPlayerEventDB = {
     playerId: nextPlayerId,
     eventId: nextCreateEventId,
     type: "CREATEPLAYER" as eventType,
     created: event.created,
   };
-  allPEvents.push(newEvent);
-  createPlayerEvents.push({
+  const newPlayerEvent: ICreatePlayerDB = {
     eventId: nextCreateEventId,
     playerName: event.data.name,
-  });
-  return newEvent;
+  };
+  allPEvents.push(newEvent);
+  createPlayerEvents.push(newPlayerEvent);
+  return {
+    playerId: newEvent.playerId,
+    eventId: newEvent.eventId,
+    type: "CREATEPLAYER",
+    created: newEvent.created,
+    playerName: newPlayerEvent.playerName,
+  };
 };
 
 export const startLevelEvent = (
-  player: IPlayer,
-  event: {
-    playerId: number;
-    created: number;
-    type: eventType;
-    data: {
-      arcana: number;
-      mode: gameMode;
-      level: number;
-    };
-  }
-): IPlayerEvent => {
+  game: IGame,
+  event: IStartLevelData
+): IStartLevelEvent => {
   const nextCreateEventId = getNextStartLevelEventId();
-  if (enoughEnergyToPlay(player, event.data)) {
-    const newEvent = {
+  if (enoughEnergyToPlay(game.player, event.data)) {
+    const newEvent: IPlayerEventDB = {
       playerId: event.playerId,
       eventId: nextCreateEventId,
       type: "STARTLEVEL" as eventType,
       created: event.created,
     };
-    allPEvents.push(newEvent);
-    startLevelEvents.push({
+    const newStartPlayerEvent: IStartLevelDB = {
       eventId: nextCreateEventId,
-      arcanaId: event.data.arcana,
-      levelId: event.data.level,
+      arcanaId: event.data.arcanaId,
+      levelId: event.data.levelId,
       mode: event.data.mode,
-    });
-    return newEvent;
+    };
+    allPEvents.push(newEvent);
+    startLevelEvents.push(newStartPlayerEvent);
+    return {
+      playerId: newEvent.playerId,
+      eventId: newEvent.eventId,
+      created: newEvent.created,
+      type: "STARTLEVEL",
+      arcanaId: newStartPlayerEvent.arcanaId,
+      mode: newStartPlayerEvent.mode,
+      levelId: newStartPlayerEvent.levelId,
+    };
   } else {
     throw new Error("Can't generate startLevelEvent");
   }
 };
 
 export const winLevelEvent = (
-  player: IPlayer,
-  event: {
-    playerId: number;
-    created: number;
-    type: eventType;
-    data: {
-      arcana: number;
-      mode: gameMode;
-      level: number;
-    };
-  }
-) => {
+  game: IGame,
+  event: IWinLevelData
+): IWinLevelEvent => {
   const nextCreateEventId = getNextWinLevelEventId();
-  if (foundStartLevelToWin(player.currentState, event.data)) {
-    const newEvent = {
+  if (foundStartLevelToWin(game.player.currentState, event.data)) {
+    const newEvent: IPlayerEventDB = {
       playerId: event.playerId,
       eventId: nextCreateEventId,
-      type: "WINLEVEL" as eventType,
       created: event.created,
+      type: "WINLEVEL" as eventType,
+    };
+    const newWinLevelEvent: IWinLevelDB = {
+      eventId: nextCreateEventId,
+      arcanaId: event.data.arcanaId,
+      levelId: event.data.levelId,
+      mode: event.data.mode,
     };
     allPEvents.push(newEvent);
-    winLevelEvents.push({
-      eventId: nextCreateEventId,
-      arcanaId: event.data.arcana,
-      levelId: event.data.level,
-      mode: event.data.mode,
-    });
-    return newEvent;
+    winLevelEvents.push(newWinLevelEvent);
+    return {
+      playerId: newEvent.playerId,
+      eventId: newEvent.eventId,
+      created: newEvent.created,
+      type: "WINLEVEL",
+      arcanaId: newWinLevelEvent.arcanaId,
+      mode: newWinLevelEvent.mode,
+      levelId: newWinLevelEvent.levelId,
+    };
   } else {
     throw new Error("Can't generate winLevelEvent");
   }
 };
 
 export const startEndlessEvent = (
-  player: IPlayer,
-  event: {
-    playerId: number;
-    created: number;
-    type: eventType;
-    data: {
-      arcana: number;
-      mode: gameMode;
-    };
-  }
-) => {
+  game: IGame,
+  event: IStartEndlessData
+): IStartEndlessEvent => {
   const nextCreateEventId = getNextStartEndlessEventId();
-  if (enoughEnergyToPlay(player, event.data)) {
-    const newEvent = {
+  if (enoughEnergyToPlay(game.player, event.data)) {
+    const newEvent: IPlayerEventDB = {
       playerId: event.playerId,
       eventId: nextCreateEventId,
       type: "STARTENDLESS" as eventType,
       created: new Date().valueOf(),
     };
-    allPEvents.push(newEvent);
-    startEldessEvents.push({
+    const newStartEldessEvents: IStartEndlessDB = {
       eventId: nextCreateEventId,
-      arcanaId: event.data.arcana,
+      arcanaId: event.data.arcanaId,
       mode: event.data.mode,
-    });
-    return newEvent;
+    };
+    allPEvents.push(newEvent);
+    startEldessEvents.push(newStartEldessEvents);
+    return {
+      playerId: newEvent.playerId,
+      eventId: newEvent.eventId,
+      created: newEvent.created,
+      type: "STARTENDLESS",
+      arcanaId: newStartEldessEvents.arcanaId,
+      mode: newStartEldessEvents.mode,
+    };
   } else {
     throw new Error("Can't generate startEndlessEvent");
   }
 };
 
 export const passCheckpointEvent = (
-  player: IPlayer,
-  event: {
-    playerId: number;
-    created: number;
-    type: eventType;
-    data: {
-      arcana: number;
-      mode: gameMode;
-      checkpoint: number;
-    };
-  }
-) => {
+  game: IGame,
+  event: IPassCheckpointData
+): IPassCheckpointEvent => {
   const nextCreateEventId = getNextPassCheckpointEventId();
-  if (correctCheckpoint(player, event.data)) {
-    const newEvent = {
+  if (correctCheckpoint(game.player, event.data)) {
+    const newEvent: IPlayerEventDB = {
       playerId: event.playerId,
       eventId: nextCreateEventId,
       type: "PASSCHECKPOINT" as eventType,
       created: new Date().valueOf(),
     };
-    allPEvents.push(newEvent);
-    passCheckpointEvents.push({
+    const newPassCheckpointEvent = {
       eventId: nextCreateEventId,
-      arcanaId: event.data.arcana,
+      arcanaId: event.data.arcanaId,
       mode: event.data.mode,
       checkpoint: event.data.checkpoint,
-    });
-    return newEvent;
+    };
+    allPEvents.push(newEvent);
+    passCheckpointEvents.push(newPassCheckpointEvent);
+    return {
+      playerId: newEvent.playerId,
+      eventId: newEvent.eventId,
+      created: newEvent.created,
+      type: "PASSCHECKPOINT",
+      arcanaId: newPassCheckpointEvent.arcanaId,
+      mode: newPassCheckpointEvent.mode,
+      checkpoint: newPassCheckpointEvent.checkpoint,
+    };
   } else {
     throw new Error("Can't generate passCheckpointEvent");
   }
 };
 
 export const missCheckpointEvent = (
-  player: IPlayer,
-  event: {
-    playerId: number;
-    created: number;
-    type: eventType;
-    data: {
-      arcana: number;
-      mode: gameMode;
-    };
-  }
-) => {
+  game: IGame,
+  event: IMissCheckpointData
+): IMissCheckpointEvent => {
   const nextCreateEventId = getNextMissCheckpointEventId();
-  const newEvent = {
+  const newEvent: IPlayerEventDB = {
     playerId: event.playerId,
     eventId: nextCreateEventId,
     type: "MISSCHECKPOINT" as eventType,
     created: new Date().valueOf(),
   };
-  allPEvents.push(newEvent);
-  missCheckpointEvents.push({
+  const newMissCheckpointEvent: IMissCheckpointDB = {
     eventId: nextCreateEventId,
-    arcanaId: event.data.arcana,
+    arcanaId: event.data.arcanaId,
     mode: event.data.mode,
-  });
-  return newEvent;
+  };
+  allPEvents.push(newEvent);
+  missCheckpointEvents.push(newMissCheckpointEvent);
+  return {
+    playerId: newEvent.playerId,
+    eventId: newEvent.eventId,
+    created: newEvent.created,
+    type: "MISSCHECKPOINT",
+    arcanaId: newMissCheckpointEvent.arcanaId,
+    mode: newMissCheckpointEvent.mode,
+  };
 };
 
 export const openSpellEvent = (
-  player: IPlayer,
-  event: {
-    playerId: number;
-    created: number;
-    type: eventType;
-    data: {
-      arcana: number;
-      spell: number;
-    };
-  }
-) => {
+  game: IGame,
+  event: IOpenSpellData
+): IOpenSpellEvent => {
   const nextCreateEventId = getNextOpenSpellEventId();
-  const newPlayerSpells = JSON.parse(JSON.stringify(player.spells));
+  const newPlayerSpells = JSON.parse(JSON.stringify(game.player.spells));
   const indexToChange = newPlayerSpells.findIndex(
     (s: ISpellOpen | ISpellClosed | ISpell) =>
-      s.arcanaId === event.data.arcana && s.id === event.data.spell
+      s.arcanaId === event.data.arcanaId && s.id === event.data.spellId
   );
   if (!newPlayerSpells[indexToChange].price) {
     throw new Error("Spell to open doesn't have a price");
   }
-  if (enoughToPay(player.materials, newPlayerSpells[indexToChange].price)) {
-    const newEvent = {
+  if (
+    enoughToPay(game.player.materials, newPlayerSpells[indexToChange].price)
+  ) {
+    const newEvent: IPlayerEventDB = {
       playerId: event.playerId,
       eventId: nextCreateEventId,
       type: "OPENSPELL" as eventType,
       created: event.created,
     };
-    allPEvents.push(newEvent);
-    openSpellEvents.push({
+    const newOpelSpellEvent: IOpenSpellDB = {
       eventId: nextCreateEventId,
-      arcanaId: event.data.arcana,
-      spellId: event.data.spell,
-    });
-    return newEvent;
+      arcanaId: event.data.arcanaId,
+      spellId: event.data.spellId,
+    };
+    allPEvents.push(newEvent);
+    openSpellEvents.push(newOpelSpellEvent);
+    return {
+      playerId: newEvent.playerId,
+      eventId: newEvent.eventId,
+      created: newEvent.created,
+      type: "OPENSPELL",
+      arcanaId: newOpelSpellEvent.arcanaId,
+      spellId: newOpelSpellEvent.spellId,
+    };
   } else {
     throw new Error("Can't generate openSpellEvent");
   }
 };
 
 export const updateSpellEvent = (
-  player: IPlayer,
-  event: {
-    playerId: number;
-    created: number;
-    type: eventType;
-    data: {
-      arcana: number;
-      spell: number;
-    };
-  }
-) => {
+  game: IGame,
+  event: IUpdateSpellData
+): IUpdateSpellEvent => {
   const nextCreateEventId = getNextUpdateSpellEventId();
-  const newPlayerSpells = JSON.parse(JSON.stringify(player.spells));
+  const newPlayerSpells = JSON.parse(JSON.stringify(game.player.spells));
   const indexToChange = newPlayerSpells.findIndex(
     (s: ISpellOpen | ISpellClosed | ISpell) =>
-      s.arcanaId === event.data.arcana && s.id === event.data.spell
+      s.arcanaId === event.data.arcanaId && s.id === event.data.spellId
   );
   if (!newPlayerSpells[indexToChange].updatePrice) {
     throw new Error("Spell to open doesn't have a price");
@@ -359,25 +379,36 @@ export const updateSpellEvent = (
     throw new Error("Spell to open doesn't have a required strength");
   }
   if (
-    enoughToPay(player.materials, newPlayerSpells[indexToChange].updatePrice) &&
+    enoughToPay(
+      game.player.materials,
+      newPlayerSpells[indexToChange].updatePrice
+    ) &&
     canUpdateSpell(
       newPlayerSpells[indexToChange].requiredStrength,
       newPlayerSpells[indexToChange].strength
     )
   ) {
-    const newEvent = {
+    const newEvent: IPlayerEventDB = {
       playerId: event.playerId,
       eventId: nextCreateEventId,
       type: "UPDATESPELL" as eventType,
       created: event.created,
     };
-    allPEvents.push(newEvent);
-    updateSpellEvents.push({
+    const newupdateSpellEvent: IUpdateSpellDB = {
       eventId: nextCreateEventId,
-      arcanaId: event.data.arcana,
-      spellId: event.data.spell,
-    });
-    return newEvent;
+      arcanaId: event.data.arcanaId,
+      spellId: event.data.spellId,
+    };
+    allPEvents.push(newEvent);
+    updateSpellEvents.push(newupdateSpellEvent);
+    return {
+      playerId: newEvent.playerId,
+      eventId: newEvent.eventId,
+      created: newEvent.created,
+      type: "UPDATESPELL",
+      arcanaId: newupdateSpellEvent.arcanaId,
+      spellId: newupdateSpellEvent.spellId,
+    };
   } else {
     throw new Error("Can't generate updateSpellEvent");
   }

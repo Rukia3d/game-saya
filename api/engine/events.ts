@@ -1,5 +1,4 @@
 import { arcanas } from "../db/testDBArcanes";
-import { arenaFight, arenaRun } from "../db/testDBArena";
 import { eventTowerRewards } from "../db/testDBLevels";
 import { materials } from "../db/testDBPlayer";
 import { spellPrices, spells, spellUpdates } from "../db/testDBSpells";
@@ -8,25 +7,13 @@ import {
   rewardPlayer,
   openNextLevel,
   removeMaterials,
-  updateRewardPool,
-  updateArenaResults,
 } from "./actions";
-import {
-  calculateResult,
-  ensure,
-  findEnergyPrice,
-  findLastCheckpoint,
-} from "./helpers";
+import { ensure, findEnergyPrice, findLastCheckpoint } from "./helpers";
 
 import {
   currentState,
   gameMode,
-  IArena,
-  IArenaEndEventTimed,
-  IArenaEvent,
-  IArenaStartEventTimed,
-  ICreatePlayerEventId,
-  ICurrentState,
+  ICreatePlayerEvent,
   IEventReward,
   IMaterial,
   IMissCheckpointEvent,
@@ -41,11 +28,11 @@ import {
   IStartEndlessEvent,
   IStartLevelEvent,
   IUpdateSpellEvent,
-  IWinLevelEventTimed,
+  IWinLevelEvent,
 } from "./types";
 
 export const createPlayer = (
-  event: ICreatePlayerEventId,
+  event: ICreatePlayerEvent,
   player: IPlayer
 ): IPlayer => {
   return {
@@ -158,10 +145,7 @@ export const missCheckpoint = (
   };
 };
 
-export const winLevel = (
-  event: IWinLevelEventTimed,
-  player: IPlayer
-): IPlayer => {
+export const winLevel = (event: IWinLevelEvent, player: IPlayer): IPlayer => {
   const newMaterials = rewardPlayer(event, player.materials, player.arcanas);
   // need to add experience before we open the next level
   const newExperience = addExperience(event, player);

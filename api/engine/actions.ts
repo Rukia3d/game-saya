@@ -1,8 +1,6 @@
-import seedrandom from "seedrandom";
 import {
   findLastCheckpoint,
-  findLevelForEndless,
-  findLevelForStory,
+  findLevel,
   findLevelIndex,
   generateRandom,
 } from "./helpers";
@@ -10,21 +8,19 @@ import {
   IMaterialQuant,
   IArcana,
   IAllowedRewards,
-  IWinLevelEventTimed,
   IMissCheckpointEvent,
   IPlayer,
   IArenaEvent,
+  IWinLevelEvent,
+  IPassCheckpointEvent,
 } from "./types";
 
 export const rewardPlayer = (
-  event: IWinLevelEventTimed | IMissCheckpointEvent,
+  event: IWinLevelEvent | IMissCheckpointEvent,
   materials: IMaterialQuant[],
   arcanas: IArcana[]
 ): { all: IMaterialQuant[]; new: IMaterialQuant[] } => {
-  const level =
-    "time" in event
-      ? findLevelForStory(event, arcanas)
-      : findLevelForEndless(event, arcanas);
+  const level = findLevel(event, arcanas);
   const newOnly: IMaterialQuant[] = [];
   level.allowedRewards.forEach((r: IAllowedRewards) => {
     const rand = generateRandom(event, level, r);
@@ -35,7 +31,7 @@ export const rewardPlayer = (
 };
 
 export const openNextLevel = (
-  event: IWinLevelEventTimed,
+  event: IWinLevelEvent,
   arcanas: IArcana[]
 ): IArcana[] => {
   const [charIndex, levelIndex] = findLevelIndex(event, arcanas);
@@ -47,13 +43,10 @@ export const openNextLevel = (
 };
 
 export const addExperience = (
-  event: IWinLevelEventTimed | IMissCheckpointEvent,
+  event: IWinLevelEvent | IPassCheckpointEvent,
   player: IPlayer
 ): number => {
-  const level =
-    "time" in event
-      ? findLevelForStory(event, player.arcanas)
-      : findLevelForEndless(event, player.arcanas);
+  const level = findLevel(event, player.arcanas);
   if ("state" in level && level.state === "open") {
     return player.exprience + level.experience;
   }

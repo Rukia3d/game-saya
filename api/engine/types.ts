@@ -176,15 +176,6 @@ export interface IPlayer {
   currentState: ICurrentState;
 }
 
-export type IPlayerDataEvent = {
-  playerId: number;
-  created: number;
-  type: eventType;
-  data: any;
-};
-
-export type IGenericEvent = IPlayerEvent | IServerEvent;
-
 export type IServerEvent = {
   id: number;
   eventId: number;
@@ -192,79 +183,253 @@ export type IServerEvent = {
   created: number;
 };
 
-export type IPlayerEvent = {
+export type IGameEvent =
+  | ICreatePlayerEvent
+  | IStartLevelEvent
+  | IWinLevelEvent
+  | IOpenSpellEvent
+  | IUpdateSpellEvent
+  | IStartEndlessEvent
+  | IPassCheckpointEvent
+  | IMissCheckpointEvent;
+
+export type IPlayerEventDB = {
   playerId: number;
   eventId: number;
   type: eventType;
   created: number;
 };
 
-export type ICreatePlayerEvent = {
+// CREATEPLAYER
+export type ICreatePlayerData = {
+  created: number;
+  type: "CREATEPLAYER";
+  data: {
+    name: string;
+  };
+};
+
+export type ICreatePlayerDB = {
   eventId: number;
   playerName: string;
 };
 
-export type IStartLevelEvent = {
+export type ICreatePlayerEvent = {
+  playerId: number;
+  eventId: number;
+  created: number;
+  type: "CREATEPLAYER";
+  playerName: string;
+};
+
+// STARTLEVEL
+export type IStartLevelDB = {
   eventId: number;
   arcanaId: number;
   mode: gameMode;
   levelId: number;
+};
+
+export type IStartLevelData = {
+  playerId: number;
+  created: number;
+  type: "STARTLEVEL";
+  data: {
+    arcanaId: number;
+    mode: gameMode;
+    levelId: number;
+  };
+};
+
+export type IStartLevelEvent = {
+  playerId: number;
+  eventId: number;
+  created: number;
+  type: "STARTLEVEL";
+  arcanaId: number;
+  mode: gameMode;
+  levelId: number;
+};
+
+// WINLEVEL
+export type IWinLevelDB = {
+  eventId: number;
+  arcanaId: number;
+  mode: gameMode;
+  levelId: number;
+};
+
+export type IWinLevelData = {
+  playerId: number;
+  created: number;
+  type: "WINLEVEL";
+  data: {
+    arcanaId: number;
+    mode: gameMode;
+    levelId: number;
+  };
 };
 
 export type IWinLevelEvent = {
+  playerId: number;
   eventId: number;
+  created: number;
+  type: "WINLEVEL";
   arcanaId: number;
   mode: gameMode;
   levelId: number;
 };
 
-export type IOpenSpellEvent = {
+// OPENSPELL
+export type IOpenSpellDB = {
   eventId: number;
   arcanaId: number;
   spellId: number;
+};
+
+export type IOpenSpellData = {
+  playerId: number;
+  created: number;
+  type: "OPENSPELL";
+  data: {
+    arcanaId: number;
+    spellId: number;
+  };
+};
+
+export type IOpenSpellEvent = {
+  playerId: number;
+  eventId: number;
+  created: number;
+  type: "OPENSPELL";
+  arcanaId: number;
+  spellId: number;
+};
+
+// UPDATESPELL
+export type IUpdateSpellDB = {
+  eventId: number;
+  arcanaId: number;
+  spellId: number;
+};
+
+export type IUpdateSpellData = {
+  playerId: number;
+  created: number;
+  type: "UPDATESPELL";
+  data: {
+    arcanaId: number;
+    spellId: number;
+  };
 };
 
 export type IUpdateSpellEvent = {
+  playerId: number;
   eventId: number;
+  created: number;
+  type: "UPDATESPELL";
   arcanaId: number;
   spellId: number;
 };
 
-export type IStartEndlessEvent = {
+// STARTENDLESS
+export type IStartEndlessDB = {
   eventId: number;
   arcanaId: number;
   mode: gameMode;
 };
 
-export type IPassCheckpointEvent = {
+export type IStartEndlessData = {
+  playerId: number;
+  created: number;
+  type: "STARTENDLESS";
+  data: {
+    arcanaId: number;
+    mode: gameMode;
+  };
+};
+
+export type IStartEndlessEvent = {
+  playerId: number;
+  eventId: number;
+  created: number;
+  type: "STARTENDLESS";
+  arcanaId: number;
+  mode: gameMode;
+};
+
+// PASSCHECKPOINT
+export type IPassCheckpointDB = {
   eventId: number;
   arcanaId: number;
   mode: gameMode;
   checkpoint: number;
 };
 
-export type IMissCheckpointEvent = {
+export type IPassCheckpointData = {
+  playerId: number;
+  created: number;
+  type: "PASSCHECKPOINT";
+  data: {
+    arcanaId: number;
+    mode: gameMode;
+    checkpoint: number;
+  };
+};
+
+export type IPassCheckpointEvent = {
+  playerId: number;
+  eventId: number;
+  created: number;
+  type: "PASSCHECKPOINT";
+  arcanaId: number;
+  mode: gameMode;
+  checkpoint: number;
+};
+
+// MISSCHECKPOINT
+export type IMissCheckpointDB = {
   eventId: number;
   arcanaId: number;
   mode: gameMode;
 };
 
-export type IArenaStartEvent = {
+export type IMissCheckpointData = {
+  playerId: number;
+  created: number;
+  type: "MISSCHECKPOINT";
+  data: {
+    arcanaId: number;
+    mode: gameMode;
+  };
+};
+
+export type IMissCheckpointEvent = {
+  playerId: number;
+  eventId: number;
+  created: number;
+  type: "MISSCHECKPOINT";
+  arcanaId: number;
+  mode: gameMode;
+};
+
+// ARENA
+export type IArenaStartDB = {
   eventId: number;
   index: number;
   mode: gameMode;
 };
 
-export type IArenaEndEvent = {
+export type IArenaEndDB = {
   eventId: number;
   index: number;
   mode: gameMode;
 };
 
-export type IWinLevelEventTimed = IWinLevelEvent & { time: number };
-export type IArenaStartEventTimed = IArenaStartEvent & { time: number };
-export type IArenaEndEventTimed = IArenaEndEvent & { time: number };
-export type ICreatePlayerEventId = ICreatePlayerEvent & { playerId: number };
+// export type IWinLevelTimed = IWinLevelEvent & { time: number };
+// export type IArenaStartTimed = IArenaStartEvent & { time: number };
+// export type IArenaEndTimedDB = IArenaEndEvent & { time: number };
+// export type ICreatePlayerEventId = ICreatePlayerEvent & { playerId: number };
 
 export type arcanaName = "rings" | "cups" | "wands" | "swords" | "dimonds";
 export type spellState = "closed" | "open" | "listed";

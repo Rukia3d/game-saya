@@ -1,17 +1,17 @@
 import {
-  IPlayerEvent,
-  ICreatePlayerEvent,
-  IStartLevelEvent,
-  IWinLevelEvent,
   IMaterial,
-  IOpenSpellEvent,
-  IUpdateSpellEvent,
-  IStartEndlessEvent,
-  IPassCheckpointEvent,
-  IMissCheckpointEvent,
-  IArenaStartEvent,
-  IArenaEndEvent,
   IServerEvent,
+  IPlayerEventDB,
+  ICreatePlayerDB,
+  IArenaStartDB,
+  IMissCheckpointDB,
+  IOpenSpellDB,
+  IPassCheckpointDB,
+  IStartEndlessDB,
+  IStartLevelDB,
+  IUpdateSpellDB,
+  IWinLevelDB,
+  IArenaEndDB,
 } from "../engine/types";
 
 // const testLevel = new Array(131).fill(new Array(9));
@@ -38,7 +38,7 @@ export const materials: IMaterial[] = [
 
 export const allSEvents: IServerEvent[] = [];
 
-export const allPEvents: IPlayerEvent[] = [
+export const allPEvents: IPlayerEventDB[] = [
   {
     playerId: 1,
     eventId: 0,
@@ -61,27 +61,27 @@ export const allPEvents: IPlayerEvent[] = [
   },
 ];
 
-export const createPlayerEvents: ICreatePlayerEvent[] = [
+export const createPlayerEvents: ICreatePlayerDB[] = [
   { eventId: 0, playerName: "player 1 name" },
   { eventId: 1, playerName: "player 2 name" },
 ];
 
-export const startLevelEvents: IStartLevelEvent[] = [
+export const startLevelEvents: IStartLevelDB[] = [
   { eventId: 0, arcanaId: 0, levelId: 0, mode: "story" },
 ];
 
-export const winLevelEvents: IWinLevelEvent[] = [
+export const winLevelEvents: IWinLevelDB[] = [
   { eventId: 0, arcanaId: 0, levelId: 0, mode: "story" },
 ];
 
-export const openSpellEvents: IOpenSpellEvent[] = [
+export const openSpellEvents: IOpenSpellDB[] = [
   {
     eventId: 0,
     arcanaId: 0,
     spellId: 0,
   },
 ];
-export const updateSpellEvents: IUpdateSpellEvent[] = [
+export const updateSpellEvents: IUpdateSpellDB[] = [
   {
     eventId: 0,
     arcanaId: 0,
@@ -89,7 +89,7 @@ export const updateSpellEvents: IUpdateSpellEvent[] = [
   },
 ];
 
-export const startEldessEvents: IStartEndlessEvent[] = [
+export const startEldessEvents: IStartEndlessDB[] = [
   {
     eventId: 0,
     arcanaId: 0,
@@ -97,7 +97,7 @@ export const startEldessEvents: IStartEndlessEvent[] = [
   },
 ];
 
-export const passCheckpointEvents: IPassCheckpointEvent[] = [
+export const passCheckpointEvents: IPassCheckpointDB[] = [
   {
     eventId: 0,
     arcanaId: 0,
@@ -106,7 +106,7 @@ export const passCheckpointEvents: IPassCheckpointEvent[] = [
   },
 ];
 
-export const missCheckpointEvents: IMissCheckpointEvent[] = [
+export const missCheckpointEvents: IMissCheckpointDB[] = [
   {
     eventId: 0,
     arcanaId: 0,
@@ -114,7 +114,7 @@ export const missCheckpointEvents: IMissCheckpointEvent[] = [
   },
 ];
 
-export const arenaStartEvents: IArenaStartEvent[] = [
+export const arenaStartEvents: IArenaStartDB[] = [
   {
     eventId: 0,
     index: 0,
@@ -122,7 +122,7 @@ export const arenaStartEvents: IArenaStartEvent[] = [
   },
 ];
 
-export const arenaEndEvents: IArenaEndEvent[] = [
+export const arenaEndEvents: IArenaEndDB[] = [
   {
     eventId: 0,
     index: 0,
