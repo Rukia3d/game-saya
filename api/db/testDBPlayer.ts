@@ -1,7 +1,6 @@
 import {
   IMaterial,
-  IServerEvent,
-  IPlayerEventDB,
+  IEventDB,
   ICreatePlayerDB,
   IArenaStartDB,
   IMissCheckpointDB,
@@ -11,7 +10,6 @@ import {
   IStartLevelDB,
   IUpdateSpellDB,
   IWinLevelDB,
-  IArenaEndDB,
 } from "../engine/types";
 
 // const testLevel = new Array(131).fill(new Array(9));
@@ -36,9 +34,7 @@ export const materials: IMaterial[] = [
   { id: 7, name: "Dimonds" },
 ];
 
-export const allSEvents: IServerEvent[] = [];
-
-export const allPEvents: IPlayerEventDB[] = [
+export const allPEvents: IEventDB[] = [
   {
     playerId: 1,
     eventId: 0,
@@ -58,6 +54,24 @@ export const allPEvents: IPlayerEventDB[] = [
     eventId: 1,
     type: "CREATEPLAYER",
     created: 1654347310,
+  },
+  {
+    playerId: null,
+    eventId: 0,
+    type: "ARENASTART",
+    created: 1654347193,
+  },
+  {
+    playerId: null,
+    eventId: 1,
+    type: "ARENASTART",
+    created: 1654347193,
+  },
+  {
+    playerId: null,
+    eventId: 2,
+    type: "ARENASTART",
+    created: 1654347193,
   },
 ];
 
@@ -117,15 +131,23 @@ export const missCheckpointEvents: IMissCheckpointDB[] = [
 export const arenaStartEvents: IArenaStartDB[] = [
   {
     eventId: 0,
-    index: 0,
     mode: "run",
+    start: 1662286894,
+    end: 1663150894,
+    multiplier: 1,
   },
-];
-
-export const arenaEndEvents: IArenaEndDB[] = [
   {
-    eventId: 0,
-    index: 0,
+    eventId: 1,
     mode: "run",
+    start: 1662286894,
+    end: 1663150894,
+    multiplier: 5,
+  },
+  {
+    eventId: 2,
+    mode: "run",
+    start: 1662286894,
+    end: 1663150894,
+    multiplier: 10,
   },
 ];

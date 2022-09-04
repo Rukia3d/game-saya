@@ -193,8 +193,8 @@ export type IGameEvent =
   | IPassCheckpointEvent
   | IMissCheckpointEvent;
 
-export type IPlayerEventDB = {
-  playerId: number;
+export type IEventDB = {
+  playerId: number | null;
   eventId: number;
   type: eventType;
   created: number;
@@ -416,12 +416,15 @@ export type IMissCheckpointEvent = {
 // ARENA
 export type IArenaStartDB = {
   eventId: number;
-  index: number;
   mode: gameMode;
+  start: number;
+  end: number;
+  multiplier: number;
 };
 
-export type IArenaEndDB = {
+export type IPlayerArenaStartDB = {
   eventId: number;
+  playerId: number;
   index: number;
   mode: gameMode;
 };
@@ -454,6 +457,4 @@ export type playerEventType =
   | "STARTENDLESS"
   | "PASSCHECKPOINT"
   | "MISSCHECKPOINT"
-  | "ARENASTART"
-  | "ARENAEND"
-  | "MATERIALADD";
+  | "ARENASTART";

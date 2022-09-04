@@ -85,9 +85,9 @@ app.post("/api/players/:id/startLevel", async (req: any, res: any) => {
     created: new Date().valueOf(),
     type: "STARTLEVEL",
     data: {
-      arcanaId: req.body.arcana,
+      arcanaId: req.body.arcanaId,
       mode: req.body.mode,
-      levelId: req.body.level,
+      levelId: req.body.levelId,
     },
   };
   try {
@@ -108,9 +108,9 @@ app.post("/api/players/:id/winLevel", async (req: any, res: any) => {
     created: new Date().valueOf(),
     type: "WINLEVEL",
     data: {
-      arcanaId: req.body.arcana,
+      arcanaId: req.body.arcanaId,
       mode: req.body.mode,
-      levelId: req.body.level,
+      levelId: req.body.levelId,
     },
   };
   try {
@@ -131,8 +131,8 @@ app.post("/api/players/:id/openSpell", async (req: any, res: any) => {
     created: new Date().valueOf(),
     type: "OPENSPELL",
     data: {
-      arcanaId: req.body.arcana,
-      spellId: req.body.spell,
+      arcanaId: req.body.arcanaId,
+      spellId: req.body.spellId,
     },
   };
   try {
@@ -152,8 +152,8 @@ app.post("/api/players/:id/updateSpell", async (req: any, res: any) => {
     created: new Date().valueOf(),
     type: "UPDATESPELL",
     data: {
-      arcanaId: req.body.arcana,
-      spellId: req.body.spell,
+      arcanaId: req.body.arcanaId,
+      spellId: req.body.spellId,
     },
   };
   try {
@@ -174,7 +174,7 @@ app.post("/api/players/:id/startEndless", async (req: any, res: any) => {
     created: new Date().valueOf(),
     type: "STARTENDLESS",
     data: {
-      arcanaId: req.body.arcana,
+      arcanaId: req.body.arcanaId,
       mode: req.body.mode,
     },
   };
@@ -196,7 +196,7 @@ app.post("/api/players/:id/passCheckpoint", async (req: any, res: any) => {
     created: new Date().valueOf(),
     type: "PASSCHECKPOINT",
     data: {
-      arcanaId: req.body.arcana,
+      arcanaId: req.body.arcanaId,
       mode: req.body.mode,
       checkpoint: req.body.checkpoint,
     },
@@ -219,7 +219,7 @@ app.post("/api/players/:id/missCheckpoint", async (req: any, res: any) => {
     created: new Date().valueOf(),
     type: "MISSCHECKPOINT",
     data: {
-      arcanaId: req.body.arcana,
+      arcanaId: req.body.arcanaId,
       mode: req.body.mode,
     },
   };

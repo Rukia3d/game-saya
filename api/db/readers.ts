@@ -1,6 +1,5 @@
 import { ensure } from "../engine/helpers";
 import {
-  IArenaStartDB,
   ICreatePlayerDB,
   ICreatePlayerEvent,
   IGameEvent,
@@ -10,7 +9,7 @@ import {
   IOpenSpellEvent,
   IPassCheckpointDB,
   IPassCheckpointEvent,
-  IPlayerEventDB,
+  IEventDB,
   IStartEndlessDB,
   IStartEndlessEvent,
   IStartLevelDB,
@@ -30,19 +29,9 @@ import {
   passCheckpointEvents,
   missCheckpointEvents,
   arenaStartEvents,
-  arenaEndEvents,
-  allSEvents,
 } from "./testDBPlayer";
 
-export const allEvents = () => {
-  return;
-};
-
-export const allServerEvents = () => {
-  return allSEvents;
-};
-
-export const allPlayerEvents = () => {
+export const allGameEvents = () => {
   return allPEvents;
 };
 
@@ -82,32 +71,18 @@ export const allArenaStartEvents = () => {
   return arenaStartEvents;
 };
 
-export const allArenaEndEvents = () => {
-  return arenaEndEvents;
-};
-
-export const serverEvents = (playerId: number) => {
-  // Find events for a player
-  const events = ensure(
-    allPlayerEvents().filter((p: IPlayerEventDB) => p.playerId == playerId)
-  );
-  if (events.length === 0) {
-    throw new Error(`No events found for ${playerId}`);
-  }
-
-  return events;
-};
-
 export const playerEvents = (playerId: number): IGameEvent[] => {
   // Find events for a player
   const events = ensure(
-    allPlayerEvents().filter((p: IPlayerEventDB) => p.playerId == playerId)
+    allGameEvents().filter(
+      (p: IEventDB) => p.playerId == playerId || p.playerId == null
+    )
   );
   if (events.length === 0) {
     throw new Error(`No events found for ${playerId}`);
   }
   const newEvents: IGameEvent[] = [];
-  events.forEach((e: IPlayerEventDB) => {
+  events.forEach((e: IEventDB) => {
     switch (e.type) {
       case "CREATEPLAYER":
         newEvents.push(createPlayerEvent(e));
@@ -151,15 +126,16 @@ export const playerEvents = (playerId: number): IGameEvent[] => {
   return newEvents;
 };
 
-export const createPlayerEvent = (
-  event: IPlayerEventDB
-): ICreatePlayerEvent => {
+export const createPlayerEvent = (event: IEventDB): ICreatePlayerEvent => {
   const createPlayer = ensure(
     allCreatePlayerEvents().find(
       (e: ICreatePlayerDB) => e.eventId == event.eventId
     ),
     "No create player event"
   );
+  if (!event.playerId) {
+    throw new Error("No player ID in createPlayerEvent");
+  }
   return {
     playerId: event.playerId,
     eventId: event.eventId,
@@ -169,13 +145,16 @@ export const createPlayerEvent = (
   };
 };
 
-export const startLevelEvent = (event: IPlayerEventDB): IStartLevelEvent => {
+export const startLevelEvent = (event: IEventDB): IStartLevelEvent => {
   const startLevel = ensure(
     allStartLevelEvents().find(
       (e: IStartLevelDB) => e.eventId == event.eventId
     ),
     "No start level event"
   );
+  if (!event.playerId) {
+    throw new Error("No player ID in startLevelEvent");
+  }
   return {
     playerId: event.playerId,
     eventId: event.eventId,
@@ -187,11 +166,14 @@ export const startLevelEvent = (event: IPlayerEventDB): IStartLevelEvent => {
   };
 };
 
-export const winLevelEvent = (event: IPlayerEventDB): IWinLevelEvent => {
+export const winLevelEvent = (event: IEventDB): IWinLevelEvent => {
   const winLevel = ensure(
     allWinLevelEvents().find((e: IWinLevelDB) => e.eventId == event.eventId),
     "No win level event"
   );
+  if (!event.playerId) {
+    throw new Error("No player ID in winLevelEvent");
+  }
   return {
     playerId: event.playerId,
     eventId: event.eventId,
@@ -203,11 +185,14 @@ export const winLevelEvent = (event: IPlayerEventDB): IWinLevelEvent => {
   };
 };
 
-export const openSpellEvent = (event: IPlayerEventDB): IOpenSpellEvent => {
+export const openSpellEvent = (event: IEventDB): IOpenSpellEvent => {
   const openSpell = ensure(
     allOpenSpellEvents().find((e: IOpenSpellDB) => e.eventId == event.eventId),
     "No open spell event"
   );
+  if (!event.playerId) {
+    throw new Error("No player ID in openSpellEvent");
+  }
   return {
     playerId: event.playerId,
     eventId: event.eventId,
@@ -218,13 +203,16 @@ export const openSpellEvent = (event: IPlayerEventDB): IOpenSpellEvent => {
   };
 };
 
-export const updateSpellEvent = (event: IPlayerEventDB): IUpdateSpellEvent => {
+export const updateSpellEvent = (event: IEventDB): IUpdateSpellEvent => {
   const updateSpell = ensure(
     allUpdateSpellEvents().find(
       (e: IOpenSpellDB) => e.eventId == event.eventId
     ),
     "No update spell event"
   );
+  if (!event.playerId) {
+    throw new Error("No player ID in updateSpellEvent");
+  }
   return {
     playerId: event.playerId,
     eventId: event.eventId,
@@ -235,15 +223,16 @@ export const updateSpellEvent = (event: IPlayerEventDB): IUpdateSpellEvent => {
   };
 };
 
-export const startEndlessEvent = (
-  event: IPlayerEventDB
-): IStartEndlessEvent => {
+export const startEndlessEvent = (event: IEventDB): IStartEndlessEvent => {
   const startEndless = ensure(
     allStartEndlessEvents().find(
       (e: IStartEndlessDB) => e.eventId == event.eventId
     ),
     "No start endless event"
   );
+  if (!event.playerId) {
+    throw new Error("No player ID in startEndlessEvent");
+  }
   return {
     playerId: event.playerId,
     eventId: event.eventId,
@@ -254,15 +243,16 @@ export const startEndlessEvent = (
   };
 };
 
-export const passCheckpointEvent = (
-  event: IPlayerEventDB
-): IPassCheckpointEvent => {
+export const passCheckpointEvent = (event: IEventDB): IPassCheckpointEvent => {
   const passCheckpoint = ensure(
     allPassCheckpointEvents().find(
       (e: IPassCheckpointDB) => e.eventId == event.eventId
     ),
     "No pass checkpoint event"
   );
+  if (!event.playerId) {
+    throw new Error("No player ID in passCheckpointEvent");
+  }
   return {
     playerId: event.playerId,
     eventId: event.eventId,
@@ -274,15 +264,16 @@ export const passCheckpointEvent = (
   };
 };
 
-export const missCheckpointEvent = (
-  event: IPlayerEventDB
-): IMissCheckpointEvent => {
+export const missCheckpointEvent = (event: IEventDB): IMissCheckpointEvent => {
   const missCheckpoint = ensure(
     allMissCheckpointEvents().find(
       (e: IMissCheckpointDB) => e.eventId == event.eventId
     ),
     "No miss checkpoint event"
   );
+  if (!event.playerId) {
+    throw new Error("No player ID in missCheckpointEvent");
+  }
   return {
     playerId: event.playerId,
     eventId: event.eventId,
@@ -291,28 +282,4 @@ export const missCheckpointEvent = (
     arcanaId: missCheckpoint.arcanaId,
     mode: missCheckpoint.mode,
   };
-};
-
-export const arenaStartEvent = (eventId: number) => {
-  const event = ensure(
-    allPlayerEvents().find((e: IPlayerEventDB) => e.eventId == eventId),
-    "No game state event"
-  );
-  const arenastart = ensure(
-    allArenaStartEvents().find((e: IArenaStartDB) => e.eventId == eventId),
-    "No arena start event"
-  );
-  return arenastart;
-};
-
-export const arenaEndEvent = (eventId: number) => {
-  const event = ensure(
-    allPlayerEvents().find((e: IPlayerEventDB) => e.eventId == eventId),
-    "No game state event"
-  );
-  const arenaend = ensure(
-    allArenaEndEvents().find((e: IArenaStartDB) => e.eventId == eventId),
-    "No arena end event"
-  );
-  return arenaend;
 };

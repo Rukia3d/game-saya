@@ -2,7 +2,7 @@ import * as readers from "../db/readers";
 
 test("Reads player events correctly", () => {
   jest.spyOn(console, "error").mockImplementation(() => jest.fn());
-  expect(() => readers.playerEvents(3)).toThrow("No events found for 3");
+  expect(() => readers.gameEvents(3)).toThrow("No events found for 3");
   jest.restoreAllMocks();
 });
 

@@ -1,19 +1,17 @@
 import * as readers from "./readers";
 import {
-  allowParticipation,
   canUpdateSpell,
   correctCheckpoint,
   enoughEnergyToPlay,
   enoughToPay,
-  foundArenaStartEvent,
   foundStartLevelToWin,
 } from "../engine/helpers";
 import {
   eventType,
-  gameMode,
   ICreatePlayerData,
   ICreatePlayerDB,
   ICreatePlayerEvent,
+  IEventDB,
   IGame,
   IMissCheckpointData,
   IMissCheckpointDB,
@@ -23,8 +21,6 @@ import {
   IOpenSpellEvent,
   IPassCheckpointData,
   IPassCheckpointEvent,
-  IPlayer,
-  IPlayerEventDB,
   ISpell,
   ISpellClosed,
   ISpellOpen,
@@ -51,15 +47,23 @@ import {
   startEldessEvents,
   passCheckpointEvents,
   missCheckpointEvents,
-  arenaStartEvents,
-  arenaEndEvents,
 } from "./testDBPlayer";
 
 const getNextPlayerId = () => {
+  const createPlayers = readers
+    .allCreatePlayerEvents()
+    .sort((a, b) => a.eventId - b.eventId);
   const latestEvents = readers
-    .allPlayerEvents()
-    .sort((a, b) => a.playerId - b.playerId);
-  return latestEvents[latestEvents.length - 1].playerId + 1;
+    .allGameEvents()
+    .find(
+      (e: IEventDB) =>
+        e.eventId == createPlayers[createPlayers.length - 1].eventId
+    );
+
+  if (!latestEvents || latestEvents.playerId == null) {
+    throw new Error("Can't find the last created player Id");
+  }
+  return latestEvents.playerId + 1;
 };
 
 const getNextCreatePlayerEventId = () => {
@@ -118,26 +122,12 @@ const getNextUpdateSpellEventId = () => {
   return latestEvents[latestEvents.length - 1].eventId + 1;
 };
 
-const getNextArenaStartEvent = () => {
-  const latestEvents = readers
-    .allArenaStartEvents()
-    .sort((a, b) => a.eventId - b.eventId);
-  return latestEvents[latestEvents.length - 1].eventId + 1;
-};
-
-const getNextArenaEndEvent = () => {
-  const latestEvents = readers
-    .allArenaEndEvents()
-    .sort((a, b) => a.eventId - b.eventId);
-  return latestEvents[latestEvents.length - 1].eventId + 1;
-};
-
 export const createPlayerEvent = (
   event: ICreatePlayerData
 ): ICreatePlayerEvent => {
   const nextPlayerId = getNextPlayerId();
   const nextCreateEventId = getNextCreatePlayerEventId();
-  const newEvent: IPlayerEventDB = {
+  const newEvent: IEventDB = {
     playerId: nextPlayerId,
     eventId: nextCreateEventId,
     type: "CREATEPLAYER" as eventType,
@@ -150,7 +140,7 @@ export const createPlayerEvent = (
   allPEvents.push(newEvent);
   createPlayerEvents.push(newPlayerEvent);
   return {
-    playerId: newEvent.playerId,
+    playerId: nextPlayerId,
     eventId: newEvent.eventId,
     type: "CREATEPLAYER",
     created: newEvent.created,
@@ -164,7 +154,7 @@ export const startLevelEvent = (
 ): IStartLevelEvent => {
   const nextCreateEventId = getNextStartLevelEventId();
   if (enoughEnergyToPlay(game.player, event.data)) {
-    const newEvent: IPlayerEventDB = {
+    const newEvent: IEventDB = {
       playerId: event.playerId,
       eventId: nextCreateEventId,
       type: "STARTLEVEL" as eventType,
@@ -179,7 +169,7 @@ export const startLevelEvent = (
     allPEvents.push(newEvent);
     startLevelEvents.push(newStartPlayerEvent);
     return {
-      playerId: newEvent.playerId,
+      playerId: event.playerId,
       eventId: newEvent.eventId,
       created: newEvent.created,
       type: "STARTLEVEL",
@@ -198,7 +188,7 @@ export const winLevelEvent = (
 ): IWinLevelEvent => {
   const nextCreateEventId = getNextWinLevelEventId();
   if (foundStartLevelToWin(game.player.currentState, event.data)) {
-    const newEvent: IPlayerEventDB = {
+    const newEvent: IEventDB = {
       playerId: event.playerId,
       eventId: nextCreateEventId,
       created: event.created,
@@ -213,7 +203,7 @@ export const winLevelEvent = (
     allPEvents.push(newEvent);
     winLevelEvents.push(newWinLevelEvent);
     return {
-      playerId: newEvent.playerId,
+      playerId: event.playerId,
       eventId: newEvent.eventId,
       created: newEvent.created,
       type: "WINLEVEL",
@@ -232,7 +222,7 @@ export const startEndlessEvent = (
 ): IStartEndlessEvent => {
   const nextCreateEventId = getNextStartEndlessEventId();
   if (enoughEnergyToPlay(game.player, event.data)) {
-    const newEvent: IPlayerEventDB = {
+    const newEvent: IEventDB = {
       playerId: event.playerId,
       eventId: nextCreateEventId,
       type: "STARTENDLESS" as eventType,
@@ -246,7 +236,7 @@ export const startEndlessEvent = (
     allPEvents.push(newEvent);
     startEldessEvents.push(newStartEldessEvents);
     return {
-      playerId: newEvent.playerId,
+      playerId: event.playerId,
       eventId: newEvent.eventId,
       created: newEvent.created,
       type: "STARTENDLESS",
@@ -264,7 +254,7 @@ export const passCheckpointEvent = (
 ): IPassCheckpointEvent => {
   const nextCreateEventId = getNextPassCheckpointEventId();
   if (correctCheckpoint(game.player, event.data)) {
-    const newEvent: IPlayerEventDB = {
+    const newEvent: IEventDB = {
       playerId: event.playerId,
       eventId: nextCreateEventId,
       type: "PASSCHECKPOINT" as eventType,
@@ -279,7 +269,7 @@ export const passCheckpointEvent = (
     allPEvents.push(newEvent);
     passCheckpointEvents.push(newPassCheckpointEvent);
     return {
-      playerId: newEvent.playerId,
+      playerId: event.playerId,
       eventId: newEvent.eventId,
       created: newEvent.created,
       type: "PASSCHECKPOINT",
@@ -297,7 +287,7 @@ export const missCheckpointEvent = (
   event: IMissCheckpointData
 ): IMissCheckpointEvent => {
   const nextCreateEventId = getNextMissCheckpointEventId();
-  const newEvent: IPlayerEventDB = {
+  const newEvent: IEventDB = {
     playerId: event.playerId,
     eventId: nextCreateEventId,
     type: "MISSCHECKPOINT" as eventType,
@@ -311,7 +301,7 @@ export const missCheckpointEvent = (
   allPEvents.push(newEvent);
   missCheckpointEvents.push(newMissCheckpointEvent);
   return {
-    playerId: newEvent.playerId,
+    playerId: event.playerId,
     eventId: newEvent.eventId,
     created: newEvent.created,
     type: "MISSCHECKPOINT",
@@ -336,7 +326,7 @@ export const openSpellEvent = (
   if (
     enoughToPay(game.player.materials, newPlayerSpells[indexToChange].price)
   ) {
-    const newEvent: IPlayerEventDB = {
+    const newEvent: IEventDB = {
       playerId: event.playerId,
       eventId: nextCreateEventId,
       type: "OPENSPELL" as eventType,
@@ -350,7 +340,7 @@ export const openSpellEvent = (
     allPEvents.push(newEvent);
     openSpellEvents.push(newOpelSpellEvent);
     return {
-      playerId: newEvent.playerId,
+      playerId: event.playerId,
       eventId: newEvent.eventId,
       created: newEvent.created,
       type: "OPENSPELL",
@@ -388,7 +378,7 @@ export const updateSpellEvent = (
       newPlayerSpells[indexToChange].strength
     )
   ) {
-    const newEvent: IPlayerEventDB = {
+    const newEvent: IEventDB = {
       playerId: event.playerId,
       eventId: nextCreateEventId,
       type: "UPDATESPELL" as eventType,
@@ -402,7 +392,7 @@ export const updateSpellEvent = (
     allPEvents.push(newEvent);
     updateSpellEvents.push(newupdateSpellEvent);
     return {
-      playerId: newEvent.playerId,
+      playerId: event.playerId,
       eventId: newEvent.eventId,
       created: newEvent.created,
       type: "UPDATESPELL",
