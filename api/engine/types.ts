@@ -425,6 +425,11 @@ export type IServerArenaStartDB = {
   end: number;
 };
 
+export type IServerArenaStartData = {
+  startDate: number;
+  endDate: number;
+};
+
 export type IServerArenaStartEvent = {
   eventId: number;
   type: "SERVERARENASTART";

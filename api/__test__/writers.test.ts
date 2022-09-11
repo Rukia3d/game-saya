@@ -1,3 +1,4 @@
+import { ARENAEVENTINTERVAL } from "../cronjobs";
 import * as readers from "../db/readers";
 import { arcanas } from "../db/testDBArcanes";
 import { materials } from "../db/testDBPlayer";
@@ -305,7 +306,7 @@ test("Writes missCheckpointEvent event correctly", () => {
   expect(writeMiss.playerId).toEqual(3);
   expect(writeMiss.eventId).toEqual(1);
   expect(writeMiss.type).toEqual("MISSCHECKPOINT");
-  console.log(readers.allGameEvents());
+
   const readMiss = readers.passCheckpointEvent({
     playerId: 3,
     eventId: 1,
@@ -316,4 +317,33 @@ test("Writes missCheckpointEvent event correctly", () => {
   expect(readMiss.arcanaId).toEqual(0);
   expect(readMiss.checkpoint).toEqual(0);
   expect(readMiss.mode).toEqual("run");
+});
+
+test("Writes serverStartArena event correctly", () => {
+  const now = new Date().valueOf();
+  const game = {
+    player: {
+      ...basePlayer,
+    },
+    server: { ...baseServer },
+  };
+  const writeStart = writers.serverStartArena(game, {
+    startDate: now,
+    endDate: now + ARENAEVENTINTERVAL,
+  });
+  expect(writeStart.eventId).toEqual(1);
+  expect(writeStart.mode).toEqual("run");
+  expect(writeStart.start).toEqual(now);
+  expect(writeStart.end).toEqual(now + ARENAEVENTINTERVAL);
+
+  const readStart = readers.serverArenaStartEvent({
+    playerId: 3,
+    eventId: 1,
+    created: new Date().valueOf(),
+    type: "SERVERARENASTART",
+  });
+  expect(readStart.eventId).toEqual(1);
+  expect(readStart.mode).toEqual("run");
+  expect(readStart.start).toEqual(now);
+  expect(readStart.end).toEqual(now + ARENAEVENTINTERVAL);
 });

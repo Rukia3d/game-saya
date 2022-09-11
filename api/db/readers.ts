@@ -109,7 +109,7 @@ export const playerEvents = (playerId: number): IGameEvent[] => {
         newEvents.push(missCheckpointEvent(e));
         break;
       case "SERVERARENASTART":
-        newEvents.push(serverStartArena());
+        newEvents.push(serverArenaStartEvent(e));
       // case "ARENASTART":
       //   newPlayer = events.arenaStart(
       //     { ...readers.arenaStartEvent(event.eventId), time: event.created },

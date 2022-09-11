@@ -21,6 +21,7 @@ import {
   IOpenSpellEvent,
   IPassCheckpointData,
   IPassCheckpointEvent,
+  IServerArenaStartData,
   IServerArenaStartEvent,
   ISpell,
   ISpellClosed,
@@ -486,7 +487,10 @@ export const arenaEndEvent = (
 };
 */
 
-export const serverStartArena = (): IServerArenaStartEvent => {
+export const serverStartArena = (
+  game: IGame,
+  dates: IServerArenaStartData
+): IServerArenaStartEvent => {
   const nextServerStartArena = getNextServerStartArena();
   const now = new Date().valueOf();
   const newEvent = {
@@ -499,9 +503,9 @@ export const serverStartArena = (): IServerArenaStartEvent => {
     eventId: nextServerStartArena,
     mode: "run",
     type: "SERVERARENASTART",
-    start: now,
+    start: dates.startDate,
     created: now,
-    end: now + ARENAEVENTINTERVAL,
+    end: dates.endDate,
   };
   allPEvents.push(newEvent);
   serverArenaStartEvents.push(newServerStartArenaEvent);

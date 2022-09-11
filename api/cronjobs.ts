@@ -1,7 +1,28 @@
 import * as writers from "./db/writers";
-import { IArenaResult } from "./engine/types";
+import { IArenaResult, IPlayer, IServer } from "./engine/types";
 
 export const ARENAEVENTINTERVAL = 10000;
+
+const basePlayer: IPlayer = {
+  id: 3,
+  name: "",
+  exprience: 0,
+  energy: 0,
+  maxEnergy: 0,
+  loungeId: null,
+  materials: [],
+  arcanas: [],
+  spells: [],
+  missions: [],
+  messages: [],
+  currentState: { state: "MAIN" },
+};
+const baseServer: IServer = {
+  arenaRun: { events: [], resultTime: 0, type: "run" },
+  arenaFight: { events: [], resultTime: 0, type: "fight" },
+  arenaRunHistory: [],
+  arenaFightHistory: [],
+};
 
 export const detectWinners = (winners: IArenaResult[]) => {
   let res: { [time: number]: IArenaResult[] } = {};
@@ -21,7 +42,17 @@ export const detectWinners = (winners: IArenaResult[]) => {
 
 export const startArena = () => {
   console.log("StartArena");
-  writers.serverStartArena();
+  const now = new Date().valueOf();
+  const game = {
+    player: {
+      ...basePlayer,
+    },
+    server: { ...baseServer },
+  };
+  writers.serverStartArena(game, {
+    startDate: now,
+    endDate: now + ARENAEVENTINTERVAL,
+  });
 };
 
 export const endArena = () => {
