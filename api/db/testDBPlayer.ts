@@ -119,7 +119,6 @@ export const missCheckpointEvents: IMissCheckpointDB[] = [
 export const serverArenaStartEvents: IServerArenaStartDB[] = [
   {
     eventId: 0,
-    mode: "run",
     created: 1654347193,
     start: 1654347193,
     end: 1654357193,

@@ -8,11 +8,17 @@ import {
   openNextLevel,
   removeMaterials,
 } from "./actions";
-import { ensure, findEnergyPrice, findLastCheckpoint } from "./helpers";
+import {
+  ensure,
+  findEnergyPrice,
+  findLastCheckpoint,
+  generateArenaRandom,
+} from "./helpers";
 
 import {
   currentState,
   gameMode,
+  IArenaEvent,
   ICreatePlayerEvent,
   IEventReward,
   IMaterial,
@@ -20,6 +26,8 @@ import {
   IOpenSpellEvent,
   IPassCheckpointEvent,
   IPlayer,
+  IServer,
+  IServerArenaStartEvent,
   ISpell,
   ISpellClosed,
   ISpellOpen,
@@ -249,6 +257,57 @@ export const updateSpell = (
     spells: newPlayerSpells,
     currentState: { state: "SPELLS" },
   };
+};
+
+export const serverArenaStart = (
+  event: IServerArenaStartEvent,
+  server: IServer
+) => {
+  const newServer = JSON.parse(JSON.stringify(server));
+  newServer.arenaFightHistory.push(server.arenaFight);
+  newServer.arenaRunHistory.push(server.arenaRun);
+  const eventsRun: IArenaEvent[] = [0, 1, 2].map((n: number) => {
+    const reward = generateArenaRandom(event, "run", 4);
+    const randResource = materials[reward + 3];
+    return {
+      index: n,
+      stake: [
+        { id: 0, name: "Coin", quantity: 25 * (n + 1) },
+        { ...randResource, quantity: 5 * (n + 1) },
+      ],
+      level: "some",
+      rewardPool: [],
+      results: [],
+      mode: "run",
+    };
+  });
+  const eventsFight: IArenaEvent[] = [0, 1, 2].map((n: number) => {
+    const reward = generateArenaRandom(event, "fight", 4);
+    const randResource = materials[reward + 3];
+    return {
+      index: n,
+      stake: [
+        { id: 0, name: "Coin", quantity: 25 * (n + 1) },
+        { ...randResource, quantity: 5 * (n + 1) },
+      ],
+      level: "some",
+      rewardPool: [],
+      results: [],
+      mode: "fight",
+    };
+  });
+
+  newServer.arenaRun = {
+    type: "run",
+    resultTime: event.end,
+    events: eventsRun,
+  };
+  newServer.arenaFight = {
+    type: "fight",
+    resultTime: event.end,
+    events: eventsFight,
+  };
+  return newServer;
 };
 /*
 export const arenaStart = (

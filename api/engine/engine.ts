@@ -36,6 +36,8 @@ export const applyEvent = (game: IGame, event: IGameEvent): IGame => {
     case "MISSCHECKPOINT":
       newPlayer = events.missCheckpoint(event, newPlayer);
       break;
+    case "SERVERARENASTART":
+      newServer = events.serverArenaStart(event, newServer);
     // case "ARENASTART":
     //   newPlayer = events.arenaStart(
     //     { ...readers.arenaStartEvent(event.eventId), time: event.created },

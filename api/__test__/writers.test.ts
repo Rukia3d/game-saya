@@ -332,7 +332,6 @@ test("Writes serverStartArena event correctly", () => {
     endDate: now + ARENAEVENTINTERVAL,
   });
   expect(writeStart.eventId).toEqual(1);
-  expect(writeStart.mode).toEqual("run");
   expect(writeStart.start).toEqual(now);
   expect(writeStart.end).toEqual(now + ARENAEVENTINTERVAL);
 
@@ -343,7 +342,6 @@ test("Writes serverStartArena event correctly", () => {
     type: "SERVERARENASTART",
   });
   expect(readStart.eventId).toEqual(1);
-  expect(readStart.mode).toEqual("run");
   expect(readStart.start).toEqual(now);
   expect(readStart.end).toEqual(now + ARENAEVENTINTERVAL);
 });

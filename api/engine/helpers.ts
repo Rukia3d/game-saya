@@ -14,6 +14,7 @@ import {
   IMissCheckpointEvent,
   IWinLevelEvent,
   IPassCheckpointEvent,
+  IServerArenaStartEvent,
 } from "./types";
 dayjs.extend(relativeTime);
 
@@ -23,6 +24,15 @@ export const generateSeed = (
 ) => {
   const phrase = seedrandom(event.eventId + event.arcanaId + event.mode + id);
   return phrase;
+};
+
+export const generateArenaRandom = (
+  event: IServerArenaStartEvent,
+  mode: string,
+  upTo: number
+) => {
+  const seed = seedrandom(event.eventId + mode + event.start + event.end);
+  return Math.round(seed() * upTo) + 1;
 };
 
 export const generateRandom = (

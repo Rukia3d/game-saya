@@ -501,7 +501,6 @@ export const serverStartArena = (
   };
   const newServerStartArenaEvent: IServerArenaStartEvent = {
     eventId: nextServerStartArena,
-    mode: "run",
     type: "SERVERARENASTART",
     start: dates.startDate,
     created: now,

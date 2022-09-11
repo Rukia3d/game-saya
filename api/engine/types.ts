@@ -419,7 +419,6 @@ export type IMissCheckpointEvent = {
 // ARENA
 export type IServerArenaStartDB = {
   eventId: number;
-  mode: gameMode;
   created: number;
   start: number;
   end: number;
@@ -433,7 +432,6 @@ export type IServerArenaStartData = {
 export type IServerArenaStartEvent = {
   eventId: number;
   type: "SERVERARENASTART";
-  mode: gameMode;
   start: number;
   end: number;
   created: number;

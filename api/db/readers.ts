@@ -306,7 +306,6 @@ export const serverArenaStartEvent = (
     eventId: event.eventId,
     type: "SERVERARENASTART",
     created: event.created,
-    mode: startArena.mode,
     start: startArena.start,
     end: startArena.end,
   };
