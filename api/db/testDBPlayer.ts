@@ -2,7 +2,6 @@ import {
   IMaterial,
   IEventDB,
   ICreatePlayerDB,
-  IArenaStartDB,
   IMissCheckpointDB,
   IOpenSpellDB,
   IPassCheckpointDB,
@@ -10,6 +9,7 @@ import {
   IStartLevelDB,
   IUpdateSpellDB,
   IWinLevelDB,
+  IServerArenaStartDB,
 } from "../engine/types";
 
 // const testLevel = new Array(131).fill(new Array(9));
@@ -53,24 +53,12 @@ export const allPEvents: IEventDB[] = [
     playerId: 2,
     eventId: 1,
     type: "CREATEPLAYER",
-    created: 1654347310,
+    created: 1654347193,
   },
   {
     playerId: null,
     eventId: 0,
-    type: "ARENASTART",
-    created: 1654347193,
-  },
-  {
-    playerId: null,
-    eventId: 1,
-    type: "ARENASTART",
-    created: 1654347193,
-  },
-  {
-    playerId: null,
-    eventId: 2,
-    type: "ARENASTART",
+    type: "SERVERARENASTART",
     created: 1654347193,
   },
 ];
@@ -128,26 +116,12 @@ export const missCheckpointEvents: IMissCheckpointDB[] = [
   },
 ];
 
-export const arenaStartEvents: IArenaStartDB[] = [
+export const serverArenaStartEvents: IServerArenaStartDB[] = [
   {
     eventId: 0,
     mode: "run",
-    start: 1662286894,
-    end: 1663150894,
-    multiplier: 1,
-  },
-  {
-    eventId: 1,
-    mode: "run",
-    start: 1662286894,
-    end: 1663150894,
-    multiplier: 5,
-  },
-  {
-    eventId: 2,
-    mode: "run",
-    start: 1662286894,
-    end: 1663150894,
-    multiplier: 10,
+    created: 1654347193,
+    start: 1654347193,
+    end: 1654357193,
   },
 ];

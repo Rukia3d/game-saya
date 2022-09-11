@@ -1,5 +1,7 @@
-import { arenaRun, arenaFight } from "./db/testDBArena";
-import { IArenaEvent, IArenaResult } from "./engine/types";
+import * as writers from "./db/writers";
+import { IArenaResult } from "./engine/types";
+
+export const ARENAEVENTINTERVAL = 10000;
 
 export const detectWinners = (winners: IArenaResult[]) => {
   let res: { [time: number]: IArenaResult[] } = {};
@@ -17,14 +19,17 @@ export const detectWinners = (winners: IArenaResult[]) => {
   return groups.slice(0, 3);
 };
 
-export const endArenaRun = () => {
-  // 50
-  // 35
-  // 15
-  arenaRun.events.forEach((e: IArenaEvent) => {
-    const rewards = e.rewardPool;
-    const winners = detectWinners(e.results);
-  });
+export const startArena = () => {
+  console.log("StartArena");
+  writers.serverStartArena();
+};
 
-  //engine.processEvent(player, event);
+export const endArena = () => {
+  console.log("EndArena");
+};
+
+export const run = () => {
+  console.log("Run");
+  setInterval(startArena, ARENAEVENTINTERVAL);
+  setInterval(endArena, ARENAEVENTINTERVAL);
 };

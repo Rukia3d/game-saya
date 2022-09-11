@@ -40,6 +40,8 @@ const basePlayer: IPlayer = {
 const baseServer: IServer = {
   arenaRun: { events: [], resultTime: 0, type: "run" },
   arenaFight: { events: [], resultTime: 0, type: "fight" },
+  arenaRunHistory: [],
+  arenaFightHistory: [],
 };
 
 export const eventsApplication = (playerId: number) => {
@@ -233,22 +235,23 @@ app.post("/api/players/:id/missCheckpoint", async (req: any, res: any) => {
 });
 
 /*
-app.post("/api/players/:id/arena", async (req: any, res: any) => {
+app.post("/api/players/:id/arenaStart", async (req: any, res: any) => {
   console.log("ARENA START", req.body);
   const playerId = parseInt(req.params.id);
   const game = eventsApplication(playerId);
   const event = {
     playerId: playerId,
     created: new Date().valueOf(),
-    type: "ARENASTART" as eventType,
+    type: "ARENASTART",
     data: {
       mode: req.body.eventMode,
       index: req.body.eventIndx,
     },
   };
   try {
-    const updateGame = engine.processEvent(game, event);
-    res.send(updateGame);
+    const newEvent = writers.arenaStartEvent(game, event);
+    const newGame = eventsApplication(newEvent.playerId);
+    res.send(newGame);
   } catch (error) {
     res.send(error);
   }
@@ -276,11 +279,7 @@ app.post("/api/players/:id/endArena", async (req: any, res: any) => {
 });
 */
 
-app.post("/api/debug/arenaResult", async (req: any, res: any) => {
-  console.log("Trigger arena results");
-  cronjobs.endArenaRun();
-});
-
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
+  cronjobs.run();
 });

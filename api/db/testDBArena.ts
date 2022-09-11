@@ -1,4 +1,4 @@
-import { IArena } from "../engine/types";
+import { IArena, IServer } from "../engine/types";
 export const arenaRun: IArena = {
   resultTime: new Date(new Date().valueOf() + 50 * 1000).valueOf(),
   type: "run",
@@ -77,4 +77,11 @@ export const arenaFight: IArena = {
       mode: "run",
     },
   ],
+};
+
+export const serverGames: IServer = {
+  arenaRun: arenaRun,
+  arenaFight: arenaFight,
+  arenaRunHistory: [],
+  arenaFightHistory: [],
 };

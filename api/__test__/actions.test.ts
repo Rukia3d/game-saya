@@ -36,7 +36,9 @@ test("rewardPlayer generates correct rewards", async () => {
       mode: "story",
       arcanaId: 0,
       levelId: 0,
-      time: 1654347302,
+      created: 1654347302,
+      playerId: 0,
+      type: "WINLEVEL",
     },
     playerMaterials,
     playerCharacters
@@ -53,7 +55,9 @@ test("rewardPlayer generates correct rewards", async () => {
       mode: "story",
       arcanaId: 0,
       levelId: 0,
-      time: 1654347302,
+      created: 1654347302,
+      playerId: 0,
+      type: "WINLEVEL",
     },
     JSON.parse(JSON.stringify(res.all)),
     playerCharacters
@@ -70,7 +74,9 @@ test("openNextLevel opens next level correctly", async () => {
       mode: "story",
       arcanaId: 0,
       levelId: 0,
-      time: 1654347302,
+      created: 1654347302,
+      playerId: 0,
+      type: "WINLEVEL",
     },
     playerCharacters
   );
@@ -84,7 +90,9 @@ test("openNextLevel opens next level correctly", async () => {
       mode: "story",
       arcanaId: 0,
       levelId: 1,
-      time: 1654347302,
+      created: 1654347302,
+      playerId: 0,
+      type: "WINLEVEL",
     },
     res
   );
@@ -102,7 +110,9 @@ test("addExperience correctly adds experience", async () => {
       mode: "story",
       arcanaId: 0,
       levelId: 0,
-      time: 1654347302,
+      created: 1654347302,
+      playerId: 0,
+      type: "WINLEVEL",
     },
     { ...basePlayer, arcanas: playerCharacters, exprience: 10 }
   );
@@ -115,7 +125,9 @@ test("addExperience correctly adds experience", async () => {
       mode: "story",
       arcanaId: 0,
       levelId: 1,
-      time: 1654347302,
+      created: 1654347302,
+      playerId: 0,
+      type: "WINLEVEL",
     },
     { ...basePlayer, arcanas: playerCharacters, exprience: 10 }
   );

@@ -28,208 +28,292 @@ const basePlayer: IPlayer = {
 const baseServer: IServer = {
   arenaRun: { events: [], resultTime: 0, type: "run" },
   arenaFight: { events: [], resultTime: 0, type: "fight" },
+  arenaRunHistory: [],
+  arenaFightHistory: [],
 };
 
 test("Writes createPlayerEvent correctly", () => {
-  const res = writers.createPlayerEvent({
+  const writeCreate = writers.createPlayerEvent({
     created: new Date().valueOf(),
     type: "CREATEPLAYER",
     data: { name: "Created player test" },
   });
-  expect(res.playerId).toEqual(3);
-  expect(res.eventId).toEqual(2);
-  expect(res.type).toEqual("CREATEPLAYER");
-  const res2 = readers.createPlayerEvent(res.eventId);
-  expect(res2.eventId).toEqual(2);
-  expect(res2.playerName).toEqual("Created player test");
+  expect(writeCreate.playerId).toEqual(3);
+  expect(writeCreate.eventId).toEqual(2);
+  expect(writeCreate.type).toEqual("CREATEPLAYER");
+  const readCreate = readers.createPlayerEvent({
+    playerId: 3,
+    eventId: 2,
+    created: new Date().valueOf(),
+    type: "CREATEPLAYER",
+  });
+  expect(readCreate.eventId).toEqual(2);
+  expect(readCreate.playerName).toEqual("Created player test");
 });
 
 test("Writes startLevelEvent correctly", () => {
-  const newPlayer = {
-    ...basePlayer,
-    energy: 100,
-    arcanas: JSON.parse(JSON.stringify(arcanas)),
+  const game = {
+    player: {
+      ...basePlayer,
+      energy: 100,
+      arcanas: JSON.parse(JSON.stringify(arcanas)),
+    },
+    server: { ...baseServer },
   };
-  const newServer = { ...baseServer };
-  const res = writers.startLevelEvent(newPlayer, {
+  const writeStart = writers.startLevelEvent(game, {
     playerId: 3,
     created: new Date().valueOf(),
     type: "STARTLEVEL",
-    data: { arcana: 0, level: 0, mode: "story" },
+    data: { arcanaId: 0, levelId: 0, mode: "story" },
   });
-  expect(res.playerId).toEqual(3);
-  expect(res.eventId).toEqual(1);
-  expect(res.type).toEqual("STARTLEVEL");
-  const res2 = readers.startLevelEvent(res.eventId);
-  expect(res2.eventId).toEqual(1);
-  expect(res2.arcanaId).toEqual(0);
-  expect(res2.levelId).toEqual(0);
-  expect(res2.mode).toEqual("story");
+  expect(writeStart.playerId).toEqual(3);
+  expect(writeStart.eventId).toEqual(1);
+  expect(writeStart.type).toEqual("STARTLEVEL");
+
+  const readStart = readers.startLevelEvent({
+    playerId: 3,
+    eventId: 1,
+    created: new Date().valueOf(),
+    type: "STARTLEVEL",
+  });
+  expect(readStart.eventId).toEqual(1);
+  expect(readStart.arcanaId).toEqual(0);
+  expect(readStart.levelId).toEqual(0);
+  expect(readStart.mode).toEqual("story");
 });
 
 test("Writes winLevelEvent correctly", () => {
-  const newPlayer = {
-    ...basePlayer,
-    arcanas: JSON.parse(JSON.stringify(arcanas)),
-    currentState: {
-      state: "PLAY" as currentState,
-      level: { arcana: 0, level: 0, mode: "story" as gameMode },
+  const game = {
+    player: {
+      ...basePlayer,
+      arcanas: JSON.parse(JSON.stringify(arcanas)),
+      currentState: {
+        state: "PLAY" as currentState,
+        level: { arcana: 0, level: 0, mode: "story" as gameMode },
+      },
     },
+    server: { ...baseServer },
   };
-  const newServer = { ...baseServer };
-  const res = writers.winLevelEvent(newPlayer, {
+  const writeWin = writers.winLevelEvent(game, {
     playerId: 3,
     created: new Date().valueOf(),
     type: "WINLEVEL",
-    data: { arcana: 0, level: 0, mode: "story" },
+    data: { arcanaId: 0, levelId: 0, mode: "story" },
   });
-  expect(res.playerId).toEqual(3);
-  expect(res.eventId).toEqual(1);
-  expect(res.type).toEqual("WINLEVEL");
-  const res2 = readers.winLevelEvent(res.eventId);
-  expect(res2.eventId).toEqual(1);
-  expect(res2.arcanaId).toEqual(0);
-  expect(res2.levelId).toEqual(0);
-  expect(res2.mode).toEqual("story");
+  expect(writeWin.playerId).toEqual(3);
+  expect(writeWin.eventId).toEqual(1);
+  expect(writeWin.type).toEqual("WINLEVEL");
+
+  const readWin = readers.winLevelEvent({
+    playerId: 3,
+    eventId: 1,
+    created: new Date().valueOf(),
+    type: "WINLEVEL",
+  });
+  expect(readWin.eventId).toEqual(1);
+  expect(readWin.arcanaId).toEqual(0);
+  expect(readWin.levelId).toEqual(0);
+  expect(readWin.mode).toEqual("story");
 });
 
 test("Writes openSpellEvent correctly", () => {
-  const newPlayer = {
-    ...basePlayer,
-    arcanas: JSON.parse(JSON.stringify(arcanas)),
-    spells: JSON.parse(JSON.stringify(spells)),
-    materials: JSON.parse(
-      JSON.stringify(
-        materials.map((m: IMaterial) => {
-          return { ...m, quantity: 10 };
-        })
-      )
-    ),
+  const game = {
+    player: {
+      ...basePlayer,
+      arcanas: JSON.parse(JSON.stringify(arcanas)),
+      spells: JSON.parse(JSON.stringify(spells)),
+      materials: JSON.parse(
+        JSON.stringify(
+          materials.map((m: IMaterial) => {
+            return { ...m, quantity: 10 };
+          })
+        )
+      ),
+    },
+    server: { ...baseServer },
   };
-  const newServer = { ...baseServer };
-  newPlayer.spells[0].price = [
+  game.player.spells[0].price = [
     { id: 0, name: "Coin", quantity: 5 },
     { id: 3, name: "Air essence", quantity: 1 },
   ];
 
-  const res = writers.openSpellEvent(newPlayer, {
+  const writeOpen = writers.openSpellEvent(game, {
     playerId: 3,
     created: new Date().valueOf(),
     type: "OPENSPELL",
-    data: { arcana: 0, spell: 0 },
+    data: { arcanaId: 0, spellId: 0 },
   });
-  expect(res.playerId).toEqual(3);
-  expect(res.eventId).toEqual(1);
-  expect(res.type).toEqual("OPENSPELL");
-  const res2 = readers.openSpellEvent(res.eventId);
-  expect(res2.eventId).toEqual(1);
-  expect(res2.arcanaId).toEqual(0);
-  expect(res2.spellId).toEqual(0);
+  expect(writeOpen.playerId).toEqual(3);
+  expect(writeOpen.eventId).toEqual(1);
+  expect(writeOpen.type).toEqual("OPENSPELL");
+
+  const readOpen = readers.openSpellEvent({
+    playerId: 3,
+    eventId: 1,
+    created: new Date().valueOf(),
+    type: "OPENSPELL",
+  });
+  expect(readOpen.eventId).toEqual(1);
+  expect(readOpen.arcanaId).toEqual(0);
+  expect(readOpen.spellId).toEqual(0);
 });
 
 test("Writest updateSpellEvent correctly", () => {
-  const newPlayer = {
-    ...basePlayer,
-    arcanas: JSON.parse(JSON.stringify(arcanas)),
-    spells: JSON.parse(JSON.stringify(spells)),
-    materials: JSON.parse(
-      JSON.stringify(
-        materials.map((m: IMaterial) => {
-          return { ...m, quantity: 10 };
-        })
-      )
-    ),
+  const game = {
+    player: {
+      ...basePlayer,
+      arcanas: JSON.parse(JSON.stringify(arcanas)),
+      spells: JSON.parse(JSON.stringify(spells)),
+      materials: JSON.parse(
+        JSON.stringify(
+          materials.map((m: IMaterial) => {
+            return { ...m, quantity: 10 };
+          })
+        )
+      ),
+    },
+    server: { ...baseServer },
   };
-  const newServer = { ...baseServer };
-  newPlayer.spells[0].price = [
+  game.player.spells[0].price = [
     { id: 0, name: "Coin", quantity: 5 },
     { id: 3, name: "Air essence", quantity: 1 },
   ];
-  newPlayer.spells[0].updatePrice = [
+  game.player.spells[0].updatePrice = [
     { id: 0, name: "Coin", quantity: 5 },
     { id: 3, name: "Air essence", quantity: 1 },
   ];
-  newPlayer.spells[0].requiredStrength = 1;
+  game.player.spells[0].requiredStrength = 1;
 
-  const res = writers.updateSpellEvent(newPlayer, {
+  const writeUpdate = writers.updateSpellEvent(game, {
     playerId: 3,
     created: new Date().valueOf(),
     type: "UPDATESPELL",
-    data: { arcana: 0, spell: 0 },
+    data: { arcanaId: 0, spellId: 0 },
   });
-  expect(res.playerId).toEqual(3);
-  expect(res.eventId).toEqual(1);
-  expect(res.type).toEqual("UPDATESPELL");
-  const res2 = readers.openSpellEvent(res.eventId);
-  expect(res2.eventId).toEqual(1);
-  expect(res2.arcanaId).toEqual(0);
-  expect(res2.spellId).toEqual(0);
+  expect(writeUpdate.playerId).toEqual(3);
+  expect(writeUpdate.eventId).toEqual(1);
+  expect(writeUpdate.type).toEqual("UPDATESPELL");
+
+  const readUpdate = readers.updateSpellEvent({
+    playerId: 3,
+    eventId: 1,
+    created: new Date().valueOf(),
+    type: "UPDATESPELL",
+  });
+  expect(readUpdate.eventId).toEqual(1);
+  expect(readUpdate.arcanaId).toEqual(0);
+  expect(readUpdate.spellId).toEqual(0);
 });
 
 test("Writes startEndlessEvent correctly", () => {
-  const newPlayer = {
-    ...basePlayer,
-    energy: 100,
-    arcanas: JSON.parse(JSON.stringify(arcanas)),
+  const game = {
+    player: {
+      ...basePlayer,
+      energy: 100,
+      arcanas: JSON.parse(JSON.stringify(arcanas)),
+      currentState: {
+        state: "PLAY" as currentState,
+        level: {
+          arcana: 0,
+          mode: "run" as gameMode,
+        },
+      },
+    },
+    server: { ...baseServer },
   };
-  const newServer = { ...baseServer };
-  const res = writers.startEndlessEvent(newPlayer, {
+  const writeStart = writers.startEndlessEvent(game, {
     playerId: 3,
     created: new Date().valueOf(),
     type: "STARTENDLESS",
-    data: { arcana: 0, mode: "run" },
+    data: { arcanaId: 0, mode: "run" },
   });
-  expect(res.playerId).toEqual(3);
-  expect(res.eventId).toEqual(2);
-  expect(res.type).toEqual("STARTENDLESS");
-  const res2 = readers.startEndlessEvent(res.eventId);
-  expect(res2.eventId).toEqual(2);
-  expect(res2.arcanaId).toEqual(0);
-  expect(res2.mode).toEqual("run");
+  expect(writeStart.playerId).toEqual(3);
+  expect(writeStart.eventId).toEqual(2);
+  expect(writeStart.type).toEqual("STARTENDLESS");
+
+  const readStart = readers.startEndlessEvent({
+    playerId: 3,
+    eventId: 2,
+    created: new Date().valueOf(),
+    type: "STARTENDLESS",
+  });
+  expect(readStart.eventId).toEqual(2);
+  expect(readStart.arcanaId).toEqual(0);
+  expect(readStart.mode).toEqual("run");
 });
 
 test("Writes passCheckpoint event correctly", () => {
-  const newPlayer = {
-    ...basePlayer,
-    energy: 100,
-    arcanas: JSON.parse(JSON.stringify(arcanas)),
+  const game = {
+    player: {
+      ...basePlayer,
+      energy: 100,
+      arcanas: JSON.parse(JSON.stringify(arcanas)),
+      currentState: {
+        state: "PLAY" as currentState,
+        level: {
+          arcana: 0,
+          mode: "run" as gameMode,
+        },
+      },
+    },
+    server: { ...baseServer },
   };
-  const newServer = { ...baseServer };
-  const res = writers.passCheckpointEvent(newPlayer, {
+  const writePass = writers.passCheckpointEvent(game, {
     playerId: 3,
     created: new Date().valueOf(),
     type: "PASSCHECKPOINT",
-    data: { arcana: 0, mode: "run", checkpoint: 0 },
+    data: { arcanaId: 0, mode: "run", checkpoint: 0 },
   });
-  expect(res.playerId).toEqual(3);
-  expect(res.eventId).toEqual(1);
-  expect(res.type).toEqual("PASSCHECKPOINT");
-  const res2 = readers.passCheckpointEvent(res.eventId);
-  expect(res2.eventId).toEqual(1);
-  expect(res2.arcanaId).toEqual(0);
-  expect(res2.checkpoint).toEqual(0);
-  expect(res2.mode).toEqual("run");
+  expect(writePass.playerId).toEqual(3);
+  expect(writePass.eventId).toEqual(1);
+  expect(writePass.type).toEqual("PASSCHECKPOINT");
+
+  const readPass = readers.passCheckpointEvent({
+    playerId: 3,
+    eventId: 1,
+    created: new Date().valueOf(),
+    type: "PASSCHECKPOINT",
+  });
+  expect(readPass.eventId).toEqual(1);
+  expect(readPass.arcanaId).toEqual(0);
+  expect(readPass.checkpoint).toEqual(0);
+  expect(readPass.mode).toEqual("run");
 });
 
 test("Writes missCheckpointEvent event correctly", () => {
-  const newPlayer = {
-    ...basePlayer,
-    energy: 100,
-    arcanas: JSON.parse(JSON.stringify(arcanas)),
+  const game = {
+    player: {
+      ...basePlayer,
+      energy: 100,
+      arcanas: JSON.parse(JSON.stringify(arcanas)),
+      currentState: {
+        state: "PLAY" as currentState,
+        level: {
+          arcana: 0,
+          mode: "run" as gameMode,
+        },
+      },
+    },
+    server: { ...baseServer },
   };
-  const newServer = { ...baseServer };
-  const res = writers.missCheckpointEvent(newPlayer, {
+  const writeMiss = writers.missCheckpointEvent(game, {
     playerId: 3,
     created: new Date().valueOf(),
     type: "MISSCHECKPOINT",
-    data: { arcana: 0, mode: "run" },
+    data: { arcanaId: 0, mode: "run" },
   });
-  expect(res.playerId).toEqual(3);
-  expect(res.eventId).toEqual(1);
-  expect(res.type).toEqual("MISSCHECKPOINT");
-  const res2 = readers.passCheckpointEvent(res.eventId);
-  expect(res2.eventId).toEqual(1);
-  expect(res2.arcanaId).toEqual(0);
-  expect(res2.checkpoint).toEqual(0);
-  expect(res2.mode).toEqual("run");
+  expect(writeMiss.playerId).toEqual(3);
+  expect(writeMiss.eventId).toEqual(1);
+  expect(writeMiss.type).toEqual("MISSCHECKPOINT");
+  console.log(readers.allGameEvents());
+  const readMiss = readers.passCheckpointEvent({
+    playerId: 3,
+    eventId: 1,
+    created: new Date().valueOf(),
+    type: "MISSCHECKPOINT",
+  });
+  expect(readMiss.eventId).toEqual(1);
+  expect(readMiss.arcanaId).toEqual(0);
+  expect(readMiss.checkpoint).toEqual(0);
+  expect(readMiss.mode).toEqual("run");
 });

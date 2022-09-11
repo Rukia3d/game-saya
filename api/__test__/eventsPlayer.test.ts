@@ -20,7 +20,13 @@ const basePlayer: IPlayer = {
 
 test("eventCreatePlayer for player 1", async () => {
   const res: IPlayer = events.createPlayer(
-    { eventId: 0, playerName: "player 1 name", playerId: 1 },
+    {
+      eventId: 0,
+      playerName: "player 1 name",
+      playerId: 1,
+      created: new Date().valueOf(),
+      type: "CREATEPLAYER",
+    },
     basePlayer
   );
   expect(res.id).toEqual(1);
@@ -56,7 +62,14 @@ test("openSpell for player 1", async () => {
     return { ...m, quantity: 10 };
   });
   const res: IPlayer = events.openSpell(
-    { eventId: 0, arcanaId: 0, spellId: 0 },
+    {
+      eventId: 0,
+      arcanaId: 0,
+      spellId: 0,
+      playerId: 1,
+      created: new Date().valueOf(),
+      type: "OPENSPELL",
+    },
     {
       ...basePlayer,
       materials: playerMaterials,
@@ -76,7 +89,14 @@ test("openSpell for player 1", async () => {
   jest.spyOn(console, "error").mockImplementation(() => jest.fn());
   expect(() =>
     events.openSpell(
-      { eventId: 0, arcanaId: 0, spellId: 1 },
+      {
+        eventId: 0,
+        arcanaId: 0,
+        spellId: 1,
+        playerId: 1,
+        created: new Date().valueOf(),
+        type: "OPENSPELL",
+      },
       {
         ...basePlayer,
         materials: playerMaterials,

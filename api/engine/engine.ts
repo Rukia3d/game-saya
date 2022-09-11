@@ -72,6 +72,8 @@ export const applyEvents = (events: IGameEvent[]): IGame => {
     server: {
       arenaRun: { events: [], resultTime: 0, type: "run" },
       arenaFight: { events: [], resultTime: 0, type: "fight" },
+      arenaRunHistory: [],
+      arenaFightHistory: [],
     },
   };
   for (let i = 0; i < events.length; i++) {

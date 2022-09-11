@@ -20,11 +20,25 @@ const basePlayer: IPlayer = {
 
 test("story starts and wins for player 1 outside tutorial", async () => {
   const player: IPlayer = events.createPlayer(
-    { eventId: 0, playerName: "player 1 name", playerId: 1 },
+    {
+      eventId: 0,
+      playerName: "player 1 name",
+      playerId: 1,
+      created: new Date().valueOf(),
+      type: "CREATEPLAYER",
+    },
     basePlayer
   );
   const res: IPlayer = events.startLevel(
-    { eventId: 0, mode: "story", arcanaId: 0, levelId: 2 },
+    {
+      eventId: 0,
+      mode: "story",
+      arcanaId: 0,
+      levelId: 2,
+      playerId: 1,
+      created: new Date().valueOf(),
+      type: "STARTLEVEL",
+    },
     { ...player, energy: 100 }
   );
   expect(res.energy).toEqual(95);
@@ -41,7 +55,9 @@ test("eventWinLevel for player 1", async () => {
       mode: "story",
       arcanaId: 0,
       levelId: 0,
-      time: 1654347902,
+      created: new Date().valueOf(),
+      type: "WINLEVEL",
+      playerId: 1,
     },
     {
       ...basePlayer,
@@ -66,11 +82,24 @@ test("eventWinLevel for player 1", async () => {
 
 test("Endless flow tournament for player 1", async () => {
   const player: IPlayer = events.createPlayer(
-    { eventId: 0, playerName: "player 1 name", playerId: 1 },
+    {
+      eventId: 0,
+      playerName: "player 1 name",
+      playerId: 1,
+      type: "CREATEPLAYER",
+      created: new Date().valueOf(),
+    },
     basePlayer
   );
   const startEvent = events.startEndless(
-    { eventId: 1, arcanaId: 0, mode: "run" },
+    {
+      eventId: 1,
+      arcanaId: 0,
+      mode: "run",
+      created: new Date().valueOf(),
+      type: "STARTENDLESS",
+      playerId: 1,
+    },
     { ...player }
   );
   expect(startEvent.energy).toEqual(40);
@@ -78,7 +107,15 @@ test("Endless flow tournament for player 1", async () => {
   expect(startEvent.currentState.level?.arcana).toEqual(0);
   expect(startEvent.currentState.level?.mode).toEqual("run");
   const passChec0 = events.passCheckpoint(
-    { eventId: 2, checkpoint: 0, mode: "run", arcanaId: 0 },
+    {
+      eventId: 2,
+      checkpoint: 0,
+      mode: "run",
+      arcanaId: 0,
+      playerId: 1,
+      type: "PASSCHECKPOINT",
+      created: new Date().valueOf(),
+    },
     { ...startEvent }
   );
   expect(passChec0.arcanas[0].currentEvents[0].checkpoint).toEqual(0);
@@ -90,7 +127,15 @@ test("Endless flow tournament for player 1", async () => {
     1
   );
   const passChec1 = events.passCheckpoint(
-    { eventId: 3, checkpoint: 1, mode: "run", arcanaId: 0 },
+    {
+      eventId: 3,
+      checkpoint: 1,
+      mode: "run",
+      arcanaId: 0,
+      created: new Date().valueOf(),
+      playerId: 1,
+      type: "PASSCHECKPOINT",
+    },
     { ...passChec0 }
   );
   expect(passChec1.exprience).toEqual(20);
@@ -102,7 +147,14 @@ test("Endless flow tournament for player 1", async () => {
     5
   );
   const missCheck = events.missCheckpoint(
-    { eventId: 1, mode: "run", arcanaId: 0 },
+    {
+      eventId: 1,
+      mode: "run",
+      arcanaId: 0,
+      type: "MISSCHECKPOINT",
+      playerId: 1,
+      created: new Date().valueOf(),
+    },
     passChec1
   );
   expect(missCheck.exprience).toEqual(20);

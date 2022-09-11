@@ -154,6 +154,8 @@ export interface ICurrentState {
 export interface IServer {
   arenaRun: IArena;
   arenaFight: IArena;
+  arenaRunHistory: IArena[];
+  arenaFightHistory: IArena[];
 }
 
 export interface IGame {
@@ -191,7 +193,8 @@ export type IGameEvent =
   | IUpdateSpellEvent
   | IStartEndlessEvent
   | IPassCheckpointEvent
-  | IMissCheckpointEvent;
+  | IMissCheckpointEvent
+  | IServerArenaStartEvent;
 
 export type IEventDB = {
   playerId: number | null;
@@ -414,12 +417,21 @@ export type IMissCheckpointEvent = {
 };
 
 // ARENA
-export type IArenaStartDB = {
+export type IServerArenaStartDB = {
   eventId: number;
+  mode: gameMode;
+  created: number;
+  start: number;
+  end: number;
+};
+
+export type IServerArenaStartEvent = {
+  eventId: number;
+  type: "SERVERARENASTART";
   mode: gameMode;
   start: number;
   end: number;
-  multiplier: number;
+  created: number;
 };
 
 export type IPlayerArenaStartDB = {
@@ -428,11 +440,6 @@ export type IPlayerArenaStartDB = {
   index: number;
   mode: gameMode;
 };
-
-// export type IWinLevelTimed = IWinLevelEvent & { time: number };
-// export type IArenaStartTimed = IArenaStartEvent & { time: number };
-// export type IArenaEndTimedDB = IArenaEndEvent & { time: number };
-// export type ICreatePlayerEventId = ICreatePlayerEvent & { playerId: number };
 
 export type arcanaName = "rings" | "cups" | "wands" | "swords" | "dimonds";
 export type spellState = "closed" | "open" | "listed";
@@ -457,4 +464,6 @@ export type playerEventType =
   | "STARTENDLESS"
   | "PASSCHECKPOINT"
   | "MISSCHECKPOINT"
-  | "ARENASTART";
+  | "ARENASTART"
+  | "ARENAEND"
+  | "SERVERARENASTART";

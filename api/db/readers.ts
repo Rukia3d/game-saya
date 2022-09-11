@@ -17,6 +17,8 @@ import {
   IUpdateSpellEvent,
   IWinLevelDB,
   IWinLevelEvent,
+  IServerArenaStartDB,
+  IServerArenaStartEvent,
 } from "../engine/types";
 import {
   createPlayerEvents,
@@ -28,8 +30,9 @@ import {
   startEldessEvents,
   passCheckpointEvents,
   missCheckpointEvents,
-  arenaStartEvents,
+  serverArenaStartEvents,
 } from "./testDBPlayer";
+import { serverStartArena } from "./writers";
 
 export const allGameEvents = () => {
   return allPEvents;
@@ -67,8 +70,8 @@ export const allMissCheckpointEvents = () => {
   return missCheckpointEvents;
 };
 
-export const allArenaStartEvents = () => {
-  return arenaStartEvents;
+export const allServerStartArena = () => {
+  return serverArenaStartEvents;
 };
 
 export const playerEvents = (playerId: number): IGameEvent[] => {
@@ -78,9 +81,6 @@ export const playerEvents = (playerId: number): IGameEvent[] => {
       (p: IEventDB) => p.playerId == playerId || p.playerId == null
     )
   );
-  if (events.length === 0) {
-    throw new Error(`No events found for ${playerId}`);
-  }
   const newEvents: IGameEvent[] = [];
   events.forEach((e: IEventDB) => {
     switch (e.type) {
@@ -108,6 +108,8 @@ export const playerEvents = (playerId: number): IGameEvent[] => {
       case "MISSCHECKPOINT":
         newEvents.push(missCheckpointEvent(e));
         break;
+      case "SERVERARENASTART":
+        newEvents.push(serverStartArena());
       // case "ARENASTART":
       //   newPlayer = events.arenaStart(
       //     { ...readers.arenaStartEvent(event.eventId), time: event.created },
@@ -133,11 +135,18 @@ export const createPlayerEvent = (event: IEventDB): ICreatePlayerEvent => {
     ),
     "No create player event"
   );
-  if (!event.playerId) {
+  const allEvent = ensure(
+    allGameEvents().find(
+      (e: IEventDB) =>
+        e.eventId == createPlayer.eventId && e.type == "CREATEPLAYER"
+    ),
+    "No create player event in all events"
+  );
+  if (!allEvent.playerId) {
     throw new Error("No player ID in createPlayerEvent");
   }
   return {
-    playerId: event.playerId,
+    playerId: allEvent.playerId,
     eventId: event.eventId,
     created: event.created,
     type: "CREATEPLAYER",
@@ -281,5 +290,24 @@ export const missCheckpointEvent = (event: IEventDB): IMissCheckpointEvent => {
     type: "MISSCHECKPOINT",
     arcanaId: missCheckpoint.arcanaId,
     mode: missCheckpoint.mode,
+  };
+};
+
+export const serverArenaStartEvent = (
+  event: IEventDB
+): IServerArenaStartEvent => {
+  const startArena = ensure(
+    allServerStartArena().find(
+      (e: IServerArenaStartDB) => e.eventId == event.eventId
+    ),
+    "No start server arena event"
+  );
+  return {
+    eventId: event.eventId,
+    type: "SERVERARENASTART",
+    created: event.created,
+    mode: startArena.mode,
+    start: startArena.start,
+    end: startArena.end,
   };
 };

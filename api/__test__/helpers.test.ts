@@ -7,11 +7,7 @@ import {
   findLevelForStory,
   findLevelIndex,
 } from "../engine/helpers";
-import {
-  IMaterial,
-  IMaterialQuant,
-  IWinLevelEventTimed,
-} from "../engine/types";
+import { IMaterial, IMaterialQuant, IWinLevelEvent } from "../engine/types";
 
 test("energy price is found for a correct mode", async () => {
   const res = findEnergyPrice(0, "story", 0);
@@ -26,12 +22,14 @@ test("energy price is found for a correct mode", async () => {
 });
 
 test("finds correct index", async () => {
-  const winLevelEvent: IWinLevelEventTimed = {
+  const winLevelEvent: IWinLevelEvent = {
+    playerId: 1,
+    created: new Date().valueOf(),
+    type: "WINLEVEL",
     eventId: 0,
     arcanaId: 1,
     mode: "story",
     levelId: 0,
-    time: new Date().valueOf(),
   };
   const res = findLevelIndex(winLevelEvent, arcanas);
   expect(res[0]).toEqual(1);
@@ -80,22 +78,31 @@ test("Finds correct level for story", () => {
   const playerArcanas = JSON.parse(JSON.stringify(arcanas));
   const res = findLevelForStory(
     {
+      playerId: 1,
+      created: new Date().valueOf(),
+      type: "WINLEVEL",
       eventId: 0,
-      arcanaId: 0,
+      arcanaId: 1,
       mode: "story",
-      levelId: 1,
-      time: new Date().valueOf(),
+      levelId: 0,
     },
     playerArcanas
   );
-  expect(res.id).toEqual(1);
+  expect(res.id).toEqual(0);
   expect(res.mode).toEqual("story");
 });
 
 test("Finds correct level for tournament", () => {
   const playerArcanas = JSON.parse(JSON.stringify(arcanas));
   const res = findLevelForEndless(
-    { eventId: 0, arcanaId: 0, mode: "run" },
+    {
+      eventId: 0,
+      arcanaId: 0,
+      mode: "run",
+      playerId: 1,
+      created: new Date().valueOf(),
+      type: "MISSCHECKPOINT",
+    },
     playerArcanas
   );
   expect(res.id).toEqual(0);
