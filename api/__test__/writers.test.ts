@@ -345,3 +345,23 @@ test("Writes serverStartArena event correctly", () => {
   expect(readStart.start).toEqual(now);
   expect(readStart.end).toEqual(now + ARENAEVENTINTERVAL);
 });
+
+test("Writes serverEndArena event correctly", () => {
+  const game = {
+    player: {
+      ...basePlayer,
+    },
+    server: { ...baseServer },
+  };
+
+  const writeEnd = writers.serverEndArena(game);
+  expect(writeEnd.eventId).toEqual(1);
+
+  const readEnd = readers.serverArenaEndEvent({
+    playerId: 3,
+    eventId: 1,
+    created: new Date().valueOf(),
+    type: "SERVERARENAEND",
+  });
+  expect(readEnd.eventId).toEqual(1);
+});

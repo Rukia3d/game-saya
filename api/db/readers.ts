@@ -19,6 +19,8 @@ import {
   IWinLevelEvent,
   IServerArenaStartDB,
   IServerArenaStartEvent,
+  IServerArenaEndEvent,
+  IServerArenaEndDB,
 } from "../engine/types";
 import {
   createPlayerEvents,
@@ -31,6 +33,7 @@ import {
   passCheckpointEvents,
   missCheckpointEvents,
   serverArenaStartEvents,
+  serverArenaEndEvents,
 } from "./testDBPlayer";
 import { serverStartArena } from "./writers";
 
@@ -72,6 +75,10 @@ export const allMissCheckpointEvents = () => {
 
 export const allServerStartArena = () => {
   return serverArenaStartEvents;
+};
+
+export const allServerEndArena = () => {
+  return serverArenaEndEvents;
 };
 
 export const playerEvents = (playerId: number): IGameEvent[] => {
@@ -303,10 +310,24 @@ export const serverArenaStartEvent = (
     "No start server arena event"
   );
   return {
-    eventId: event.eventId,
+    eventId: startArena.eventId,
     type: "SERVERARENASTART",
     created: event.created,
     start: startArena.start,
     end: startArena.end,
+  };
+};
+
+export const serverArenaEndEvent = (event: IEventDB): IServerArenaEndEvent => {
+  const startArena = ensure(
+    allServerEndArena().find(
+      (e: IServerArenaEndDB) => e.eventId == event.eventId
+    ),
+    "No start server arena event"
+  );
+  return {
+    eventId: startArena.eventId,
+    type: "SERVERARENAEND",
+    created: event.created,
   };
 };

@@ -1,3 +1,4 @@
+import { detectWinners } from "../cronjobs";
 import { arcanas } from "../db/testDBArcanes";
 import { eventTowerRewards } from "../db/testDBLevels";
 import { materials } from "../db/testDBPlayer";
@@ -27,6 +28,7 @@ import {
   IPassCheckpointEvent,
   IPlayer,
   IServer,
+  IServerArenaEndEvent,
   IServerArenaStartEvent,
   ISpell,
   ISpellClosed,
@@ -263,7 +265,7 @@ export const serverArenaStart = (
   event: IServerArenaStartEvent,
   server: IServer
 ) => {
-  const newServer = JSON.parse(JSON.stringify(server));
+  const newServer: IServer = JSON.parse(JSON.stringify(server));
   newServer.arenaFightHistory.push(server.arenaFight);
   newServer.arenaRunHistory.push(server.arenaRun);
   const eventsRun: IArenaEvent[] = [0, 1, 2].map((n: number) => {
@@ -307,6 +309,18 @@ export const serverArenaStart = (
     resultTime: event.end,
     events: eventsFight,
   };
+  return newServer;
+};
+
+export const serverArenaEnd = (
+  event: IServerArenaEndEvent,
+  server: IServer
+) => {
+  const newServer: IServer = JSON.parse(JSON.stringify(server));
+  newServer.arenaRun.events.map((e: IArenaEvent) => {
+    const result = detectWinners(e.results);
+    //TODO Add message for players to claim achivements
+  });
   return newServer;
 };
 /*

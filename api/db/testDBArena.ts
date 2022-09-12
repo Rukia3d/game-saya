@@ -29,7 +29,7 @@ export const arenaRun: IArena = {
       index: 2,
       stake: [
         { id: 0, name: "Coin", quantity: 100 },
-        { id: 3, name: "Rings", quantity: 25 },
+        { id: 3, name: "Rings", quantity: 20 },
       ],
       level: "some",
       rewardPool: [],
@@ -69,7 +69,7 @@ export const arenaFight: IArena = {
       index: 2,
       stake: [
         { id: 0, name: "Coin", quantity: 100 },
-        { id: 3, name: "Rings", quantity: 25 },
+        { id: 3, name: "Rings", quantity: 20 },
       ],
       level: "some",
       rewardPool: [],

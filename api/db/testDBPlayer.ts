@@ -10,6 +10,7 @@ import {
   IUpdateSpellDB,
   IWinLevelDB,
   IServerArenaStartDB,
+  IServerArenaEndDB,
 } from "../engine/types";
 
 // const testLevel = new Array(131).fill(new Array(9));
@@ -60,6 +61,12 @@ export const allPEvents: IEventDB[] = [
     eventId: 0,
     type: "SERVERARENASTART",
     created: 1654347193,
+  },
+  {
+    playerId: null,
+    eventId: 0,
+    type: "SERVERARENAEND",
+    created: 1654347593,
   },
 ];
 
@@ -122,5 +129,12 @@ export const serverArenaStartEvents: IServerArenaStartDB[] = [
     created: 1654347193,
     start: 1654347193,
     end: 1654357193,
+  },
+];
+
+export const serverArenaEndEvents: IServerArenaEndDB[] = [
+  {
+    eventId: 0,
+    created: 1654357193,
   },
 ];

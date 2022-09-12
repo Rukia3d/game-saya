@@ -57,10 +57,17 @@ export const startArena = () => {
 
 export const endArena = () => {
   console.log("EndArena");
+  const game = {
+    player: {
+      ...basePlayer,
+    },
+    server: { ...baseServer },
+  };
+  writers.serverEndArena(game);
 };
 
 export const run = () => {
   console.log("Run");
-  setInterval(startArena, ARENAEVENTINTERVAL);
   setInterval(endArena, ARENAEVENTINTERVAL);
+  setInterval(startArena, ARENAEVENTINTERVAL);
 };

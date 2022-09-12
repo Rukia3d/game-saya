@@ -207,3 +207,16 @@ test("Won't read server arena start if no event with this Id", () => {
   ).toThrow("No start server arena event");
   jest.restoreAllMocks();
 });
+
+test("Won't read server arena end if no event with this Id", () => {
+  jest.spyOn(console, "error").mockImplementation(() => jest.fn());
+  expect(() =>
+    readers.serverArenaStartEvent({
+      playerId: null,
+      eventId: 3,
+      created: new Date().valueOf(),
+      type: "SERVERARENAEND",
+    })
+  ).toThrow("No start server arena event");
+  jest.restoreAllMocks();
+});

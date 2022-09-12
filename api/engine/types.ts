@@ -437,6 +437,17 @@ export type IServerArenaStartEvent = {
   created: number;
 };
 
+export type IServerArenaEndDB = {
+  eventId: number;
+  created: number;
+};
+
+export type IServerArenaEndEvent = {
+  eventId: number;
+  type: "SERVERARENAEND";
+  created: number;
+};
+
 export type IPlayerArenaStartDB = {
   eventId: number;
   playerId: number;
@@ -469,4 +480,5 @@ export type playerEventType =
   | "MISSCHECKPOINT"
   | "ARENASTART"
   | "ARENAEND"
-  | "SERVERARENASTART";
+  | "SERVERARENASTART"
+  | "SERVERARENAEND";

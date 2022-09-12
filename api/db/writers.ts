@@ -21,6 +21,7 @@ import {
   IOpenSpellEvent,
   IPassCheckpointData,
   IPassCheckpointEvent,
+  IServerArenaEndEvent,
   IServerArenaStartData,
   IServerArenaStartEvent,
   ISpell,
@@ -50,6 +51,7 @@ import {
   passCheckpointEvents,
   missCheckpointEvents,
   serverArenaStartEvents,
+  serverArenaEndEvents,
 } from "./testDBPlayer";
 import { ARENAEVENTINTERVAL } from "../cronjobs";
 
@@ -129,6 +131,13 @@ const getNextUpdateSpellEventId = () => {
 const getNextServerStartArena = () => {
   const latestEvents = readers
     .allServerStartArena()
+    .sort((a, b) => a.eventId - b.eventId);
+  return latestEvents[latestEvents.length - 1].eventId + 1;
+};
+
+const getNextServerEndArena = () => {
+  const latestEvents = readers
+    .allServerEndArena()
     .sort((a, b) => a.eventId - b.eventId);
   return latestEvents[latestEvents.length - 1].eventId + 1;
 };
@@ -509,4 +518,23 @@ export const serverStartArena = (
   allPEvents.push(newEvent);
   serverArenaStartEvents.push(newServerStartArenaEvent);
   return newServerStartArenaEvent;
+};
+
+export const serverEndArena = (game: IGame): IServerArenaEndEvent => {
+  const nextServerEndArena = getNextServerEndArena();
+  const now = new Date().valueOf();
+  const newEvent = {
+    playerId: null,
+    eventId: nextServerEndArena,
+    type: "SERVERARENAEND" as eventType,
+    created: now,
+  };
+  const newServerEndArenaEvent: IServerArenaEndEvent = {
+    eventId: nextServerEndArena,
+    type: "SERVERARENAEND",
+    created: now,
+  };
+  allPEvents.push(newEvent);
+  serverArenaEndEvents.push(newServerEndArenaEvent);
+  return newServerEndArenaEvent;
 };
