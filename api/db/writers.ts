@@ -1,9 +1,11 @@
 import * as readers from "./readers";
 import {
+  allowParticipation,
   canUpdateSpell,
   correctCheckpoint,
   enoughEnergyToPlay,
   enoughToPay,
+  foundArenaStartEvent,
   foundStartLevelToWin,
 } from "../engine/helpers";
 import {
@@ -39,6 +41,12 @@ import {
   IWinLevelData,
   IWinLevelDB,
   IWinLevelEvent,
+  IArenaStartEvent,
+  IArenaStartDB,
+  IArenaStartData,
+  IArenaEndData,
+  IArenaEndEvent,
+  IArenaEndDB,
 } from "../engine/types";
 import {
   createPlayerEvents,
@@ -52,8 +60,9 @@ import {
   missCheckpointEvents,
   serverArenaStartEvents,
   serverArenaEndEvents,
+  arenaStartEvents,
+  arenaEndEvents,
 } from "./testDBPlayer";
-import { ARENAEVENTINTERVAL } from "../cronjobs";
 
 const getNextPlayerId = () => {
   const createPlayers = readers
@@ -138,6 +147,20 @@ const getNextServerStartArena = () => {
 const getNextServerEndArena = () => {
   const latestEvents = readers
     .allServerEndArena()
+    .sort((a, b) => a.eventId - b.eventId);
+  return latestEvents[latestEvents.length - 1].eventId + 1;
+};
+
+const getNextStartArenaEventId = () => {
+  const latestEvents = readers
+    .allStartArena()
+    .sort((a, b) => a.eventId - b.eventId);
+  return latestEvents[latestEvents.length - 1].eventId + 1;
+};
+
+const getNextEndArenaEventId = () => {
+  const latestEvents = readers
+    .allEndArena()
     .sort((a, b) => a.eventId - b.eventId);
   return latestEvents[latestEvents.length - 1].eventId + 1;
 };
@@ -424,77 +447,79 @@ export const updateSpellEvent = (
   }
 };
 
-/*
 export const arenaStartEvent = (
-  player: IPlayer,
-  event: {
-    playerId: number;
-    created: number;
-    type: eventType;
-    data: {
-      mode: gameMode;
-      index: number;
-    };
-  }
-) => {
+  game: IGame,
+  event: IArenaStartData
+): IArenaStartEvent => {
   const arenaEvent =
-    event.data.mode === "run" ? player.arenaRun : player.arenaFight;
+    event.data.mode === "run" ? game.server.arenaRun : game.server.arenaFight;
   if (
-    enoughToPay(player.materials, arenaEvent.events[event.data.index].stake) &&
+    enoughToPay(
+      game.player.materials,
+      arenaEvent.events[event.data.index].stake
+    ) &&
     allowParticipation(event.created, arenaEvent.resultTime)
   ) {
-    const nextArenaStartEventId = getNextArenaStartEvent();
-    const newEvent = {
+    const nextArenaStartEventId = getNextStartArenaEventId();
+    const newEvent: IEventDB = {
       playerId: event.playerId,
       eventId: nextArenaStartEventId,
       type: "ARENASTART" as eventType,
       created: new Date().valueOf(),
     };
-    allPEvents.push(newEvent);
-    arenaStartEvents.push({
+    const newArenaStartEvent: IArenaStartDB = {
       eventId: nextArenaStartEventId,
       mode: event.data.mode,
       index: event.data.index,
-    });
-    return newEvent;
+    };
+    allPEvents.push(newEvent);
+    arenaStartEvents.push(newArenaStartEvent);
+
+    return {
+      playerId: event.playerId,
+      eventId: newEvent.eventId,
+      created: newEvent.created,
+      type: "ARENASTART",
+      mode: newArenaStartEvent.mode,
+      index: newArenaStartEvent.index,
+    };
   } else {
     throw new Error("Can't generate arenaStartEvent");
   }
 };
 
-
 export const arenaEndEvent = (
-  player: IPlayer,
-  event: {
-    playerId: number;
-    created: number;
-    type: eventType;
-    data: {
-      mode: gameMode;
-      index: number;
-    };
-  }
-) => {
-  if (foundArenaStartEvent(player.currentState, event.data)) {
-    const nextArenaEndEventId = getNextArenaEndEvent();
-    const newEvent = {
+  game: IGame,
+  event: IArenaEndData
+): IArenaEndEvent => {
+  if (foundArenaStartEvent(game.player.currentState, event.data)) {
+    const nextArenaEndEventId = getNextEndArenaEventId();
+    const newEvent: IEventDB = {
       playerId: event.playerId,
       eventId: nextArenaEndEventId,
       type: "ARENAEND" as eventType,
       created: new Date().valueOf(),
     };
-    allPEvents.push(newEvent);
-    arenaEndEvents.push({
+    const newArenaEndEvent: IArenaEndDB = {
       eventId: nextArenaEndEventId,
       mode: event.data.mode,
       index: event.data.index,
-    });
-    return newEvent;
+    };
+    allPEvents.push(newEvent);
+    arenaEndEvents.push(newArenaEndEvent);
+
+    return {
+      playerId: event.playerId,
+      eventId: newEvent.eventId,
+      created: newEvent.created,
+      type: "ARENAEND",
+      mode: newArenaEndEvent.mode,
+      index: newArenaEndEvent.index,
+    };
   } else {
     throw new Error("Can't generate arenaEndEvent");
   }
 };
-*/
 
 export const serverStartArena = (
   game: IGame,

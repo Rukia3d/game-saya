@@ -1,10 +1,13 @@
 import { arcanas } from "../db/testDBArcanes";
+import { arenaRun } from "../db/testDBArena";
 import { materials } from "../db/testDBPlayer";
 import {
   addExperience,
   openNextLevel,
   removeMaterials,
   rewardPlayer,
+  updateArenaResults,
+  updateRewardPool,
 } from "../engine/actions";
 import { IMaterial, IMaterialQuant, IPlayer } from "../engine/types";
 
@@ -146,4 +149,37 @@ test("Removes materials correctly", async () => {
   const res = removeMaterials(owned, price);
   expect(res[0].quantity).toEqual(5);
   expect(res[3].quantity).toEqual(3);
+});
+
+test("Updates rewards pool when a player joins", () => {
+  const arenaEvent = JSON.parse(JSON.stringify(arenaRun.events[1]));
+  const stake = [
+    { id: 0, name: "Coin", quantity: 50 },
+    { id: 3, name: "Rings", quantity: 15 },
+  ];
+  const oneStakeEvent = updateRewardPool(arenaEvent, stake);
+  expect(oneStakeEvent.rewardPool.length).toEqual(2);
+  expect(oneStakeEvent.rewardPool[0].quantity).toEqual(50);
+  expect(oneStakeEvent.rewardPool[1].quantity).toEqual(15);
+  const twoStakeEvent = updateRewardPool(oneStakeEvent, stake);
+  expect(twoStakeEvent.rewardPool.length).toEqual(2);
+  expect(twoStakeEvent.rewardPool[0].quantity).toEqual(100);
+  expect(twoStakeEvent.rewardPool[1].quantity).toEqual(30);
+});
+
+test("Updates arena result when player finishes", () => {
+  const arenaEvent = JSON.parse(JSON.stringify(arenaRun.events[1]));
+  const player = JSON.parse(
+    JSON.stringify({ ...basePlayer, name: "PlayerArena" })
+  );
+  const oneResultEvent = updateArenaResults(arenaEvent, 6565, player);
+  expect(oneResultEvent.results.length).toEqual(1);
+  expect(oneResultEvent.results[0].playerId).toEqual(1);
+  expect(oneResultEvent.results[0].playerName).toEqual("PlayerArena");
+  expect(oneResultEvent.results[0].time).toEqual(6565);
+  const twoResultEvent = updateArenaResults(oneResultEvent, 7565, player);
+  expect(twoResultEvent.results.length).toEqual(1);
+  expect(twoResultEvent.results[0].playerId).toEqual(1);
+  expect(twoResultEvent.results[0].playerName).toEqual("PlayerArena");
+  expect(twoResultEvent.results[0].time).toEqual(7565);
 });

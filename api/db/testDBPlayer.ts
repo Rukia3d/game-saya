@@ -11,6 +11,8 @@ import {
   IWinLevelDB,
   IServerArenaStartDB,
   IServerArenaEndDB,
+  IArenaStartDB,
+  IArenaEndDB,
 } from "../engine/types";
 
 // const testLevel = new Array(131).fill(new Array(9));
@@ -68,6 +70,8 @@ export const allPEvents: IEventDB[] = [
     type: "SERVERARENAEND",
     created: 1654347593,
   },
+  { playerId: 1, eventId: 0, type: "ARENASTART", created: 1654348593 },
+  { playerId: 1, eventId: 0, type: "ARENAEND", created: 1654348793 },
 ];
 
 export const createPlayerEvents: ICreatePlayerDB[] = [
@@ -137,4 +141,12 @@ export const serverArenaEndEvents: IServerArenaEndDB[] = [
     eventId: 0,
     created: 1654357193,
   },
+];
+
+export const arenaStartEvents: IArenaStartDB[] = [
+  { eventId: 0, mode: "run", index: 0 },
+];
+
+export const arenaEndEvents: IArenaEndDB[] = [
+  { eventId: 0, mode: "run", index: 0 },
 ];

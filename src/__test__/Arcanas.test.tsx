@@ -114,6 +114,8 @@ const player: IPlayer = {
 const server: IServer = {
   arenaRun: { events: [], resultTime: 0, type: "run" },
   arenaFight: { events: [], resultTime: 0, type: "fight" },
+  arenaFightHistory: [],
+  arenaRunHistory: [],
 };
 const context: GameContextType = {
   mutate: jest.fn(),

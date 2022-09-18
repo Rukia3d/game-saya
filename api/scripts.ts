@@ -3,6 +3,8 @@ import * as writers from "./db/writers";
 import * as engine from "./engine/engine";
 import * as cronjobs from "./cronjobs";
 import {
+  IArenaEndData,
+  IArenaStartData,
   ICreatePlayerData,
   IMissCheckpointData,
   IOpenSpellData,
@@ -234,12 +236,11 @@ app.post("/api/players/:id/missCheckpoint", async (req: any, res: any) => {
   }
 });
 
-/*
 app.post("/api/players/:id/arenaStart", async (req: any, res: any) => {
   console.log("ARENA START", req.body);
   const playerId = parseInt(req.params.id);
   const game = eventsApplication(playerId);
-  const event = {
+  const event: IArenaStartData = {
     playerId: playerId,
     created: new Date().valueOf(),
     type: "ARENASTART",
@@ -261,23 +262,23 @@ app.post("/api/players/:id/endArena", async (req: any, res: any) => {
   console.log("ARENA END", req.body);
   const playerId = parseInt(req.params.id);
   const game = eventsApplication(playerId);
-  const event = {
+  const event: IArenaEndData = {
     playerId: playerId,
     created: new Date().valueOf(),
-    type: "ARENAEND" as eventType,
+    type: "ARENAEND",
     data: {
       mode: req.body.eventMode,
       index: req.body.eventIndx,
     },
   };
   try {
-    const updateGame = engine.processEvent(game, event);
-    res.send(updateGame);
+    const newEvent = writers.arenaEndEvent(game, event);
+    const newGame = eventsApplication(newEvent.playerId);
+    res.send(newGame);
   } catch (error) {
     res.send(error);
   }
 });
-*/
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);

@@ -9,7 +9,7 @@ test("detectWinners works correctly with simple array", async () => {
     { playerName: "Winner 4", playerId: 4, time: 20000000 },
   ];
   const res = detectWinners(winners);
-  expect(res.length).toEqual(3);
+  expect(res.length).toEqual(4);
   expect(res[0][0].playerName).toEqual(winners[0].playerName);
   expect(res[0][0].time).toEqual(winners[0].time);
   expect(res[1][0].playerName).toEqual(winners[1].playerName);
@@ -27,7 +27,7 @@ test("detectWinners works correctly with doubles", async () => {
     { playerName: "Winner 5", playerId: 5, time: 20000000 },
   ];
   const res = detectWinners(winners);
-  expect(res.length).toEqual(3);
+  expect(res.length).toEqual(4);
   expect(res[0][0].playerName).toEqual(winners[0].playerName);
   expect(res[0][0].time).toEqual(winners[0].time);
   expect(res[1][0].playerName).toEqual(winners[1].playerName);

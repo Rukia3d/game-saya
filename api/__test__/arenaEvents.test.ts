@@ -50,7 +50,7 @@ test("Creates arena event correctly", () => {
   expect(res.arenaRun.events[1].stake[1].quantity).toEqual(10);
 });
 
-test("Ends arena event correctly and rewards correct players", () => {
+test.skip("Ends arena event correctly and rewards correct players", () => {
   const server = { ...baseServer, arenaRun: { ...arenaRun } };
   server.arenaRun.events.map((e: IArenaEvent) => {
     e.rewardPool = [
@@ -70,10 +70,5 @@ test("Ends arena event correctly and rewards correct players", () => {
     type: "SERVERARENEND" as "SERVERARENAEND",
     created: now,
   };
-  console.log(
-    "game.server.arenaRun.events",
-    server.arenaRun.events[0].rewardPool
-  );
   const res = serverArenaEnd(event, server);
-  console.log("res", res);
 });

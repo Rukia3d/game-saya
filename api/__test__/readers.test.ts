@@ -195,6 +195,58 @@ test("Won't read miss checkpoint if no player Id", () => {
   jest.restoreAllMocks();
 });
 
+test("Won't read arena start if no event with this Id", () => {
+  jest.spyOn(console, "error").mockImplementation(() => jest.fn());
+  expect(() =>
+    readers.arenaStartEvent({
+      playerId: 3,
+      eventId: 3,
+      created: new Date().valueOf(),
+      type: "ARENASTART",
+    })
+  ).toThrow("No player start arena event");
+  jest.restoreAllMocks();
+});
+
+test("Won't read arena start if no player Id", () => {
+  jest.spyOn(console, "error").mockImplementation(() => jest.fn());
+  expect(() =>
+    readers.arenaStartEvent({
+      playerId: null,
+      eventId: 0,
+      created: new Date().valueOf(),
+      type: "ARENASTART",
+    })
+  ).toThrow("No player ID in arenaStartEvent");
+  jest.restoreAllMocks();
+});
+
+test("Won't read arena end if no event with this Id", () => {
+  jest.spyOn(console, "error").mockImplementation(() => jest.fn());
+  expect(() =>
+    readers.arenaEndEvent({
+      playerId: 3,
+      eventId: 3,
+      created: new Date().valueOf(),
+      type: "ARENAEND",
+    })
+  ).toThrow("No player end arena event");
+  jest.restoreAllMocks();
+});
+
+test("Won't read arena end if no player Id", () => {
+  jest.spyOn(console, "error").mockImplementation(() => jest.fn());
+  expect(() =>
+    readers.arenaEndEvent({
+      playerId: null,
+      eventId: 0,
+      created: new Date().valueOf(),
+      type: "ARENAEND",
+    })
+  ).toThrow("No player ID in arenaEndEvent");
+  jest.restoreAllMocks();
+});
+
 test("Won't read server arena start if no event with this Id", () => {
   jest.spyOn(console, "error").mockImplementation(() => jest.fn());
   expect(() =>

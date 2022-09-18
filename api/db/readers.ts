@@ -21,6 +21,10 @@ import {
   IServerArenaStartEvent,
   IServerArenaEndEvent,
   IServerArenaEndDB,
+  IArenaStartEvent,
+  IArenaStartDB,
+  IArenaEndEvent,
+  IArenaEndDB,
 } from "../engine/types";
 import {
   createPlayerEvents,
@@ -34,8 +38,9 @@ import {
   missCheckpointEvents,
   serverArenaStartEvents,
   serverArenaEndEvents,
+  arenaStartEvents,
+  arenaEndEvents,
 } from "./testDBPlayer";
-import { serverStartArena } from "./writers";
 
 export const allGameEvents = () => {
   return allPEvents;
@@ -81,6 +86,14 @@ export const allServerEndArena = () => {
   return serverArenaEndEvents;
 };
 
+export const allStartArena = () => {
+  return arenaStartEvents;
+};
+
+export const allEndArena = () => {
+  return arenaEndEvents;
+};
+
 export const playerEvents = (playerId: number): IGameEvent[] => {
   // Find events for a player
   const events = ensure(
@@ -117,18 +130,13 @@ export const playerEvents = (playerId: number): IGameEvent[] => {
         break;
       case "SERVERARENASTART":
         newEvents.push(serverArenaStartEvent(e));
-      // case "ARENASTART":
-      //   newPlayer = events.arenaStart(
-      //     { ...readers.arenaStartEvent(event.eventId), time: event.created },
-      //     newPlayer
-      //   );
-      //   break;
-      // case "ARENAEND":
-      //   newPlayer = events.arenaEnd(
-      //     { ...readers.arenaEndEvent(event.eventId), time: event.created },
-      //     newPlayer
-      //   );
-      //   break;
+        break;
+      case "ARENASTART":
+        newEvents.push(arenaStartEvent(e));
+        break;
+      case "ARENAEND":
+        newEvents.push(arenaEndEvent(e));
+        break;
     }
   });
 
@@ -297,6 +305,42 @@ export const missCheckpointEvent = (event: IEventDB): IMissCheckpointEvent => {
     type: "MISSCHECKPOINT",
     arcanaId: missCheckpoint.arcanaId,
     mode: missCheckpoint.mode,
+  };
+};
+
+export const arenaStartEvent = (event: IEventDB): IArenaStartEvent => {
+  const arenaStart = ensure(
+    allStartArena().find((e: IArenaStartDB) => e.eventId == event.eventId),
+    "No player start arena event"
+  );
+  if (!event.playerId) {
+    throw new Error("No player ID in arenaStartEvent");
+  }
+  return {
+    playerId: event.playerId,
+    eventId: event.eventId,
+    created: event.created,
+    type: "ARENASTART",
+    index: arenaStart.index,
+    mode: arenaStart.mode,
+  };
+};
+
+export const arenaEndEvent = (event: IEventDB): IArenaEndEvent => {
+  const arenaStart = ensure(
+    allEndArena().find((e: IArenaEndDB) => e.eventId == event.eventId),
+    "No player end arena event"
+  );
+  if (!event.playerId) {
+    throw new Error("No player ID in arenaEndEvent");
+  }
+  return {
+    playerId: event.playerId,
+    eventId: event.eventId,
+    created: event.created,
+    type: "ARENAEND",
+    index: arenaStart.index,
+    mode: arenaStart.mode,
   };
 };
 

@@ -1,7 +1,7 @@
 import * as writers from "./db/writers";
 import { IArenaResult, IPlayer, IServer } from "./engine/types";
 
-export const ARENAEVENTINTERVAL = 10000;
+export const ARENAEVENTINTERVAL = 100000;
 
 const basePlayer: IPlayer = {
   id: 3,
@@ -37,7 +37,7 @@ export const detectWinners = (winners: IArenaResult[]) => {
   for (const time of times) {
     groups.push(res[time]);
   }
-  return groups.slice(0, 3);
+  return groups;
 };
 
 export const startArena = () => {

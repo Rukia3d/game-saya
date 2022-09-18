@@ -19,7 +19,7 @@ export const ArenaStartPopup = ({
 
   const startEvent = async () => {
     setArenaEvent(null);
-    await axios.post(`/api/players/${context.player.id}/arena`, {
+    await axios.post(`/api/players/${context.player.id}/arenaStart`, {
       eventMode: arenaEvent.mode,
       eventIndx: arenaEvent.index,
     });

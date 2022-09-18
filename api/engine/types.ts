@@ -143,7 +143,7 @@ export interface ICurrentState {
   arena?: {
     mode: gameMode;
     index: number;
-    time: number;
+    startTime: number;
   };
   arenaResult?: {
     results: IArenaResult[];
@@ -194,7 +194,10 @@ export type IGameEvent =
   | IStartEndlessEvent
   | IPassCheckpointEvent
   | IMissCheckpointEvent
-  | IServerArenaStartEvent;
+  | IServerArenaStartEvent
+  | IServerArenaEndEvent
+  | IArenaStartEvent
+  | IArenaEndEvent;
 
 export type IEventDB = {
   playerId: number | null;
@@ -414,6 +417,57 @@ export type IMissCheckpointEvent = {
   type: "MISSCHECKPOINT";
   arcanaId: number;
   mode: gameMode;
+};
+
+// PLAYER ARENA
+export type IArenaStartDB = {
+  eventId: number;
+  mode: gameMode;
+  index: number;
+};
+
+export type IArenaStartData = {
+  playerId: number;
+  created: number;
+  type: "ARENASTART";
+  data: {
+    mode: gameMode;
+    index: number;
+  };
+};
+
+export type IArenaStartEvent = {
+  playerId: number;
+  eventId: number;
+  created: number;
+  type: "ARENASTART";
+  mode: gameMode;
+  index: number;
+};
+
+export type IArenaEndDB = {
+  eventId: number;
+  mode: gameMode;
+  index: number;
+};
+
+export type IArenaEndData = {
+  playerId: number;
+  created: number;
+  type: "ARENAEND";
+  data: {
+    mode: gameMode;
+    index: number;
+  };
+};
+
+export type IArenaEndEvent = {
+  playerId: number;
+  eventId: number;
+  created: number;
+  type: "ARENAEND";
+  mode: gameMode;
+  index: number;
 };
 
 // ARENA

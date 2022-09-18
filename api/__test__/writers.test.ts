@@ -1,6 +1,7 @@
 import { ARENAEVENTINTERVAL } from "../cronjobs";
 import * as readers from "../db/readers";
 import { arcanas } from "../db/testDBArcanes";
+import { arenaRun } from "../db/testDBArena";
 import { materials } from "../db/testDBPlayer";
 import { spells } from "../db/testDBSpells";
 import * as writers from "../db/writers";
@@ -279,6 +280,88 @@ test("Writes passCheckpoint event correctly", () => {
   expect(readPass.arcanaId).toEqual(0);
   expect(readPass.checkpoint).toEqual(0);
   expect(readPass.mode).toEqual("run");
+});
+
+test("Writes arenaStartEvent correctly", () => {
+  const game = {
+    player: {
+      ...basePlayer,
+      energy: 100,
+      arcanas: JSON.parse(JSON.stringify(arcanas)),
+      materials: JSON.parse(
+        JSON.stringify(
+          materials.map((m: IMaterial) => {
+            return { ...m, quantity: 50 };
+          })
+        )
+      ),
+    },
+    server: { ...baseServer, arenaRun: arenaRun },
+  };
+  const writeStart = writers.arenaStartEvent(game, {
+    playerId: 3,
+    created: new Date().valueOf(),
+    type: "ARENASTART",
+    data: { mode: "run", index: 0 },
+  });
+  expect(writeStart.playerId).toEqual(3);
+  expect(writeStart.eventId).toEqual(1);
+  expect(writeStart.type).toEqual("ARENASTART");
+
+  const readStart = readers.arenaStartEvent({
+    playerId: 3,
+    eventId: 1,
+    created: new Date().valueOf(),
+    type: "ARENASTART",
+  });
+  expect(readStart.eventId).toEqual(1);
+  expect(readStart.index).toEqual(0);
+  expect(readStart.mode).toEqual("run");
+});
+
+test("Writes arenaEndEvent correctly", () => {
+  const game = {
+    player: {
+      ...basePlayer,
+      energy: 100,
+      arcanas: JSON.parse(JSON.stringify(arcanas)),
+      materials: JSON.parse(
+        JSON.stringify(
+          materials.map((m: IMaterial) => {
+            return { ...m, quantity: 50 };
+          })
+        )
+      ),
+      currentState: {
+        state: "ARENAPLAY" as currentState,
+        arena: {
+          mode: "run" as "run",
+          index: 0,
+          startTime: new Date().valueOf(),
+        },
+      },
+    },
+    server: { ...baseServer, arenaRun: arenaRun },
+  };
+  const writeEnd = writers.arenaEndEvent(game, {
+    playerId: 3,
+    created: new Date().valueOf() + 15000,
+    type: "ARENAEND",
+    data: { mode: "run", index: 0 },
+  });
+  expect(writeEnd.playerId).toEqual(3);
+  expect(writeEnd.eventId).toEqual(1);
+  expect(writeEnd.type).toEqual("ARENAEND");
+
+  const readEnd = readers.arenaStartEvent({
+    playerId: 3,
+    eventId: 1,
+    created: new Date().valueOf(),
+    type: "ARENAEND",
+  });
+  expect(readEnd.eventId).toEqual(1);
+  expect(readEnd.index).toEqual(0);
+  expect(readEnd.mode).toEqual("run");
 });
 
 test("Writes missCheckpointEvent event correctly", () => {

@@ -4,10 +4,11 @@ import { IGame, IGameEvent } from "./types";
 export const applyEvent = (game: IGame, event: IGameEvent): IGame => {
   let newPlayer = JSON.parse(JSON.stringify(game.player));
   let newServer = JSON.parse(JSON.stringify(game.server));
+  let newGame = { player: newPlayer, server: newServer };
   //console.log("Apply Event", event.type);
   switch (event.type) {
     case "CREATEPLAYER":
-      newPlayer = events.createPlayer(
+      newGame.player = events.createPlayer(
         {
           ...event,
           playerId: event.playerId,
@@ -16,42 +17,40 @@ export const applyEvent = (game: IGame, event: IGameEvent): IGame => {
       );
       break;
     case "STARTLEVEL":
-      newPlayer = events.startLevel(event, newPlayer);
+      newGame.player = events.startLevel(event, newPlayer);
       break;
     case "WINLEVEL":
-      newPlayer = events.winLevel(event, newPlayer);
+      newGame.player = events.winLevel(event, newPlayer);
       break;
     case "OPENSPELL":
-      newPlayer = events.openSpell(event, newPlayer);
+      newGame.player = events.openSpell(event, newPlayer);
       break;
     case "UPDATESPELL":
-      newPlayer = events.updateSpell(event, newPlayer);
+      newGame.player = events.updateSpell(event, newPlayer);
       break;
     case "STARTENDLESS":
-      newPlayer = events.startEndless(event, newPlayer);
+      newGame.player = events.startEndless(event, newPlayer);
       break;
     case "PASSCHECKPOINT":
-      newPlayer = events.passCheckpoint(event, newPlayer);
+      newGame.player = events.passCheckpoint(event, newPlayer);
       break;
     case "MISSCHECKPOINT":
-      newPlayer = events.missCheckpoint(event, newPlayer);
+      newGame.player = events.missCheckpoint(event, newPlayer);
       break;
     case "SERVERARENASTART":
-      newServer = events.serverArenaStart(event, newServer);
-    // case "ARENASTART":
-    //   newPlayer = events.arenaStart(
-    //     { ...readers.arenaStartEvent(event.eventId), time: event.created },
-    //     newPlayer
-    //   );
-    //   break;
-    // case "ARENAEND":
-    //   newPlayer = events.arenaEnd(
-    //     { ...readers.arenaEndEvent(event.eventId), time: event.created },
-    //     newPlayer
-    //   );
-    //   break;
+      newGame.server = events.serverArenaStart(event, newServer);
+      break;
+    case "SERVERARENAEND":
+      newGame.server = events.serverArenaEnd(event, newServer);
+      break;
+    case "ARENASTART":
+      newGame = events.arenaStart(event, newPlayer);
+      break;
+    case "ARENAEND":
+      newGame = events.arenaEnd(event, newPlayer);
+      break;
   }
-  return { player: newPlayer, server: newServer };
+  return newGame;
 };
 
 export const applyEvents = (events: IGameEvent[]): IGame => {

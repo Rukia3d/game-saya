@@ -8,8 +8,11 @@ import {
   rewardPlayer,
   openNextLevel,
   removeMaterials,
+  updateRewardPool,
+  updateArenaResults,
 } from "./actions";
 import {
+  calculateResult,
   ensure,
   findEnergyPrice,
   findLastCheckpoint,
@@ -19,9 +22,14 @@ import {
 import {
   currentState,
   gameMode,
+  IArena,
+  IArenaEndEvent,
   IArenaEvent,
+  IArenaStartEvent,
   ICreatePlayerEvent,
+  ICurrentState,
   IEventReward,
+  IGame,
   IMaterial,
   IMissCheckpointEvent,
   IOpenSpellEvent,
@@ -323,64 +331,75 @@ export const serverArenaEnd = (
   });
   return newServer;
 };
-/*
-export const arenaStart = (
-  event: IArenaStartEventTimed,
-  player: IPlayer
-): IPlayer => {
+
+export const arenaStart = (event: IArenaStartEvent, game: IGame): IGame => {
   const newArena: IArena =
-    event.mode === "run" ? player.arenaRun : player.arenaFight;
+    event.mode === "run" ? game.server.arenaRun : game.server.arenaFight;
   const arenaEvent: IArenaEvent =
     event.mode === "run"
-      ? player.arenaRun.events[event.index]
-      : player.arenaFight.events[event.index];
-  const newMaterials = removeMaterials(player.materials, arenaEvent.stake);
+      ? game.server.arenaRun.events[event.index]
+      : game.server.arenaFight.events[event.index];
+  const newMaterials = removeMaterials(game.player.materials, arenaEvent.stake);
   const newArenaEvent = updateRewardPool(arenaEvent, arenaEvent.stake);
   const newState = {
     state: "ARENAPLAY" as currentState,
-    arena: { mode: event.mode, index: event.index, time: event.time },
+    arena: { mode: event.mode, index: event.index, startTime: event.created },
   };
-  newArena.events[event.index] = newArenaEvent;
-  return {
-    ...player,
-    arenaFight: event.mode === "fight" ? newArena : player.arenaFight,
-    arenaRun: event.mode === "run" ? newArena : player.arenaRun,
+  const newPlayer = {
+    ...game.player,
     materials: newMaterials,
     currentState: newState,
   };
+  newArena.events[event.index] = newArenaEvent;
+  const newServer: IServer = {
+    arenaFight: event.mode === "fight" ? newArena : game.server.arenaFight,
+    arenaRun: event.mode === "run" ? newArena : game.server.arenaRun,
+    arenaFightHistory: game.server.arenaFightHistory,
+    arenaRunHistory: game.server.arenaRunHistory,
+  };
+  return {
+    player: newPlayer,
+    server: newServer,
+  };
 };
 
-export const arenaEnd = (
-  event: IArenaEndEventTimed,
-  player: IPlayer
-): IPlayer => {
-  if (!player.currentState.arena) {
+export const arenaEnd = (event: IArenaEndEvent, game: IGame): IGame => {
+  if (!game.player.currentState.arena?.startTime) {
     throw new Error("Can't end arena event withouth the starting time");
   }
   const newArena: IArena =
-    event.mode === "run" ? player.arenaRun : player.arenaFight;
-  const arenaEvent =
+    event.mode === "run" ? game.server.arenaRun : game.server.arenaFight;
+  const arenaEvent: IArenaEvent =
     event.mode === "run"
-      ? player.arenaRun.events[event.index]
-      : player.arenaFight.events[event.index];
+      ? game.server.arenaRun.events[event.index]
+      : game.server.arenaFight.events[event.index];
   const resultTime = calculateResult(
-    player.currentState.arena?.time,
-    event.time
+    game.player.currentState.arena?.startTime,
+    event.created
   );
-  const newArenaEvent = updateArenaResults(arenaEvent, resultTime, player);
+  const newArenaEvent = updateArenaResults(arenaEvent, resultTime, game.player);
   const newState: ICurrentState = {
     state: "ARENAEND" as currentState,
+    arena: undefined,
     arenaResult: {
       results: newArenaEvent.results,
       result: resultTime,
     },
   };
   newArena.events[event.index] = newArenaEvent;
-  return {
-    ...player,
-    arenaFight: event.mode === "fight" ? newArena : player.arenaFight,
-    arenaRun: event.mode === "run" ? newArena : player.arenaRun,
+  const newPlayer = {
+    ...game.player,
     currentState: newState,
   };
+  newArena.events[event.index] = newArenaEvent;
+  const newServer: IServer = {
+    arenaFight: event.mode === "fight" ? newArena : game.server.arenaFight,
+    arenaRun: event.mode === "run" ? newArena : game.server.arenaRun,
+    arenaFightHistory: game.server.arenaFightHistory,
+    arenaRunHistory: game.server.arenaRunHistory,
+  };
+  return {
+    player: newPlayer,
+    server: newServer,
+  };
 };
-*/

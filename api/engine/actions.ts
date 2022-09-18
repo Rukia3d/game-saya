@@ -13,6 +13,7 @@ import {
   IArenaEvent,
   IWinLevelEvent,
   IPassCheckpointEvent,
+  IArenaResult,
 } from "./types";
 
 export const rewardPlayer = (
@@ -97,11 +98,24 @@ export const updateArenaResults = (
   player: IPlayer
 ) => {
   const newEvent: IArenaEvent = JSON.parse(JSON.stringify(event));
-  newEvent.results.push({
-    playerName: player.name,
-    playerId: player.id,
-    time: timeInSec,
-  });
+  const previousResult = newEvent.results.find(
+    (r: IArenaResult) =>
+      r.playerId === player.id && r.playerName === player.name
+  );
+
+  if (!previousResult) {
+    newEvent.results.push({
+      playerName: player.name,
+      playerId: player.id,
+      time: timeInSec,
+    });
+  }
+
+  if (previousResult && previousResult.time < timeInSec) {
+    const index = newEvent.results.indexOf(previousResult);
+    newEvent.results[index].time = timeInSec;
+  }
+
   newEvent.results = newEvent.results.sort((a, b) => a.time - b.time);
   return newEvent;
 };
