@@ -27,6 +27,7 @@ const baseServer: IServer = {
   arenaRunHistory: [],
   arenaFightHistory: [],
 };
+const game = { player: basePlayer, server: baseServer };
 
 test("Creates arena event correctly", () => {
   const now = new Date().valueOf();
@@ -37,17 +38,17 @@ test("Creates arena event correctly", () => {
     end: now + 600000,
     created: now,
   };
-  const res = serverArenaStart(event, baseServer);
-  expect(res.arenaRunHistory.length).toEqual(1);
-  expect(res.arenaRun.resultTime).toEqual(now + 600000);
-  expect(res.arenaRun.events.length).toEqual(3);
-  expect(res.arenaRun.events[0].index).toEqual(0);
-  expect(res.arenaRun.events[0].stake[0].name).toEqual("Coin");
-  expect(res.arenaRun.events[0].stake[0].quantity).toEqual(25);
-  expect(res.arenaRun.events[0].stake[1].quantity).toEqual(5);
-  expect(res.arenaRun.events[1].stake[0].name).toEqual("Coin");
-  expect(res.arenaRun.events[1].stake[0].quantity).toEqual(50);
-  expect(res.arenaRun.events[1].stake[1].quantity).toEqual(10);
+  const res = serverArenaStart(event, game);
+  expect(res.server.arenaRunHistory.length).toEqual(1);
+  expect(res.server.arenaRun.resultTime).toEqual(now + 600000);
+  expect(res.server.arenaRun.events.length).toEqual(3);
+  expect(res.server.arenaRun.events[0].index).toEqual(0);
+  expect(res.server.arenaRun.events[0].stake[0].name).toEqual("Coin");
+  expect(res.server.arenaRun.events[0].stake[0].quantity).toEqual(25);
+  expect(res.server.arenaRun.events[0].stake[1].quantity).toEqual(5);
+  expect(res.server.arenaRun.events[1].stake[0].name).toEqual("Coin");
+  expect(res.server.arenaRun.events[1].stake[0].quantity).toEqual(50);
+  expect(res.server.arenaRun.events[1].stake[1].quantity).toEqual(10);
 });
 
 test.skip("Ends arena event correctly and rewards correct players", () => {
@@ -70,5 +71,5 @@ test.skip("Ends arena event correctly and rewards correct players", () => {
     type: "SERVERARENEND" as "SERVERARENAEND",
     created: now,
   };
-  const res = serverArenaEnd(event, server);
+  const res = serverArenaEnd(event, { player: basePlayer, server: server });
 });

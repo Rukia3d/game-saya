@@ -1,7 +1,14 @@
+import { arenaFight, arenaRun } from "../db/testDBArena";
 import { materials } from "../db/testDBPlayer";
 import { spells } from "../db/testDBSpells";
 import * as events from "../engine/events";
-import { IMaterial, IMaterialQuant, IPlayer } from "../engine/types";
+import {
+  IGame,
+  IMaterial,
+  IMaterialQuant,
+  IPlayer,
+  IServer,
+} from "../engine/types";
 
 const basePlayer: IPlayer = {
   id: 0,
@@ -17,9 +24,16 @@ const basePlayer: IPlayer = {
   messages: [],
   currentState: { state: "MAIN" },
 };
+const baseServer: IServer = {
+  arenaRun: arenaRun,
+  arenaFight: arenaFight,
+  arenaRunHistory: [],
+  arenaFightHistory: [],
+};
+const game = { player: basePlayer, server: baseServer };
 
 test("eventCreatePlayer for player 1", async () => {
-  const res: IPlayer = events.createPlayer(
+  const res: IGame = events.createPlayer(
     {
       eventId: 0,
       playerName: "player 1 name",
@@ -27,18 +41,20 @@ test("eventCreatePlayer for player 1", async () => {
       created: new Date().valueOf(),
       type: "CREATEPLAYER",
     },
-    basePlayer
+    game
   );
-  expect(res.id).toEqual(1);
-  expect(res.name).toEqual("player 1 name");
-  expect(res.energy).toEqual(50);
-  expect(res.exprience).toEqual(0);
-  expect(res.arcanas.length).toEqual(1);
-  expect(res.materials.length).toEqual(8);
-  res.materials.forEach((r: IMaterialQuant) => expect(r.quantity).toEqual(0));
-  expect(res.arcanas[0].stories.length).toEqual(3);
-  expect(res.arcanas[0].stories[0].state).toEqual("open");
-  expect(res.arcanas[0].stories[1].state).toEqual("closed");
+  expect(res.player.id).toEqual(1);
+  expect(res.player.name).toEqual("player 1 name");
+  expect(res.player.energy).toEqual(50);
+  expect(res.player.exprience).toEqual(0);
+  expect(res.player.arcanas.length).toEqual(1);
+  expect(res.player.materials.length).toEqual(8);
+  res.player.materials.forEach((r: IMaterialQuant) =>
+    expect(r.quantity).toEqual(0)
+  );
+  expect(res.player.arcanas[0].stories.length).toEqual(3);
+  expect(res.player.arcanas[0].stories[0].state).toEqual("open");
+  expect(res.player.arcanas[0].stories[1].state).toEqual("closed");
 });
 
 test("openSpell for player 1", async () => {
@@ -61,7 +77,7 @@ test("openSpell for player 1", async () => {
   const playerMaterials = materials.map((m: IMaterial) => {
     return { ...m, quantity: 10 };
   });
-  const res: IPlayer = events.openSpell(
+  const res: IGame = events.openSpell(
     {
       eventId: 0,
       arcanaId: 0,
@@ -71,20 +87,23 @@ test("openSpell for player 1", async () => {
       type: "OPENSPELL",
     },
     {
-      ...basePlayer,
-      materials: playerMaterials,
-      spells: playerSpells,
+      player: {
+        ...basePlayer,
+        materials: playerMaterials,
+        spells: playerSpells,
+      },
+      server: baseServer,
     }
   );
-  expect(res.spells.length).toEqual(2);
-  expect(res.spells[0]).not.toHaveProperty("price");
-  expect(res.spells[1]).toHaveProperty("price");
-  expect(res.materials[0].quantity).toEqual(5);
-  expect(res.materials[1].quantity).toEqual(3);
-  expect(res.currentState.state).toEqual("SPELLS");
-  expect(res.spells[0].state).toEqual("open");
-  expect(res.spells[0]).toHaveProperty("updatePrice");
-  expect(res.spells[0]).toHaveProperty("requiredStrength");
+  expect(res.player.spells.length).toEqual(2);
+  expect(res.player.spells[0]).not.toHaveProperty("price");
+  expect(res.player.spells[1]).toHaveProperty("price");
+  expect(res.player.materials[0].quantity).toEqual(5);
+  expect(res.player.materials[1].quantity).toEqual(3);
+  expect(res.player.currentState.state).toEqual("SPELLS");
+  expect(res.player.spells[0].state).toEqual("open");
+  expect(res.player.spells[0]).toHaveProperty("updatePrice");
+  expect(res.player.spells[0]).toHaveProperty("requiredStrength");
 
   jest.spyOn(console, "error").mockImplementation(() => jest.fn());
   expect(() =>
@@ -98,9 +117,12 @@ test("openSpell for player 1", async () => {
         type: "OPENSPELL",
       },
       {
-        ...basePlayer,
-        materials: playerMaterials,
-        spells: [playerSpells[0], { ...spells[1] }],
+        player: {
+          ...basePlayer,
+          materials: playerMaterials,
+          spells: [playerSpells[0], { ...spells[1] }],
+        },
+        server: baseServer,
       }
     )
   ).toThrow("Spell to open doesn't have a price");

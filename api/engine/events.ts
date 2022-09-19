@@ -49,12 +49,9 @@ import {
   IWinLevelEvent,
 } from "./types";
 
-export const createPlayer = (
-  event: ICreatePlayerEvent,
-  player: IPlayer
-): IPlayer => {
-  return {
-    ...player,
+export const createPlayer = (event: ICreatePlayerEvent, game: IGame): IGame => {
+  const newPlayer: IPlayer = {
+    ...game.player,
     id: event.playerId,
     name: event.playerName,
     maxEnergy: 50,
@@ -69,19 +66,21 @@ export const createPlayer = (
       return { ...m, quantity: 0 };
     }),
   };
+  return {
+    ...game,
+    player: newPlayer,
+  };
 };
 
-export const startLevel = (
-  event: IStartLevelEvent,
-  player: IPlayer
-): IPlayer => {
+export const startLevel = (event: IStartLevelEvent, game: IGame): IGame => {
   let energyPrice = findEnergyPrice(event.arcanaId, "story", event.levelId);
   const firstTime =
-    player.arcanas[event.arcanaId].stories[event.levelId].state !== "complete";
+    game.player.arcanas[event.arcanaId].stories[event.levelId].state !==
+    "complete";
   if (
     event.arcanaId === 0 &&
     event.levelId < 2 &&
-    player.arcanas &&
+    game.player.arcanas &&
     firstTime
   ) {
     energyPrice = 0;
@@ -94,17 +93,38 @@ export const startLevel = (
       level: event.levelId,
     },
   };
-  return {
-    ...player,
-    energy: player.energy - energyPrice,
+  const newPlayer: IPlayer = {
+    ...game.player,
+    energy: game.player.energy - energyPrice,
     currentState: state,
   };
+  return { ...game, player: newPlayer };
 };
 
-export const startEndless = (
-  event: IStartEndlessEvent,
-  player: IPlayer
-): IPlayer => {
+export const winLevel = (event: IWinLevelEvent, game: IGame): IGame => {
+  const newMaterials = rewardPlayer(
+    event,
+    game.player.materials,
+    game.player.arcanas
+  );
+  // need to add experience before we open the next level
+  const newExperience = addExperience(event, game.player);
+  const newState = {
+    state: "WINMATERIAL" as currentState,
+    materials: newMaterials.new,
+  };
+  const newPlayer: IPlayer = {
+    ...game.player,
+    materials: newMaterials.all,
+    arcanas: openNextLevel(event, game.player.arcanas),
+    exprience: newExperience,
+    // TODO Check if this is correct
+    currentState: newState,
+  };
+  return { ...game, player: newPlayer };
+};
+
+export const startEndless = (event: IStartEndlessEvent, game: IGame): IGame => {
   let energyPrice = findEnergyPrice(event.arcanaId, event.mode);
   const state = {
     state: "PLAY" as currentState,
@@ -113,18 +133,19 @@ export const startEndless = (
       mode: event.mode as gameMode,
     },
   };
-  return {
-    ...player,
-    energy: player.energy - energyPrice,
+  const newPlayer: IPlayer = {
+    ...game.player,
+    energy: game.player.energy - energyPrice,
     currentState: state,
   };
+  return { ...game, player: newPlayer };
 };
 
 export const passCheckpoint = (
   event: IPassCheckpointEvent,
-  player: IPlayer
-): IPlayer => {
-  const newArcanas = JSON.parse(JSON.stringify(player.arcanas));
+  game: IGame
+): IGame => {
+  const newArcanas = JSON.parse(JSON.stringify(game.player.arcanas));
   const eventIndex = event.mode === "run" ? 0 : 1;
   const newAllowedRewards = ensure(
     eventTowerRewards.find(
@@ -133,56 +154,42 @@ export const passCheckpoint = (
     )
   ).reward;
   // -1 allows us to cover a spread between level start and 0 trigger
-  const last = findLastCheckpoint(player, event.mode, event.arcanaId);
+  const last = findLastCheckpoint(game.player, event.mode, event.arcanaId);
   newArcanas[event.arcanaId].currentEvents[eventIndex].checkpoint = last + 1;
   newArcanas[event.arcanaId].currentEvents[eventIndex].allowedRewards =
     newAllowedRewards;
-
-  const newExperience = addExperience(event, player);
-
-  return {
-    ...player,
+  const newExperience = addExperience(event, game.player);
+  const newPlayer: IPlayer = {
+    ...game.player,
     arcanas: newArcanas,
     exprience: newExperience,
   };
+  return { ...game, player: newPlayer };
 };
 
 export const missCheckpoint = (
   event: IMissCheckpointEvent,
-  player: IPlayer
-): IPlayer => {
-  const newMaterials = rewardPlayer(event, player.materials, player.arcanas);
-  let newState = {
-    state: "WINMATERIAL" as currentState,
-    materials: newMaterials.new,
-  };
-  return {
-    ...player,
-    materials: newMaterials.all,
-    currentState: newState,
-  };
-};
-
-export const winLevel = (event: IWinLevelEvent, player: IPlayer): IPlayer => {
-  const newMaterials = rewardPlayer(event, player.materials, player.arcanas);
-  // need to add experience before we open the next level
-  const newExperience = addExperience(event, player);
+  game: IGame
+): IGame => {
+  const newMaterials = rewardPlayer(
+    event,
+    game.player.materials,
+    game.player.arcanas
+  );
   const newState = {
     state: "WINMATERIAL" as currentState,
     materials: newMaterials.new,
   };
-  return {
-    ...player,
+  const newPlayer: IPlayer = {
+    ...game.player,
     materials: newMaterials.all,
-    arcanas: openNextLevel(event, player.arcanas),
-    exprience: newExperience,
-    // TODO Check if this is correct
     currentState: newState,
   };
+  return { ...game, player: newPlayer };
 };
 
-export const openSpell = (event: IOpenSpellEvent, player: IPlayer): IPlayer => {
-  const newPlayerSpells = JSON.parse(JSON.stringify(player.spells));
+export const openSpell = (event: IOpenSpellEvent, game: IGame): IGame => {
+  const newPlayerSpells = JSON.parse(JSON.stringify(game.player.spells));
   const indexToChange = newPlayerSpells.findIndex(
     (s: ISpellOpen | ISpellClosed | ISpell) =>
       s.arcanaId === event.arcanaId && s.id === event.spellId
@@ -191,7 +198,7 @@ export const openSpell = (event: IOpenSpellEvent, player: IPlayer): IPlayer => {
     throw new Error("Spell to open doesn't have a price");
   }
   let newMaterials = removeMaterials(
-    JSON.parse(JSON.stringify(player.materials)),
+    JSON.parse(JSON.stringify(game.player.materials)),
     newPlayerSpells[indexToChange].price
   );
 
@@ -217,19 +224,17 @@ export const openSpell = (event: IOpenSpellEvent, player: IPlayer): IPlayer => {
   } else {
     console.warn(`Spell number${indexToChange} doesn't have updates in DB`);
   }
-  return {
-    ...player,
+  const newPlayer: IPlayer = {
+    ...game.player,
     materials: newMaterials,
     spells: newPlayerSpells,
     currentState: { state: "SPELLS" },
   };
+  return { ...game, player: newPlayer };
 };
 
-export const updateSpell = (
-  event: IUpdateSpellEvent,
-  player: IPlayer
-): IPlayer => {
-  const newPlayerSpells = JSON.parse(JSON.stringify(player.spells));
+export const updateSpell = (event: IUpdateSpellEvent, game: IGame): IGame => {
+  const newPlayerSpells = JSON.parse(JSON.stringify(game.player.spells));
   const indexToChange = newPlayerSpells.findIndex(
     (s: ISpellOpen | ISpellClosed | ISpell) =>
       s.arcanaId === event.arcanaId && s.id === event.spellId
@@ -241,7 +246,7 @@ export const updateSpell = (
     throw new Error("Spell to open doesn't have a required strength");
   }
   let newMaterials = removeMaterials(
-    JSON.parse(JSON.stringify(player.materials)),
+    JSON.parse(JSON.stringify(game.player.materials)),
     newPlayerSpells[indexToChange].updatePrice
   );
 
@@ -261,21 +266,22 @@ export const updateSpell = (
   } else {
     console.warn(`Spell number${indexToChange} doesn't have updates in DB`);
   }
-  return {
-    ...player,
+  const newPlayer: IPlayer = {
+    ...game.player,
     materials: newMaterials,
     spells: newPlayerSpells,
     currentState: { state: "SPELLS" },
   };
+  return { ...game, player: newPlayer };
 };
 
 export const serverArenaStart = (
   event: IServerArenaStartEvent,
-  server: IServer
-) => {
-  const newServer: IServer = JSON.parse(JSON.stringify(server));
-  newServer.arenaFightHistory.push(server.arenaFight);
-  newServer.arenaRunHistory.push(server.arenaRun);
+  game: IGame
+): IGame => {
+  const newServer: IServer = JSON.parse(JSON.stringify(game.server));
+  newServer.arenaFightHistory.push(game.server.arenaFight);
+  newServer.arenaRunHistory.push(game.server.arenaRun);
   const eventsRun: IArenaEvent[] = [0, 1, 2].map((n: number) => {
     const reward = generateArenaRandom(event, "run", 4);
     const randResource = materials[reward + 3];
@@ -317,19 +323,19 @@ export const serverArenaStart = (
     resultTime: event.end,
     events: eventsFight,
   };
-  return newServer;
+  return { ...game, server: newServer };
 };
 
 export const serverArenaEnd = (
   event: IServerArenaEndEvent,
-  server: IServer
-) => {
-  const newServer: IServer = JSON.parse(JSON.stringify(server));
+  game: IGame
+): IGame => {
+  const newServer: IServer = JSON.parse(JSON.stringify(game.server));
   newServer.arenaRun.events.map((e: IArenaEvent) => {
     const result = detectWinners(e.results);
     //TODO Add message for players to claim achivements
   });
-  return newServer;
+  return { ...game, server: newServer };
 };
 
 export const arenaStart = (event: IArenaStartEvent, game: IGame): IGame => {

@@ -1,53 +1,53 @@
 import * as events from "./events";
-import { IGame, IGameEvent } from "./types";
+import { IGame, IGameEvent, IPlayer, IServer } from "./types";
 
 export const applyEvent = (game: IGame, event: IGameEvent): IGame => {
-  let newPlayer = JSON.parse(JSON.stringify(game.player));
-  let newServer = JSON.parse(JSON.stringify(game.server));
-  let newGame = { player: newPlayer, server: newServer };
+  let newPlayer: IPlayer = JSON.parse(JSON.stringify(game.player));
+  let newServer: IServer = JSON.parse(JSON.stringify(game.server));
+  let newGame: IGame = { player: newPlayer, server: newServer };
   //console.log("Apply Event", event.type);
   switch (event.type) {
     case "CREATEPLAYER":
-      newGame.player = events.createPlayer(
+      newGame = events.createPlayer(
         {
           ...event,
           playerId: event.playerId,
         },
-        newPlayer
+        newGame
       );
       break;
     case "STARTLEVEL":
-      newGame.player = events.startLevel(event, newPlayer);
+      newGame = events.startLevel(event, newGame);
       break;
     case "WINLEVEL":
-      newGame.player = events.winLevel(event, newPlayer);
+      newGame = events.winLevel(event, newGame);
       break;
     case "OPENSPELL":
-      newGame.player = events.openSpell(event, newPlayer);
+      newGame = events.openSpell(event, newGame);
       break;
     case "UPDATESPELL":
-      newGame.player = events.updateSpell(event, newPlayer);
+      newGame = events.updateSpell(event, newGame);
       break;
     case "STARTENDLESS":
-      newGame.player = events.startEndless(event, newPlayer);
+      newGame = events.startEndless(event, newGame);
       break;
     case "PASSCHECKPOINT":
-      newGame.player = events.passCheckpoint(event, newPlayer);
+      newGame = events.passCheckpoint(event, newGame);
       break;
     case "MISSCHECKPOINT":
-      newGame.player = events.missCheckpoint(event, newPlayer);
+      newGame = events.missCheckpoint(event, newGame);
       break;
     case "SERVERARENASTART":
-      newGame.server = events.serverArenaStart(event, newServer);
+      newGame = events.serverArenaStart(event, newGame);
       break;
     case "SERVERARENAEND":
-      newGame.server = events.serverArenaEnd(event, newServer);
+      newGame = events.serverArenaEnd(event, newGame);
       break;
     case "ARENASTART":
-      newGame = events.arenaStart(event, newPlayer);
+      newGame = events.arenaStart(event, newGame);
       break;
     case "ARENAEND":
-      newGame = events.arenaEnd(event, newPlayer);
+      newGame = events.arenaEnd(event, newGame);
       break;
   }
   return newGame;
