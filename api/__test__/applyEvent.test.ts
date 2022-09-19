@@ -1,16 +1,22 @@
 import { arcanas } from "../db/testDBArcanes";
-import { materials } from "../db/testDBPlayer";
 import { applyEvent } from "../engine/engine";
 import {
-  IMaterial,
-  IPlayer,
-  IServer,
-  IStartLevelEvent,
-  IWinLevelEvent,
-} from "../engine/types";
+  serverArenaStart,
+  createPlayer,
+  startLevel,
+  winLevel,
+  startEndless,
+  passCheckpoint,
+  missCheckpoint,
+  openSpell,
+  updateSpell,
+  startArena,
+  endArena,
+} from "../engine/events";
+import { IGame, IPlayer, IServer, IStartLevelEvent } from "../engine/types";
 
 const basePlayer: IPlayer = {
-  id: 1,
+  id: 0,
   name: "",
   exprience: 0,
   energy: 0,
@@ -53,37 +59,222 @@ test("Applies a single event correctly", () => {
 });
 
 test("Applies a series of events correctly", () => {
-  const newPlayer = {
-    ...basePlayer,
-    arcanas: arcanas,
-    materials: materials.map((m: IMaterial) => {
-      return { ...m, quantity: 0 };
-    }),
-  };
-  const newServer = { ...baseServer };
-  const startLevelEvent: IStartLevelEvent = {
-    playerId: 1,
-    eventId: 0,
-    type: "STARTLEVEL",
-    created: new Date().valueOf(),
-    levelId: 0,
-    arcanaId: 0,
-    mode: "story",
-  };
-  const winLevelEvent: IWinLevelEvent = {
-    playerId: 1,
-    eventId: 0,
-    type: "WINLEVEL",
-    created: new Date().valueOf(),
-    levelId: 0,
-    arcanaId: 0,
-    mode: "story",
-  };
-  const resMiddle = applyEvent(
-    { server: newServer, player: newPlayer },
-    startLevelEvent
+  let currentGame: IGame = { server: baseServer, player: basePlayer };
+  const now = new Date().valueOf();
+  currentGame = serverArenaStart(
+    {
+      eventId: 1,
+      type: "SERVERARENASTART",
+      start: now,
+      end: now + 60000,
+      created: now,
+    },
+    currentGame
   );
-  const res = applyEvent(resMiddle, winLevelEvent);
-  expect(res.player.currentState.state).toEqual("WINMATERIAL");
-  expect(res.player.currentState.materials?.length).toEqual(2);
+  expect(currentGame.server.arenaRunHistory.length).toEqual(1);
+  expect(currentGame.server.arenaRun.resultTime).toEqual(now + 60000);
+
+  currentGame = createPlayer(
+    {
+      playerId: 5,
+      eventId: 0,
+      created: now + 1,
+      type: "CREATEPLAYER",
+      playerName: "Player 5 name",
+    },
+    currentGame
+  );
+  expect(currentGame.player.id).toEqual(5);
+  expect(currentGame.player.energy).toEqual(50);
+  expect(currentGame.player.currentState.state).toEqual("MAIN");
+  expect(currentGame.player.arcanas[0].stories[0].state).toEqual("open");
+
+  currentGame = startLevel(
+    {
+      playerId: 5,
+      eventId: 0,
+      created: now + 2,
+      type: "STARTLEVEL",
+      arcanaId: 0,
+      mode: "story",
+      levelId: 0,
+    },
+    currentGame
+  );
+  expect(currentGame.player.currentState.state).toEqual("PLAY");
+  expect(currentGame.player.currentState.level?.arcana).toEqual(0);
+  expect(currentGame.player.currentState.level?.level).toEqual(0);
+
+  currentGame = winLevel(
+    {
+      playerId: 5,
+      eventId: 0,
+      created: now + 3,
+      type: "WINLEVEL",
+      arcanaId: 0,
+      mode: "story",
+      levelId: 0,
+    },
+    currentGame
+  );
+  expect(currentGame.player.currentState.state).toEqual("WINMATERIAL");
+  expect(currentGame.player.exprience).toEqual(10);
+  expect(currentGame.player.currentState.materials?.length).toEqual(2);
+  expect(currentGame.player.arcanas[0].stories[1].state).toEqual("open");
+  expect(currentGame.player.arcanas[0].stories[0].state).toEqual("complete");
+  expect(currentGame.player.materials[0].quantity).toEqual(20);
+
+  currentGame = startLevel(
+    {
+      playerId: 5,
+      eventId: 1,
+      created: now + 5,
+      type: "STARTLEVEL",
+      arcanaId: 0,
+      mode: "story",
+      levelId: 1,
+    },
+    currentGame
+  );
+  expect(currentGame.player.currentState.state).toEqual("PLAY");
+  expect(currentGame.player.currentState.level?.arcana).toEqual(0);
+  expect(currentGame.player.currentState.level?.level).toEqual(1);
+
+  currentGame = winLevel(
+    {
+      playerId: 5,
+      eventId: 1,
+      created: now + 6,
+      type: "WINLEVEL",
+      arcanaId: 0,
+      mode: "story",
+      levelId: 1,
+    },
+    currentGame
+  );
+  expect(currentGame.player.exprience).toEqual(20);
+  expect(currentGame.player.currentState.state).toEqual("WINMATERIAL");
+  expect(currentGame.player.currentState.materials?.length).toEqual(3);
+  expect(currentGame.player.materials[0].quantity).toEqual(38);
+  expect(currentGame.player.arcanas[0].stories[1].state).toEqual("complete");
+  expect(currentGame.player.arcanas[0].stories[2].state).toEqual("open");
+
+  currentGame = startEndless(
+    {
+      playerId: 5,
+      eventId: 0,
+      created: now + 7,
+      type: "STARTENDLESS",
+      arcanaId: 0,
+      mode: "run",
+    },
+    currentGame
+  );
+  expect(currentGame.player.energy).toEqual(40);
+  expect(currentGame.player.currentState.level?.arcana).toBe(0);
+  expect(currentGame.player.currentState.level?.level).not.toBeDefined();
+
+  currentGame = passCheckpoint(
+    {
+      playerId: 5,
+      eventId: 0,
+      created: now + 8,
+      type: "PASSCHECKPOINT",
+      arcanaId: 0,
+      mode: "run",
+      checkpoint: 0,
+    },
+    currentGame
+  );
+  expect(currentGame.player.exprience).toEqual(30);
+  expect(currentGame.player.arcanas[0].currentEvents[0].checkpoint).toEqual(0);
+
+  currentGame = passCheckpoint(
+    {
+      playerId: 5,
+      eventId: 1,
+      created: now + 9,
+      type: "PASSCHECKPOINT",
+      arcanaId: 0,
+      mode: "run",
+      checkpoint: 1,
+    },
+    currentGame
+  );
+  expect(currentGame.player.exprience).toEqual(40);
+  expect(currentGame.player.arcanas[0].currentEvents[0].checkpoint).toEqual(1);
+
+  currentGame = missCheckpoint(
+    {
+      playerId: 5,
+      eventId: 1,
+      created: now + 9,
+      type: "MISSCHECKPOINT",
+      arcanaId: 0,
+      mode: "run",
+    },
+    currentGame
+  );
+  expect(currentGame.player.exprience).toEqual(40);
+  expect(currentGame.player.arcanas[0].currentEvents[0].checkpoint).toEqual(1);
+  expect(currentGame.player.currentState.state).toEqual("WINMATERIAL");
+  expect(currentGame.player.currentState.materials?.length).toEqual(2);
+  expect(currentGame.player.materials[0].quantity).toEqual(42);
+
+  currentGame = openSpell(
+    {
+      playerId: 5,
+      eventId: 1,
+      created: now + 10,
+      type: "OPENSPELL",
+      arcanaId: 0,
+      spellId: 0,
+    },
+    currentGame
+  );
+  expect(currentGame.player.spells[0].state).toEqual("open");
+  expect(currentGame.player.spells[0].strength).toEqual(1);
+  expect(currentGame.player.spells[0]).toHaveProperty("updatePrice");
+  expect(currentGame.player.spells[0]).toHaveProperty("requiredStrength");
+
+  currentGame = updateSpell(
+    {
+      playerId: 5,
+      eventId: 1,
+      created: now + 10,
+      type: "UPDATESPELL",
+      arcanaId: 0,
+      spellId: 0,
+    },
+    currentGame
+  );
+  expect(currentGame.player.spells[0].strength).toEqual(2);
+
+  currentGame = startArena(
+    {
+      playerId: 5,
+      eventId: 0,
+      created: now + 11,
+      type: "ARENASTART",
+      mode: "run",
+      index: 0,
+    },
+    currentGame
+  );
+  // TEST PLAYER may not have enough resources but they will pass checks
+  expect(currentGame.server.arenaRun.events[0].rewardPool.length).toEqual(2);
+  expect(currentGame.player.materials[0].quantity).toEqual(7);
+
+  currentGame = endArena(
+    {
+      playerId: 5,
+      eventId: 0,
+      created: now + 20,
+      type: "ARENAEND",
+      mode: "run",
+      index: 0,
+    },
+    currentGame
+  );
+  expect(currentGame.server.arenaRun.events[0].results.length).toEqual(1);
 });

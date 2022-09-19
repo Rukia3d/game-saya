@@ -60,8 +60,8 @@ import {
   missCheckpointEvents,
   serverArenaStartEvents,
   serverArenaEndEvents,
-  arenaStartEvents,
-  arenaEndEvents,
+  startArenaEvents,
+  endArenaEvents,
 } from "./testDBPlayer";
 
 const getNextPlayerId = () => {
@@ -447,7 +447,7 @@ export const updateSpellEvent = (
   }
 };
 
-export const arenaStartEvent = (
+export const startArenaEvent = (
   game: IGame,
   event: IArenaStartData
 ): IArenaStartEvent => {
@@ -473,7 +473,7 @@ export const arenaStartEvent = (
       index: event.data.index,
     };
     allPEvents.push(newEvent);
-    arenaStartEvents.push(newArenaStartEvent);
+    startArenaEvents.push(newArenaStartEvent);
 
     return {
       playerId: event.playerId,
@@ -484,11 +484,11 @@ export const arenaStartEvent = (
       index: newArenaStartEvent.index,
     };
   } else {
-    throw new Error("Can't generate arenaStartEvent");
+    throw new Error("Can't generate startArenaEvent");
   }
 };
 
-export const arenaEndEvent = (
+export const endArenaEvent = (
   game: IGame,
   event: IArenaEndData
 ): IArenaEndEvent => {
@@ -506,7 +506,7 @@ export const arenaEndEvent = (
       index: event.data.index,
     };
     allPEvents.push(newEvent);
-    arenaEndEvents.push(newArenaEndEvent);
+    endArenaEvents.push(newArenaEndEvent);
 
     return {
       playerId: event.playerId,
@@ -517,7 +517,7 @@ export const arenaEndEvent = (
       index: newArenaEndEvent.index,
     };
   } else {
-    throw new Error("Can't generate arenaEndEvent");
+    throw new Error("Can't generate endArenaEvent");
   }
 };
 

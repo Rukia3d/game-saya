@@ -282,7 +282,7 @@ test("Writes passCheckpoint event correctly", () => {
   expect(readPass.mode).toEqual("run");
 });
 
-test("Writes arenaStartEvent correctly", () => {
+test("Writes startArenaEvent correctly", () => {
   const game = {
     player: {
       ...basePlayer,
@@ -298,7 +298,7 @@ test("Writes arenaStartEvent correctly", () => {
     },
     server: { ...baseServer, arenaRun: arenaRun },
   };
-  const writeStart = writers.arenaStartEvent(game, {
+  const writeStart = writers.startArenaEvent(game, {
     playerId: 3,
     created: new Date().valueOf(),
     type: "ARENASTART",
@@ -308,7 +308,7 @@ test("Writes arenaStartEvent correctly", () => {
   expect(writeStart.eventId).toEqual(1);
   expect(writeStart.type).toEqual("ARENASTART");
 
-  const readStart = readers.arenaStartEvent({
+  const readStart = readers.startArenaEvent({
     playerId: 3,
     eventId: 1,
     created: new Date().valueOf(),
@@ -319,7 +319,7 @@ test("Writes arenaStartEvent correctly", () => {
   expect(readStart.mode).toEqual("run");
 });
 
-test("Writes arenaEndEvent correctly", () => {
+test("Writes endArenaEvent correctly", () => {
   const game = {
     player: {
       ...basePlayer,
@@ -343,7 +343,7 @@ test("Writes arenaEndEvent correctly", () => {
     },
     server: { ...baseServer, arenaRun: arenaRun },
   };
-  const writeEnd = writers.arenaEndEvent(game, {
+  const writeEnd = writers.endArenaEvent(game, {
     playerId: 3,
     created: new Date().valueOf() + 15000,
     type: "ARENAEND",
@@ -353,7 +353,7 @@ test("Writes arenaEndEvent correctly", () => {
   expect(writeEnd.eventId).toEqual(1);
   expect(writeEnd.type).toEqual("ARENAEND");
 
-  const readEnd = readers.arenaStartEvent({
+  const readEnd = readers.startArenaEvent({
     playerId: 3,
     eventId: 1,
     created: new Date().valueOf(),

@@ -143,10 +143,10 @@ export const serverArenaEndEvents: IServerArenaEndDB[] = [
   },
 ];
 
-export const arenaStartEvents: IArenaStartDB[] = [
+export const startArenaEvents: IArenaStartDB[] = [
   { eventId: 0, mode: "run", index: 0 },
 ];
 
-export const arenaEndEvents: IArenaEndDB[] = [
+export const endArenaEvents: IArenaEndDB[] = [
   { eventId: 0, mode: "run", index: 0 },
 ];

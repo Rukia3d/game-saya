@@ -236,7 +236,7 @@ app.post("/api/players/:id/missCheckpoint", async (req: any, res: any) => {
   }
 });
 
-app.post("/api/players/:id/arenaStart", async (req: any, res: any) => {
+app.post("/api/players/:id/startArena", async (req: any, res: any) => {
   console.log("ARENA START", req.body);
   const playerId = parseInt(req.params.id);
   const game = eventsApplication(playerId);
@@ -250,7 +250,7 @@ app.post("/api/players/:id/arenaStart", async (req: any, res: any) => {
     },
   };
   try {
-    const newEvent = writers.arenaStartEvent(game, event);
+    const newEvent = writers.startArenaEvent(game, event);
     const newGame = eventsApplication(newEvent.playerId);
     res.send(newGame);
   } catch (error) {
@@ -272,7 +272,7 @@ app.post("/api/players/:id/endArena", async (req: any, res: any) => {
     },
   };
   try {
-    const newEvent = writers.arenaEndEvent(game, event);
+    const newEvent = writers.endArenaEvent(game, event);
     const newGame = eventsApplication(newEvent.playerId);
     res.send(newGame);
   } catch (error) {

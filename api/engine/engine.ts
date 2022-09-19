@@ -44,10 +44,10 @@ export const applyEvent = (game: IGame, event: IGameEvent): IGame => {
       newGame = events.serverArenaEnd(event, newGame);
       break;
     case "ARENASTART":
-      newGame = events.arenaStart(event, newGame);
+      newGame = events.startArena(event, newGame);
       break;
     case "ARENAEND":
-      newGame = events.arenaEnd(event, newGame);
+      newGame = events.endArena(event, newGame);
       break;
   }
   return newGame;

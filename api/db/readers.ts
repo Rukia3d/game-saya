@@ -38,8 +38,8 @@ import {
   missCheckpointEvents,
   serverArenaStartEvents,
   serverArenaEndEvents,
-  arenaStartEvents,
-  arenaEndEvents,
+  startArenaEvents,
+  endArenaEvents,
 } from "./testDBPlayer";
 
 export const allGameEvents = () => {
@@ -87,11 +87,11 @@ export const allServerEndArena = () => {
 };
 
 export const allStartArena = () => {
-  return arenaStartEvents;
+  return startArenaEvents;
 };
 
 export const allEndArena = () => {
-  return arenaEndEvents;
+  return endArenaEvents;
 };
 
 export const playerEvents = (playerId: number): IGameEvent[] => {
@@ -132,10 +132,10 @@ export const playerEvents = (playerId: number): IGameEvent[] => {
         newEvents.push(serverArenaStartEvent(e));
         break;
       case "ARENASTART":
-        newEvents.push(arenaStartEvent(e));
+        newEvents.push(startArenaEvent(e));
         break;
       case "ARENAEND":
-        newEvents.push(arenaEndEvent(e));
+        newEvents.push(endArenaEvent(e));
         break;
     }
   });
@@ -308,39 +308,39 @@ export const missCheckpointEvent = (event: IEventDB): IMissCheckpointEvent => {
   };
 };
 
-export const arenaStartEvent = (event: IEventDB): IArenaStartEvent => {
-  const arenaStart = ensure(
+export const startArenaEvent = (event: IEventDB): IArenaStartEvent => {
+  const startArena = ensure(
     allStartArena().find((e: IArenaStartDB) => e.eventId == event.eventId),
     "No player start arena event"
   );
   if (!event.playerId) {
-    throw new Error("No player ID in arenaStartEvent");
+    throw new Error("No player ID in startArenaEvent");
   }
   return {
     playerId: event.playerId,
     eventId: event.eventId,
     created: event.created,
     type: "ARENASTART",
-    index: arenaStart.index,
-    mode: arenaStart.mode,
+    index: startArena.index,
+    mode: startArena.mode,
   };
 };
 
-export const arenaEndEvent = (event: IEventDB): IArenaEndEvent => {
-  const arenaStart = ensure(
+export const endArenaEvent = (event: IEventDB): IArenaEndEvent => {
+  const startArena = ensure(
     allEndArena().find((e: IArenaEndDB) => e.eventId == event.eventId),
     "No player end arena event"
   );
   if (!event.playerId) {
-    throw new Error("No player ID in arenaEndEvent");
+    throw new Error("No player ID in endArenaEvent");
   }
   return {
     playerId: event.playerId,
     eventId: event.eventId,
     created: event.created,
     type: "ARENAEND",
-    index: arenaStart.index,
-    mode: arenaStart.mode,
+    index: startArena.index,
+    mode: startArena.mode,
   };
 };
 

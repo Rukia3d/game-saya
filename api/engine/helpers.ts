@@ -29,10 +29,14 @@ export const generateSeed = (
 export const generateArenaRandom = (
   event: IServerArenaStartEvent,
   mode: string,
-  upTo: number
+  upTo: number,
+  index: number
 ) => {
-  const seed = seedrandom(event.eventId + mode + event.start + event.end);
-  return Math.round(seed() * upTo) + 1;
+  const seed = seedrandom(
+    event.eventId + mode + event.start + event.end + index
+  );
+  const res = Math.round(seed() * upTo) + 1;
+  return res;
 };
 
 export const generateRandom = (

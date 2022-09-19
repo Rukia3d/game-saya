@@ -283,7 +283,7 @@ export const serverArenaStart = (
   newServer.arenaFightHistory.push(game.server.arenaFight);
   newServer.arenaRunHistory.push(game.server.arenaRun);
   const eventsRun: IArenaEvent[] = [0, 1, 2].map((n: number) => {
-    const reward = generateArenaRandom(event, "run", 4);
+    const reward = generateArenaRandom(event, "run", 4, n);
     const randResource = materials[reward + 3];
     return {
       index: n,
@@ -298,7 +298,7 @@ export const serverArenaStart = (
     };
   });
   const eventsFight: IArenaEvent[] = [0, 1, 2].map((n: number) => {
-    const reward = generateArenaRandom(event, "fight", 4);
+    const reward = generateArenaRandom(event, "fight", 4, n);
     const randResource = materials[reward + 3];
     return {
       index: n,
@@ -338,7 +338,7 @@ export const serverArenaEnd = (
   return { ...game, server: newServer };
 };
 
-export const arenaStart = (event: IArenaStartEvent, game: IGame): IGame => {
+export const startArena = (event: IArenaStartEvent, game: IGame): IGame => {
   const newArena: IArena =
     event.mode === "run" ? game.server.arenaRun : game.server.arenaFight;
   const arenaEvent: IArenaEvent =
@@ -369,7 +369,7 @@ export const arenaStart = (event: IArenaStartEvent, game: IGame): IGame => {
   };
 };
 
-export const arenaEnd = (event: IArenaEndEvent, game: IGame): IGame => {
+export const endArena = (event: IArenaEndEvent, game: IGame): IGame => {
   if (!game.player.currentState.arena?.startTime) {
     throw new Error("Can't end arena event withouth the starting time");
   }
