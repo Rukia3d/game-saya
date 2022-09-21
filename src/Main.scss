@@ -16,25 +16,16 @@
     align-content: stretch;
     background-color: paleturquoise;
 
-    .IconMessage {
-      border: 1px solid black;
-      flex-grow: 1;
-    }
-    .IconCoins {
+    .IconMessage,
+    .IconCoins,
+    .IconGoals,
+    .IconAbout {
       border: 1px solid black;
       flex-grow: 1;
     }
     .AdventureSelected {
       border: 1px solid black;
       flex-grow: 2;
-    }
-    .IconGoals {
-      border: 1px solid black;
-      flex-grow: 1;
-    }
-    .IconAbout {
-      border: 1px solid black;
-      flex-grow: 1;
     }
   }
 
@@ -78,6 +69,7 @@
   display: flex;
   flex-direction: column;
 }
+
 .PopUp {
   width: 100%;
   height: 93%;
@@ -92,8 +84,8 @@
   }
 
   .Adventures,
-  .Stories {
-    background-color: sandybrown;
+  .Stories,
+  .EndlessEvents {
     width: 100%;
     height: 100%;
     display: flex;
@@ -103,12 +95,21 @@
 
     .AdventureType {
       border: 1px solid black;
+      background-color: sandybrown;
       width: 30%;
     }
 
     .StoryType {
       border: 1px solid black;
+      background-color: violet;
       width: 20%;
+    }
+
+    .EndlessType {
+      border: 1px solid black;
+      background-color: greenyellow;
+      width: 100%;
+      height: 50%;
     }
   }
 }

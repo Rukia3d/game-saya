@@ -5,6 +5,7 @@ import "./Main.scss";
 import { GameContextType, GameContext } from "./App";
 import { Arcana } from "./Arcana";
 import { Story } from "./Story";
+import { Endless } from "./Endless";
 
 export type mainScreenState =
   | "menus"
@@ -53,7 +54,7 @@ const mainScreens: MainScreensType = {
   menus: Menus,
   arcana: Arcana,
   story: Story,
-  endless: Arcana,
+  endless: Endless,
   quest: Arcana,
   spells: Arcana,
   legend: Arcana,
