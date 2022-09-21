@@ -3,6 +3,131 @@
   width: 100%;
   height: 100%;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   background-color: aqua;
+
+  .Inventory {
+    width: 40%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: stretch;
+    align-content: stretch;
+    background-color: paleturquoise;
+
+    .IconMessage {
+      border: 1px solid black;
+      flex-grow: 1;
+    }
+    .IconCoins {
+      border: 1px solid black;
+      flex-grow: 1;
+    }
+    .AdventureSelected {
+      border: 1px solid black;
+      flex-grow: 2;
+    }
+    .IconGoals {
+      border: 1px solid black;
+      flex-grow: 1;
+    }
+    .IconAbout {
+      border: 1px solid black;
+      flex-grow: 1;
+    }
+  }
+
+  .Adventures {
+    width: 30%;
+    height: 100%;
+    background-color: mediumaquamarine;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: stretch;
+    align-content: stretch;
+
+    .Adventure {
+      border: 1px solid black;
+      flex-grow: 1;
+    }
+  }
+
+  .Menu {
+    width: 30%;
+    height: 100%;
+    background-color: aqua;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: stretch;
+    align-content: stretch;
+
+    .MenuCard {
+      border: 1px solid black;
+      flex-grow: 1;
+    }
+  }
+}
+
+.Arcana {
+  width: 100%;
+  height: 100%;
+  background-color: blueviolet;
+  display: flex;
+  flex-direction: column;
+}
+.PopUp {
+  width: 100%;
+  height: 93%;
+  background-color: salmon;
+  position: relative;
+
+  .CloseButton {
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-size: 300%;
+  }
+
+  .Adventures,
+  .Stories {
+    background-color: sandybrown;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+
+    .AdventureType {
+      border: 1px solid black;
+      width: 30%;
+    }
+
+    .StoryType {
+      border: 1px solid black;
+      width: 20%;
+    }
+  }
+}
+
+.TopMenu {
+  width: 100%;
+  height: 7%;
+  background-color: palevioletred;
+  display: flex;
+  flex-direction: row;
+
+  .Material {
+    border: 1px solid black;
+    width: 20%;
+  }
+}
+
+.Inventory {
+  width: 100%;
+  height: 100%;
+  background-color: violet;
 }

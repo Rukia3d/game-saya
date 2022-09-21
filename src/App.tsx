@@ -1,24 +1,16 @@
 import React, { useState } from "react";
 import { KeyedMutator } from "swr";
 // Types
-import { IEvent, IPlayer, IServer, IStory } from "../api/engine/types";
-import { arcanaScreenState } from "./Arcanas/Arcanas";
+import { IPlayer, IServer } from "../api/engine/types";
 // Utils
 import "./App.scss";
 // Components
-import { Main, mainScreenState } from "./Main";
+import { Main } from "./Main";
 
 export interface GameContextType {
   player: IPlayer;
   server: IServer;
   mutate: KeyedMutator<any>;
-  changeMainScreen: (s: mainScreenState) => void;
-  changeArcanaScreen: (s: arcanaScreenState) => void;
-  arcana: number | null;
-  setArcana: (e: number | null) => void;
-  game: IEvent | IStory | null;
-  setGame: (e: IEvent | IStory | null) => void;
-  setWin: (w: boolean) => void;
 }
 
 export const GameContext = React.createContext<undefined | GameContextType>(
@@ -34,9 +26,6 @@ function App() {
   };
   return (
     <div className="App">
-      {/* <h1>Game</h1>
-      <button onClick={() => changePlayer("1")}>Player 1</button>
-      <button onClick={() => changePlayer("2")}>Player 2</button> */}
       <Main playerId={playerId} />
     </div>
   );
