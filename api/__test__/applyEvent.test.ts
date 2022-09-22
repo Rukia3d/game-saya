@@ -1,4 +1,4 @@
-import { arcanas } from "../db/testDBArcanes";
+import { arcanas } from "../db/testDBArcanas";
 import { applyEvent } from "../engine/engine";
 import {
   serverArenaStart,
@@ -30,8 +30,8 @@ const basePlayer: IPlayer = {
   currentState: { state: "MAIN" },
 };
 const baseServer: IServer = {
-  arenaRun: { events: [], resultTime: 0, type: "run" },
-  arenaFight: { events: [], resultTime: 0, type: "fight" },
+  arenaRun: { events: [], resultTime: 0, mode: "run" },
+  arenaFight: { events: [], resultTime: 0, mode: "fight" },
   arenaRunHistory: [],
   arenaFightHistory: [],
 };

@@ -71,8 +71,8 @@ export const applyEvents = (events: IGameEvent[]): IGame => {
       currentState: { state: "MAIN" },
     },
     server: {
-      arenaRun: { events: [], resultTime: 0, type: "run" },
-      arenaFight: { events: [], resultTime: 0, type: "fight" },
+      arenaRun: { events: [], resultTime: 0, mode: "run" },
+      arenaFight: { events: [], resultTime: 0, mode: "fight" },
       arenaRunHistory: [],
       arenaFightHistory: [],
     },

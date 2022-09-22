@@ -28,8 +28,9 @@ export const enoughToPay = (
   let canBuy = true;
   price.forEach((p: IMaterialQuant) => {
     const material = materials.find((m: IMaterialQuant) => m.id === p.id);
-    if (!material)
+    if (!material) {
       throw new Error("Price of an item contains non-existant material");
+    }
     if (p.quantity > material.quantity) {
       canBuy = false;
     }

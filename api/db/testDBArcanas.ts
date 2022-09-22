@@ -25,6 +25,7 @@ export const arcanas: IArcana[] = [
     stories: [
       {
         id: 0,
+        arcanaId: 0,
         level: "",
         name: "Saya story 1",
         mode: "story",
@@ -40,6 +41,7 @@ export const arcanas: IArcana[] = [
       },
       {
         id: 1,
+        arcanaId: 0,
         level: "",
         name: "Saya story 2",
         mode: "story",
@@ -55,6 +57,7 @@ export const arcanas: IArcana[] = [
       },
       {
         id: 2,
+        arcanaId: 0,
         level: "",
         name: "Saya story 3",
         mode: "story",
@@ -74,6 +77,7 @@ export const arcanas: IArcana[] = [
     currentEvents: [
       {
         id: 0,
+        arcanaId: 0,
         level: "",
         mode: "run",
         energy: 10,
@@ -85,7 +89,8 @@ export const arcanas: IArcana[] = [
         ).reward,
       },
       {
-        id: 0,
+        id: 1,
+        arcanaId: 0,
         level: "",
         mode: "fight",
         energy: 10,
@@ -104,6 +109,7 @@ export const arcanas: IArcana[] = [
     stories: [
       {
         id: 0,
+        arcanaId: 1,
         level: "",
         name: "Wands story 1",
         mode: "story",
@@ -118,6 +124,7 @@ export const arcanas: IArcana[] = [
       },
       {
         id: 1,
+        arcanaId: 1,
         level: "",
         name: "Wands story 2",
         mode: "story",
@@ -136,6 +143,7 @@ export const arcanas: IArcana[] = [
     currentEvents: [
       {
         id: 0,
+        arcanaId: 1,
         level: "",
         mode: "run",
         energy: 10,
@@ -146,7 +154,8 @@ export const arcanas: IArcana[] = [
         ],
       },
       {
-        id: 0,
+        id: 1,
+        arcanaId: 1,
         level: "",
         mode: "fight",
         energy: 10,

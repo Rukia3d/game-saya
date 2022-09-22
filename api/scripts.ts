@@ -40,26 +40,23 @@ const basePlayer: IPlayer = {
   currentState: { state: "MAIN" },
 };
 const baseServer: IServer = {
-  arenaRun: { events: [], resultTime: 0, type: "run" },
-  arenaFight: { events: [], resultTime: 0, type: "fight" },
+  arenaRun: { events: [], resultTime: 0, mode: "run" },
+  arenaFight: { events: [], resultTime: 0, mode: "fight" },
   arenaRunHistory: [],
   arenaFightHistory: [],
 };
 
 export const eventsApplication = (playerId: number) => {
   const events = readers.playerEvents(playerId);
+  console.log("events", events);
   const game = engine.applyEvents(events);
   return game;
 };
 
 app.get("/api/players/:id", async (req: any, res: any) => {
   const playerId = parseInt(req.params.id);
-  try {
-    const game = eventsApplication(playerId);
-    res.send(game);
-  } catch (error) {
-    res.send(error);
-  }
+  const game = eventsApplication(playerId);
+  res.send(game);
 });
 
 app.post("/api/players/new", async (req: any, res: any) => {
@@ -71,13 +68,9 @@ app.post("/api/players/new", async (req: any, res: any) => {
       name: req.query.name,
     },
   };
-  try {
-    const newEvent = writers.createPlayerEvent(event);
-    const game = eventsApplication(newEvent.playerId);
-    res.send(game);
-  } catch (error) {
-    res.send(error);
-  }
+  const newEvent = writers.createPlayerEvent(event);
+  const game = eventsApplication(newEvent.playerId);
+  res.send(game);
 });
 
 app.post("/api/players/:id/startLevel", async (req: any, res: any) => {
@@ -89,18 +82,16 @@ app.post("/api/players/:id/startLevel", async (req: any, res: any) => {
     created: new Date().valueOf(),
     type: "STARTLEVEL",
     data: {
-      arcanaId: req.body.arcanaId,
+      arcanaId: req.body.arcana,
       mode: req.body.mode,
-      levelId: req.body.levelId,
+      levelId: req.body.level,
     },
   };
-  try {
-    const newEvent = writers.startLevelEvent(game, event);
-    const newGame = eventsApplication(newEvent.playerId);
-    res.send(newGame);
-  } catch (error) {
-    res.send(error);
-  }
+  console.log("going to write an event");
+  const newEvent = writers.startLevelEvent(game, event);
+  console.log("newEvent", newEvent);
+  const newGame = eventsApplication(newEvent.playerId);
+  res.send(newGame);
 });
 
 app.post("/api/players/:id/winLevel", async (req: any, res: any) => {
@@ -112,18 +103,15 @@ app.post("/api/players/:id/winLevel", async (req: any, res: any) => {
     created: new Date().valueOf(),
     type: "WINLEVEL",
     data: {
-      arcanaId: req.body.arcanaId,
+      arcanaId: req.body.arcana,
       mode: req.body.mode,
-      levelId: req.body.levelId,
+      levelId: req.body.level,
     },
   };
-  try {
-    const newEvent = writers.winLevelEvent(game, event);
-    const newGame = eventsApplication(newEvent.playerId);
-    res.send(newGame);
-  } catch (error) {
-    res.send(error);
-  }
+
+  const newEvent = writers.winLevelEvent(game, event);
+  const newGame = eventsApplication(newEvent.playerId);
+  res.send(newGame);
 });
 
 app.post("/api/players/:id/openSpell", async (req: any, res: any) => {
@@ -135,17 +123,14 @@ app.post("/api/players/:id/openSpell", async (req: any, res: any) => {
     created: new Date().valueOf(),
     type: "OPENSPELL",
     data: {
-      arcanaId: req.body.arcanaId,
-      spellId: req.body.spellId,
+      arcanaId: req.body.arcana,
+      spellId: req.body.spell,
     },
   };
-  try {
-    const newEvent = writers.openSpellEvent(game, event);
-    const newGame = eventsApplication(newEvent.playerId);
-    res.send(newGame);
-  } catch (error) {
-    res.send(error);
-  }
+
+  const newEvent = writers.openSpellEvent(game, event);
+  const newGame = eventsApplication(newEvent.playerId);
+  res.send(newGame);
 });
 
 app.post("/api/players/:id/updateSpell", async (req: any, res: any) => {
@@ -156,17 +141,13 @@ app.post("/api/players/:id/updateSpell", async (req: any, res: any) => {
     created: new Date().valueOf(),
     type: "UPDATESPELL",
     data: {
-      arcanaId: req.body.arcanaId,
-      spellId: req.body.spellId,
+      arcanaId: req.body.arcana,
+      spellId: req.body.spell,
     },
   };
-  try {
-    const newEvent = writers.updateSpellEvent(game, event);
-    const newGame = eventsApplication(newEvent.playerId);
-    res.send(newGame);
-  } catch (error) {
-    res.send(error);
-  }
+  const newEvent = writers.updateSpellEvent(game, event);
+  const newGame = eventsApplication(newEvent.playerId);
+  res.send(newGame);
 });
 
 app.post("/api/players/:id/startEndless", async (req: any, res: any) => {
@@ -178,17 +159,13 @@ app.post("/api/players/:id/startEndless", async (req: any, res: any) => {
     created: new Date().valueOf(),
     type: "STARTENDLESS",
     data: {
-      arcanaId: req.body.arcanaId,
+      arcanaId: req.body.arcana,
       mode: req.body.mode,
     },
   };
-  try {
-    const newEvent = writers.startEndlessEvent(game, event);
-    const newGame = eventsApplication(newEvent.playerId);
-    res.send(newGame);
-  } catch (error) {
-    res.send(error);
-  }
+  const newEvent = writers.startEndlessEvent(game, event);
+  const newGame = eventsApplication(newEvent.playerId);
+  res.send(newGame);
 });
 
 app.post("/api/players/:id/passCheckpoint", async (req: any, res: any) => {
@@ -200,18 +177,14 @@ app.post("/api/players/:id/passCheckpoint", async (req: any, res: any) => {
     created: new Date().valueOf(),
     type: "PASSCHECKPOINT",
     data: {
-      arcanaId: req.body.arcanaId,
+      arcanaId: req.body.arcana,
       mode: req.body.mode,
       checkpoint: req.body.checkpoint,
     },
   };
-  try {
-    const newEvent = writers.passCheckpointEvent(game, event);
-    const newGame = eventsApplication(newEvent.playerId);
-    res.send(newGame);
-  } catch (error) {
-    res.send(error);
-  }
+  const newEvent = writers.passCheckpointEvent(game, event);
+  const newGame = eventsApplication(newEvent.playerId);
+  res.send(newGame);
 });
 
 app.post("/api/players/:id/missCheckpoint", async (req: any, res: any) => {
@@ -223,17 +196,13 @@ app.post("/api/players/:id/missCheckpoint", async (req: any, res: any) => {
     created: new Date().valueOf(),
     type: "MISSCHECKPOINT",
     data: {
-      arcanaId: req.body.arcanaId,
+      arcanaId: req.body.arcana,
       mode: req.body.mode,
     },
   };
-  try {
-    const newEvent = writers.missCheckpointEvent(game, event);
-    const newGame = eventsApplication(newEvent.playerId);
-    res.send(newGame);
-  } catch (error) {
-    res.send(error);
-  }
+  const newEvent = writers.missCheckpointEvent(game, event);
+  const newGame = eventsApplication(newEvent.playerId);
+  res.send(newGame);
 });
 
 app.post("/api/players/:id/startArena", async (req: any, res: any) => {
@@ -249,13 +218,9 @@ app.post("/api/players/:id/startArena", async (req: any, res: any) => {
       index: req.body.eventIndx,
     },
   };
-  try {
-    const newEvent = writers.startArenaEvent(game, event);
-    const newGame = eventsApplication(newEvent.playerId);
-    res.send(newGame);
-  } catch (error) {
-    res.send(error);
-  }
+  const newEvent = writers.startArenaEvent(game, event);
+  const newGame = eventsApplication(newEvent.playerId);
+  res.send(newGame);
 });
 
 app.post("/api/players/:id/endArena", async (req: any, res: any) => {
@@ -271,13 +236,9 @@ app.post("/api/players/:id/endArena", async (req: any, res: any) => {
       index: req.body.eventIndx,
     },
   };
-  try {
-    const newEvent = writers.endArenaEvent(game, event);
-    const newGame = eventsApplication(newEvent.playerId);
-    res.send(newGame);
-  } catch (error) {
-    res.send(error);
-  }
+  const newEvent = writers.endArenaEvent(game, event);
+  const newGame = eventsApplication(newEvent.playerId);
+  res.send(newGame);
 });
 
 app.listen(port, () => {

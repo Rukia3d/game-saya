@@ -1,6 +1,6 @@
 import { ARENAEVENTINTERVAL } from "../cronjobs";
 import * as readers from "../db/readers";
-import { arcanas } from "../db/testDBArcanes";
+import { arcanas } from "../db/testDBArcanas";
 import { arenaRun } from "../db/testDBArena";
 import { materials } from "../db/testDBPlayer";
 import { spells } from "../db/testDBSpells";
@@ -28,8 +28,8 @@ const basePlayer: IPlayer = {
   currentState: { state: "MAIN" },
 };
 const baseServer: IServer = {
-  arenaRun: { events: [], resultTime: 0, type: "run" },
-  arenaFight: { events: [], resultTime: 0, type: "fight" },
+  arenaRun: { events: [], resultTime: 0, mode: "run" },
+  arenaFight: { events: [], resultTime: 0, mode: "fight" },
   arenaRunHistory: [],
   arenaFightHistory: [],
 };

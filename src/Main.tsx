@@ -6,6 +6,12 @@ import { GameContextType, GameContext } from "./App";
 import { Arcana } from "./Arcana";
 import { Story } from "./Story";
 import { Endless } from "./Endless";
+import { Spells } from "./Spells";
+import { Arena } from "./Arena";
+import { PopUp } from "./PopUp";
+import { TopMenu } from "./TopMenu";
+import { IArenaEventWithTime, IEvent, IStory } from "../api/engine/types";
+import { Game } from "./Game";
 
 export type mainScreenState =
   | "menus"
@@ -19,10 +25,11 @@ export type mainScreenState =
   | "arena"
   | "inventory"
   | "messages"
-  | "missions"
+  | "goals"
   | "agora"
   | "aliance"
-  | "additional";
+  | "additional"
+  | "game";
 
 type MainScreensType = {
   [key in mainScreenState]: React.FC<{
@@ -50,28 +57,53 @@ export const Menus = ({
   );
 };
 
+export const ComingSoon = ({
+  arcana,
+  setArcana,
+  setScreen,
+}: {
+  arcana: number | null;
+  setArcana: (n: number | null) => void;
+  setScreen: (n: mainScreenState) => void;
+}) => {
+  return (
+    <div className="ComingSoon">
+      <TopMenu />
+      <PopUp close={() => setScreen("menus")}>
+        <div>
+          <h1>Coming Soon</h1>
+        </div>
+      </PopUp>
+    </div>
+  );
+};
+
 const mainScreens: MainScreensType = {
   menus: Menus,
   arcana: Arcana,
   story: Story,
   endless: Endless,
-  quest: Arcana,
-  spells: Arcana,
-  legend: Arcana,
-  creation: Arcana,
-  arena: Arcana,
-  inventory: Arcana,
-  messages: Arcana,
-  missions: Arcana,
-  agora: Arcana,
-  aliance: Arcana,
-  additional: Arcana,
+  spells: Spells,
+  arena: Arena,
+  game: Game,
+  legend: ComingSoon,
+  inventory: ComingSoon,
+  messages: ComingSoon,
+  goals: ComingSoon,
+  agora: ComingSoon,
+  aliance: ComingSoon,
+  additional: ComingSoon,
+  quest: ComingSoon,
+  creation: ComingSoon,
 };
 
 export const Main = ({ playerId }: { playerId: string }) => {
   const { data, error, mutate } = useSWR(`/api/players/${playerId}`, fetcher);
   const [screen, setScreen] = useState<mainScreenState>("menus");
   const [arcana, setArcana] = useState<number | null>(null);
+  const [game, setGame] = useState<
+    IStory | IEvent | IArenaEventWithTime | null
+  >(null);
 
   const CurrentScreen = mainScreens[screen];
 
@@ -86,9 +118,10 @@ export const Main = ({ playerId }: { playerId: string }) => {
     player: data.player,
     server: data.server,
     mutate: mutate,
+    game: game,
+    setGame: setGame,
   };
-  console.log("screen", screen);
-  console.log("arcana", arcana);
+
   return (
     <GameContext.Provider value={context}>
       <CurrentScreen
@@ -111,14 +144,14 @@ export const LeftMenu = ({
   if (!context || !context.player) {
     throw new Error("No data in context");
   }
-  console.log("left menu arcana", arcana);
+
   return (
     <div className="Inventory">
-      <div className="IconMessage">
-        <button>Show messages</button>
-      </div>
       <div className="IconCoins">
-        <button>Show inventory</button>
+        <button onClick={() => setScreen("inventory")}>Show inventory</button>
+      </div>
+      <div className="IconSpells">
+        <button onClick={() => setScreen("spells")}>Show spells</button>
       </div>
       <div className="AdventureSelected">
         {arcana !== null ? (
@@ -130,10 +163,10 @@ export const LeftMenu = ({
         )}
       </div>
       <div className="IconGoals">
-        <button>Show goals</button>
+        <button onClick={() => setScreen("goals")}>Show goals</button>
       </div>
-      <div className="IconAbout">
-        <button>Show about</button>
+      <div className="IconMessage">
+        <button onClick={() => setScreen("messages")}>Show messages</button>
       </div>
     </div>
   );

@@ -1,7 +1,7 @@
 import seedrandom from "seedrandom";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import { arcanas } from "../db/testDBArcanes";
+import { arcanas } from "../db/testDBArcanas";
 import {
   gameMode,
   ICurrentState,
@@ -35,7 +35,7 @@ export const generateArenaRandom = (
   const seed = seedrandom(
     event.eventId + mode + event.start + event.end + index
   );
-  const res = Math.round(seed() * upTo) + 1;
+  const res = Math.round(seed() * upTo);
   return res;
 };
 

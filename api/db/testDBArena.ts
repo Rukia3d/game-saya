@@ -1,7 +1,7 @@
 import { IArena, IServer } from "../engine/types";
 export const arenaRun: IArena = {
   resultTime: new Date(new Date().valueOf() + 50 * 1000).valueOf(),
-  type: "run",
+  mode: "run",
   events: [
     {
       index: 0,
@@ -41,7 +41,7 @@ export const arenaRun: IArena = {
 
 export const arenaFight: IArena = {
   resultTime: new Date(new Date().valueOf() + 4 * 60 * 60 * 1000).valueOf(),
-  type: "fight",
+  mode: "fight",
   events: [
     {
       index: 0,

@@ -1,5 +1,5 @@
 import { detectWinners } from "../cronjobs";
-import { arcanas } from "../db/testDBArcanes";
+import { arcanas } from "../db/testDBArcanas";
 import { eventTowerRewards } from "../db/testDBLevels";
 import { materials } from "../db/testDBPlayer";
 import { spellPrices, spells, spellUpdates } from "../db/testDBSpells";
@@ -314,12 +314,12 @@ export const serverArenaStart = (
   });
 
   newServer.arenaRun = {
-    type: "run",
+    mode: "run",
     resultTime: event.end,
     events: eventsRun,
   };
   newServer.arenaFight = {
-    type: "fight",
+    mode: "fight",
     resultTime: event.end,
     events: eventsFight,
   };

@@ -19,7 +19,7 @@
     .IconMessage,
     .IconCoins,
     .IconGoals,
-    .IconAbout {
+    .IconSpells {
       border: 1px solid black;
       flex-grow: 1;
     }
@@ -112,6 +112,27 @@
       height: 50%;
     }
   }
+
+  .ArenaEvents {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    gap: 10px;
+
+    .ArenaType {
+      width: 100%;
+      height: 50%;
+      background-color: forestgreen;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+
+      .ArenaEvent {
+        border: 1px solid black;
+        background-color: cadetblue;
+      }
+    }
+  }
 }
 
 .TopMenu {
@@ -131,4 +152,27 @@
   width: 100%;
   height: 100%;
   background-color: violet;
+}
+
+.ConfirmationPopup {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  background-color: turquoise;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+}
+
+.Game {
+  background-color: seagreen;
+  height: 100%;
+  width: 100%;
+
+  .CloseButton {
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-size: 300%;
+  }
 }

@@ -1,4 +1,4 @@
-import { arcanas } from "../db/testDBArcanes";
+import { arcanas } from "../db/testDBArcanas";
 import { materials } from "../db/testDBPlayer";
 import {
   enoughToPay,

@@ -1,7 +1,8 @@
+import dayjs from "dayjs";
 import * as writers from "./db/writers";
 import { IArenaResult, IPlayer, IServer } from "./engine/types";
 
-export const ARENAEVENTINTERVAL = 100000;
+export const ARENAEVENTINTERVAL = 60000000;
 
 const basePlayer: IPlayer = {
   id: 3,
@@ -18,8 +19,8 @@ const basePlayer: IPlayer = {
   currentState: { state: "MAIN" },
 };
 const baseServer: IServer = {
-  arenaRun: { events: [], resultTime: 0, type: "run" },
-  arenaFight: { events: [], resultTime: 0, type: "fight" },
+  arenaRun: { events: [], resultTime: 0, mode: "run" },
+  arenaFight: { events: [], resultTime: 0, mode: "fight" },
   arenaRunHistory: [],
   arenaFightHistory: [],
 };
@@ -41,7 +42,6 @@ export const detectWinners = (winners: IArenaResult[]) => {
 };
 
 export const startArena = () => {
-  console.log("StartArena");
   const now = new Date().valueOf();
   const game = {
     player: {
@@ -53,6 +53,9 @@ export const startArena = () => {
     startDate: now,
     endDate: now + ARENAEVENTINTERVAL,
   });
+  console.log("StartArena");
+  console.log("startdate", dayjs(now).format("DD/MM/YYYY"));
+  console.log("enddate", dayjs(now + ARENAEVENTINTERVAL).format("DD/MM/YYYY"));
 };
 
 export const endArena = () => {
@@ -66,8 +69,12 @@ export const endArena = () => {
   writers.serverEndArena(game);
 };
 
+let n = 0;
 export const run = () => {
-  console.log("Run");
+  if (n === 0) {
+    startArena();
+  }
   setInterval(endArena, ARENAEVENTINTERVAL);
   setInterval(startArena, ARENAEVENTINTERVAL);
+  n++;
 };

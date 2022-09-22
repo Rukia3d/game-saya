@@ -1,4 +1,4 @@
-import { arcanas } from "../db/testDBArcanes";
+import { arcanas } from "../db/testDBArcanas";
 import { arenaRun } from "../db/testDBArena";
 import { materials } from "../db/testDBPlayer";
 import {

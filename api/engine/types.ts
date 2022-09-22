@@ -51,6 +51,7 @@ export type IQuestListing = IQuest & { price: number; owner: number };
 
 export interface IEvent {
   id: number;
+  arcanaId: number;
   mode: gameMode;
   energy: number;
   checkpoint: number | null;
@@ -73,6 +74,7 @@ export interface IEventReward {
 
 export interface IStory {
   id: number;
+  arcanaId: number;
   mode: gameMode;
   name: string;
   state: levelState;
@@ -100,7 +102,7 @@ export interface IArcana {
 export interface IArena {
   events: IArenaEvent[];
   resultTime: number;
-  type: arenaType;
+  mode: gameMode;
 }
 
 export interface IArenaEvent {
@@ -111,6 +113,8 @@ export interface IArenaEvent {
   rewardPool: IMaterialQuant[];
   results: IArenaResult[];
 }
+
+export type IArenaEventWithTime = IArenaEvent & { resultTime: number };
 
 export interface IArenaResult {
   playerName: string;

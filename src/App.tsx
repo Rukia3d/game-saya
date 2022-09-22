@@ -1,7 +1,16 @@
+import axios from "axios";
 import React, { useState } from "react";
 import { KeyedMutator } from "swr";
 // Types
-import { IPlayer, IServer } from "../api/engine/types";
+import {
+  IArena,
+  IArenaEvent,
+  IArenaEventWithTime,
+  IEvent,
+  IPlayer,
+  IServer,
+  IStory,
+} from "../api/engine/types";
 // Utils
 import "./App.scss";
 // Components
@@ -11,6 +20,8 @@ export interface GameContextType {
   player: IPlayer;
   server: IServer;
   mutate: KeyedMutator<any>;
+  game: IStory | IEvent | IArenaEventWithTime | null;
+  setGame: (g: IStory | IEvent | IArenaEventWithTime | null) => void;
 }
 
 export const GameContext = React.createContext<undefined | GameContextType>(
@@ -19,14 +30,21 @@ export const GameContext = React.createContext<undefined | GameContextType>(
 
 function App() {
   //window.localStorage.getItem("playerId") || short.generate();
-  const [playerId, setPlayerId] = useState("2");
+  const [playerId, setPlayerId] = useState<string | null>(null);
 
-  const changePlayer = (id: string) => {
-    setPlayerId(id);
+  const createplayer = async () => {
+    const res = await axios.post(`api/players/new?name=PlayerNew`);
+    console.log("createplayer", res.data);
+    setPlayerId(res.data.player.id);
   };
+
   return (
     <div className="App">
-      <Main playerId={playerId} />
+      {playerId == null ? (
+        <button onClick={createplayer}>create player</button>
+      ) : (
+        <Main playerId={playerId} />
+      )}
     </div>
   );
 }
