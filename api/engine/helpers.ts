@@ -16,6 +16,10 @@ import {
   IPassCheckpointEvent,
   IServerArenaStartEvent,
   IGame,
+  IArenaResult,
+  IArenaResultPool,
+  IArena,
+  IArenaEvent,
 } from "./types";
 dayjs.extend(relativeTime);
 
@@ -289,7 +293,10 @@ export const findPlayer = (game: IGame, playerId: number) => {
   return res;
 };
 
-export const replacePlayer = (allPlayers: IPlayer[], newPlayer: IPlayer) => {
+export const replacePlayer = (
+  allPlayers: IPlayer[],
+  newPlayer: IPlayer
+): IPlayer[] => {
   const newPlayers = JSON.parse(JSON.stringify(allPlayers));
   const indexOfNewPlayer = allPlayers.findIndex(
     (p: IPlayer) => p.id === newPlayer.id
@@ -299,4 +306,46 @@ export const replacePlayer = (allPlayers: IPlayer[], newPlayer: IPlayer) => {
   }
   newPlayers[indexOfNewPlayer] = newPlayer;
   return newPlayers;
+};
+
+export const rewardArenaPlayer = (
+  player: IPlayer,
+  reward: IMaterialQuant[]
+) => {
+  const newPlayer = JSON.parse(JSON.stringify(player));
+  newPlayer.claims.push({
+    prize: reward,
+    state: "unclaimed",
+  });
+  return newPlayer;
+};
+
+export const rewardArenaPlayers = (
+  game: IGame,
+  result: IArenaResult[][],
+  reward: IArenaResultPool[]
+): IPlayer[] => {
+  let newPlayers: IPlayer[] = JSON.parse(JSON.stringify(game.players));
+  for (let i = 0; i < 3; i++) {
+    result[i].forEach((r: IArenaResult) => {
+      const player = findPlayer(game, r.playerId);
+      const newPlayer = rewardArenaPlayer(player, reward[i].reward);
+      newPlayers = replacePlayer(newPlayers, newPlayer);
+    });
+  }
+  return newPlayers;
+};
+
+export const findEventArena = (
+  game: IGame,
+  mode: gameMode,
+  index: number
+): [IArena, IArenaEvent] => {
+  const newArena: IArena =
+    mode === "run" ? game.server.arenaRun : game.server.arenaFight;
+  const arenaEvent: IArenaEvent =
+    mode === "run"
+      ? game.server.arenaRun.events[index]
+      : game.server.arenaFight.events[index];
+  return [newArena, arenaEvent];
 };

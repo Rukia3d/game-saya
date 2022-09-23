@@ -35,8 +35,7 @@ app.get("/api/players/:id", async (req: any, res: any) => {
   const playerId = parseInt(req.params.id);
   const game = eventsApplication();
   const player = findPlayer(game, playerId);
-  const playerBased = { server: game.server, player: player };
-  res.send(playerBased);
+  res.send({ server: game.server, player: player });
 });
 
 app.post("/api/players/new", async (req: any, res: any) => {
@@ -50,7 +49,8 @@ app.post("/api/players/new", async (req: any, res: any) => {
   };
   const newEvent = writers.createPlayerEvent(event);
   const game = eventsApplication();
-  res.send(game);
+  const player = findPlayer(game, newEvent.playerId);
+  res.send({ server: game.server, player: player });
 });
 
 app.post("/api/players/:id/startLevel", async (req: any, res: any) => {
@@ -67,11 +67,10 @@ app.post("/api/players/:id/startLevel", async (req: any, res: any) => {
       levelId: req.body.level,
     },
   };
-  console.log("going to write an event");
   const newEvent = writers.startLevelEvent(game, event);
-  console.log("newEvent", newEvent);
   const newGame = eventsApplication();
-  res.send(newGame);
+  const player = findPlayer(game, playerId);
+  res.send({ server: newGame.server, player: player });
 });
 
 app.post("/api/players/:id/winLevel", async (req: any, res: any) => {
@@ -91,7 +90,8 @@ app.post("/api/players/:id/winLevel", async (req: any, res: any) => {
 
   const newEvent = writers.winLevelEvent(game, event);
   const newGame = eventsApplication();
-  res.send(newGame);
+  const player = findPlayer(game, playerId);
+  res.send({ server: newGame.server, player: player });
 });
 
 app.post("/api/players/:id/openSpell", async (req: any, res: any) => {
@@ -110,7 +110,8 @@ app.post("/api/players/:id/openSpell", async (req: any, res: any) => {
 
   const newEvent = writers.openSpellEvent(game, event);
   const newGame = eventsApplication();
-  res.send(newGame);
+  const player = findPlayer(game, playerId);
+  res.send({ server: newGame.server, player: player });
 });
 
 app.post("/api/players/:id/updateSpell", async (req: any, res: any) => {
@@ -127,7 +128,8 @@ app.post("/api/players/:id/updateSpell", async (req: any, res: any) => {
   };
   const newEvent = writers.updateSpellEvent(game, event);
   const newGame = eventsApplication();
-  res.send(newGame);
+  const player = findPlayer(game, playerId);
+  res.send({ server: newGame.server, player: player });
 });
 
 app.post("/api/players/:id/startEndless", async (req: any, res: any) => {
@@ -145,7 +147,8 @@ app.post("/api/players/:id/startEndless", async (req: any, res: any) => {
   };
   const newEvent = writers.startEndlessEvent(game, event);
   const newGame = eventsApplication();
-  res.send(newGame);
+  const player = findPlayer(game, playerId);
+  res.send({ server: newGame.server, player: player });
 });
 
 app.post("/api/players/:id/passCheckpoint", async (req: any, res: any) => {
@@ -164,7 +167,8 @@ app.post("/api/players/:id/passCheckpoint", async (req: any, res: any) => {
   };
   const newEvent = writers.passCheckpointEvent(game, event);
   const newGame = eventsApplication();
-  res.send(newGame);
+  const player = findPlayer(game, playerId);
+  res.send({ server: newGame.server, player: player });
 });
 
 app.post("/api/players/:id/missCheckpoint", async (req: any, res: any) => {
@@ -182,7 +186,8 @@ app.post("/api/players/:id/missCheckpoint", async (req: any, res: any) => {
   };
   const newEvent = writers.missCheckpointEvent(game, event);
   const newGame = eventsApplication();
-  res.send(newGame);
+  const player = findPlayer(game, playerId);
+  res.send({ server: newGame.server, player: player });
 });
 
 app.post("/api/players/:id/startArena", async (req: any, res: any) => {
@@ -200,7 +205,8 @@ app.post("/api/players/:id/startArena", async (req: any, res: any) => {
   };
   const newEvent = writers.startArenaEvent(game, event);
   const newGame = eventsApplication();
-  res.send(newGame);
+  const player = findPlayer(game, playerId);
+  res.send({ server: newGame.server, player: player });
 });
 
 app.post("/api/players/:id/endArena", async (req: any, res: any) => {
@@ -218,7 +224,8 @@ app.post("/api/players/:id/endArena", async (req: any, res: any) => {
   };
   const newEvent = writers.endArenaEvent(game, event);
   const newGame = eventsApplication();
-  res.send(newGame);
+  const player = findPlayer(game, playerId);
+  res.send({ server: newGame.server, player: player });
 });
 
 app.listen(port, () => {

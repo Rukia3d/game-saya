@@ -1,7 +1,8 @@
 import dayjs from "dayjs";
+import { FORMERR } from "dns";
 import { basePlayer, baseServer } from "./db/testDBPlayer";
 import * as writers from "./db/writers";
-import { IArenaResult } from "./engine/types";
+import { IArenaResult, IArenaResultPool, IMaterialQuant } from "./engine/types";
 
 export const ARENAEVENTINTERVAL = 60000000;
 
@@ -19,6 +20,40 @@ export const detectWinners = (winners: IArenaResult[]) => {
     groups.push(res[time]);
   }
   return groups;
+};
+
+export const getRewardPerPlace = (
+  percent: number,
+  pool: IMaterialQuant[],
+  split: number
+) => {
+  const res: IMaterialQuant[] = [];
+
+  for (let i = 0; i < pool.length; i++) {
+    res.push({
+      ...pool[i],
+      quantity: Math.floor((pool[i].quantity * percent) / split),
+    });
+  }
+  return res;
+};
+
+export const splitPool = (
+  groups: IArenaResult[][],
+  pool: IMaterialQuant[]
+): IArenaResultPool[] => {
+  let reward: IArenaResultPool[] = [];
+  for (let i = 0; i < 3; i++) {
+    const players = groups[i];
+    let percent = 0.2;
+    if (i == 0) percent = 0.5;
+    if (i == 1) percent = 0.3;
+    reward.push({
+      place: i + 1,
+      reward: getRewardPerPlace(percent, pool, players.length),
+    });
+  }
+  return reward;
 };
 
 export const startArena = () => {

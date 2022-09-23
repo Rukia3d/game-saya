@@ -1,4 +1,4 @@
-import { detectWinners } from "../cronjobs";
+import { detectWinners, splitPool } from "../cronjobs";
 import { arcanas } from "../db/testDBArcanas";
 import { eventTowerRewards } from "../db/testDBLevels";
 import { basePlayer, materials } from "../db/testDBPlayer";
@@ -15,10 +15,13 @@ import {
   calculateResult,
   ensure,
   findEnergyPrice,
+  findEventArena,
   findLastCheckpoint,
   findPlayer,
   generateArenaRandom,
   replacePlayer,
+  rewardArenaPlayer,
+  rewardArenaPlayers,
 } from "./helpers";
 
 import {
@@ -333,22 +336,18 @@ export const serverArenaEnd = (
   game: IGame
 ): IGame => {
   const newServer: IServer = JSON.parse(JSON.stringify(game.server));
+  let newPlayers: IPlayer[] = JSON.parse(JSON.stringify(game.players));
   newServer.arenaRun.events.map((e: IArenaEvent) => {
     const result = detectWinners(e.results);
-    //TODO Add claim for players to claim achivements
-    //result.map((r: IArenaResult) => {});
+    const reward = splitPool(result, e.rewardPool);
+    newPlayers = rewardArenaPlayers(game, result, reward);
   });
-  return { ...game, server: newServer };
+  return { players: newPlayers, server: newServer };
 };
 
 export const startArena = (event: IArenaStartEvent, game: IGame): IGame => {
   const player = findPlayer(game, event.playerId);
-  const newArena: IArena =
-    event.mode === "run" ? game.server.arenaRun : game.server.arenaFight;
-  const arenaEvent: IArenaEvent =
-    event.mode === "run"
-      ? game.server.arenaRun.events[event.index]
-      : game.server.arenaFight.events[event.index];
+  const [newArena, arenaEvent] = findEventArena(game, event.mode, event.index);
   const newMaterials = removeMaterials(player.materials, arenaEvent.stake);
   const newArenaEvent = updateRewardPool(arenaEvent, arenaEvent.stake);
   const newState = {
@@ -378,12 +377,7 @@ export const endArena = (event: IArenaEndEvent, game: IGame): IGame => {
   if (!player.currentState.arena?.startTime) {
     throw new Error("Can't end arena event withouth the starting time");
   }
-  const newArena: IArena =
-    event.mode === "run" ? game.server.arenaRun : game.server.arenaFight;
-  const arenaEvent: IArenaEvent =
-    event.mode === "run"
-      ? game.server.arenaRun.events[event.index]
-      : game.server.arenaFight.events[event.index];
+  const [newArena, arenaEvent] = findEventArena(game, event.mode, event.index);
   const resultTime = calculateResult(
     player.currentState.arena?.startTime,
     event.created

@@ -114,6 +114,11 @@ export interface IArenaEvent {
   results: IArenaResult[];
 }
 
+export interface IArenaResultPool {
+  place: number;
+  reward: IMaterialQuant[];
+}
+
 export type IArenaEventWithTime = IArenaEvent & { resultTime: number };
 
 export interface IArenaResult {

@@ -1,4 +1,5 @@
 import { arenaFight, arenaRun } from "../db/testDBArena";
+import { baseGame, basePlayer, baseServer } from "../db/testDBPlayer";
 import { serverArenaEnd, serverArenaStart } from "../engine/events";
 import {
   IArenaEvent,
@@ -7,28 +8,6 @@ import {
   IServerArenaEndEvent,
   IServerArenaStartEvent,
 } from "../engine/types";
-const basePlayer: IPlayer = {
-  id: 3,
-  name: "",
-  exprience: 0,
-  energy: 0,
-  maxEnergy: 0,
-  loungeId: null,
-  materials: [],
-  arcanas: [],
-  spells: [],
-  missions: [],
-  messages: [],
-  claims: [],
-  currentState: { state: "MAIN" },
-};
-const baseServer: IServer = {
-  arenaRun: arenaRun,
-  arenaFight: arenaFight,
-  arenaRunHistory: [],
-  arenaFightHistory: [],
-};
-const game = { players: [basePlayer], server: baseServer };
 
 test("Creates arena event correctly", () => {
   const now = new Date().valueOf();
@@ -39,7 +18,7 @@ test("Creates arena event correctly", () => {
     end: now + 600000,
     created: now,
   };
-  const res = serverArenaStart(event, game);
+  const res = serverArenaStart(event, baseGame);
   expect(res.server.arenaRunHistory.length).toEqual(1);
   expect(res.server.arenaRun.resultTime).toEqual(now + 600000);
   expect(res.server.arenaRun.events.length).toEqual(3);
@@ -52,8 +31,14 @@ test("Creates arena event correctly", () => {
   expect(res.server.arenaRun.events[1].stake[1].quantity).toEqual(10);
 });
 
-test.skip("Ends arena event correctly and rewards correct players", () => {
+test("Ends arena event correctly and rewards correct players", () => {
   const server = { ...baseServer, arenaRun: { ...arenaRun } };
+  const players = [
+    { ...basePlayer, id: 1 },
+    { ...basePlayer, id: 2 },
+    { ...basePlayer, id: 3 },
+    { ...basePlayer, id: 4 },
+  ];
   server.arenaRun.events.map((e: IArenaEvent) => {
     e.rewardPool = [
       { id: 0, name: "Coin", quantity: 25 * 4 },
@@ -72,5 +57,9 @@ test.skip("Ends arena event correctly and rewards correct players", () => {
     type: "SERVERARENEND" as "SERVERARENAEND",
     created: now,
   };
-  const res = serverArenaEnd(event, { players: [basePlayer], server: server });
+  const res = serverArenaEnd(event, { players: players, server: server });
+  expect(res.players[0].claims.length).toEqual(1);
+  expect(res.players[0].claims[0].state).toEqual("unclaimed");
+  expect(res.players[0].claims[0].prize.length).toEqual(2);
+  expect(res.players[3].claims.length).toEqual(0);
 });
