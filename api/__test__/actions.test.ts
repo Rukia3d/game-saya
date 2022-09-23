@@ -23,6 +23,7 @@ const basePlayer: IPlayer = {
   spells: [],
   missions: [],
   messages: [],
+  claims: [],
   currentState: { state: "MAIN" },
 };
 

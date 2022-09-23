@@ -16,6 +16,7 @@ const basePlayer: IPlayer = {
   spells: [],
   missions: [],
   messages: [],
+  claims: [],
   currentState: { state: "MAIN" },
 };
 const baseServer: IServer = {
@@ -24,7 +25,7 @@ const baseServer: IServer = {
   arenaRunHistory: [],
   arenaFightHistory: [],
 };
-const game = { player: basePlayer, server: baseServer };
+const game: IGame = { players: [], server: baseServer };
 
 test("story starts and wins for player 1 outside tutorial", async () => {
   const newGame: IGame = events.createPlayer(
@@ -49,11 +50,12 @@ test("story starts and wins for player 1 outside tutorial", async () => {
     },
     newGame
   );
-  expect(res.player.energy).toEqual(45);
-  expect(res.player.currentState.state).toEqual("PLAY");
-  expect(res.player.currentState.level?.arcana).toEqual(0);
-  expect(res.player.currentState.level?.level).toEqual(2);
-  expect(res.player.currentState.level?.mode).toEqual("story");
+
+  expect(res.players[0].energy).toEqual(45);
+  expect(res.players[0].currentState.state).toEqual("PLAY");
+  expect(res.players[0].currentState.level?.arcana).toEqual(0);
+  expect(res.players[0].currentState.level?.level).toEqual(2);
+  expect(res.players[0].currentState.level?.mode).toEqual("story");
 });
 
 test("eventWinLevel for player 1", async () => {
@@ -68,27 +70,32 @@ test("eventWinLevel for player 1", async () => {
       playerId: 1,
     },
     {
-      player: {
-        ...basePlayer,
-        currentState: {
-          state: "PLAY",
-          level: { mode: "story", arcana: 0, level: 0 },
+      players: [
+        {
+          ...basePlayer,
+          id: 1,
+          currentState: {
+            state: "PLAY",
+            level: { mode: "story", arcana: 0, level: 0 },
+          },
+          arcanas: JSON.parse(JSON.stringify(arcanas)),
+          materials: JSON.parse(JSON.stringify(materials)).map(
+            (m: IMaterial) => {
+              return { ...m, quantity: 1 };
+            }
+          ),
         },
-        arcanas: JSON.parse(JSON.stringify(arcanas)),
-        materials: JSON.parse(JSON.stringify(materials)).map((m: IMaterial) => {
-          return { ...m, quantity: 1 };
-        }),
-      },
+      ],
       server: baseServer,
     }
   );
-  expect(res.player.exprience).toEqual(10);
-  expect(res.player.materials[0].quantity).toEqual(15);
-  expect(res.player.materials[3].quantity).toEqual(7);
-  expect(res.player.arcanas[0].stories[0].state).toEqual("complete");
-  expect(res.player.arcanas[0].stories[1].state).toEqual("open");
-  expect(res.player.currentState.state).toEqual("WINMATERIAL");
-  expect(res.player.currentState.materials?.length).toEqual(2);
+  expect(res.players[0].exprience).toEqual(10);
+  expect(res.players[0].materials[0].quantity).toEqual(15);
+  expect(res.players[0].materials[3].quantity).toEqual(7);
+  expect(res.players[0].arcanas[0].stories[0].state).toEqual("complete");
+  expect(res.players[0].arcanas[0].stories[1].state).toEqual("open");
+  expect(res.players[0].currentState.state).toEqual("WINMATERIAL");
+  expect(res.players[0].currentState.materials?.length).toEqual(2);
 });
 
 test("Endless flow tournament for player 1", async () => {
@@ -113,10 +120,10 @@ test("Endless flow tournament for player 1", async () => {
     },
     newGame
   );
-  expect(startEvent.player.energy).toEqual(40);
-  expect(startEvent.player.currentState.state).toEqual("PLAY");
-  expect(startEvent.player.currentState.level?.arcana).toEqual(0);
-  expect(startEvent.player.currentState.level?.mode).toEqual("run");
+  expect(startEvent.players[0].energy).toEqual(40);
+  expect(startEvent.players[0].currentState.state).toEqual("PLAY");
+  expect(startEvent.players[0].currentState.level?.arcana).toEqual(0);
+  expect(startEvent.players[0].currentState.level?.mode).toEqual("run");
   const passChec0: IGame = events.passCheckpoint(
     {
       eventId: 2,
@@ -129,13 +136,15 @@ test("Endless flow tournament for player 1", async () => {
     },
     { ...startEvent }
   );
-  expect(passChec0.player.arcanas[0].currentEvents[0].checkpoint).toEqual(0);
-  expect(passChec0.player.exprience).toEqual(10);
+  expect(passChec0.players[0].arcanas[0].currentEvents[0].checkpoint).toEqual(
+    0
+  );
+  expect(passChec0.players[0].exprience).toEqual(10);
   expect(
-    passChec0.player.arcanas[0].currentEvents[0].allowedRewards[0].upTo
+    passChec0.players[0].arcanas[0].currentEvents[0].allowedRewards[0].upTo
   ).toEqual(5);
   expect(
-    passChec0.player.arcanas[0].currentEvents[0].allowedRewards[1].upTo
+    passChec0.players[0].arcanas[0].currentEvents[0].allowedRewards[1].upTo
   ).toEqual(1);
   const passChec1: IGame = events.passCheckpoint(
     {
@@ -149,13 +158,15 @@ test("Endless flow tournament for player 1", async () => {
     },
     { ...passChec0 }
   );
-  expect(passChec1.player.exprience).toEqual(20);
-  expect(passChec1.player.arcanas[0].currentEvents[0].checkpoint).toEqual(1);
+  expect(passChec1.players[0].exprience).toEqual(20);
+  expect(passChec1.players[0].arcanas[0].currentEvents[0].checkpoint).toEqual(
+    1
+  );
   expect(
-    passChec1.player.arcanas[0].currentEvents[0].allowedRewards[0].upTo
+    passChec1.players[0].arcanas[0].currentEvents[0].allowedRewards[0].upTo
   ).toEqual(10);
   expect(
-    passChec1.player.arcanas[0].currentEvents[0].allowedRewards[1].upTo
+    passChec1.players[0].arcanas[0].currentEvents[0].allowedRewards[1].upTo
   ).toEqual(5);
   const missCheck: IGame = events.missCheckpoint(
     {
@@ -168,14 +179,16 @@ test("Endless flow tournament for player 1", async () => {
     },
     passChec1
   );
-  expect(missCheck.player.exprience).toEqual(20);
-  expect(missCheck.player.arcanas[0].currentEvents[0].checkpoint).toEqual(1);
+  expect(missCheck.players[0].exprience).toEqual(20);
+  expect(missCheck.players[0].arcanas[0].currentEvents[0].checkpoint).toEqual(
+    1
+  );
   expect(
-    missCheck.player.arcanas[0].currentEvents[0].allowedRewards[0].upTo
+    missCheck.players[0].arcanas[0].currentEvents[0].allowedRewards[0].upTo
   ).toEqual(10);
   expect(
-    missCheck.player.arcanas[0].currentEvents[0].allowedRewards[1].upTo
+    missCheck.players[0].arcanas[0].currentEvents[0].allowedRewards[1].upTo
   ).toEqual(5);
-  expect(missCheck.player.currentState.state).toEqual("WINMATERIAL");
-  expect(missCheck.player.currentState.materials?.length).toEqual(2);
+  expect(missCheck.players[0].currentState.state).toEqual("WINMATERIAL");
+  expect(missCheck.players[0].currentState.materials?.length).toEqual(2);
 });

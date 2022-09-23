@@ -74,8 +74,6 @@ export const Story = ({
     setScreen("arcana");
   };
 
-  console.log("player.stories", context.player.arcanas[0].stories);
-
   const stories = context.player.arcanas[arcana].stories;
   return (
     <div className="Story">

@@ -27,23 +27,23 @@ import {
   IArenaEndDB,
 } from "../engine/types";
 import {
+  allGameEvents,
   createPlayerEvents,
-  openSpellEvents,
-  allPEvents,
   startLevelEvents,
-  updateSpellEvents,
-  winLevelEvents,
   startEldessEvents,
+  winLevelEvents,
+  openSpellEvents,
+  updateSpellEvents,
   passCheckpointEvents,
   missCheckpointEvents,
   serverArenaStartEvents,
   serverArenaEndEvents,
   startArenaEvents,
   endArenaEvents,
-} from "./testDBPlayer";
+} from "./testDBEvents";
 
-export const allGameEvents = () => {
-  return allPEvents;
+export const gameEvents = (): IEventDB[] => {
+  return allGameEvents;
 };
 
 export const allCreatePlayerEvents = () => {
@@ -94,13 +94,9 @@ export const allEndArena = () => {
   return endArenaEvents;
 };
 
-export const playerEvents = (playerId: number): IGameEvent[] => {
+export const playerEvents = (): IGameEvent[] => {
   // Find events for a player
-  const events = ensure(
-    allGameEvents().filter(
-      (p: IEventDB) => p.playerId == playerId || p.playerId == null
-    )
-  );
+  const events = gameEvents();
   const newEvents: IGameEvent[] = [];
   events.forEach((e: IEventDB) => {
     switch (e.type) {
@@ -150,18 +146,11 @@ export const createPlayerEvent = (event: IEventDB): ICreatePlayerEvent => {
     ),
     "No create player event"
   );
-  const allEvent = ensure(
-    allGameEvents().find(
-      (e: IEventDB) =>
-        e.eventId == createPlayer.eventId && e.type == "CREATEPLAYER"
-    ),
-    "No create player event in all events"
-  );
-  if (!allEvent.playerId) {
+  if (!createPlayer.playerId) {
     throw new Error("No player ID in createPlayerEvent");
   }
   return {
-    playerId: allEvent.playerId,
+    playerId: createPlayer.playerId,
     eventId: event.eventId,
     created: event.created,
     type: "CREATEPLAYER",
@@ -176,11 +165,8 @@ export const startLevelEvent = (event: IEventDB): IStartLevelEvent => {
     ),
     "No start level event"
   );
-  if (!event.playerId) {
-    throw new Error("No player ID in startLevelEvent");
-  }
   return {
-    playerId: event.playerId,
+    playerId: startLevel.playerId,
     eventId: event.eventId,
     created: event.created,
     type: "STARTLEVEL",
@@ -195,11 +181,9 @@ export const winLevelEvent = (event: IEventDB): IWinLevelEvent => {
     allWinLevelEvents().find((e: IWinLevelDB) => e.eventId == event.eventId),
     "No win level event"
   );
-  if (!event.playerId) {
-    throw new Error("No player ID in winLevelEvent");
-  }
+
   return {
-    playerId: event.playerId,
+    playerId: winLevel.playerId,
     eventId: event.eventId,
     created: event.created,
     type: "WINLEVEL",
@@ -214,11 +198,9 @@ export const openSpellEvent = (event: IEventDB): IOpenSpellEvent => {
     allOpenSpellEvents().find((e: IOpenSpellDB) => e.eventId == event.eventId),
     "No open spell event"
   );
-  if (!event.playerId) {
-    throw new Error("No player ID in openSpellEvent");
-  }
+
   return {
-    playerId: event.playerId,
+    playerId: openSpell.playerId,
     eventId: event.eventId,
     created: event.created,
     type: "OPENSPELL",
@@ -234,11 +216,9 @@ export const updateSpellEvent = (event: IEventDB): IUpdateSpellEvent => {
     ),
     "No update spell event"
   );
-  if (!event.playerId) {
-    throw new Error("No player ID in updateSpellEvent");
-  }
+
   return {
-    playerId: event.playerId,
+    playerId: updateSpell.playerId,
     eventId: event.eventId,
     created: event.created,
     type: "UPDATESPELL",
@@ -254,11 +234,9 @@ export const startEndlessEvent = (event: IEventDB): IStartEndlessEvent => {
     ),
     "No start endless event"
   );
-  if (!event.playerId) {
-    throw new Error("No player ID in startEndlessEvent");
-  }
+
   return {
-    playerId: event.playerId,
+    playerId: startEndless.playerId,
     eventId: event.eventId,
     created: event.created,
     type: "STARTENDLESS",
@@ -274,11 +252,9 @@ export const passCheckpointEvent = (event: IEventDB): IPassCheckpointEvent => {
     ),
     "No pass checkpoint event"
   );
-  if (!event.playerId) {
-    throw new Error("No player ID in passCheckpointEvent");
-  }
+
   return {
-    playerId: event.playerId,
+    playerId: passCheckpoint.playerId,
     eventId: event.eventId,
     created: event.created,
     type: "PASSCHECKPOINT",
@@ -295,11 +271,9 @@ export const missCheckpointEvent = (event: IEventDB): IMissCheckpointEvent => {
     ),
     "No miss checkpoint event"
   );
-  if (!event.playerId) {
-    throw new Error("No player ID in missCheckpointEvent");
-  }
+
   return {
-    playerId: event.playerId,
+    playerId: missCheckpoint.playerId,
     eventId: event.eventId,
     created: event.created,
     type: "MISSCHECKPOINT",
@@ -313,11 +287,9 @@ export const startArenaEvent = (event: IEventDB): IArenaStartEvent => {
     allStartArena().find((e: IArenaStartDB) => e.eventId == event.eventId),
     "No player start arena event"
   );
-  if (!event.playerId) {
-    throw new Error("No player ID in startArenaEvent");
-  }
+
   return {
-    playerId: event.playerId,
+    playerId: startArena.playerId,
     eventId: event.eventId,
     created: event.created,
     type: "ARENASTART",
@@ -331,11 +303,9 @@ export const endArenaEvent = (event: IEventDB): IArenaEndEvent => {
     allEndArena().find((e: IArenaEndDB) => e.eventId == event.eventId),
     "No player end arena event"
   );
-  if (!event.playerId) {
-    throw new Error("No player ID in endArenaEvent");
-  }
+
   return {
-    playerId: event.playerId,
+    playerId: startArena.playerId,
     eventId: event.eventId,
     created: event.created,
     type: "ARENAEND",

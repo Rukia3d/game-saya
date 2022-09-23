@@ -1,14 +1,5 @@
 import { IEventReward, IStoryReward } from "../engine/types";
 
-// { id: 0, name: "Coin" },
-// { id: 1, name: "Black Soul Stone" },
-// { id: 2, name: "White Soul Stone" },
-// { id: 3, name: "Rings" },
-// { id: 4, name: "Wands" },
-// { id: 5, name: "Swords" },
-// { id: 6, name: "Cups" },
-// { id: 7, name: "Dimonds" },
-
 export const storyRewards: IStoryReward[] = [
   {
     id: 0,

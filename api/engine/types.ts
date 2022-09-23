@@ -164,6 +164,11 @@ export interface IServer {
 
 export interface IGame {
   server: IServer;
+  players: IPlayer[];
+}
+
+export interface IGamePlayer {
+  server: IServer;
   player: IPlayer;
 }
 
@@ -180,6 +185,12 @@ export interface IPlayer {
   missions: [];
   messages: [];
   currentState: ICurrentState;
+  claims: IClaimReward[];
+}
+
+export interface IClaimReward {
+  prize: IMaterialQuant[];
+  state: "claimed" | "unclaimed";
 }
 
 export type IServerEvent = {
@@ -204,7 +215,6 @@ export type IGameEvent =
   | IArenaEndEvent;
 
 export type IEventDB = {
-  playerId: number | null;
   eventId: number;
   type: eventType;
   created: number;
@@ -221,6 +231,7 @@ export type ICreatePlayerData = {
 
 export type ICreatePlayerDB = {
   eventId: number;
+  playerId: number;
   playerName: string;
 };
 
@@ -235,6 +246,7 @@ export type ICreatePlayerEvent = {
 // STARTLEVEL
 export type IStartLevelDB = {
   eventId: number;
+  playerId: number;
   arcanaId: number;
   mode: gameMode;
   levelId: number;
@@ -264,6 +276,7 @@ export type IStartLevelEvent = {
 // WINLEVEL
 export type IWinLevelDB = {
   eventId: number;
+  playerId: number;
   arcanaId: number;
   mode: gameMode;
   levelId: number;
@@ -293,6 +306,7 @@ export type IWinLevelEvent = {
 // OPENSPELL
 export type IOpenSpellDB = {
   eventId: number;
+  playerId: number;
   arcanaId: number;
   spellId: number;
 };
@@ -319,6 +333,7 @@ export type IOpenSpellEvent = {
 // UPDATESPELL
 export type IUpdateSpellDB = {
   eventId: number;
+  playerId: number;
   arcanaId: number;
   spellId: number;
 };
@@ -345,6 +360,7 @@ export type IUpdateSpellEvent = {
 // STARTENDLESS
 export type IStartEndlessDB = {
   eventId: number;
+  playerId: number;
   arcanaId: number;
   mode: gameMode;
 };
@@ -371,6 +387,7 @@ export type IStartEndlessEvent = {
 // PASSCHECKPOINT
 export type IPassCheckpointDB = {
   eventId: number;
+  playerId: number;
   arcanaId: number;
   mode: gameMode;
   checkpoint: number;
@@ -400,6 +417,7 @@ export type IPassCheckpointEvent = {
 // MISSCHECKPOINT
 export type IMissCheckpointDB = {
   eventId: number;
+  playerId: number;
   arcanaId: number;
   mode: gameMode;
 };
@@ -426,6 +444,7 @@ export type IMissCheckpointEvent = {
 // PLAYER ARENA
 export type IArenaStartDB = {
   eventId: number;
+  playerId: number;
   mode: gameMode;
   index: number;
 };
@@ -451,6 +470,7 @@ export type IArenaStartEvent = {
 
 export type IArenaEndDB = {
   eventId: number;
+  playerId: number;
   mode: gameMode;
   index: number;
 };

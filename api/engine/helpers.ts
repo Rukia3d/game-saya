@@ -15,6 +15,7 @@ import {
   IWinLevelEvent,
   IPassCheckpointEvent,
   IServerArenaStartEvent,
+  IGame,
 } from "./types";
 dayjs.extend(relativeTime);
 
@@ -281,3 +282,21 @@ export function ensure<T>(
 
   return argument;
 }
+
+export const findPlayer = (game: IGame, playerId: number) => {
+  const res = game.players.find((p: IPlayer) => p.id == playerId);
+  if (!res) throw new Error("Can't find player based on ID");
+  return res;
+};
+
+export const replacePlayer = (allPlayers: IPlayer[], newPlayer: IPlayer) => {
+  const newPlayers = JSON.parse(JSON.stringify(allPlayers));
+  const indexOfNewPlayer = allPlayers.findIndex(
+    (p: IPlayer) => p.id === newPlayer.id
+  );
+  if (indexOfNewPlayer === -1) {
+    throw new Error("Can't find player to update");
+  }
+  newPlayers[indexOfNewPlayer] = newPlayer;
+  return newPlayers;
+};

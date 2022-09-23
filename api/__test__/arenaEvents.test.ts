@@ -19,6 +19,7 @@ const basePlayer: IPlayer = {
   spells: [],
   missions: [],
   messages: [],
+  claims: [],
   currentState: { state: "MAIN" },
 };
 const baseServer: IServer = {
@@ -27,7 +28,7 @@ const baseServer: IServer = {
   arenaRunHistory: [],
   arenaFightHistory: [],
 };
-const game = { player: basePlayer, server: baseServer };
+const game = { players: [basePlayer], server: baseServer };
 
 test("Creates arena event correctly", () => {
   const now = new Date().valueOf();
@@ -71,5 +72,5 @@ test.skip("Ends arena event correctly and rewards correct players", () => {
     type: "SERVERARENEND" as "SERVERARENAEND",
     created: now,
   };
-  const res = serverArenaEnd(event, { player: basePlayer, server: server });
+  const res = serverArenaEnd(event, { players: [basePlayer], server: server });
 });

@@ -1,72 +1,142 @@
-import { IServerEvent } from "../engine/types";
+import {
+  IArenaEndDB,
+  IArenaStartDB,
+  ICreatePlayerDB,
+  IEventDB,
+  IMissCheckpointDB,
+  IOpenSpellDB,
+  IPassCheckpointDB,
+  IServerArenaEndDB,
+  IServerArenaStartDB,
+  IStartEndlessDB,
+  IStartLevelDB,
+  IUpdateSpellDB,
+  IWinLevelDB,
+} from "../engine/types";
 
-export const allGEvents: IServerEvent[] = [
+export const allGameEvents: IEventDB[] = [
   {
-    id: 0,
     eventId: 0,
-    type: "CREATEARENARUN",
-    created: 1661426668,
+    type: "CREATEPLAYER",
+    created: 1654347193,
+  },
+  {
+    eventId: 1,
+    type: "STARTLEVEL",
+    created: 1654347300,
+  },
+  { eventId: 2, type: "WINLEVEL", created: 1654347302 },
+  { eventId: 3, type: "OPENSPELL", created: 1654347302 },
+  {
+    eventId: 4,
+    type: "CREATEPLAYER",
+    created: 1654347193,
+  },
+  {
+    eventId: 5,
+    type: "SERVERARENASTART",
+    created: 1654347193,
+  },
+  {
+    eventId: 6,
+    type: "SERVERARENAEND",
+    created: 1654347593,
+  },
+  { eventId: 7, type: "ARENASTART", created: 1654348593 },
+  { eventId: 8, type: "ARENAEND", created: 1654348793 },
+  { eventId: 9, type: "UPDATESPELL", created: 1654348795 },
+  { eventId: 10, type: "STARTENDLESS", created: 1654348795 },
+  { eventId: 11, type: "PASSCHECKPOINT", created: 1654348796 },
+  { eventId: 12, type: "PASSCHECKPOINT", created: 1654348800 },
+  { eventId: 13, type: "MISSCHECKPOINT", created: 1654348830 },
+];
+
+export const createPlayerEvents: ICreatePlayerDB[] = [
+  { playerId: 1, eventId: 0, playerName: "player 1 name" },
+  { playerId: 2, eventId: 4, playerName: "player 2 name" },
+];
+
+export const startLevelEvents: IStartLevelDB[] = [
+  { playerId: 1, eventId: 1, arcanaId: 0, levelId: 0, mode: "story" },
+];
+
+export const winLevelEvents: IWinLevelDB[] = [
+  { playerId: 1, eventId: 2, arcanaId: 0, levelId: 0, mode: "story" },
+];
+
+export const openSpellEvents: IOpenSpellDB[] = [
+  {
+    playerId: 1,
+    eventId: 3,
+    arcanaId: 0,
+    spellId: 0,
   },
 ];
 
-/*
-resultTime: new Date(new Date().valueOf() + 4 * 60 * 60 * 1000).valueOf(),
-  type: "fight",
-  events: [
-    {
-      index: 0,
-      stake: [
-        { id: 0, name: "Coin", quantity: 25 },
-        { id: 3, name: "Rings", quantity: 5 },
-      ],
-      level: "some",
-      rewardPool: [],
-      results: [],
-      mode: "run",
-    },
-    {
-      index: 1,
-      stake: [
-        { id: 0, name: "Coin", quantity: 50 },
-        { id: 3, name: "Rings", quantity: 15 },
-      ],
-      level: "some",
-      rewardPool: [],
-      results: [],
-      mode: "run",
-    },
-    {
-      index: 2,
-      stake: [
-        { id: 0, name: "Coin", quantity: 100 },
-        { id: 3, name: "Rings", quantity: 25 },
-      ],
-      level: "some",
-      rewardPool: [],
-      results: [],
-      mode: "run",
-    },
-    */
-export const createArenaRunEvents = [
+export const updateSpellEvents: IUpdateSpellDB[] = [
   {
-    eventId: 0,
-    resultTime: new Date(new Date().valueOf() + 4 * 60 * 60 * 1000).valueOf(),
-    type: "run",
-    events: [0, 1, 2].map((n: number) => {
-      return {
-        index: n,
-        level: "some",
-        mode: "run",
-        rewardPool: [],
-        results: [],
-        stake: [0, 3].map((j: number) => {
-          return {
-            id: j,
-            name: j === 0 ? "Coin" : "Rings",
-            quantity: j === 0 ? 10 * n * j : 10 * j,
-          };
-        }),
-      };
-    }),
+    playerId: 1,
+    eventId: 9,
+    arcanaId: 0,
+    spellId: 0,
   },
+];
+
+export const startEldessEvents: IStartEndlessDB[] = [
+  {
+    playerId: 1,
+    eventId: 10,
+    arcanaId: 0,
+    mode: "run",
+  },
+];
+
+export const passCheckpointEvents: IPassCheckpointDB[] = [
+  {
+    playerId: 1,
+    eventId: 11,
+    arcanaId: 0,
+    mode: "run",
+    checkpoint: 0,
+  },
+  {
+    playerId: 1,
+    eventId: 12,
+    arcanaId: 0,
+    mode: "run",
+    checkpoint: 1,
+  },
+];
+
+export const missCheckpointEvents: IMissCheckpointDB[] = [
+  {
+    playerId: 1,
+    eventId: 13,
+    arcanaId: 0,
+    mode: "run",
+  },
+];
+
+export const serverArenaStartEvents: IServerArenaStartDB[] = [
+  {
+    eventId: 5,
+    created: 1654347193,
+    start: 1654347193,
+    end: 1654357193,
+  },
+];
+
+export const serverArenaEndEvents: IServerArenaEndDB[] = [
+  {
+    eventId: 6,
+    created: 1654357193,
+  },
+];
+
+export const startArenaEvents: IArenaStartDB[] = [
+  { playerId: 1, eventId: 7, mode: "run", index: 0 },
+];
+
+export const endArenaEvents: IArenaEndDB[] = [
+  { playerId: 1, eventId: 8, mode: "run", index: 0 },
 ];

@@ -1,36 +1,12 @@
-import { arenaFight, arenaRun } from "../db/testDBArena";
-import { materials } from "../db/testDBPlayer";
+import {
+  baseGame,
+  basePlayer,
+  baseServer,
+  materials,
+} from "../db/testDBPlayer";
 import { spells } from "../db/testDBSpells";
 import * as events from "../engine/events";
-import {
-  IGame,
-  IMaterial,
-  IMaterialQuant,
-  IPlayer,
-  IServer,
-} from "../engine/types";
-
-const basePlayer: IPlayer = {
-  id: 0,
-  name: "",
-  exprience: 0,
-  energy: 0,
-  maxEnergy: 0,
-  loungeId: null,
-  materials: [],
-  arcanas: [],
-  spells: [],
-  missions: [],
-  messages: [],
-  currentState: { state: "MAIN" },
-};
-const baseServer: IServer = {
-  arenaRun: arenaRun,
-  arenaFight: arenaFight,
-  arenaRunHistory: [],
-  arenaFightHistory: [],
-};
-const game = { player: basePlayer, server: baseServer };
+import { IGame, IMaterial, IMaterialQuant } from "../engine/types";
 
 test("eventCreatePlayer for player 1", async () => {
   const res: IGame = events.createPlayer(
@@ -41,20 +17,20 @@ test("eventCreatePlayer for player 1", async () => {
       created: new Date().valueOf(),
       type: "CREATEPLAYER",
     },
-    game
+    { server: baseServer, players: [] }
   );
-  expect(res.player.id).toEqual(1);
-  expect(res.player.name).toEqual("player 1 name");
-  expect(res.player.energy).toEqual(50);
-  expect(res.player.exprience).toEqual(0);
-  expect(res.player.arcanas.length).toEqual(1);
-  expect(res.player.materials.length).toEqual(8);
-  res.player.materials.forEach((r: IMaterialQuant) =>
+  expect(res.players[0].id).toEqual(1);
+  expect(res.players[0].name).toEqual("player 1 name");
+  expect(res.players[0].energy).toEqual(50);
+  expect(res.players[0].exprience).toEqual(0);
+  expect(res.players[0].arcanas.length).toEqual(1);
+  expect(res.players[0].materials.length).toEqual(8);
+  res.players[0].materials.forEach((r: IMaterialQuant) =>
     expect(r.quantity).toEqual(0)
   );
-  expect(res.player.arcanas[0].stories.length).toEqual(3);
-  expect(res.player.arcanas[0].stories[0].state).toEqual("open");
-  expect(res.player.arcanas[0].stories[1].state).toEqual("closed");
+  expect(res.players[0].arcanas[0].stories.length).toEqual(3);
+  expect(res.players[0].arcanas[0].stories[0].state).toEqual("open");
+  expect(res.players[0].arcanas[0].stories[1].state).toEqual("closed");
 });
 
 test("openSpell for player 1", async () => {
@@ -87,23 +63,26 @@ test("openSpell for player 1", async () => {
       type: "OPENSPELL",
     },
     {
-      player: {
-        ...basePlayer,
-        materials: playerMaterials,
-        spells: playerSpells,
-      },
+      players: [
+        {
+          ...basePlayer,
+          id: 1,
+          materials: playerMaterials,
+          spells: playerSpells,
+        },
+      ],
       server: baseServer,
     }
   );
-  expect(res.player.spells.length).toEqual(2);
-  expect(res.player.spells[0]).not.toHaveProperty("price");
-  expect(res.player.spells[1]).toHaveProperty("price");
-  expect(res.player.materials[0].quantity).toEqual(5);
-  expect(res.player.materials[1].quantity).toEqual(3);
-  expect(res.player.currentState.state).toEqual("SPELLS");
-  expect(res.player.spells[0].state).toEqual("open");
-  expect(res.player.spells[0]).toHaveProperty("updatePrice");
-  expect(res.player.spells[0]).toHaveProperty("requiredStrength");
+  expect(res.players[0].spells.length).toEqual(2);
+  expect(res.players[0].spells[0]).not.toHaveProperty("price");
+  expect(res.players[0].spells[1]).toHaveProperty("price");
+  expect(res.players[0].materials[0].quantity).toEqual(5);
+  expect(res.players[0].materials[1].quantity).toEqual(3);
+  expect(res.players[0].currentState.state).toEqual("SPELLS");
+  expect(res.players[0].spells[0].state).toEqual("open");
+  expect(res.players[0].spells[0]).toHaveProperty("updatePrice");
+  expect(res.players[0].spells[0]).toHaveProperty("requiredStrength");
 
   jest.spyOn(console, "error").mockImplementation(() => jest.fn());
   expect(() =>
@@ -117,11 +96,14 @@ test("openSpell for player 1", async () => {
         type: "OPENSPELL",
       },
       {
-        player: {
-          ...basePlayer,
-          materials: playerMaterials,
-          spells: [playerSpells[0], { ...spells[1] }],
-        },
+        players: [
+          {
+            ...basePlayer,
+            id: 1,
+            materials: playerMaterials,
+            spells: [playerSpells[0], { ...spells[1] }],
+          },
+        ],
         server: baseServer,
       }
     )

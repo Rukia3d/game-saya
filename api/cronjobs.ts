@@ -1,29 +1,9 @@
 import dayjs from "dayjs";
+import { basePlayer, baseServer } from "./db/testDBPlayer";
 import * as writers from "./db/writers";
-import { IArenaResult, IPlayer, IServer } from "./engine/types";
+import { IArenaResult } from "./engine/types";
 
 export const ARENAEVENTINTERVAL = 60000000;
-
-const basePlayer: IPlayer = {
-  id: 3,
-  name: "",
-  exprience: 0,
-  energy: 0,
-  maxEnergy: 0,
-  loungeId: null,
-  materials: [],
-  arcanas: [],
-  spells: [],
-  missions: [],
-  messages: [],
-  currentState: { state: "MAIN" },
-};
-const baseServer: IServer = {
-  arenaRun: { events: [], resultTime: 0, mode: "run" },
-  arenaFight: { events: [], resultTime: 0, mode: "fight" },
-  arenaRunHistory: [],
-  arenaFightHistory: [],
-};
 
 export const detectWinners = (winners: IArenaResult[]) => {
   let res: { [time: number]: IArenaResult[] } = {};
@@ -44,9 +24,11 @@ export const detectWinners = (winners: IArenaResult[]) => {
 export const startArena = () => {
   const now = new Date().valueOf();
   const game = {
-    player: {
-      ...basePlayer,
-    },
+    players: [
+      {
+        ...basePlayer,
+      },
+    ],
     server: { ...baseServer },
   };
   writers.serverStartArena(game, {
@@ -61,9 +43,11 @@ export const startArena = () => {
 export const endArena = () => {
   console.log("EndArena");
   const game = {
-    player: {
-      ...basePlayer,
-    },
+    players: [
+      {
+        ...basePlayer,
+      },
+    ],
     server: { ...baseServer },
   };
   writers.serverEndArena(game);

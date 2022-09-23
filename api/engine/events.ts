@@ -1,7 +1,7 @@
 import { detectWinners } from "../cronjobs";
 import { arcanas } from "../db/testDBArcanas";
 import { eventTowerRewards } from "../db/testDBLevels";
-import { materials } from "../db/testDBPlayer";
+import { basePlayer, materials } from "../db/testDBPlayer";
 import { spellPrices, spells, spellUpdates } from "../db/testDBSpells";
 import {
   addExperience,
@@ -16,7 +16,9 @@ import {
   ensure,
   findEnergyPrice,
   findLastCheckpoint,
+  findPlayer,
   generateArenaRandom,
+  replacePlayer,
 } from "./helpers";
 
 import {
@@ -25,6 +27,7 @@ import {
   IArena,
   IArenaEndEvent,
   IArenaEvent,
+  IArenaResult,
   IArenaStartEvent,
   ICreatePlayerEvent,
   ICurrentState,
@@ -51,7 +54,7 @@ import {
 
 export const createPlayer = (event: ICreatePlayerEvent, game: IGame): IGame => {
   const newPlayer: IPlayer = {
-    ...game.player,
+    ...basePlayer,
     id: event.playerId,
     name: event.playerName,
     maxEnergy: 50,
@@ -66,21 +69,22 @@ export const createPlayer = (event: ICreatePlayerEvent, game: IGame): IGame => {
       return { ...m, quantity: 0 };
     }),
   };
+  const newPlayers = game.players.concat([newPlayer]);
   return {
     ...game,
-    player: newPlayer,
+    players: newPlayers,
   };
 };
 
 export const startLevel = (event: IStartLevelEvent, game: IGame): IGame => {
+  const player = findPlayer(game, event.playerId);
   let energyPrice = findEnergyPrice(event.arcanaId, "story", event.levelId);
   const firstTime =
-    game.player.arcanas[event.arcanaId].stories[event.levelId].state !==
-    "complete";
+    player.arcanas[event.arcanaId].stories[event.levelId].state !== "complete";
   if (
     event.arcanaId === 0 &&
     event.levelId < 2 &&
-    game.player.arcanas &&
+    player.arcanas &&
     firstTime
   ) {
     energyPrice = 0;
@@ -94,37 +98,35 @@ export const startLevel = (event: IStartLevelEvent, game: IGame): IGame => {
     },
   };
   const newPlayer: IPlayer = {
-    ...game.player,
-    energy: game.player.energy - energyPrice,
+    ...player,
+    energy: player.energy - energyPrice,
     currentState: state,
   };
-  return { ...game, player: newPlayer };
+  return { ...game, players: replacePlayer(game.players, newPlayer) };
 };
 
 export const winLevel = (event: IWinLevelEvent, game: IGame): IGame => {
-  const newMaterials = rewardPlayer(
-    event,
-    game.player.materials,
-    game.player.arcanas
-  );
+  const player = findPlayer(game, event.playerId);
+  const newMaterials = rewardPlayer(event, player.materials, player.arcanas);
   // need to add experience before we open the next level
-  const newExperience = addExperience(event, game.player);
+  const newExperience = addExperience(event, player);
   const newState = {
     state: "WINMATERIAL" as currentState,
     materials: newMaterials.new,
   };
   const newPlayer: IPlayer = {
-    ...game.player,
+    ...player,
     materials: newMaterials.all,
-    arcanas: openNextLevel(event, game.player.arcanas),
+    arcanas: openNextLevel(event, player.arcanas),
     exprience: newExperience,
     // TODO Check if this is correct
     currentState: newState,
   };
-  return { ...game, player: newPlayer };
+  return { ...game, players: replacePlayer(game.players, newPlayer) };
 };
 
 export const startEndless = (event: IStartEndlessEvent, game: IGame): IGame => {
+  const player = findPlayer(game, event.playerId);
   let energyPrice = findEnergyPrice(event.arcanaId, event.mode);
   const state = {
     state: "PLAY" as currentState,
@@ -134,18 +136,19 @@ export const startEndless = (event: IStartEndlessEvent, game: IGame): IGame => {
     },
   };
   const newPlayer: IPlayer = {
-    ...game.player,
-    energy: game.player.energy - energyPrice,
+    ...player,
+    energy: player.energy - energyPrice,
     currentState: state,
   };
-  return { ...game, player: newPlayer };
+  return { ...game, players: replacePlayer(game.players, newPlayer) };
 };
 
 export const passCheckpoint = (
   event: IPassCheckpointEvent,
   game: IGame
 ): IGame => {
-  const newArcanas = JSON.parse(JSON.stringify(game.player.arcanas));
+  const player = findPlayer(game, event.playerId);
+  const newArcanas = JSON.parse(JSON.stringify(player.arcanas));
   const eventIndex = event.mode === "run" ? 0 : 1;
   const newAllowedRewards = ensure(
     eventTowerRewards.find(
@@ -154,42 +157,40 @@ export const passCheckpoint = (
     )
   ).reward;
   // -1 allows us to cover a spread between level start and 0 trigger
-  const last = findLastCheckpoint(game.player, event.mode, event.arcanaId);
+  const last = findLastCheckpoint(player, event.mode, event.arcanaId);
   newArcanas[event.arcanaId].currentEvents[eventIndex].checkpoint = last + 1;
   newArcanas[event.arcanaId].currentEvents[eventIndex].allowedRewards =
     newAllowedRewards;
-  const newExperience = addExperience(event, game.player);
+  const newExperience = addExperience(event, player);
   const newPlayer: IPlayer = {
-    ...game.player,
+    ...player,
     arcanas: newArcanas,
     exprience: newExperience,
   };
-  return { ...game, player: newPlayer };
+  return { ...game, players: replacePlayer(game.players, newPlayer) };
 };
 
 export const missCheckpoint = (
   event: IMissCheckpointEvent,
   game: IGame
 ): IGame => {
-  const newMaterials = rewardPlayer(
-    event,
-    game.player.materials,
-    game.player.arcanas
-  );
+  const player = findPlayer(game, event.playerId);
+  const newMaterials = rewardPlayer(event, player.materials, player.arcanas);
   const newState = {
     state: "WINMATERIAL" as currentState,
     materials: newMaterials.new,
   };
   const newPlayer: IPlayer = {
-    ...game.player,
+    ...player,
     materials: newMaterials.all,
     currentState: newState,
   };
-  return { ...game, player: newPlayer };
+  return { ...game, players: replacePlayer(game.players, newPlayer) };
 };
 
 export const openSpell = (event: IOpenSpellEvent, game: IGame): IGame => {
-  const newPlayerSpells = JSON.parse(JSON.stringify(game.player.spells));
+  const player = findPlayer(game, event.playerId);
+  const newPlayerSpells = JSON.parse(JSON.stringify(player.spells));
   const indexToChange = newPlayerSpells.findIndex(
     (s: ISpellOpen | ISpellClosed | ISpell) =>
       s.arcanaId === event.arcanaId && s.id === event.spellId
@@ -198,7 +199,7 @@ export const openSpell = (event: IOpenSpellEvent, game: IGame): IGame => {
     throw new Error("Spell to open doesn't have a price");
   }
   let newMaterials = removeMaterials(
-    JSON.parse(JSON.stringify(game.player.materials)),
+    JSON.parse(JSON.stringify(player.materials)),
     newPlayerSpells[indexToChange].price
   );
 
@@ -225,16 +226,17 @@ export const openSpell = (event: IOpenSpellEvent, game: IGame): IGame => {
     console.warn(`Spell number${indexToChange} doesn't have updates in DB`);
   }
   const newPlayer: IPlayer = {
-    ...game.player,
+    ...player,
     materials: newMaterials,
     spells: newPlayerSpells,
     currentState: { state: "SPELLS" },
   };
-  return { ...game, player: newPlayer };
+  return { ...game, players: replacePlayer(game.players, newPlayer) };
 };
 
 export const updateSpell = (event: IUpdateSpellEvent, game: IGame): IGame => {
-  const newPlayerSpells = JSON.parse(JSON.stringify(game.player.spells));
+  const player = findPlayer(game, event.playerId);
+  const newPlayerSpells = JSON.parse(JSON.stringify(player.spells));
   const indexToChange = newPlayerSpells.findIndex(
     (s: ISpellOpen | ISpellClosed | ISpell) =>
       s.arcanaId === event.arcanaId && s.id === event.spellId
@@ -246,7 +248,7 @@ export const updateSpell = (event: IUpdateSpellEvent, game: IGame): IGame => {
     throw new Error("Spell to open doesn't have a required strength");
   }
   let newMaterials = removeMaterials(
-    JSON.parse(JSON.stringify(game.player.materials)),
+    JSON.parse(JSON.stringify(player.materials)),
     newPlayerSpells[indexToChange].updatePrice
   );
 
@@ -267,12 +269,12 @@ export const updateSpell = (event: IUpdateSpellEvent, game: IGame): IGame => {
     console.warn(`Spell number${indexToChange} doesn't have updates in DB`);
   }
   const newPlayer: IPlayer = {
-    ...game.player,
+    ...player,
     materials: newMaterials,
     spells: newPlayerSpells,
     currentState: { state: "SPELLS" },
   };
-  return { ...game, player: newPlayer };
+  return { ...game, players: replacePlayer(game.players, newPlayer) };
 };
 
 export const serverArenaStart = (
@@ -333,26 +335,28 @@ export const serverArenaEnd = (
   const newServer: IServer = JSON.parse(JSON.stringify(game.server));
   newServer.arenaRun.events.map((e: IArenaEvent) => {
     const result = detectWinners(e.results);
-    //TODO Add message for players to claim achivements
+    //TODO Add claim for players to claim achivements
+    //result.map((r: IArenaResult) => {});
   });
   return { ...game, server: newServer };
 };
 
 export const startArena = (event: IArenaStartEvent, game: IGame): IGame => {
+  const player = findPlayer(game, event.playerId);
   const newArena: IArena =
     event.mode === "run" ? game.server.arenaRun : game.server.arenaFight;
   const arenaEvent: IArenaEvent =
     event.mode === "run"
       ? game.server.arenaRun.events[event.index]
       : game.server.arenaFight.events[event.index];
-  const newMaterials = removeMaterials(game.player.materials, arenaEvent.stake);
+  const newMaterials = removeMaterials(player.materials, arenaEvent.stake);
   const newArenaEvent = updateRewardPool(arenaEvent, arenaEvent.stake);
   const newState = {
     state: "ARENAPLAY" as currentState,
     arena: { mode: event.mode, index: event.index, startTime: event.created },
   };
   const newPlayer = {
-    ...game.player,
+    ...player,
     materials: newMaterials,
     currentState: newState,
   };
@@ -364,13 +368,14 @@ export const startArena = (event: IArenaStartEvent, game: IGame): IGame => {
     arenaRunHistory: game.server.arenaRunHistory,
   };
   return {
-    player: newPlayer,
+    players: replacePlayer(game.players, newPlayer),
     server: newServer,
   };
 };
 
 export const endArena = (event: IArenaEndEvent, game: IGame): IGame => {
-  if (!game.player.currentState.arena?.startTime) {
+  const player = findPlayer(game, event.playerId);
+  if (!player.currentState.arena?.startTime) {
     throw new Error("Can't end arena event withouth the starting time");
   }
   const newArena: IArena =
@@ -380,10 +385,10 @@ export const endArena = (event: IArenaEndEvent, game: IGame): IGame => {
       ? game.server.arenaRun.events[event.index]
       : game.server.arenaFight.events[event.index];
   const resultTime = calculateResult(
-    game.player.currentState.arena?.startTime,
+    player.currentState.arena?.startTime,
     event.created
   );
-  const newArenaEvent = updateArenaResults(arenaEvent, resultTime, game.player);
+  const newArenaEvent = updateArenaResults(arenaEvent, resultTime, player);
   const newState: ICurrentState = {
     state: "ARENAEND" as currentState,
     arena: undefined,
@@ -394,7 +399,7 @@ export const endArena = (event: IArenaEndEvent, game: IGame): IGame => {
   };
   newArena.events[event.index] = newArenaEvent;
   const newPlayer = {
-    ...game.player,
+    ...player,
     currentState: newState,
   };
   newArena.events[event.index] = newArenaEvent;
@@ -405,7 +410,7 @@ export const endArena = (event: IArenaEndEvent, game: IGame): IGame => {
     arenaRunHistory: game.server.arenaRunHistory,
   };
   return {
-    player: newPlayer,
+    players: replacePlayer(game.players, newPlayer),
     server: newServer,
   };
 };

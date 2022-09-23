@@ -2,9 +2,9 @@ import * as events from "./events";
 import { IGame, IGameEvent, IPlayer, IServer } from "./types";
 
 export const applyEvent = (game: IGame, event: IGameEvent): IGame => {
-  let newPlayer: IPlayer = JSON.parse(JSON.stringify(game.player));
+  let newPlayers: IPlayer[] = JSON.parse(JSON.stringify(game.players));
   let newServer: IServer = JSON.parse(JSON.stringify(game.server));
-  let newGame: IGame = { player: newPlayer, server: newServer };
+  let newGame: IGame = { players: newPlayers, server: newServer };
   //console.log("Apply Event", event.type);
   switch (event.type) {
     case "CREATEPLAYER":
@@ -56,20 +56,23 @@ export const applyEvent = (game: IGame, event: IGameEvent): IGame => {
 export const applyEvents = (events: IGameEvent[]): IGame => {
   // Apply events assuming they are sorted
   let game: IGame = {
-    player: {
-      id: 0,
-      name: "",
-      exprience: 0,
-      energy: 0,
-      maxEnergy: 0,
-      loungeId: null,
-      materials: [],
-      arcanas: [],
-      spells: [],
-      missions: [],
-      messages: [],
-      currentState: { state: "MAIN" },
-    },
+    players: [
+      {
+        id: 0,
+        name: "",
+        exprience: 0,
+        energy: 0,
+        maxEnergy: 0,
+        loungeId: null,
+        materials: [],
+        arcanas: [],
+        spells: [],
+        missions: [],
+        messages: [],
+        claims: [],
+        currentState: { state: "MAIN" },
+      },
+    ],
     server: {
       arenaRun: { events: [], resultTime: 0, mode: "run" },
       arenaFight: { events: [], resultTime: 0, mode: "fight" },
