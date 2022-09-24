@@ -17,11 +17,16 @@ export const Game = ({
     throw new Error("No data in context");
   }
   const game = context.game;
-  const [gameType, setGameType] = useState<mainScreenState>("story");
 
   const close = () => {
     context.setGame(null);
-    setScreen(gameType);
+    if ("checkpoint" in game) {
+      setScreen("endless");
+    } else if ("stake" in game) {
+      setScreen("arena");
+    } else {
+      setScreen("story");
+    }
   };
 
   const endEndless = async (n: number | null) => {
@@ -33,15 +38,16 @@ export const Game = ({
         arcana: game.arcanaId,
         mode: game.mode,
       });
+      await context.mutate();
+      close();
     } else {
       await axios.post(`/api/players/${context.player.id}/passCheckpoint`, {
         arcana: game.arcanaId,
         mode: game.mode,
         checkpoint: n,
       });
+      await context.mutate();
     }
-    await context.mutate();
-    close();
   };
 
   const endArena = async () => {
@@ -73,7 +79,6 @@ export const Game = ({
 
   if ("stake" in context.game) {
     // This is Arena event
-    setGameType("arena");
     return (
       <div className="Game">
         <div className="CloseButton" onClick={close}>
@@ -86,8 +91,8 @@ export const Game = ({
   }
 
   if ("checkpoint" in context.game) {
+    console.log("arena");
     // This is Endless event
-    setGameType("endless");
     return (
       <div className="Game">
         <div className="CloseButton" onClick={close}>

@@ -3,8 +3,6 @@ import React, { useState } from "react";
 import { KeyedMutator } from "swr";
 // Types
 import {
-  IArena,
-  IArenaEvent,
   IArenaEventWithTime,
   IEvent,
   IPlayer,

@@ -1,10 +1,8 @@
-import { arenaFight, arenaRun } from "../db/testDBArena";
+import { arenaRun } from "../db/testDBArena";
 import { baseGame, basePlayer, baseServer } from "../db/testDBPlayer";
 import { serverArenaEnd, serverArenaStart } from "../engine/events";
 import {
   IArenaEvent,
-  IPlayer,
-  IServer,
   IServerArenaEndEvent,
   IServerArenaStartEvent,
 } from "../engine/types";

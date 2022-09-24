@@ -20,17 +20,14 @@ import {
   findPlayer,
   generateArenaRandom,
   replacePlayer,
-  rewardArenaPlayer,
   rewardArenaPlayers,
 } from "./helpers";
 
 import {
   currentState,
   gameMode,
-  IArena,
   IArenaEndEvent,
   IArenaEvent,
-  IArenaResult,
   IArenaStartEvent,
   ICreatePlayerEvent,
   ICurrentState,
@@ -69,7 +66,7 @@ export const createPlayer = (event: ICreatePlayerEvent, game: IGame): IGame => {
     }),
     arcanas: [JSON.parse(JSON.stringify(arcanas[0]))],
     materials: JSON.parse(JSON.stringify(materials)).map((m: IMaterial) => {
-      return { ...m, quantity: 0 };
+      return { ...m, quantity: 50 };
     }),
   };
   const newPlayers = game.players.concat([newPlayer]);
