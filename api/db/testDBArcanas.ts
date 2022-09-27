@@ -19,15 +19,15 @@ function ensure<T>(
 
 export const arcanas: IArcana[] = [
   {
-    arcanaName: "rings" as arcanaName,
+    arcanaName: "one" as arcanaName,
     id: 0,
-    characterName: "Saya",
+    characterName: "Character1",
     stories: [
       {
         id: 0,
         arcanaId: 0,
         level: "",
-        name: "Saya story 1",
+        name: "Character1 story1",
         mode: "story",
         state: "open",
         allowedRewards: ensure(
@@ -43,7 +43,7 @@ export const arcanas: IArcana[] = [
         id: 1,
         arcanaId: 0,
         level: "",
-        name: "Saya story 2",
+        name: "Character1 story2",
         mode: "story",
         state: "closed",
         allowedRewards: ensure(
@@ -59,7 +59,7 @@ export const arcanas: IArcana[] = [
         id: 2,
         arcanaId: 0,
         level: "",
-        name: "Saya story 3",
+        name: "Character1 story3",
         mode: "story",
         state: "closed",
         allowedRewards: ensure(
@@ -72,7 +72,7 @@ export const arcanas: IArcana[] = [
         energy: 5,
       },
     ],
-    legend: ["Saya story line 1", "Saya story line 2"],
+    legend: ["Char1 story line 1", "Char1 story line 2"],
     currentQuests: [],
     currentEvents: [
       {
@@ -103,15 +103,15 @@ export const arcanas: IArcana[] = [
     ],
   },
   {
-    arcanaName: "wands" as arcanaName,
+    arcanaName: "two" as arcanaName,
     id: 1,
-    characterName: "Nell",
+    characterName: "Character2",
     stories: [
       {
         id: 0,
         arcanaId: 1,
         level: "",
-        name: "Wands story 1",
+        name: "Character2 story1",
         mode: "story",
         state: "closed",
         allowedRewards: [
@@ -126,7 +126,7 @@ export const arcanas: IArcana[] = [
         id: 1,
         arcanaId: 1,
         level: "",
-        name: "Wands story 2",
+        name: "Character2 story2",
         mode: "story",
         state: "closed",
         allowedRewards: [
@@ -138,7 +138,7 @@ export const arcanas: IArcana[] = [
         experience: 10,
       },
     ],
-    legend: ["Nell story line 1", "Nell story line 2"],
+    legend: ["Char2 story line 1", "Char2 story line 2"],
     currentQuests: [],
     currentEvents: [
       {

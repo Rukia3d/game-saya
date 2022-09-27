@@ -12,6 +12,7 @@ import { PopUp } from "./PopUp";
 import { TopMenu } from "./TopMenu";
 import { IArenaEventWithTime, IEvent, IStory } from "../api/engine/types";
 import { Game } from "./Game";
+import { Legend } from "./Legend";
 
 export type mainScreenState =
   | "menus"
@@ -86,7 +87,7 @@ const mainScreens: MainScreensType = {
   spells: Spells,
   arena: Arena,
   game: Game,
-  legend: ComingSoon,
+  legend: Legend,
   inventory: ComingSoon,
   messages: ComingSoon,
   goals: ComingSoon,

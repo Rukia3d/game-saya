@@ -38,12 +38,12 @@ export const baseServer: IServer = {
 export const baseGame = { players: [basePlayer], server: baseServer };
 
 export const materials: IMaterial[] = [
-  { id: 0, name: "Coin" },
-  { id: 1, name: "Black Soul Stone" },
-  { id: 2, name: "White Soul Stone" },
-  { id: 3, name: "Rings" },
-  { id: 4, name: "Wands" },
-  { id: 5, name: "Swords" },
-  { id: 6, name: "Cups" },
-  { id: 7, name: "Dimonds" },
+  { id: 0, name: "money" },
+  { id: 1, name: "aliancerew1" },
+  { id: 2, name: "aliancerew2" },
+  { id: 3, name: "resource1" },
+  { id: 4, name: "resource2" },
+  { id: 5, name: "resource3" },
+  { id: 6, name: "resource4" },
+  { id: 7, name: "resource5" },
 ];

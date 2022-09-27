@@ -6,8 +6,8 @@ export const arenaRun: IArena = {
     {
       index: 0,
       stake: [
-        { id: 0, name: "Coin", quantity: 25 },
-        { id: 3, name: "Rings", quantity: 5 },
+        { id: 0, name: "money", quantity: 25 },
+        { id: 3, name: "resource1", quantity: 5 },
       ],
       level: "some",
       rewardPool: [],
@@ -17,8 +17,8 @@ export const arenaRun: IArena = {
     {
       index: 1,
       stake: [
-        { id: 0, name: "Coin", quantity: 50 },
-        { id: 3, name: "Rings", quantity: 15 },
+        { id: 0, name: "money", quantity: 50 },
+        { id: 3, name: "resource1", quantity: 15 },
       ],
       level: "some",
       rewardPool: [],
@@ -28,8 +28,8 @@ export const arenaRun: IArena = {
     {
       index: 2,
       stake: [
-        { id: 0, name: "Coin", quantity: 100 },
-        { id: 3, name: "Rings", quantity: 20 },
+        { id: 0, name: "money", quantity: 100 },
+        { id: 3, name: "resource1", quantity: 20 },
       ],
       level: "some",
       rewardPool: [],
@@ -46,8 +46,8 @@ export const arenaFight: IArena = {
     {
       index: 0,
       stake: [
-        { id: 0, name: "Coin", quantity: 25 },
-        { id: 3, name: "Rings", quantity: 5 },
+        { id: 0, name: "money", quantity: 25 },
+        { id: 3, name: "resource1", quantity: 5 },
       ],
       level: "some",
       rewardPool: [],
@@ -57,8 +57,8 @@ export const arenaFight: IArena = {
     {
       index: 1,
       stake: [
-        { id: 0, name: "Coin", quantity: 50 },
-        { id: 3, name: "Rings", quantity: 15 },
+        { id: 0, name: "money", quantity: 50 },
+        { id: 3, name: "resource1", quantity: 15 },
       ],
       level: "some",
       rewardPool: [],
@@ -68,8 +68,8 @@ export const arenaFight: IArena = {
     {
       index: 2,
       stake: [
-        { id: 0, name: "Coin", quantity: 100 },
-        { id: 3, name: "Rings", quantity: 20 },
+        { id: 0, name: "money", quantity: 100 },
+        { id: 3, name: "resource1", quantity: 20 },
       ],
       level: "some",
       rewardPool: [],

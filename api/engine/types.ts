@@ -36,7 +36,7 @@ export type ISpellOpen = ISpell & {
 
 export interface IMaterial {
   id: number;
-  name: string;
+  name: materialName;
 }
 
 export type IMaterialQuant = IMaterial & { quantity: number };
@@ -538,7 +538,16 @@ export type IPlayerArenaStartDB = {
   mode: gameMode;
 };
 
-export type arcanaName = "rings" | "cups" | "wands" | "swords" | "dimonds";
+export type arcanaName = "one" | "two" | "three" | "four" | "five";
+export type materialName =
+  | "money"
+  | "aliancerew1"
+  | "aliancerew2"
+  | "resource1"
+  | "resource2"
+  | "resource3"
+  | "resource4"
+  | "resource5";
 export type spellState = "closed" | "open" | "listed";
 export type questState = "open" | "rented" | "new";
 export type gameMode = "story" | "quest" | "run" | "fight";
@@ -550,9 +559,7 @@ export type currentState =
   | "SPELLS"
   | "WINMATERIAL"
   | "ARENAPLAY";
-export type eventType = genericEventType | playerEventType;
-export type genericEventType = "CREATEARENARUN";
-export type playerEventType =
+export type eventType =
   | "CREATEPLAYER"
   | "STARTLEVEL"
   | "WINLEVEL"

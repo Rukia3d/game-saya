@@ -290,7 +290,7 @@ export const serverArenaStart = (
     return {
       index: n,
       stake: [
-        { id: 0, name: "Coin", quantity: 25 * (n + 1) },
+        { id: 0, name: "money", quantity: 25 * (n + 1) },
         { ...randResource, quantity: 5 * (n + 1) },
       ],
       level: "some",
@@ -305,7 +305,7 @@ export const serverArenaStart = (
     return {
       index: n,
       stake: [
-        { id: 0, name: "Coin", quantity: 25 * (n + 1) },
+        { id: 0, name: "money", quantity: 25 * (n + 1) },
         { ...randResource, quantity: 5 * (n + 1) },
       ],
       level: "some",
