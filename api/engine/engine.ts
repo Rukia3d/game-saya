@@ -5,7 +5,7 @@ export const applyEvent = (game: IGame, event: IGameEvent): IGame => {
   let newPlayers: IPlayer[] = JSON.parse(JSON.stringify(game.players));
   let newServer: IServer = JSON.parse(JSON.stringify(game.server));
   let newGame: IGame = { players: newPlayers, server: newServer };
-  //console.log("Apply Event", event.type);
+  console.log("Apply Event", event.type);
   switch (event.type) {
     case "CREATEPLAYER":
       newGame = events.createPlayer(
@@ -52,6 +52,8 @@ export const applyEvent = (game: IGame, event: IGameEvent): IGame => {
     case "ARENAEND":
       newGame = events.endArena(event, newGame);
       break;
+    default:
+      throw new Error("Unknown event type");
   }
   return newGame;
 };

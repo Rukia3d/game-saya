@@ -44,13 +44,15 @@ export const splitPool = (
 ): IArenaResultPool[] => {
   let reward: IArenaResultPool[] = [];
   for (let i = 0; i < 3; i++) {
-    const players = groups[i];
+    const results = groups[i];
+    console.log("results", results);
+    const n = results.length;
     let percent = 0.2;
     if (i == 0) percent = 0.5;
     if (i == 1) percent = 0.3;
     reward.push({
       place: i + 1,
-      reward: getRewardPerPlace(percent, pool, players.length),
+      reward: getRewardPerPlace(percent, pool, n),
     });
   }
   return reward;

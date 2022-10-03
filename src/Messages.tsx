@@ -2,11 +2,13 @@ import { useContext } from "react";
 import { IMessage } from "../api/engine/types";
 import { GameContext } from "./App";
 import { mainScreenState } from "./Main";
+import { PopUp } from "./PopUp";
+import { TopMenu } from "./TopMenu";
 
 export const Message = ({ message }: { message: IMessage }) => {
   return (
     <div className="Message">
-      <p>{message.text}</p>
+      <button>{message.header}</button>
     </div>
   );
 };
@@ -28,13 +30,18 @@ export const Messages = ({
   const messages = context.player.messages;
   return (
     <div className="Messages">
-      {messages.length > 0 ? (
-        messages.map((m: IMessage, i: number) => (
-          <Message message={m} key={i} />
-        ))
-      ) : (
-        <p>No incoming messages</p>
-      )}
+      <TopMenu />
+      <PopUp close={() => setScreen("menus")}>
+        <div className="MessageItems">
+          {messages.length > 0 ? (
+            messages.map((m: IMessage, i: number) => (
+              <Message message={m} key={i} />
+            ))
+          ) : (
+            <p>No incoming messages</p>
+          )}
+        </div>
+      </PopUp>
     </div>
   );
 };

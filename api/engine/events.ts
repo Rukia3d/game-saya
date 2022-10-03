@@ -199,7 +199,7 @@ export const openSpell = (event: IOpenSpellEvent, game: IGame): IGame => {
     (s: ISpellOpen | ISpellClosed | ISpell) =>
       s.arcanaId === event.arcanaId && s.id === event.spellId
   );
-  if (!newPlayerSpells[indexToChange].price) {
+  if (!("price" in newPlayerSpells[indexToChange])) {
     throw new Error("Spell to open doesn't have a price");
   }
   let newMaterials = removeMaterials(
@@ -295,9 +295,10 @@ export const listSpell = (event: IListSpellEvent, game: IGame): IGame => {
     currency: event.currency,
     owner: event.playerId,
   };
+  newPlayerSpells.splice(indexToRemove, 1);
   const newPlayer: IPlayer = {
     ...player,
-    spells: newPlayerSpells.splice(indexToRemove, 1),
+    spells: newPlayerSpells,
     currentState: { state: "SPELLS" },
   };
 
@@ -366,9 +367,11 @@ export const serverArenaEnd = (
   const newServer: IServer = JSON.parse(JSON.stringify(game.server));
   let newPlayers: IPlayer[] = JSON.parse(JSON.stringify(game.players));
   newServer.arenaRun.events.map((e: IArenaEvent) => {
-    const result = detectWinners(e.results);
-    const reward = splitPool(result, e.rewardPool);
-    newPlayers = rewardArenaPlayers(game, result, reward);
+    if (e.results.length > 0) {
+      const result = detectWinners(e.results);
+      const reward = splitPool(result, e.rewardPool);
+      newPlayers = rewardArenaPlayers(game, result, reward);
+    }
   });
   return { players: newPlayers, server: newServer };
 };

@@ -290,7 +290,7 @@ export const openSpellEvent = (
     (s: ISpellOpen | ISpellClosed | ISpell) =>
       s.arcanaId === event.data.arcanaId && s.id === event.data.spellId
   );
-  if (!newPlayerSpells[indexToChange].price) {
+  if (!("price" in newPlayerSpells[indexToChange])) {
     throw new Error("Spell to open doesn't have a price");
   }
   if (enoughToPay(player.materials, newPlayerSpells[indexToChange].price)) {
@@ -380,7 +380,10 @@ export const listSpellEvent = (
   const indexToRemove = newPlayerSpells.findIndex(
     (s: ISpellOpen | ISpellClosed | ISpell) => s.id === event.data.spellId
   );
-  if (indexToRemove && "updatePrice" in newPlayerSpells[indexToRemove]) {
+  console.log("listSpellEvent");
+  console.log("indexToRemove", indexToRemove);
+  console.log("newPlayerSpells[indexToRemove]", newPlayerSpells[indexToRemove]);
+  if (indexToRemove >= 0 && "updatePrice" in newPlayerSpells[indexToRemove]) {
     const newEvent: IEventDB = {
       eventId: nextCreateEventId,
       type: "LISTSPELL" as eventType,

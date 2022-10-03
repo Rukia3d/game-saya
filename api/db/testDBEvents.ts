@@ -50,7 +50,7 @@ export const allGameEvents: IEventDB[] = [
   { eventId: 11, type: "PASSCHECKPOINT", created: 1654348796 },
   { eventId: 12, type: "PASSCHECKPOINT", created: 1654348800 },
   { eventId: 13, type: "MISSCHECKPOINT", created: 1654348830 },
-  { eventId: 14, type: "LISTSPELL", created: 1654348830 },
+  { eventId: 14, type: "LISTSPELL", created: 1654348831 },
 ];
 
 export const createPlayerEvents: ICreatePlayerDB[] = [

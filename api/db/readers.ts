@@ -122,6 +122,9 @@ export const playerEvents = (): IGameEvent[] => {
       case "UPDATESPELL":
         newEvents.push(updateSpellEvent(e));
         break;
+      case "LISTSPELL":
+        newEvents.push(listSpellEvent(e));
+        break;
       case "STARTENDLESS":
         newEvents.push(startEndlessEvent(e));
         break;
@@ -134,12 +137,17 @@ export const playerEvents = (): IGameEvent[] => {
       case "SERVERARENASTART":
         newEvents.push(serverArenaStartEvent(e));
         break;
+      case "SERVERARENAEND":
+        newEvents.push(serverArenaEndEvent(e));
+        break;
       case "ARENASTART":
         newEvents.push(startArenaEvent(e));
         break;
       case "ARENAEND":
         newEvents.push(endArenaEvent(e));
         break;
+      default:
+        throw new Error(`Can't find type ${e.type} in player events`);
     }
   });
 

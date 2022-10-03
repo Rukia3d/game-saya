@@ -57,6 +57,8 @@ const SpellCreateListing = ({
       price: inputs.price,
       currency: inputs.currency,
     });
+    await context.mutate();
+    setSpell(null);
   };
 
   return (
