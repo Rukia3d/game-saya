@@ -1,12 +1,9 @@
-import {
-  baseGame,
-  basePlayer,
-  baseServer,
-  materials,
-} from "../db/testDBPlayer";
+import { basePlayer, baseServer, materials } from "../db/testDBPlayer";
 import { spells } from "../db/testDBSpells";
 import * as events from "../engine/events";
 import { IGame, IMaterial, IMaterialQuant } from "../engine/types";
+
+const BASEQUANTITY = 50;
 
 test("eventCreatePlayer for player 1", async () => {
   const res: IGame = events.createPlayer(
@@ -24,9 +21,9 @@ test("eventCreatePlayer for player 1", async () => {
   expect(res.players[0].energy).toEqual(50);
   expect(res.players[0].exprience).toEqual(0);
   expect(res.players[0].arcanas.length).toEqual(1);
-  expect(res.players[0].materials.length).toEqual(8);
+  expect(res.players[0].materials.length).toEqual(7);
   res.players[0].materials.forEach((r: IMaterialQuant) =>
-    expect(r.quantity).toEqual(0)
+    expect(r.quantity).toEqual(BASEQUANTITY)
   );
   expect(res.players[0].arcanas[0].stories.length).toEqual(3);
   expect(res.players[0].arcanas[0].stories[0].state).toEqual("open");
@@ -109,4 +106,55 @@ test("openSpell for player 1", async () => {
     )
   ).toThrow("Spell to open doesn't have a price");
   jest.restoreAllMocks();
+});
+
+test("listSpell for player 1", async () => {
+  const playerSpells = [
+    {
+      ...spells[0],
+      price: [
+        { ...materials[0], quantity: 5 },
+        { ...materials[1], quantity: 7 },
+      ],
+      updatePrice: [
+        { ...materials[0], quantity: 3 },
+        { ...materials[2], quantity: 3 },
+      ],
+      requiredStrength: 2,
+    },
+    {
+      ...spells[1],
+      price: [
+        { ...materials[0], quantity: 3 },
+        { ...materials[2], quantity: 3 },
+      ],
+    },
+  ];
+
+  const res: IGame = events.listSpell(
+    {
+      eventId: 0,
+      spellId: 0,
+      playerId: 1,
+      created: new Date().valueOf(),
+      type: "LISTSPELL",
+      price: 0.02,
+      currency: "ETH",
+    },
+    {
+      players: [
+        {
+          ...basePlayer,
+          id: 1,
+          spells: playerSpells,
+        },
+      ],
+      server: baseServer,
+    }
+  );
+
+  expect(res.server.listings.length).toEqual(1);
+  expect(res.server.listings[0].spellId).toEqual(0);
+  expect(res.server.listings[0].owner).toEqual(1);
+  expect(res.server.listings[0].currency).toEqual("ETH");
 });

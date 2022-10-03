@@ -10,8 +10,9 @@ export interface ISpell {
 
 export type ISpellListing = {
   spellId: number;
-  spellarcanaId: number;
+  spell: ISpellOpen;
   price: number;
+  currency: "ETH" | "USDC" | "TOKEN";
   owner: number;
 };
 
@@ -127,13 +128,6 @@ export interface IArenaResult {
   time: number;
 }
 
-export interface IMessage {
-  header: string;
-  text: string;
-  read: boolean;
-  reward?: IMaterial[];
-}
-
 export interface IMission {
   name: string;
   reward: IMaterial;
@@ -165,6 +159,7 @@ export interface IServer {
   arenaFight: IArena;
   arenaRunHistory: IArena[];
   arenaFightHistory: IArena[];
+  listings: ISpellListing[];
 }
 
 export interface IGame {
@@ -188,14 +183,22 @@ export interface IPlayer {
   arcanas: IArcana[];
   spells: (ISpellOpen | ISpellClosed | ISpell)[];
   missions: [];
-  messages: [];
+  messages: IMessage[];
   currentState: ICurrentState;
   claims: IClaimReward[];
 }
 
+export interface IMessage {
+  header: string;
+  text: string;
+  read: boolean;
+  claimId?: number;
+}
+
 export interface IClaimReward {
+  id: number;
   prize: IMaterialQuant[];
-  state: "claimed" | "unclaimed";
+  claimed: boolean;
 }
 
 export type IServerEvent = {
@@ -211,6 +214,7 @@ export type IGameEvent =
   | IWinLevelEvent
   | IOpenSpellEvent
   | IUpdateSpellEvent
+  | IListSpellEvent
   | IStartEndlessEvent
   | IPassCheckpointEvent
   | IMissCheckpointEvent
@@ -359,6 +363,36 @@ export type IUpdateSpellEvent = {
   created: number;
   type: "UPDATESPELL";
   arcanaId: number;
+  spellId: number;
+};
+
+// LISTSPELL
+export type IListSpellDB = {
+  eventId: number;
+  playerId: number;
+  spellId: number;
+  currency: "ETH" | "USDC" | "TOKEN";
+  price: number;
+};
+
+export type IListSpellData = {
+  playerId: number;
+  created: number;
+  type: "LISTSPELL";
+  data: {
+    spellId: number;
+    price: number;
+    currency: "ETH" | "USDC" | "TOKEN";
+  };
+};
+
+export type IListSpellEvent = {
+  playerId: number;
+  eventId: number;
+  created: number;
+  type: "LISTSPELL";
+  price: number;
+  currency: "ETH" | "USDC" | "TOKEN";
   spellId: number;
 };
 
@@ -541,8 +575,7 @@ export type IPlayerArenaStartDB = {
 export type arcanaName = "one" | "two" | "three" | "four" | "five";
 export type materialName =
   | "money"
-  | "aliancerew1"
-  | "aliancerew2"
+  | "token"
   | "resource1"
   | "resource2"
   | "resource3"
@@ -565,6 +598,7 @@ export type eventType =
   | "WINLEVEL"
   | "OPENSPELL"
   | "UPDATESPELL"
+  | "LISTSPELL"
   | "STARTENDLESS"
   | "PASSCHECKPOINT"
   | "MISSCHECKPOINT"

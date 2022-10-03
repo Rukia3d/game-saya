@@ -16,8 +16,7 @@ export const spellUpdates: ISpellUpdate[] = [
     updatePrice: [
       { id: 0, name: "money", quantity: 50000 },
       { id: 3, name: "resource1", quantity: 5000 },
-      { id: 1, name: "aliancerew1", quantity: 500 },
-      { id: 2, name: "aliancerew2", quantity: 1000 },
+      { id: 1, name: "token", quantity: 500 },
     ],
     requiredStrength: 2,
   },
@@ -27,8 +26,7 @@ export const spellUpdates: ISpellUpdate[] = [
     updatePrice: [
       { id: 0, name: "money", quantity: 5000 },
       { id: 3, name: "resource1", quantity: 500 },
-      { id: 1, name: "aliancerew1", quantity: 50 },
-      { id: 2, name: "aliancerew2", quantity: 100 },
+      { id: 1, name: "token", quantity: 50 },
     ],
     requiredStrength: 1,
   },
@@ -38,8 +36,7 @@ export const spellUpdates: ISpellUpdate[] = [
     updatePrice: [
       { id: 0, name: "money", quantity: 50000 },
       { id: 3, name: "resource1", quantity: 5000 },
-      { id: 1, name: "aliancerew1", quantity: 500 },
-      { id: 2, name: "aliancerew2", quantity: 1000 },
+      { id: 1, name: "token", quantity: 500 },
     ],
     requiredStrength: 2,
   },
@@ -60,7 +57,7 @@ export const spellPrices: ISpellPrice[] = [
     price: [
       { id: 0, name: "money", quantity: 500 },
       { id: 3, name: "resource1", quantity: 10 },
-      { id: 1, name: "aliancerew1", quantity: 1 },
+      { id: 1, name: "token", quantity: 1 },
     ],
   },
   {
@@ -77,7 +74,7 @@ export const spellPrices: ISpellPrice[] = [
     price: [
       { id: 0, name: "money", quantity: 500 },
       { id: 4, name: "resource2", quantity: 10 },
-      { id: 1, name: "aliancerew1", quantity: 1 },
+      { id: 1, name: "token", quantity: 1 },
     ],
   },
 ];

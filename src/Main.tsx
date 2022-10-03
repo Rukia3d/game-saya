@@ -13,6 +13,10 @@ import { TopMenu } from "./TopMenu";
 import { IArenaEventWithTime, IEvent, IStory } from "../api/engine/types";
 import { Game } from "./Game";
 import { Legend } from "./Legend";
+import { Inventory } from "./Inventory";
+import { Messages } from "./Messages";
+import { Goals } from "./Goals";
+import { Agora } from "./Agora";
 
 export type mainScreenState =
   | "menus"
@@ -88,10 +92,10 @@ const mainScreens: MainScreensType = {
   arena: Arena,
   game: Game,
   legend: Legend,
-  inventory: ComingSoon,
-  messages: ComingSoon,
-  goals: ComingSoon,
-  agora: ComingSoon,
+  inventory: Inventory,
+  messages: Messages,
+  goals: Goals,
+  agora: Agora,
   aliance: ComingSoon,
   additional: ComingSoon,
   quest: ComingSoon,
@@ -189,7 +193,7 @@ export const CenterMenu = ({
       {[0, 1, 2, 3].map((n: number) => (
         <div className="Adventure" key={n}>
           {n < context.player.arcanas.length && n !== arcana ? (
-            <button onClick={() => setArcana(n)}>Adventure</button>
+            <button onClick={() => setArcana(n)}>Show adventure</button>
           ) : null}
           {n === arcana ? <div>This selected</div> : null}
           {n >= context.player.arcanas.length ? <div>This empty</div> : null}

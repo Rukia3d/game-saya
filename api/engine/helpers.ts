@@ -297,7 +297,7 @@ export const replacePlayer = (
   allPlayers: IPlayer[],
   newPlayer: IPlayer
 ): IPlayer[] => {
-  const newPlayers = JSON.parse(JSON.stringify(allPlayers));
+  const newPlayers: IPlayer[] = JSON.parse(JSON.stringify(allPlayers));
   const indexOfNewPlayer = allPlayers.findIndex(
     (p: IPlayer) => p.id === newPlayer.id
   );
@@ -310,12 +310,21 @@ export const replacePlayer = (
 
 export const rewardArenaPlayer = (
   player: IPlayer,
-  reward: IMaterialQuant[]
+  reward: IMaterialQuant[],
+  place: number
 ) => {
-  const newPlayer = JSON.parse(JSON.stringify(player));
+  const newPlayer: IPlayer = JSON.parse(JSON.stringify(player));
+  const newId = newPlayer.claims.length;
   newPlayer.claims.push({
+    id: newId,
     prize: reward,
-    state: "unclaimed",
+    claimed: false,
+  });
+  newPlayer.messages.push({
+    header: "Claim arena reward",
+    text: `Congratulations on winning ${place} place reward at Arena`,
+    read: false,
+    claimId: newId,
   });
   return newPlayer;
 };
@@ -329,7 +338,7 @@ export const rewardArenaPlayers = (
   for (let i = 0; i < 3; i++) {
     result[i].forEach((r: IArenaResult) => {
       const player = findPlayer(game, r.playerId);
-      const newPlayer = rewardArenaPlayer(player, reward[i].reward);
+      const newPlayer = rewardArenaPlayer(player, reward[i].reward, i);
       newPlayers = replacePlayer(newPlayers, newPlayer);
     });
   }

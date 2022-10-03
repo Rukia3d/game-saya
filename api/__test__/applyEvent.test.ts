@@ -36,9 +36,11 @@ const baseServer: IServer = {
   arenaFight: { events: [], resultTime: 0, mode: "fight" },
   arenaRunHistory: [],
   arenaFightHistory: [],
+  listings: [],
 };
 
 const LASTEVENTID = readers.gameEvents().length - 1;
+const BASEQUANTITY = 50;
 
 test("Applies a single event correctly", () => {
   const newPlayer = { ...basePlayer, arcanas: arcanas };
@@ -129,7 +131,9 @@ test("Applies a series of events correctly", () => {
   expect(currentGame.players[0].arcanas[0].stories[0].state).toEqual(
     "complete"
   );
-  expect(currentGame.players[0].materials[0].quantity).toEqual(20);
+  expect(currentGame.players[0].materials[0].quantity).toEqual(
+    BASEQUANTITY + 20
+  );
 
   currentGame = startLevel(
     {
@@ -162,7 +166,9 @@ test("Applies a series of events correctly", () => {
   expect(currentGame.players[0].exprience).toEqual(20);
   expect(currentGame.players[0].currentState.state).toEqual("WINMATERIAL");
   expect(currentGame.players[0].currentState.materials?.length).toEqual(3);
-  expect(currentGame.players[0].materials[0].quantity).toEqual(38);
+  expect(currentGame.players[0].materials[0].quantity).toEqual(
+    BASEQUANTITY + 38
+  );
   expect(currentGame.players[0].arcanas[0].stories[1].state).toEqual(
     "complete"
   );
@@ -234,7 +240,9 @@ test("Applies a series of events correctly", () => {
   );
   expect(currentGame.players[0].currentState.state).toEqual("WINMATERIAL");
   expect(currentGame.players[0].currentState.materials?.length).toEqual(2);
-  expect(currentGame.players[0].materials[0].quantity).toEqual(42);
+  expect(currentGame.players[0].materials[0].quantity).toEqual(
+    BASEQUANTITY + 42
+  );
 
   currentGame = openSpell(
     {
@@ -278,7 +286,9 @@ test("Applies a series of events correctly", () => {
   );
   // TEST PLAYER may not have enough resources but they will pass checks
   expect(currentGame.server.arenaRun.events[0].rewardPool.length).toEqual(2);
-  expect(currentGame.players[0].materials[0].quantity).toEqual(7);
+  expect(currentGame.players[0].materials[0].quantity).toEqual(
+    BASEQUANTITY + 7
+  );
 
   currentGame = endArena(
     {

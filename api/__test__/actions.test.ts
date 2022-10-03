@@ -9,7 +9,12 @@ import {
   updateArenaResults,
   updateRewardPool,
 } from "../engine/actions";
-import { IMaterial, IMaterialQuant, IPlayer } from "../engine/types";
+import {
+  IMaterial,
+  IMaterialQuant,
+  IPlayer,
+  materialName,
+} from "../engine/types";
 
 const basePlayer: IPlayer = {
   id: 1,
@@ -47,9 +52,9 @@ test("rewardPlayer generates correct rewards", async () => {
     playerMaterials,
     playerCharacters
   );
-  expect(res.all[0].name).toEqual("Coin");
+  expect(res.all[0].name).toEqual("money");
   expect(res.all[0].quantity).toEqual(11);
-  expect(res.all[3].name).toEqual("Rings");
+  expect(res.all[3].name).toEqual("resource2");
   expect(res.all[3].quantity).toEqual(5);
   // Rewards are added 2nd time to the same materials (level replayed)
   playerCharacters[0].stories[0].state = "complete";
@@ -155,8 +160,8 @@ test("Removes materials correctly", async () => {
 test("Updates rewards pool when a player joins", () => {
   const arenaEvent = JSON.parse(JSON.stringify(arenaRun.events[1]));
   const stake = [
-    { id: 0, name: "Coin", quantity: 50 },
-    { id: 3, name: "Rings", quantity: 15 },
+    { id: 0, name: "money" as materialName, quantity: 50 },
+    { id: 3, name: "resource1" as materialName, quantity: 15 },
   ];
   const oneStakeEvent = updateRewardPool(arenaEvent, stake);
   expect(oneStakeEvent.rewardPool.length).toEqual(2);

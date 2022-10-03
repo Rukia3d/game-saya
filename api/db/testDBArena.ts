@@ -84,4 +84,5 @@ export const serverGames: IServer = {
   arenaFight: arenaFight,
   arenaRunHistory: [],
   arenaFightHistory: [],
+  listings: [],
 };

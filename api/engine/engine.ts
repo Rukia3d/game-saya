@@ -28,6 +28,9 @@ export const applyEvent = (game: IGame, event: IGameEvent): IGame => {
     case "UPDATESPELL":
       newGame = events.updateSpell(event, newGame);
       break;
+    case "LISTSPELL":
+      newGame = events.listSpell(event, newGame);
+      break;
     case "STARTENDLESS":
       newGame = events.startEndless(event, newGame);
       break;
@@ -78,6 +81,7 @@ export const applyEvents = (events: IGameEvent[]): IGame => {
       arenaFight: { events: [], resultTime: 0, mode: "fight" },
       arenaRunHistory: [],
       arenaFightHistory: [],
+      listings: [],
     },
   };
   for (let i = 0; i < events.length; i++) {

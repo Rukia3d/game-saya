@@ -25,6 +25,8 @@ import {
   IArenaStartDB,
   IArenaEndEvent,
   IArenaEndDB,
+  IListSpellEvent,
+  IListSpellDB,
 } from "../engine/types";
 import {
   allGameEvents,
@@ -40,6 +42,7 @@ import {
   serverArenaEndEvents,
   startArenaEvents,
   endArenaEvents,
+  listSpellEvents,
 } from "./testDBEvents";
 
 export const gameEvents = (): IEventDB[] => {
@@ -68,6 +71,10 @@ export const allOpenSpellEvents = () => {
 
 export const allUpdateSpellEvents = () => {
   return updateSpellEvents;
+};
+
+export const allListSpellEvents = () => {
+  return listSpellEvents;
 };
 
 export const allPassCheckpointEvents = () => {
@@ -223,7 +230,24 @@ export const updateSpellEvent = (event: IEventDB): IUpdateSpellEvent => {
     created: event.created,
     type: "UPDATESPELL",
     arcanaId: updateSpell.arcanaId,
-    spellId: updateSpell.arcanaId,
+    spellId: updateSpell.spellId,
+  };
+};
+
+export const listSpellEvent = (event: IEventDB): IListSpellEvent => {
+  const listSpell = ensure(
+    allListSpellEvents().find((e: IListSpellDB) => e.eventId == event.eventId),
+    "No list spell event"
+  );
+
+  return {
+    playerId: listSpell.playerId,
+    eventId: event.eventId,
+    created: event.created,
+    type: "LISTSPELL",
+    spellId: listSpell.spellId,
+    currency: listSpell.currency,
+    price: listSpell.price,
   };
 };
 

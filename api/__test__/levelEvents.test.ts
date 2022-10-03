@@ -24,6 +24,7 @@ const baseServer: IServer = {
   arenaFight: arenaFight,
   arenaRunHistory: [],
   arenaFightHistory: [],
+  listings: [],
 };
 const game: IGame = { players: [], server: baseServer };
 

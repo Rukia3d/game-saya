@@ -46,14 +46,14 @@ test("splitPool works correctly with a simple array", () => {
     [{ playerName: "Winner 4", playerId: 4, time: 20000000 }],
   ];
   const rewards: IMaterialQuant[] = [
-    { id: 0, name: "Coin", quantity: 100 },
-    { id: 3, name: "Rings", quantity: 25 },
-    { id: 5, name: "Swords", quantity: 7 },
+    { id: 0, name: "money", quantity: 100 },
+    { id: 3, name: "resource1", quantity: 25 },
+    { id: 5, name: "resource3", quantity: 7 },
   ];
   const res = splitPool(winners, rewards);
   expect(res[0].place).toEqual(1);
   expect(res[0].reward.length).toEqual(3);
-  expect(res[0].reward[0].name).toEqual("Coin");
+  expect(res[0].reward[0].name).toEqual("money");
   expect(res[0].reward[0].quantity).toEqual(50);
   expect(res[0].reward[1].quantity).toEqual(12);
   expect(res[0].reward[2].quantity).toEqual(3);
@@ -76,14 +76,14 @@ test("splitPool works correctly with a double winner", () => {
     [{ playerName: "Winner 5", playerId: 5, time: 20000000 }],
   ];
   const rewards: IMaterialQuant[] = [
-    { id: 0, name: "Coin", quantity: 100 },
-    { id: 3, name: "Rings", quantity: 25 },
-    { id: 5, name: "Swords", quantity: 7 },
+    { id: 0, name: "money", quantity: 100 },
+    { id: 3, name: "resource1", quantity: 25 },
+    { id: 5, name: "resource3", quantity: 7 },
   ];
   const res = splitPool(winners, rewards);
   expect(res[0].place).toEqual(1);
   expect(res[0].reward.length).toEqual(3);
-  expect(res[0].reward[0].name).toEqual("Coin");
+  expect(res[0].reward[0].name).toEqual("money");
   expect(res[0].reward[0].quantity).toEqual(50);
   expect(res[0].reward[1].quantity).toEqual(12);
   expect(res[0].reward[2].quantity).toEqual(3);

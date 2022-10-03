@@ -3,6 +3,7 @@ import {
   IArenaStartDB,
   ICreatePlayerDB,
   IEventDB,
+  IListSpellDB,
   IMissCheckpointDB,
   IOpenSpellDB,
   IPassCheckpointDB,
@@ -49,6 +50,7 @@ export const allGameEvents: IEventDB[] = [
   { eventId: 11, type: "PASSCHECKPOINT", created: 1654348796 },
   { eventId: 12, type: "PASSCHECKPOINT", created: 1654348800 },
   { eventId: 13, type: "MISSCHECKPOINT", created: 1654348830 },
+  { eventId: 14, type: "LISTSPELL", created: 1654348830 },
 ];
 
 export const createPlayerEvents: ICreatePlayerDB[] = [
@@ -79,6 +81,16 @@ export const updateSpellEvents: IUpdateSpellDB[] = [
     eventId: 9,
     arcanaId: 0,
     spellId: 0,
+  },
+];
+
+export const listSpellEvents: IListSpellDB[] = [
+  {
+    playerId: 1,
+    eventId: 14,
+    spellId: 0,
+    price: 0.025,
+    currency: "ETH",
   },
 ];
 

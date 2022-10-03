@@ -33,6 +33,7 @@ import {
   ICurrentState,
   IEventReward,
   IGame,
+  IListSpellEvent,
   IMaterial,
   IMissCheckpointEvent,
   IOpenSpellEvent,
@@ -43,6 +44,7 @@ import {
   IServerArenaStartEvent,
   ISpell,
   ISpellClosed,
+  ISpellListing,
   ISpellOpen,
   ISpellPrice,
   ISpellUpdate,
@@ -51,6 +53,8 @@ import {
   IUpdateSpellEvent,
   IWinLevelEvent,
 } from "./types";
+
+const INDEXOFFIRSTREWARDABLE = 2;
 
 export const createPlayer = (event: ICreatePlayerEvent, game: IGame): IGame => {
   const newPlayer: IPlayer = {
@@ -277,6 +281,33 @@ export const updateSpell = (event: IUpdateSpellEvent, game: IGame): IGame => {
   return { ...game, players: replacePlayer(game.players, newPlayer) };
 };
 
+export const listSpell = (event: IListSpellEvent, game: IGame): IGame => {
+  const player = findPlayer(game, event.playerId);
+  const server = JSON.parse(JSON.stringify(game.server));
+  const newPlayerSpells = JSON.parse(JSON.stringify(player.spells));
+  const indexToRemove = newPlayerSpells.findIndex(
+    (s: ISpellOpen | ISpellClosed | ISpell) => s.id === event.spellId
+  );
+  const newListing: ISpellListing = {
+    spellId: event.spellId,
+    spell: newPlayerSpells[indexToRemove],
+    price: event.price,
+    currency: event.currency,
+    owner: event.playerId,
+  };
+  const newPlayer: IPlayer = {
+    ...player,
+    spells: newPlayerSpells.splice(indexToRemove, 1),
+    currentState: { state: "SPELLS" },
+  };
+
+  const newServer = {
+    ...server,
+    listings: server.listings.concat([newListing]),
+  };
+  return { server: newServer, players: replacePlayer(game.players, newPlayer) };
+};
+
 export const serverArenaStart = (
   event: IServerArenaStartEvent,
   game: IGame
@@ -286,7 +317,7 @@ export const serverArenaStart = (
   newServer.arenaRunHistory.push(game.server.arenaRun);
   const eventsRun: IArenaEvent[] = [0, 1, 2].map((n: number) => {
     const reward = generateArenaRandom(event, "run", 4, n);
-    const randResource = materials[reward + 3];
+    const randResource = materials[reward + INDEXOFFIRSTREWARDABLE];
     return {
       index: n,
       stake: [
@@ -301,7 +332,7 @@ export const serverArenaStart = (
   });
   const eventsFight: IArenaEvent[] = [0, 1, 2].map((n: number) => {
     const reward = generateArenaRandom(event, "fight", 4, n);
-    const randResource = materials[reward + 3];
+    const randResource = materials[reward + INDEXOFFIRSTREWARDABLE];
     return {
       index: n,
       stake: [
@@ -362,6 +393,7 @@ export const startArena = (event: IArenaStartEvent, game: IGame): IGame => {
     arenaRun: event.mode === "run" ? newArena : game.server.arenaRun,
     arenaFightHistory: game.server.arenaFightHistory,
     arenaRunHistory: game.server.arenaRunHistory,
+    listings: game.server.listings,
   };
   return {
     players: replacePlayer(game.players, newPlayer),
@@ -399,6 +431,7 @@ export const endArena = (event: IArenaEndEvent, game: IGame): IGame => {
     arenaRun: event.mode === "run" ? newArena : game.server.arenaRun,
     arenaFightHistory: game.server.arenaFightHistory,
     arenaRunHistory: game.server.arenaRunHistory,
+    listings: game.server.listings,
   };
   return {
     players: replacePlayer(game.players, newPlayer),

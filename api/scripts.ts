@@ -6,6 +6,7 @@ import {
   IArenaEndData,
   IArenaStartData,
   ICreatePlayerData,
+  IListSpellData,
   IMissCheckpointData,
   IOpenSpellData,
   IPassCheckpointData,
@@ -127,6 +128,26 @@ app.post("/api/players/:id/updateSpell", async (req: any, res: any) => {
     },
   };
   const newEvent = writers.updateSpellEvent(game, event);
+  const newGame = eventsApplication();
+  const player = findPlayer(game, playerId);
+  res.send({ server: newGame.server, player: player });
+});
+
+app.post("/api/players/:id/sellSpell", async (req: any, res: any) => {
+  console.log("LISTSPELL", req.body);
+  const playerId = parseInt(req.params.id);
+  const game = eventsApplication();
+  const event: IListSpellData = {
+    playerId: playerId,
+    created: new Date().valueOf(),
+    type: "LISTSPELL",
+    data: {
+      spellId: req.body.spell,
+      price: req.body.price,
+      currency: req.body.currency,
+    },
+  };
+  const newEvent = writers.listSpellEvent(game, event);
   const newGame = eventsApplication();
   const player = findPlayer(game, playerId);
   res.send({ server: newGame.server, player: player });

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import {
   IMaterialQuant,
   ISpell,
@@ -29,7 +29,69 @@ const canUpdateSpell = (
   return canBuy;
 };
 
-const Spell = ({ spell }: { spell: ISpellOpen | ISpellClosed | ISpell }) => {
+const SpellCreateListing = ({
+  spell,
+  setSpell,
+}: {
+  spell: ISpellOpen | ISpellClosed | ISpell;
+  setSpell: (s: null | ISpellOpen) => void;
+}) => {
+  const context = useContext(GameContext);
+  if (!context || !context.player) {
+    throw new Error("No data in context");
+  }
+  const [inputs, setInputs] = useState({ currency: "ETH", price: 0.01 });
+
+  const handleChange = (event: any) => {
+    const name = event.target.name;
+    const value = event.target.value;
+    setInputs((values) => ({ ...values, [name]: value }));
+  };
+
+  const handleSubmit = async (event: any) => {
+    event.preventDefault();
+    console.log("Submit");
+    console.log(inputs);
+    await axios.post(`/api/players/${context.player.id}/sellSpell`, {
+      spell: spell.id,
+      price: inputs.price,
+      currency: inputs.currency,
+    });
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <label>
+        Select currency:
+        <select value={inputs.currency} onChange={handleChange} name="currency">
+          <option value="ETH">ETH</option>
+          <option value="USDC">USDC</option>
+          <option value="TOKEN">TOKEN</option>
+        </select>
+      </label>
+      <br />
+      <label>
+        Enter the price:
+        <input
+          type="number"
+          name="price"
+          value={inputs.price}
+          onChange={handleChange}
+        />
+      </label>
+      <br />
+      <input type="submit" />
+    </form>
+  );
+};
+
+const Spell = ({
+  spell,
+  setSpell,
+}: {
+  spell: ISpellOpen | ISpellClosed | ISpell;
+  setSpell: (s: null | ISpellOpen) => void;
+}) => {
   const context = useContext(GameContext);
   if (!context || !context.player) {
     throw new Error("No data in context");
@@ -92,6 +154,7 @@ const Spell = ({ spell }: { spell: ISpellOpen | ISpellClosed | ISpell }) => {
         ) : (
           <div>Not enough materials to update</div>
         )}
+        <button onClick={() => setSpell(spell)}>Sell</button>
       </div>
     );
   } else {
@@ -119,20 +182,33 @@ export const Spells = ({
   if (!context || !context.player) {
     throw new Error("No data in context");
   }
+  const [spell, setSpell] = useState<ISpellOpen | null>(null);
 
   const spells = context.player.spells;
+  const close = () => {
+    setSpell(null);
+    setScreen("spells");
+  };
   return (
     <div className="Story">
       <TopMenu />
-      <PopUp close={() => setScreen("menus")}>
-        <div className="Stories">
-          {spells.map((s: ISpellOpen | ISpellClosed | ISpell, n: number) => (
-            <div className="StoryType" key={n}>
-              <Spell spell={s} />
-            </div>
-          ))}
-        </div>
-      </PopUp>
+      {spell ? (
+        <PopUp close={close}>
+          <div className="SellSpell">
+            <SpellCreateListing spell={spell} setSpell={setSpell} />
+          </div>
+        </PopUp>
+      ) : (
+        <PopUp close={() => setScreen("menus")}>
+          <div className="Stories">
+            {spells.map((s: ISpellOpen | ISpellClosed | ISpell, n: number) => (
+              <div className="StoryType" key={n}>
+                <Spell spell={s} setSpell={setSpell} />
+              </div>
+            ))}
+          </div>
+        </PopUp>
+      )}
     </div>
   );
 };

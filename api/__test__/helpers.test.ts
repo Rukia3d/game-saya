@@ -69,7 +69,7 @@ test("Can pay for a spell returns  error if material doesn't exist", async () =>
   });
   jest.spyOn(console, "error").mockImplementation(() => jest.fn());
   expect(() =>
-    enoughToPay(owned, [{ id: 55, name: "Coin", quantity: 1 }])
+    enoughToPay(owned, [{ id: 55, name: "money", quantity: 1 }])
   ).toThrow("Price of an item contains non-existant materia");
   jest.restoreAllMocks();
 });

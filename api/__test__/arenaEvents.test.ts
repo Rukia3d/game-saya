@@ -21,10 +21,10 @@ test("Creates arena event correctly", () => {
   expect(res.server.arenaRun.resultTime).toEqual(now + 600000);
   expect(res.server.arenaRun.events.length).toEqual(3);
   expect(res.server.arenaRun.events[0].index).toEqual(0);
-  expect(res.server.arenaRun.events[0].stake[0].name).toEqual("Coin");
+  expect(res.server.arenaRun.events[0].stake[0].name).toEqual("money");
   expect(res.server.arenaRun.events[0].stake[0].quantity).toEqual(25);
   expect(res.server.arenaRun.events[0].stake[1].quantity).toEqual(5);
-  expect(res.server.arenaRun.events[1].stake[0].name).toEqual("Coin");
+  expect(res.server.arenaRun.events[1].stake[0].name).toEqual("money");
   expect(res.server.arenaRun.events[1].stake[0].quantity).toEqual(50);
   expect(res.server.arenaRun.events[1].stake[1].quantity).toEqual(10);
 });
@@ -39,8 +39,8 @@ test("Ends arena event correctly and rewards correct players", () => {
   ];
   server.arenaRun.events.map((e: IArenaEvent) => {
     e.rewardPool = [
-      { id: 0, name: "Coin", quantity: 25 * 4 },
-      { id: 3, name: "Rings", quantity: 5 * 4 },
+      { id: 0, name: "money", quantity: 25 * 4 },
+      { id: 3, name: "resource1", quantity: 5 * 4 },
     ];
     e.results = [
       { playerName: "Winner 1", playerId: 1, time: 15151515 },
@@ -57,7 +57,11 @@ test("Ends arena event correctly and rewards correct players", () => {
   };
   const res = serverArenaEnd(event, { players: players, server: server });
   expect(res.players[0].claims.length).toEqual(1);
-  expect(res.players[0].claims[0].state).toEqual("unclaimed");
+  expect(res.players[0].claims[0].claimed).not.toBeTruthy();
   expect(res.players[0].claims[0].prize.length).toEqual(2);
+  expect(res.players[0].claims[0].id).toEqual(0);
+  expect(res.players[0].messages.length).toEqual(1);
+  expect(res.players[0].messages[0].read).not.toBeTruthy();
+  expect(res.players[0].messages[0].claimId).toEqual(0);
   expect(res.players[3].claims.length).toEqual(0);
 });

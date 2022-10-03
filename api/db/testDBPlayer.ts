@@ -33,17 +33,17 @@ export const baseServer: IServer = {
   arenaFight: arenaFight,
   arenaRunHistory: [],
   arenaFightHistory: [],
+  listings: [],
 };
 
 export const baseGame = { players: [basePlayer], server: baseServer };
 
 export const materials: IMaterial[] = [
   { id: 0, name: "money" },
-  { id: 1, name: "aliancerew1" },
-  { id: 2, name: "aliancerew2" },
-  { id: 3, name: "resource1" },
-  { id: 4, name: "resource2" },
-  { id: 5, name: "resource3" },
-  { id: 6, name: "resource4" },
-  { id: 7, name: "resource5" },
+  { id: 1, name: "token" },
+  { id: 2, name: "resource1" },
+  { id: 3, name: "resource2" },
+  { id: 4, name: "resource3" },
+  { id: 5, name: "resource4" },
+  { id: 6, name: "resource5" },
 ];

@@ -48,6 +48,9 @@ import {
   IArenaEndData,
   IArenaEndEvent,
   IArenaEndDB,
+  IListSpellData,
+  IListSpellDB,
+  IListSpellEvent,
 } from "../engine/types";
 import {
   allGameEvents,
@@ -59,6 +62,7 @@ import {
   missCheckpointEvents,
   openSpellEvents,
   updateSpellEvents,
+  listSpellEvents,
   startArenaEvents,
   endArenaEvents,
   serverArenaStartEvents,
@@ -363,6 +367,45 @@ export const updateSpellEvent = (
     };
   } else {
     throw new Error("Can't generate updateSpellEvent");
+  }
+};
+
+export const listSpellEvent = (
+  game: IGame,
+  event: IListSpellData
+): IListSpellEvent => {
+  const nextCreateEventId = getNextEventId();
+  const player = findPlayer(game, event.playerId);
+  const newPlayerSpells = JSON.parse(JSON.stringify(player.spells));
+  const indexToRemove = newPlayerSpells.findIndex(
+    (s: ISpellOpen | ISpellClosed | ISpell) => s.id === event.data.spellId
+  );
+  if (indexToRemove && "updatePrice" in newPlayerSpells[indexToRemove]) {
+    const newEvent: IEventDB = {
+      eventId: nextCreateEventId,
+      type: "LISTSPELL" as eventType,
+      created: event.created,
+    };
+    const newListSpellEvent: IListSpellDB = {
+      playerId: event.playerId,
+      eventId: nextCreateEventId,
+      spellId: event.data.spellId,
+      currency: event.data.currency,
+      price: event.data.price,
+    };
+    allGameEvents.push(newEvent);
+    listSpellEvents.push(newListSpellEvent);
+    return {
+      playerId: event.playerId,
+      eventId: newEvent.eventId,
+      created: newEvent.created,
+      type: "LISTSPELL",
+      spellId: newListSpellEvent.spellId,
+      currency: newListSpellEvent.currency,
+      price: newListSpellEvent.price,
+    };
+  } else {
+    throw new Error("Can't generate listSpellEvent");
   }
 };
 

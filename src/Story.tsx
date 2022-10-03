@@ -92,8 +92,12 @@ export const Story = ({
           {stories.map((s: IStory, n: number) => (
             <div className="StoryType" key={n}>
               {s.name}: {s.state} <br />
-              {s.state !== "closed" ? (
+              {s.state === "closed" ? <p>Closed</p> : null}
+              {s.state === "open" ? (
                 <button onClick={() => setStory(s)}>Play</button>
+              ) : null}
+              {s.state === "complete" ? (
+                <button onClick={() => setStory(s)}>RePlay</button>
               ) : null}
             </div>
           ))}
