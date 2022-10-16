@@ -31,6 +31,12 @@ export const applyEvent = (game: IGame, event: IGameEvent): IGame => {
     case "LISTSPELL":
       newGame = events.listSpell(event, newGame);
       break;
+    case "DELISTSPELL":
+      newGame = events.delistSpell(event, newGame);
+      break;
+    case "BUYSPELL":
+      newGame = events.buySpell(event, newGame);
+      break;
     case "STARTENDLESS":
       newGame = events.startEndless(event, newGame);
       break;
@@ -72,7 +78,7 @@ export const applyEvents = (events: IGameEvent[]): IGame => {
         materials: [],
         arcanas: [],
         spells: [],
-        missions: [],
+        goals: [],
         messages: [],
         claims: [],
         currentState: { state: "MAIN" },

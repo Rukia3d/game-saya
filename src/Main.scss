@@ -208,3 +208,23 @@
     font-size: 300%;
   }
 }
+
+.Goals {
+  height: 100%;
+
+  .Goal {
+    border: 1px solid black;
+  }
+
+  .NewGoal {
+    background-color: violet;
+  }
+
+  .StartedGoal {
+    background-color: gold;
+  }
+
+  .ClimableGoal {
+    background-color: greenyellow;
+  }
+}

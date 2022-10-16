@@ -27,6 +27,10 @@ import {
   IArenaEndDB,
   IListSpellEvent,
   IListSpellDB,
+  IDelistSpellEvent,
+  IDelistSpellDB,
+  IBuySpellEvent,
+  IBuySpellDB,
 } from "../engine/types";
 import {
   allGameEvents,
@@ -43,6 +47,8 @@ import {
   startArenaEvents,
   endArenaEvents,
   listSpellEvents,
+  delistSpellEvents,
+  buySpellEvents,
 } from "./testDBEvents";
 
 export const gameEvents = (): IEventDB[] => {
@@ -75,6 +81,14 @@ export const allUpdateSpellEvents = () => {
 
 export const allListSpellEvents = () => {
   return listSpellEvents;
+};
+
+export const allDelistSpellEvents = () => {
+  return delistSpellEvents;
+};
+
+export const allBuySpellEvents = () => {
+  return buySpellEvents;
 };
 
 export const allPassCheckpointEvents = () => {
@@ -124,6 +138,12 @@ export const playerEvents = (): IGameEvent[] => {
         break;
       case "LISTSPELL":
         newEvents.push(listSpellEvent(e));
+        break;
+      case "DELISTSPELL":
+        newEvents.push(delistSpellEvent(e));
+        break;
+      case "BUYSPELL":
+        newEvents.push(buySpellEvent(e));
         break;
       case "STARTENDLESS":
         newEvents.push(startEndlessEvent(e));
@@ -256,6 +276,38 @@ export const listSpellEvent = (event: IEventDB): IListSpellEvent => {
     spellId: listSpell.spellId,
     currency: listSpell.currency,
     price: listSpell.price,
+  };
+};
+
+export const delistSpellEvent = (event: IEventDB): IDelistSpellEvent => {
+  const delistSpell = ensure(
+    allDelistSpellEvents().find(
+      (e: IDelistSpellDB) => e.eventId == event.eventId
+    ),
+    "No delist spell event"
+  );
+
+  return {
+    playerId: delistSpell.playerId,
+    eventId: event.eventId,
+    created: event.created,
+    type: "DELISTSPELL",
+    listingId: delistSpell.listingId,
+  };
+};
+
+export const buySpellEvent = (event: IEventDB): IBuySpellEvent => {
+  const buySpell = ensure(
+    allBuySpellEvents().find((e: IBuySpellDB) => e.eventId == event.eventId),
+    "No buy spell event"
+  );
+
+  return {
+    playerId: buySpell.playerId,
+    listingId: buySpell.listingId,
+    eventId: event.eventId,
+    created: event.created,
+    type: "BUYSPELL",
   };
 };
 

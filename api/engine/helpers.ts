@@ -20,6 +20,7 @@ import {
   IArenaResultPool,
   IArena,
   IArenaEvent,
+  ISpellListing,
 } from "./types";
 dayjs.extend(relativeTime);
 
@@ -357,4 +358,11 @@ export const findEventArena = (
       ? game.server.arenaRun.events[index]
       : game.server.arenaFight.events[index];
   return [newArena, arenaEvent];
+};
+
+export const findListing = (listings: ISpellListing[], listingId: number) => {
+  const listing = listings.find(
+    (s: ISpellListing) => s.listingId === listingId
+  );
+  return listing;
 };

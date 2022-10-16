@@ -1,4 +1,4 @@
-import { IMaterial, IPlayer, IServer } from "../engine/types";
+import { IGoal, IMaterial, IPlayer, IServer } from "../engine/types";
 import { arenaFight, arenaRun } from "./testDBArena";
 
 // const testLevel = new Array(131).fill(new Array(9));
@@ -22,7 +22,7 @@ export const basePlayer: IPlayer = {
   materials: [],
   arcanas: [],
   spells: [],
-  missions: [],
+  goals: [],
   messages: [],
   claims: [],
   currentState: { state: "MAIN" },
@@ -46,4 +46,43 @@ export const materials: IMaterial[] = [
   { id: 4, name: "resource3" },
   { id: 5, name: "resource4" },
   { id: 6, name: "resource5" },
+];
+
+export const goals: IGoal[] = [
+  {
+    id: 0,
+    title: "Complete 3 story levels",
+    description: "Complete any 3 story levels",
+    state: "new",
+    screenToGo: "arcana",
+    condition: { type: "any_story_levels", goal: 3, current: 0 },
+    reward: [
+      { ...materials[0], quantity: 30 },
+      { ...materials[2], quantity: 25 },
+    ],
+  },
+  {
+    id: 1,
+    title: "Participate in arena",
+    description: "Stake and participate in arena event",
+    state: "new",
+    screenToGo: "arena",
+    condition: { type: "any_arena_levels", goal: 1, current: 0 },
+    reward: [
+      { ...materials[0], quantity: 30 },
+      { ...materials[3], quantity: 25 },
+    ],
+  },
+  {
+    id: 2,
+    title: "Play 2 endless events",
+    description: "Play 2 endless events",
+    state: "new",
+    screenToGo: "arcana",
+    condition: { type: "any_endless", goal: 2, current: 0 },
+    reward: [
+      { ...materials[0], quantity: 30 },
+      { ...materials[4], quantity: 25 },
+    ],
+  },
 ];

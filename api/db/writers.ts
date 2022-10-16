@@ -7,6 +7,7 @@ import {
   enoughToPay,
   findPlayer,
   foundArenaStartEvent,
+  findListing,
   foundStartLevelToWin,
 } from "../engine/helpers";
 import {
@@ -51,6 +52,12 @@ import {
   IListSpellData,
   IListSpellDB,
   IListSpellEvent,
+  IDelistSpellData,
+  IDelistSpellDB,
+  IDelistSpellEvent,
+  IBuySpellData,
+  IBuySpellEvent,
+  IBuySpellDB,
 } from "../engine/types";
 import {
   allGameEvents,
@@ -67,6 +74,7 @@ import {
   endArenaEvents,
   serverArenaStartEvents,
   serverArenaEndEvents,
+  delistSpellEvents,
 } from "./testDBEvents";
 
 const getNextPlayerId = () => {
@@ -380,9 +388,6 @@ export const listSpellEvent = (
   const indexToRemove = newPlayerSpells.findIndex(
     (s: ISpellOpen | ISpellClosed | ISpell) => s.id === event.data.spellId
   );
-  console.log("listSpellEvent");
-  console.log("indexToRemove", indexToRemove);
-  console.log("newPlayerSpells[indexToRemove]", newPlayerSpells[indexToRemove]);
   if (indexToRemove >= 0 && "updatePrice" in newPlayerSpells[indexToRemove]) {
     const newEvent: IEventDB = {
       eventId: nextCreateEventId,
@@ -406,6 +411,72 @@ export const listSpellEvent = (
       spellId: newListSpellEvent.spellId,
       currency: newListSpellEvent.currency,
       price: newListSpellEvent.price,
+    };
+  } else {
+    throw new Error("Can't generate listSpellEvent");
+  }
+};
+
+export const delistSpellEvent = (
+  game: IGame,
+  event: IDelistSpellData
+): IDelistSpellEvent => {
+  const nextCreateEventId = getNextEventId();
+  const player = findPlayer(game, event.playerId);
+  if (
+    player.id === event.playerId &&
+    findListing(game.server.listings, event.data.listingId)
+  ) {
+    const newEvent: IEventDB = {
+      eventId: nextCreateEventId,
+      type: "DELISTSPELL" as eventType,
+      created: event.created,
+    };
+    const newDelistSpellEvent: IDelistSpellDB = {
+      playerId: event.playerId,
+      eventId: nextCreateEventId,
+      listingId: event.data.listingId,
+    };
+    allGameEvents.push(newEvent);
+    delistSpellEvents.push(newDelistSpellEvent);
+    return {
+      playerId: event.playerId,
+      eventId: newEvent.eventId,
+      created: newEvent.created,
+      type: "DELISTSPELL",
+      listingId: newDelistSpellEvent.listingId,
+    };
+  } else {
+    throw new Error("Can't generate listSpellEvent");
+  }
+};
+
+export const buySpellEvent = (
+  game: IGame,
+  event: IBuySpellData
+): IBuySpellEvent => {
+  const nextCreateEventId = getNextEventId();
+  const buyer = findPlayer(game, event.playerId);
+  // TODO - Balance check and balance updates
+  if (true) {
+    const newEvent: IEventDB = {
+      eventId: nextCreateEventId,
+      type: "BUYSPELL" as eventType,
+      created: event.created,
+    };
+    const newBuySpellEvent: IBuySpellDB = {
+      playerId: event.playerId,
+      eventId: nextCreateEventId,
+      listingId: event.data.listingId,
+    };
+    allGameEvents.push(newEvent);
+    delistSpellEvents.push(newBuySpellEvent);
+    return {
+      playerId: event.playerId,
+      eventId: newEvent.eventId,
+      created: newEvent.created,
+      type: "BUYSPELL",
+      listingId: newBuySpellEvent.listingId,
     };
   } else {
     throw new Error("Can't generate listSpellEvent");

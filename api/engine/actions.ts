@@ -14,6 +14,10 @@ import {
   IWinLevelEvent,
   IPassCheckpointEvent,
   IArenaResult,
+  ISpellListing,
+  ISpell,
+  ISpellClosed,
+  ISpellOpen,
 } from "./types";
 
 export const rewardPlayer = (
@@ -118,4 +122,16 @@ export const updateArenaResults = (
 
   newEvent.results = newEvent.results.sort((a, b) => a.time - b.time);
   return newEvent;
+};
+
+export const listingToPlayer = (
+  spells: (ISpellOpen | ISpellClosed | ISpell)[],
+  listings: ISpellListing[],
+  indexToRemove: number
+) => {
+  const newPlayerSpells = JSON.parse(JSON.stringify(spells));
+  const newListings: ISpellListing[] = JSON.parse(JSON.stringify(listings));
+  newPlayerSpells.push(newListings[indexToRemove].spell);
+  newListings.splice(indexToRemove, 1);
+  return [newPlayerSpells, newListings];
 };

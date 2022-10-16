@@ -1,7 +1,8 @@
+import seedrandom from "seedrandom";
 import { detectWinners, splitPool } from "../cronjobs";
 import { arcanas } from "../db/testDBArcanas";
 import { eventTowerRewards } from "../db/testDBLevels";
-import { basePlayer, materials } from "../db/testDBPlayer";
+import { basePlayer, materials, goals } from "../db/testDBPlayer";
 import { spellPrices, spells, spellUpdates } from "../db/testDBSpells";
 import {
   addExperience,
@@ -10,6 +11,7 @@ import {
   removeMaterials,
   updateRewardPool,
   updateArenaResults,
+  listingToPlayer,
 } from "./actions";
 import {
   calculateResult,
@@ -29,8 +31,10 @@ import {
   IArenaEndEvent,
   IArenaEvent,
   IArenaStartEvent,
+  IBuySpellEvent,
   ICreatePlayerEvent,
   ICurrentState,
+  IDelistSpellEvent,
   IEventReward,
   IGame,
   IListSpellEvent,
@@ -63,6 +67,7 @@ export const createPlayer = (event: ICreatePlayerEvent, game: IGame): IGame => {
     name: event.playerName,
     maxEnergy: 50,
     energy: 50,
+    goals: goals,
     spells: spells.map((s: ISpell) => {
       const price = spellPrices.find((p: ISpellPrice) => p.spellId === s.id);
       if (!price) throw new Error("Can't find a price for a spell");
@@ -288,12 +293,15 @@ export const listSpell = (event: IListSpellEvent, game: IGame): IGame => {
   const indexToRemove = newPlayerSpells.findIndex(
     (s: ISpellOpen | ISpellClosed | ISpell) => s.id === event.spellId
   );
+  const seed = seedrandom(
+    (event.eventId + event.created + event.playerId + event.spellId).toString()
+  );
   const newListing: ISpellListing = {
-    spellId: event.spellId,
     spell: newPlayerSpells[indexToRemove],
     price: event.price,
     currency: event.currency,
     owner: event.playerId,
+    listingId: Math.round(seed()),
   };
   newPlayerSpells.splice(indexToRemove, 1);
   const newPlayer: IPlayer = {
@@ -305,6 +313,53 @@ export const listSpell = (event: IListSpellEvent, game: IGame): IGame => {
   const newServer = {
     ...server,
     listings: server.listings.concat([newListing]),
+  };
+  return { server: newServer, players: replacePlayer(game.players, newPlayer) };
+};
+
+export const delistSpell = (event: IDelistSpellEvent, game: IGame): IGame => {
+  const player: IPlayer = findPlayer(game, event.playerId);
+  const server: IServer = JSON.parse(JSON.stringify(game.server));
+  const indexToRemove = server.listings.findIndex(
+    (s: ISpellListing) =>
+      s.listingId === event.listingId && s.owner === event.playerId
+  );
+  const [newPlayerSpells, newListings] = listingToPlayer(
+    player.spells,
+    game.server.listings,
+    indexToRemove
+  );
+  const newPlayer: IPlayer = {
+    ...player,
+    spells: newPlayerSpells,
+    currentState: { state: "SPELLS" },
+  };
+  const newServer = {
+    ...server,
+    listings: newListings,
+  };
+  return { server: newServer, players: replacePlayer(game.players, newPlayer) };
+};
+
+export const buySpell = (event: IBuySpellEvent, game: IGame): IGame => {
+  const player: IPlayer = findPlayer(game, event.playerId);
+  const server: IServer = JSON.parse(JSON.stringify(game.server));
+  const indexToRemove = server.listings.findIndex(
+    (s: ISpellListing) => s.listingId === event.listingId
+  );
+  const [newPlayerSpells, newListings] = listingToPlayer(
+    player.spells,
+    game.server.listings,
+    indexToRemove
+  );
+  const newPlayer: IPlayer = {
+    ...player,
+    spells: newPlayerSpells,
+    currentState: { state: "SPELLS" },
+  };
+  const newServer = {
+    ...server,
+    listings: newListings,
   };
   return { server: newServer, players: replacePlayer(game.players, newPlayer) };
 };

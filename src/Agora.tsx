@@ -9,16 +9,23 @@ export const Listing = ({ listing }: { listing: ISpellListing }) => {
     throw new Error("No data in context");
   }
   const playerId = context.player.id;
+
+  const buySpell = () => {};
+
+  const cancelListing = () => {
+    console.log("delist spell", listing);
+  };
+
   return (
     <div className="Listing">
       <p>Spell: {listing.spell.id}</p>
       <p>
         Price: {listing.price} {listing.currency}
       </p>
-      {listing.owner == playerId ? (
-        <button>Unlist</button>
+      {listing.owner === playerId ? (
+        <button onClick={cancelListing}>Unlist</button>
       ) : (
-        <button>Buy</button>
+        <button onClick={buySpell}>Buy</button>
       )}
     </div>
   );

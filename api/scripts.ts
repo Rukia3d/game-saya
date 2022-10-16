@@ -6,6 +6,7 @@ import {
   IArenaEndData,
   IArenaStartData,
   ICreatePlayerData,
+  IDelistSpellData,
   IListSpellData,
   IMissCheckpointData,
   IOpenSpellData,
@@ -133,7 +134,7 @@ app.post("/api/players/:id/updateSpell", async (req: any, res: any) => {
   res.send({ server: newGame.server, player: player });
 });
 
-app.post("/api/players/:id/sellSpell", async (req: any, res: any) => {
+app.post("/api/players/:id/listSpell", async (req: any, res: any) => {
   console.log("LISTSPELL", req.body);
   const playerId = parseInt(req.params.id);
   const game = eventsApplication();
@@ -152,6 +153,44 @@ app.post("/api/players/:id/sellSpell", async (req: any, res: any) => {
   const player = findPlayer(game, playerId);
   res.send({ server: newGame.server, player: player });
 });
+
+app.post("/api/players/:id/delistSpell", async (req: any, res: any) => {
+  console.log("DELISTSPELL", req.body);
+  const playerId = parseInt(req.params.id);
+  const game = eventsApplication();
+  const event: IDelistSpellData = {
+    playerId: playerId,
+    created: new Date().valueOf(),
+    type: "DELISTSPELL",
+    data: {
+      listingId: req.body.listing,
+    },
+  };
+  const newEvent = writers.delistSpellEvent(game, event);
+  const newGame = eventsApplication();
+  const player = findPlayer(game, playerId);
+  res.send({ server: newGame.server, player: player });
+});
+
+// app.post("/api/players/:id/buySpell", async (req: any, res: any) => {
+//   console.log("BUYSPELL", req.body);
+//   const playerId = parseInt(req.params.id);
+//   const game = eventsApplication();
+//   const event: IListSpellData = {
+//     playerId: playerId,
+//     created: new Date().valueOf(),
+//     type: "BUYSPELL",
+//     data: {
+//       spellId: req.body.spell,
+//       price: req.body.price,
+//       currency: req.body.currency,
+//     },
+//   };
+//   const newEvent = writers.buySpellEvent(game, event);
+//   const newGame = eventsApplication();
+//   const player = findPlayer(game, playerId);
+//   res.send({ server: newGame.server, player: player });
+// });
 
 app.post("/api/players/:id/startEndless", async (req: any, res: any) => {
   console.log("STARTENDLESS", req.body);

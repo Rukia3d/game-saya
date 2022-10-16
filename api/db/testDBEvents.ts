@@ -1,7 +1,9 @@
 import {
   IArenaEndDB,
   IArenaStartDB,
+  IBuySpellDB,
   ICreatePlayerDB,
+  IDelistSpellDB,
   IEventDB,
   IListSpellDB,
   IMissCheckpointDB,
@@ -93,6 +95,10 @@ export const listSpellEvents: IListSpellDB[] = [
     currency: "ETH",
   },
 ];
+
+export const delistSpellEvents: IDelistSpellDB[] = [];
+
+export const buySpellEvents: IBuySpellDB[] = [];
 
 export const startEldessEvents: IStartEndlessDB[] = [
   {

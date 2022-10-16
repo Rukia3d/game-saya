@@ -9,7 +9,7 @@ export interface ISpell {
 }
 
 export type ISpellListing = {
-  spellId: number;
+  listingId: number;
   spell: ISpellOpen;
   price: number;
   currency: "ETH" | "USDC" | "TOKEN";
@@ -182,10 +182,26 @@ export interface IPlayer {
   materials: IMaterialQuant[];
   arcanas: IArcana[];
   spells: (ISpellOpen | ISpellClosed | ISpell)[];
-  missions: [];
+  goals: IGoal[];
   messages: IMessage[];
   currentState: ICurrentState;
   claims: IClaimReward[];
+}
+
+export interface IGoal {
+  id: number;
+  title: string;
+  description: string;
+  state: "new" | "started" | "claimable";
+  screenToGo: string;
+  reward: IMaterialQuant[];
+  condition: IGoalCondition;
+}
+
+export interface IGoalCondition {
+  type: goalType;
+  goal: number;
+  current: number;
 }
 
 export interface IMessage {
@@ -215,6 +231,8 @@ export type IGameEvent =
   | IOpenSpellEvent
   | IUpdateSpellEvent
   | IListSpellEvent
+  | IDelistSpellEvent
+  | IBuySpellEvent
   | IStartEndlessEvent
   | IPassCheckpointEvent
   | IMissCheckpointEvent
@@ -391,9 +409,57 @@ export type IListSpellEvent = {
   eventId: number;
   created: number;
   type: "LISTSPELL";
+  spellId: number;
   price: number;
   currency: "ETH" | "USDC" | "TOKEN";
-  spellId: number;
+};
+
+// DELISTSPELL
+export type IDelistSpellDB = {
+  eventId: number;
+  playerId: number;
+  listingId: number;
+};
+
+export type IDelistSpellData = {
+  playerId: number;
+  created: number;
+  type: "DELISTSPELL";
+  data: {
+    listingId: number;
+  };
+};
+
+export type IDelistSpellEvent = {
+  playerId: number;
+  eventId: number;
+  created: number;
+  type: "DELISTSPELL";
+  listingId: number;
+};
+
+// BUYSPELL
+export type IBuySpellDB = {
+  eventId: number;
+  playerId: number;
+  listingId: number;
+};
+
+export type IBuySpellData = {
+  playerId: number;
+  created: number;
+  type: "BUYSPELL";
+  data: {
+    listingId: number;
+  };
+};
+
+export type IBuySpellEvent = {
+  playerId: number;
+  eventId: number;
+  created: number;
+  type: "BUYSPELL";
+  listingId: number;
 };
 
 // STARTENDLESS
@@ -599,6 +665,8 @@ export type eventType =
   | "OPENSPELL"
   | "UPDATESPELL"
   | "LISTSPELL"
+  | "DELISTSPELL"
+  | "BUYSPELL"
   | "STARTENDLESS"
   | "PASSCHECKPOINT"
   | "MISSCHECKPOINT"
@@ -606,3 +674,30 @@ export type eventType =
   | "ARENAEND"
   | "SERVERARENASTART"
   | "SERVERARENAEND";
+
+export type goalType =
+  | "any_story_levels"
+  | "arcana_one_story_levels"
+  | "arcana_two_story_levels"
+  | "arcana_three_story_levels"
+  | "arcana_four_story_levels"
+  | "arcana_five_story_levels"
+  | "new_story_levels"
+  | "material_money_get"
+  | "material_resource1_get"
+  | "material_resource2_get"
+  | "material_resource3_get"
+  | "material_resource4_get"
+  | "material_resource5_get"
+  | "any_arena_levels"
+  | "arena_run_levels"
+  | "arena_fight_levels"
+  | "any_endless"
+  | "arcana_one_endless"
+  | "arcana_two_endless"
+  | "arcana_three_endless"
+  | "arcana_four_endless"
+  | "arcana_five_endless"
+  | "spell_open"
+  | "spell_update"
+  | "spell_list";

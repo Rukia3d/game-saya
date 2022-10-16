@@ -52,7 +52,7 @@ const SpellCreateListing = ({
     event.preventDefault();
     console.log("Submit");
     console.log(inputs);
-    await axios.post(`/api/players/${context.player.id}/sellSpell`, {
+    await axios.post(`/api/players/${context.player.id}/listSpell`, {
       spell: spell.id,
       price: inputs.price,
       currency: inputs.currency,

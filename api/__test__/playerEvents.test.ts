@@ -154,7 +154,7 @@ test("listSpell for player 1", async () => {
   );
 
   expect(res.server.listings.length).toEqual(1);
-  expect(res.server.listings[0].spellId).toEqual(0);
+  expect(res.server.listings[0].spell.id).toEqual(0);
   expect(res.server.listings[0].owner).toEqual(1);
   expect(res.server.listings[0].currency).toEqual("ETH");
 });
