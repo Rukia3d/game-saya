@@ -21,6 +21,7 @@
   },
   "scripts": {
     "start": "npx ts-node --project tsconfig.json ./scripts.ts",
+    "generate": "npx ts-node --project tsconfig.json ./levelgen.ts",
     "build": "react-scripts build",
     "test": "jest",
     "eject": "react-scripts eject",
