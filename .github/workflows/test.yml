@@ -1,4 +1,4 @@
-name: Code Climate
+name: Tests frontend and backend
 on:
   push:
 jobs:

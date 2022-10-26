@@ -54,7 +54,7 @@ export const Menus = ({
   setScreen: (n: mainScreenState) => void;
 }) => {
   return (
-    <div className="Main">
+    <div className="Main" data-testid="main-screen">
       <LeftMenu arcana={arcana} setScreen={setScreen} />
       <CenterMenu arcana={arcana} setArcana={setArcana} />
       <RightMenu setScreen={setScreen} />
