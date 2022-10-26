@@ -54,7 +54,7 @@ export const Menus = ({
   setScreen: (n: mainScreenState) => void;
 }) => {
   return (
-    <div className="Main" data-testid="main-screen">
+    <div className="Main">
       <LeftMenu arcana={arcana} setScreen={setScreen} />
       <CenterMenu arcana={arcana} setArcana={setArcana} />
       <RightMenu setScreen={setScreen} />
@@ -114,7 +114,7 @@ export const Main = ({ playerId }: { playerId: string }) => {
 
   if (error || !data) {
     return (
-      <div className="Main">
+      <div className="Main" data-testid="main-screen-error">
         <h1>ERROR</h1>
       </div>
     );

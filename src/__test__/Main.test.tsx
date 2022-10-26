@@ -6,5 +6,5 @@ import { Main } from "../Main";
 const context = {};
 test("Renders main correctly with context", () => {
   render(<Main playerId="1" />);
-  expect(screen.getByTestId("main-screen")).toBeInTheDocument();
+  expect(screen.getByTestId("main-screen-error")).toBeInTheDocument();
 });
