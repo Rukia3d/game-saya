@@ -1,0 +1,31 @@
+name: Code Climate
+on:
+  push:
+jobs:
+  build:
+    name: Test Coverage
+    runs-on: ubuntu-latest
+    env:
+      NODE_ENV: development
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Use Node.js 16
+        uses: actions/setup-node@v1
+        with:
+          node-version: 16
+
+      - name: Install packages backend
+        run: cd api && npm install
+
+      - name: Run tests and build a report
+        run: npm run test
+
+      - name: Install packages frontend
+        run: npm install
+
+      - name: Run tests and build a report
+        run: npm run test
