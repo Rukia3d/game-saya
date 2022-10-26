@@ -1,11 +1,15 @@
 type arcana = "arcana1" | "arcana2";
 type setting = "lake" | "forest" | "village" | "city" | "castle";
 type cell = "space" | "enemy" | "obstacle";
+type reel = "dialogue" | "panel";
+
 interface IReel {
   imageAddress: string;
   text: string;
   name: string;
+  type: reel;
 }
+
 interface IRun {
   settingName: string;
   setting: setting;
@@ -42,11 +46,36 @@ interface IEnemyCell {
 }
 type ICell = IEmptyCell | IObstacleCell | IEnemyCell;
 const reel: IReel[] = [
-  { imageAddress: "/address1", text: "Reel text 1", name: "Reel name 1" },
-  { imageAddress: "/address2", text: "Reel text 2", name: "Reel name 2" },
-  { imageAddress: "/address3", text: "Reel text 3", name: "Reel name 3" },
-  { imageAddress: "/address4", text: "Reel text 4", name: "Reel name 4" },
-  { imageAddress: "/address5", text: "Reel text 5", name: "Reel name 5" },
+  {
+    imageAddress: "/address1",
+    text: "Reel text 1",
+    name: "Reel name 1",
+    type: "panel",
+  },
+  {
+    imageAddress: "/address2",
+    text: "Reel text 2",
+    name: "Reel name 2",
+    type: "panel",
+  },
+  {
+    imageAddress: "/address3",
+    text: "Reel text 3",
+    name: "Reel name 3",
+    type: "panel",
+  },
+  {
+    imageAddress: "/address4",
+    text: "Reel text 4",
+    name: "Reel name 4",
+    type: "panel",
+  },
+  {
+    imageAddress: "/address5",
+    text: "Reel text 5",
+    name: "Reel name 5",
+    type: "panel",
+  },
 ];
 const run: IRun = {
   settingName: "Run name",
@@ -132,10 +161,10 @@ const generateMap = (length: number, width: number, difficulty: number) => {
 };
 
 const start = () => {
-  const length = 16; // number of rows with gates
-  const widht = 5; // number of moves l to r
+  const length = 20; // number of rows with gates
+  const width = 5; // number of moves l to r
   const difficulty = 5; // number of rows between gates, can't be less than 2
-  const newMap = generateMap(length, widht, difficulty);
+  const newMap = generateMap(length, width, difficulty);
   newMap.map((e: ICell[]) => {
     e.map((c: ICell) => {
       switch (c.type) {
