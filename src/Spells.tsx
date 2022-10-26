@@ -50,8 +50,6 @@ const SpellCreateListing = ({
 
   const handleSubmit = async (event: any) => {
     event.preventDefault();
-    console.log("Submit");
-    console.log(inputs);
     await axios.post(`/api/players/${context.player.id}/listSpell`, {
       spell: spell.id,
       price: inputs.price,

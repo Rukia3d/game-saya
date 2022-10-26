@@ -16,7 +16,6 @@ const EndlessStartConfirmation = ({
   startEndless: () => void;
   cancelEndless: () => void;
 }) => {
-  console.log("sucess", sucess);
   if (sucess) {
     return (
       <div className="GameStartPopup">

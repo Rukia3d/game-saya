@@ -91,7 +91,6 @@ export const Game = ({
   }
 
   if ("checkpoint" in context.game) {
-    console.log("arena");
     // This is Endless event
     return (
       <div className="Game">

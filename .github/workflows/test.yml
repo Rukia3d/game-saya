@@ -18,14 +18,14 @@ jobs:
         with:
           node-version: 16
 
-      - name: Install packages backend
-        run: cd api && npm install
-
-      - name: Run tests and build a report
-        run: cd api && npm run test
-
       - name: Install packages frontend
         run: npm install
 
       - name: Run tests and build a report
         run: npm run test
+
+      - name: Install packages backend
+        run: cd api && npm install
+
+      - name: Run tests and build a report
+        run: cd api && npm run test

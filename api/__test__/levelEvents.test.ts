@@ -14,7 +14,7 @@ const basePlayer: IPlayer = {
   materials: [],
   arcanas: [],
   spells: [],
-  missions: [],
+  goals: [],
   messages: [],
   claims: [],
   currentState: { state: "MAIN" },
