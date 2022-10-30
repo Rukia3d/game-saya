@@ -1,11 +1,18 @@
 export interface ISpell {
   id: number;
-  arcanaId: number;
-  enemy: arcanaName;
+  elementId: number;
+  element: elementName;
   strength: number;
   symbol: string; // Unknown for now
   state: spellState;
   name: string;
+}
+
+export interface ICharacter {
+  name: string;
+  legend: string[];
+  weapon: weaponName;
+  element: elementName;
 }
 
 export type ISpellListing = {
@@ -18,13 +25,13 @@ export type ISpellListing = {
 
 export type ISpellPrice = {
   spellId: number;
-  arcanaId: number;
+  elementId: number;
   price: IMaterialQuant[];
 };
 
 export type ISpellUpdate = {
   spellId: number;
-  arcanaId: number;
+  elementId: number;
   updatePrice: IMaterialQuant[];
   requiredStrength: number;
 };
@@ -52,7 +59,7 @@ export type IQuestListing = IQuest & { price: number; owner: number };
 
 export interface IEvent {
   id: number;
-  arcanaId: number;
+  elementId: number;
   mode: gameMode;
   energy: number;
   checkpoint: number | null;
@@ -62,20 +69,20 @@ export interface IEvent {
 
 export interface IStoryReward {
   id: number;
-  arcanaId: number;
+  elementId: number;
   storyId: number;
   reward: IAllowedRewards[];
 }
 
 export interface IEventReward {
   id: number;
-  arcanaId: number;
+  elementId: number;
   reward: IAllowedRewards[];
 }
 
 export interface IStory {
   id: number;
-  arcanaId: number;
+  elementId: number;
   mode: gameMode;
   name: string;
   state: levelState;
@@ -90,11 +97,9 @@ export interface IAllowedRewards {
   upTo: number;
 }
 
-export interface IArcana {
-  arcanaName: arcanaName;
+export interface IElement {
+  character: ICharacter;
   id: number;
-  characterName: string;
-  legend: string[];
   stories: IStory[]; //Unknown for now
   currentQuests: IStory[]; //Unknown for now
   currentEvents: IEvent[];
@@ -140,7 +145,7 @@ export interface ICurrentState {
   level?: {
     level?: number;
     mode: gameMode;
-    arcana: number;
+    element: number;
   };
   materials?: IMaterialQuant[];
   arena?: {
@@ -180,7 +185,7 @@ export interface IPlayer {
   maxEnergy: number;
   loungeId: number | null;
   materials: IMaterialQuant[];
-  arcanas: IArcana[];
+  elements: IElement[];
   spells: (ISpellOpen | ISpellClosed | ISpell)[];
   goals: IGoal[];
   messages: IMessage[];
@@ -274,7 +279,7 @@ export type ICreatePlayerEvent = {
 export type IStartLevelDB = {
   eventId: number;
   playerId: number;
-  arcanaId: number;
+  elementId: number;
   mode: gameMode;
   levelId: number;
 };
@@ -284,7 +289,7 @@ export type IStartLevelData = {
   created: number;
   type: "STARTLEVEL";
   data: {
-    arcanaId: number;
+    elementId: number;
     mode: gameMode;
     levelId: number;
   };
@@ -295,7 +300,7 @@ export type IStartLevelEvent = {
   eventId: number;
   created: number;
   type: "STARTLEVEL";
-  arcanaId: number;
+  elementId: number;
   mode: gameMode;
   levelId: number;
 };
@@ -304,7 +309,7 @@ export type IStartLevelEvent = {
 export type IWinLevelDB = {
   eventId: number;
   playerId: number;
-  arcanaId: number;
+  elementId: number;
   mode: gameMode;
   levelId: number;
 };
@@ -314,7 +319,7 @@ export type IWinLevelData = {
   created: number;
   type: "WINLEVEL";
   data: {
-    arcanaId: number;
+    elementId: number;
     mode: gameMode;
     levelId: number;
   };
@@ -325,7 +330,7 @@ export type IWinLevelEvent = {
   eventId: number;
   created: number;
   type: "WINLEVEL";
-  arcanaId: number;
+  elementId: number;
   mode: gameMode;
   levelId: number;
 };
@@ -334,7 +339,7 @@ export type IWinLevelEvent = {
 export type IOpenSpellDB = {
   eventId: number;
   playerId: number;
-  arcanaId: number;
+  elementId: number;
   spellId: number;
 };
 
@@ -343,7 +348,7 @@ export type IOpenSpellData = {
   created: number;
   type: "OPENSPELL";
   data: {
-    arcanaId: number;
+    elementId: number;
     spellId: number;
   };
 };
@@ -353,7 +358,7 @@ export type IOpenSpellEvent = {
   eventId: number;
   created: number;
   type: "OPENSPELL";
-  arcanaId: number;
+  elementId: number;
   spellId: number;
 };
 
@@ -361,7 +366,7 @@ export type IOpenSpellEvent = {
 export type IUpdateSpellDB = {
   eventId: number;
   playerId: number;
-  arcanaId: number;
+  elementId: number;
   spellId: number;
 };
 
@@ -370,7 +375,7 @@ export type IUpdateSpellData = {
   created: number;
   type: "UPDATESPELL";
   data: {
-    arcanaId: number;
+    elementId: number;
     spellId: number;
   };
 };
@@ -380,7 +385,7 @@ export type IUpdateSpellEvent = {
   eventId: number;
   created: number;
   type: "UPDATESPELL";
-  arcanaId: number;
+  elementId: number;
   spellId: number;
 };
 
@@ -466,7 +471,7 @@ export type IBuySpellEvent = {
 export type IStartEndlessDB = {
   eventId: number;
   playerId: number;
-  arcanaId: number;
+  elementId: number;
   mode: gameMode;
 };
 
@@ -475,7 +480,7 @@ export type IStartEndlessData = {
   created: number;
   type: "STARTENDLESS";
   data: {
-    arcanaId: number;
+    elementId: number;
     mode: gameMode;
   };
 };
@@ -485,7 +490,7 @@ export type IStartEndlessEvent = {
   eventId: number;
   created: number;
   type: "STARTENDLESS";
-  arcanaId: number;
+  elementId: number;
   mode: gameMode;
 };
 
@@ -493,7 +498,7 @@ export type IStartEndlessEvent = {
 export type IPassCheckpointDB = {
   eventId: number;
   playerId: number;
-  arcanaId: number;
+  elementId: number;
   mode: gameMode;
   checkpoint: number;
 };
@@ -503,7 +508,7 @@ export type IPassCheckpointData = {
   created: number;
   type: "PASSCHECKPOINT";
   data: {
-    arcanaId: number;
+    elementId: number;
     mode: gameMode;
     checkpoint: number;
   };
@@ -514,7 +519,7 @@ export type IPassCheckpointEvent = {
   eventId: number;
   created: number;
   type: "PASSCHECKPOINT";
-  arcanaId: number;
+  elementId: number;
   mode: gameMode;
   checkpoint: number;
 };
@@ -523,7 +528,7 @@ export type IPassCheckpointEvent = {
 export type IMissCheckpointDB = {
   eventId: number;
   playerId: number;
-  arcanaId: number;
+  elementId: number;
   mode: gameMode;
 };
 
@@ -532,7 +537,7 @@ export type IMissCheckpointData = {
   created: number;
   type: "MISSCHECKPOINT";
   data: {
-    arcanaId: number;
+    elementId: number;
     mode: gameMode;
   };
 };
@@ -542,7 +547,7 @@ export type IMissCheckpointEvent = {
   eventId: number;
   created: number;
   type: "MISSCHECKPOINT";
-  arcanaId: number;
+  elementId: number;
   mode: gameMode;
 };
 
@@ -637,16 +642,19 @@ export type IPlayerArenaStartDB = {
   index: number;
   mode: gameMode;
 };
+export type elementName = "air" | "fire" | "metal" | "water" | "wood";
 
-export type arcanaName = "one" | "two" | "three" | "four" | "five";
+export type weaponName = "chakram" | "sword" | "scythe" | "sceptre" | "daggers";
+
 export type materialName =
   | "money"
   | "token"
-  | "resource1"
-  | "resource2"
-  | "resource3"
-  | "resource4"
-  | "resource5";
+  | "steel"
+  | "amber"
+  | "obsidian"
+  | "seashell"
+  | "gem";
+
 export type spellState = "closed" | "open" | "listed";
 export type questState = "open" | "rented" | "new";
 export type gameMode = "story" | "quest" | "run" | "fight";
