@@ -9,10 +9,19 @@ export interface ISpell {
 }
 
 export interface ICharacter {
+  id: number;
   name: string;
-  legend: string[];
   weapon: weaponName;
   element: elementName;
+}
+
+export interface IWeapon {
+  id: number;
+  name: weaponName;
+  elementId: number;
+  charge: number;
+  maxCharge: number;
+  state: "open" | "closed";
 }
 
 export type ISpellListing = {
@@ -45,6 +54,7 @@ export type ISpellOpen = ISpell & {
 export interface IMaterial {
   id: number;
   name: materialName;
+  element: null | elementName;
 }
 
 export type IMaterialQuant = IMaterial & { quantity: number };
@@ -57,7 +67,7 @@ export interface IQuest {
 
 export type IQuestListing = IQuest & { price: number; owner: number };
 
-export interface IEvent {
+export interface IEndless {
   id: number;
   elementId: number;
   mode: gameMode;
@@ -80,6 +90,14 @@ export interface IEventReward {
   reward: IAllowedRewards[];
 }
 
+export interface IAdventure {
+  id: number;
+  name: string;
+  description: string;
+  elementId: number;
+  stories: IStory[];
+}
+
 export interface IStory {
   id: number;
   elementId: number;
@@ -100,9 +118,9 @@ export interface IAllowedRewards {
 export interface IElement {
   character: ICharacter;
   id: number;
-  stories: IStory[]; //Unknown for now
-  currentQuests: IStory[]; //Unknown for now
-  currentEvents: IEvent[];
+  adventures: IAdventure[];
+  endless: IEndless[];
+  quests: IQuest[];
 }
 
 export interface IArena {
@@ -164,7 +182,6 @@ export interface IServer {
   arenaFight: IArena;
   arenaRunHistory: IArena[];
   arenaFightHistory: IArena[];
-  listings: ISpellListing[];
 }
 
 export interface IGame {
@@ -186,7 +203,7 @@ export interface IPlayer {
   loungeId: number | null;
   materials: IMaterialQuant[];
   elements: IElement[];
-  spells: (ISpellOpen | ISpellClosed | ISpell)[];
+  weapons: IWeapon[];
   goals: IGoal[];
   messages: IMessage[];
   currentState: ICurrentState;
@@ -642,18 +659,28 @@ export type IPlayerArenaStartDB = {
   index: number;
   mode: gameMode;
 };
-export type elementName = "air" | "fire" | "metal" | "water" | "wood";
+export type elementName =
+  | "turquoise"
+  | "garnet"
+  | "obsidian"
+  | "moonstone"
+  | "amber";
 
-export type weaponName = "chakram" | "sword" | "scythe" | "sceptre" | "daggers";
+export type weaponName =
+  | "chakram"
+  | "greatsword"
+  | "scythe"
+  | "sceptre"
+  | "daggers";
 
 export type materialName =
-  | "money"
-  | "token"
-  | "steel"
-  | "amber"
-  | "obsidian"
-  | "seashell"
-  | "gem";
+  | "Gold"
+  | "Soul Stone"
+  | "Turquoise"
+  | "Garnet"
+  | "Obsidian"
+  | "Moonstone"
+  | "Amber";
 
 export type spellState = "closed" | "open" | "listed";
 export type questState = "open" | "rented" | "new";

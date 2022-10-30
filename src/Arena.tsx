@@ -12,7 +12,6 @@ import { mainScreenState } from "./Main";
 import { PopUp } from "./PopUp";
 import { TopMenu } from "./TopMenu";
 import { enoughToPay } from "./utils/helpers";
-import { ConfirmationPopup } from "./ConfirmationPopup";
 
 const timeDifference = (now: dayjs.Dayjs, time: number) => {
   let diffDate = dayjs(time).diff(now, "second");
@@ -186,7 +185,7 @@ export const Arena = ({
 
   const cancelArena = () => {
     setArena(null);
-    setScreen("arcana");
+    setScreen("main");
   };
 
   const events = [context.server.arenaRun, context.server.arenaFight];
@@ -195,16 +194,16 @@ export const Arena = ({
   return (
     <div className="Arena">
       {arena ? (
-        <ConfirmationPopup close={cancelArena}>
+        <PopUp close={cancelArena}>
           <ArenaStartConfirmation
             sucess={canCompete}
             startArena={startArena}
             cancelArena={cancelArena}
           />
-        </ConfirmationPopup>
+        </PopUp>
       ) : null}
       <TopMenu />
-      <PopUp close={() => setScreen("menus")}>
+      <PopUp close={() => setScreen("main")}>
         <div className="ArenaEvents">
           {events.map((a: IArena, n: number) => (
             <div className="ArenaType" key={n}>

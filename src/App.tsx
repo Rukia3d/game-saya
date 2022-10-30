@@ -4,7 +4,7 @@ import { KeyedMutator } from "swr";
 // Types
 import {
   IArenaEventWithTime,
-  IEvent,
+  IEndless,
   IPlayer,
   IServer,
   IStory,
@@ -18,8 +18,8 @@ export interface GameContextType {
   player: IPlayer;
   server: IServer;
   mutate: KeyedMutator<any>;
-  game: IStory | IEvent | IArenaEventWithTime | null;
-  setGame: (g: IStory | IEvent | IArenaEventWithTime | null) => void;
+  game: IStory | IEndless | IArenaEventWithTime | null;
+  setGame: (g: IStory | IEndless | IArenaEventWithTime | null) => void;
 }
 
 export const GameContext = React.createContext<undefined | GameContextType>(

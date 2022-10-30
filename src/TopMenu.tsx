@@ -11,8 +11,6 @@ export const TopMenu = () => {
     ["energy", context.player.energy],
     ["experience", context.player.exprience],
     [context.player.materials[0].name, context.player.materials[0].quantity],
-    [context.player.materials[1].name, context.player.materials[1].quantity],
-    [context.player.materials[2].name, context.player.materials[2].quantity],
   ];
   return (
     <div className="TopMenu">
