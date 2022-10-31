@@ -1,13 +1,11 @@
 import * as readers from "./readers";
 import {
   allowParticipation,
-  canUpdateSpell,
   correctCheckpoint,
   enoughEnergyToPlay,
   enoughToPay,
   findPlayer,
   foundArenaStartEvent,
-  findListing,
   foundStartLevelToWin,
 } from "../engine/helpers";
 import {
@@ -20,26 +18,17 @@ import {
   IMissCheckpointData,
   IMissCheckpointDB,
   IMissCheckpointEvent,
-  IOpenSpellData,
-  IOpenSpellDB,
-  IOpenSpellEvent,
   IPassCheckpointData,
   IPassCheckpointEvent,
   IServerArenaEndEvent,
   IServerArenaStartData,
   IServerArenaStartEvent,
-  ISpell,
-  ISpellClosed,
-  ISpellOpen,
   IStartEndlessData,
   IStartEndlessDB,
   IStartEndlessEvent,
   IStartLevelData,
   IStartLevelDB,
   IStartLevelEvent,
-  IUpdateSpellData,
-  IUpdateSpellDB,
-  IUpdateSpellEvent,
   IWinLevelData,
   IWinLevelDB,
   IWinLevelEvent,
@@ -49,15 +38,6 @@ import {
   IArenaEndData,
   IArenaEndEvent,
   IArenaEndDB,
-  IListSpellData,
-  IListSpellDB,
-  IListSpellEvent,
-  IDelistSpellData,
-  IDelistSpellDB,
-  IDelistSpellEvent,
-  IBuySpellData,
-  IBuySpellEvent,
-  IBuySpellDB,
 } from "../engine/types";
 import {
   allGameEvents,
@@ -67,14 +47,10 @@ import {
   startEldessEvents,
   passCheckpointEvents,
   missCheckpointEvents,
-  openSpellEvents,
-  updateSpellEvents,
-  listSpellEvents,
   startArenaEvents,
   endArenaEvents,
   serverArenaStartEvents,
   serverArenaEndEvents,
-  delistSpellEvents,
 } from "./testDBEvents";
 
 const getNextPlayerId = () => {
@@ -136,7 +112,7 @@ export const startLevelEvent = (
     const newStartPlayerEvent: IStartLevelDB = {
       playerId: event.playerId,
       eventId: nextCreateEventId,
-      arcanaId: event.data.arcanaId,
+      elementId: event.data.elementId,
       levelId: event.data.levelId,
       mode: event.data.mode,
     };
@@ -147,7 +123,7 @@ export const startLevelEvent = (
       eventId: newEvent.eventId,
       created: newEvent.created,
       type: "STARTLEVEL",
-      arcanaId: newStartPlayerEvent.arcanaId,
+      elementId: newStartPlayerEvent.elementId,
       mode: newStartPlayerEvent.mode,
       levelId: newStartPlayerEvent.levelId,
     };
@@ -171,7 +147,7 @@ export const winLevelEvent = (
     const newWinLevelEvent: IWinLevelDB = {
       playerId: event.playerId,
       eventId: nextCreateEventId,
-      arcanaId: event.data.arcanaId,
+      elementId: event.data.elementId,
       levelId: event.data.levelId,
       mode: event.data.mode,
     };
@@ -182,7 +158,7 @@ export const winLevelEvent = (
       eventId: newEvent.eventId,
       created: newEvent.created,
       type: "WINLEVEL",
-      arcanaId: newWinLevelEvent.arcanaId,
+      elementId: newWinLevelEvent.elementId,
       mode: newWinLevelEvent.mode,
       levelId: newWinLevelEvent.levelId,
     };
@@ -206,7 +182,7 @@ export const startEndlessEvent = (
     const newStartEldessEvents: IStartEndlessDB = {
       playerId: event.playerId,
       eventId: nextCreateEventId,
-      arcanaId: event.data.arcanaId,
+      elementId: event.data.elementId,
       mode: event.data.mode,
     };
     allGameEvents.push(newEvent);
@@ -216,7 +192,7 @@ export const startEndlessEvent = (
       eventId: newEvent.eventId,
       created: newEvent.created,
       type: "STARTENDLESS",
-      arcanaId: newStartEldessEvents.arcanaId,
+      elementId: newStartEldessEvents.elementId,
       mode: newStartEldessEvents.mode,
     };
   } else {
@@ -239,7 +215,7 @@ export const passCheckpointEvent = (
     const newPassCheckpointEvent = {
       eventId: nextCreateEventId,
       playerId: event.playerId,
-      arcanaId: event.data.arcanaId,
+      elementId: event.data.elementId,
       mode: event.data.mode,
       checkpoint: event.data.checkpoint,
     };
@@ -250,7 +226,7 @@ export const passCheckpointEvent = (
       eventId: newEvent.eventId,
       created: newEvent.created,
       type: "PASSCHECKPOINT",
-      arcanaId: newPassCheckpointEvent.arcanaId,
+      elementId: newPassCheckpointEvent.elementId,
       mode: newPassCheckpointEvent.mode,
       checkpoint: newPassCheckpointEvent.checkpoint,
     };
@@ -272,7 +248,7 @@ export const missCheckpointEvent = (
   const newMissCheckpointEvent: IMissCheckpointDB = {
     playerId: event.playerId,
     eventId: nextCreateEventId,
-    arcanaId: event.data.arcanaId,
+    elementId: event.data.elementId,
     mode: event.data.mode,
   };
   allGameEvents.push(newEvent);
@@ -282,11 +258,12 @@ export const missCheckpointEvent = (
     eventId: newEvent.eventId,
     created: newEvent.created,
     type: "MISSCHECKPOINT",
-    arcanaId: newMissCheckpointEvent.arcanaId,
+    elementId: newMissCheckpointEvent.elementId,
     mode: newMissCheckpointEvent.mode,
   };
 };
 
+/*
 export const openSpellEvent = (
   game: IGame,
   event: IOpenSpellData
@@ -296,7 +273,7 @@ export const openSpellEvent = (
   const newPlayerSpells = JSON.parse(JSON.stringify(player.spells));
   const indexToChange = newPlayerSpells.findIndex(
     (s: ISpellOpen | ISpellClosed | ISpell) =>
-      s.arcanaId === event.data.arcanaId && s.id === event.data.spellId
+      s.elementId === event.data.elementId && s.id === event.data.spellId
   );
   if (!("price" in newPlayerSpells[indexToChange])) {
     throw new Error("Spell to open doesn't have a price");
@@ -310,7 +287,7 @@ export const openSpellEvent = (
     const newOpelSpellEvent: IOpenSpellDB = {
       playerId: event.playerId,
       eventId: nextCreateEventId,
-      arcanaId: event.data.arcanaId,
+      elementId: event.data.elementId,
       spellId: event.data.spellId,
     };
     allGameEvents.push(newEvent);
@@ -320,7 +297,7 @@ export const openSpellEvent = (
       eventId: newEvent.eventId,
       created: newEvent.created,
       type: "OPENSPELL",
-      arcanaId: newOpelSpellEvent.arcanaId,
+      elementId: newOpelSpellEvent.elementId,
       spellId: newOpelSpellEvent.spellId,
     };
   } else {
@@ -337,7 +314,7 @@ export const updateSpellEvent = (
   const newPlayerSpells = JSON.parse(JSON.stringify(player.spells));
   const indexToChange = newPlayerSpells.findIndex(
     (s: ISpellOpen | ISpellClosed | ISpell) =>
-      s.arcanaId === event.data.arcanaId && s.id === event.data.spellId
+      s.elementId === event.data.elementId && s.id === event.data.spellId
   );
   if (!newPlayerSpells[indexToChange].updatePrice) {
     throw new Error("Spell to open doesn't have a price");
@@ -360,7 +337,7 @@ export const updateSpellEvent = (
     const newupdateSpellEvent: IUpdateSpellDB = {
       playerId: event.playerId,
       eventId: nextCreateEventId,
-      arcanaId: event.data.arcanaId,
+      elementId: event.data.elementId,
       spellId: event.data.spellId,
     };
     allGameEvents.push(newEvent);
@@ -370,7 +347,7 @@ export const updateSpellEvent = (
       eventId: newEvent.eventId,
       created: newEvent.created,
       type: "UPDATESPELL",
-      arcanaId: newupdateSpellEvent.arcanaId,
+      elementId: newupdateSpellEvent.elementId,
       spellId: newupdateSpellEvent.spellId,
     };
   } else {
@@ -482,6 +459,8 @@ export const buySpellEvent = (
     throw new Error("Can't generate listSpellEvent");
   }
 };
+
+*/
 
 export const startArenaEvent = (
   game: IGame,

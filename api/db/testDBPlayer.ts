@@ -1,16 +1,30 @@
-import { IGoal, IMaterial, IPlayer, IServer } from "../engine/types";
+import {
+  elementName,
+  gameMode,
+  IAdventure,
+  ICharacter,
+  IElement,
+  IEndless,
+  IGoal,
+  IMaterial,
+  IPlayer,
+  IServer,
+  IStory,
+  IWeapon,
+  weaponName,
+} from "../engine/types";
 import { arenaFight, arenaRun } from "./testDBArena";
 
-// const testLevel = new Array(131).fill(new Array(9));
-// for (let i = 0; i < testLevel.length; i++) {
-//   for (let j = 0; j < testLevel[i].length; i++) {
-//     testLevel[i][j] = "o";
-//     if (i === 50 || i === 95 || i === 131) {
-//       testLevel[i][j] = "t";
-//     }
-//   }
-// }
-// console.log(testLevel);
+function ensure<T>(
+  argument: T | undefined | null,
+  message: string = "This value was promised to be there."
+): T {
+  if (argument === undefined || argument === null) {
+    throw new TypeError(message);
+  }
+
+  return argument;
+}
 
 export const basePlayer: IPlayer = {
   id: 0,
@@ -20,8 +34,8 @@ export const basePlayer: IPlayer = {
   maxEnergy: 0,
   loungeId: null,
   materials: [],
-  arcanas: [],
-  spells: [],
+  elements: [],
+  weapons: [],
   goals: [],
   messages: [],
   claims: [],
@@ -33,19 +47,102 @@ export const baseServer: IServer = {
   arenaFight: arenaFight,
   arenaRunHistory: [],
   arenaFightHistory: [],
-  listings: [],
 };
 
 export const baseGame = { players: [basePlayer], server: baseServer };
 
 export const materials: IMaterial[] = [
-  { id: 0, name: "money" },
-  { id: 1, name: "token" },
-  { id: 2, name: "resource1" },
-  { id: 3, name: "resource2" },
-  { id: 4, name: "resource3" },
-  { id: 5, name: "resource4" },
-  { id: 6, name: "resource5" },
+  { id: 0, name: "Gold", element: null },
+  { id: 1, name: "Soul Stone", element: null },
+  { id: 2, name: "Turquoise", element: "turquoise" },
+  { id: 3, name: "Garnet", element: "garnet" },
+  { id: 4, name: "Obsidian", element: "obsidian" },
+  { id: 5, name: "Moonstone", element: "moonstone" },
+  { id: 6, name: "Amber", element: "amber" },
+];
+
+export const characters: ICharacter[] = [
+  { name: "Saya", id: 0, weapon: "chakram", element: "turquoise" },
+  { name: "Nell", id: 1, weapon: "greatsword", element: "garnet" },
+];
+
+export const stories: IStory[] = [0, 1, 2].map((n: number) => {
+  return {
+    id: n,
+    elementId: 0,
+    level: "",
+    name: "Story" + n,
+    mode: "story",
+    state: "open",
+    allowedRewards: [
+      { id: 0, upTo: 5 },
+      { id: 3, upTo: 1 },
+    ],
+    experience: 10,
+    energy: 5,
+  };
+});
+export const adventures: IAdventure[][] = characters.map((n: ICharacter) => {
+  return [
+    {
+      id: n.id,
+      elementId: n.id,
+      stories: stories,
+      name: "SomeName",
+      description: "SomeDescription",
+    },
+  ];
+});
+
+export const endless: IEndless[] = ["run", "fight"].map(
+  (s: string, n: number) => {
+    return {
+      id: n,
+      elementId: 0,
+      level: "",
+      mode: s as gameMode,
+      energy: 10,
+      checkpoint: null,
+      allowedRewards: [
+        { id: 0, upTo: 5 },
+        { id: 3, upTo: 1 },
+      ],
+    };
+  }
+);
+
+export const weapons: IWeapon[] = [];
+["chakram", "greatsword"].map((s: string, n: number) => {
+  ["turquoise", "garnet", "obsidian", "moonstone", "amber"].map(
+    (e: string, i: number) => {
+      weapons.push({
+        name: s as weaponName,
+        id: n,
+        elementId: i,
+        elementName: e as elementName,
+        charge: 100,
+        maxCharge: 100,
+        state: i === 0 ? "open" : "closed",
+      });
+    }
+  );
+});
+
+export const elements: IElement[] = [
+  {
+    character: characters[0],
+    id: 0,
+    adventures: adventures[0],
+    endless: endless,
+    quests: [],
+  },
+  {
+    character: characters[1],
+    id: 1,
+    adventures: adventures[1],
+    endless: endless,
+    quests: [],
+  },
 ];
 
 export const goals: IGoal[] = [

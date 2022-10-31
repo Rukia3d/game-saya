@@ -44,7 +44,7 @@ test("Writes startLevelEvent correctly", () => {
     playerId: 3,
     created: new Date().valueOf(),
     type: "STARTLEVEL",
-    data: { arcanaId: 0, levelId: 0, mode: "story" },
+    data: { elementId: 0, levelId: 0, mode: "story" },
   });
   expect(writeStart.playerId).toEqual(3);
   expect(writeStart.eventId).toEqual(LASTEVENTID + 2);
@@ -57,7 +57,7 @@ test("Writes startLevelEvent correctly", () => {
   });
   expect(writeStart.playerId).toEqual(3);
   expect(readStart.eventId).toEqual(LASTEVENTID + 2);
-  expect(readStart.arcanaId).toEqual(0);
+  expect(readStart.elementId).toEqual(0);
   expect(readStart.levelId).toEqual(0);
   expect(readStart.mode).toEqual("story");
 });
@@ -81,7 +81,7 @@ test("Writes winLevelEvent correctly", () => {
     playerId: 3,
     created: new Date().valueOf(),
     type: "WINLEVEL",
-    data: { arcanaId: 0, levelId: 0, mode: "story" },
+    data: { elementId: 0, levelId: 0, mode: "story" },
   });
   expect(writeWin.playerId).toEqual(3);
   expect(writeWin.eventId).toEqual(LASTEVENTID + 3);
@@ -94,7 +94,7 @@ test("Writes winLevelEvent correctly", () => {
   });
   expect(readWin.playerId).toEqual(3);
   expect(readWin.eventId).toEqual(LASTEVENTID + 3);
-  expect(readWin.arcanaId).toEqual(0);
+  expect(readWin.elementId).toEqual(0);
   expect(readWin.levelId).toEqual(0);
   expect(readWin.mode).toEqual("story");
 });
@@ -128,7 +128,7 @@ test("Writes openSpellEvent correctly", () => {
     playerId: 3,
     created: new Date().valueOf(),
     type: "OPENSPELL",
-    data: { arcanaId: 0, spellId: 0 },
+    data: { elementId: 0, spellId: 0 },
   });
   expect(writeOpen.playerId).toEqual(3);
   expect(writeOpen.eventId).toEqual(LASTEVENTID + 4);
@@ -141,7 +141,7 @@ test("Writes openSpellEvent correctly", () => {
   });
   expect(readOpen.playerId).toEqual(3);
   expect(readOpen.eventId).toEqual(LASTEVENTID + 4);
-  expect(readOpen.arcanaId).toEqual(0);
+  expect(readOpen.elementId).toEqual(0);
   expect(readOpen.spellId).toEqual(0);
 });
 
@@ -181,7 +181,7 @@ test("Writest updateSpellEvent correctly", () => {
     playerId: 3,
     created: new Date().valueOf(),
     type: "UPDATESPELL",
-    data: { arcanaId: 0, spellId: 0 },
+    data: { elementId: 0, spellId: 0 },
   });
   expect(writeUpdate.playerId).toEqual(3);
   expect(writeUpdate.eventId).toEqual(LASTEVENTID + 5);
@@ -194,7 +194,7 @@ test("Writest updateSpellEvent correctly", () => {
   });
   expect(readUpdate.playerId).toEqual(3);
   expect(readUpdate.eventId).toEqual(LASTEVENTID + 5);
-  expect(readUpdate.arcanaId).toEqual(0);
+  expect(readUpdate.elementId).toEqual(0);
   expect(readUpdate.spellId).toEqual(0);
 });
 
@@ -221,7 +221,7 @@ test("Writes startEndlessEvent correctly", () => {
     playerId: 3,
     created: new Date().valueOf(),
     type: "STARTENDLESS",
-    data: { arcanaId: 0, mode: "run" },
+    data: { elementId: 0, mode: "run" },
   });
   expect(writeStart.playerId).toEqual(3);
   expect(writeStart.eventId).toEqual(LASTEVENTID + 6);
@@ -234,7 +234,7 @@ test("Writes startEndlessEvent correctly", () => {
   });
   expect(readStart.playerId).toEqual(3);
   expect(readStart.eventId).toEqual(LASTEVENTID + 6);
-  expect(readStart.arcanaId).toEqual(0);
+  expect(readStart.elementId).toEqual(0);
   expect(readStart.mode).toEqual("run");
 });
 
@@ -261,7 +261,7 @@ test("Writes passCheckpoint event correctly", () => {
     playerId: 3,
     created: new Date().valueOf(),
     type: "PASSCHECKPOINT",
-    data: { arcanaId: 0, mode: "run", checkpoint: 0 },
+    data: { elementId: 0, mode: "run", checkpoint: 0 },
   });
   expect(writePass.playerId).toEqual(3);
   expect(writePass.eventId).toEqual(LASTEVENTID + 7);
@@ -274,7 +274,7 @@ test("Writes passCheckpoint event correctly", () => {
   });
   expect(readPass.playerId).toEqual(3);
   expect(readPass.eventId).toEqual(LASTEVENTID + 7);
-  expect(readPass.arcanaId).toEqual(0);
+  expect(readPass.elementId).toEqual(0);
   expect(readPass.checkpoint).toEqual(0);
   expect(readPass.mode).toEqual("run");
 });
@@ -302,7 +302,7 @@ test("Writes missCheckpointEvent event correctly", () => {
     playerId: 3,
     created: new Date().valueOf(),
     type: "MISSCHECKPOINT",
-    data: { arcanaId: 0, mode: "run" },
+    data: { elementId: 0, mode: "run" },
   });
   expect(writeMiss.playerId).toEqual(3);
   expect(writeMiss.eventId).toEqual(LASTEVENTID + 8);
@@ -315,7 +315,7 @@ test("Writes missCheckpointEvent event correctly", () => {
   });
   expect(readMiss.playerId).toEqual(3);
   expect(readMiss.eventId).toEqual(LASTEVENTID + 8);
-  expect(readMiss.arcanaId).toEqual(0);
+  expect(readMiss.elementId).toEqual(0);
   expect(readMiss.mode).toEqual("run");
 });
 

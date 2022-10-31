@@ -1,4 +1,5 @@
 import {
+  elementName,
   gameMode,
   IAdventure,
   IArena,
@@ -93,18 +94,22 @@ const testElements: IElement[] = [
   },
 ];
 
-export const testWeapons: IWeapon[] = ["chakram", "greatsword"].map(
-  (s: string, n: number) => {
-    return {
-      name: s as weaponName,
-      id: n,
-      elementId: 0,
-      charge: 100,
-      maxCharge: 100,
-      state: "open",
-    };
-  }
-);
+export const testWeapons: IWeapon[] = [];
+["chakram", "greatsword"].map((s: string, n: number) => {
+  ["turquoise", "garnet", "obsidian", "moonstone", "amber"].map(
+    (e: string, i: number) => {
+      testWeapons.push({
+        name: s as weaponName,
+        id: n,
+        elementId: i,
+        elementName: e as elementName,
+        charge: 100,
+        maxCharge: 100,
+        state: i === 0 ? "open" : "closed",
+      });
+    }
+  );
+});
 
 export const goals: IGoal[] = [
   {

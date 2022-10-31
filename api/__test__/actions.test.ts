@@ -43,7 +43,7 @@ test("rewardPlayer generates correct rewards", async () => {
     {
       eventId: 5,
       mode: "story",
-      arcanaId: 0,
+      elementId: 0,
       levelId: 0,
       created: 1654347302,
       playerId: 0,
@@ -62,7 +62,7 @@ test("rewardPlayer generates correct rewards", async () => {
     {
       eventId: 6,
       mode: "story",
-      arcanaId: 0,
+      elementId: 0,
       levelId: 0,
       created: 1654347302,
       playerId: 0,
@@ -81,7 +81,7 @@ test("openNextLevel opens next level correctly", async () => {
     {
       eventId: 0,
       mode: "story",
-      arcanaId: 0,
+      elementId: 0,
       levelId: 0,
       created: 1654347302,
       playerId: 0,
@@ -97,7 +97,7 @@ test("openNextLevel opens next level correctly", async () => {
     {
       eventId: 1,
       mode: "story",
-      arcanaId: 0,
+      elementId: 0,
       levelId: 1,
       created: 1654347302,
       playerId: 0,
@@ -117,7 +117,7 @@ test("addExperience correctly adds experience", async () => {
     {
       eventId: 0,
       mode: "story",
-      arcanaId: 0,
+      elementId: 0,
       levelId: 0,
       created: 1654347302,
       playerId: 0,
@@ -132,7 +132,7 @@ test("addExperience correctly adds experience", async () => {
     {
       eventId: 1,
       mode: "story",
-      arcanaId: 0,
+      elementId: 0,
       levelId: 1,
       created: 1654347302,
       playerId: 0,

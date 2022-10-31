@@ -13,7 +13,7 @@ export const TopMenu = () => {
     [context.player.materials[0].name, context.player.materials[0].quantity],
   ];
   return (
-    <div className="TopMenu">
+    <div className="TopMenu" data-testid="top-menu">
       {items.map((m: any, n: number) => (
         <div className="Material" key={n}>
           {m[0]}

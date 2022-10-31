@@ -18,6 +18,7 @@ export interface ICharacter {
 export interface IWeapon {
   id: number;
   name: weaponName;
+  elementName: elementName;
   elementId: number;
   charge: number;
   maxCharge: number;
@@ -670,7 +671,7 @@ export type weaponName =
   | "chakram"
   | "greatsword"
   | "scythe"
-  | "sceptre"
+  | "scroll"
   | "daggers";
 
 export type materialName =

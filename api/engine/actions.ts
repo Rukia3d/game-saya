@@ -57,7 +57,7 @@ export const addExperience = (
   }
   if (event.mode === "run" || event.mode === "fight") {
     // if it is the first time the last checkpoint will return -1
-    const last = findLastCheckpoint(player, event.mode, event.arcanaId);
+    const last = findLastCheckpoint(player, event.mode, event.elementId);
     return player.exprience + (last <= 0 ? 1 : last) * 10;
   }
   return player.exprience;

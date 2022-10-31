@@ -17,11 +17,11 @@ export const Items = ({
     "messages",
   ];
   return (
-    <div className="Home-Items" data-testid="home-items">
+    <div className="Items" data-testid="home-items">
       {items.map((i: mainScreenState, n: number) => (
-        <button key={n} onClick={() => setScreen(i)}>
+        <div className="Item" key={n} onClick={() => setScreen(i)}>
           {i}
-        </button>
+        </div>
       ))}
     </div>
   );
@@ -38,9 +38,11 @@ export const Adventures = ({
   }
   const elements = context.player.elements;
   return (
-    <div className="Home-Adventures" data-testid="home-adventures">
+    <div className="Adventures" data-testid="home-adventures">
       {elements.map((e: IElement, n: number) => (
-        <button key={n}>{e.character.element}</button>
+        <div className="Adventure" key={n}>
+          {e.character.element}
+        </div>
       ))}
     </div>
   );
@@ -53,11 +55,11 @@ export const Menues = ({
 }) => {
   const menues: mainScreenState[] = ["arena", "market", "aliance", "studio"];
   return (
-    <div className="Home-Menues" data-testid="home-menues">
+    <div className="Menues" data-testid="home-menues">
       {menues.map((i: mainScreenState, n: number) => (
-        <button key={n} onClick={() => setScreen(i)}>
+        <div className="Menu" key={n} onClick={() => setScreen(i)}>
           {i}
-        </button>
+        </div>
       ))}
     </div>
   );
@@ -73,7 +75,7 @@ export const Home = ({
     throw new Error("No data in context");
   }
   return (
-    <div className="Home" data-testid="home-screen">
+    <div className="HomeContainer" data-testid="home-screen">
       <Items setScreen={setScreen} />
       <Adventures setScreen={setScreen} />
       <Menues setScreen={setScreen} />

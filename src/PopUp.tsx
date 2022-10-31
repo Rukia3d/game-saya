@@ -6,11 +6,17 @@ export const PopUp = ({
   children: JSX.Element;
 }) => {
   return (
-    <div className="PopUp">
-      <div className="CloseButton" onClick={close}>
-        X
-      </div>
+    <div className="PopUp" data-testid="popup-screen">
+      <CloseButton close={CloseButton} />
       {children}
+    </div>
+  );
+};
+
+export const CloseButton = ({ close }: { close: any }) => {
+  return (
+    <div className="CloseButton" onClick={close}>
+      X
     </div>
   );
 };

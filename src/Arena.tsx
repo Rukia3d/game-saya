@@ -153,12 +153,8 @@ export const ArenaEvent = ({
 };
 
 export const Arena = ({
-  arcana,
-  setArcana,
   setScreen,
 }: {
-  arcana: number | null;
-  setArcana: (n: number | null) => void;
   setScreen: (n: mainScreenState) => void;
 }) => {
   const context = useContext(GameContext);

@@ -1,137 +1,89 @@
-.Main {
-  text-align: center;
-  width: 100%;
-  height: 100%;
+.HomeContainer {
   display: flex;
   flex-direction: row;
-  background-color: aqua;
+  height: 100%;
+  width: 100%;
 
-  .Inventory {
-    width: 40%;
+  .Items {
+    background-color: #b4fcfc;
+    width: 30%;
     height: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: stretch;
-    align-content: stretch;
-    background-color: paleturquoise;
 
-    .IconMessage,
-    .IconCoins,
-    .IconGoals,
-    .IconSpells {
-      border: 1px solid black;
+    .Item {
+      width: 100%;
       flex-grow: 1;
-    }
-    .AdventureSelected {
       border: 1px solid black;
-      flex-grow: 2;
     }
   }
 
   .Adventures {
-    width: 30%;
+    background-color: #52ffff;
+    width: 40%;
     height: 100%;
-    background-color: mediumaquamarine;
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: stretch;
-    align-content: stretch;
 
     .Adventure {
-      border: 1px solid black;
+      width: 100%;
       flex-grow: 1;
+      border: 1px solid black;
     }
   }
 
-  .Menu {
+  .Menues {
+    background-color: #00bbbb;
     width: 30%;
     height: 100%;
-    background-color: aqua;
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: stretch;
-    align-content: stretch;
 
-    .MenuCard {
-      border: 1px solid black;
+    .Menu {
+      width: 100%;
       flex-grow: 1;
+      border: 1px solid black;
     }
   }
 }
 
-.Arcana {
-  width: 100%;
+.WeaponsContainer {
+  background-color: #f394de;
   height: 100%;
-  background-color: blueviolet;
-  display: flex;
-  flex-direction: column;
-}
 
-.PopUp {
-  width: 100%;
-  height: 93%;
-  background-color: salmon;
-  position: relative;
-
-  .CloseButton {
-    position: absolute;
-    top: 0;
-    right: 0;
-    font-size: 300%;
-  }
-
-  .Adventures,
-  .Stories,
-  .SellSpell,
-  .EndlessEvents {
-    width: 100%;
+  .Weapons {
     height: 100%;
+    width: 100%;
     display: flex;
+    flex-direction: row;
     flex-wrap: wrap;
-    gap: 10px;
-    justify-content: center;
 
-    .AdventureType {
+    .Weapon {
+      flex-grow: 1;
+      align-items: stretch;
       border: 1px solid black;
-      background-color: sandybrown;
-      width: 30%;
-    }
-
-    .StoryType {
-      border: 1px solid black;
-      background-color: violet;
-      width: 20%;
-    }
-
-    .EndlessType {
-      border: 1px solid black;
-      background-color: greenyellow;
-      width: 100%;
-      height: 50%;
     }
   }
 
-  .ArenaEvents {
-    width: 100%;
+  .WeaponList {
+    background-color: #b92999;
     height: 100%;
+    width: 100%;
     display: flex;
-    gap: 10px;
+    flex-direction: column;
+    flex-wrap: wrap;
 
-    .ArenaType {
-      width: 100%;
-      height: 50%;
-      background-color: forestgreen;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
+    .WeaponItem {
+      border: 1px solid black;
+      min-height: 3em;
+    }
 
-      .ArenaEvent {
-        border: 1px solid black;
-        background-color: cadetblue;
-      }
+    .WeaponDetail {
+      border: 1px solid black;
+      min-height: 6em;
     }
   }
 }
@@ -142,89 +94,25 @@
   background-color: palevioletred;
   display: flex;
   flex-direction: row;
+  align-items: stretch;
 
   .Material {
     border: 1px solid black;
-    width: 20%;
+    flex-grow: 1;
   }
 }
 
-.Inventory {
+.PopUp {
   width: 100%;
-  height: 100%;
-  background-color: violet;
+  height: 93%;
+  background-color: salmon;
+  position: relative;
 }
 
-.ConfirmationPopup {
-  height: 100%;
-  width: 100%;
+.CloseButton {
   position: absolute;
-  background-color: turquoise;
   top: 0;
-  left: 0;
+  right: 0;
+  font-size: 300%;
   z-index: 1000;
-}
-
-.Game {
-  background-color: seagreen;
-  height: 100%;
-  width: 100%;
-
-  .CloseButton {
-    position: absolute;
-    top: 0;
-    right: 0;
-    font-size: 300%;
-  }
-}
-
-.Legend {
-  background-color: palegreen;
-  width: 100%;
-  height: 100%;
-}
-
-.Agora {
-  width: 100%;
-  height: 100%;
-  background-color: blanchedalmond;
-  display: flex;
-  flex-direction: column;
-
-  .AgoraItems {
-    display: flex;
-    flex-direction: row;
-
-    .Listing {
-      border: 1px solid black;
-      width: 25%;
-    }
-  }
-
-  .CloseButton {
-    position: absolute;
-    top: 0;
-    right: 0;
-    font-size: 300%;
-  }
-}
-
-.Goals {
-  height: 100%;
-
-  .Goal {
-    border: 1px solid black;
-  }
-
-  .NewGoal {
-    background-color: violet;
-  }
-
-  .StartedGoal {
-    background-color: gold;
-  }
-
-  .ClimableGoal {
-    background-color: greenyellow;
-  }
 }

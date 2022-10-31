@@ -43,7 +43,7 @@ test("story starts and wins for player 1 outside tutorial", async () => {
     {
       eventId: 0,
       mode: "story",
-      arcanaId: 0,
+      elementId: 0,
       levelId: 2,
       playerId: 1,
       created: new Date().valueOf(),
@@ -64,7 +64,7 @@ test("eventWinLevel for player 1", async () => {
     {
       eventId: 1,
       mode: "story",
-      arcanaId: 0,
+      elementId: 0,
       levelId: 0,
       created: new Date().valueOf(),
       type: "WINLEVEL",
@@ -113,7 +113,7 @@ test("Endless flow tournament for player 1", async () => {
   const startEvent: IGame = events.startEndless(
     {
       eventId: 1,
-      arcanaId: 0,
+      elementId: 0,
       mode: "run",
       created: new Date().valueOf(),
       type: "STARTENDLESS",
@@ -130,7 +130,7 @@ test("Endless flow tournament for player 1", async () => {
       eventId: 2,
       checkpoint: 0,
       mode: "run",
-      arcanaId: 0,
+      elementId: 0,
       playerId: 1,
       type: "PASSCHECKPOINT",
       created: new Date().valueOf(),
@@ -152,7 +152,7 @@ test("Endless flow tournament for player 1", async () => {
       eventId: 3,
       checkpoint: 1,
       mode: "run",
-      arcanaId: 0,
+      elementId: 0,
       created: new Date().valueOf(),
       playerId: 1,
       type: "PASSCHECKPOINT",
@@ -173,7 +173,7 @@ test("Endless flow tournament for player 1", async () => {
     {
       eventId: 1,
       mode: "run",
-      arcanaId: 0,
+      elementId: 0,
       type: "MISSCHECKPOINT",
       playerId: 1,
       created: new Date().valueOf(),

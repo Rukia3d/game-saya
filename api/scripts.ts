@@ -17,6 +17,7 @@ import {
   IWinLevelData,
 } from "./engine/types";
 import { findPlayer } from "./engine/helpers";
+import { testServer, testPlayer } from "../src/utils/testData";
 
 const bodyParser = require("body-parser");
 const express = require("express");
@@ -38,6 +39,7 @@ app.get("/api/players/:id", async (req: any, res: any) => {
   const game = eventsApplication();
   const player = findPlayer(game, playerId);
   res.send({ server: game.server, player: player });
+  res.send({ server: testServer, player: testPlayer });
 });
 
 app.post("/api/players/new", async (req: any, res: any) => {
@@ -64,7 +66,7 @@ app.post("/api/players/:id/startLevel", async (req: any, res: any) => {
     created: new Date().valueOf(),
     type: "STARTLEVEL",
     data: {
-      arcanaId: req.body.arcana,
+      elementId: req.body.arcana,
       mode: req.body.mode,
       levelId: req.body.level,
     },
@@ -84,7 +86,7 @@ app.post("/api/players/:id/winLevel", async (req: any, res: any) => {
     created: new Date().valueOf(),
     type: "WINLEVEL",
     data: {
-      arcanaId: req.body.arcana,
+      elementId: req.body.arcana,
       mode: req.body.mode,
       levelId: req.body.level,
     },
@@ -105,7 +107,7 @@ app.post("/api/players/:id/openSpell", async (req: any, res: any) => {
     created: new Date().valueOf(),
     type: "OPENSPELL",
     data: {
-      arcanaId: req.body.arcana,
+      elementId: req.body.arcana,
       spellId: req.body.spell,
     },
   };
@@ -124,7 +126,7 @@ app.post("/api/players/:id/updateSpell", async (req: any, res: any) => {
     created: new Date().valueOf(),
     type: "UPDATESPELL",
     data: {
-      arcanaId: req.body.arcana,
+      elementId: req.body.arcana,
       spellId: req.body.spell,
     },
   };
@@ -201,7 +203,7 @@ app.post("/api/players/:id/startEndless", async (req: any, res: any) => {
     created: new Date().valueOf(),
     type: "STARTENDLESS",
     data: {
-      arcanaId: req.body.arcana,
+      elementId: req.body.arcana,
       mode: req.body.mode,
     },
   };
@@ -220,7 +222,7 @@ app.post("/api/players/:id/passCheckpoint", async (req: any, res: any) => {
     created: new Date().valueOf(),
     type: "PASSCHECKPOINT",
     data: {
-      arcanaId: req.body.arcana,
+      elementId: req.body.arcana,
       mode: req.body.mode,
       checkpoint: req.body.checkpoint,
     },
@@ -240,7 +242,7 @@ app.post("/api/players/:id/missCheckpoint", async (req: any, res: any) => {
     created: new Date().valueOf(),
     type: "MISSCHECKPOINT",
     data: {
-      arcanaId: req.body.arcana,
+      elementId: req.body.arcana,
       mode: req.body.mode,
     },
   };

@@ -76,8 +76,8 @@ export const applyEvents = (events: IGameEvent[]): IGame => {
         maxEnergy: 0,
         loungeId: null,
         materials: [],
-        arcanas: [],
-        spells: [],
+        elements: [],
+        weapons: [],
         goals: [],
         messages: [],
         claims: [],
@@ -89,7 +89,6 @@ export const applyEvents = (events: IGameEvent[]): IGame => {
       arenaFight: { events: [], resultTime: 0, mode: "fight" },
       arenaRunHistory: [],
       arenaFightHistory: [],
-      listings: [],
     },
   };
   for (let i = 0; i < events.length; i++) {

@@ -11,7 +11,7 @@ const context: GameContextType = {
   game: null,
   setGame: jest.fn(),
 };
-test("Renders main correctly with context", () => {
+test("Renders home screen correctly with relevant adventures", () => {
   render(
     <GameContext.Provider value={context}>
       <Home setScreen={jest.fn()} />

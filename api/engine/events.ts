@@ -87,11 +87,11 @@ export const createPlayer = (event: ICreatePlayerEvent, game: IGame): IGame => {
 
 export const startLevel = (event: IStartLevelEvent, game: IGame): IGame => {
   const player = findPlayer(game, event.playerId);
-  let energyPrice = findEnergyPrice(event.arcanaId, "story", event.levelId);
+  let energyPrice = findEnergyPrice(event.elementId, "story", event.levelId);
   const firstTime =
-    player.arcanas[event.arcanaId].stories[event.levelId].state !== "complete";
+    player.arcanas[event.elementId].stories[event.levelId].state !== "complete";
   if (
-    event.arcanaId === 0 &&
+    event.elementId === 0 &&
     event.levelId < 2 &&
     player.arcanas &&
     firstTime
@@ -101,7 +101,7 @@ export const startLevel = (event: IStartLevelEvent, game: IGame): IGame => {
   const state = {
     state: "PLAY" as currentState,
     level: {
-      arcana: event.arcanaId,
+      arcana: event.elementId,
       mode: "story" as gameMode,
       level: event.levelId,
     },
@@ -136,11 +136,11 @@ export const winLevel = (event: IWinLevelEvent, game: IGame): IGame => {
 
 export const startEndless = (event: IStartEndlessEvent, game: IGame): IGame => {
   const player = findPlayer(game, event.playerId);
-  let energyPrice = findEnergyPrice(event.arcanaId, event.mode);
+  let energyPrice = findEnergyPrice(event.elementId, event.mode);
   const state = {
     state: "PLAY" as currentState,
     level: {
-      arcana: event.arcanaId,
+      arcana: event.elementId,
       mode: event.mode as gameMode,
     },
   };
@@ -162,13 +162,13 @@ export const passCheckpoint = (
   const newAllowedRewards = ensure(
     eventTowerRewards.find(
       (s: IEventReward) =>
-        s.id === event.checkpoint && s.arcanaId === event.arcanaId
+        s.id === event.checkpoint && s.elementId === event.elementId
     )
   ).reward;
   // -1 allows us to cover a spread between level start and 0 trigger
-  const last = findLastCheckpoint(player, event.mode, event.arcanaId);
-  newArcanas[event.arcanaId].currentEvents[eventIndex].checkpoint = last + 1;
-  newArcanas[event.arcanaId].currentEvents[eventIndex].allowedRewards =
+  const last = findLastCheckpoint(player, event.mode, event.elementId);
+  newArcanas[event.elementId].currentEvents[eventIndex].checkpoint = last + 1;
+  newArcanas[event.elementId].currentEvents[eventIndex].allowedRewards =
     newAllowedRewards;
   const newExperience = addExperience(event, player);
   const newPlayer: IPlayer = {
@@ -202,7 +202,7 @@ export const openSpell = (event: IOpenSpellEvent, game: IGame): IGame => {
   const newPlayerSpells = JSON.parse(JSON.stringify(player.spells));
   const indexToChange = newPlayerSpells.findIndex(
     (s: ISpellOpen | ISpellClosed | ISpell) =>
-      s.arcanaId === event.arcanaId && s.id === event.spellId
+      s.elementId === event.elementId && s.id === event.spellId
   );
   if (!("price" in newPlayerSpells[indexToChange])) {
     throw new Error("Spell to open doesn't have a price");
@@ -222,7 +222,7 @@ export const openSpell = (event: IOpenSpellEvent, game: IGame): IGame => {
   if (nextUpdate) {
     newPlayerSpells[indexToChange] = {
       id: newPlayerSpells[indexToChange].id,
-      arcanaId: newPlayerSpells[indexToChange].arcanaId,
+      elementId: newPlayerSpells[indexToChange].elementId,
       enemy: newPlayerSpells[indexToChange].enemy,
       strength: newPlayerSpells[indexToChange].strength,
       symbol: newPlayerSpells[indexToChange].symbol,
@@ -248,7 +248,7 @@ export const updateSpell = (event: IUpdateSpellEvent, game: IGame): IGame => {
   const newPlayerSpells = JSON.parse(JSON.stringify(player.spells));
   const indexToChange = newPlayerSpells.findIndex(
     (s: ISpellOpen | ISpellClosed | ISpell) =>
-      s.arcanaId === event.arcanaId && s.id === event.spellId
+      s.elementId === event.elementId && s.id === event.spellId
   );
   if (!newPlayerSpells[indexToChange].updatePrice) {
     throw new Error("Spell to open doesn't have a price");

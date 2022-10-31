@@ -27,7 +27,7 @@ test("finds correct index", async () => {
     created: new Date().valueOf(),
     type: "WINLEVEL",
     eventId: 0,
-    arcanaId: 1,
+    elementId: 1,
     mode: "story",
     levelId: 0,
   };
@@ -37,7 +37,7 @@ test("finds correct index", async () => {
 
   jest.spyOn(console, "error").mockImplementation(() => jest.fn());
   expect(() =>
-    findLevelIndex({ ...winLevelEvent, arcanaId: 7 }, arcanas)
+    findLevelIndex({ ...winLevelEvent, elementId: 7 }, arcanas)
   ).toThrow("No character 7 found");
 
   expect(() =>
@@ -82,7 +82,7 @@ test("Finds correct level for story", () => {
       created: new Date().valueOf(),
       type: "WINLEVEL",
       eventId: 0,
-      arcanaId: 1,
+      elementId: 1,
       mode: "story",
       levelId: 0,
     },
@@ -97,7 +97,7 @@ test("Finds correct level for tournament", () => {
   const res = findLevelForEndless(
     {
       eventId: 0,
-      arcanaId: 0,
+      elementId: 0,
       mode: "run",
       playerId: 1,
       created: new Date().valueOf(),

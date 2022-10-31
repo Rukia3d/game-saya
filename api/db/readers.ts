@@ -205,7 +205,7 @@ export const startLevelEvent = (event: IEventDB): IStartLevelEvent => {
     eventId: event.eventId,
     created: event.created,
     type: "STARTLEVEL",
-    arcanaId: startLevel.arcanaId,
+    elementId: startLevel.elementId,
     mode: startLevel.mode,
     levelId: startLevel.levelId,
   };
@@ -222,7 +222,7 @@ export const winLevelEvent = (event: IEventDB): IWinLevelEvent => {
     eventId: event.eventId,
     created: event.created,
     type: "WINLEVEL",
-    arcanaId: winLevel.arcanaId,
+    elementId: winLevel.elementId,
     mode: winLevel.mode,
     levelId: winLevel.levelId,
   };
@@ -239,8 +239,8 @@ export const openSpellEvent = (event: IEventDB): IOpenSpellEvent => {
     eventId: event.eventId,
     created: event.created,
     type: "OPENSPELL",
-    arcanaId: openSpell.arcanaId,
-    spellId: openSpell.arcanaId,
+    elementId: openSpell.elementId,
+    spellId: openSpell.elementId,
   };
 };
 
@@ -257,7 +257,7 @@ export const updateSpellEvent = (event: IEventDB): IUpdateSpellEvent => {
     eventId: event.eventId,
     created: event.created,
     type: "UPDATESPELL",
-    arcanaId: updateSpell.arcanaId,
+    elementId: updateSpell.elementId,
     spellId: updateSpell.spellId,
   };
 };
@@ -324,7 +324,7 @@ export const startEndlessEvent = (event: IEventDB): IStartEndlessEvent => {
     eventId: event.eventId,
     created: event.created,
     type: "STARTENDLESS",
-    arcanaId: startEndless.arcanaId,
+    elementId: startEndless.elementId,
     mode: startEndless.mode,
   };
 };
@@ -342,7 +342,7 @@ export const passCheckpointEvent = (event: IEventDB): IPassCheckpointEvent => {
     eventId: event.eventId,
     created: event.created,
     type: "PASSCHECKPOINT",
-    arcanaId: passCheckpoint.arcanaId,
+    elementId: passCheckpoint.elementId,
     mode: passCheckpoint.mode,
     checkpoint: passCheckpoint.checkpoint,
   };
@@ -361,7 +361,7 @@ export const missCheckpointEvent = (event: IEventDB): IMissCheckpointEvent => {
     eventId: event.eventId,
     created: event.created,
     type: "MISSCHECKPOINT",
-    arcanaId: missCheckpoint.arcanaId,
+    elementId: missCheckpoint.elementId,
     mode: missCheckpoint.mode,
   };
 };

@@ -5,11 +5,9 @@ import { arcanas } from "../db/testDBArcanas";
 import {
   gameMode,
   ICurrentState,
-  IArcana,
   IMaterialQuant,
   IPlayer,
   IStory,
-  IEvent,
   IAllowedRewards,
   IMissCheckpointEvent,
   IWinLevelEvent,
@@ -21,6 +19,8 @@ import {
   IArena,
   IArenaEvent,
   ISpellListing,
+  IEndless,
+  IElement,
 } from "./types";
 dayjs.extend(relativeTime);
 
@@ -28,7 +28,7 @@ export const generateSeed = (
   event: IWinLevelEvent | IMissCheckpointEvent,
   id: number
 ) => {
-  const phrase = seedrandom(event.eventId + event.arcanaId + event.mode + id);
+  const phrase = seedrandom(event.eventId + event.elementId + event.mode + id);
   return phrase;
 };
 
@@ -47,7 +47,7 @@ export const generateArenaRandom = (
 
 export const generateRandom = (
   event: IWinLevelEvent | IMissCheckpointEvent,
-  level: IStory | IEvent,
+  level: IStory | IEndless,
   reward: IAllowedRewards
 ) => {
   const addition = "levelId" in event ? event.levelId : 0;
@@ -82,9 +82,12 @@ export const findEnergyPrice = (
   throw new Error(`Unknown mode ${mode}`);
 };
 
-export const findLevelIndex = (event: IWinLevelEvent, arcanas: IArcana[]) => {
-  const charIndex = arcanas.findIndex((c: IArcana) => c.id === event.arcanaId);
-  if (charIndex === -1) throw new Error(`No character ${event.arcanaId} found`);
+export const findLevelIndex = (event: IWinLevelEvent, elements: IElement[]) => {
+  const charIndex = elements.findIndex(
+    (c: IEndless) => c.id === event.elementId
+  );
+  if (charIndex === -1)
+    throw new Error(`No character ${event.elementId} found`);
   const levelIndex = arcanas[charIndex].stories.findIndex(
     (s: IStory) => s.id === event.levelId
   );
@@ -95,7 +98,7 @@ export const findLevelIndex = (event: IWinLevelEvent, arcanas: IArcana[]) => {
 export const findLevel = (
   event: IWinLevelEvent | IMissCheckpointEvent | IPassCheckpointEvent,
   arcanas: IArcana[]
-): IStory | IEvent => {
+): IStory | IEndless => {
   switch (event.type) {
     case "WINLEVEL":
       return findLevelForStory(event, arcanas);
@@ -118,15 +121,15 @@ export const findLevelForStory = (
 export const findLevelForEndless = (
   event: IMissCheckpointEvent | IPassCheckpointEvent,
   arcanas: IArcana[]
-): IEvent => {
+): IEndless => {
   const eventIndex = event.mode === "run" ? 0 : 1;
-  const level = arcanas[event.arcanaId].currentEvents[eventIndex];
+  const level = arcanas[event.elementId].currentEvents[eventIndex];
   return level;
 };
 
 const correctStateForWin = (
   event: {
-    arcanaId: number;
+    elementId: number;
     mode: gameMode;
     levelId: number;
   },
@@ -134,7 +137,7 @@ const correctStateForWin = (
 ) => {
   return (
     event.levelId === currentState.level?.level &&
-    event.arcanaId === currentState.level?.arcana &&
+    event.elementId === currentState.level?.arcana &&
     event.mode === currentState.level?.mode
   );
 };
@@ -155,7 +158,7 @@ const correctStateForArena = (
 export const foundStartLevelToWin = (
   currentState: ICurrentState,
   event: {
-    arcanaId: number;
+    elementId: number;
     mode: gameMode;
     levelId: number;
   }
@@ -201,31 +204,31 @@ export const findLastCheckpoint = (
 export const correctCheckpoint = (
   player: IPlayer,
   data: {
-    arcanaId: number;
+    elementId: number;
     mode: gameMode;
     checkpoint: number;
   }
 ) => {
-  const last = findLastCheckpoint(player, data.mode, data.arcanaId) || 0;
+  const last = findLastCheckpoint(player, data.mode, data.elementId) || 0;
   return data.checkpoint === last + 1;
 };
 
 export const enoughEnergyToPlay = (
   player: IPlayer,
   data: {
-    arcanaId: number;
+    elementId: number;
     mode: gameMode;
     levelId?: number;
   }
 ) => {
   let energyPrice = 0;
   if (data.mode === "story" && ensure(data.levelId) >= 0) {
-    energyPrice = findEnergyPrice(data.arcanaId, data.mode, data.levelId);
+    energyPrice = findEnergyPrice(data.elementId, data.mode, data.levelId);
     const firstTime =
-      player.arcanas[data.arcanaId].stories[ensure(data.levelId)].state !==
+      player.arcanas[data.elementId].stories[ensure(data.levelId)].state !==
       "complete";
     if (
-      data.arcanaId === 0 &&
+      data.elementId === 0 &&
       ensure(data.levelId) < 2 &&
       player.arcanas &&
       firstTime
@@ -234,7 +237,7 @@ export const enoughEnergyToPlay = (
     }
   }
   if (data.mode === "run" || "fight") {
-    energyPrice = findEnergyPrice(data.arcanaId, data.mode, data.levelId);
+    energyPrice = findEnergyPrice(data.elementId, data.mode, data.levelId);
   }
   return player.energy - energyPrice >= 0;
 };

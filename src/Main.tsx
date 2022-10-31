@@ -8,6 +8,11 @@ import { PopUp } from "./PopUp";
 import { TopMenu } from "./TopMenu";
 import { IArenaEventWithTime, IEndless, IStory } from "../api/engine/types";
 import { Home } from "./Home";
+import { Weapons } from "./Weapons";
+import { Inventory } from "./Inventory";
+import { Goals } from "./Goals";
+import { Arena } from "./Arena";
+import { testPlayer, testServer } from "./utils/testData";
 
 export type mainScreenState =
   | "main"
@@ -48,21 +53,24 @@ export const ComingSoon = ({
 
 const mainScreens: MainScreensType = {
   main: Home,
-  game: ComingSoon,
-  weapons: ComingSoon,
-  inventory: ComingSoon,
-  goals: ComingSoon,
+  weapons: Weapons,
+  inventory: Inventory,
+  goals: Goals,
   collections: ComingSoon,
   messages: ComingSoon,
   element: ComingSoon,
-  arena: ComingSoon,
+  arena: Arena,
   market: ComingSoon,
   aliance: ComingSoon,
   studio: ComingSoon,
+  game: ComingSoon,
 };
 
 export const Main = ({ playerId }: { playerId: string }) => {
   const { data, error, mutate } = useSWR(`/api/players/${playerId}`, fetcher);
+  // const error = null;
+  // const data = { server: testServer, player: testPlayer };
+  // const mutate = async () => {};
   const [screen, setScreen] = useState<mainScreenState>("main");
   const [game, setGame] = useState<
     IStory | IEndless | IArenaEventWithTime | null
@@ -72,7 +80,7 @@ export const Main = ({ playerId }: { playerId: string }) => {
 
   if (error || !data) {
     return (
-      <div className="Main" data-testid="main-screen-error">
+      <div className="MainContainer" data-testid="main-screen-error">
         <h1>ERROR</h1>
       </div>
     );

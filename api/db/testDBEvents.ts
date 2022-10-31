@@ -61,18 +61,18 @@ export const createPlayerEvents: ICreatePlayerDB[] = [
 ];
 
 export const startLevelEvents: IStartLevelDB[] = [
-  { playerId: 1, eventId: 1, arcanaId: 0, levelId: 0, mode: "story" },
+  { playerId: 1, eventId: 1, elementId: 0, levelId: 0, mode: "story" },
 ];
 
 export const winLevelEvents: IWinLevelDB[] = [
-  { playerId: 1, eventId: 2, arcanaId: 0, levelId: 0, mode: "story" },
+  { playerId: 1, eventId: 2, elementId: 0, levelId: 0, mode: "story" },
 ];
 
 export const openSpellEvents: IOpenSpellDB[] = [
   {
     playerId: 1,
     eventId: 3,
-    arcanaId: 0,
+    elementId: 0,
     spellId: 0,
   },
 ];
@@ -81,7 +81,7 @@ export const updateSpellEvents: IUpdateSpellDB[] = [
   {
     playerId: 1,
     eventId: 9,
-    arcanaId: 0,
+    elementId: 0,
     spellId: 0,
   },
 ];
@@ -104,7 +104,7 @@ export const startEldessEvents: IStartEndlessDB[] = [
   {
     playerId: 1,
     eventId: 10,
-    arcanaId: 0,
+    elementId: 0,
     mode: "run",
   },
 ];
@@ -113,14 +113,14 @@ export const passCheckpointEvents: IPassCheckpointDB[] = [
   {
     playerId: 1,
     eventId: 11,
-    arcanaId: 0,
+    elementId: 0,
     mode: "run",
     checkpoint: 0,
   },
   {
     playerId: 1,
     eventId: 12,
-    arcanaId: 0,
+    elementId: 0,
     mode: "run",
     checkpoint: 1,
   },
@@ -130,7 +130,7 @@ export const missCheckpointEvents: IMissCheckpointDB[] = [
   {
     playerId: 1,
     eventId: 13,
-    arcanaId: 0,
+    elementId: 0,
     mode: "run",
   },
 ];

@@ -53,7 +53,7 @@ test("openSpell for player 1", async () => {
   const res: IGame = events.openSpell(
     {
       eventId: 0,
-      arcanaId: 0,
+      elementId: 0,
       spellId: 0,
       playerId: 1,
       created: new Date().valueOf(),
@@ -86,7 +86,7 @@ test("openSpell for player 1", async () => {
     events.openSpell(
       {
         eventId: 0,
-        arcanaId: 0,
+        elementId: 0,
         spellId: 1,
         playerId: 1,
         created: new Date().valueOf(),

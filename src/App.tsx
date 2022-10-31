@@ -28,7 +28,7 @@ export const GameContext = React.createContext<undefined | GameContextType>(
 
 function App() {
   //window.localStorage.getItem("playerId") || short.generate();
-  const [playerId, setPlayerId] = useState<string | null>(null);
+  const [playerId, setPlayerId] = useState<string | null>("1");
 
   const createplayer = async () => {
     const res = await axios.post(`api/players/new?name=PlayerNew`);
