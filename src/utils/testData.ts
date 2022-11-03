@@ -4,6 +4,7 @@ import {
   IAdventure,
   IArena,
   ICharacter,
+  ICollection,
   IElement,
   IEndless,
   IGoal,
@@ -112,6 +113,22 @@ export const testWeapons: IWeapon[] = [];
   );
 });
 
+export const collections: ICollection[] = [0, 1, 2].map((n: number) => {
+  return {
+    id: n,
+    title: "Story" + n,
+    maxPages: n === 0 ? 4 : 10,
+    pages: [0, 1, 2, 3].map((i: number) => {
+      return {
+        id: i,
+        title: "Story " + n + " Page title " + i,
+        text: "Some text",
+        image: i < 2 ? undefined : "img",
+      };
+    }),
+  };
+});
+
 export const goals: IGoal[] = [
   {
     id: 0,
@@ -119,7 +136,7 @@ export const goals: IGoal[] = [
     description: "Complete any 3 story levels",
     state: "new",
     screenToGo: "arcana",
-    condition: { type: "any_story_levels", goal: 3, current: 0 },
+    condition: { type: "any_story_levels", goal: 3, current: 1 },
     reward: [
       { ...testMaterials[0], quantity: 30 },
       { ...testMaterials[2], quantity: 25 },
@@ -141,9 +158,9 @@ export const goals: IGoal[] = [
     id: 2,
     title: "Play 2 endless events",
     description: "Play 2 endless events",
-    state: "new",
+    state: "claimable",
     screenToGo: "arcana",
-    condition: { type: "any_endless", goal: 2, current: 0 },
+    condition: { type: "any_endless", goal: 2, current: 2 },
     reward: [
       { ...testMaterials[0], quantity: 30 },
       { ...testMaterials[4], quantity: 25 },
@@ -244,7 +261,7 @@ export const testPlayer: IPlayer = {
   elements: testElements,
   weapons: testWeapons,
   goals: goals,
-  collections: [],
+  collections: collections,
   messages: [],
   currentState: { state: "MAIN" },
   claims: [],

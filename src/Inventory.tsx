@@ -45,7 +45,13 @@ export const Inventory = ({
       <div className="Inventory" data-testid="inventory-list">
         {items.map((i: InventoryItem, n: number) => (
           <div className="InventoryItem">
-            {i.name}: {i.quantity} {n === 0 ? <button>Generate</button> : null}
+            <div className="InventoryItemImage"></div>
+            <div className="InventoryItemText">
+              <h4>{i.name}</h4>
+              Quantity: {i.quantity}
+              <br />
+              {n === 0 ? <button>Generate</button> : <div> </div>}
+            </div>
           </div>
         ))}
       </div>

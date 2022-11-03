@@ -213,6 +213,7 @@ export interface IPlayer {
 }
 
 export interface IPage {
+  id: number;
   title: string;
   text: string;
   image?: string;
@@ -222,6 +223,7 @@ export interface ICollection {
   id: number;
   title: string;
   pages: IPage[];
+  maxPages: number;
 }
 
 export interface IGoal {
