@@ -206,9 +206,22 @@ export interface IPlayer {
   elements: IElement[];
   weapons: IWeapon[];
   goals: IGoal[];
+  collections: ICollection[];
   messages: IMessage[];
   currentState: ICurrentState;
   claims: IClaimReward[];
+}
+
+export interface IPage {
+  title: string;
+  text: string;
+  image?: string;
+}
+
+export interface ICollection {
+  id: number;
+  title: string;
+  pages: IPage[];
 }
 
 export interface IGoal {
@@ -661,7 +674,7 @@ export type IPlayerArenaStartDB = {
   mode: gameMode;
 };
 export type elementName =
-  | "turquoise"
+  | "jade"
   | "garnet"
   | "obsidian"
   | "moonstone"
@@ -677,7 +690,7 @@ export type weaponName =
 export type materialName =
   | "Gold"
   | "Soul Stone"
-  | "Turquoise"
+  | "Jade"
   | "Garnet"
   | "Obsidian"
   | "Moonstone"

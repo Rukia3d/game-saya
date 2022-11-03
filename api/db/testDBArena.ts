@@ -7,7 +7,7 @@ export const arenaRun: IArena = {
       index: 0,
       stake: [
         { id: 0, name: "Gold", element: null, quantity: 25 },
-        { id: 3, name: "Turquoise", element: "turquoise", quantity: 5 },
+        { id: 3, name: "Jade", element: "jade", quantity: 5 },
       ],
       level: "some",
       rewardPool: [],
@@ -18,7 +18,7 @@ export const arenaRun: IArena = {
       index: 1,
       stake: [
         { id: 0, name: "Gold", element: null, quantity: 50 },
-        { id: 3, name: "Turquoise", element: "turquoise", quantity: 15 },
+        { id: 3, name: "Jade", element: "jade", quantity: 15 },
       ],
       level: "some",
       rewardPool: [],
@@ -29,7 +29,7 @@ export const arenaRun: IArena = {
       index: 2,
       stake: [
         { id: 0, name: "Gold", element: null, quantity: 100 },
-        { id: 3, name: "Turquoise", element: "turquoise", quantity: 20 },
+        { id: 3, name: "Jade", element: "jade", quantity: 20 },
       ],
       level: "some",
       rewardPool: [],
@@ -47,7 +47,7 @@ export const arenaFight: IArena = {
       index: 0,
       stake: [
         { id: 0, name: "Gold", element: null, quantity: 25 },
-        { id: 3, name: "Turquoise", element: "turquoise", quantity: 5 },
+        { id: 3, name: "Jade", element: "jade", quantity: 5 },
       ],
       level: "some",
       rewardPool: [],
@@ -58,7 +58,7 @@ export const arenaFight: IArena = {
       index: 1,
       stake: [
         { id: 0, name: "Gold", element: null, quantity: 50 },
-        { id: 3, name: "Turquoise", element: "turquoise", quantity: 15 },
+        { id: 3, name: "Jade", element: "jade", quantity: 15 },
       ],
       level: "some",
       rewardPool: [],
@@ -69,7 +69,7 @@ export const arenaFight: IArena = {
       index: 2,
       stake: [
         { id: 0, name: "Gold", element: null, quantity: 100 },
-        { id: 3, name: "Turquoise", element: "turquoise", quantity: 20 },
+        { id: 3, name: "Jade", element: "jade", quantity: 20 },
       ],
       level: "some",
       rewardPool: [],

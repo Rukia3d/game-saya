@@ -13,6 +13,7 @@ import { Inventory } from "./Inventory";
 import { Goals } from "./Goals";
 import { Arena } from "./Arena";
 import { testPlayer, testServer } from "./utils/testData";
+import { Collections } from "./Collections";
 
 export type mainScreenState =
   | "main"
@@ -56,7 +57,7 @@ const mainScreens: MainScreensType = {
   weapons: Weapons,
   inventory: Inventory,
   goals: Goals,
-  collections: ComingSoon,
+  collections: Collections,
   messages: ComingSoon,
   element: ComingSoon,
   arena: Arena,
@@ -67,10 +68,10 @@ const mainScreens: MainScreensType = {
 };
 
 export const Main = ({ playerId }: { playerId: string }) => {
-  const { data, error, mutate } = useSWR(`/api/players/${playerId}`, fetcher);
-  // const error = null;
-  // const data = { server: testServer, player: testPlayer };
-  // const mutate = async () => {};
+  // const { data, error, mutate } = useSWR(`/api/players/${playerId}`, fetcher);
+  const error = null;
+  const data = { server: testServer, player: testPlayer };
+  const mutate = async () => {};
   const [screen, setScreen] = useState<mainScreenState>("main");
   const [game, setGame] = useState<
     IStory | IEndless | IArenaEventWithTime | null

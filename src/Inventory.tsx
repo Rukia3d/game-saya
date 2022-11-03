@@ -44,7 +44,7 @@ export const Inventory = ({
       <CloseButton close={() => setScreen("main")} />
       <div className="Inventory" data-testid="inventory-list">
         {items.map((i: InventoryItem, n: number) => (
-          <div>
+          <div className="InventoryItem">
             {i.name}: {i.quantity} {n === 0 ? <button>Generate</button> : null}
           </div>
         ))}

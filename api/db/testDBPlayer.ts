@@ -54,7 +54,7 @@ export const baseGame = { players: [basePlayer], server: baseServer };
 export const materials: IMaterial[] = [
   { id: 0, name: "Gold", element: null },
   { id: 1, name: "Soul Stone", element: null },
-  { id: 2, name: "Turquoise", element: "turquoise" },
+  { id: 2, name: "Jade", element: "jade" },
   { id: 3, name: "Garnet", element: "garnet" },
   { id: 4, name: "Obsidian", element: "obsidian" },
   { id: 5, name: "Moonstone", element: "moonstone" },
@@ -62,7 +62,7 @@ export const materials: IMaterial[] = [
 ];
 
 export const characters: ICharacter[] = [
-  { name: "Saya", id: 0, weapon: "chakram", element: "turquoise" },
+  { name: "Saya", id: 0, weapon: "chakram", element: "jade" },
   { name: "Nell", id: 1, weapon: "greatsword", element: "garnet" },
 ];
 
@@ -113,7 +113,7 @@ export const endless: IEndless[] = ["run", "fight"].map(
 
 export const weapons: IWeapon[] = [];
 ["chakram", "greatsword"].map((s: string, n: number) => {
-  ["turquoise", "garnet", "obsidian", "moonstone", "amber"].map(
+  ["jade", "garnet", "obsidian", "moonstone", "amber"].map(
     (e: string, i: number) => {
       weapons.push({
         name: s as weaponName,

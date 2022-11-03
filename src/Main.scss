@@ -59,12 +59,30 @@
     width: 100%;
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap;
 
     .Weapon {
       flex-grow: 1;
       align-items: stretch;
       border: 1px solid black;
+      max-height: 15em;
+
+      .WeaponElements {
+        display: flex;
+        flex-direction: column;
+        margin-top: 3em;
+
+        .Open {
+          background-color: turquoise;
+        }
+
+        .Charge {
+          background-color: yellow;
+        }
+
+        .Closed {
+          background-color: gray;
+        }
+      }
     }
   }
 
@@ -74,7 +92,6 @@
     width: 100%;
     display: flex;
     flex-direction: column;
-    flex-wrap: wrap;
 
     .WeaponItem {
       border: 1px solid black;
@@ -83,7 +100,46 @@
 
     .WeaponDetail {
       border: 1px solid black;
-      min-height: 6em;
+      min-height: 8em;
+
+      .Weapon {
+        display: flex;
+        flex-direction: row;
+
+        .WeaponImage {
+          background-color: #f394de;
+          margin: 1em;
+          width: 40%;
+          height: 100%;
+          min-height: 8em;
+          min-width: 5em;
+        }
+
+        .WeaponText {
+          width: 60%;
+          height: 100%;
+          margin: 1em;
+        }
+      }
+    }
+  }
+}
+
+.InventoryContainer {
+  width: 100%;
+  height: 100%;
+  background-color: #f1f524;
+  padding-top: 1em;
+
+  .Inventory {
+    display: flex;
+    width: 100%;
+    flex-wrap: wrap;
+
+    .InventoryItem {
+      border: 1px solid black;
+      min-width: 50%;
+      min-height: 5em;
     }
   }
 }

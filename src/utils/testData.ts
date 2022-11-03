@@ -16,7 +16,7 @@ import {
 } from "../../api/engine/types";
 
 export const testCharacters: ICharacter[] = [
-  { name: "Saya", id: 0, weapon: "chakram", element: "turquoise" },
+  { name: "Saya", id: 0, weapon: "chakram", element: "jade" },
   { name: "Nell", id: 1, weapon: "greatsword", element: "garnet" },
 ];
 
@@ -36,6 +36,7 @@ export const testStories: IStory[] = [0, 1, 2].map((n: number) => {
     energy: 5,
   };
 });
+
 export const testAdventures: IAdventure[][] = testCharacters.map(
   (n: ICharacter) => {
     return [
@@ -70,7 +71,7 @@ export const testEndless: IEndless[] = ["run", "fight"].map(
 const testMaterials: IMaterial[] = [
   { id: 0, name: "Gold", element: null },
   { id: 1, name: "Soul Stone", element: null },
-  { id: 2, name: "Turquoise", element: "turquoise" },
+  { id: 2, name: "Jade", element: "jade" },
   { id: 3, name: "Garnet", element: "garnet" },
   { id: 4, name: "Obsidian", element: "obsidian" },
   { id: 5, name: "Moonstone", element: "moonstone" },
@@ -96,16 +97,16 @@ const testElements: IElement[] = [
 
 export const testWeapons: IWeapon[] = [];
 ["chakram", "greatsword"].map((s: string, n: number) => {
-  ["turquoise", "garnet", "obsidian", "moonstone", "amber"].map(
+  ["jade", "garnet", "obsidian", "moonstone", "amber"].map(
     (e: string, i: number) => {
       testWeapons.push({
         name: s as weaponName,
         id: n,
         elementId: i,
         elementName: e as elementName,
-        charge: 100,
+        charge: i === 0 ? 40 : 100,
         maxCharge: 100,
-        state: i === 0 ? "open" : "closed",
+        state: i < 2 ? "open" : "closed",
       });
     }
   );
@@ -158,7 +159,7 @@ export const testArenaRun: IArena = {
       index: 0,
       stake: [
         { id: 0, name: "Gold", element: null, quantity: 25 },
-        { id: 3, name: "Turquoise", element: "turquoise", quantity: 5 },
+        { id: 3, name: "Jade", element: "jade", quantity: 5 },
       ],
       level: "some",
       rewardPool: [],
@@ -169,7 +170,7 @@ export const testArenaRun: IArena = {
       index: 1,
       stake: [
         { id: 0, name: "Gold", element: null, quantity: 50 },
-        { id: 3, name: "Turquoise", element: "turquoise", quantity: 15 },
+        { id: 3, name: "Jade", element: "jade", quantity: 15 },
       ],
       level: "some",
       rewardPool: [],
@@ -180,7 +181,7 @@ export const testArenaRun: IArena = {
       index: 2,
       stake: [
         { id: 0, name: "Gold", element: null, quantity: 100 },
-        { id: 3, name: "Turquoise", element: "turquoise", quantity: 20 },
+        { id: 3, name: "Jade", element: "jade", quantity: 20 },
       ],
       level: "some",
       rewardPool: [],
@@ -198,7 +199,7 @@ export const testArenaFight: IArena = {
       index: 0,
       stake: [
         { id: 0, name: "Gold", element: null, quantity: 25 },
-        { id: 3, name: "Turquoise", element: "turquoise", quantity: 5 },
+        { id: 3, name: "Jade", element: "jade", quantity: 5 },
       ],
       level: "some",
       rewardPool: [],
@@ -209,7 +210,7 @@ export const testArenaFight: IArena = {
       index: 1,
       stake: [
         { id: 0, name: "Gold", element: null, quantity: 50 },
-        { id: 3, name: "Turquoise", element: "turquoise", quantity: 15 },
+        { id: 3, name: "Jade", element: "jade", quantity: 15 },
       ],
       level: "some",
       rewardPool: [],
@@ -220,7 +221,7 @@ export const testArenaFight: IArena = {
       index: 2,
       stake: [
         { id: 0, name: "Gold", element: null, quantity: 100 },
-        { id: 3, name: "Turquoise", element: "turquoise", quantity: 20 },
+        { id: 3, name: "Jade", element: "jade", quantity: 20 },
       ],
       level: "some",
       rewardPool: [],
@@ -243,6 +244,7 @@ export const testPlayer: IPlayer = {
   elements: testElements,
   weapons: testWeapons,
   goals: goals,
+  collections: [],
   messages: [],
   currentState: { state: "MAIN" },
   claims: [],

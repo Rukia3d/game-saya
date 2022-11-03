@@ -23,36 +23,71 @@ const weaponsById = (weapons: IWeapon[]): WeaponById[] => {
   return newWepons;
 };
 
+const elementState = (e: IWeapon) => {
+  if (e.state === "open" && e.charge >= e.maxCharge / 2) {
+    return "Open";
+  }
+
+  if (e.state === "open" && e.charge < e.maxCharge / 2 && e.charge > 0) {
+    return "Charge";
+  }
+
+  if (e.state === "open" && e.charge <= 0) {
+    return "NoCharge";
+  }
+
+  return "Closed";
+};
+
 export const WeaponList = ({
   weapon,
   setWeapon,
+  element,
+  setElement,
 }: {
   weapon: WeaponById;
   setWeapon: (w: null | WeaponById) => void;
+  element: null | IWeapon;
+  setElement: (w: null | IWeapon) => void;
 }) => {
-  const [element, setElement] = useState<null | IWeapon>(weapon.elements[0]);
+  const [selected, setSelected] = useState(element);
+
+  const changeElement = (w: IWeapon) => {
+    setSelected(w);
+    setElement(w);
+  };
+
   const close = () => {
     setElement(null);
     setWeapon(null);
   };
 
-  const selected = (w: IWeapon) => {
-    return element && element.elementId === w.elementId;
-  };
   return (
     <div className="WeaponList" data-testid="weapon-popup">
       <CloseButton close={close} />
       {weapon.elements.map((w: IWeapon, n: number) => (
         <div
+          onClick={() => changeElement(w)}
           key={n}
           data-testid="weapon-screen"
-          className={`${selected(w) ? "WeaponDetail" : "WeaponItem"}`}
+          className={`${
+            selected?.elementId === w.elementId ? "WeaponDetail" : "WeaponItem"
+          }`}
         >
           {w.name} : {w.elementName}
-          {selected(w) ? (
-            <span>
-              {w.charge} out of {w.maxCharge}
-            </span>
+          {selected?.elementId === w.elementId ? (
+            <div className="Weapon">
+              <div className="WeaponImage"></div>
+              <div className="WeaponText">
+                {w.state === "open" ? (
+                  <span>
+                    {w.charge} out of {w.maxCharge}
+                  </span>
+                ) : (
+                  <span>Closed</span>
+                )}
+              </div>
+            </div>
           ) : null}
         </div>
       ))}
@@ -72,8 +107,11 @@ export const Weapons = ({
 
   const weapons = weaponsById(context.player.weapons);
   const [weapon, setWeapon] = useState<null | WeaponById>(null);
+  const [weponElement, setWeaponElement] = useState<null | IWeapon>(null);
+  const elements = ["Jade", "Garnet", "Obsidian", "Moonstone", "Amber"];
 
   const close = () => {
+    setWeaponElement(null);
     setWeapon(null);
     setScreen("main");
   };
@@ -83,7 +121,12 @@ export const Weapons = ({
       <TopMenu />
       {weapon ? (
         <PopUp close={close}>
-          <WeaponList weapon={weapon} setWeapon={setWeapon} />
+          <WeaponList
+            weapon={weapon}
+            setWeapon={setWeapon}
+            element={weponElement}
+            setElement={setWeaponElement}
+          />
         </PopUp>
       ) : (
         <>
@@ -97,7 +140,18 @@ export const Weapons = ({
                 onClick={() => setWeapon(w)}
                 data-testid="weapon-selection"
               >
-                {w.name}
+                <div onClick={() => setWeapon(w)}>{w.name}</div>
+                <div className="WeaponElements">
+                  {elements.map((e: string, i: number) => (
+                    <button
+                      key={i}
+                      onClick={() => setWeaponElement(w.elements[i])}
+                      className={elementState(w.elements[i])}
+                    >
+                      {e}
+                    </button>
+                  ))}
+                </div>
               </div>
             ))}
           </div>
