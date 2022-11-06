@@ -1,11 +1,13 @@
 import { applyEvent } from "../engine/engine";
 
-import { IGame, IPlayer, IServer, IStartLevelEvent } from "../engine/types";
 import * as readers from "../db/readers";
+
+import { IGame, IPlayer, IServer, IStartLevelEvent } from "../engine/types";
 
 const LASTEVENTID = readers.gameEvents().length - 1;
 const BASEQUANTITY = 50;
 
+/*
 test("Applies a single event correctly", () => {
   const newPlayer = { ...basePlayer, arcanas: arcanas };
   const newServer = { ...baseServer };
@@ -267,3 +269,4 @@ test("Applies a series of events correctly", () => {
   );
   expect(currentGame.server.arenaRun.events[0].results.length).toEqual(1);
 });
+*/

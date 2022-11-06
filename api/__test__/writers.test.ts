@@ -1,11 +1,5 @@
-import { ARENAEVENTINTERVAL } from "../cronjobs";
 import * as readers from "../db/readers";
-import { arcanas } from "../db/testDBArcanas";
-import { arenaRun } from "../../src/utils/testDBArena";
-import { basePlayer, baseServer, materials } from "../db/testDBPlayer";
-import { spells } from "../db/testDBSpells";
 import * as writers from "../db/writers";
-import { currentState, gameMode, IGame, IMaterial } from "../engine/types";
 
 const LASTEVENTID = readers.gameEvents().length - 1;
 test("Writes createPlayerEvent correctly", () => {
@@ -28,6 +22,7 @@ test("Writes createPlayerEvent correctly", () => {
   expect(readCreate.playerName).toEqual("Created player test");
 });
 
+/*
 test("Writes startLevelEvent correctly", () => {
   const game: IGame = {
     players: [
@@ -457,3 +452,4 @@ test("Writes endArenaEvent correctly", () => {
   expect(readEnd.index).toEqual(0);
   expect(readEnd.mode).toEqual("run");
 });
+*/

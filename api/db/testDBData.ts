@@ -247,7 +247,7 @@ export const elementAdventure: IElement[] = [
     character: characters[0],
     adventures: [adventures[0]],
     endless: [endless[0], endless[1]],
-    quests: [quests[0], quests[1]],
+    quests: [quests[0]],
   },
   {
     id: 1,

@@ -12,6 +12,7 @@ test("Won't read create player if no event with this ID", () => {
   jest.restoreAllMocks();
 });
 
+/*
 test("Won't read start level if no event with this ID", () => {
   jest.spyOn(console, "error").mockImplementation(() => jest.fn());
   expect(() =>
@@ -143,3 +144,4 @@ test("Won't read server arena end if no event with this Id", () => {
   ).toThrow("No start server arena event");
   jest.restoreAllMocks();
 });
+*/

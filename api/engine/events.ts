@@ -11,6 +11,7 @@ import {
   ICreatePlayerEvent,
   ICurrentState,
   IDelistSpellEvent,
+  IElement,
   IEventReward,
   IGame,
   IListSpellEvent,
@@ -31,6 +32,9 @@ import {
 const INDEXOFFIRSTREWARDABLE = 2;
 
 export const createPlayer = (event: ICreatePlayerEvent, game: IGame): IGame => {
+  const newElement: IElement = JSON.parse(JSON.stringify(elementAdventure))[0];
+  newElement.adventures[0].stories[0].state = "open";
+  newElement.quests[0].stories[0].state = "open";
   const newPlayer: IPlayer = {
     ...basePlayer,
     id: event.playerId,
@@ -38,7 +42,7 @@ export const createPlayer = (event: ICreatePlayerEvent, game: IGame): IGame => {
     materials: JSON.parse(JSON.stringify(materials)).map((m: IMaterial) => {
       return { ...m, quantity: 50 };
     }),
-    elements: JSON.parse(JSON.stringify(elementAdventure)),
+    elements: [newElement],
   };
   const newPlayers = game.players.concat([newPlayer]);
   return {
