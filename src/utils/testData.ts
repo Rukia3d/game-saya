@@ -9,7 +9,9 @@ import {
   IEndless,
   IGoal,
   IMaterial,
+  IMessage,
   IPlayer,
+  IQuest,
   IServer,
   IStory,
   IWeapon,
@@ -69,6 +71,18 @@ export const testEndless: IEndless[] = ["run", "fight"].map(
   }
 );
 
+export const testQuests: IQuest[] = [0, 1, 3].map((n: number) => {
+  return {
+    id: n,
+    state: n === 0 ? "new" : "rented",
+    name: n === 0 ? "New Quest" : "Rented Quest" + n,
+    description:
+      n === 0 ? "New Quest Descriotion" : "Rented Quest " + n + " Description",
+    elementId: 0,
+    stories: testStories,
+  };
+});
+
 const testMaterials: IMaterial[] = [
   { id: 0, name: "Gold", element: null },
   { id: 1, name: "Soul Stone", element: null },
@@ -85,7 +99,7 @@ const testElements: IElement[] = [
     id: 0,
     adventures: testAdventures[0],
     endless: testEndless,
-    quests: [],
+    quests: testQuests,
   },
   {
     character: testCharacters[1],
@@ -165,6 +179,7 @@ export const goals: IGoal[] = [
       { ...testMaterials[0], quantity: 30 },
       { ...testMaterials[4], quantity: 25 },
     ],
+    claimId: 0,
   },
 ];
 
@@ -207,6 +222,17 @@ export const testArenaRun: IArena = {
     },
   ],
 };
+
+export const messages: IMessage[] = [0, 1].map((n: number) => {
+  return {
+    text:
+      n === 1
+        ? "You've completed 2 endless events, please claim your goal"
+        : "Tomorrow the server will be in maintenance mode from 2 to 3 PM, no arena events will be hosted",
+    read: false,
+    claimId: n === 1 ? 0 : undefined,
+  };
+});
 
 export const testArenaFight: IArena = {
   resultTime: new Date(new Date().valueOf() + 4 * 60 * 60 * 1000).valueOf(),
@@ -262,7 +288,7 @@ export const testPlayer: IPlayer = {
   weapons: testWeapons,
   goals: goals,
   collections: collections,
-  messages: [],
+  messages: messages,
   currentState: { state: "MAIN" },
   claims: [],
 };

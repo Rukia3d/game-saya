@@ -233,6 +233,102 @@
   }
 }
 
+.MessagesContainer {
+  background-color: #96f394;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+
+  .Message {
+    min-height: 3em;
+    border: 1px solid black;
+    text-align: center;
+    display: flex;
+    flex-direction: row;
+
+    .MessageText {
+      width: 70%;
+    }
+
+    .MessageActions {
+      width: 30%;
+      display: flex;
+      flex-direction: column;
+    }
+  }
+}
+
+.AdventuresContainer {
+  background-color: #52ffff;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+
+  .Adventures {
+    min-height: 3em;
+    display: flex;
+    flex-direction: column;
+
+    .AdventuresStories {
+      min-height: 3em;
+      border: 1px solid black;
+      padding: 1em;
+
+      .AdventuresStoriesList {
+        display: flex;
+        flex-direction: row;
+
+        .AdventuresStory {
+          background-color: #00bbbb;
+          border: 1px solid black;
+          height: 5em;
+          max-width: 30%;
+          margin: 1em;
+        }
+      }
+    }
+
+    .AdventuresEndless {
+      min-height: 3em;
+      border: 1px solid black;
+      padding: 1em;
+
+      .AdventuresEndlessList {
+        display: flex;
+        flex-direction: row;
+
+        .AdventureEndless {
+          background-color: #00bbbb;
+          border: 1px solid black;
+          height: 5em;
+          width: 50%;
+          margin: 1em;
+        }
+      }
+    }
+
+    .AdventuresQuests {
+      min-height: 3em;
+      border: 1px solid black;
+      padding: 1em;
+
+      .AdventuresQuestList {
+        display: flex;
+        flex-direction: row;
+
+        .AdventureQuest {
+          background-color: #00bbbb;
+          border: 1px solid black;
+          height: 5em;
+          margin: 1em;
+        }
+      }
+    }
+  }
+}
+
 .TopMenu {
   width: 100%;
   height: 7%;

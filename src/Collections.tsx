@@ -8,24 +8,36 @@ import { TopMenu } from "./TopMenu";
 export const Page = ({
   page,
   pages,
+  setCollection,
   setPage,
 }: {
-  page: IPage | null;
+  page: IPage;
   pages: IPage[];
+  setCollection: (p: null | ICollection) => void;
   setPage: (p: null | IPage) => void;
 }) => {
-  return <div className="Collection">{page ? page.title : pages[0].title}</div>;
+  return <div className="Collection">{page.title}</div>;
 };
 
 export const Collection = ({
   collection,
   setCollection,
+  setPage,
 }: {
   collection: ICollection;
   setCollection: (c: null | ICollection) => void;
+  setPage: (p: null | IPage) => void;
 }) => {
+  const changeCollection = (c: ICollection) => {
+    setCollection(collection);
+    setPage(collection.pages[0]);
+  };
+
   return (
-    <div className="CollectionItem" onClick={() => setCollection(collection)}>
+    <div
+      className="CollectionItem"
+      onClick={() => changeCollection(collection)}
+    >
       <div className="CollectionItemTitle">
         <h4>{collection.title}</h4>
       </div>
@@ -50,18 +62,29 @@ export const Collections = ({
 
   const collections = context.player.collections;
 
-  const close = () => {
-    console.log("close");
-    setPage(null);
-    setCollection(null);
+  const selectCollection = (c: ICollection | null) => {
+    console.log("selectCollection", c);
+    if (c) {
+      setCollection(c);
+      setPage(c.pages[0]);
+    } else {
+      setPage(null);
+      setCollection(null);
+      setScreen("main");
+    }
   };
 
   return (
     <div className="CollectionsContainer" data-testid="collections-screen">
       <TopMenu />
-      {collection ? (
-        <PopUp close={close}>
-          <Page page={page} pages={collection.pages} setPage={setPage} />
+      {collection && page ? (
+        <PopUp close={() => selectCollection(null)}>
+          <Page
+            page={page}
+            pages={collection.pages}
+            setCollection={setCollection}
+            setPage={setPage}
+          />
         </PopUp>
       ) : (
         <>
@@ -72,7 +95,8 @@ export const Collections = ({
               <Collection
                 collection={i}
                 key={n}
-                setCollection={setCollection}
+                setCollection={selectCollection}
+                setPage={setPage}
               />
             ))}
           </div>

@@ -44,7 +44,7 @@ export const Inventory = ({
       <CloseButton close={() => setScreen("main")} />
       <div className="Inventory" data-testid="inventory-list">
         {items.map((i: InventoryItem, n: number) => (
-          <div className="InventoryItem">
+          <div className="InventoryItem" key={n}>
             <div className="InventoryItemImage"></div>
             <div className="InventoryItemText">
               <h4>{i.name}</h4>

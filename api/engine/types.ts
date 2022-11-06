@@ -63,7 +63,10 @@ export type IMaterialQuant = IMaterial & { quantity: number };
 export interface IQuest {
   id: number;
   state: questState;
-  levels: []; //Unknown for now
+  name: string;
+  description: string;
+  elementId: number;
+  stories: IStory[];
 }
 
 export type IQuestListing = IQuest & { price: number; owner: number };
@@ -234,6 +237,7 @@ export interface IGoal {
   screenToGo: string;
   reward: IMaterialQuant[];
   condition: IGoalCondition;
+  claimId?: number;
 }
 
 export interface IGoalCondition {
@@ -243,7 +247,6 @@ export interface IGoalCondition {
 }
 
 export interface IMessage {
-  header: string;
   text: string;
   read: boolean;
   claimId?: number;
@@ -699,7 +702,7 @@ export type materialName =
   | "Amber";
 
 export type spellState = "closed" | "open" | "listed";
-export type questState = "open" | "rented" | "new";
+export type questState = "owned" | "rented" | "new";
 export type gameMode = "story" | "quest" | "run" | "fight";
 export type levelState = "open" | "closed" | "complete";
 export type arenaType = "run" | "fight";

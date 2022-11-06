@@ -25,7 +25,7 @@ const Goal = ({ goal }: { goal: IGoal }) => {
             {goal.condition.current} out of {goal.condition.goal}
           </div>
           <div>
-            {goal.state === "claimable" ? (
+            {goal.state === "claimable" && goal.claimId ? (
               <button>Claim</button>
             ) : (
               <button>Skip</button>

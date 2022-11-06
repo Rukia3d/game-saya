@@ -40,7 +40,11 @@ export const Adventures = ({
   return (
     <div className="Adventures" data-testid="home-adventures">
       {elements.map((e: IElement, n: number) => (
-        <div className="Adventure" key={n}>
+        <div
+          className="Adventure"
+          key={n}
+          onClick={() => setScreen("adventure")}
+        >
           {e.character.element}
         </div>
       ))}

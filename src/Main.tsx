@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import useSWR from "swr";
-import { fetcher } from "./utils/helpers";
 import "./Main.scss";
 import { GameContextType, GameContext } from "./App";
 
@@ -14,6 +12,8 @@ import { Goals } from "./Goals";
 import { Arena } from "./Arena";
 import { testPlayer, testServer } from "./utils/testData";
 import { Collections } from "./Collections";
+import { Messages } from "./Messages";
+import { Adventures } from "./Adventures";
 
 export type mainScreenState =
   | "main"
@@ -23,7 +23,7 @@ export type mainScreenState =
   | "goals"
   | "collections"
   | "messages"
-  | "element"
+  | "adventure"
   | "arena"
   | "market"
   | "aliance"
@@ -58,8 +58,8 @@ const mainScreens: MainScreensType = {
   inventory: Inventory,
   goals: Goals,
   collections: Collections,
-  messages: ComingSoon,
-  element: ComingSoon,
+  messages: Messages,
+  adventure: Adventures,
   arena: Arena,
   market: ComingSoon,
   aliance: ComingSoon,
