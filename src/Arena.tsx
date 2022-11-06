@@ -188,7 +188,7 @@ export const Arena = ({
   const canCompete: boolean =
     arena !== null && enoughToPay(context.player.materials, arena.stake);
   return (
-    <div className="Arena">
+    <div className="ArenaContainer">
       {arena ? (
         <PopUp close={cancelArena}>
           <ArenaStartConfirmation
