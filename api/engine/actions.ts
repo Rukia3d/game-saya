@@ -1,12 +1,5 @@
 import {
-  findLastCheckpoint,
-  findLevel,
-  findLevelIndex,
-  generateRandom,
-} from "./helpers";
-import {
   IMaterialQuant,
-  IArcana,
   IAllowedRewards,
   IMissCheckpointEvent,
   IPlayer,
@@ -14,12 +7,9 @@ import {
   IWinLevelEvent,
   IPassCheckpointEvent,
   IArenaResult,
-  ISpellListing,
-  ISpell,
-  ISpellClosed,
-  ISpellOpen,
 } from "./types";
 
+/*
 export const rewardPlayer = (
   event: IWinLevelEvent | IMissCheckpointEvent,
   materials: IMaterialQuant[],
@@ -135,3 +125,4 @@ export const listingToPlayer = (
   newListings.splice(indexToRemove, 1);
   return [newPlayerSpells, newListings];
 };
+*/

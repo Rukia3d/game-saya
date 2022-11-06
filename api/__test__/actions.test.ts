@@ -1,6 +1,4 @@
-import { arcanas } from "../db/testDBArcanas";
-import { arenaRun } from "../db/testDBArena";
-import { materials } from "../db/testDBPlayer";
+import { materials } from "../db/testDBData";
 import {
   addExperience,
   openNextLevel,
@@ -15,22 +13,6 @@ import {
   IPlayer,
   materialName,
 } from "../engine/types";
-
-const basePlayer: IPlayer = {
-  id: 1,
-  name: "",
-  exprience: 0,
-  energy: 0,
-  maxEnergy: 0,
-  loungeId: null,
-  materials: [],
-  arcanas: [],
-  spells: [],
-  goals: [],
-  messages: [],
-  claims: [],
-  currentState: { state: "MAIN" },
-};
 
 test("rewardPlayer generates correct rewards", async () => {
   const playerMaterials = JSON.parse(JSON.stringify(materials)).map(

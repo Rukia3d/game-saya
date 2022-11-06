@@ -1,5 +1,14 @@
-import { IArena, IServer } from "../engine/types";
-export const arenaRun: IArena = {
+import { elementName, IArena } from "../../api/engine/types";
+
+export const elements: { id: number; name: elementName }[] = [
+  { id: 0, name: "jade" },
+  { id: 1, name: "garnet" },
+  { id: 2, name: "obsidian" },
+  { id: 3, name: "moonstone" },
+  { id: 4, name: "amber" },
+];
+
+export const testArenaRun: IArena = {
   resultTime: new Date(new Date().valueOf() + 50 * 1000).valueOf(),
   mode: "run",
   events: [
@@ -7,7 +16,7 @@ export const arenaRun: IArena = {
       index: 0,
       stake: [
         { id: 0, name: "Gold", element: null, quantity: 25 },
-        { id: 3, name: "Jade", element: "jade", quantity: 5 },
+        { id: 3, name: "Jade", element: elements[0], quantity: 5 },
       ],
       level: "some",
       rewardPool: [],
@@ -18,7 +27,7 @@ export const arenaRun: IArena = {
       index: 1,
       stake: [
         { id: 0, name: "Gold", element: null, quantity: 50 },
-        { id: 3, name: "Jade", element: "jade", quantity: 15 },
+        { id: 3, name: "Jade", element: elements[0], quantity: 15 },
       ],
       level: "some",
       rewardPool: [],
@@ -29,7 +38,7 @@ export const arenaRun: IArena = {
       index: 2,
       stake: [
         { id: 0, name: "Gold", element: null, quantity: 100 },
-        { id: 3, name: "Jade", element: "jade", quantity: 20 },
+        { id: 3, name: "Jade", element: elements[0], quantity: 20 },
       ],
       level: "some",
       rewardPool: [],
@@ -39,7 +48,7 @@ export const arenaRun: IArena = {
   ],
 };
 
-export const arenaFight: IArena = {
+export const testArenaFight: IArena = {
   resultTime: new Date(new Date().valueOf() + 4 * 60 * 60 * 1000).valueOf(),
   mode: "fight",
   events: [
@@ -47,7 +56,7 @@ export const arenaFight: IArena = {
       index: 0,
       stake: [
         { id: 0, name: "Gold", element: null, quantity: 25 },
-        { id: 3, name: "Jade", element: "jade", quantity: 5 },
+        { id: 3, name: "Jade", element: elements[0], quantity: 5 },
       ],
       level: "some",
       rewardPool: [],
@@ -58,7 +67,7 @@ export const arenaFight: IArena = {
       index: 1,
       stake: [
         { id: 0, name: "Gold", element: null, quantity: 50 },
-        { id: 3, name: "Jade", element: "jade", quantity: 15 },
+        { id: 3, name: "Jade", element: elements[0], quantity: 15 },
       ],
       level: "some",
       rewardPool: [],
@@ -69,7 +78,7 @@ export const arenaFight: IArena = {
       index: 2,
       stake: [
         { id: 0, name: "Gold", element: null, quantity: 100 },
-        { id: 3, name: "Jade", element: "jade", quantity: 20 },
+        { id: 3, name: "Jade", element: elements[0], quantity: 20 },
       ],
       level: "some",
       rewardPool: [],
@@ -77,11 +86,4 @@ export const arenaFight: IArena = {
       mode: "run",
     },
   ],
-};
-
-export const serverGames: IServer = {
-  arenaRun: arenaRun,
-  arenaFight: arenaFight,
-  arenaRunHistory: [],
-  arenaFightHistory: [],
 };

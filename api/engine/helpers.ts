@@ -1,7 +1,6 @@
 import seedrandom from "seedrandom";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import { arcanas } from "../db/testDBArcanas";
 import {
   gameMode,
   ICurrentState,
@@ -18,7 +17,6 @@ import {
   IArenaResultPool,
   IArena,
   IArenaEvent,
-  ISpellListing,
   IEndless,
   IElement,
 } from "./types";
@@ -32,6 +30,24 @@ export const generateSeed = (
   return phrase;
 };
 
+export function ensure<T>(
+  argument: T | undefined | null,
+  message: string = "This value was promised to be there."
+): T {
+  if (argument === undefined || argument === null) {
+    throw new TypeError(message);
+  }
+
+  return argument;
+}
+
+export const findPlayer = (game: IGame, playerId: number) => {
+  const res = game.players.find((p: IPlayer) => p.id == playerId);
+  if (!res) throw new Error("Can't find player based on ID");
+  return res;
+};
+
+/*
 export const generateArenaRandom = (
   event: IServerArenaStartEvent,
   mode: string,
@@ -280,22 +296,7 @@ export const canUpdateSpell = (
   return requiredStrength === strength;
 };
 
-export function ensure<T>(
-  argument: T | undefined | null,
-  message: string = "This value was promised to be there."
-): T {
-  if (argument === undefined || argument === null) {
-    throw new TypeError(message);
-  }
 
-  return argument;
-}
-
-export const findPlayer = (game: IGame, playerId: number) => {
-  const res = game.players.find((p: IPlayer) => p.id == playerId);
-  if (!res) throw new Error("Can't find player based on ID");
-  return res;
-};
 
 export const replacePlayer = (
   allPlayers: IPlayer[],
@@ -325,8 +326,7 @@ export const rewardArenaPlayer = (
     claimed: false,
   });
   newPlayer.messages.push({
-    header: "Claim arena reward",
-    text: `Congratulations on winning ${place} place reward at Arena`,
+    text: `Claim arena reward! Congratulations on winning ${place} place reward at Arena`,
     read: false,
     claimId: newId,
   });
@@ -369,3 +369,4 @@ export const findListing = (listings: ISpellListing[], listingId: number) => {
   );
   return listing;
 };
+*/

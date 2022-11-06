@@ -16,27 +16,28 @@ export const applyEvent = (game: IGame, event: IGameEvent): IGame => {
         newGame
       );
       break;
+    /*
     case "STARTLEVEL":
       newGame = events.startLevel(event, newGame);
       break;
     case "WINLEVEL":
       newGame = events.winLevel(event, newGame);
       break;
-    case "OPENSPELL":
-      newGame = events.openSpell(event, newGame);
-      break;
-    case "UPDATESPELL":
-      newGame = events.updateSpell(event, newGame);
-      break;
-    case "LISTSPELL":
-      newGame = events.listSpell(event, newGame);
-      break;
-    case "DELISTSPELL":
-      newGame = events.delistSpell(event, newGame);
-      break;
-    case "BUYSPELL":
-      newGame = events.buySpell(event, newGame);
-      break;
+    // case "OPENSPELL":
+    //   newGame = events.openSpell(event, newGame);
+    //   break;
+    // case "UPDATESPELL":
+    //   newGame = events.updateSpell(event, newGame);
+    //   break;
+    // case "LISTSPELL":
+    //   newGame = events.listSpell(event, newGame);
+    //   break;
+    // case "DELISTSPELL":
+    //   newGame = events.delistSpell(event, newGame);
+    //   break;
+    // case "BUYSPELL":
+    //   newGame = events.buySpell(event, newGame);
+    //   break;
     case "STARTENDLESS":
       newGame = events.startEndless(event, newGame);
       break;
@@ -58,6 +59,7 @@ export const applyEvent = (game: IGame, event: IGameEvent): IGame => {
     case "ARENAEND":
       newGame = events.endArena(event, newGame);
       break;
+      */
     default:
       throw new Error("Unknown event type");
   }
@@ -81,6 +83,7 @@ export const applyEvents = (events: IGameEvent[]): IGame => {
         goals: [],
         messages: [],
         claims: [],
+        collections: [],
         currentState: { state: "MAIN" },
       },
     ],

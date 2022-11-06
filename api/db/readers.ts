@@ -5,8 +5,6 @@ import {
   IGameEvent,
   IMissCheckpointDB,
   IMissCheckpointEvent,
-  IOpenSpellDB,
-  IOpenSpellEvent,
   IPassCheckpointDB,
   IPassCheckpointEvent,
   IEventDB,
@@ -14,7 +12,6 @@ import {
   IStartEndlessEvent,
   IStartLevelDB,
   IStartLevelEvent,
-  IUpdateSpellEvent,
   IWinLevelDB,
   IWinLevelEvent,
   IServerArenaStartDB,
@@ -25,12 +22,6 @@ import {
   IArenaStartDB,
   IArenaEndEvent,
   IArenaEndDB,
-  IListSpellEvent,
-  IListSpellDB,
-  IDelistSpellEvent,
-  IDelistSpellDB,
-  IBuySpellEvent,
-  IBuySpellDB,
 } from "../engine/types";
 import {
   allGameEvents,
@@ -124,27 +115,28 @@ export const playerEvents = (): IGameEvent[] => {
       case "CREATEPLAYER":
         newEvents.push(createPlayerEvent(e));
         break;
+      /*
       case "STARTLEVEL":
         newEvents.push(startLevelEvent(e));
         break;
       case "WINLEVEL":
         newEvents.push(winLevelEvent(e));
         break;
-      case "OPENSPELL":
-        newEvents.push(openSpellEvent(e));
-        break;
-      case "UPDATESPELL":
-        newEvents.push(updateSpellEvent(e));
-        break;
-      case "LISTSPELL":
-        newEvents.push(listSpellEvent(e));
-        break;
-      case "DELISTSPELL":
-        newEvents.push(delistSpellEvent(e));
-        break;
-      case "BUYSPELL":
-        newEvents.push(buySpellEvent(e));
-        break;
+      // case "OPENSPELL":
+      //   newEvents.push(openSpellEvent(e));
+      //   break;
+      // case "UPDATESPELL":
+      //   newEvents.push(updateSpellEvent(e));
+      //   break;
+      // case "LISTSPELL":
+      //   newEvents.push(listSpellEvent(e));
+      //   break;
+      // case "DELISTSPELL":
+      //   newEvents.push(delistSpellEvent(e));
+      //   break;
+      // case "BUYSPELL":
+      //   newEvents.push(buySpellEvent(e));
+      //   break;
       case "STARTENDLESS":
         newEvents.push(startEndlessEvent(e));
         break;
@@ -166,6 +158,7 @@ export const playerEvents = (): IGameEvent[] => {
       case "ARENAEND":
         newEvents.push(endArenaEvent(e));
         break;
+        */
       default:
         throw new Error(`Can't find type ${e.type} in player events`);
     }
@@ -193,6 +186,7 @@ export const createPlayerEvent = (event: IEventDB): ICreatePlayerEvent => {
   };
 };
 
+/*
 export const startLevelEvent = (event: IEventDB): IStartLevelEvent => {
   const startLevel = ensure(
     allStartLevelEvents().find(
@@ -228,6 +222,7 @@ export const winLevelEvent = (event: IEventDB): IWinLevelEvent => {
   };
 };
 
+/*
 export const openSpellEvent = (event: IEventDB): IOpenSpellEvent => {
   const openSpell = ensure(
     allOpenSpellEvents().find((e: IOpenSpellDB) => e.eventId == event.eventId),
@@ -310,6 +305,7 @@ export const buySpellEvent = (event: IEventDB): IBuySpellEvent => {
     type: "BUYSPELL",
   };
 };
+
 
 export const startEndlessEvent = (event: IEventDB): IStartEndlessEvent => {
   const startEndless = ensure(
@@ -429,3 +425,4 @@ export const serverArenaEndEvent = (event: IEventDB): IServerArenaEndEvent => {
     created: event.created,
   };
 };
+*/

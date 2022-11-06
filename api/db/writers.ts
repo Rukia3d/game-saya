@@ -1,14 +1,5 @@
 import * as readers from "./readers";
 import {
-  allowParticipation,
-  correctCheckpoint,
-  enoughEnergyToPlay,
-  enoughToPay,
-  findPlayer,
-  foundArenaStartEvent,
-  foundStartLevelToWin,
-} from "../engine/helpers";
-import {
   eventType,
   ICreatePlayerData,
   ICreatePlayerDB,
@@ -97,6 +88,7 @@ export const createPlayerEvent = (
   };
 };
 
+/*
 export const startLevelEvent = (
   game: IGame,
   event: IStartLevelData
@@ -460,7 +452,6 @@ export const buySpellEvent = (
   }
 };
 
-*/
 
 export const startArenaEvent = (
   game: IGame,
@@ -534,7 +525,7 @@ export const endArenaEvent = (
     throw new Error("Can't generate endArenaEvent");
   }
 };
-
+*/
 export const serverStartArena = (
   game: IGame,
   dates: IServerArenaStartData

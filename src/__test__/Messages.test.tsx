@@ -1,7 +1,7 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import { GameContext, GameContextType } from "../App";
-import { testPlayer, testServer } from "../utils/testData";
+import { testPlayer, testServer } from "../utils/testDBPlayer";
 import userEvent from "@testing-library/user-event";
 import { Messages } from "../Messages";
 

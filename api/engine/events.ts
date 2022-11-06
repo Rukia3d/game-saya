@@ -1,30 +1,6 @@
 import seedrandom from "seedrandom";
 import { detectWinners, splitPool } from "../cronjobs";
-import { arcanas } from "../db/testDBArcanas";
-import { eventTowerRewards } from "../db/testDBLevels";
-import { basePlayer, materials, goals } from "../db/testDBPlayer";
-import { spellPrices, spells, spellUpdates } from "../db/testDBSpells";
-import {
-  addExperience,
-  rewardPlayer,
-  openNextLevel,
-  removeMaterials,
-  updateRewardPool,
-  updateArenaResults,
-  listingToPlayer,
-} from "./actions";
-import {
-  calculateResult,
-  ensure,
-  findEnergyPrice,
-  findEventArena,
-  findLastCheckpoint,
-  findPlayer,
-  generateArenaRandom,
-  replacePlayer,
-  rewardArenaPlayers,
-} from "./helpers";
-
+import { basePlayer, materials, elementAdventure } from "../db/testDBData";
 import {
   currentState,
   gameMode,
@@ -46,12 +22,6 @@ import {
   IServer,
   IServerArenaEndEvent,
   IServerArenaStartEvent,
-  ISpell,
-  ISpellClosed,
-  ISpellListing,
-  ISpellOpen,
-  ISpellPrice,
-  ISpellUpdate,
   IStartEndlessEvent,
   IStartLevelEvent,
   IUpdateSpellEvent,
@@ -65,18 +35,10 @@ export const createPlayer = (event: ICreatePlayerEvent, game: IGame): IGame => {
     ...basePlayer,
     id: event.playerId,
     name: event.playerName,
-    maxEnergy: 50,
-    energy: 50,
-    goals: goals,
-    spells: spells.map((s: ISpell) => {
-      const price = spellPrices.find((p: ISpellPrice) => p.spellId === s.id);
-      if (!price) throw new Error("Can't find a price for a spell");
-      return { ...s, price: price.price };
-    }),
-    arcanas: [JSON.parse(JSON.stringify(arcanas[0]))],
     materials: JSON.parse(JSON.stringify(materials)).map((m: IMaterial) => {
       return { ...m, quantity: 50 };
     }),
+    elements: JSON.parse(JSON.stringify(elementAdventure)),
   };
   const newPlayers = game.players.concat([newPlayer]);
   return {
@@ -85,6 +47,7 @@ export const createPlayer = (event: ICreatePlayerEvent, game: IGame): IGame => {
   };
 };
 
+/*
 export const startLevel = (event: IStartLevelEvent, game: IGame): IGame => {
   const player = findPlayer(game, event.playerId);
   let energyPrice = findEnergyPrice(event.elementId, "story", event.levelId);
@@ -496,3 +459,4 @@ export const endArena = (event: IArenaEndEvent, game: IGame): IGame => {
     server: newServer,
   };
 };
+*/

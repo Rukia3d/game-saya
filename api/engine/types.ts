@@ -1,61 +1,23 @@
-export interface ISpell {
-  id: number;
-  elementId: number;
-  element: elementName;
-  strength: number;
-  symbol: string; // Unknown for now
-  state: spellState;
-  name: string;
-}
-
 export interface ICharacter {
   id: number;
   name: string;
   weapon: weaponName;
-  element: elementName;
+  element: { id: number; name: elementName };
 }
 
 export interface IWeapon {
   id: number;
   name: weaponName;
-  elementName: elementName;
-  elementId: number;
+  element: { id: number; name: elementName };
   charge: number;
   maxCharge: number;
   state: "open" | "closed";
 }
 
-export type ISpellListing = {
-  listingId: number;
-  spell: ISpellOpen;
-  price: number;
-  currency: "ETH" | "USDC" | "TOKEN";
-  owner: number;
-};
-
-export type ISpellPrice = {
-  spellId: number;
-  elementId: number;
-  price: IMaterialQuant[];
-};
-
-export type ISpellUpdate = {
-  spellId: number;
-  elementId: number;
-  updatePrice: IMaterialQuant[];
-  requiredStrength: number;
-};
-
-export type ISpellClosed = ISpell & { price: IMaterialQuant[] };
-export type ISpellOpen = ISpell & {
-  updatePrice: IMaterialQuant[];
-  requiredStrength: number;
-};
-
 export interface IMaterial {
   id: number;
   name: materialName;
-  element: null | elementName;
+  element: { id: number; name: elementName } | null;
 }
 
 export type IMaterialQuant = IMaterial & { quantity: number };
@@ -65,7 +27,7 @@ export interface IQuest {
   state: questState;
   name: string;
   description: string;
-  elementId: number;
+  element: { id: number; name: elementName };
   stories: IStory[];
 }
 
@@ -73,7 +35,7 @@ export type IQuestListing = IQuest & { price: number; owner: number };
 
 export interface IEndless {
   id: number;
-  elementId: number;
+  element: { id: number; name: elementName };
   mode: gameMode;
   energy: number;
   checkpoint: number | null;
@@ -96,15 +58,13 @@ export interface IEventReward {
 
 export interface IAdventure {
   id: number;
-  name: string;
-  description: string;
-  elementId: number;
+  element: { id: number; name: elementName };
   stories: IStory[];
 }
 
 export interface IStory {
   id: number;
-  elementId: number;
+  element: { id: number; name: elementName };
   mode: gameMode;
   name: string;
   state: levelState;

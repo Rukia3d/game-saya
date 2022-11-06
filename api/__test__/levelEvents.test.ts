@@ -1,5 +1,5 @@
 import { arcanas } from "../db/testDBArcanas";
-import { arenaFight, arenaRun } from "../db/testDBArena";
+import { arenaFight, arenaRun } from "../../src/utils/testDBArena";
 import { materials } from "../db/testDBPlayer";
 import * as events from "../engine/events";
 import { IGame, IMaterial, IPlayer, IServer } from "../engine/types";

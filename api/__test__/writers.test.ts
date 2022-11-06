@@ -1,7 +1,7 @@
 import { ARENAEVENTINTERVAL } from "../cronjobs";
 import * as readers from "../db/readers";
 import { arcanas } from "../db/testDBArcanas";
-import { arenaRun } from "../db/testDBArena";
+import { arenaRun } from "../../src/utils/testDBArena";
 import { basePlayer, baseServer, materials } from "../db/testDBPlayer";
 import { spells } from "../db/testDBSpells";
 import * as writers from "../db/writers";

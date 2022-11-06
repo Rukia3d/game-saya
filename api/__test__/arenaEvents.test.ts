@@ -1,4 +1,4 @@
-import { arenaRun } from "../db/testDBArena";
+import { arenaRun } from "../../src/utils/testDBArena";
 import { baseGame, basePlayer, baseServer } from "../db/testDBPlayer";
 import { serverArenaEnd, serverArenaStart } from "../engine/events";
 import {

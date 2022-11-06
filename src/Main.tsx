@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import useSWR from "swr";
+import { fetcher } from "./utils/helpers";
 import "./Main.scss";
 import { GameContextType, GameContext } from "./App";
 
@@ -10,7 +12,7 @@ import { Weapons } from "./Weapons";
 import { Inventory } from "./Inventory";
 import { Goals } from "./Goals";
 import { Arena } from "./Arena";
-import { testPlayer, testServer } from "./utils/testData";
+import { testPlayer, testServer } from "./utils/testDBPlayer";
 import { Collections } from "./Collections";
 import { Messages } from "./Messages";
 import { Adventures } from "./Adventures";
@@ -68,10 +70,10 @@ const mainScreens: MainScreensType = {
 };
 
 export const Main = ({ playerId }: { playerId: string }) => {
-  // const { data, error, mutate } = useSWR(`/api/players/${playerId}`, fetcher);
-  const error = null;
-  const data = { server: testServer, player: testPlayer };
-  const mutate = async () => {};
+  const { data, error, mutate } = useSWR(`/api/players/${playerId}`, fetcher);
+  // const error = null;
+  // const data = { server: testServer, player: testPlayer };
+  // const mutate = async () => {};
   const [screen, setScreen] = useState<mainScreenState>("main");
   const [game, setGame] = useState<
     IStory | IEndless | IArenaEventWithTime | null

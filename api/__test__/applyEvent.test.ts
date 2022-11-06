@@ -1,43 +1,7 @@
-import { arcanas } from "../db/testDBArcanas";
 import { applyEvent } from "../engine/engine";
-import {
-  serverArenaStart,
-  createPlayer,
-  startLevel,
-  winLevel,
-  startEndless,
-  passCheckpoint,
-  missCheckpoint,
-  openSpell,
-  updateSpell,
-  startArena,
-  endArena,
-} from "../engine/events";
+
 import { IGame, IPlayer, IServer, IStartLevelEvent } from "../engine/types";
 import * as readers from "../db/readers";
-
-const basePlayer: IPlayer = {
-  id: 1,
-  name: "",
-  exprience: 0,
-  energy: 0,
-  maxEnergy: 0,
-  loungeId: null,
-  materials: [],
-  arcanas: [],
-  spells: [],
-  goals: [],
-  messages: [],
-  claims: [],
-  currentState: { state: "MAIN" },
-};
-const baseServer: IServer = {
-  arenaRun: { events: [], resultTime: 0, mode: "run" },
-  arenaFight: { events: [], resultTime: 0, mode: "fight" },
-  arenaRunHistory: [],
-  arenaFightHistory: [],
-  listings: [],
-};
 
 const LASTEVENTID = readers.gameEvents().length - 1;
 const BASEQUANTITY = 50;
