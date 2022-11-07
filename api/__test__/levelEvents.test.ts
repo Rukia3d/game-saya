@@ -4,7 +4,6 @@ import { IGame, IMaterial } from "../engine/types";
 
 const game: IGame = { players: [], server: baseServer };
 
-/*
 test("story starts and wins for player 1 outside tutorial", async () => {
   const newGame: IGame = events.createPlayer(
     {
@@ -21,7 +20,8 @@ test("story starts and wins for player 1 outside tutorial", async () => {
       eventId: 0,
       mode: "story",
       elementId: 0,
-      levelId: 2,
+      adventureId: 0,
+      storyId: 2,
       playerId: 1,
       created: new Date().valueOf(),
       type: "STARTLEVEL",
@@ -31,11 +31,13 @@ test("story starts and wins for player 1 outside tutorial", async () => {
 
   expect(res.players[0].energy).toEqual(45);
   expect(res.players[0].currentState.state).toEqual("PLAY");
-  expect(res.players[0].currentState.level?.arcana).toEqual(0);
-  expect(res.players[0].currentState.level?.level).toEqual(2);
+  expect(res.players[0].currentState.level?.elementId).toEqual(0);
+  expect(res.players[0].currentState.level?.adventureId).toEqual(0);
+  expect(res.players[0].currentState.level?.storyId).toEqual(2);
   expect(res.players[0].currentState.level?.mode).toEqual("story");
 });
 
+/*
 test("eventWinLevel for player 1", async () => {
   const res: IGame = events.winLevel(
     {

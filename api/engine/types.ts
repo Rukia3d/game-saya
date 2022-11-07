@@ -57,6 +57,7 @@ export interface IEventReward {
 }
 
 export interface IAdventure {
+  name: string;
   id: number;
   element: { id: number; name: elementName };
   stories: IStory[];
@@ -75,7 +76,7 @@ export interface IStory {
 }
 
 export interface IAllowedRewards {
-  id: number;
+  material: IMaterial;
   upTo: number;
 }
 
@@ -125,9 +126,10 @@ export interface IMission {
 export interface ICurrentState {
   state: currentState;
   level?: {
-    level?: number;
+    storyId?: number;
     mode: gameMode;
-    element: number;
+    elementId: number;
+    adventureId: number;
   };
   materials?: IMaterialQuant[];
   arena?: {
@@ -277,7 +279,8 @@ export type IStartLevelDB = {
   playerId: number;
   elementId: number;
   mode: gameMode;
-  levelId: number;
+  storyId: number;
+  adventureId: number;
 };
 
 export type IStartLevelData = {
@@ -286,8 +289,9 @@ export type IStartLevelData = {
   type: "STARTLEVEL";
   data: {
     elementId: number;
+    adventureId: number;
     mode: gameMode;
-    levelId: number;
+    storyId: number;
   };
 };
 
@@ -298,7 +302,8 @@ export type IStartLevelEvent = {
   type: "STARTLEVEL";
   elementId: number;
   mode: gameMode;
-  levelId: number;
+  storyId: number;
+  adventureId: number;
 };
 
 // WINLEVEL

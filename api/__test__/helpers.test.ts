@@ -1,18 +1,18 @@
+import { findEnergyPrice } from "../engine/helpers";
 import { IMaterial, IMaterialQuant, IWinLevelEvent } from "../engine/types";
 
-/*
 test("energy price is found for a correct mode", async () => {
-  const res = findEnergyPrice(0, "story", 0);
+  const res = findEnergyPrice(0, 0, "story", 0);
   expect(res).toEqual(5);
 
-  const res2 = findEnergyPrice(0, "run", 0);
+  const res2 = findEnergyPrice(0, 0, "run", 0);
   expect(res2).toEqual(10);
 
-  jest.spyOn(console, "error").mockImplementation(() => jest.fn());
-  expect(() => findEnergyPrice(0, "quest", 5)).toThrow("Unknown mode");
-  jest.restoreAllMocks();
+  const res3 = findEnergyPrice(0, 0, "quest", 0);
+  expect(res3).toEqual(5);
 });
 
+/*
 test("finds correct index", async () => {
   const winLevelEvent: IWinLevelEvent = {
     playerId: 1,

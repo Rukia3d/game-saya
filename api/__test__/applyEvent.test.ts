@@ -3,13 +3,14 @@ import { applyEvent } from "../engine/engine";
 import * as readers from "../db/readers";
 
 import { IGame, IPlayer, IServer, IStartLevelEvent } from "../engine/types";
+import { basePlayer, baseServer, elementAdventure } from "../db/testDBData";
 
 const LASTEVENTID = readers.gameEvents().length - 1;
 const BASEQUANTITY = 50;
 
-/*
 test("Applies a single event correctly", () => {
-  const newPlayer = { ...basePlayer, arcanas: arcanas };
+  const newPlayer = { ...basePlayer, elements: elementAdventure, id: 1 };
+  newPlayer.elements[0].adventures[0].stories[0].state = "open";
   const newServer = { ...baseServer };
   const startLevelEvent: IStartLevelEvent = {
     playerId: 1,
@@ -17,19 +18,22 @@ test("Applies a single event correctly", () => {
     type: "STARTLEVEL",
     created: new Date().valueOf(),
     elementId: 0,
+    adventureId: 0,
     mode: "story",
-    levelId: 0,
+    storyId: 0,
   };
   const res = applyEvent(
     { server: newServer, players: [newPlayer] },
     startLevelEvent
   );
   expect(res.players[0].currentState.state).toEqual("PLAY");
-  expect(res.players[0].currentState.level?.arcana).toEqual(0);
+  expect(res.players[0].currentState.level?.elementId).toEqual(0);
+  expect(res.players[0].currentState.level?.adventureId).toEqual(0);
   expect(res.players[0].currentState.level?.mode).toEqual("story");
-  expect(res.players[0].currentState.level?.level).toEqual(0);
+  expect(res.players[0].currentState.level?.storyId).toEqual(0);
 });
 
+/*
 test("Applies a series of events correctly", () => {
   let currentGame: IGame = { server: baseServer, players: [] };
   const now = new Date().valueOf();

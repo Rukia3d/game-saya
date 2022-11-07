@@ -56,8 +56,6 @@ app.post("/api/players/new", async (req: any, res: any) => {
   res.send({ server: game.server, player: player });
 });
 
-/*
-
 app.post("/api/players/:id/startLevel", async (req: any, res: any) => {
   console.log("STARTLEVEL", req.params.id, req.body);
   const playerId = parseInt(req.params.id);
@@ -67,9 +65,10 @@ app.post("/api/players/:id/startLevel", async (req: any, res: any) => {
     created: new Date().valueOf(),
     type: "STARTLEVEL",
     data: {
-      elementId: req.body.arcana,
+      elementId: req.body.element,
+      adventureId: req.body.adventure,
       mode: req.body.mode,
-      levelId: req.body.level,
+      storyId: req.body.story,
     },
   };
   const newEvent = writers.startLevelEvent(game, event);
@@ -78,6 +77,7 @@ app.post("/api/players/:id/startLevel", async (req: any, res: any) => {
   res.send({ server: newGame.server, player: player });
 });
 
+/*
 app.post("/api/players/:id/winLevel", async (req: any, res: any) => {
   console.log("WINLEVEL", req.params.id, req.body);
   const playerId = parseInt(req.params.id);

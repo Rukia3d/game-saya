@@ -12,7 +12,6 @@ test("Won't read create player if no event with this ID", () => {
   jest.restoreAllMocks();
 });
 
-/*
 test("Won't read start level if no event with this ID", () => {
   jest.spyOn(console, "error").mockImplementation(() => jest.fn());
   expect(() =>
@@ -25,6 +24,7 @@ test("Won't read start level if no event with this ID", () => {
   jest.restoreAllMocks();
 });
 
+/*
 test("Won't read win level if no event with this Id", () => {
   jest.spyOn(console, "error").mockImplementation(() => jest.fn());
   expect(() =>

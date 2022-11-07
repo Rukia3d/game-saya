@@ -1,4 +1,4 @@
-import { IMaterialQuant } from "../../api/engine/types";
+import { IMaterial, IMaterialQuant } from "../../api/engine/types";
 
 //@ts-ignore
 export const fetcher = (...args) => fetch(...args).then((res) => res.json());

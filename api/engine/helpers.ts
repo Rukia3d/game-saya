@@ -20,6 +20,7 @@ import {
   IEndless,
   IElement,
 } from "./types";
+import { elementAdventure } from "../db/testDBData";
 dayjs.extend(relativeTime);
 
 export const generateSeed = (
@@ -111,6 +112,82 @@ export const rewardArenaPlayers = (
   return newPlayers;
 };
 
+export const findEnergyPrice = (
+  elementId: number,
+  adventureId: number,
+  mode: gameMode,
+  levelId?: number
+) => {
+  if (mode === "story" && levelId !== undefined) {
+    return elementAdventure[elementId].adventures[adventureId].stories[levelId]
+      .energy;
+  }
+  if (mode === "quest" && levelId !== undefined) {
+    return elementAdventure[elementId].quests[adventureId].stories[levelId]
+      .energy;
+  }
+  if (mode === "run" || mode === "fight") {
+    return elementAdventure[elementId].endless[adventureId].energy;
+  }
+  throw new Error(`Unknown mode ${mode}`);
+};
+
+export const energyPriceForStory = (
+  player: IPlayer,
+  elementId: number,
+  adventureId: number,
+  mode: gameMode,
+  storyId?: number
+) => {
+  let energyPrice = findEnergyPrice(elementId, adventureId, "story", storyId);
+  const firstTime =
+    player.elements[elementId].adventures[adventureId].stories[ensure(storyId)]
+      .state !== "complete";
+  if (
+    elementId === 0 &&
+    adventureId === 0 &&
+    ensure(storyId) < 2 &&
+    player.elements &&
+    firstTime
+  ) {
+    energyPrice = 0;
+  }
+  return energyPrice;
+};
+
+export const enoughEnergyToPlay = (
+  player: IPlayer,
+  data: {
+    elementId: number;
+    adventureId: number;
+    mode: gameMode;
+    storyId?: number;
+  }
+) => {
+  let energyPrice = 0;
+  if (
+    (data.mode === "story" || data.mode === "quest") &&
+    ensure(data.storyId) >= 0
+  ) {
+    energyPrice = energyPriceForStory(
+      player,
+      data.elementId,
+      data.adventureId,
+      data.mode,
+      data.storyId
+    );
+  }
+  if (data.mode === "run" || "fight") {
+    energyPrice = findEnergyPrice(
+      data.elementId,
+      data.adventureId,
+      data.mode,
+      data.storyId
+    );
+  }
+  return player.energy - energyPrice >= 0;
+};
+
 /*
 export const generateRandom = (
   event: IWinLevelEvent | IMissCheckpointEvent,
@@ -132,22 +209,6 @@ export const generateRandom = (
   return rand;
 };
 
-export const findEnergyPrice = (
-  arcana: number,
-  mode: gameMode,
-  level?: number
-) => {
-  if (mode === "story" && level !== undefined) {
-    return arcanas[arcana].stories[level].energy;
-  }
-  if (mode === "run") {
-    return arcanas[arcana].currentEvents[0].energy;
-  }
-  if (mode === "fight") {
-    return arcanas[arcana].currentEvents[1].energy;
-  }
-  throw new Error(`Unknown mode ${mode}`);
-};
 
 export const findLevelIndex = (event: IWinLevelEvent, elements: IElement[]) => {
   const charIndex = elements.findIndex(
@@ -280,34 +341,6 @@ export const correctCheckpoint = (
   return data.checkpoint === last + 1;
 };
 
-export const enoughEnergyToPlay = (
-  player: IPlayer,
-  data: {
-    elementId: number;
-    mode: gameMode;
-    levelId?: number;
-  }
-) => {
-  let energyPrice = 0;
-  if (data.mode === "story" && ensure(data.levelId) >= 0) {
-    energyPrice = findEnergyPrice(data.elementId, data.mode, data.levelId);
-    const firstTime =
-      player.arcanas[data.elementId].stories[ensure(data.levelId)].state !==
-      "complete";
-    if (
-      data.elementId === 0 &&
-      ensure(data.levelId) < 2 &&
-      player.arcanas &&
-      firstTime
-    ) {
-      energyPrice = 0;
-    }
-  }
-  if (data.mode === "run" || "fight") {
-    energyPrice = findEnergyPrice(data.elementId, data.mode, data.levelId);
-  }
-  return player.energy - energyPrice >= 0;
-};
 
 export const enoughToPay = (
   materials: IMaterialQuant[],

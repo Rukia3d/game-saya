@@ -1,10 +1,13 @@
+import { basePlayer, baseServer } from "../db/testDBData";
+import { serverArenaStart } from "../engine/events";
 import {
   IArenaEvent,
   IServerArenaEndEvent,
   IServerArenaStartEvent,
 } from "../engine/types";
 
-/*
+const baseGame = { server: baseServer, players: [basePlayer] };
+
 test("Creates arena event correctly", () => {
   const now = new Date().valueOf();
   const event: IServerArenaStartEvent = {
@@ -19,14 +22,15 @@ test("Creates arena event correctly", () => {
   expect(res.server.arenaRun.resultTime).toEqual(now + 600000);
   expect(res.server.arenaRun.events.length).toEqual(3);
   expect(res.server.arenaRun.events[0].index).toEqual(0);
-  expect(res.server.arenaRun.events[0].stake[0].name).toEqual("money");
+  expect(res.server.arenaRun.events[0].stake[0].name).toEqual("Gold");
   expect(res.server.arenaRun.events[0].stake[0].quantity).toEqual(25);
   expect(res.server.arenaRun.events[0].stake[1].quantity).toEqual(5);
-  expect(res.server.arenaRun.events[1].stake[0].name).toEqual("money");
+  expect(res.server.arenaRun.events[1].stake[0].name).toEqual("Gold");
   expect(res.server.arenaRun.events[1].stake[0].quantity).toEqual(50);
   expect(res.server.arenaRun.events[1].stake[1].quantity).toEqual(10);
 });
 
+/*
 test("Ends arena event correctly and rewards correct players", () => {
   const server = { ...baseServer, arenaRun: { ...arenaRun } };
   const players = [

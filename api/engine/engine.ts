@@ -22,10 +22,10 @@ export const applyEvent = (game: IGame, event: IGameEvent): IGame => {
     case "SERVERARENAEND":
       newGame = events.serverArenaEnd(event, newGame);
       break;
-    /*
     case "STARTLEVEL":
       newGame = events.startLevel(event, newGame);
       break;
+    /*
     case "WINLEVEL":
       newGame = events.winLevel(event, newGame);
       break;

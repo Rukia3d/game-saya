@@ -1,7 +1,15 @@
 import seedrandom from "seedrandom";
 import { detectWinners, splitPool } from "../cronjobs";
 import { basePlayer, materials, elementAdventure } from "../db/testDBData";
-import { generateArenaRandom, rewardArenaPlayers } from "./helpers";
+import {
+  energyPriceForStory,
+  ensure,
+  findEnergyPrice,
+  findPlayer,
+  generateArenaRandom,
+  replacePlayer,
+  rewardArenaPlayers,
+} from "./helpers";
 import {
   currentState,
   gameMode,
@@ -119,26 +127,22 @@ export const serverArenaEnd = (
   return { players: newPlayers, server: newServer };
 };
 
-/*
 export const startLevel = (event: IStartLevelEvent, game: IGame): IGame => {
   const player = findPlayer(game, event.playerId);
-  let energyPrice = findEnergyPrice(event.elementId, "story", event.levelId);
-  const firstTime =
-    player.arcanas[event.elementId].stories[event.levelId].state !== "complete";
-  if (
-    event.elementId === 0 &&
-    event.levelId < 2 &&
-    player.arcanas &&
-    firstTime
-  ) {
-    energyPrice = 0;
-  }
-  const state = {
+  let energyPrice = energyPriceForStory(
+    player,
+    event.elementId,
+    event.adventureId,
+    "story",
+    event.storyId
+  );
+  const state: ICurrentState = {
     state: "PLAY" as currentState,
     level: {
-      arcana: event.elementId,
+      elementId: event.elementId,
+      adventureId: event.adventureId,
       mode: "story" as gameMode,
-      level: event.levelId,
+      storyId: event.storyId,
     },
   };
   const newPlayer: IPlayer = {
@@ -149,6 +153,7 @@ export const startLevel = (event: IStartLevelEvent, game: IGame): IGame => {
   return { ...game, players: replacePlayer(game.players, newPlayer) };
 };
 
+/*
 export const winLevel = (event: IWinLevelEvent, game: IGame): IGame => {
   const player = findPlayer(game, event.playerId);
   const newMaterials = rewardPlayer(event, player.materials, player.arcanas);

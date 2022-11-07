@@ -49,8 +49,8 @@ export const stories: IStory[] = [
     state: "closed",
     level: "", // Add generated level
     allowedRewards: [
-      { id: 0, upTo: 5 },
-      { id: 2, upTo: 1 },
+      { material: materials[0], upTo: 5 },
+      { material: materials[2], upTo: 1 },
     ],
     experience: 10,
     energy: 5,
@@ -63,8 +63,8 @@ export const stories: IStory[] = [
     state: "closed",
     level: "", // Add generated level
     allowedRewards: [
-      { id: 0, upTo: 5 },
-      { id: 2, upTo: 3 },
+      { material: materials[0], upTo: 5 },
+      { material: materials[2], upTo: 3 },
     ],
     experience: 10,
     energy: 5,
@@ -77,8 +77,8 @@ export const stories: IStory[] = [
     state: "closed",
     level: "", // Add generated level
     allowedRewards: [
-      { id: 0, upTo: 10 },
-      { id: 2, upTo: 5 },
+      { material: materials[0], upTo: 10 },
+      { material: materials[2], upTo: 5 },
     ],
     experience: 10,
     energy: 5,
@@ -91,8 +91,8 @@ export const stories: IStory[] = [
     state: "closed",
     level: "", // Add generated level
     allowedRewards: [
-      { id: 0, upTo: 10 },
-      { id: 3, upTo: 1 },
+      { material: materials[0], upTo: 10 },
+      { material: materials[3], upTo: 1 },
     ],
     experience: 10,
     energy: 5,
@@ -106,8 +106,8 @@ export const stories: IStory[] = [
     state: "closed",
     level: "", // Add generated level
     allowedRewards: [
-      { id: 0, upTo: 5 },
-      { id: 3, upTo: 3 },
+      { material: materials[0], upTo: 5 },
+      { material: materials[3], upTo: 3 },
     ],
     experience: 10,
     energy: 5,
@@ -120,8 +120,8 @@ export const stories: IStory[] = [
     state: "closed",
     level: "", // Add generated level
     allowedRewards: [
-      { id: 0, upTo: 10 },
-      { id: 3, upTo: 5 },
+      { material: materials[0], upTo: 10 },
+      { material: materials[3], upTo: 5 },
     ],
     experience: 10,
     energy: 5,
@@ -135,9 +135,9 @@ export const stories: IStory[] = [
     state: "closed",
     level: "", // Add generated level
     allowedRewards: [
-      { id: 0, upTo: 10 },
-      { id: 1, upTo: 1 },
-      { id: 2, upTo: 5 },
+      { material: materials[0], upTo: 10 },
+      { material: materials[1], upTo: 1 },
+      { material: materials[2], upTo: 5 },
     ],
     experience: 10,
     energy: 5,
@@ -150,9 +150,9 @@ export const stories: IStory[] = [
     state: "closed",
     level: "", // Add generated level
     allowedRewards: [
-      { id: 0, upTo: 10 },
-      { id: 1, upTo: 1 },
-      { id: 2, upTo: 5 },
+      { material: materials[0], upTo: 10 },
+      { material: materials[1], upTo: 1 },
+      { material: materials[2], upTo: 5 },
     ],
     experience: 10,
     energy: 5,
@@ -168,8 +168,8 @@ export const endless: IEndless[] = [
     energy: 10,
     checkpoint: null,
     allowedRewards: [
-      { id: 0, upTo: 5 },
-      { id: 3, upTo: 1 },
+      { material: materials[0], upTo: 5 },
+      { material: materials[3], upTo: 1 },
     ],
   },
   {
@@ -180,8 +180,8 @@ export const endless: IEndless[] = [
     energy: 10,
     checkpoint: null,
     allowedRewards: [
-      { id: 0, upTo: 5 },
-      { id: 3, upTo: 1 },
+      { material: materials[0], upTo: 5 },
+      { material: materials[3], upTo: 1 },
     ],
   },
   {
@@ -192,8 +192,8 @@ export const endless: IEndless[] = [
     energy: 10,
     checkpoint: null,
     allowedRewards: [
-      { id: 0, upTo: 5 },
-      { id: 4, upTo: 1 },
+      { material: materials[0], upTo: 5 },
+      { material: materials[4], upTo: 1 },
     ],
   },
   {
@@ -204,19 +204,21 @@ export const endless: IEndless[] = [
     energy: 10,
     checkpoint: null,
     allowedRewards: [
-      { id: 0, upTo: 5 },
-      { id: 4, upTo: 1 },
+      { material: materials[0], upTo: 5 },
+      { material: materials[4], upTo: 1 },
     ],
   },
 ];
 export const adventures: IAdventure[] = [
   {
     id: 0,
+    name: "Adventure " + elements[0].name,
     element: elements[0],
     stories: [stories[0], stories[1], stories[2]],
   },
   {
     id: 1,
+    name: "Adventure " + elements[1].name,
     element: elements[1],
     stories: [stories[3], stories[4], stories[5]],
   },

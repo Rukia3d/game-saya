@@ -23,17 +23,21 @@ export const allGameEvents: IEventDB[] = [
     type: "CREATEPLAYER",
     created: 1654347193,
   },
-  // {
-  //   eventId: 1,
-  //   type: "STARTLEVEL",
-  //   created: 1654347300,
-  // },
-  // { eventId: 2, type: "WINLEVEL", created: 1654347302 },
-  // { eventId: 3, type: "OPENSPELL", created: 1654347302 },
+  {
+    eventId: 1,
+    type: "STARTLEVEL",
+    created: 1654347300,
+  },
+  { eventId: 2, type: "WINLEVEL", created: 1654347302 },
+  {
+    eventId: 3,
+    type: "SERVERARENASTART",
+    created: 1654347193,
+  },
   {
     eventId: 4,
-    type: "CREATEPLAYER",
-    created: 1654347193,
+    type: "SERVERARENAEND",
+    created: 1654347593,
   },
   // {
   //   eventId: 5,
@@ -57,11 +61,17 @@ export const allGameEvents: IEventDB[] = [
 
 export const createPlayerEvents: ICreatePlayerDB[] = [
   { playerId: 1, eventId: 0, playerName: "player 1 name" },
-  { playerId: 2, eventId: 4, playerName: "player 2 name" },
 ];
 
 export const startLevelEvents: IStartLevelDB[] = [
-  { playerId: 1, eventId: 1, elementId: 0, levelId: 0, mode: "story" },
+  {
+    playerId: 1,
+    eventId: 1,
+    elementId: 0,
+    adventureId: 0,
+    storyId: 0,
+    mode: "story",
+  },
 ];
 
 export const winLevelEvents: IWinLevelDB[] = [
@@ -137,7 +147,7 @@ export const missCheckpointEvents: IMissCheckpointDB[] = [
 
 export const serverArenaStartEvents: IServerArenaStartDB[] = [
   {
-    eventId: 5,
+    eventId: 3,
     created: 1654347193,
     start: 1654347193,
     end: 1654357193,
@@ -146,7 +156,7 @@ export const serverArenaStartEvents: IServerArenaStartDB[] = [
 
 export const serverArenaEndEvents: IServerArenaEndDB[] = [
   {
-    eventId: 6,
+    eventId: 4,
     created: 1654357193,
   },
 ];

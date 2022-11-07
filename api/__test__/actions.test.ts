@@ -6,6 +6,41 @@ import {
   materialName,
 } from "../engine/types";
 
+test("openNextLevel opens next level correctly", async () => {
+  const playerCharacters = [JSON.parse(JSON.stringify(arcanas[0]))];
+  const res = openNextLevel(
+    {
+      eventId: 0,
+      mode: "story",
+      elementId: 0,
+      levelId: 0,
+      created: 1654347302,
+      playerId: 0,
+      type: "WINLEVEL",
+    },
+    playerCharacters
+  );
+  expect(res[0].stories[0].state).toEqual("complete");
+  expect(res[0].stories[1].state).toEqual("open");
+  expect(res[0].stories[2].state).toEqual("closed");
+  // Next level also opens
+  const res2 = openNextLevel(
+    {
+      eventId: 1,
+      mode: "story",
+      elementId: 0,
+      levelId: 1,
+      created: 1654347302,
+      playerId: 0,
+      type: "WINLEVEL",
+    },
+    res
+  );
+  expect(res2[0].stories[0].state).toEqual("complete");
+  expect(res2[0].stories[1].state).toEqual("complete");
+  expect(res2[0].stories[2].state).toEqual("open");
+});
+
 /*
 test("rewardPlayer generates correct rewards", async () => {
   const playerMaterials = JSON.parse(JSON.stringify(materials)).map(
@@ -50,40 +85,6 @@ test("rewardPlayer generates correct rewards", async () => {
   expect(res2.all[3].quantity).toEqual(7);
 });
 
-test("openNextLevel opens next level correctly", async () => {
-  const playerCharacters = [JSON.parse(JSON.stringify(arcanas[0]))];
-  const res = openNextLevel(
-    {
-      eventId: 0,
-      mode: "story",
-      elementId: 0,
-      levelId: 0,
-      created: 1654347302,
-      playerId: 0,
-      type: "WINLEVEL",
-    },
-    playerCharacters
-  );
-  expect(res[0].stories[0].state).toEqual("complete");
-  expect(res[0].stories[1].state).toEqual("open");
-  expect(res[0].stories[2].state).toEqual("closed");
-  // Next level also opens
-  const res2 = openNextLevel(
-    {
-      eventId: 1,
-      mode: "story",
-      elementId: 0,
-      levelId: 1,
-      created: 1654347302,
-      playerId: 0,
-      type: "WINLEVEL",
-    },
-    res
-  );
-  expect(res2[0].stories[0].state).toEqual("complete");
-  expect(res2[0].stories[1].state).toEqual("complete");
-  expect(res2[0].stories[2].state).toEqual("open");
-});
 
 test("addExperience correctly adds experience", async () => {
   const playerCharacters = [JSON.parse(JSON.stringify(arcanas[0]))];

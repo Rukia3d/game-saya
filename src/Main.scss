@@ -327,6 +327,27 @@
       }
     }
   }
+
+  .Adventure {
+    background-color: #52ffff;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+
+    .AdventureList {
+      display: flex;
+      flex-direction: row;
+
+      .Story {
+        background-color: #00bbbb;
+        border: 1px solid black;
+        max-width: 30%;
+        margin: 0.5em;
+        padding: 0.5em;
+      }
+    }
+  }
 }
 
 .ArenaContainer {

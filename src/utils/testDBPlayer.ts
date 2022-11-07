@@ -29,8 +29,8 @@ export const testStories: IStory[] = [0, 1, 2].map((n: number) => {
     mode: "story",
     state: "open",
     allowedRewards: [
-      { id: 0, upTo: 5 },
-      { id: 3, upTo: 1 },
+      { material: materials[0], upTo: 5 },
+      { material: materials[3], upTo: 1 },
     ],
     experience: 10,
     energy: 5,
@@ -41,6 +41,7 @@ export const testAdventures: IAdventure[][] = testCharacters.map(
   (n: ICharacter) => {
     return [
       {
+        name: elements[n.id].name + " Adventure for " + n.name,
         id: n.id,
         element: elements[n.id],
         stories: testStories,
@@ -59,8 +60,8 @@ export const testEndless: IEndless[] = ["run", "fight"].map(
       energy: 10,
       checkpoint: null,
       allowedRewards: [
-        { id: 0, upTo: 5 },
-        { id: 3, upTo: 1 },
+        { material: materials[0], upTo: 5 },
+        { material: materials[3], upTo: 1 },
       ],
     };
   }

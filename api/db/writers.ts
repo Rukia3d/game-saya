@@ -43,6 +43,7 @@ import {
   serverArenaStartEvents,
   serverArenaEndEvents,
 } from "./testDBEvents";
+import { enoughEnergyToPlay, findPlayer } from "../engine/helpers";
 
 const getNextPlayerId = () => {
   const createPlayers = readers
@@ -88,7 +89,6 @@ export const createPlayerEvent = (
   };
 };
 
-/*
 export const startLevelEvent = (
   game: IGame,
   event: IStartLevelData
@@ -105,7 +105,8 @@ export const startLevelEvent = (
       playerId: event.playerId,
       eventId: nextCreateEventId,
       elementId: event.data.elementId,
-      levelId: event.data.levelId,
+      adventureId: event.data.adventureId,
+      storyId: event.data.storyId,
       mode: event.data.mode,
     };
     allGameEvents.push(newEvent);
@@ -116,14 +117,16 @@ export const startLevelEvent = (
       created: newEvent.created,
       type: "STARTLEVEL",
       elementId: newStartPlayerEvent.elementId,
+      adventureId: newStartPlayerEvent.adventureId,
       mode: newStartPlayerEvent.mode,
-      levelId: newStartPlayerEvent.levelId,
+      storyId: newStartPlayerEvent.storyId,
     };
   } else {
     throw new Error("Can't generate startLevelEvent");
   }
 };
 
+/*
 export const winLevelEvent = (
   game: IGame,
   event: IWinLevelData
