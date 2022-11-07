@@ -71,11 +71,13 @@ export const WeaponList = ({
           key={n}
           data-testid="weapon-screen"
           className={`${
-            selected?.elementId === w.elementId ? "WeaponDetail" : "WeaponItem"
+            selected?.element.id === w.element.id
+              ? "WeaponDetail"
+              : "WeaponItem"
           }`}
         >
-          {w.name} : {w.elementName}
-          {selected?.elementId === w.elementId ? (
+          {w.name} : {w.element.name}
+          {selected?.element.id === w.element.id ? (
             <div className="Weapon">
               <div className="WeaponImage"></div>
               <div className="WeaponText">

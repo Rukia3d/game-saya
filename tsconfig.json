@@ -18,4 +18,3 @@
   },
   "include": ["src", "api/db/testDBEvents.ts"]
 }
-, "api/db/testDBLevels.ts"

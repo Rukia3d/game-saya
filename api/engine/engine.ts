@@ -16,6 +16,12 @@ export const applyEvent = (game: IGame, event: IGameEvent): IGame => {
         newGame
       );
       break;
+    case "SERVERARENASTART":
+      newGame = events.serverArenaStart(event, newGame);
+      break;
+    case "SERVERARENAEND":
+      newGame = events.serverArenaEnd(event, newGame);
+      break;
     /*
     case "STARTLEVEL":
       newGame = events.startLevel(event, newGame);
@@ -46,12 +52,6 @@ export const applyEvent = (game: IGame, event: IGameEvent): IGame => {
       break;
     case "MISSCHECKPOINT":
       newGame = events.missCheckpoint(event, newGame);
-      break;
-    case "SERVERARENASTART":
-      newGame = events.serverArenaStart(event, newGame);
-      break;
-    case "SERVERARENAEND":
-      newGame = events.serverArenaEnd(event, newGame);
       break;
     case "ARENASTART":
       newGame = events.startArena(event, newGame);

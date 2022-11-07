@@ -19,7 +19,7 @@ export const Adventures = ({
   return (
     <div className="AdventuresContainer" data-testid="adventures-screen">
       <TopMenu />
-      <h3>Adventure - {element.character.element}</h3>
+      <h3>Adventure - {element.character.element.name}</h3>
       <CloseButton close={() => setScreen("main")} />
       <div className="Adventures" data-testid="adventures-list">
         <div className="AdventuresStories">
@@ -27,7 +27,7 @@ export const Adventures = ({
           <div className="AdventuresStoriesList">
             {element.adventures.map((a: IAdventure, n: number) => (
               <div className="AdventuresStory" key={n}>
-                {a.name}
+                {a.element.name}
               </div>
             ))}
           </div>

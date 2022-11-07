@@ -47,7 +47,6 @@ export const findPlayer = (game: IGame, playerId: number) => {
   return res;
 };
 
-/*
 export const generateArenaRandom = (
   event: IServerArenaStartEvent,
   mode: string,
@@ -61,6 +60,58 @@ export const generateArenaRandom = (
   return res;
 };
 
+export const rewardArenaPlayer = (
+  player: IPlayer,
+  reward: IMaterialQuant[],
+  place: number
+) => {
+  const newPlayer: IPlayer = JSON.parse(JSON.stringify(player));
+  const newId = newPlayer.claims.length;
+  newPlayer.claims.push({
+    id: newId,
+    prize: reward,
+    claimed: false,
+  });
+  newPlayer.messages.push({
+    text: `Claim arena reward! Congratulations on winning ${place} place reward at Arena`,
+    read: false,
+    claimId: newId,
+  });
+  return newPlayer;
+};
+
+export const replacePlayer = (
+  allPlayers: IPlayer[],
+  newPlayer: IPlayer
+): IPlayer[] => {
+  const newPlayers: IPlayer[] = JSON.parse(JSON.stringify(allPlayers));
+  const indexOfNewPlayer = allPlayers.findIndex(
+    (p: IPlayer) => p.id === newPlayer.id
+  );
+  if (indexOfNewPlayer === -1) {
+    throw new Error("Can't find player to update");
+  }
+  newPlayers[indexOfNewPlayer] = newPlayer;
+  return newPlayers;
+};
+
+export const rewardArenaPlayers = (
+  game: IGame,
+  result: IArenaResult[][],
+  reward: IArenaResultPool[]
+): IPlayer[] => {
+  let newPlayers: IPlayer[] = JSON.parse(JSON.stringify(game.players));
+  for (let i = 0; i < 3; i++) {
+    result[i].forEach((r: IArenaResult) => {
+      const player = findPlayer(game, r.playerId);
+      const newPlayer = rewardArenaPlayer(player, reward[i].reward, i);
+      newPlayers = replacePlayer(newPlayers, newPlayer);
+    });
+  }
+  return newPlayers;
+};
+
+/*
 export const generateRandom = (
   event: IWinLevelEvent | IMissCheckpointEvent,
   level: IStory | IEndless,
@@ -294,59 +345,6 @@ export const canUpdateSpell = (
   strength: number
 ): boolean => {
   return requiredStrength === strength;
-};
-
-
-
-export const replacePlayer = (
-  allPlayers: IPlayer[],
-  newPlayer: IPlayer
-): IPlayer[] => {
-  const newPlayers: IPlayer[] = JSON.parse(JSON.stringify(allPlayers));
-  const indexOfNewPlayer = allPlayers.findIndex(
-    (p: IPlayer) => p.id === newPlayer.id
-  );
-  if (indexOfNewPlayer === -1) {
-    throw new Error("Can't find player to update");
-  }
-  newPlayers[indexOfNewPlayer] = newPlayer;
-  return newPlayers;
-};
-
-export const rewardArenaPlayer = (
-  player: IPlayer,
-  reward: IMaterialQuant[],
-  place: number
-) => {
-  const newPlayer: IPlayer = JSON.parse(JSON.stringify(player));
-  const newId = newPlayer.claims.length;
-  newPlayer.claims.push({
-    id: newId,
-    prize: reward,
-    claimed: false,
-  });
-  newPlayer.messages.push({
-    text: `Claim arena reward! Congratulations on winning ${place} place reward at Arena`,
-    read: false,
-    claimId: newId,
-  });
-  return newPlayer;
-};
-
-export const rewardArenaPlayers = (
-  game: IGame,
-  result: IArenaResult[][],
-  reward: IArenaResultPool[]
-): IPlayer[] => {
-  let newPlayers: IPlayer[] = JSON.parse(JSON.stringify(game.players));
-  for (let i = 0; i < 3; i++) {
-    result[i].forEach((r: IArenaResult) => {
-      const player = findPlayer(game, r.playerId);
-      const newPlayer = rewardArenaPlayer(player, reward[i].reward, i);
-      newPlayers = replacePlayer(newPlayers, newPlayer);
-    });
-  }
-  return newPlayers;
 };
 
 export const findEventArena = (

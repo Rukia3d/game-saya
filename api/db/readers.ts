@@ -110,10 +110,17 @@ export const playerEvents = (): IGameEvent[] => {
   // Find events for a player
   const events = gameEvents();
   const newEvents: IGameEvent[] = [];
+  console.log("events", events);
   events.forEach((e: IEventDB) => {
     switch (e.type) {
       case "CREATEPLAYER":
         newEvents.push(createPlayerEvent(e));
+        break;
+      case "SERVERARENASTART":
+        newEvents.push(serverArenaStartEvent(e));
+        break;
+      case "SERVERARENAEND":
+        newEvents.push(serverArenaEndEvent(e));
         break;
       /*
       case "STARTLEVEL":
@@ -145,12 +152,6 @@ export const playerEvents = (): IGameEvent[] => {
         break;
       case "MISSCHECKPOINT":
         newEvents.push(missCheckpointEvent(e));
-        break;
-      case "SERVERARENASTART":
-        newEvents.push(serverArenaStartEvent(e));
-        break;
-      case "SERVERARENAEND":
-        newEvents.push(serverArenaEndEvent(e));
         break;
       case "ARENASTART":
         newEvents.push(startArenaEvent(e));
@@ -393,6 +394,7 @@ export const endArenaEvent = (event: IEventDB): IArenaEndEvent => {
     mode: startArena.mode,
   };
 };
+*/
 
 export const serverArenaStartEvent = (
   event: IEventDB
@@ -425,4 +427,3 @@ export const serverArenaEndEvent = (event: IEventDB): IServerArenaEndEvent => {
     created: event.created,
   };
 };
-*/

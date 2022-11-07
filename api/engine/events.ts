@@ -1,6 +1,7 @@
 import seedrandom from "seedrandom";
 import { detectWinners, splitPool } from "../cronjobs";
 import { basePlayer, materials, elementAdventure } from "../db/testDBData";
+import { generateArenaRandom, rewardArenaPlayers } from "./helpers";
 import {
   currentState,
   gameMode,
@@ -49,6 +50,73 @@ export const createPlayer = (event: ICreatePlayerEvent, game: IGame): IGame => {
     ...game,
     players: newPlayers,
   };
+};
+
+export const serverArenaStart = (
+  event: IServerArenaStartEvent,
+  game: IGame
+): IGame => {
+  const newServer: IServer = JSON.parse(JSON.stringify(game.server));
+  newServer.arenaFightHistory.push(game.server.arenaFight);
+  newServer.arenaRunHistory.push(game.server.arenaRun);
+  const eventsRun: IArenaEvent[] = [0, 1, 2].map((n: number) => {
+    const reward = generateArenaRandom(event, "run", 4, n);
+    const randResource = materials[reward + INDEXOFFIRSTREWARDABLE];
+    return {
+      index: n,
+      stake: [
+        { id: 0, element: null, name: "Gold", quantity: 25 * (n + 1) },
+        { ...randResource, quantity: 5 * (n + 1) },
+      ],
+      level: "some",
+      rewardPool: [],
+      results: [],
+      mode: "run",
+    };
+  });
+  const eventsFight: IArenaEvent[] = [0, 1, 2].map((n: number) => {
+    const reward = generateArenaRandom(event, "fight", 4, n);
+    const randResource = materials[reward + INDEXOFFIRSTREWARDABLE];
+    return {
+      index: n,
+      stake: [
+        { id: 0, element: null, name: "Gold", quantity: 25 * (n + 1) },
+        { ...randResource, quantity: 5 * (n + 1) },
+      ],
+      level: "some",
+      rewardPool: [],
+      results: [],
+      mode: "fight",
+    };
+  });
+
+  newServer.arenaRun = {
+    mode: "run",
+    resultTime: event.end,
+    events: eventsRun,
+  };
+  newServer.arenaFight = {
+    mode: "fight",
+    resultTime: event.end,
+    events: eventsFight,
+  };
+  return { ...game, server: newServer };
+};
+
+export const serverArenaEnd = (
+  event: IServerArenaEndEvent,
+  game: IGame
+): IGame => {
+  const newServer: IServer = JSON.parse(JSON.stringify(game.server));
+  let newPlayers: IPlayer[] = JSON.parse(JSON.stringify(game.players));
+  newServer.arenaRun.events.map((e: IArenaEvent) => {
+    if (e.results.length > 0) {
+      const result = detectWinners(e.results);
+      const reward = splitPool(result, e.rewardPool);
+      newPlayers = rewardArenaPlayers(game, result, reward);
+    }
+  });
+  return { players: newPlayers, server: newServer };
 };
 
 /*
@@ -329,73 +397,6 @@ export const buySpell = (event: IBuySpellEvent, game: IGame): IGame => {
     listings: newListings,
   };
   return { server: newServer, players: replacePlayer(game.players, newPlayer) };
-};
-
-export const serverArenaStart = (
-  event: IServerArenaStartEvent,
-  game: IGame
-): IGame => {
-  const newServer: IServer = JSON.parse(JSON.stringify(game.server));
-  newServer.arenaFightHistory.push(game.server.arenaFight);
-  newServer.arenaRunHistory.push(game.server.arenaRun);
-  const eventsRun: IArenaEvent[] = [0, 1, 2].map((n: number) => {
-    const reward = generateArenaRandom(event, "run", 4, n);
-    const randResource = materials[reward + INDEXOFFIRSTREWARDABLE];
-    return {
-      index: n,
-      stake: [
-        { id: 0, name: "money", quantity: 25 * (n + 1) },
-        { ...randResource, quantity: 5 * (n + 1) },
-      ],
-      level: "some",
-      rewardPool: [],
-      results: [],
-      mode: "run",
-    };
-  });
-  const eventsFight: IArenaEvent[] = [0, 1, 2].map((n: number) => {
-    const reward = generateArenaRandom(event, "fight", 4, n);
-    const randResource = materials[reward + INDEXOFFIRSTREWARDABLE];
-    return {
-      index: n,
-      stake: [
-        { id: 0, name: "money", quantity: 25 * (n + 1) },
-        { ...randResource, quantity: 5 * (n + 1) },
-      ],
-      level: "some",
-      rewardPool: [],
-      results: [],
-      mode: "fight",
-    };
-  });
-
-  newServer.arenaRun = {
-    mode: "run",
-    resultTime: event.end,
-    events: eventsRun,
-  };
-  newServer.arenaFight = {
-    mode: "fight",
-    resultTime: event.end,
-    events: eventsFight,
-  };
-  return { ...game, server: newServer };
-};
-
-export const serverArenaEnd = (
-  event: IServerArenaEndEvent,
-  game: IGame
-): IGame => {
-  const newServer: IServer = JSON.parse(JSON.stringify(game.server));
-  let newPlayers: IPlayer[] = JSON.parse(JSON.stringify(game.players));
-  newServer.arenaRun.events.map((e: IArenaEvent) => {
-    if (e.results.length > 0) {
-      const result = detectWinners(e.results);
-      const reward = splitPool(result, e.rewardPool);
-      newPlayers = rewardArenaPlayers(game, result, reward);
-    }
-  });
-  return { players: newPlayers, server: newServer };
 };
 
 export const startArena = (event: IArenaStartEvent, game: IGame): IGame => {

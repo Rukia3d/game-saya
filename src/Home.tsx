@@ -45,7 +45,7 @@ export const Adventures = ({
           key={n}
           onClick={() => setScreen("adventure")}
         >
-          {e.character.element}
+          {e.character.element.name}
         </div>
       ))}
     </div>
