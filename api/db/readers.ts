@@ -125,10 +125,10 @@ export const playerEvents = (): IGameEvent[] => {
       case "STARTLEVEL":
         newEvents.push(startLevelEvent(e));
         break;
-      /*
       case "WINLEVEL":
         newEvents.push(winLevelEvent(e));
         break;
+      /*
       // case "OPENSPELL":
       //   newEvents.push(openSpellEvent(e));
       //   break;
@@ -206,7 +206,6 @@ export const startLevelEvent = (event: IEventDB): IStartLevelEvent => {
   };
 };
 
-/*
 export const winLevelEvent = (event: IEventDB): IWinLevelEvent => {
   const winLevel = ensure(
     allWinLevelEvents().find((e: IWinLevelDB) => e.eventId == event.eventId),
@@ -219,8 +218,9 @@ export const winLevelEvent = (event: IEventDB): IWinLevelEvent => {
     created: event.created,
     type: "WINLEVEL",
     elementId: winLevel.elementId,
+    adventureId: winLevel.adventureId,
     mode: winLevel.mode,
-    levelId: winLevel.levelId,
+    storyId: winLevel.storyId,
   };
 };
 

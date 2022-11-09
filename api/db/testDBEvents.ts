@@ -75,7 +75,14 @@ export const startLevelEvents: IStartLevelDB[] = [
 ];
 
 export const winLevelEvents: IWinLevelDB[] = [
-  { playerId: 1, eventId: 2, elementId: 0, levelId: 0, mode: "story" },
+  {
+    playerId: 1,
+    eventId: 2,
+    elementId: 0,
+    adventureId: 0,
+    storyId: 0,
+    mode: "story",
+  },
 ];
 
 export const openSpellEvents: IOpenSpellDB[] = [

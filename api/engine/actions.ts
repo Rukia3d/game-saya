@@ -1,3 +1,4 @@
+import { findLastCheckpoint, findLevel, generateRandom } from "./helpers";
 import {
   IMaterialQuant,
   IAllowedRewards,
@@ -7,52 +8,72 @@ import {
   IWinLevelEvent,
   IPassCheckpointEvent,
   IArenaResult,
+  IElement,
 } from "./types";
 
-/*
 export const rewardPlayer = (
   event: IWinLevelEvent | IMissCheckpointEvent,
   materials: IMaterialQuant[],
-  arcanas: IArcana[]
+  element: IElement
 ): { all: IMaterialQuant[]; new: IMaterialQuant[] } => {
-  const level = findLevel(event, arcanas);
+  const level = findLevel(event, element);
   const newOnly: IMaterialQuant[] = [];
   level.allowedRewards.forEach((r: IAllowedRewards) => {
     const rand = generateRandom(event, level, r);
-    materials[r.id].quantity = materials[r.id].quantity + rand;
-    newOnly.push({ ...materials[r.id], quantity: rand });
+    materials[r.material.id].quantity =
+      materials[r.material.id].quantity + rand;
+    newOnly.push({ ...materials[r.material.id], quantity: rand });
   });
   return { all: materials, new: newOnly };
 };
 
 export const openNextLevel = (
   event: IWinLevelEvent,
-  arcanas: IArcana[]
-): IArcana[] => {
-  const [charIndex, levelIndex] = findLevelIndex(event, arcanas);
-  if (levelIndex < arcanas[charIndex].stories.length) {
-    arcanas[charIndex].stories[event.levelId + 1].state = "open";
+  elements: IElement[]
+): IElement[] => {
+  const newElements = JSON.parse(JSON.stringify(elements));
+  const currentStories =
+    newElements[event.elementId].adventures[event.adventureId].stories;
+
+  if (currentStories[event.storyId].id < currentStories.length) {
+    // If next closed it becomes open
+    if (currentStories[event.storyId + 1].state === "closed") {
+      newElements[event.elementId].adventures[event.adventureId].stories[
+        event.storyId + 1
+      ].state = "open";
+    }
+    // If this open becomes complete
+    if (currentStories[event.storyId].state === "open")
+      newElements[event.elementId].adventures[event.adventureId].stories[
+        event.storyId
+      ].state = "complete";
   }
-  arcanas[charIndex].stories[event.levelId].state = "complete";
-  return arcanas;
+
+  return newElements;
 };
 
 export const addExperience = (
   event: IWinLevelEvent | IPassCheckpointEvent,
   player: IPlayer
 ): number => {
-  const level = findLevel(event, player.arcanas);
+  const level = findLevel(event, player.elements[event.elementId]);
   if ("state" in level && level.state === "open") {
     return player.exprience + level.experience;
   }
   if (event.mode === "run" || event.mode === "fight") {
     // if it is the first time the last checkpoint will return -1
-    const last = findLastCheckpoint(player, event.mode, event.elementId);
+    const last = findLastCheckpoint(
+      player,
+      event.mode,
+      event.elementId,
+      event.adventureId
+    );
     return player.exprience + (last <= 0 ? 1 : last) * 10;
   }
   return player.exprience;
 };
 
+/*
 export const removeMaterials = (
   materials: IMaterialQuant[],
   price: IMaterialQuant[]

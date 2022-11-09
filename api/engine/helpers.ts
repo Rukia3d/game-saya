@@ -27,7 +27,9 @@ export const generateSeed = (
   event: IWinLevelEvent | IMissCheckpointEvent,
   id: number
 ) => {
-  const phrase = seedrandom(event.eventId + event.elementId + event.mode + id);
+  const phrase = seedrandom(
+    event.eventId + event.elementId + event.playerId + event.mode + id
+  );
   return phrase;
 };
 
@@ -188,13 +190,49 @@ export const enoughEnergyToPlay = (
   return player.energy - energyPrice >= 0;
 };
 
-/*
+export const findStartLevel = (
+  currentState: ICurrentState,
+  storyId: number
+) => {
+  console.log("findStartLevel", currentState);
+  if (currentState.level?.elementId === undefined)
+    throw new Error("Incorrect state: can't finish level you haven't started");
+  if (currentState.level?.adventureId === undefined)
+    throw new Error("Incorrect state: can't finish level you haven't started");
+  if (currentState.level?.storyId === undefined)
+    throw new Error("Incorrect state: can't finish level you haven't started");
+  if (currentState.level?.storyId !== storyId)
+    throw new Error("Incorrect state: can't finish level you haven't started");
+
+  return {
+    elementId: currentState.level.elementId,
+    adventureId: currentState.level.adventureId,
+    mode: currentState.level.mode,
+    storyId: currentState.level.storyId,
+  };
+};
+
+export const findLevel = (
+  event: IWinLevelEvent | IMissCheckpointEvent | IPassCheckpointEvent,
+  element: IElement
+): IStory | IEndless => {
+  switch (event.type) {
+    case "WINLEVEL":
+      return element.adventures[event.adventureId].stories[event.storyId];
+    case "PASSCHECKPOINT":
+      return element.endless[event.adventureId];
+    // case "MISSCHECKPOINT":
+    //   return findLevelForEndless(event, arcanas);
+  }
+  throw new Error("Can't find level");
+};
+
 export const generateRandom = (
   event: IWinLevelEvent | IMissCheckpointEvent,
   level: IStory | IEndless,
   reward: IAllowedRewards
 ) => {
-  const addition = "levelId" in event ? event.levelId : 0;
+  const addition = "storyId" in event ? event.storyId : 0;
   const seed = generateSeed(event, addition);
   // rand shouldn't be 0 unless specified that's the case
   let rand = Math.round(seed() * reward.upTo) + 1;
@@ -209,7 +247,24 @@ export const generateRandom = (
   return rand;
 };
 
+export const findLastCheckpoint = (
+  player: IPlayer,
+  mode: gameMode,
+  elementId: number,
+  adventureId: number
+) => {
+  if (mode !== "run" && mode !== "fight") {
+    throw new Error("Unknown game mode");
+  }
+  const lastCheckpoint =
+    player.elements[elementId].endless[adventureId].checkpoint;
+  if (lastCheckpoint === null) {
+    return -1;
+  }
+  return lastCheckpoint;
+};
 
+/*
 export const findLevelIndex = (event: IWinLevelEvent, elements: IElement[]) => {
   const charIndex = elements.findIndex(
     (c: IEndless) => c.id === event.elementId
@@ -223,19 +278,6 @@ export const findLevelIndex = (event: IWinLevelEvent, elements: IElement[]) => {
   return [charIndex, levelIndex];
 };
 
-export const findLevel = (
-  event: IWinLevelEvent | IMissCheckpointEvent | IPassCheckpointEvent,
-  arcanas: IArcana[]
-): IStory | IEndless => {
-  switch (event.type) {
-    case "WINLEVEL":
-      return findLevelForStory(event, arcanas);
-    case "PASSCHECKPOINT":
-      return findLevelForEndless(event, arcanas);
-    case "MISSCHECKPOINT":
-      return findLevelForEndless(event, arcanas);
-  }
-};
 
 export const findLevelForStory = (
   event: IWinLevelEvent,
@@ -255,20 +297,6 @@ export const findLevelForEndless = (
   return level;
 };
 
-const correctStateForWin = (
-  event: {
-    elementId: number;
-    mode: gameMode;
-    levelId: number;
-  },
-  currentState: ICurrentState
-) => {
-  return (
-    event.levelId === currentState.level?.level &&
-    event.elementId === currentState.level?.arcana &&
-    event.mode === currentState.level?.mode
-  );
-};
 
 const correctStateForArena = (
   arena: {
@@ -283,20 +311,6 @@ const correctStateForArena = (
   );
 };
 
-export const foundStartLevelToWin = (
-  currentState: ICurrentState,
-  event: {
-    elementId: number;
-    mode: gameMode;
-    levelId: number;
-  }
-) => {
-  if ("level" in currentState) {
-    return correctStateForWin(event, currentState);
-  } else {
-    throw new Error("Incorrect state: can't finish level you haven't started");
-  }
-};
 
 export const foundArenaStartEvent = (
   currentState: ICurrentState,
@@ -312,22 +326,6 @@ export const foundArenaStartEvent = (
   }
 };
 
-export const findLastCheckpoint = (
-  player: IPlayer,
-  mode: gameMode,
-  arcana: number
-) => {
-  if (mode !== "run" && mode !== "fight") {
-    throw new Error("Unknown game mode");
-  }
-  const eventIndex = mode === "run" ? 0 : 1;
-  const lastCheckpoint =
-    player.arcanas[arcana].currentEvents[eventIndex].checkpoint;
-  if (lastCheckpoint === null) {
-    return -1;
-  }
-  return lastCheckpoint;
-};
 
 export const correctCheckpoint = (
   player: IPlayer,

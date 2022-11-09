@@ -1,6 +1,7 @@
 import seedrandom from "seedrandom";
 import { detectWinners, splitPool } from "../cronjobs";
 import { basePlayer, materials, elementAdventure } from "../db/testDBData";
+import { addExperience, openNextLevel, rewardPlayer } from "./actions";
 import {
   energyPriceForStory,
   ensure,
@@ -153,10 +154,13 @@ export const startLevel = (event: IStartLevelEvent, game: IGame): IGame => {
   return { ...game, players: replacePlayer(game.players, newPlayer) };
 };
 
-/*
 export const winLevel = (event: IWinLevelEvent, game: IGame): IGame => {
   const player = findPlayer(game, event.playerId);
-  const newMaterials = rewardPlayer(event, player.materials, player.arcanas);
+  const newMaterials = rewardPlayer(
+    event,
+    player.materials,
+    player.elements[event.elementId]
+  );
   // need to add experience before we open the next level
   const newExperience = addExperience(event, player);
   const newState = {
@@ -166,13 +170,15 @@ export const winLevel = (event: IWinLevelEvent, game: IGame): IGame => {
   const newPlayer: IPlayer = {
     ...player,
     materials: newMaterials.all,
-    arcanas: openNextLevel(event, player.arcanas),
+    elements: openNextLevel(event, player.elements),
     exprience: newExperience,
     // TODO Check if this is correct
     currentState: newState,
   };
   return { ...game, players: replacePlayer(game.players, newPlayer) };
 };
+
+/*
 
 export const startEndless = (event: IStartEndlessEvent, game: IGame): IGame => {
   const player = findPlayer(game, event.playerId);

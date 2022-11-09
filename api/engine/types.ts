@@ -311,8 +311,9 @@ export type IWinLevelDB = {
   eventId: number;
   playerId: number;
   elementId: number;
+  adventureId: number;
   mode: gameMode;
-  levelId: number;
+  storyId: number;
 };
 
 export type IWinLevelData = {
@@ -320,9 +321,7 @@ export type IWinLevelData = {
   created: number;
   type: "WINLEVEL";
   data: {
-    elementId: number;
-    mode: gameMode;
-    levelId: number;
+    storyId: number;
   };
 };
 
@@ -332,8 +331,9 @@ export type IWinLevelEvent = {
   created: number;
   type: "WINLEVEL";
   elementId: number;
+  adventureId: number;
   mode: gameMode;
-  levelId: number;
+  storyId: number;
 };
 
 // OPENSPELL
@@ -521,6 +521,7 @@ export type IPassCheckpointEvent = {
   created: number;
   type: "PASSCHECKPOINT";
   elementId: number;
+  adventureId: number;
   mode: gameMode;
   checkpoint: number;
 };

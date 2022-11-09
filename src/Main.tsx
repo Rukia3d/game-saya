@@ -16,6 +16,7 @@ import { testPlayer, testServer } from "./utils/testDBPlayer";
 import { Collections } from "./Collections";
 import { Messages } from "./Messages";
 import { Adventures } from "./Adventures";
+import { Game } from "./Game";
 
 export type mainScreenState =
   | "main"
@@ -66,7 +67,7 @@ const mainScreens: MainScreensType = {
   market: ComingSoon,
   aliance: ComingSoon,
   studio: ComingSoon,
-  game: ComingSoon,
+  game: Game,
 };
 
 export const Main = ({ playerId }: { playerId: string }) => {

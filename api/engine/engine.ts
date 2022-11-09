@@ -25,10 +25,10 @@ export const applyEvent = (game: IGame, event: IGameEvent): IGame => {
     case "STARTLEVEL":
       newGame = events.startLevel(event, newGame);
       break;
-    /*
     case "WINLEVEL":
       newGame = events.winLevel(event, newGame);
       break;
+    /*
     // case "OPENSPELL":
     //   newGame = events.openSpell(event, newGame);
     //   break;

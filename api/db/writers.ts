@@ -43,7 +43,11 @@ import {
   serverArenaStartEvents,
   serverArenaEndEvents,
 } from "./testDBEvents";
-import { enoughEnergyToPlay, findPlayer } from "../engine/helpers";
+import {
+  enoughEnergyToPlay,
+  findPlayer,
+  findStartLevel,
+} from "../engine/helpers";
 
 const getNextPlayerId = () => {
   const createPlayers = readers
@@ -126,14 +130,14 @@ export const startLevelEvent = (
   }
 };
 
-/*
 export const winLevelEvent = (
   game: IGame,
   event: IWinLevelData
 ): IWinLevelEvent => {
   const nextCreateEventId = getNextEventId();
   const player = findPlayer(game, event.playerId);
-  if (foundStartLevelToWin(player.currentState, event.data)) {
+  const res = findStartLevel(player.currentState, event.data.storyId);
+  if (res) {
     const newEvent: IEventDB = {
       eventId: nextCreateEventId,
       created: event.created,
@@ -142,9 +146,10 @@ export const winLevelEvent = (
     const newWinLevelEvent: IWinLevelDB = {
       playerId: event.playerId,
       eventId: nextCreateEventId,
-      elementId: event.data.elementId,
-      levelId: event.data.levelId,
-      mode: event.data.mode,
+      elementId: res.elementId,
+      adventureId: res.adventureId,
+      storyId: res.storyId,
+      mode: res.mode,
     };
     allGameEvents.push(newEvent);
     winLevelEvents.push(newWinLevelEvent);
@@ -154,14 +159,15 @@ export const winLevelEvent = (
       created: newEvent.created,
       type: "WINLEVEL",
       elementId: newWinLevelEvent.elementId,
+      adventureId: newWinLevelEvent.adventureId,
+      storyId: newWinLevelEvent.storyId,
       mode: newWinLevelEvent.mode,
-      levelId: newWinLevelEvent.levelId,
     };
   } else {
     throw new Error("Can't generate winLevelEvent");
   }
 };
-
+/*
 export const startEndlessEvent = (
   game: IGame,
   event: IStartEndlessData

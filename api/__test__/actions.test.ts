@@ -1,4 +1,10 @@
-import { basePlayer, materials } from "../db/testDBData";
+import {
+  basePlayer,
+  elementAdventure,
+  elements,
+  materials,
+} from "../db/testDBData";
+import { openNextLevel, rewardPlayer } from "../engine/actions";
 import {
   IMaterial,
   IMaterialQuant,
@@ -7,85 +13,88 @@ import {
 } from "../engine/types";
 
 test("openNextLevel opens next level correctly", async () => {
-  const playerCharacters = [JSON.parse(JSON.stringify(arcanas[0]))];
+  const playerElements = [JSON.parse(JSON.stringify(elementAdventure[0]))];
+  playerElements[0].adventures[0].stories[0].state = "open";
   const res = openNextLevel(
     {
       eventId: 0,
       mode: "story",
       elementId: 0,
-      levelId: 0,
+      adventureId: 0,
+      storyId: 0,
       created: 1654347302,
       playerId: 0,
       type: "WINLEVEL",
     },
-    playerCharacters
+    playerElements
   );
-  expect(res[0].stories[0].state).toEqual("complete");
-  expect(res[0].stories[1].state).toEqual("open");
-  expect(res[0].stories[2].state).toEqual("closed");
+  expect(res[0].adventures[0].stories[0].state).toEqual("complete");
+  expect(res[0].adventures[0].stories[1].state).toEqual("open");
+  expect(res[0].adventures[0].stories[2].state).toEqual("closed");
   // Next level also opens
   const res2 = openNextLevel(
     {
       eventId: 1,
       mode: "story",
       elementId: 0,
-      levelId: 1,
+      adventureId: 0,
+      storyId: 1,
       created: 1654347302,
       playerId: 0,
       type: "WINLEVEL",
     },
     res
   );
-  expect(res2[0].stories[0].state).toEqual("complete");
-  expect(res2[0].stories[1].state).toEqual("complete");
-  expect(res2[0].stories[2].state).toEqual("open");
+  expect(res2[0].adventures[0].stories[0].state).toEqual("complete");
+  expect(res2[0].adventures[0].stories[1].state).toEqual("complete");
+  expect(res2[0].adventures[0].stories[2].state).toEqual("open");
 });
 
-/*
 test("rewardPlayer generates correct rewards", async () => {
   const playerMaterials = JSON.parse(JSON.stringify(materials)).map(
     (m: IMaterial) => {
       return { ...m, quantity: 1 };
     }
   );
-  const playerCharacters = JSON.parse(JSON.stringify(arcanas));
+  const playerElement = JSON.parse(JSON.stringify(elementAdventure[0]));
   const res = rewardPlayer(
     {
       eventId: 5,
       mode: "story",
       elementId: 0,
-      levelId: 0,
+      adventureId: 0,
+      storyId: 0,
       created: 1654347302,
       playerId: 0,
       type: "WINLEVEL",
     },
     playerMaterials,
-    playerCharacters
+    playerElement
   );
-  expect(res.all[0].name).toEqual("money");
-  expect(res.all[0].quantity).toEqual(11);
-  expect(res.all[3].name).toEqual("resource2");
-  expect(res.all[3].quantity).toEqual(5);
+  expect(res.all[0].name).toEqual("Gold");
+  expect(res.all[0].quantity).toEqual(4);
+  expect(res.all[3].name).toEqual("Garnet");
+  expect(res.all[3].quantity).toEqual(1);
   // Rewards are added 2nd time to the same materials (level replayed)
-  playerCharacters[0].stories[0].state = "complete";
-  const res2 = rewardPlayer(
-    {
-      eventId: 6,
-      mode: "story",
-      elementId: 0,
-      levelId: 0,
-      created: 1654347302,
-      playerId: 0,
-      type: "WINLEVEL",
-    },
-    JSON.parse(JSON.stringify(res.all)),
-    playerCharacters
-  );
-  expect(res2.all[0].quantity).toEqual(16);
-  expect(res2.all[3].quantity).toEqual(7);
+  // playerElement.adventures[0].stories[0].state = "complete";
+  // const res2 = rewardPlayer(
+  //   {
+  //     eventId: 6,
+  //     mode: "story",
+  //     elementId: 0,
+  //     adventureId: 0,
+  //     storyId: 0,
+  //     created: 1654347302,
+  //     playerId: 0,
+  //     type: "WINLEVEL",
+  //   },
+  //   JSON.parse(JSON.stringify(res.all)),
+  //   playerElement
+  // );
+  // expect(res2.all[0].quantity).toEqual(7);
+  // expect(res2.all[3].quantity).toEqual(7);
 });
-
-
+/*
 test("addExperience correctly adds experience", async () => {
   const playerCharacters = [JSON.parse(JSON.stringify(arcanas[0]))];
   playerCharacters[0].stories[0].state = "open";
@@ -132,6 +141,7 @@ test("Removes materials correctly", async () => {
   expect(res[0].quantity).toEqual(5);
   expect(res[3].quantity).toEqual(3);
 });
+
 
 test("Updates rewards pool when a player joins", () => {
   const arenaEvent = JSON.parse(JSON.stringify(arenaRun.events[1]));
