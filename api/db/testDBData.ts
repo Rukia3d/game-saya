@@ -11,7 +11,9 @@ import {
   IQuest,
   IPlayer,
   IServer,
+  IWeapon,
 } from "../engine/types";
+import { testLevel } from "./testDBLevelMaps";
 
 export const elements: { id: number; name: elementName }[] = [
   { id: 0, name: "jade" },
@@ -31,6 +33,49 @@ export const materials: IMaterial[] = [
   { id: 6, name: "Amber", element: elements[4] },
 ];
 
+export const weapons: IWeapon[] = [
+  {
+    name: "chakram",
+    id: 0,
+    element: elements[0],
+    charge: 0,
+    maxCharge: 100,
+    state: "closed",
+  },
+  {
+    name: "greatsword",
+    id: 1,
+    element: elements[1],
+    charge: 0,
+    maxCharge: 100,
+    state: "closed",
+  },
+  {
+    name: "scythe",
+    id: 2,
+    element: elements[2],
+    charge: 0,
+    maxCharge: 100,
+    state: "closed",
+  },
+  {
+    name: "scroll",
+    id: 3,
+    element: elements[3],
+    charge: 0,
+    maxCharge: 100,
+    state: "closed",
+  },
+  {
+    name: "daggers",
+    id: 4,
+    element: elements[4],
+    charge: 0,
+    maxCharge: 100,
+    state: "closed",
+  },
+];
+
 export const characters: ICharacter[] = [
   { name: "Sayuri", id: 0, weapon: "chakram", element: elements[0] },
   { name: "Nell", id: 1, weapon: "greatsword", element: elements[1] },
@@ -47,7 +92,7 @@ export const stories: IStory[] = [
     mode: "story",
     name: characters[0].name + " Story0",
     state: "closed",
-    level: "", // Add generated level
+    level: testLevel,
     allowedRewards: [
       { material: materials[0], upTo: 5 },
       { material: materials[2], upTo: 1 },
@@ -61,7 +106,7 @@ export const stories: IStory[] = [
     mode: "story",
     name: characters[0].name + " Story1",
     state: "closed",
-    level: "", // Add generated level
+    level: testLevel,
     allowedRewards: [
       { material: materials[0], upTo: 5 },
       { material: materials[2], upTo: 3 },
@@ -75,7 +120,7 @@ export const stories: IStory[] = [
     mode: "story",
     name: characters[0].name + " Story2",
     state: "closed",
-    level: "", // Add generated level
+    level: testLevel,
     allowedRewards: [
       { material: materials[0], upTo: 10 },
       { material: materials[2], upTo: 5 },
@@ -89,7 +134,7 @@ export const stories: IStory[] = [
     mode: "story",
     name: characters[1].name + " Story0",
     state: "closed",
-    level: "", // Add generated level
+    level: testLevel,
     allowedRewards: [
       { material: materials[0], upTo: 10 },
       { material: materials[3], upTo: 1 },
@@ -104,7 +149,7 @@ export const stories: IStory[] = [
     mode: "story",
     name: characters[1].name + " Story1",
     state: "closed",
-    level: "", // Add generated level
+    level: testLevel,
     allowedRewards: [
       { material: materials[0], upTo: 5 },
       { material: materials[3], upTo: 3 },
@@ -118,7 +163,7 @@ export const stories: IStory[] = [
     mode: "story",
     name: characters[1].name + " Story2",
     state: "closed",
-    level: "", // Add generated level
+    level: testLevel,
     allowedRewards: [
       { material: materials[0], upTo: 10 },
       { material: materials[3], upTo: 5 },
@@ -133,7 +178,7 @@ export const stories: IStory[] = [
     mode: "quest",
     name: characters[0].name + " Quest0",
     state: "closed",
-    level: "", // Add generated level
+    level: testLevel,
     allowedRewards: [
       { material: materials[0], upTo: 10 },
       { material: materials[1], upTo: 1 },
@@ -148,7 +193,7 @@ export const stories: IStory[] = [
     mode: "quest",
     name: characters[0].name + " Quest1",
     state: "closed",
-    level: "", // Add generated level
+    level: testLevel,
     allowedRewards: [
       { material: materials[0], upTo: 10 },
       { material: materials[1], upTo: 1 },
@@ -163,7 +208,7 @@ export const endless: IEndless[] = [
   {
     id: 0,
     element: elements[0],
-    level: "",
+    level: testLevel,
     mode: "run" as gameMode,
     energy: 10,
     checkpoint: null,
@@ -175,7 +220,7 @@ export const endless: IEndless[] = [
   {
     id: 1,
     element: elements[0],
-    level: "",
+    level: testLevel,
     mode: "fight" as gameMode,
     energy: 10,
     checkpoint: null,
@@ -187,7 +232,7 @@ export const endless: IEndless[] = [
   {
     id: 2,
     element: elements[1],
-    level: "",
+    level: testLevel,
     mode: "run" as gameMode,
     energy: 10,
     checkpoint: null,
@@ -199,7 +244,7 @@ export const endless: IEndless[] = [
   {
     id: 3,
     element: elements[1],
-    level: "",
+    level: testLevel,
     mode: "fight" as gameMode,
     energy: 10,
     checkpoint: null,
@@ -264,7 +309,7 @@ export const basePlayer: IPlayer = {
   id: 0,
   name: "",
   exprience: 0,
-  energy: 50,
+  energy: 0,
   maxEnergy: 50,
   loungeId: null,
   materials: [],

@@ -1,91 +1,63 @@
-type arcana = "arcana1" | "arcana2";
+import { elementName, IElement } from "./engine/types";
+
 type setting = "lake" | "forest" | "village" | "city" | "castle";
-type cell = "space" | "enemy" | "obstacle";
 type reel = "dialogue" | "panel";
 
-interface IReel {
+export interface IReel {
   imageAddress: string;
   text: string;
   name: string;
   type: reel;
 }
 
-interface IRun {
+export interface IRun {
   settingName: string;
   setting: setting;
   map: ICell[][];
   type: "run";
-  enemyType: arcana[];
+  enemyType: { id: number; name: elementName }[];
+  musicAddress: string;
 }
-interface IFight {
+export interface IFight {
   settingName: string;
   setting: setting;
   map: ICell[][];
   type: "fight";
-  enemyType: arcana;
-}
-export interface ILevel {
-  level: any;
-  arcana: arcana;
+  enemyType: { id: number; name: elementName }[];
   musicAddress: string;
 }
+
+export type ILayout = IReel[] | IRun | IFight;
+
+export interface ILevel {
+  levels: ILayout[];
+  element: { id: number; name: elementName }[];
+}
+
 interface IEmptyCell {
   type: "space";
 }
+
+interface ITriggerCell {
+  type: "trigger";
+  // trigger: "reel" | "dialogue";
+  // triggerId: number;
+}
+
 interface IObstacleCell {
   type: "obstacle";
   //   image: string;
 }
+
 interface IEnemyCell {
   type: "enemy";
   //   image: string;
   //   sound: string;
   //   strength: number;
   //   reward: string;
-  //   arcana: arcana;
+  //   element: element;
 }
-type ICell = IEmptyCell | IObstacleCell | IEnemyCell;
-const reel: IReel[] = [
-  {
-    imageAddress: "/address1",
-    text: "Reel text 1",
-    name: "Reel name 1",
-    type: "panel",
-  },
-  {
-    imageAddress: "/address2",
-    text: "Reel text 2",
-    name: "Reel name 2",
-    type: "panel",
-  },
-  {
-    imageAddress: "/address3",
-    text: "Reel text 3",
-    name: "Reel name 3",
-    type: "panel",
-  },
-  {
-    imageAddress: "/address4",
-    text: "Reel text 4",
-    name: "Reel name 4",
-    type: "panel",
-  },
-  {
-    imageAddress: "/address5",
-    text: "Reel text 5",
-    name: "Reel name 5",
-    type: "panel",
-  },
-];
-const run: IRun = {
-  settingName: "Run name",
-  setting: "lake",
-  map: [],
-  type: "run",
-  enemyType: ["arcana1", "arcana2"],
-};
-const fght = {};
-const level = [];
+export type ICell = IEmptyCell | IObstacleCell | IEnemyCell | ITriggerCell;
 
 // generate the gated sections of the level
 const generatePath = (length: number, width: number) => {
@@ -161,7 +133,7 @@ const generateMap = (length: number, width: number, difficulty: number) => {
 };
 
 const start = () => {
-  const length = 20; // number of rows with gates
+  const length = 16; // number of rows with gates
   const width = 5; // number of moves l to r
   const difficulty = 5; // number of rows between gates, can't be less than 2
   const newMap = generateMap(length, width, difficulty);
@@ -181,6 +153,7 @@ const start = () => {
     });
     console.log("\n");
   });
+  console.log(newMap);
 };
 
 start();

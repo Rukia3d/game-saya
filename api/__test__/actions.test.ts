@@ -4,7 +4,7 @@ import {
   elements,
   materials,
 } from "../db/testDBData";
-import { openNextLevel, rewardPlayer } from "../engine/actions";
+import { openNextLevel, rewardPlayer, addExperience } from "../engine/actions";
 import {
   IMaterial,
   IMaterialQuant,
@@ -75,60 +75,43 @@ test("rewardPlayer generates correct rewards", async () => {
   expect(res.all[0].quantity).toEqual(4);
   expect(res.all[3].name).toEqual("Garnet");
   expect(res.all[3].quantity).toEqual(1);
-  // Rewards are added 2nd time to the same materials (level replayed)
-  playerElement.adventures[0].stories[0].state = "complete";
-  playerElement.adventures[0].stories[1].state = "open";
-  // const res2 = rewardPlayer(
-  //   {
-  //     eventId: 6,
-  //     mode: "story",
-  //     elementId: 0,
-  //     adventureId: 0,
-  //     storyId: 0,
-  //     created: 1654347302,
-  //     playerId: 0,
-  //     type: "WINLEVEL",
-  //   },
-  //   JSON.parse(JSON.stringify(res.all)),
-  //   playerElement
-  // );
-  // expect(res2.all[0].quantity).toEqual(7);
-  // expect(res2.all[3].quantity).toEqual(7);
 });
-/*
+
 test("addExperience correctly adds experience", async () => {
-  const playerCharacters = [JSON.parse(JSON.stringify(arcanas[0]))];
-  playerCharacters[0].stories[0].state = "open";
+  const playerElement = JSON.parse(JSON.stringify(elementAdventure[0]));
   const res = addExperience(
     {
       eventId: 0,
       mode: "story",
       elementId: 0,
-      levelId: 0,
+      adventureId: 0,
+      storyId: 0,
       created: 1654347302,
       playerId: 0,
       type: "WINLEVEL",
     },
-    { ...basePlayer, arcanas: playerCharacters, exprience: 10 }
+    { ...basePlayer, elements: [playerElement], exprience: 10 }
   );
-  expect(res).toEqual(20);
+  expect(res).toEqual(10);
   // For the level that was already completed exp is not granted
-  playerCharacters[0].stories[1].state = "complete";
+  playerElement.adventures[0].stories[1].state = "complete";
   const res2 = addExperience(
     {
       eventId: 1,
       mode: "story",
       elementId: 0,
-      levelId: 1,
+      adventureId: 0,
+      storyId: 1,
       created: 1654347302,
       playerId: 0,
       type: "WINLEVEL",
     },
-    { ...basePlayer, arcanas: playerCharacters, exprience: 10 }
+    { ...basePlayer, elements: [playerElement], exprience: 10 }
   );
   expect(res2).toEqual(10);
 });
 
+/*
 test("Removes materials correctly", async () => {
   const owned: IMaterialQuant[] = materials.map((m: IMaterial) => {
     return { ...m, quantity: 10 };

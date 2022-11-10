@@ -1,3 +1,5 @@
+import { ILevel } from "../levelgen";
+
 export interface ICharacter {
   id: number;
   name: string;
@@ -39,7 +41,7 @@ export interface IEndless {
   mode: gameMode;
   energy: number;
   checkpoint: number | null;
-  level: string; //Unknown for now
+  level: ILevel;
   allowedRewards: IAllowedRewards[];
 }
 
@@ -69,7 +71,7 @@ export interface IStory {
   mode: gameMode;
   name: string;
   state: levelState;
-  level: string;
+  level: ILevel;
   allowedRewards: IAllowedRewards[];
   experience: number;
   energy: number;
@@ -98,7 +100,7 @@ export interface IArenaEvent {
   index: number;
   stake: IMaterialQuant[];
   mode: gameMode;
-  level: string; //Unknown for now
+  level: ILevel;
   rewardPool: IMaterialQuant[];
   results: IArenaResult[];
 }

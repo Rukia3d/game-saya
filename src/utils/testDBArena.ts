@@ -1,3 +1,4 @@
+import { testLevel } from "../../api/db/testDBLevelMaps";
 import { elementName, IArena } from "../../api/engine/types";
 
 export const elements: { id: number; name: elementName }[] = [
@@ -18,7 +19,7 @@ export const testArenaRun: IArena = {
         { id: 0, name: "Gold", element: null, quantity: 25 },
         { id: 3, name: "Jade", element: elements[0], quantity: 5 },
       ],
-      level: "some",
+      level: testLevel,
       rewardPool: [],
       results: [],
       mode: "run",
@@ -29,7 +30,7 @@ export const testArenaRun: IArena = {
         { id: 0, name: "Gold", element: null, quantity: 50 },
         { id: 3, name: "Jade", element: elements[0], quantity: 15 },
       ],
-      level: "some",
+      level: testLevel,
       rewardPool: [],
       results: [],
       mode: "run",
@@ -40,7 +41,7 @@ export const testArenaRun: IArena = {
         { id: 0, name: "Gold", element: null, quantity: 100 },
         { id: 3, name: "Jade", element: elements[0], quantity: 20 },
       ],
-      level: "some",
+      level: testLevel,
       rewardPool: [],
       results: [],
       mode: "run",
@@ -58,7 +59,7 @@ export const testArenaFight: IArena = {
         { id: 0, name: "Gold", element: null, quantity: 25 },
         { id: 3, name: "Jade", element: elements[0], quantity: 5 },
       ],
-      level: "some",
+      level: testLevel,
       rewardPool: [],
       results: [],
       mode: "run",
@@ -69,7 +70,7 @@ export const testArenaFight: IArena = {
         { id: 0, name: "Gold", element: null, quantity: 50 },
         { id: 3, name: "Jade", element: elements[0], quantity: 15 },
       ],
-      level: "some",
+      level: testLevel,
       rewardPool: [],
       results: [],
       mode: "run",
@@ -80,7 +81,7 @@ export const testArenaFight: IArena = {
         { id: 0, name: "Gold", element: null, quantity: 100 },
         { id: 3, name: "Jade", element: elements[0], quantity: 20 },
       ],
-      level: "some",
+      level: testLevel,
       rewardPool: [],
       results: [],
       mode: "run",

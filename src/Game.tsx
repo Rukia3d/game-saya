@@ -4,6 +4,14 @@ import { GameContext } from "./App";
 import { ComingSoon, mainScreenState } from "./Main";
 import { CloseButton } from "./PopUp";
 
+export const Panel = () => {
+  return <h1>Panel</h1>;
+};
+
+export const Level = () => {
+  return <h1>Level</h1>;
+};
+
 export const Game = ({
   setScreen,
 }: {
@@ -14,6 +22,7 @@ export const Game = ({
     throw new Error("No data in context");
   }
   const [confirmation, setConfirmation] = useState(false);
+  const [current, setCurrent] = useState(context.game.level.levels[0]);
 
   const winLevel = async () => {
     console.log("WinLevel");
@@ -23,7 +32,14 @@ export const Game = ({
       });
 
       await context.mutate();
+      setScreen("adventure");
+      context.setGame(null);
     }
+  };
+
+  const looseLevel = () => {
+    setScreen("adventure");
+    context.setGame(null);
   };
 
   if (context.game.mode === "story") {
@@ -31,7 +47,8 @@ export const Game = ({
       <div className="GameContainer" data-testid="game-screen">
         <CloseButton close={() => setScreen("adventure")} />
         <button onClick={winLevel}>Win</button>
-        <button>Loose</button>
+        <button onClick={looseLevel}>Loose</button>
+        {"map" in current ? <Level /> : <Panel />}
       </div>
     );
   }

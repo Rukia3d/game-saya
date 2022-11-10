@@ -16,15 +16,39 @@ import {
   IWeapon,
   weaponName,
 } from "../../api/engine/types";
+import { IRun } from "../../api/levelgen";
 import { testArenaFight, testArenaRun } from "./testDBArena";
 
 export const testCharacters: ICharacter[] = [characters[0], characters[1]];
+const testLevel: IRun = {
+  settingName: "Wood",
+  setting: "forest",
+  map: [
+    [
+      { type: "space" },
+      { type: "space" },
+      { type: "space" },
+      { type: "space" },
+      { type: "space" },
+    ],
+    [
+      { type: "trigger" },
+      { type: "trigger" },
+      { type: "trigger" },
+      { type: "trigger" },
+      { type: "trigger" },
+    ],
+  ],
+  type: "run",
+  enemyType: [{ id: 0, name: "jade" }],
+  musicAddress: "testmusic",
+};
 
 export const testStories: IStory[] = [0, 1, 2].map((n: number) => {
   return {
     id: n,
     element: elements[0],
-    level: "",
+    level: { levels: [testLevel], element: [{ id: 0, name: "jade" }] },
     name: "Story" + n,
     mode: "story",
     state: "open",
@@ -55,7 +79,7 @@ export const testEndless: IEndless[] = ["run", "fight"].map(
     return {
       id: n,
       element: elements[n],
-      level: "",
+      level: { levels: [testLevel], element: [{ id: 0, name: "jade" }] },
       mode: s as gameMode,
       energy: 10,
       checkpoint: null,

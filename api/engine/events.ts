@@ -1,6 +1,12 @@
 import seedrandom from "seedrandom";
 import { detectWinners, splitPool } from "../cronjobs";
-import { basePlayer, materials, elementAdventure } from "../db/testDBData";
+import {
+  basePlayer,
+  materials,
+  elementAdventure,
+  weapons,
+} from "../db/testDBData";
+import { testLevel } from "../db/testDBLevelMaps";
 import { addExperience, openNextLevel, rewardPlayer } from "./actions";
 import {
   energyPriceForStory,
@@ -36,6 +42,7 @@ import {
   IStartEndlessEvent,
   IStartLevelEvent,
   IUpdateSpellEvent,
+  IWeapon,
   IWinLevelEvent,
 } from "./types";
 
@@ -45,6 +52,9 @@ export const createPlayer = (event: ICreatePlayerEvent, game: IGame): IGame => {
   const newElement: IElement = JSON.parse(JSON.stringify(elementAdventure))[0];
   newElement.adventures[0].stories[0].state = "open";
   newElement.quests[0].stories[0].state = "open";
+  const newWeapon: IWeapon = JSON.parse(JSON.stringify(weapons))[0];
+  newWeapon.charge = 100;
+  newWeapon.state = "open";
   const newPlayer: IPlayer = {
     ...basePlayer,
     id: event.playerId,
@@ -52,6 +62,8 @@ export const createPlayer = (event: ICreatePlayerEvent, game: IGame): IGame => {
     materials: JSON.parse(JSON.stringify(materials)).map((m: IMaterial) => {
       return { ...m, quantity: 50 };
     }),
+    energy: 50,
+    weapons: [newWeapon],
     elements: [newElement],
   };
   const newPlayers = game.players.concat([newPlayer]);
@@ -77,7 +89,7 @@ export const serverArenaStart = (
         { id: 0, element: null, name: "Gold", quantity: 25 * (n + 1) },
         { ...randResource, quantity: 5 * (n + 1) },
       ],
-      level: "some",
+      level: testLevel,
       rewardPool: [],
       results: [],
       mode: "run",
@@ -92,7 +104,7 @@ export const serverArenaStart = (
         { id: 0, element: null, name: "Gold", quantity: 25 * (n + 1) },
         { ...randResource, quantity: 5 * (n + 1) },
       ],
-      level: "some",
+      level: testLevel,
       rewardPool: [],
       results: [],
       mode: "fight",

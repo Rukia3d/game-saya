@@ -135,42 +135,54 @@ export const Adventures = ({
   return (
     <div className="AdventuresContainer" data-testid="adventures-screen">
       <TopMenu />
-      <h3>Adventure - {element.character.element.name}</h3>
-      <CloseButton close={() => setScreen("main")} />
-      <div className="Adventures" data-testid="adventures-list">
-        <div className="AdventuresStories">
-          <h4>Stories</h4>
-          <div className="AdventuresStoriesList">
-            {element.adventures.map((a: IAdventure, n: number) => (
-              <AdventureStory
-                adventure={a}
-                setAdventure={setAdventure}
-                key={n}
-              />
-            ))}
-          </div>
-        </div>
-        <div className="AdventuresEndless">
-          <h4>Endless</h4>
-          <div className="AdventuresEndlessList">
-            {element.endless.map((e: IEndless, n: number) => (
-              <div className="AdventureEndless" key={n}>
-                {e.mode}
+      {adventure ? (
+        <PopUp close={() => setAdventure(null)}>
+          <Adventure
+            adventure={adventure}
+            setAdventure={setAdventure}
+            setScreen={setScreen}
+          />
+        </PopUp>
+      ) : (
+        <>
+          <h3>Adventure - {element.character.element.name}</h3>
+          <CloseButton close={() => setScreen("main")} />
+          <div className="Adventures" data-testid="adventures-list">
+            <div className="AdventuresStories">
+              <h4>Stories</h4>
+              <div className="AdventuresStoriesList">
+                {element.adventures.map((a: IAdventure, n: number) => (
+                  <AdventureStory
+                    adventure={a}
+                    setAdventure={setAdventure}
+                    key={n}
+                  />
+                ))}
               </div>
-            ))}
-          </div>
-        </div>
-        <div className="AdventuresQuests">
-          <h4>Quests</h4>
-          <div className="AdventuresQuestList">
-            {element.quests.map((e: IQuest, n: number) => (
-              <div className="AdventureQuest" key={n}>
-                {e.name}
+            </div>
+            <div className="AdventuresEndless">
+              <h4>Endless</h4>
+              <div className="AdventuresEndlessList">
+                {element.endless.map((e: IEndless, n: number) => (
+                  <div className="AdventureEndless" key={n}>
+                    {e.mode}
+                  </div>
+                ))}
               </div>
-            ))}
+            </div>
+            <div className="AdventuresQuests">
+              <h4>Quests</h4>
+              <div className="AdventuresQuestList">
+                {element.quests.map((e: IQuest, n: number) => (
+                  <div className="AdventureQuest" key={n}>
+                    {e.name}
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
+        </>
+      )}
     </div>
   );
 };
