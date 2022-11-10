@@ -1,7 +1,41 @@
-import { findEnergyPrice } from "../engine/helpers";
-import { IMaterial, IMaterialQuant, IWinLevelEvent } from "../engine/types";
+import { testPlayer } from "../../src/utils/testDBPlayer";
+import { basePlayer } from "../db/testDBData";
+import {
+  energyPriceForStory,
+  findEnergyPrice,
+  generateArenaRandom,
+  rewardArenaPlayer,
+} from "../engine/helpers";
+import {
+  elementName,
+  IMaterial,
+  IMaterialQuant,
+  IWinLevelEvent,
+  materialName,
+} from "../engine/types";
 
-test("energy price is found for a correct mode", async () => {
+test("rewardArenaPlayer works as expected", () => {
+  const reward = [
+    { id: 0, name: "Gold" as materialName, element: null, quantity: 50 },
+    {
+      id: 2,
+      name: "Jade" as materialName,
+      element: { id: 0, name: "jade" as elementName },
+      quantity: 10,
+    },
+  ];
+  const res = rewardArenaPlayer(testPlayer, reward, 1);
+  expect(res.claims.length).toEqual(1);
+  expect(res.claims[0].id).toEqual(0);
+  expect(res.claims[0].claimed).toBeFalsy();
+  expect(res.claims[0].prize[0].quantity).toEqual(50);
+  expect(res.claims[0].prize[0].name).toEqual("Gold");
+  expect(res.claims[0].prize[1].quantity).toEqual(10);
+  expect(res.claims[0].prize[1].name).toEqual("Jade");
+  expect(res.messages.length).toEqual(3);
+});
+
+test("energy price is found for a correct mode", () => {
   const res = findEnergyPrice(0, 0, "story", 0);
   expect(res).toEqual(5);
 
@@ -12,6 +46,12 @@ test("energy price is found for a correct mode", async () => {
   expect(res3).toEqual(5);
 });
 
+test("energyPriceForStory works correctly", () => {
+  const res = energyPriceForStory(testPlayer, 0, 0, "run", 0);
+  expect(res).toEqual(0);
+  const res1 = energyPriceForStory(testPlayer, 0, 0, "run", 2);
+  expect(res1).toEqual(5);
+});
 /*
 test("finds correct index", async () => {
   const winLevelEvent: IWinLevelEvent = {

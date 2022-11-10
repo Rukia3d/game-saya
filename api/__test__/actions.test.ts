@@ -76,7 +76,8 @@ test("rewardPlayer generates correct rewards", async () => {
   expect(res.all[3].name).toEqual("Garnet");
   expect(res.all[3].quantity).toEqual(1);
   // Rewards are added 2nd time to the same materials (level replayed)
-  // playerElement.adventures[0].stories[0].state = "complete";
+  playerElement.adventures[0].stories[0].state = "complete";
+  playerElement.adventures[0].stories[1].state = "open";
   // const res2 = rewardPlayer(
   //   {
   //     eventId: 6,
