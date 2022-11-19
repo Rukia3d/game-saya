@@ -1,4 +1,5 @@
 import { materials, characters, elements } from "../../api/db/testDBData";
+import { testCells } from "../../api/db/testDBLevelMaps";
 import {
   gameMode,
   IAdventure,
@@ -23,22 +24,7 @@ export const testCharacters: ICharacter[] = [characters[0], characters[1]];
 const testLevel: IRun = {
   settingName: "Wood",
   setting: "forest",
-  map: [
-    [
-      { type: "space" },
-      { type: "space" },
-      { type: "space" },
-      { type: "space" },
-      { type: "space" },
-    ],
-    [
-      { type: "trigger" },
-      { type: "trigger" },
-      { type: "trigger" },
-      { type: "trigger" },
-      { type: "trigger" },
-    ],
-  ],
+  map: testCells,
   type: "run",
   enemyType: [{ id: 0, name: "jade" }],
   musicAddress: "testmusic",

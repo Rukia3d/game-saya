@@ -27,7 +27,7 @@ export interface IFight {
   musicAddress: string;
 }
 
-export type ILayout = IReel[] | IRun | IFight;
+export type ILayout = IRun | IFight;
 
 export interface ILevel {
   levels: ILayout[];
@@ -40,8 +40,8 @@ interface IEmptyCell {
 
 interface ITriggerCell {
   type: "trigger";
-  // trigger: "reel" | "dialogue";
-  // triggerId: number;
+  trigger: "reel" | "dialogue";
+  triggerId: number;
 }
 
 interface IObstacleCell {

@@ -22,6 +22,7 @@
   "scripts": {
     "start": "npx ts-node --project tsconfig.json ./scripts.ts",
     "generate": "npx ts-node --project tsconfig.json ./levelgen.ts",
+    "sim": "npx ts-node --project tsconfig.json ./sim.ts",
     "build": "react-scripts build",
     "test": "jest",
     "eject": "react-scripts eject",

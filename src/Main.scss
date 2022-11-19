@@ -389,6 +389,64 @@
   }
 }
 
+.GameContainer {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  .GameUI {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 100;
+
+    .Player {
+      position: absolute;
+      left: 160px;
+      width: 80px;
+      height: 80px;
+      bottom: 0;
+      background-color: green;
+      border: 1px solid yellow;
+    }
+  }
+  .GameLevelMap {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    position: absolute;
+
+    .GameLevel {
+      position: absolute;
+      bottom: 0px;
+      border: 1px solid black;
+      display: flex;
+      flex-direction: column;
+
+      .MapRow {
+        width: 100%;
+        background-color: #00bbbb;
+        display: flex;
+        flex-direction: row;
+
+        .MapCell {
+          width: 100%;
+          min-width: 80px;
+          min-height: 80px;
+          border: 1px solid black;
+        }
+
+        .enemy {
+          background-color: red;
+        }
+
+        .obstacle {
+          background-color: black;
+        }
+      }
+    }
+  }
+}
+
 .PopUp {
   width: 100%;
   height: 93%;
