@@ -1,14 +1,11 @@
 import axios from "axios";
-import { useContext, useEffect, useState } from "react";
-import { id } from "../api/jest.config";
-import { ICell } from "../api/levelgen";
+import React, { useContext, useEffect, useState } from "react";
+
+import { ICell, IEnemyCell, IFight, IRun } from "../api/levelgen";
 import { GameContext } from "./App";
 import { ComingSoon, mainScreenState } from "./Main";
 import { CloseButton } from "./PopUp";
-
-export const Panel = () => {
-  return <h1>Panel</h1>;
-};
+import { screenToMap } from "./utils/helpers";
 
 export const Player = ({ position }: { position: number }) => {
   return <div className="Player"></div>;
@@ -19,36 +16,107 @@ export const Level = ({
   level,
 }: {
   position: number;
-  level: ICell[][];
+  level: IRun | IFight;
 }) => {
   const context = useContext(GameContext);
   if (!context || !context.player || !context.game) {
     throw new Error("No data in context");
   }
 
+  const staticCells = level.map;
+  const enemies = level.enemies;
+
   return (
     <div className="GameLevelMap">
       <div className="GameLevel" style={{ bottom: `-${position}px` }}>
-        {level.map((m: ICell[], n: number) => (
+        {staticCells.map((m: ICell[], n: number) => (
           <div className="MapRow" key={n}>
             {m.map((c: ICell, j: number) => (
               <div className={`MapCell ${c.type}`} key={j}></div>
             ))}
           </div>
         ))}
+        {enemies.map((enemy) => (
+          <Enemy key={enemy.enemy.id} enemy={enemy} />
+        ))}
       </div>
     </div>
   );
 };
 
-const screenToMap = (
-  xS: number,
-  yS: number,
-  map: ICell[][]
-): [number, number] => {
-  const xP = Math.floor(xS / 80);
-  const yP = Math.floor(map.length - yS / 80);
-  return [xP, yP];
+type IEnemy = { enemy: IEnemyCell; x: number; y: number };
+const Enemy = ({ enemy }: { enemy: IEnemy }) => {
+  // ???
+
+  return (
+    <div
+      className="enemy"
+      style={{ left: `${enemy.x}px`, bottom: `${enemy.y}px` }}
+    />
+  );
+};
+
+type Point = { x: number; y: number; name?: string };
+type Box = {
+  bottomLeft: Point;
+  topLeft: Point;
+  topRight: Point;
+  bottomRight: Point;
+};
+
+const isDangerous = (level: ICell[][], coord: Point) => {
+  return level[coord.y][coord.x].type !== "space";
+};
+
+const mapCollision = (current: IRun | IFight, player: Box) => {
+  const collision = boxCorners(player).find((point) =>
+    isDangerous(current.map, point)
+  );
+
+  if (collision) {
+    console.log(
+      "MAP COLLISION",
+      current.map[collision.y][collision.x].type,
+      collision
+    );
+  }
+};
+
+const pointToBox = (point: Point): Box => {
+  const prefix = point.name ? `${point.name}-` : "";
+  return {
+    bottomLeft: { x: point.x, y: point.y, name: `${prefix}bottomLeft` },
+    topLeft: { x: point.x, y: point.y + 79, name: `${prefix}topLeft` },
+    topRight: { x: point.x + 79, y: point.y + 79, name: `${prefix}topRight` },
+    bottomRight: { x: point.x + 79, y: point.y, name: `${prefix}bottomRight` },
+  };
+};
+
+const boxCorners = (box: Box): Point[] => [
+  box.bottomLeft,
+  box.bottomRight,
+  box.topLeft,
+  box.topRight,
+];
+
+const pointInsideBox = (point: Point, box: Box): boolean => {
+  const xInsideBox = point.x >= box.bottomLeft.x && point.x <= box.topRight.x;
+  const yInsideBox = point.y >= box.bottomLeft.y && point.y <= box.topRight.y;
+  return xInsideBox && yInsideBox;
+};
+
+const boxesCollided = (box1: Box, box2: Box): Point | undefined => {
+  return boxCorners(box1).find((point) => pointInsideBox(point, box2));
+};
+
+const enemyCollision = (current: IRun | IFight, player: Box) => {
+  const enemies = current.enemies;
+  enemies.forEach((enemy) => {
+    const collision = boxesCollided(player, pointToBox(enemy));
+    if (collision) {
+      console.log("COLLISION WITH ENEMY ", enemy, " AT ", collision);
+    }
+  });
 };
 
 export const Game = ({
@@ -61,10 +129,8 @@ export const Game = ({
     throw new Error("No data in context");
   }
   // const [confirmation, setConfirmation] = useState(false);
-  const [position, setPosition] = useState(0);
+  const [position, setPosition] = useState(10);
   const [current, setCurrent] = useState(context.game.level.levels[0]);
-
-  //useEffect(() => {}, []);
 
   const winLevel = async () => {
     console.log("WinLevel");
@@ -86,44 +152,19 @@ export const Game = ({
 
   setTimeout(() => {
     setPosition(position + 1);
-    collision();
   }, 50);
-  const bottomLeft = screenToMap(160, position, current.map);
-  const topLeft = screenToMap(160, position + 79, current.map);
-  const topRight = screenToMap(160 + 79, position + 79, current.map);
-  const bottomRight = screenToMap(160 + 79, position, current.map);
 
-  const isDangerous = (level: ICell[][], coord: [number, number]) => {
-    console.log(coord);
-    //console.log("level[coord[0]][coord[1]]", level[coord[0]][coord[1]]);
-    return level[coord[1]][coord[0]].type !== "space";
-  };
-  const collision = () => {
-    if (isDangerous(current.map, bottomLeft)) {
-      console.log(
-        "COLLISION BOTTOM LEFT",
-        current.map[bottomLeft[1]][bottomLeft[0]].type
-      );
-    }
-    if (isDangerous(current.map, topLeft)) {
-      console.log(
-        "COLLISION TOP LEFT",
-        current.map[topLeft[1]][topLeft[0]].type
-      );
-    }
-    if (isDangerous(current.map, topRight)) {
-      console.log(
-        "COLLISION TOP RIGHT",
-        current.map[topRight[1]][topRight[0]].type
-      );
-    }
-    if (isDangerous(current.map, bottomRight)) {
-      console.log(
-        "COLLISION BOTTOM RIGHT",
-        current.map[bottomRight[1]][bottomRight[0]].type
-      );
-    }
-  };
+  useEffect(() => {
+    const playerM: Box = {
+      bottomLeft: screenToMap({ x: 160, y: position }, current.map),
+      topLeft: screenToMap({ x: 160, y: position + 79 }, current.map),
+      topRight: screenToMap({ x: 160 + 79, y: position + 79 }, current.map),
+      bottomRight: screenToMap({ x: 160 + 79, y: position }, current.map),
+    };
+    const playerS = pointToBox({ x: 160, y: position, name: "player" });
+    mapCollision(current, playerM);
+    enemyCollision(current, playerS);
+  }, [current, position]);
 
   if (context.game.mode === "story") {
     return (
@@ -134,7 +175,7 @@ export const Game = ({
           <button onClick={looseLevel}>Loose</button>
           <Player position={position} />
         </div>
-        <Level position={position} level={current.map} />
+        <Level position={position} level={current} />
       </div>
     );
   }

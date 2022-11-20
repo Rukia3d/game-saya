@@ -14,9 +14,11 @@ export interface IRun {
   settingName: string;
   setting: setting;
   map: ICell[][];
+  enemies: { enemy: IEnemyCell; x: number; y: number }[];
   type: "run";
-  enemyType: { id: number; name: elementName }[];
   musicAddress: string;
+  triggers: { trigger: ITriggerCell; y: number; triggerId: number }[];
+  reels: { reelId: number; y: number; reelType: reel }[];
 }
 export interface IFight {
   settingName: string;
@@ -24,7 +26,10 @@ export interface IFight {
   map: ICell[][];
   type: "fight";
   enemyType: { id: number; name: elementName }[];
+  enemies: { enemy: IEnemyCell; x: number; y: number }[];
   musicAddress: string;
+  triggers: { trigger: ITriggerCell; y: number; triggerId: number }[];
+  reels: { reelId: number; y: number; reelType: reel }[];
 }
 
 export type ILayout = IRun | IFight;
@@ -38,10 +43,8 @@ interface IEmptyCell {
   type: "space";
 }
 
-interface ITriggerCell {
+export interface ITriggerCell {
   type: "trigger";
-  trigger: "reel" | "dialogue";
-  triggerId: number;
 }
 
 interface IObstacleCell {
@@ -49,15 +52,16 @@ interface IObstacleCell {
   //   image: string;
 }
 
-interface IEnemyCell {
+export interface IEnemyCell {
   type: "enemy";
+  id: number;
   //   image: string;
   //   sound: string;
   //   strength: number;
   //   reward: string;
   //   element: element;
 }
-export type ICell = IEmptyCell | IObstacleCell | IEnemyCell | ITriggerCell;
+export type ICell = IEmptyCell | IObstacleCell | ITriggerCell;
 
 // generate the gated sections of the level
 const generatePath = (length: number, width: number) => {
@@ -94,17 +98,17 @@ const generatePath = (length: number, width: number) => {
   return newLayer;
 };
 
-const generateEnemyPosition = (width: number, difficulty: number) => {
-  const index = Math.floor(Math.random() * width);
-  const addition: ICell[] = new Array(width).fill({ type: "space" });
-  addition[index] = { type: "enemy" };
-  const enemyChance = Math.random() < 0.5;
-  if (difficulty <= 3 && enemyChance) {
-    const index = Math.floor(Math.random() * width);
-    addition[index] = { type: "enemy" };
-  }
-  return addition;
-};
+// const generateEnemyPosition = (width: number, difficulty: number) => {
+//   const index = Math.floor(Math.random() * width);
+//   const addition: ICell[] = new Array(width).fill({ type: "space" });
+//   addition[index] = { type: "enemy" };
+//   const enemyChance = Math.random() < 0.5;
+//   if (difficulty <= 3 && enemyChance) {
+//     const index = Math.floor(Math.random() * width);
+//     addition[index] = { type: "enemy" };
+//   }
+//   return addition;
+// };
 
 const generateEnemySpace = (width: number, difficulty: number) => {
   let newLayer: any = [];
@@ -113,7 +117,7 @@ const generateEnemySpace = (width: number, difficulty: number) => {
     const enemyChance = Math.random() < 0.5;
     if (enemyChance && i >= 1) {
       // enemy can't be inserted into 1st line after gates
-      newLayer.push(generateEnemyPosition(width, difficulty));
+      //newLayer.push(generateEnemyPosition(width, difficulty));
     } else {
       newLayer.push(addition);
     }
@@ -145,9 +149,6 @@ const start = () => {
           break;
         case "obstacle":
           process.stdout.write("x");
-          break;
-        case "enemy":
-          process.stdout.write("e");
           break;
       }
     });

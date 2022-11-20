@@ -1,5 +1,5 @@
 import { materials, characters, elements } from "../../api/db/testDBData";
-import { testCells } from "../../api/db/testDBLevelMaps";
+import { testCells, testRun } from "../../api/db/testDBLevelMaps";
 import {
   gameMode,
   IAdventure,
@@ -21,14 +21,7 @@ import { IRun } from "../../api/levelgen";
 import { testArenaFight, testArenaRun } from "./testDBArena";
 
 export const testCharacters: ICharacter[] = [characters[0], characters[1]];
-const testLevel: IRun = {
-  settingName: "Wood",
-  setting: "forest",
-  map: testCells,
-  type: "run",
-  enemyType: [{ id: 0, name: "jade" }],
-  musicAddress: "testmusic",
-};
+const testLevel: IRun = testRun;
 
 export const testStories: IStory[] = [0, 1, 2].map((n: number) => {
   return {

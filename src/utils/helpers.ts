@@ -1,4 +1,5 @@
 import { IMaterial, IMaterialQuant } from "../../api/engine/types";
+import { ICell } from "../../api/levelgen";
 
 //@ts-ignore
 export const fetcher = (...args) => fetch(...args).then((res) => res.json());
@@ -40,3 +41,22 @@ export const enoughToPay = (
 };
 
 export const shuffle = (array: any) => array.sort(() => Math.random() - 0.5);
+
+// TODO: replace { x: number, y: number } with Point type
+export const screenToMap = (
+  s: { x: number; y: number },
+  map: ICell[][]
+): { x: number; y: number } => {
+  const xP = Math.floor(s.x / 80);
+  const yP = Math.ceil(map.length - 1 - s.y / 80);
+  return { x: xP, y: yP };
+};
+
+export const mapToScreen = (
+  m: { x: number; y: number },
+  map: ICell[][]
+): { x: number; y: number } => {
+  const xS = m.x * 80; // left
+  const yS = map.length * 80 - m.y * 80 - 1; // bottom
+  return { x: xS, y: yS };
+};
