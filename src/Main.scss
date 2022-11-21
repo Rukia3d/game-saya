@@ -410,6 +410,12 @@
       background-color: green;
       border: 1px solid yellow;
     }
+
+    .Control {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+    }
   }
   .GameLevelMap {
     width: 100%;
@@ -450,6 +456,145 @@
         position: absolute;
         height: 80px;
         width: 80px;
+      }
+    }
+  }
+}
+
+.ReelContainer {
+  background-color: red;
+  width: 100%;
+  height: 100%;
+
+  .Reel {
+    background-color: #96f394;
+    width: 100%;
+    height: 100%;
+
+    .p4topRiht {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background-color: #00bbbb;
+
+      div {
+        position: absolute;
+        border: 3px solid black;
+      }
+      .panel0 {
+        top: 0;
+        width: 100%;
+        height: 30%;
+      }
+
+      .panel1 {
+        top: 30%;
+        left: 0;
+        width: 50%;
+        height: 35%;
+      }
+      .panel2 {
+        top: 65%;
+        left: 0;
+        width: 50%;
+        height: 35%;
+      }
+      .panel3 {
+        top: 30%;
+        left: 50%;
+        width: 50%;
+        height: 70%;
+      }
+    }
+    .p5top3 {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background-color: #466cf5;
+
+      div {
+        position: absolute;
+        border: 3px solid black;
+      }
+      .panel0 {
+        top: 0;
+        width: 30%;
+        height: 60%;
+        left: 0;
+      }
+      .panel1 {
+        top: 0;
+        width: 30%;
+        height: 60%;
+        left: 30%;
+      }
+      .panel2 {
+        top: 0;
+        width: 40%;
+        height: 60%;
+        left: 60%;
+      }
+      .panel3 {
+        top: 60%;
+        width: 60%;
+        height: 40%;
+        left: 0;
+      }
+      .panel4 {
+        top: 60%;
+        width: 40%;
+        height: 40%;
+        left: 60%;
+      }
+    }
+
+    .p1full {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background-color: #8952ff;
+
+      div {
+        position: absolute;
+        border: 3px solid black;
+        width: 100%;
+        height: 100%;
+      }
+    }
+
+    .p4bottomRight {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background-color: #94a9f3;
+
+      div {
+        position: absolute;
+        border: 3px solid black;
+      }
+      .panel0 {
+        top: 0;
+        width: 30%;
+        height: 60%;
+        left: 0;
+      }
+      .panel1 {
+        top: 0;
+        width: 30%;
+        height: 60%;
+        left: 30%;
+      }
+      .panel2 {
+        top: 0;
+        width: 40%;
+        height: 60%;
+        left: 60%;
+      }
+      .panel3 {
+        top: 60%;
+        width: 100%;
+        height: 40%;
+        left: 0;
       }
     }
   }

@@ -1,14 +1,30 @@
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 
-import { ICell, IEnemyCell, IFight, IRun } from "../api/levelgen";
+import { ICell, IEnemyCell, IFight, IReel, IRun } from "../api/levelgen";
 import { GameContext } from "./App";
 import { ComingSoon, mainScreenState } from "./Main";
 import { CloseButton } from "./PopUp";
+import { Reel } from "./Reel";
 import { screenToMap } from "./utils/helpers";
 
-export const Player = ({ position }: { position: number }) => {
+export const Player = () => {
   return <div className="Player"></div>;
+};
+
+export const Controls = () => {
+  const moveLeft = () => {
+    console.log("moveLeft");
+  };
+  const moveRight = () => {
+    console.log("moveRight");
+  };
+  return (
+    <div className="Control">
+      <button onClick={moveLeft}>Left</button>
+      <button onClick={moveRight}>Right</button>
+    </div>
+  );
 };
 
 export const Level = ({
@@ -46,8 +62,6 @@ export const Level = ({
 
 type IEnemy = { enemy: IEnemyCell; x: number; y: number };
 const Enemy = ({ enemy }: { enemy: IEnemy }) => {
-  // ???
-
   return (
     <div
       className="enemy"
@@ -119,18 +133,19 @@ const enemyCollision = (current: IRun | IFight, player: Box) => {
   });
 };
 
-export const Game = ({
+export const GamePlay = ({
   setScreen,
+  setReel,
 }: {
   setScreen: (n: mainScreenState) => void;
+  setReel: (r: undefined | IReel[]) => void;
 }) => {
   const context = useContext(GameContext);
   if (!context || !context.player || !context.game) {
     throw new Error("No data in context");
   }
-  // const [confirmation, setConfirmation] = useState(false);
-  const [position, setPosition] = useState(10);
-  const [current, setCurrent] = useState(context.game.level.levels[0]);
+  const current = context.game.level.levels[0];
+  const [offset, setOffset] = useState(0);
 
   const winLevel = async () => {
     console.log("WinLevel");
@@ -151,34 +166,54 @@ export const Game = ({
   };
 
   setTimeout(() => {
-    setPosition(position + 1);
+    console.log("offset");
+    setOffset(offset + 1);
   }, 50);
 
   useEffect(() => {
     const playerM: Box = {
-      bottomLeft: screenToMap({ x: 160, y: position }, current.map),
-      topLeft: screenToMap({ x: 160, y: position + 79 }, current.map),
-      topRight: screenToMap({ x: 160 + 79, y: position + 79 }, current.map),
-      bottomRight: screenToMap({ x: 160 + 79, y: position }, current.map),
+      bottomLeft: screenToMap({ x: 160, y: offset }, current.map),
+      topLeft: screenToMap({ x: 160, y: offset + 79 }, current.map),
+      topRight: screenToMap({ x: 160 + 79, y: offset + 79 }, current.map),
+      bottomRight: screenToMap({ x: 160 + 79, y: offset }, current.map),
     };
-    const playerS = pointToBox({ x: 160, y: position, name: "player" });
+    const playerS = pointToBox({ x: 160, y: offset, name: "player" });
     mapCollision(current, playerM);
     enemyCollision(current, playerS);
-  }, [current, position]);
+  }, [current, offset]);
 
-  if (context.game.mode === "story") {
-    return (
-      <div className="GameContainer" data-testid="game-screen">
-        <div className="GameUI">
-          <CloseButton close={() => setScreen("adventure")} />
-          <button onClick={winLevel}>Win</button>
-          <button onClick={looseLevel}>Loose</button>
-          <Player position={position} />
-        </div>
-        <Level position={position} level={current} />
+  return (
+    <div className="GameContainer" data-testid="game-screen">
+      <div className="GameUI">
+        <CloseButton close={() => setScreen("adventure")} />
+        <button onClick={winLevel}>Win</button>
+        <button onClick={looseLevel}>Loose</button>
+        <Controls />
+        <Player />
       </div>
-    );
-  }
+      <Level position={offset} level={current} />
+    </div>
+  );
+};
 
-  return <ComingSoon setScreen={setScreen} />;
+export const Game = ({
+  setScreen,
+}: {
+  setScreen: (n: mainScreenState) => void;
+}) => {
+  const context = useContext(GameContext);
+  if (!context || !context.player || !context.game) {
+    throw new Error("No data in context");
+  }
+  const [reel, setReel] = useState(context.game.level.opening);
+
+  if (reel === undefined) {
+    return <GamePlay setScreen={setScreen} setReel={setReel} />;
+  }
+  return (
+    <div className="ReelContainer" data-testid="reel-screen">
+      <CloseButton close={() => setReel(undefined)} />
+      <Reel reel={reel} setReel={setReel} />
+    </div>
+  );
 };

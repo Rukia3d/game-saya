@@ -7,50 +7,73 @@ import {
   IRun,
   ITriggerCell,
 } from "../levelgen";
-import { elements } from "./testDBData";
-
 import { mapToScreen } from "../../src/utils/helpers";
 
 export const testReelsPanel: IReel[] = [
   {
-    imageAddress: "test1",
-    text: "test1",
-    name: "test1",
-    type: "panel",
+    layout: "4topRiht",
+    panels: [
+      {
+        imageAddress: "4topRiht-test1",
+      },
+      {
+        imageAddress: "4topRiht-test2",
+      },
+      {
+        imageAddress: "4topRiht-test3",
+      },
+      {
+        imageAddress: "4topRiht-test4",
+      },
+    ],
   },
   {
-    imageAddress: "test2",
-    text: "test2",
-    name: "test2",
-    type: "panel",
+    layout: "5top3",
+    panels: [
+      {
+        imageAddress: "5top3-test1",
+      },
+      {
+        imageAddress: "5top3-test2",
+      },
+      {
+        imageAddress: "5top3-test3",
+      },
+      {
+        imageAddress: "5top3-test4",
+      },
+      {
+        imageAddress: "5top3-test5",
+      },
+    ],
   },
   {
-    imageAddress: "test3",
-    text: "test3",
-    name: "test3",
-    type: "panel",
+    layout: "1full",
+    panels: [
+      {
+        imageAddress: "1full-test1",
+      },
+    ],
+  },
+  {
+    layout: "4bottomRight",
+    panels: [
+      {
+        imageAddress: "4bottomRiht-test1",
+      },
+      {
+        imageAddress: "4bottomRiht-test2",
+      },
+      {
+        imageAddress: "4bottomRiht-test3",
+      },
+      {
+        imageAddress: "4bottomRiht-test4",
+      },
+    ],
   },
 ];
-export const testReelsDial: IReel[] = [
-  {
-    imageAddress: "test1",
-    text: "test1",
-    name: "test1",
-    type: "dialogue",
-  },
-  {
-    imageAddress: "test2",
-    text: "test2",
-    name: "test2",
-    type: "dialogue",
-  },
-  {
-    imageAddress: "test3",
-    text: "test3",
-    name: "test3",
-    type: "dialogue",
-  },
-];
+export const testReelsDial: IReel[] = [];
 export const triggersMap: {
   trigger: ITriggerCell;
   y: number;
@@ -758,11 +781,11 @@ export const testCells: ICell[][] = [
     { type: "space" },
   ],
   [
-    { type: "trigger" },
-    { type: "trigger" },
-    { type: "trigger" },
-    { type: "trigger" },
-    { type: "trigger" },
+    { type: "space" },
+    { type: "space" },
+    { type: "space" },
+    { type: "space" },
+    { type: "space" },
   ],
   [
     { type: "trigger" },
@@ -814,7 +837,6 @@ export const testRun: IRun = {
   map: testCells,
   enemies: enemiesMap,
   triggers: [],
-  reels: [],
   type: "run",
   musicAddress: "testmusic",
 };
@@ -822,4 +844,6 @@ export const testRun: IRun = {
 export const testLevel: ILevel = {
   levels: [testRun],
   element: [{ id: 0, name: "jade" as elementName }],
+  opening: testReelsPanel,
+  ending: testReelsPanel,
 };

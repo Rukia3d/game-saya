@@ -1,13 +1,16 @@
 import { elementName, IElement } from "./engine/types";
 
 type setting = "lake" | "forest" | "village" | "city" | "castle";
-type reel = "dialogue" | "panel";
 
 export interface IReel {
+  layout: string;
+  panels: IReelPanel[];
+}
+
+export interface IReelPanel {
   imageAddress: string;
-  text: string;
-  name: string;
-  type: reel;
+  text?: string;
+  name?: string;
 }
 
 export interface IRun {
@@ -18,7 +21,6 @@ export interface IRun {
   type: "run";
   musicAddress: string;
   triggers: { trigger: ITriggerCell; y: number; triggerId: number }[];
-  reels: { reelId: number; y: number; reelType: reel }[];
 }
 export interface IFight {
   settingName: string;
@@ -29,7 +31,6 @@ export interface IFight {
   enemies: { enemy: IEnemyCell; x: number; y: number }[];
   musicAddress: string;
   triggers: { trigger: ITriggerCell; y: number; triggerId: number }[];
-  reels: { reelId: number; y: number; reelType: reel }[];
 }
 
 export type ILayout = IRun | IFight;
@@ -37,6 +38,8 @@ export type ILayout = IRun | IFight;
 export interface ILevel {
   levels: ILayout[];
   element: { id: number; name: elementName }[];
+  opening?: IReel[];
+  ending?: IReel[];
 }
 
 interface IEmptyCell {

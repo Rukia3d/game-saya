@@ -24,6 +24,7 @@ const weaponsById = (weapons: IWeapon[]): WeaponById[] => {
 };
 
 const elementState = (e: IWeapon) => {
+  console.log("elementState", e);
   if (e.state === "open" && e.charge >= e.maxCharge / 2) {
     return "Open";
   }
@@ -117,6 +118,7 @@ export const Weapons = ({
     setWeapon(null);
     setScreen("main");
   };
+  console.log("weapons", weapons);
 
   return (
     <div className="WeaponsContainer" data-testid="weapons-screen">
@@ -148,7 +150,7 @@ export const Weapons = ({
                     <button
                       key={i}
                       onClick={() => setWeaponElement(w.elements[i])}
-                      className={elementState(w.elements[i])}
+                      //className={elementState(w.elements[i])}
                     >
                       {e}
                     </button>
