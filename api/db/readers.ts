@@ -1,15 +1,9 @@
+import { Database } from "sqlite3";
 import { ensure } from "../engine/helpers";
 import {
   ICreatePlayerDB,
   ICreatePlayerEvent,
   IGameEvent,
-  IMissCheckpointDB,
-  IMissCheckpointEvent,
-  IPassCheckpointDB,
-  IPassCheckpointEvent,
-  IEventDB,
-  IStartEndlessDB,
-  IStartEndlessEvent,
   IStartLevelDB,
   IStartLevelEvent,
   IWinLevelDB,
@@ -18,115 +12,43 @@ import {
   IServerArenaStartEvent,
   IServerArenaEndEvent,
   IServerArenaEndDB,
-  IArenaStartEvent,
-  IArenaStartDB,
-  IArenaEndEvent,
-  IArenaEndDB,
 } from "../engine/types";
 import {
-  allGameEvents,
-  createPlayerEvents,
-  startLevelEvents,
-  startEldessEvents,
-  winLevelEvents,
-  openSpellEvents,
-  updateSpellEvents,
-  passCheckpointEvents,
-  missCheckpointEvents,
-  serverArenaStartEvents,
-  serverArenaEndEvents,
-  startArenaEvents,
-  endArenaEvents,
-  listSpellEvents,
-  delistSpellEvents,
-  buySpellEvents,
-} from "./testDBEvents";
+  IEventCreatePlayerDB,
+  IEventDB,
+  IEventServerArenaEndDB,
+  IEventServerArenaStartDB,
+  IEventStartLevelDB,
+  IEventWinLevelDB,
+  readCreatePlayerEvents,
+  readGameEvents,
+  readServerEndArena,
+  readServerStartArena,
+  readStartLevelEvents,
+  readWinLevelEvents,
+} from "./playerdata_readers";
 
-export const gameEvents = (): IEventDB[] => {
-  return allGameEvents;
-};
-
-export const allCreatePlayerEvents = () => {
-  return createPlayerEvents;
-};
-
-export const allStartLevelEvents = () => {
-  return startLevelEvents;
-};
-
-export const allStartEndlessEvents = () => {
-  return startEldessEvents;
-};
-
-export const allWinLevelEvents = () => {
-  return winLevelEvents;
-};
-
-export const allOpenSpellEvents = () => {
-  return openSpellEvents;
-};
-
-export const allUpdateSpellEvents = () => {
-  return updateSpellEvents;
-};
-
-export const allListSpellEvents = () => {
-  return listSpellEvents;
-};
-
-export const allDelistSpellEvents = () => {
-  return delistSpellEvents;
-};
-
-export const allBuySpellEvents = () => {
-  return buySpellEvents;
-};
-
-export const allPassCheckpointEvents = () => {
-  return passCheckpointEvents;
-};
-
-export const allMissCheckpointEvents = () => {
-  return missCheckpointEvents;
-};
-
-export const allServerStartArena = () => {
-  return serverArenaStartEvents;
-};
-
-export const allServerEndArena = () => {
-  return serverArenaEndEvents;
-};
-
-export const allStartArena = () => {
-  return startArenaEvents;
-};
-
-export const allEndArena = () => {
-  return endArenaEvents;
-};
-
-export const playerEvents = (): IGameEvent[] => {
+export const playerEvents = async (db: Database): Promise<IGameEvent[]> => {
   // Find events for a player
-  const events = gameEvents();
+  const events = await readGameEvents(db);
   const newEvents: IGameEvent[] = [];
   console.log("events", events);
-  events.forEach((e: IEventDB) => {
+  for (let e of events) {
     switch (e.type) {
       case "CREATEPLAYER":
-        newEvents.push(createPlayerEvent(e));
-        break;
-      case "SERVERARENASTART":
-        newEvents.push(serverArenaStartEvent(e));
-        break;
-      case "SERVERARENAEND":
-        newEvents.push(serverArenaEndEvent(e));
+        newEvents.push(await createPlayerEvent(db, e));
         break;
       case "STARTLEVEL":
-        newEvents.push(startLevelEvent(e));
+        newEvents.push(await startLevelEvent(db, e));
         break;
       case "WINLEVEL":
-        newEvents.push(winLevelEvent(e));
+        newEvents.push(await winLevelEvent(db, e));
+        break;
+      case "SERVERARENASTART":
+        newEvents.push(await serverArenaStartEvent(db, e));
+        break;
+      case "SERVERARENAEND":
+        newEvents.push(await serverArenaEndEvent(db, e));
         break;
       /*
       // case "OPENSPELL":
@@ -163,20 +85,21 @@ export const playerEvents = (): IGameEvent[] => {
       default:
         throw new Error(`Can't find type ${e.type} in player events`);
     }
-  });
+  }
 
   return newEvents;
 };
 
-export const createPlayerEvent = (event: IEventDB): ICreatePlayerEvent => {
-  const createPlayer = ensure(
-    allCreatePlayerEvents().find(
-      (e: ICreatePlayerDB) => e.eventId == event.eventId
-    ),
-    "No create player event"
+export const createPlayerEvent = async (
+  db: Database,
+  event: IEventDB
+): Promise<ICreatePlayerEvent> => {
+  const allPlayerEvents = await readCreatePlayerEvents(db);
+  const createPlayer = allPlayerEvents.find(
+    (p: IEventCreatePlayerDB) => p.eventId === event.eventId
   );
-  if (!createPlayer.playerId) {
-    throw new Error("No player ID in createPlayerEvent");
+  if (!createPlayer) {
+    throw new Error("No create player event found");
   }
   return {
     playerId: createPlayer.playerId,
@@ -187,40 +110,85 @@ export const createPlayerEvent = (event: IEventDB): ICreatePlayerEvent => {
   };
 };
 
-export const startLevelEvent = (event: IEventDB): IStartLevelEvent => {
-  const startLevel = ensure(
-    allStartLevelEvents().find(
-      (e: IStartLevelDB) => e.eventId == event.eventId
-    ),
-    "No start level event"
+export const startLevelEvent = async (
+  db: Database,
+  event: IEventDB
+): Promise<IStartLevelEvent> => {
+  const allPlayerEvents = await readStartLevelEvents(db);
+  const startLevel = allPlayerEvents.find(
+    (p: IEventStartLevelDB) => p.eventId === event.eventId
   );
+  if (!startLevel) {
+    throw new Error("No start level event found");
+  }
   return {
     playerId: startLevel.playerId,
     eventId: event.eventId,
     created: event.created,
     type: "STARTLEVEL",
-    elementId: startLevel.elementId,
-    mode: startLevel.mode,
+    chapterId: startLevel.chapterId,
     adventureId: startLevel.adventureId,
     storyId: startLevel.storyId,
   };
 };
 
-export const winLevelEvent = (event: IEventDB): IWinLevelEvent => {
-  const winLevel = ensure(
-    allWinLevelEvents().find((e: IWinLevelDB) => e.eventId == event.eventId),
-    "No win level event"
+export const winLevelEvent = async (
+  db: Database,
+  event: IEventDB
+): Promise<IWinLevelEvent> => {
+  const allPlayerEvents = await readWinLevelEvents(db);
+  const winLevel = allPlayerEvents.find(
+    (p: IEventWinLevelDB) => p.eventId === event.eventId
   );
-
+  if (!winLevel) {
+    throw new Error("No win level event found");
+  }
   return {
     playerId: winLevel.playerId,
     eventId: event.eventId,
     created: event.created,
     type: "WINLEVEL",
-    elementId: winLevel.elementId,
+    chapterId: winLevel.chapterId,
     adventureId: winLevel.adventureId,
-    mode: winLevel.mode,
     storyId: winLevel.storyId,
+  };
+};
+
+export const serverArenaStartEvent = async (
+  db: Database,
+  event: IEventDB
+): Promise<IServerArenaStartEvent> => {
+  const allPlayerEvents = await readServerStartArena(db);
+  const startArena = allPlayerEvents.find(
+    (p: IEventServerArenaStartDB) => p.eventId === event.eventId
+  );
+  if (!startArena) {
+    throw new Error("No win level event found");
+  }
+  return {
+    eventId: startArena.eventId,
+    type: "SERVERARENASTART",
+    created: event.created,
+    start: startArena.start,
+    end: startArena.end,
+  };
+};
+
+export const serverArenaEndEvent = async (
+  db: Database,
+  event: IEventDB
+): Promise<IServerArenaEndEvent> => {
+  const allPlayerEvents = await readServerEndArena(db);
+  const endArena = allPlayerEvents.find(
+    (p: IEventServerArenaEndDB) => p.eventId === event.eventId
+  );
+  if (!endArena) {
+    throw new Error("No win level event found");
+  }
+  return {
+    eventId: endArena.eventId,
+    type: "SERVERARENAEND",
+    created: event.created,
   };
 };
 
@@ -396,35 +364,3 @@ export const endArenaEvent = (event: IEventDB): IArenaEndEvent => {
   };
 };
 */
-
-export const serverArenaStartEvent = (
-  event: IEventDB
-): IServerArenaStartEvent => {
-  const startArena = ensure(
-    allServerStartArena().find(
-      (e: IServerArenaStartDB) => e.eventId == event.eventId
-    ),
-    "No start server arena event"
-  );
-  return {
-    eventId: startArena.eventId,
-    type: "SERVERARENASTART",
-    created: event.created,
-    start: startArena.start,
-    end: startArena.end,
-  };
-};
-
-export const serverArenaEndEvent = (event: IEventDB): IServerArenaEndEvent => {
-  const startArena = ensure(
-    allServerEndArena().find(
-      (e: IServerArenaEndDB) => e.eventId == event.eventId
-    ),
-    "No start server arena event"
-  );
-  return {
-    eventId: startArena.eventId,
-    type: "SERVERARENAEND",
-    created: event.created,
-  };
-};

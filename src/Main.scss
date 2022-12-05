@@ -402,15 +402,6 @@
     align-items: flex-start;
     justify-content: center;
 
-    .Player {
-      position: absolute;
-      width: 80px;
-      height: 80px;
-      bottom: 0;
-      background-color: green;
-      border: 1px solid yellow;
-    }
-
     .Control {
       position: absolute;
       bottom: 0;
@@ -451,8 +442,23 @@
         }
       }
 
+      .Player {
+        position: absolute;
+        width: 80px;
+        height: 80px;
+        bottom: 0;
+        background-color: green;
+        border: 1px solid yellow;
+      }
+
       .enemy {
         background-color: red;
+        position: absolute;
+        height: 80px;
+        width: 80px;
+      }
+      .trigger {
+        background-color: white;
         position: absolute;
         height: 80px;
         width: 80px;

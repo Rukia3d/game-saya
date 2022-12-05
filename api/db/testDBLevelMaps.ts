@@ -1,4 +1,3 @@
-import { elementName } from "../engine/types";
 import {
   ICell,
   IEnemyCell,
@@ -74,15 +73,6 @@ export const testReelsPanel: IReel[] = [
   },
 ];
 export const testReelsDial: IReel[] = [];
-export const triggersMap: {
-  trigger: ITriggerCell;
-  y: number;
-  triggerId: number;
-}[] = [
-  { trigger: { type: "trigger" }, y: 0, triggerId: 0 },
-  { trigger: { type: "trigger" }, y: 99, triggerId: 1 },
-  { trigger: { type: "trigger" }, y: 100, triggerId: 2 },
-];
 
 export const testCells: ICell[][] = [
   [
@@ -788,14 +778,35 @@ export const testCells: ICell[][] = [
     { type: "space" },
   ],
   [
-    { type: "trigger" },
-    { type: "trigger" },
-    { type: "trigger" },
-    { type: "trigger" },
-    { type: "trigger" },
+    { type: "space" },
+    { type: "space" },
+    { type: "space" },
+    { type: "space" },
+    { type: "space" },
   ],
 ];
 
+export const triggersMap: {
+  trigger: ITriggerCell;
+  x: number;
+  y: number;
+  triggerId: number;
+}[] = [
+  { y: 0, triggerId: 0 },
+  { y: 80, triggerId: 1 },
+  { y: 100, triggerId: 2 },
+]
+  .map((trigger) =>
+    [0, 1, 2, 3, 4].map((n) => {
+      const s = mapToScreen({ x: n, y: trigger.y }, testCells);
+      return {
+        trigger: { type: "trigger" as const },
+        triggerId: trigger.triggerId,
+        ...s,
+      };
+    })
+  )
+  .flat();
 export const enemiesMap: { enemy: IEnemyCell; x: number; y: number }[] = [
   { x: 2, y: 2 },
   { x: 3, y: 5 },
@@ -825,7 +836,7 @@ export const enemiesMap: { enemy: IEnemyCell; x: number; y: number }[] = [
   { x: 2, y: 81 },
   { x: 0, y: 85 },
   { x: 1, y: 89 },
-  { x: 2, y: 97 },
+  { x: 3, y: 97 },
 ].map((enemy, n) => {
   const s = mapToScreen(enemy, testCells);
   return { enemy: { type: "enemy", id: n }, ...s };
@@ -836,14 +847,14 @@ export const testRun: IRun = {
   setting: "forest",
   map: testCells,
   enemies: enemiesMap,
-  triggers: [],
+  triggers: triggersMap,
   type: "run",
   musicAddress: "testmusic",
 };
 
 export const testLevel: ILevel = {
   levels: [testRun],
-  element: [{ id: 0, name: "jade" as elementName }],
+  element: [{ id: 0, name: "jade" }],
   opening: testReelsPanel,
   ending: testReelsPanel,
 };

@@ -1,32 +1,39 @@
+import { Database } from "sqlite3";
 import * as events from "./events";
 import { IGame, IGameEvent, IPlayer, IServer } from "./types";
 
-export const applyEvent = (game: IGame, event: IGameEvent): IGame => {
+export const applyEvent = async (
+  db: Database,
+  game: IGame,
+  event: IGameEvent
+): Promise<IGame> => {
   let newPlayers: IPlayer[] = JSON.parse(JSON.stringify(game.players));
   let newServer: IServer = JSON.parse(JSON.stringify(game.server));
   let newGame: IGame = { players: newPlayers, server: newServer };
   console.log("Apply Event", event.type);
   switch (event.type) {
     case "CREATEPLAYER":
-      newGame = events.createPlayer(
+      newGame = await events.createPlayer(
+        db,
         {
           ...event,
           playerId: event.playerId,
         },
+
         newGame
       );
       break;
     case "SERVERARENASTART":
-      newGame = events.serverArenaStart(event, newGame);
+      newGame = await events.serverArenaStart(db, event, newGame);
       break;
     case "SERVERARENAEND":
-      newGame = events.serverArenaEnd(event, newGame);
+      newGame = await events.serverArenaEnd(db, event, newGame);
       break;
     case "STARTLEVEL":
-      newGame = events.startLevel(event, newGame);
+      newGame = await events.startLevel(db, event, newGame);
       break;
     case "WINLEVEL":
-      newGame = events.winLevel(event, newGame);
+      newGame = await events.winLevel(db, event, newGame);
       break;
     /*
     // case "OPENSPELL":
@@ -66,19 +73,20 @@ export const applyEvent = (game: IGame, event: IGameEvent): IGame => {
   return newGame;
 };
 
-export const applyEvents = (events: IGameEvent[]): IGame => {
+export const applyEvents = async (
+  db: Database,
+  events: IGameEvent[]
+): Promise<IGame> => {
   // Apply events assuming they are sorted
   let game: IGame = {
     players: [
       {
         id: 0,
         name: "",
-        exprience: 0,
-        energy: 0,
         maxEnergy: 0,
         loungeId: null,
         materials: [],
-        elements: [],
+        adventures: [],
         weapons: [],
         goals: [],
         messages: [],
@@ -96,7 +104,7 @@ export const applyEvents = (events: IGameEvent[]): IGame => {
   };
   for (let i = 0; i < events.length; i++) {
     const event = events[i];
-    game = applyEvent(game, event);
+    game = await applyEvent(db, game, event);
   }
   return game;
 };
