@@ -1,5 +1,3 @@
-import { elementName, IElement } from "./engine/types";
-
 type setting = "lake" | "forest" | "village" | "city" | "castle";
 
 export interface IReel {
@@ -20,24 +18,34 @@ export interface IRun {
   enemies: { enemy: IEnemyCell; x: number; y: number }[];
   type: "run";
   musicAddress: string;
-  triggers: { trigger: ITriggerCell; y: number; triggerId: number }[];
+  triggers: {
+    trigger: ITriggerCell;
+    x: number;
+    y: number;
+    triggerId: number;
+  }[];
 }
 export interface IFight {
   settingName: string;
   setting: setting;
   map: ICell[][];
   type: "fight";
-  enemyType: { id: number; name: elementName }[];
+  enemyType: { id: number; name: string }[];
   enemies: { enemy: IEnemyCell; x: number; y: number }[];
   musicAddress: string;
-  triggers: { trigger: ITriggerCell; y: number; triggerId: number }[];
+  triggers: {
+    trigger: ITriggerCell;
+    x: number;
+    y: number;
+    triggerId: number;
+  }[];
 }
 
 export type ILayout = IRun | IFight;
 
 export interface ILevel {
   levels: ILayout[];
-  element: { id: number; name: elementName }[];
+  element: { id: number; name: string }[];
   opening?: IReel[];
   ending?: IReel[];
 }

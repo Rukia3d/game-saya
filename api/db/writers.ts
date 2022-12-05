@@ -4,74 +4,50 @@ import {
   ICreatePlayerData,
   ICreatePlayerDB,
   ICreatePlayerEvent,
-  IEventDB,
-  IGame,
-  IMissCheckpointData,
-  IMissCheckpointDB,
-  IMissCheckpointEvent,
-  IPassCheckpointData,
-  IPassCheckpointEvent,
-  IServerArenaEndEvent,
-  IServerArenaStartData,
-  IServerArenaStartEvent,
-  IStartEndlessData,
-  IStartEndlessDB,
-  IStartEndlessEvent,
-  IStartLevelData,
-  IStartLevelDB,
-  IStartLevelEvent,
-  IWinLevelData,
-  IWinLevelDB,
-  IWinLevelEvent,
-  IArenaStartEvent,
-  IArenaStartDB,
-  IArenaStartData,
-  IArenaEndData,
-  IArenaEndEvent,
-  IArenaEndDB,
 } from "../engine/types";
-import {
-  allGameEvents,
-  createPlayerEvents,
-  startLevelEvents,
-  winLevelEvents,
-  startEldessEvents,
-  passCheckpointEvents,
-  missCheckpointEvents,
-  startArenaEvents,
-  endArenaEvents,
-  serverArenaStartEvents,
-  serverArenaEndEvents,
-} from "./testDBEvents";
-import {
-  enoughEnergyToPlay,
-  findPlayer,
-  findStartLevel,
-} from "../engine/helpers";
+import { Database } from "sqlite3";
+import { readCreatePlayerEventsData } from "../engine/combiners";
+import { IEventDB } from "./playerdata_readers";
+import { writeOneLine } from "./db";
 
-const getNextPlayerId = () => {
-  const createPlayers = readers
-    .allCreatePlayerEvents()
-    .sort((a, b) => a.eventId - b.eventId);
-
+const getNextPlayerId = async (db: Database) => {
+  const createPlayers = await readCreatePlayerEventsData(db);
   if (!createPlayers) {
     throw new Error("Can't find the last created player Id");
   }
   return createPlayers[createPlayers.length - 1].playerId + 1;
 };
 
-const getNextEventId = () => {
-  const latestEvents = readers
-    .gameEvents()
-    .sort((a, b) => a.eventId - b.eventId);
-  return latestEvents[latestEvents.length - 1].eventId + 1;
+export const writeCreatePlayer = async (
+  player_id: number,
+  created: number,
+  name: string,
+  db: Database
+): Promise<number> => {
+  // console.log("trying to write a new player");
+  const player_event = "event(type, created_at, updated_at, deleted_at)";
+  const newPlayer = ["CREATEPLAYER", created, created, "NULL"];
+  const event_id = await writeOneLine(player_event, newPlayer, db);
+  // console.log("player_event last ID", event_id);
+  const event_createuser =
+    "event_player_createplayer(player_id, player_name, event_id)";
+  const newEvent = [player_id, name, event_id];
+  const res = await writeOneLine(event_createuser, newEvent, db);
+  // console.log("create_player_event last ID", res);
+  return res;
 };
 
-export const createPlayerEvent = (
+export const createPlayerEvent = async (
+  db: Database,
   event: ICreatePlayerData
-): ICreatePlayerEvent => {
-  const nextPlayerId = getNextPlayerId();
-  const nextCreateEventId = getNextEventId();
+): Promise<ICreatePlayerEvent> => {
+  const nextPlayerId = await getNextPlayerId(db);
+  const nextCreateEventId = await writeCreatePlayer(
+    nextPlayerId,
+    event.created,
+    event.data.name,
+    db
+  );
   const newEvent: IEventDB = {
     eventId: nextCreateEventId,
     type: "CREATEPLAYER" as eventType,
@@ -82,8 +58,6 @@ export const createPlayerEvent = (
     eventId: nextCreateEventId,
     playerName: event.data.name,
   };
-  allGameEvents.push(newEvent);
-  createPlayerEvents.push(newPlayerEvent);
   return {
     playerId: nextPlayerId,
     eventId: newEvent.eventId,
@@ -93,6 +67,7 @@ export const createPlayerEvent = (
   };
 };
 
+/*
 export const startLevelEvent = (
   game: IGame,
   event: IStartLevelData
@@ -534,7 +509,7 @@ export const endArenaEvent = (
     throw new Error("Can't generate endArenaEvent");
   }
 };
-*/
+
 export const serverStartArena = (
   game: IGame,
   dates: IServerArenaStartData
@@ -577,3 +552,4 @@ export const serverEndArena = (game: IGame): IServerArenaEndEvent => {
   serverArenaEndEvents.push(newServerEndArenaEvent);
   return newServerEndArenaEvent;
 };
+*/

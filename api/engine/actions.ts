@@ -1,57 +1,76 @@
-import { findLastCheckpoint, findLevel, generateRandom } from "./helpers";
 import {
-  IMaterialQuant,
-  IAllowedRewards,
   IMissCheckpointEvent,
   IPlayer,
-  IArenaEvent,
   IWinLevelEvent,
   IPassCheckpointEvent,
-  IArenaResult,
-  IElement,
+  IChapter,
+  IInventoryQuant,
+  IAdventure,
 } from "./types";
+import { INDEXOFEXPERIENCE } from "../config";
 
 export const rewardPlayer = (
   event: IWinLevelEvent | IMissCheckpointEvent,
-  materials: IMaterialQuant[],
-  element: IElement
-): { all: IMaterialQuant[]; new: IMaterialQuant[] } => {
-  const level = findLevel(event, element);
-  const newOnly: IMaterialQuant[] = [];
-  level.allowedRewards.forEach((r: IAllowedRewards) => {
-    const rand = generateRandom(event, level, r);
-    materials[r.material.id].quantity =
-      materials[r.material.id].quantity + rand;
-    newOnly.push({ ...materials[r.material.id], quantity: rand });
-  });
-  return { all: materials, new: newOnly };
+  player: IPlayer
+): { all: IInventoryQuant[]; new: IInventoryQuant[] } => {
+  if (event.type === "WINLEVEL") {
+    const chapter: IChapter =
+      player.adventures[event.adventureId].stories[event.storyId].chapters[
+        event.chapterId
+      ];
+    const allowedRewards: IInventoryQuant[] =
+      chapter.state === "complete"
+        ? chapter.staticRewards
+        : chapter.firstTimeRewards;
+    const experience: number =
+      chapter.state === "complete" ? chapter.experience : chapter.maxExperience;
+    const newOnly: IInventoryQuant[] = [];
+    // Update materials
+    allowedRewards.forEach((r: IInventoryQuant) => {
+      player.materials[r.id].quantity =
+        player.materials[r.id].quantity + r.quantity;
+      newOnly.push({ ...player.materials[r.id], quantity: r.quantity });
+    });
+
+    // Update experience
+    player.materials[INDEXOFEXPERIENCE].quantity =
+      player.materials[INDEXOFEXPERIENCE].quantity + experience;
+    newOnly.push({
+      ...player.materials[INDEXOFEXPERIENCE],
+      quantity: experience,
+    });
+    return { all: player.materials, new: newOnly };
+  }
+  // TODO Update to work with Miss Checkpoint
+  return { all: [], new: [] };
 };
 
 export const openNextLevel = (
   event: IWinLevelEvent,
-  elements: IElement[]
-): IElement[] => {
-  const newElements = JSON.parse(JSON.stringify(elements));
-  const currentStories =
-    newElements[event.elementId].adventures[event.adventureId].stories;
+  adventures: IAdventure[]
+): IAdventure[] => {
+  const newAdventures = JSON.parse(JSON.stringify(adventures));
+  const currentChapters =
+    newAdventures[event.adventureId].stories[event.storyId].chapters;
 
-  if (currentStories[event.storyId].id < currentStories.length) {
+  if (currentChapters[event.chapterId].id < currentChapters.length) {
     // If next closed it becomes open
-    if (currentStories[event.storyId + 1].state === "closed") {
-      newElements[event.elementId].adventures[event.adventureId].stories[
-        event.storyId + 1
+    if (currentChapters[event.chapterId + 1].state === "closed") {
+      newAdventures[event.adventureId].stories[event.storyId].chapters[
+        event.chapterId + 1
       ].state = "open";
     }
     // If this open becomes complete
-    if (currentStories[event.storyId].state === "open")
-      newElements[event.elementId].adventures[event.adventureId].stories[
-        event.storyId
+    if (currentChapters[event.chapterId].state === "open")
+      newAdventures[event.adventureId].stories[event.storyId].chapters[
+        event.chapterId + 1
       ].state = "complete";
   }
 
-  return newElements;
+  return newAdventures;
 };
 
+/*
 export const addExperience = (
   event: IWinLevelEvent | IPassCheckpointEvent,
   player: IPlayer

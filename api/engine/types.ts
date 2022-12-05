@@ -1,35 +1,38 @@
 import { ILevel } from "../levelgen";
 
+//-//-//-//-//
 export interface ICharacter {
   id: number;
   name: string;
-  weapon: weaponName;
-  element: { id: number; name: elementName };
+  weapon: string;
+  material: { id: number; name: string };
 }
 
 export interface IWeapon {
   id: number;
-  name: weaponName;
-  element: { id: number; name: elementName };
-  charge: number;
-  maxCharge: number;
-  state: "open" | "closed";
+  name: string;
+  materials: {
+    id: number;
+    name: string;
+    charge: number;
+    maxCharge: number;
+    state: "open" | "closed";
+  }[];
 }
 
-export interface IMaterial {
+export interface IInventory {
   id: number;
-  name: materialName;
-  element: { id: number; name: elementName } | null;
+  name: string;
 }
 
-export type IMaterialQuant = IMaterial & { quantity: number };
+export type IInventoryQuant = IInventory & { quantity: number };
 
 export interface IQuest {
   id: number;
   state: questState;
   name: string;
   description: string;
-  element: { id: number; name: elementName };
+  element: { id: number; name: string };
   stories: IStory[];
 }
 
@@ -37,55 +40,50 @@ export type IQuestListing = IQuest & { price: number; owner: number };
 
 export interface IEndless {
   id: number;
-  element: { id: number; name: elementName };
+  element: { id: number; name: string };
   mode: gameMode;
   energy: number;
   checkpoint: number | null;
   level: ILevel;
-  allowedRewards: IAllowedRewards[];
+  allowedRewards: IInventoryQuant[];
 }
 
 export interface IStoryReward {
   id: number;
   elementId: number;
   storyId: number;
-  reward: IAllowedRewards[];
+  reward: IInventoryQuant[];
 }
 
 export interface IEventReward {
   id: number;
   elementId: number;
-  reward: IAllowedRewards[];
-}
-
-export interface IAdventure {
-  name: string;
-  id: number;
-  element: { id: number; name: elementName };
-  stories: IStory[];
+  reward: IInventoryQuant[];
 }
 
 export interface IStory {
+  name: string;
   id: number;
-  element: { id: number; name: elementName };
-  mode: gameMode;
+  chapters: IChapter[];
+}
+
+export interface IChapter {
+  id: number;
+  mode: string;
   name: string;
   state: levelState;
   level: ILevel;
-  allowedRewards: IAllowedRewards[];
+  firstTimeRewards: IInventoryQuant[];
+  staticRewards: IInventoryQuant[];
+  maxExperience: number;
   experience: number;
   energy: number;
 }
 
-export interface IAllowedRewards {
-  material: IMaterial;
-  upTo: number;
-}
-
-export interface IElement {
+export interface IAdventure {
   character: ICharacter;
   id: number;
-  adventures: IAdventure[];
+  stories: IStory[];
   endless: IEndless[];
   quests: IQuest[];
 }
@@ -98,16 +96,16 @@ export interface IArena {
 
 export interface IArenaEvent {
   index: number;
-  stake: IMaterialQuant[];
+  stake: IInventoryQuant[];
   mode: gameMode;
   level: ILevel;
-  rewardPool: IMaterialQuant[];
+  rewardPool: IInventoryQuant[];
   results: IArenaResult[];
 }
 
 export interface IArenaResultPool {
   place: number;
-  reward: IMaterialQuant[];
+  reward: IInventoryQuant[];
 }
 
 export type IArenaEventWithTime = IArenaEvent & { resultTime: number };
@@ -120,7 +118,7 @@ export interface IArenaResult {
 
 export interface IMission {
   name: string;
-  reward: IMaterial;
+  reward: IInventory;
   completed: boolean;
   progress: number;
 }
@@ -130,10 +128,10 @@ export interface ICurrentState {
   level?: {
     storyId?: number;
     mode: gameMode;
-    elementId: number;
+    chapterId?: number;
     adventureId: number;
   };
-  materials?: IMaterialQuant[];
+  materials?: IInventoryQuant[];
   arena?: {
     mode: gameMode;
     index: number;
@@ -165,12 +163,10 @@ export interface IGamePlayer {
 export interface IPlayer {
   id: number;
   name: string;
-  exprience: number;
-  energy: number;
   maxEnergy: number;
   loungeId: number | null;
-  materials: IMaterialQuant[];
-  elements: IElement[];
+  materials: IInventoryQuant[];
+  adventures: IAdventure[];
   weapons: IWeapon[];
   goals: IGoal[];
   collections: ICollection[];
@@ -199,7 +195,7 @@ export interface IGoal {
   description: string;
   state: "new" | "started" | "claimable";
   screenToGo: string;
-  reward: IMaterialQuant[];
+  reward: IInventoryQuant[];
   condition: IGoalCondition;
   claimId?: number;
 }
@@ -218,7 +214,7 @@ export interface IMessage {
 
 export interface IClaimReward {
   id: number;
-  prize: IMaterialQuant[];
+  prize: IInventoryQuant[];
   claimed: boolean;
 }
 
@@ -245,12 +241,6 @@ export type IGameEvent =
   | IServerArenaEndEvent
   | IArenaStartEvent
   | IArenaEndEvent;
-
-export type IEventDB = {
-  eventId: number;
-  type: eventType;
-  created: number;
-};
 
 // CREATEPLAYER
 export type ICreatePlayerData = {
@@ -302,8 +292,7 @@ export type IStartLevelEvent = {
   eventId: number;
   created: number;
   type: "STARTLEVEL";
-  elementId: number;
-  mode: gameMode;
+  chapterId: number;
   storyId: number;
   adventureId: number;
 };
@@ -332,9 +321,8 @@ export type IWinLevelEvent = {
   eventId: number;
   created: number;
   type: "WINLEVEL";
-  elementId: number;
+  chapterId: number;
   adventureId: number;
-  mode: gameMode;
   storyId: number;
 };
 
@@ -646,7 +634,7 @@ export type IPlayerArenaStartDB = {
   index: number;
   mode: gameMode;
 };
-export type elementName =
+export type materialName =
   | "jade"
   | "garnet"
   | "obsidian"
@@ -659,15 +647,6 @@ export type weaponName =
   | "scythe"
   | "scroll"
   | "daggers";
-
-export type materialName =
-  | "Gold"
-  | "Soul Stone"
-  | "Jade"
-  | "Garnet"
-  | "Obsidian"
-  | "Moonstone"
-  | "Amber";
 
 export type spellState = "closed" | "open" | "listed";
 export type questState = "owned" | "rented" | "new";

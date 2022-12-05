@@ -1,7 +1,7 @@
 import * as readers from "./db/readers";
 import * as writers from "./db/writers";
 import * as engine from "./engine/engine";
-
+import { Database } from "sqlite3";
 import {
   IArenaEndData,
   IArenaStartData,
@@ -18,6 +18,7 @@ import {
 } from "./engine/types";
 import { findPlayer } from "./engine/helpers";
 import { testServer, testPlayer } from "../src/utils/testDBPlayer";
+import createDb from "./db/db";
 
 const bodyParser = require("body-parser");
 const express = require("express");
@@ -26,23 +27,25 @@ export const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-export const eventsApplication = () => {
-  const events = readers.playerEvents();
+export const eventsApplication = async (db: Database) => {
+  const events = await readers.playerEvents(db);
   console.log("events", events);
-  const game = engine.applyEvents(events);
+  const game = await engine.applyEvents(db, events);
   return game;
 };
 
 app.get("/api/players/:id", async (req: any, res: any) => {
   const playerId = parseInt(req.params.id);
-  const game = eventsApplication();
+  const db = await createDb();
+  const game = await eventsApplication(db);
   const player = findPlayer(game, playerId);
+  db.close();
   res.send({ server: game.server, player: player });
-  // res.send({ server: testServer, player: testPlayer });
 });
 
 app.post("/api/players/new", async (req: any, res: any) => {
   console.log("CREATEPLAYER", req.query);
+  const db = await createDb();
   const event: ICreatePlayerData = {
     created: new Date().valueOf(),
     type: "CREATEPLAYER",
@@ -50,12 +53,14 @@ app.post("/api/players/new", async (req: any, res: any) => {
       name: req.query.name,
     },
   };
-  const newEvent = writers.createPlayerEvent(event);
-  const game = eventsApplication();
+  const newEvent = await writers.createPlayerEvent(db, event);
+  const game = await eventsApplication(db);
   const player = findPlayer(game, newEvent.playerId);
+  db.close();
   res.send({ server: game.server, player: player });
 });
 
+/*
 app.post("/api/players/:id/startLevel", async (req: any, res: any) => {
   console.log("STARTLEVEL", req.params.id, req.body);
   const playerId = parseInt(req.params.id);

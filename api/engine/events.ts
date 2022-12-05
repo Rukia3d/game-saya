@@ -1,70 +1,56 @@
-import seedrandom from "seedrandom";
+import { Database } from "sqlite3";
 import { detectWinners, splitPool } from "../cronjobs";
-import {
-  basePlayer,
-  materials,
-  elementAdventure,
-  weapons,
-} from "../db/testDBData";
+import { basePlayer } from "../db/testDB";
 import { testLevel } from "../db/testDBLevelMaps";
-import { addExperience, openNextLevel, rewardPlayer } from "./actions";
+import { openNextLevel, rewardPlayer } from "./actions";
+import {
+  readAdventuresData,
+  readWeaponsData,
+  readMaterialsData,
+} from "./combiners";
 import {
   energyPriceForStory,
-  ensure,
-  findEnergyPrice,
   findPlayer,
   generateArenaRandom,
   replacePlayer,
   rewardArenaPlayers,
+  updatePlayerEnergy,
 } from "./helpers";
 import {
   currentState,
   gameMode,
-  IArenaEndEvent,
+  IAdventure,
   IArenaEvent,
-  IArenaStartEvent,
-  IBuySpellEvent,
   ICreatePlayerEvent,
   ICurrentState,
-  IDelistSpellEvent,
-  IElement,
-  IEventReward,
   IGame,
-  IListSpellEvent,
-  IMaterial,
-  IMissCheckpointEvent,
-  IOpenSpellEvent,
-  IPassCheckpointEvent,
   IPlayer,
   IServer,
   IServerArenaEndEvent,
   IServerArenaStartEvent,
-  IStartEndlessEvent,
   IStartLevelEvent,
-  IUpdateSpellEvent,
   IWeapon,
   IWinLevelEvent,
 } from "./types";
 
-const INDEXOFFIRSTREWARDABLE = 2;
-
-export const createPlayer = (event: ICreatePlayerEvent, game: IGame): IGame => {
-  const newElement: IElement = JSON.parse(JSON.stringify(elementAdventure))[0];
-  newElement.adventures[0].stories[0].state = "open";
-  newElement.quests[0].stories[0].state = "open";
-  const newWeapon: IWeapon = JSON.parse(JSON.stringify(weapons))[0];
-  newWeapon.charge = 100;
-  newWeapon.state = "open";
+export const createPlayer = async (
+  db: Database,
+  event: ICreatePlayerEvent,
+  game: IGame
+): Promise<IGame> => {
+  const allAdventures: IAdventure[] = await readAdventuresData(db);
+  allAdventures[0].stories[0].chapters[0].state = "open";
+  const allWeapons: IWeapon[] = await readWeaponsData(db);
+  allWeapons[0].materials[0].state = "open";
+  const allMaterials = await readMaterialsData(db);
+  allMaterials[0].quantity = 50;
   const newPlayer: IPlayer = {
     ...basePlayer,
     id: event.playerId,
     name: event.playerName,
-    materials: JSON.parse(JSON.stringify(materials)).map((m: IMaterial) => {
-      return { ...m, quantity: 50 };
-    }),
-    energy: 50,
-    weapons: [newWeapon],
-    elements: [newElement],
+    materials: allMaterials,
+    weapons: allWeapons,
+    adventures: allAdventures,
   };
   const newPlayers = game.players.concat([newPlayer]);
   return {
@@ -73,16 +59,18 @@ export const createPlayer = (event: ICreatePlayerEvent, game: IGame): IGame => {
   };
 };
 
-export const serverArenaStart = (
+export const serverArenaStart = async (
+  db: Database,
   event: IServerArenaStartEvent,
   game: IGame
-): IGame => {
+): Promise<IGame> => {
   const newServer: IServer = JSON.parse(JSON.stringify(game.server));
   newServer.arenaFightHistory.push(game.server.arenaFight);
   newServer.arenaRunHistory.push(game.server.arenaRun);
+  const allMaterials = await readMaterialsData(db);
   const eventsRun: IArenaEvent[] = [0, 1, 2].map((n: number) => {
-    const reward = generateArenaRandom(event, "run", 4, n);
-    const randResource = materials[reward + INDEXOFFIRSTREWARDABLE];
+    const reward = generateArenaRandom(event, "run", allMaterials.length, n);
+    const randResource = allMaterials[reward];
     return {
       index: n,
       stake: [
@@ -96,8 +84,8 @@ export const serverArenaStart = (
     };
   });
   const eventsFight: IArenaEvent[] = [0, 1, 2].map((n: number) => {
-    const reward = generateArenaRandom(event, "fight", 4, n);
-    const randResource = materials[reward + INDEXOFFIRSTREWARDABLE];
+    const reward = generateArenaRandom(event, "fight", allMaterials.length, n);
+    const randResource = allMaterials[reward];
     return {
       index: n,
       stake: [
@@ -124,10 +112,11 @@ export const serverArenaStart = (
   return { ...game, server: newServer };
 };
 
-export const serverArenaEnd = (
+export const serverArenaEnd = async (
+  db: Database,
   event: IServerArenaEndEvent,
   game: IGame
-): IGame => {
+): Promise<IGame> => {
   const newServer: IServer = JSON.parse(JSON.stringify(game.server));
   let newPlayers: IPlayer[] = JSON.parse(JSON.stringify(game.players));
   newServer.arenaRun.events.map((e: IArenaEvent) => {
@@ -140,41 +129,44 @@ export const serverArenaEnd = (
   return { players: newPlayers, server: newServer };
 };
 
-export const startLevel = (event: IStartLevelEvent, game: IGame): IGame => {
+export const startLevel = async (
+  db: Database,
+  event: IStartLevelEvent,
+  game: IGame
+): Promise<IGame> => {
+  const adventures = await readAdventuresData(db);
   const player = findPlayer(game, event.playerId);
-  let energyPrice = energyPriceForStory(
+  const energyPrice = energyPriceForStory(
     player,
-    event.elementId,
+    adventures,
     event.adventureId,
-    "story",
-    event.storyId
+    event.storyId,
+    event.chapterId
   );
   const state: ICurrentState = {
     state: "PLAY" as currentState,
     level: {
-      elementId: event.elementId,
+      chapterId: event.chapterId,
       adventureId: event.adventureId,
       mode: "story" as gameMode,
       storyId: event.storyId,
     },
   };
   const newPlayer: IPlayer = {
-    ...player,
-    energy: player.energy - energyPrice,
+    ...updatePlayerEnergy(player, energyPrice),
     currentState: state,
   };
-  return { ...game, players: replacePlayer(game.players, newPlayer) };
+  const newPlayers = replacePlayer(game.players, newPlayer);
+  return { ...game, players: newPlayers };
 };
 
-export const winLevel = (event: IWinLevelEvent, game: IGame): IGame => {
+export const winLevel = async (
+  db: Database,
+  event: IWinLevelEvent,
+  game: IGame
+): Promise<IGame> => {
   const player = findPlayer(game, event.playerId);
-  const newMaterials = rewardPlayer(
-    event,
-    player.materials,
-    player.elements[event.elementId]
-  );
-  // need to add experience before we open the next level
-  const newExperience = addExperience(event, player);
+  const newMaterials = rewardPlayer(event, player);
   const newState = {
     state: "WINMATERIAL" as currentState,
     materials: newMaterials.new,
@@ -182,8 +174,7 @@ export const winLevel = (event: IWinLevelEvent, game: IGame): IGame => {
   const newPlayer: IPlayer = {
     ...player,
     materials: newMaterials.all,
-    elements: openNextLevel(event, player.elements),
-    exprience: newExperience,
+    adventures: openNextLevel(event, player.adventures),
     // TODO Check if this is correct
     currentState: newState,
   };

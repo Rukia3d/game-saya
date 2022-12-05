@@ -4,10 +4,8 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import {
   gameMode,
   ICurrentState,
-  IMaterialQuant,
   IPlayer,
   IStory,
-  IAllowedRewards,
   IMissCheckpointEvent,
   IWinLevelEvent,
   IPassCheckpointEvent,
@@ -18,18 +16,17 @@ import {
   IArena,
   IArenaEvent,
   IEndless,
-  IElement,
+  IAdventure,
+  IInventoryQuant,
 } from "./types";
-import { elementAdventure } from "../db/testDBData";
+import { INDEXOFENERGY } from "../config";
 dayjs.extend(relativeTime);
 
 export const generateSeed = (
   event: IWinLevelEvent | IMissCheckpointEvent,
   id: number
 ) => {
-  const phrase = seedrandom(
-    event.eventId + event.elementId + event.playerId + event.mode + id
-  );
+  const phrase = seedrandom(event.eventId + id + "");
   return phrase;
 };
 
@@ -65,7 +62,7 @@ export const generateArenaRandom = (
 
 export const rewardArenaPlayer = (
   player: IPlayer,
-  reward: IMaterialQuant[],
+  reward: IInventoryQuant[],
   place: number
 ) => {
   const newPlayer: IPlayer = JSON.parse(JSON.stringify(player));
@@ -114,49 +111,25 @@ export const rewardArenaPlayers = (
   return newPlayers;
 };
 
-export const findEnergyPrice = (
-  elementId: number,
-  adventureId: number,
-  mode: gameMode,
-  levelId?: number
-) => {
-  if (mode === "story" && levelId !== undefined) {
-    return elementAdventure[elementId].adventures[adventureId].stories[levelId]
-      .energy;
-  }
-  if (mode === "quest" && levelId !== undefined) {
-    return elementAdventure[elementId].quests[adventureId].stories[levelId]
-      .energy;
-  }
-  if (mode === "run" || mode === "fight") {
-    return elementAdventure[elementId].endless[adventureId].energy;
-  }
-  throw new Error(`Unknown mode ${mode}`);
+export const updatePlayerEnergy = (player: IPlayer, energy: number) => {
+  player.materials[INDEXOFENERGY].quantity =
+    player.materials[INDEXOFENERGY].quantity - energy;
+  return player;
 };
 
 export const energyPriceForStory = (
   player: IPlayer,
-  elementId: number,
+  adventures: IAdventure[],
   adventureId: number,
-  mode: gameMode,
-  storyId?: number
+  storyId: number,
+  chapterId: number
 ) => {
-  let energyPrice = findEnergyPrice(elementId, adventureId, "story", storyId);
-  const firstTime =
-    player.elements[elementId].adventures[adventureId].stories[ensure(storyId)]
-      .state !== "complete";
-  if (
-    elementId === 0 &&
-    adventureId === 0 &&
-    ensure(storyId) < 2 &&
-    player.elements &&
-    firstTime
-  ) {
-    energyPrice = 0;
-  }
-  return energyPrice;
+  const price =
+    adventures[adventureId].stories[storyId].chapters[chapterId].energy;
+  return price;
 };
 
+/*
 export const enoughEnergyToPlay = (
   player: IPlayer,
   data: {
@@ -214,7 +187,7 @@ export const findStartLevel = (
 
 export const findLevel = (
   event: IWinLevelEvent | IMissCheckpointEvent | IPassCheckpointEvent,
-  element: IElement
+  adventure: IAdventure
 ): IStory | IEndless => {
   switch (event.type) {
     case "WINLEVEL":

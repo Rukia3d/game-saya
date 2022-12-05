@@ -1,4 +1,4 @@
-import { IMaterial, IMaterialQuant } from "../../api/engine/types";
+import { IInventoryQuant } from "../../api/engine/types";
 import { ICell } from "../../api/levelgen";
 
 //@ts-ignore
@@ -23,12 +23,12 @@ export const removeFromArray = (arrArg: any[], item: any) => {
 };
 
 export const enoughToPay = (
-  materials: IMaterialQuant[],
-  price: IMaterialQuant[]
+  materials: IInventoryQuant[],
+  price: IInventoryQuant[]
 ): boolean => {
   let canBuy = true;
-  price.forEach((p: IMaterialQuant) => {
-    const material = materials.find((m: IMaterialQuant) => m.id === p.id);
+  price.forEach((p: IInventoryQuant) => {
+    const material = materials.find((m: IInventoryQuant) => m.id === p.id);
     if (!material) {
       throw new Error("Price of an item contains non-existant material");
     }
