@@ -62,7 +62,6 @@ export const readAllLnes = (
         reject(err);
         return;
       }
-      console.log("rows", rows);
       rows.forEach((row: dbDataType) => {
         res.push(row);
       });

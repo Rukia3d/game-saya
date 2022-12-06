@@ -269,8 +269,7 @@ export type ICreatePlayerEvent = {
 export type IStartLevelDB = {
   eventId: number;
   playerId: number;
-  elementId: number;
-  mode: gameMode;
+  chapterId: number;
   storyId: number;
   adventureId: number;
 };
@@ -280,9 +279,8 @@ export type IStartLevelData = {
   created: number;
   type: "STARTLEVEL";
   data: {
-    elementId: number;
+    chapterId: number;
     adventureId: number;
-    mode: gameMode;
     storyId: number;
   };
 };

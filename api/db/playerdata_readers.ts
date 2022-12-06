@@ -44,7 +44,7 @@ export type IEventServerArenaEndDB = {
 
 export const readGameEvents = async (db: Database): Promise<IEventDB[]> => {
   const events: IEventDB[] = [];
-  const sql = `SELECT id as eventId, type, created_at as created from event WHERE deleted_at='NULL'`;
+  const sql = `SELECT id as eventId, type, created from event WHERE deleted='NULL'`;
   return readAllLnes(events, sql, db) as unknown as IEventDB[];
 };
 
@@ -52,7 +52,7 @@ export const readCreatePlayerEvents = async (
   db: Database
 ): Promise<IEventCreatePlayerDB[]> => {
   const events: IEventCreatePlayerDB[] = [];
-  const sql = `SELECT event_id as eventId, player_id as playerId, player_name as playerName from event_player_createplayer`;
+  const sql = `SELECT eventId, playerId, playerName from event_player_createplayer`;
   return readAllLnes(events, sql, db) as unknown as IEventCreatePlayerDB[];
 };
 
@@ -60,7 +60,7 @@ export const readStartLevelEvents = async (
   db: Database
 ): Promise<IEventStartLevelDB[]> => {
   const events: IEventStartLevelDB[] = [];
-  const sql = `SELECT * from event_player_startlevel`;
+  const sql = `SELECT eventId, playerId, adventureId, chapterId, storyId from event_player_startlevel`;
   return readAllLnes(events, sql, db) as unknown as IEventStartLevelDB[];
 };
 

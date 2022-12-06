@@ -143,6 +143,7 @@ export const startLevel = async (
     event.storyId,
     event.chapterId
   );
+  console.log("energyPrice", energyPrice);
   const state: ICurrentState = {
     state: "PLAY" as currentState,
     level: {
@@ -156,7 +157,10 @@ export const startLevel = async (
     ...updatePlayerEnergy(player, energyPrice),
     currentState: state,
   };
+  console.log("newPlayer energyPrice", newPlayer.materials);
   const newPlayers = replacePlayer(game.players, newPlayer);
+  console.log("newPlayers", newPlayers[0].name, newPlayers[0].materials);
+  console.log("newPlayers", newPlayers[1].name, newPlayers[1].materials);
   return { ...game, players: newPlayers };
 };
 

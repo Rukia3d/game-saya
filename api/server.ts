@@ -60,28 +60,29 @@ app.post("/api/players/new", async (req: any, res: any) => {
   res.send({ server: game.server, player: player });
 });
 
-/*
 app.post("/api/players/:id/startLevel", async (req: any, res: any) => {
   console.log("STARTLEVEL", req.params.id, req.body);
+  const db = await createDb();
   const playerId = parseInt(req.params.id);
-  const game = eventsApplication();
+  const game = await eventsApplication(db);
   const event: IStartLevelData = {
     playerId: playerId,
     created: new Date().valueOf(),
     type: "STARTLEVEL",
     data: {
-      elementId: req.body.element,
-      adventureId: req.body.adventure,
-      mode: req.body.mode,
-      storyId: req.body.story,
+      chapterId: req.body.chapterId,
+      adventureId: req.body.adventureId,
+      storyId: req.body.storyId,
     },
   };
-  const newEvent = writers.startLevelEvent(game, event);
-  const newGame = eventsApplication();
+  const newEvent = await writers.startLevelEvent(db, game, event);
+  const newGame = await eventsApplication(db);
   const player = findPlayer(game, playerId);
+  db.close();
   res.send({ server: newGame.server, player: player });
 });
 
+/*
 app.post("/api/players/:id/winLevel", async (req: any, res: any) => {
   console.log("WINLEVEL", req.params.id, req.body);
   const playerId = parseInt(req.params.id);

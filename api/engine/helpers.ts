@@ -42,7 +42,7 @@ export function ensure<T>(
 }
 
 export const findPlayer = (game: IGame, playerId: number) => {
-  const res = game.players.find((p: IPlayer) => p.id == playerId);
+  const res = game.players.find((p: IPlayer) => p.id === playerId);
   if (!res) throw new Error("Can't find player based on ID");
   return res;
 };
@@ -129,40 +129,22 @@ export const energyPriceForStory = (
   return price;
 };
 
-/*
 export const enoughEnergyToPlay = (
   player: IPlayer,
   data: {
-    elementId: number;
+    chapterId: number;
     adventureId: number;
-    mode: gameMode;
-    storyId?: number;
+    storyId: number;
   }
 ) => {
-  let energyPrice = 0;
-  if (
-    (data.mode === "story" || data.mode === "quest") &&
-    ensure(data.storyId) >= 0
-  ) {
-    energyPrice = energyPriceForStory(
-      player,
-      data.elementId,
-      data.adventureId,
-      data.mode,
-      data.storyId
-    );
-  }
-  if (data.mode === "run" || "fight") {
-    energyPrice = findEnergyPrice(
-      data.elementId,
-      data.adventureId,
-      data.mode,
-      data.storyId
-    );
-  }
-  return player.energy - energyPrice >= 0;
+  const chapter =
+    player.adventures[data.adventureId].stories[data.storyId].chapters[
+      data.chapterId
+    ];
+  return player.materials[INDEXOFENERGY].quantity - chapter.energy >= 0;
 };
 
+/*
 export const findStartLevel = (
   currentState: ICurrentState,
   storyId: number
