@@ -82,24 +82,26 @@ app.post("/api/players/:id/startLevel", async (req: any, res: any) => {
   res.send({ server: newGame.server, player: player });
 });
 
-/*
 app.post("/api/players/:id/winLevel", async (req: any, res: any) => {
   console.log("WINLEVEL", req.params.id, req.body);
+
+  const db = await createDb();
   const playerId = parseInt(req.params.id);
-  const game = eventsApplication();
+  const game = await eventsApplication(db);
   const event: IWinLevelData = {
     playerId: playerId,
     created: new Date().valueOf(),
     type: "WINLEVEL",
     data: {
+      chapterId: req.body.chapterId,
+      adventureId: req.body.adventureId,
       storyId: req.body.storyId,
     },
   };
-
-  const newEvent = writers.winLevelEvent(game, event);
-  console.log("newEvent", newEvent);
-  const newGame = eventsApplication();
+  const newEvent = await writers.winLevelEvent(db, game, event);
+  const newGame = await eventsApplication(db);
   const player = findPlayer(game, playerId);
+  db.close();
   res.send({ server: newGame.server, player: player });
 });
 /*

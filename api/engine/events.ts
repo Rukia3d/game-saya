@@ -146,10 +146,9 @@ export const startLevel = async (
   console.log("energyPrice", energyPrice);
   const state: ICurrentState = {
     state: "PLAY" as currentState,
-    level: {
+    story: {
       chapterId: event.chapterId,
       adventureId: event.adventureId,
-      mode: "story" as gameMode,
       storyId: event.storyId,
     },
   };

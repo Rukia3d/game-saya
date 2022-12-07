@@ -1,19 +1,24 @@
-import * as readers from "./readers";
 import {
-  eventType,
   ICreatePlayerData,
-  ICreatePlayerDB,
   ICreatePlayerEvent,
   IGame,
   IStartLevelData,
-  IStartLevelDB,
   IStartLevelEvent,
+  IWinLevelData,
+  IWinLevelEvent,
 } from "../engine/types";
 import { Database } from "sqlite3";
 import { readCreatePlayerEventsData } from "../engine/combiners";
-import { IEventDB } from "./playerdata_readers";
-import { writeOneLine } from "./db";
-import { enoughEnergyToPlay, findPlayer } from "../engine/helpers";
+import {
+  enoughEnergyToPlay,
+  findPlayer,
+  findStartLevel,
+} from "../engine/helpers";
+import {
+  writeCreatePlayer,
+  writeStartLevelEvent,
+  writeWinLevelEvent,
+} from "./playerdata_writers";
 
 const getNextPlayerId = async (db: Database) => {
   const createPlayers = await readCreatePlayerEventsData(db);
@@ -21,43 +26,6 @@ const getNextPlayerId = async (db: Database) => {
     throw new Error("Can't find the last created player Id");
   }
   return createPlayers[createPlayers.length - 1].playerId + 1;
-};
-
-export const writeCreatePlayer = async (
-  playerId: number,
-  created: number,
-  name: string,
-  db: Database
-): Promise<number> => {
-  // console.log("trying to write a new player");
-  const player_event = "event(type, created, updated, deleted)";
-  const newPlayer = ["CREATEPLAYER", created, created, "NULL"];
-  const event_id = await writeOneLine(player_event, newPlayer, db);
-  // console.log("player_event last ID", event_id);
-  const event_createuser =
-    "event_player_createplayer(playerId, playerName, eventId)";
-  const newEvent = [playerId, name, event_id];
-  const res = await writeOneLine(event_createuser, newEvent, db);
-  // console.log("create_player_event last ID", res);
-  return res;
-};
-
-export const writeStartLevelEvent = async (
-  playerId: number,
-  adventureId: number,
-  storyId: number,
-  chapterId: number,
-  created: number,
-  db: Database
-): Promise<number> => {
-  const start_event = "event(type, created, updated, deleted)";
-  const newStart = ["STARTLEVEL", created, created, "NULL"];
-  const event_id = await writeOneLine(start_event, newStart, db);
-  const event_startlevel =
-    "event_player_startlevel(playerId, eventId, adventureId, storyId, chapterId)";
-  const newEvent = [playerId, event_id, adventureId, storyId, chapterId];
-  const res = await writeOneLine(event_startlevel, newEvent, db);
-  return res;
 };
 
 export const createPlayerEvent = async (
@@ -71,22 +39,12 @@ export const createPlayerEvent = async (
     event.data.name,
     db
   );
-  const newEvent: IEventDB = {
-    eventId: nextCreateEventId,
-    type: "CREATEPLAYER" as eventType,
-    created: event.created,
-  };
-  const newPlayerEvent: ICreatePlayerDB = {
-    playerId: nextPlayerId,
-    eventId: nextCreateEventId,
-    playerName: event.data.name,
-  };
   return {
     playerId: nextPlayerId,
-    eventId: newEvent.eventId,
+    eventId: nextCreateEventId,
     type: "CREATEPLAYER",
-    created: newEvent.created,
-    playerName: newPlayerEvent.playerName,
+    created: event.created,
+    playerName: event.data.name,
   };
 };
 
@@ -105,71 +63,55 @@ export const startLevelEvent = async (
       event.created,
       db
     );
-    const newEvent: IEventDB = {
-      eventId: startLevelEventId,
-      type: "STARTLEVEL" as eventType,
-      created: event.created,
-    };
-    const newStartPlayerEvent: IStartLevelDB = {
+    return {
       playerId: event.playerId,
       eventId: startLevelEventId,
+      created: event.created,
+      type: "STARTLEVEL",
       chapterId: event.data.chapterId,
       adventureId: event.data.adventureId,
       storyId: event.data.storyId,
-    };
-
-    return {
-      playerId: event.playerId,
-      eventId: newEvent.eventId,
-      created: newEvent.created,
-      type: "STARTLEVEL",
-      chapterId: newStartPlayerEvent.chapterId,
-      adventureId: newStartPlayerEvent.adventureId,
-      storyId: newStartPlayerEvent.storyId,
     };
   } else {
     throw new Error("Can't generate startLevelEvent");
   }
 };
 
-/*
-export const winLevelEvent = (
+export const winLevelEvent = async (
+  db: Database,
   game: IGame,
   event: IWinLevelData
-): IWinLevelEvent => {
-  const nextCreateEventId = getNextEventId();
+): Promise<IWinLevelEvent> => {
   const player = findPlayer(game, event.playerId);
-  const res = findStartLevel(player.currentState, event.data.storyId);
+  const res = findStartLevel(
+    player,
+    event.data.adventureId,
+    event.data.storyId,
+    event.data.chapterId
+  );
   if (res) {
-    const newEvent: IEventDB = {
-      eventId: nextCreateEventId,
-      created: event.created,
-      type: "WINLEVEL" as eventType,
-    };
-    const newWinLevelEvent: IWinLevelDB = {
-      playerId: event.playerId,
-      eventId: nextCreateEventId,
-      elementId: res.elementId,
-      adventureId: res.adventureId,
-      storyId: res.storyId,
-      mode: res.mode,
-    };
-    allGameEvents.push(newEvent);
-    winLevelEvents.push(newWinLevelEvent);
+    const winLevelEventId = await writeWinLevelEvent(
+      event.playerId,
+      res.adventureId,
+      res.storyId,
+      res.chapterId,
+      event.created,
+      db
+    );
     return {
       playerId: event.playerId,
-      eventId: newEvent.eventId,
-      created: newEvent.created,
+      eventId: winLevelEventId,
+      created: event.created,
       type: "WINLEVEL",
-      elementId: newWinLevelEvent.elementId,
-      adventureId: newWinLevelEvent.adventureId,
-      storyId: newWinLevelEvent.storyId,
-      mode: newWinLevelEvent.mode,
+      chapterId: event.data.chapterId,
+      adventureId: event.data.adventureId,
+      storyId: event.data.storyId,
     };
   } else {
     throw new Error("Can't generate winLevelEvent");
   }
 };
+
 /*
 export const startEndlessEvent = (
   game: IGame,

@@ -144,29 +144,30 @@ export const enoughEnergyToPlay = (
   return player.materials[INDEXOFENERGY].quantity - chapter.energy >= 0;
 };
 
-/*
 export const findStartLevel = (
-  currentState: ICurrentState,
-  storyId: number
+  player: IPlayer,
+  adventure: number,
+  story: number,
+  chapter: number
 ) => {
-  console.log("findStartLevel", currentState);
-  if (currentState.level?.elementId === undefined)
-    throw new Error("Incorrect state: can't finish level you haven't started");
-  if (currentState.level?.adventureId === undefined)
-    throw new Error("Incorrect state: can't finish level you haven't started");
-  if (currentState.level?.storyId === undefined)
-    throw new Error("Incorrect state: can't finish level you haven't started");
-  if (currentState.level?.storyId !== storyId)
-    throw new Error("Incorrect state: can't finish level you haven't started");
-
-  return {
-    elementId: currentState.level.elementId,
-    adventureId: currentState.level.adventureId,
-    mode: currentState.level.mode,
-    storyId: currentState.level.storyId,
-  };
+  if (player.currentState.story) {
+    const adventureId = player.currentState.story.adventureId;
+    const storyId = player.currentState.story.storyId;
+    const chapterId = player.currentState.story.chapterId;
+    const level =
+      player.adventures[adventureId].stories[storyId].chapters[chapterId];
+    if (
+      level &&
+      adventureId === adventure &&
+      storyId === story &&
+      chapterId === chapter
+    )
+      return player.currentState.story;
+    else throw new Error("Can't find start level");
+  } else throw new Error("Can't find start level");
 };
 
+/*
 export const findLevel = (
   event: IWinLevelEvent | IMissCheckpointEvent | IPassCheckpointEvent,
   adventure: IAdventure

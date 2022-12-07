@@ -125,10 +125,9 @@ export interface IMission {
 
 export interface ICurrentState {
   state: currentState;
-  level?: {
-    storyId?: number;
-    mode: gameMode;
-    chapterId?: number;
+  story?: {
+    storyId: number;
+    chapterId: number;
     adventureId: number;
   };
   materials?: IInventoryQuant[];
@@ -310,6 +309,8 @@ export type IWinLevelData = {
   created: number;
   type: "WINLEVEL";
   data: {
+    chapterId: number;
+    adventureId: number;
     storyId: number;
   };
 };
