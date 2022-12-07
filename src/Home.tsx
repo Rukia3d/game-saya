@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import "./Main.scss";
 import { GameContext } from "./App";
 import { mainScreenState } from "./Main";
-import { IElement } from "../api/engine/types";
+import { IAdventure } from "../api/engine/types";
 
 export const Items = ({
   setScreen,
@@ -36,16 +36,16 @@ export const Adventures = ({
   if (!context || !context.player) {
     throw new Error("No data in context");
   }
-  const elements = context.player.elements;
+  const adventures = context.player.adventures;
   return (
     <div className="Adventures" data-testid="home-adventures">
-      {elements.map((e: IElement, n: number) => (
+      {adventures.map((e: IAdventure, n: number) => (
         <div
           className="Adventure"
           key={n}
           onClick={() => setScreen("adventure")}
         >
-          {e.character.element.name}
+          {e.character.name}
         </div>
       ))}
     </div>

@@ -5,7 +5,7 @@ import {
   IArena,
   IArenaEvent,
   IArenaEventWithTime,
-  IMaterialQuant,
+  IInventoryQuant,
 } from "../api/engine/types";
 import { GameContext } from "./App";
 import { mainScreenState } from "./Main";
@@ -86,7 +86,7 @@ export const ArenaStake = ({
   return (
     <div className={visual} onClick={() => {}}>
       <div>
-        {arenaEvent.stake.map((s: IMaterialQuant, n: number) => (
+        {arenaEvent.stake.map((s: IInventoryQuant, n: number) => (
           <h3 key={n}>
             Stake {s.name}: {s.quantity}
           </h3>
@@ -94,7 +94,7 @@ export const ArenaStake = ({
       </div>
       <div>Tries: {arenaEvent.results?.length}</div>
       <div>
-        {arenaEvent.rewardPool.map((s: IMaterialQuant, n: number) => (
+        {arenaEvent.rewardPool.map((s: IInventoryQuant, n: number) => (
           <div key={n}>
             {s.name}: {s.quantity}
           </div>

@@ -3,21 +3,11 @@ import * as writers from "./db/writers";
 import * as engine from "./engine/engine";
 import { Database } from "sqlite3";
 import {
-  IArenaEndData,
-  IArenaStartData,
   ICreatePlayerData,
-  IDelistSpellData,
-  IListSpellData,
-  IMissCheckpointData,
-  IOpenSpellData,
-  IPassCheckpointData,
-  IStartEndlessData,
   IStartLevelData,
-  IUpdateSpellData,
   IWinLevelData,
 } from "./engine/types";
 import { findPlayer } from "./engine/helpers";
-import { testServer, testPlayer } from "../src/utils/testDBPlayer";
 import createDb from "./db/db";
 
 const bodyParser = require("body-parser");

@@ -12,7 +12,6 @@ import { Weapons } from "./Weapons";
 import { Inventory } from "./Inventory";
 import { Goals } from "./Goals";
 import { Arena } from "./Arena";
-import { testPlayer, testServer } from "./utils/testDBPlayer";
 import { Collections } from "./Collections";
 import { Messages } from "./Messages";
 import { Adventures } from "./Adventures";
