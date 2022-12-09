@@ -173,8 +173,8 @@ export const Arena = ({
       eventIndx: arena.index,
     });
 
-    context.setGame(arena);
-    setScreen("game");
+    //context.setGame(arena);
+    //setScreen("game");
 
     await context.mutate();
   };

@@ -22,7 +22,6 @@ export const rewardPlayer = (
         ? chapter.staticRewards
         : chapter.firstTimeRewards;
     const newOnly: IInventoryQuant[] = [];
-    console.log("allowedRewards", allowedRewards);
     // Update materials
     allowedRewards.forEach((r: IInventoryQuant) => {
       player.materials[r.id].quantity =

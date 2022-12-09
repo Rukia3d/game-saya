@@ -2,7 +2,7 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import { GameContext, GameContextType } from "../App";
 import { Home } from "../Home";
-import { testPlayer, testServer } from "../utils/testDBPlayer";
+import { testPlayer, testServer } from "../utils/helpers";
 
 const context: GameContextType = {
   player: testPlayer,

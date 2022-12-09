@@ -6,7 +6,7 @@ import { GameContextType, GameContext } from "./App";
 
 import { PopUp } from "./PopUp";
 import { TopMenu } from "./TopMenu";
-import { IArenaEventWithTime, IEndless, IStory } from "../api/engine/types";
+import { IChapter } from "../api/engine/types";
 import { Home } from "./Home";
 import { Weapons } from "./Weapons";
 import { Inventory } from "./Inventory";
@@ -75,9 +75,7 @@ export const Main = ({ playerId }: { playerId: string }) => {
   // const data = { server: testServer, player: testPlayer };
   // const mutate = async () => {};
   const [screen, setScreen] = useState<mainScreenState>("main");
-  const [game, setGame] = useState<
-    IStory | IEndless | IArenaEventWithTime | null
-  >(null);
+  const [game, setGame] = useState<IChapter | null>(null);
 
   const CurrentScreen = mainScreens[screen];
 

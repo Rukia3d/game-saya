@@ -1,6 +1,5 @@
 import axios from "axios";
 import { useContext, useState } from "react";
-import { INDEXOFENERGY } from "../api/config";
 import {
   IAdventure,
   IInventoryQuant,
@@ -14,6 +13,11 @@ import { mainScreenState } from "./Main";
 import { CloseButton, PopUp } from "./PopUp";
 import { TopMenu } from "./TopMenu";
 
+const INDEXOFGOLD = 1;
+const INDEXOFEXPERIENCE = 2;
+const INDEXOFENERGY = 0;
+const INDEXOFJADE = 5;
+
 const Chapter = ({ chapter }: { chapter: IChapter }) => {
   const context = useContext(GameContext);
   if (!context || !context.player) {
@@ -25,14 +29,13 @@ const Chapter = ({ chapter }: { chapter: IChapter }) => {
   const startLevel = async () => {
     console.log("StartLevel");
     await axios.post(`/api/players/${context.player.id}/startLevel`, {
-      // element: adventure.element.id,
-      // adventure: adventure.id,
-      // mode: story.mode,
-      // story: story.id,
+      adventureId: 0,
+      storyId: 0,
+      chapterId: 0,
     });
 
-    // context.setGame(chapter);
-    // setScreen("game");
+    context.setGame(chapter);
+    //setScreen("game");
 
     await context.mutate();
   };

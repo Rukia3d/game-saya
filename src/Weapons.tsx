@@ -13,31 +13,31 @@ interface WeaponById {
 }
 const weaponsById = (weapons: IWeapon[]): WeaponById[] => {
   let newWepons: WeaponById[] = [];
-  weapons.forEach((w: IWeapon) => {
-    if (!newWepons[w.id]) {
-      newWepons[w.id] = { id: w.id, name: w.name, elements: [w] };
-    } else {
-      newWepons[w.id].elements.push(w);
-    }
-  });
+  // weapons.forEach((w: IWeapon) => {
+  //   if (!newWepons[w.id]) {
+  //     newWepons[w.id] = { id: w.id, name: w.name, elements: [w] };
+  //   } else {
+  //     newWepons[w.id].elements.push(w);
+  //   }
+  // });
   return newWepons;
 };
 
 const elementState = (e: IWeapon) => {
   console.log("elementState", e);
-  if (e.state === "open" && e.charge >= e.maxCharge / 2) {
-    return "Open";
-  }
+  // if (e.state === "open" && e.charge >= e.maxCharge / 2) {
+  //   return "Open";
+  // }
 
-  if (e.state === "open" && e.charge < e.maxCharge / 2 && e.charge > 0) {
-    return "Charge";
-  }
+  // if (e.state === "open" && e.charge < e.maxCharge / 2 && e.charge > 0) {
+  //   return "Charge";
+  // }
 
-  if (e.state === "open" && e.charge <= 0) {
-    return "NoCharge";
-  }
+  // if (e.state === "open" && e.charge <= 0) {
+  //   return "NoCharge";
+  // }
 
-  return "Closed";
+  // return "Closed";
 };
 
 export const WeaponList = ({
@@ -67,17 +67,8 @@ export const WeaponList = ({
     <div className="WeaponList" data-testid="weapon-popup">
       <CloseButton close={close} />
       {weapon.elements.map((w: IWeapon, n: number) => (
-        <div
-          onClick={() => changeElement(w)}
-          key={n}
-          data-testid="weapon-screen"
-          className={`${
-            selected?.element.id === w.element.id
-              ? "WeaponDetail"
-              : "WeaponItem"
-          }`}
-        >
-          {w.name} : {w.element.name}
+        <div>
+          {/* {w.name} : {w.element.name}
           {selected?.element.id === w.element.id ? (
             <div className="Weapon">
               <div className="WeaponImage"></div>
@@ -91,7 +82,7 @@ export const WeaponList = ({
                 )}
               </div>
             </div>
-          ) : null}
+        ) : null} */}
         </div>
       ))}
     </div>

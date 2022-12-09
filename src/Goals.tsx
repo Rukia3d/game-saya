@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { IGoal, IMaterialQuant } from "../api/engine/types";
+import { IGoal, IInventoryQuant } from "../api/engine/types";
 import { GameContext } from "./App";
 import { mainScreenState } from "./Main";
 import { CloseButton } from "./PopUp";
@@ -13,7 +13,7 @@ const Goal = ({ goal }: { goal: IGoal }) => {
         <div className="GoalDescription">
           <div>{goal.description}</div>
           <div className="GoalRewards">
-            {goal.reward.map((m: IMaterialQuant, n: number) => (
+            {goal.reward.map((m: IInventoryQuant, n: number) => (
               <span key={n}>
                 {m.name}: {m.quantity}
               </span>
