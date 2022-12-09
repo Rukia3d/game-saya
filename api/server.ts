@@ -8,7 +8,7 @@ import {
   IWinLevelData,
 } from "./engine/types";
 import { findPlayer } from "./engine/helpers";
-import createDb from "./db/db";
+import createDb from "./storage/db";
 
 const bodyParser = require("body-parser");
 const express = require("express");

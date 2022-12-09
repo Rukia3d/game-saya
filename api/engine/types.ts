@@ -75,8 +75,6 @@ export interface IChapter {
   level: ILevel;
   firstTimeRewards: IInventoryQuant[];
   staticRewards: IInventoryQuant[];
-  maxExperience: number;
-  experience: number;
   energy: number;
 }
 

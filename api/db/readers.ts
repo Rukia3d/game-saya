@@ -1,17 +1,11 @@
 import { Database } from "sqlite3";
-import { ensure } from "../engine/helpers";
 import {
-  ICreatePlayerDB,
   ICreatePlayerEvent,
   IGameEvent,
-  IStartLevelDB,
   IStartLevelEvent,
-  IWinLevelDB,
   IWinLevelEvent,
-  IServerArenaStartDB,
   IServerArenaStartEvent,
   IServerArenaEndEvent,
-  IServerArenaEndDB,
 } from "../engine/types";
 import {
   IEventCreatePlayerDB,
@@ -26,7 +20,7 @@ import {
   readServerStartArena,
   readStartLevelEvents,
   readWinLevelEvents,
-} from "./playerdata_readers";
+} from "../storage/playerdata_readers";
 
 export const playerEvents = async (db: Database): Promise<IGameEvent[]> => {
   // Find events for a player

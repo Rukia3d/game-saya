@@ -43,7 +43,7 @@ export function ensure<T>(
 
 export const findPlayer = (game: IGame, playerId: number) => {
   const res = game.players.find((p: IPlayer) => p.id === playerId);
-  if (!res) throw new Error("Can't find player based on ID");
+  if (!res) throw new Error(`Can't find player based on ID ${playerId}`);
   return res;
 };
 

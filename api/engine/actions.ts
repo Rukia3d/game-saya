@@ -2,7 +2,6 @@ import {
   IMissCheckpointEvent,
   IPlayer,
   IWinLevelEvent,
-  IPassCheckpointEvent,
   IChapter,
   IInventoryQuant,
   IAdventure,
@@ -23,21 +22,15 @@ export const rewardPlayer = (
         ? chapter.staticRewards
         : chapter.firstTimeRewards;
     const experience: number =
-      chapter.state === "complete" ? chapter.experience : chapter.maxExperience;
+      allowedRewards.find((r: IInventoryQuant) => r.id === INDEXOFEXPERIENCE)
+        ?.quantity || 0;
     const newOnly: IInventoryQuant[] = [];
+    console.log("allowedRewards", allowedRewards);
     // Update materials
     allowedRewards.forEach((r: IInventoryQuant) => {
       player.materials[r.id].quantity =
         player.materials[r.id].quantity + r.quantity;
       newOnly.push({ ...player.materials[r.id], quantity: r.quantity });
-    });
-
-    // Update experience
-    player.materials[INDEXOFEXPERIENCE].quantity =
-      player.materials[INDEXOFEXPERIENCE].quantity + experience;
-    newOnly.push({
-      ...player.materials[INDEXOFEXPERIENCE],
-      quantity: experience,
     });
     return { all: player.materials, new: newOnly };
   }
@@ -63,7 +56,7 @@ export const openNextLevel = (
     // If this open becomes complete
     if (currentChapters[event.chapterId].state === "open")
       newAdventures[event.adventureId].stories[event.storyId].chapters[
-        event.chapterId + 1
+        event.chapterId
       ].state = "complete";
   }
 

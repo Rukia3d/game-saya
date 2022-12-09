@@ -38,7 +38,7 @@ type dbDataType =
 const createDb = async (): Promise<Database> => {
   console.log("Create DB");
   const db: Database = new sqlite3.Database(
-    "./db/player.db",
+    "./storage/player.db",
     sqlite3.OPEN_READWRITE,
     (err: Error) => {
       if (err) {

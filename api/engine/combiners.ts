@@ -14,13 +14,13 @@ import {
   readAllInventory,
   readAllChapterRewards,
   IAdventureDB,
-} from "../db/gamedata_readers";
+} from "../storage/gamedata_readers";
 import {
   IEventCreatePlayerDB,
   IEventDB,
   readCreatePlayerEvents,
   readGameEvents,
-} from "../db/playerdata_readers";
+} from "../storage/playerdata_readers";
 import { testLevel } from "../db/testDBLevelMaps";
 import {
   ICharacter,
@@ -87,7 +87,7 @@ const findChapter = (
   const rewards: IRewardInitial[] = rewardDb.map((a: IChapterRewardDB) => {
     return {
       ...findReward(dbInventory, a.inventoryId, a.quantity),
-      initial: a.initial,
+      initial: a.initial === "true" ? true : false,
     };
   });
   return {
@@ -98,8 +98,6 @@ const findChapter = (
     level: testLevel,
     firstTimeRewards: rewards.filter((r: IRewardInitial) => r.initial),
     staticRewards: rewards.filter((r: IRewardInitial) => !r.initial),
-    maxExperience: chapDb.expMax,
-    experience: chapDb.expReplay,
     energy: chapDb.energy,
   };
 };

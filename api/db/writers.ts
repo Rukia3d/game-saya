@@ -18,7 +18,7 @@ import {
   writeCreatePlayer,
   writeStartLevelEvent,
   writeWinLevelEvent,
-} from "./playerdata_writers";
+} from "../storage/playerdata_writers";
 
 const getNextPlayerId = async (db: Database) => {
   const createPlayers = await readCreatePlayerEventsData(db);

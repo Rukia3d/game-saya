@@ -54,7 +54,7 @@ export interface IChapterRewardDB {
   chapterId: number;
   inventoryId: number;
   quantity: number;
-  initial: boolean;
+  initial: string;
 }
 
 export const readAllInventory = async (
@@ -95,7 +95,7 @@ export const readAllStories = async (db: Database): Promise<IStoryDB[]> => {
 
 export const readAllChapters = async (db: Database): Promise<IChapterDB[]> => {
   const chapters: IChapterDB[] = [];
-  const sql = `SELECT id, storyId, mode, expMax, expReplay, energy, name from chapter WHERE deleted='NULL'`;
+  const sql = `SELECT id, storyId, mode, energy, name from chapter WHERE deleted='NULL'`;
   return readAllLnes(chapters, sql, db) as unknown as IChapterDB[];
 };
 
