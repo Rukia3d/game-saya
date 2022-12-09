@@ -122,6 +122,8 @@ test("Registering user", async () => {
     storyId: 0,
     adventureId: 0,
   };
+
+  // Create player
   const playerName = await engine.applyEvent(db, testGame, createPlayer);
   expect(playerName.players[0].name).toEqual("Test player 1");
   expect(playerName.players[0].materials[INDEXOFENERGY].quantity).toEqual(50);
@@ -134,6 +136,7 @@ test("Registering user", async () => {
     playerName.players[0].adventures[0].stories[0].chapters[0].state
   ).toEqual("open");
 
+  // Start first level - spend energy
   const startLevel1 = await engine.applyEvent(db, playerName, startLevel);
   expect(startLevel1.players[0].materials[INDEXOFENERGY].quantity).toEqual(45);
   expect(startLevel1.players[0].materials[INDEXOFGOLD].quantity).toEqual(0);
@@ -142,6 +145,7 @@ test("Registering user", async () => {
   );
   expect(startLevel1.players[0].materials[INDEXOFJADE].quantity).toEqual(0);
 
+  // Win first level - get rewards
   const winLevel1 = await engine.applyEvent(db, startLevel1, winLevel);
   expect(winLevel1.players[0].materials[INDEXOFENERGY].quantity).toEqual(45);
   expect(winLevel1.players[0].materials[INDEXOFGOLD].quantity).toEqual(50);
@@ -156,9 +160,11 @@ test("Registering user", async () => {
     winLevel1.players[0].adventures[0].stories[0].chapters[1].state
   ).toEqual("open");
 
+  // Start Level 1 again - spend energy
   const startLevel2 = await engine.applyEvent(db, winLevel1, startLevel);
   expect(startLevel2.players[0].materials[INDEXOFENERGY].quantity).toEqual(40);
 
+  // Win first level again - get less rewards
   const winLevel2 = await engine.applyEvent(db, startLevel2, winLevel);
   expect(winLevel2.players[0].materials[INDEXOFENERGY].quantity).toEqual(40);
   expect(winLevel2.players[0].materials[INDEXOFGOLD].quantity).toEqual(75);

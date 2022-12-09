@@ -21,9 +21,6 @@ export const rewardPlayer = (
       chapter.state === "complete"
         ? chapter.staticRewards
         : chapter.firstTimeRewards;
-    const experience: number =
-      allowedRewards.find((r: IInventoryQuant) => r.id === INDEXOFEXPERIENCE)
-        ?.quantity || 0;
     const newOnly: IInventoryQuant[] = [];
     console.log("allowedRewards", allowedRewards);
     // Update materials
