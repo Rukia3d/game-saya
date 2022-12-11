@@ -1,4 +1,4 @@
-import { Database } from "sqlite3";
+import { Database } from "sqlite";
 import {
   ICharacterDB,
   IInventoryDB,
@@ -21,7 +21,7 @@ import {
   readCreatePlayerEvents,
   readGameEvents,
 } from "../storage/playerdata_readers";
-import { testLevel } from "../db/testDBLevelMaps";
+import { testLevel } from "../storage/testDBLevelMaps";
 import {
   ICharacter,
   IInventoryQuant,
@@ -41,10 +41,10 @@ const findCharForAdventure = (
   const charDb = dbCharacters.find((c: ICharacterDB) => c.id === id);
   if (!charDb) throw new Error(`Can't find a character with id ${id}`);
   const materialDb = dbInventory.find(
-    (m: IInventoryDB) => m.id === charDb.materialId
+    (m: IInventoryDB) => m.id === charDb.inventoryId
   );
   if (!materialDb)
-    throw new Error(`Can't find a material with id ${charDb.materialId}`);
+    throw new Error(`Can't find a material with id ${charDb.inventoryId}`);
   const weaponDb = dbWeapons.find((w: IWeaponDB) => w.id === charDb.weaponId);
   if (!weaponDb)
     throw new Error(`Can't find a weapons with id ${charDb.weaponId}`);

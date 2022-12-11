@@ -7,7 +7,7 @@ import {
   IWinLevelData,
   IWinLevelEvent,
 } from "../engine/types";
-import { Database } from "sqlite3";
+import { Database } from "sqlite";
 import { readCreatePlayerEventsData } from "../engine/combiners";
 import {
   enoughEnergyToPlay,

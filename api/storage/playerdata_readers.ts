@@ -1,4 +1,4 @@
-import { Database } from "sqlite3";
+import { Database } from "sqlite";
 import { eventType } from "../engine/types";
 import { readAllLnes } from "./db";
 
@@ -44,7 +44,7 @@ export type IEventServerArenaEndDB = {
 
 export const readGameEvents = async (db: Database): Promise<IEventDB[]> => {
   const events: IEventDB[] = [];
-  const sql = `SELECT id as eventId, type, created from event WHERE deleted='NULL'`;
+  const sql = `SELECT id as eventId, type, created from event WHERE deleted is NULL`;
   return readAllLnes(events, sql, db) as unknown as IEventDB[];
 };
 

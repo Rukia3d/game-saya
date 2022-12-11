@@ -1,7 +1,7 @@
-import { Database } from "sqlite3";
+import { Database } from "sqlite";
 import { detectWinners, splitPool } from "../cronjobs";
-import { basePlayer } from "../db/testDB";
-import { testLevel } from "../db/testDBLevelMaps";
+import { basePlayer } from "../storage/testDB";
+import { testLevel } from "../storage/testDBLevelMaps";
 import { openNextLevel, rewardPlayer } from "./actions";
 import {
   readAdventuresData,
@@ -18,7 +18,6 @@ import {
 } from "./helpers";
 import {
   currentState,
-  gameMode,
   IAdventure,
   IArenaEvent,
   ICreatePlayerEvent,
@@ -143,7 +142,6 @@ export const startLevel = async (
     event.storyId,
     event.chapterId
   );
-  console.log("energyPrice", energyPrice);
   const state: ICurrentState = {
     state: "PLAY" as currentState,
     story: {

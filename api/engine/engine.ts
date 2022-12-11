@@ -1,4 +1,4 @@
-import { Database } from "sqlite3";
+import { Database } from "sqlite";
 import * as events from "./events";
 import { IGame, IGameEvent, IPlayer, IServer } from "./types";
 

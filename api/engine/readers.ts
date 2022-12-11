@@ -1,4 +1,4 @@
-import { Database } from "sqlite3";
+import { Database } from "sqlite";
 import {
   ICreatePlayerEvent,
   IGameEvent,
@@ -6,7 +6,7 @@ import {
   IWinLevelEvent,
   IServerArenaStartEvent,
   IServerArenaEndEvent,
-} from "../engine/types";
+} from "./types";
 import {
   IEventCreatePlayerDB,
   IEventDB,

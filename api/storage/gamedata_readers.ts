@@ -1,4 +1,4 @@
-import { Database } from "sqlite3";
+import { Database } from "sqlite";
 import { readAllLnes } from "./db";
 
 export interface IInventoryDB {
@@ -21,7 +21,7 @@ export interface ICharacterDB {
   id: number;
   name: string;
   weaponId: number;
-  materialId: number;
+  inventoryId: number;
 }
 
 export interface IInventoryDB {
@@ -61,13 +61,13 @@ export const readAllInventory = async (
   db: Database
 ): Promise<IInventoryDB[]> => {
   const inventory: IInventoryDB[] = [];
-  const sql = `SELECT id, name from inventory WHERE deleted='NULL'`;
+  const sql = `SELECT id, name from inventory WHERE deleted is NULL`;
   return readAllLnes(inventory, sql, db) as unknown as IInventoryDB[];
 };
 
 export const readAllWeapons = async (db: Database): Promise<IWeaponDB[]> => {
   const weapons: IWeaponDB[] = [];
-  const sql = `SELECT id, name from weapon WHERE deleted='NULL'`;
+  const sql = `SELECT id, name from weapon WHERE deleted is NULL`;
   return readAllLnes(weapons, sql, db) as unknown as IWeaponDB[];
 };
 
@@ -75,7 +75,7 @@ export const readAllCharacters = async (
   db: Database
 ): Promise<ICharacterDB[]> => {
   const characters: ICharacterDB[] = [];
-  const sql = `SELECT id, name, weaponId, materialId from character WHERE deleted='NULL'`;
+  const sql = `SELECT id, name, weaponId, inventoryId from character WHERE deleted is NULL`;
   return readAllLnes(characters, sql, db) as unknown as ICharacterDB[];
 };
 
@@ -83,19 +83,19 @@ export const readAllAdventures = async (
   db: Database
 ): Promise<IAdventureDB[]> => {
   const adventures: IAdventureDB[] = [];
-  const sql = `SELECT id, characterId from adventure WHERE deleted='NULL'`;
+  const sql = `SELECT id, characterId from adventure WHERE deleted is NULL`;
   return readAllLnes(adventures, sql, db) as unknown as IAdventureDB[];
 };
 
 export const readAllStories = async (db: Database): Promise<IStoryDB[]> => {
   const stories: IStoryDB[] = [];
-  const sql = `SELECT storyId, name, adventureId  from story_chapter WHERE deleted='NULL'`;
+  const sql = `SELECT storyId, name, adventureId  from adventure_story_chapter WHERE deleted is NULL`;
   return readAllLnes(stories, sql, db) as unknown as IStoryDB[];
 };
 
 export const readAllChapters = async (db: Database): Promise<IChapterDB[]> => {
   const chapters: IChapterDB[] = [];
-  const sql = `SELECT id, storyId, mode, energy, name from chapter WHERE deleted='NULL'`;
+  const sql = `SELECT id, storyId, mode, energy, name from chapter WHERE deleted is NULL`;
   return readAllLnes(chapters, sql, db) as unknown as IChapterDB[];
 };
 
@@ -103,6 +103,6 @@ export const readAllChapterRewards = async (
   db: Database
 ): Promise<IChapterRewardDB[]> => {
   const rewards: IChapterRewardDB[] = [];
-  const sql = `SELECT chapterId, inventoryId, quantity, initial from chapter_inventory WHERE deleted='NULL'`;
+  const sql = `SELECT chapterId, inventoryId, quantity, initial from chapter_inventory WHERE deleted is NULL`;
   return readAllLnes(rewards, sql, db) as unknown as IChapterRewardDB[];
 };

@@ -26,7 +26,6 @@ function App() {
 
   const createplayer = async () => {
     const res = await axios.post(`api/players/new?name=PlayerNew`);
-    console.log("createplayer", res.data);
     setPlayerId(res.data.player.id);
   };
 

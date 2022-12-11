@@ -1,4 +1,6 @@
-import { Database } from "sqlite3";
+import { Database, open } from "sqlite";
+import sqlite3 from "sqlite3";
+
 import { ICreatePlayerDB, IStartLevelDB, IWinLevelDB } from "../engine/types";
 import {
   IAdventureDB,
@@ -8,6 +10,7 @@ import {
   IStoryDB,
   IWeaponDB,
 } from "./gamedata_readers";
+import migrateDB from "./migrate";
 import {
   IEventCreatePlayerDB,
   IEventDB,
@@ -17,7 +20,7 @@ import {
   IEventWinLevelDB,
 } from "./playerdata_readers";
 
-const sqlite3 = require("sqlite3").verbose();
+sqlite3.verbose();
 type dbDataType =
   | IEventDB
   | ICreatePlayerDB
@@ -35,17 +38,13 @@ type dbDataType =
   | IEventServerArenaStartDB
   | IEventServerArenaEndDB;
 
-const createDb = async (): Promise<Database> => {
-  console.log("Create DB");
-  const db: Database = new sqlite3.Database(
-    "./storage/player.db",
-    sqlite3.OPEN_READWRITE,
-    (err: Error) => {
-      if (err) {
-        console.error(err.message);
-      }
-    }
-  );
+const createDb = async (dbname: string): Promise<Database> => {
+  console.log("Create DB", dbname);
+  const db: Database = await open({
+    filename: dbname,
+    driver: sqlite3.Database,
+  });
+  await migrateDB(db);
   return db;
 };
 
@@ -56,17 +55,11 @@ export const readAllLnes = (
   sql: string,
   db: Database
 ): Promise<dbDataType[]> => {
-  return new Promise((resolve, reject) => {
-    db.all(sql, [], (err: Error, rows: dbDataType[]) => {
-      if (err) {
-        reject(err);
-        return;
-      }
-      rows.forEach((row: dbDataType) => {
-        res.push(row);
-      });
-      resolve(res);
+  return db.all(sql, []).then((rows: dbDataType[]) => {
+    rows.forEach((row: dbDataType) => {
+      res.push(row);
     });
+    return res;
   });
 };
 
@@ -74,13 +67,8 @@ export const readOneLne = (
   sql: string,
   db: Database
 ): Promise<dbDataType[]> => {
-  return new Promise((resolve, reject) => {
-    db.get(sql, [], (err: Error, row: dbDataType[]) => {
-      if (err) {
-        reject(err);
-      }
-      resolve(row);
-    });
+  return db.all(sql, []).then((row: dbDataType[]) => {
+    return row;
   });
 };
 
@@ -94,14 +82,7 @@ export const writeAllLines = (table: string, data: any[], db: Database) => {
   const singleLine = data[0].map((p: any) => "?").join(",");
   const placeholders = data.map((l) => `(${singleLine})`).join(",");
   const sql = `INSERT INTO ${table} VALUES ${placeholders}`;
-  return new Promise((resolve, reject) => {
-    db.run(sql, flat, (err: Error) => {
-      if (err) {
-        reject(err);
-      }
-      resolve(200);
-    });
-  });
+  return db.run(sql, flat).then(() => 200);
 };
 
 export const writeOneLine = (
@@ -111,13 +92,5 @@ export const writeOneLine = (
 ): Promise<number> => {
   const placeholders = data.map((p) => "?").join(",");
   const sql = `INSERT INTO ${table} VALUES (${placeholders});`;
-  return new Promise((resolve, reject) => {
-    db.run(sql, data, function (err: Error) {
-      if (err) {
-        reject(err);
-      }
-      //@ts-ignore
-      resolve(this.lastID);
-    });
-  });
+  return db.run(sql, data).then((result) => result.lastID as number);
 };

@@ -1,100 +1,91 @@
-import * as readers from "./db/readers";
-import * as writers from "./db/writers";
+import * as readers from "./engine/readers";
+import * as writers from "./engine/writers";
 import * as engine from "./engine/engine";
-import { Database } from "sqlite3";
+import { Database } from "sqlite";
 import {
   ICreatePlayerData,
   IStartLevelData,
   IWinLevelData,
 } from "./engine/types";
 import { findPlayer } from "./engine/helpers";
-import createDb from "./storage/db";
 
 const bodyParser = require("body-parser");
 const express = require("express");
 const cors = require("cors");
-export const app = express();
-app.use(cors());
-app.use(bodyParser.json());
+const appWithDB = (db: Database) => {
+  const app = express();
+  app.use(cors());
+  app.use(bodyParser.json());
 
-export const eventsApplication = async (db: Database) => {
-  const events = await readers.playerEvents(db);
-  console.log("events", events);
-  const game = await engine.applyEvents(db, events);
-  return game;
-};
-
-app.get("/api/players/:id", async (req: any, res: any) => {
-  const playerId = parseInt(req.params.id);
-  const db = await createDb();
-  const game = await eventsApplication(db);
-  const player = findPlayer(game, playerId);
-  db.close();
-  res.send({ server: game.server, player: player });
-});
-
-app.post("/api/players/new", async (req: any, res: any) => {
-  console.log("CREATEPLAYER", req.query);
-  const db = await createDb();
-  const event: ICreatePlayerData = {
-    created: new Date().valueOf(),
-    type: "CREATEPLAYER",
-    data: {
-      name: req.query.name,
-    },
+  const eventsApplication = async (db: Database) => {
+    const events = await readers.playerEvents(db);
+    const game = await engine.applyEvents(db, events);
+    return game;
   };
-  const newEvent = await writers.createPlayerEvent(db, event);
-  const game = await eventsApplication(db);
-  const player = findPlayer(game, newEvent.playerId);
-  db.close();
-  res.send({ server: game.server, player: player });
-});
 
-app.post("/api/players/:id/startLevel", async (req: any, res: any) => {
-  console.log("STARTLEVEL", req.params.id, req.body);
-  const db = await createDb();
-  const playerId = parseInt(req.params.id);
-  const game = await eventsApplication(db);
-  const event: IStartLevelData = {
-    playerId: playerId,
-    created: new Date().valueOf(),
-    type: "STARTLEVEL",
-    data: {
-      chapterId: req.body.chapterId,
-      adventureId: req.body.adventureId,
-      storyId: req.body.storyId,
-    },
-  };
-  const newEvent = await writers.startLevelEvent(db, game, event);
-  const newGame = await eventsApplication(db);
-  const player = findPlayer(game, playerId);
-  db.close();
-  res.send({ server: newGame.server, player: player });
-});
+  app.get("/api/players/:id", async (req: any, res: any) => {
+    const playerId = parseInt(req.params.id);
+    const game = await eventsApplication(db);
+    const player = findPlayer(game, playerId);
+    res.send({ server: game.server, player: player });
+  });
 
-app.post("/api/players/:id/winLevel", async (req: any, res: any) => {
-  console.log("WINLEVEL", req.params.id, req.body);
+  app.post("/api/players/new", async (req: any, res: any) => {
+    console.log("CREATEPLAYER", req.query);
+    const event: ICreatePlayerData = {
+      created: new Date().valueOf(),
+      type: "CREATEPLAYER",
+      data: {
+        name: req.query.name,
+      },
+    };
+    const newEvent = await writers.createPlayerEvent(db, event);
+    const game = await eventsApplication(db);
+    const player = findPlayer(game, newEvent.playerId);
+    res.send({ server: game.server, player: player });
+  });
 
-  const db = await createDb();
-  const playerId = parseInt(req.params.id);
-  const game = await eventsApplication(db);
-  const event: IWinLevelData = {
-    playerId: playerId,
-    created: new Date().valueOf(),
-    type: "WINLEVEL",
-    data: {
-      chapterId: req.body.chapterId,
-      adventureId: req.body.adventureId,
-      storyId: req.body.storyId,
-    },
-  };
-  const newEvent = await writers.winLevelEvent(db, game, event);
-  const newGame = await eventsApplication(db);
-  const player = findPlayer(game, playerId);
-  db.close();
-  res.send({ server: newGame.server, player: player });
-});
-/*
+  app.post("/api/players/:id/startLevel", async (req: any, res: any) => {
+    console.log("STARTLEVEL", req.params.id, req.body);
+    const playerId = parseInt(req.params.id);
+    const game = await eventsApplication(db);
+    const event: IStartLevelData = {
+      playerId: playerId,
+      created: new Date().valueOf(),
+      type: "STARTLEVEL",
+      data: {
+        chapterId: req.body.chapterId,
+        adventureId: req.body.adventureId,
+        storyId: req.body.storyId,
+      },
+    };
+    const newEvent = await writers.startLevelEvent(db, game, event);
+    const newGame = await eventsApplication(db);
+    const player = findPlayer(game, playerId);
+    res.send({ server: newGame.server, player: player });
+  });
+
+  app.post("/api/players/:id/winLevel", async (req: any, res: any) => {
+    console.log("WINLEVEL", req.params.id, req.body);
+
+    const playerId = parseInt(req.params.id);
+    const game = await eventsApplication(db);
+    const event: IWinLevelData = {
+      playerId: playerId,
+      created: new Date().valueOf(),
+      type: "WINLEVEL",
+      data: {
+        chapterId: req.body.chapterId,
+        adventureId: req.body.adventureId,
+        storyId: req.body.storyId,
+      },
+    };
+    const newEvent = await writers.winLevelEvent(db, game, event);
+    const newGame = await eventsApplication(db);
+    const player = findPlayer(game, playerId);
+    res.send({ server: newGame.server, player: player });
+  });
+  /*
 app.post("/api/players/:id/openSpell", async (req: any, res: any) => {
   console.log("OPENSPELL", req.params.id, req.body);
   const playerId = parseInt(req.params.id);
@@ -288,3 +279,8 @@ app.post("/api/players/:id/endArena", async (req: any, res: any) => {
   res.send({ server: newGame.server, player: player });
 });
 */
+
+  return app;
+};
+
+export { appWithDB as app };

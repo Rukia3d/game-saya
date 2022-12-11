@@ -1,4 +1,4 @@
-import * as readers from "./db/readers";
+import * as readers from "./engine/readers";
 const weaponChargePrice = 100;
 const energyChargePrice = 50;
 const numOfWeponUsedPerLevel = 3;
