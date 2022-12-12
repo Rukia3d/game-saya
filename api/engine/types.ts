@@ -160,7 +160,6 @@ export interface IGamePlayer {
 export interface IPlayer {
   id: number;
   name: string;
-  maxEnergy: number;
   loungeId: number | null;
   materials: IInventoryQuant[];
   adventures: IAdventure[];

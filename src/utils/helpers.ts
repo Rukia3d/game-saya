@@ -4,7 +4,6 @@ import { ICell } from "../../api/levelgen";
 export const testPlayer: IPlayer = {
   id: 0,
   name: "BASEPLAYER",
-  maxEnergy: 100,
   loungeId: null,
   materials: [],
   adventures: [],

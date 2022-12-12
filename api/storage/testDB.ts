@@ -3,7 +3,6 @@ import { IPlayer, IServer } from "../engine/types";
 export const basePlayer: IPlayer = {
   id: 0,
   name: "BASEPLAYER",
-  maxEnergy: 100,
   loungeId: null,
   materials: [],
   adventures: [],

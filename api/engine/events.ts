@@ -154,6 +154,7 @@ export const startLevel = async (
     ...updatePlayerEnergy(player, energyPrice),
     currentState: state,
   };
+  console.log("newPlayer", newPlayer);
   const newPlayers = replacePlayer(game.players, newPlayer);
   return { ...game, players: newPlayers };
 };

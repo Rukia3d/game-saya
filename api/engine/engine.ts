@@ -83,7 +83,6 @@ export const applyEvents = async (
       {
         id: 0,
         name: "",
-        maxEnergy: 0,
         loungeId: null,
         materials: [],
         adventures: [],
