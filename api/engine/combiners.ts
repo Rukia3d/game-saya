@@ -1,4 +1,5 @@
 import { Database } from "sqlite";
+import { ILevel } from "../levelgen";
 import {
   ICharacterDB,
   IInventoryDB,
@@ -30,6 +31,7 @@ import {
   IAdventure,
   IWeapon,
   ICreatePlayerEvent,
+  levelState,
 } from "./types";
 
 const findCharForAdventure = (
@@ -72,12 +74,23 @@ const findReward = (
 
 type IRewardInitial = IInventoryQuant & { initial: boolean };
 
+type IChapterCut = {
+  id: number;
+  mode: string;
+  name: string;
+  state: levelState;
+  level: ILevel;
+  firstTimeRewards: IInventoryQuant[];
+  staticRewards: IInventoryQuant[];
+  energy: number;
+};
+
 const findChapter = (
   dbChapters: IChapterDB[],
   dbRewards: IChapterRewardDB[],
   dbInventory: IInventoryDB[],
   id: number
-): IChapter => {
+): IChapterCut => {
   const chapDb = dbChapters.find((c: IChapterDB) => c.id === id);
   if (!chapDb) throw new Error(`Can't find a chapter with id ${id}`);
   const rewardDb = dbRewards.filter(
@@ -106,12 +119,19 @@ const findChaptersForStory = (
   dbChapters: IChapterDB[],
   dbRewards: IChapterRewardDB[],
   dbInventory: IInventoryDB[],
-  id: number
+  adventureId: number,
+  storyId: number
 ): IChapter[] => {
-  const chaptersDb = dbChapters.filter((c: IChapterDB) => c.storyId === id);
-  return chaptersDb.map((c: IChapterDB) =>
-    findChapter(dbChapters, dbRewards, dbInventory, c.id)
+  const chaptersDb = dbChapters.filter(
+    (c: IChapterDB) => c.storyId === storyId
   );
+  return chaptersDb.map((c: IChapterDB) => {
+    return {
+      ...findChapter(dbChapters, dbRewards, dbInventory, c.id),
+      storyId: storyId,
+      adventureId: adventureId,
+    };
+  });
 };
 
 const findStoriesForAdventure = (
@@ -129,7 +149,8 @@ const findStoriesForAdventure = (
       dbChapters,
       dbRewards,
       dbInventory,
-      id
+      s.adventureId,
+      s.storyId
     );
     return { name: s.name, id: s.storyId, chapters: chapters };
   });

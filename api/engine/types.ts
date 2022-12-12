@@ -76,6 +76,8 @@ export interface IChapter {
   firstTimeRewards: IInventoryQuant[];
   staticRewards: IInventoryQuant[];
   energy: number;
+  storyId: number;
+  adventureId: number;
 }
 
 export interface IAdventure {

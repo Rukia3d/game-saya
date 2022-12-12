@@ -37,11 +37,7 @@ const Goal = ({ goal }: { goal: IGoal }) => {
   );
 };
 
-export const Goals = ({
-  setScreen,
-}: {
-  setScreen: (n: mainScreenState) => void;
-}) => {
+export const Goals = () => {
   const context = useContext(GameContext);
   if (!context || !context.player) {
     throw new Error("No data in context");
@@ -52,7 +48,7 @@ export const Goals = ({
     <div className="GoalsContainer" data-testid="goals-screen">
       <TopMenu />
       <h3>Goals</h3>
-      <CloseButton close={() => setScreen("main")} />
+      <CloseButton close={() => context.setScreen({ screen: "main" })} />
       <div className="Goals" data-testid="goals-list">
         {goals.map((i: IGoal, n: number) => (
           <Goal goal={i} key={n} />

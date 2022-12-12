@@ -1,7 +1,6 @@
 import { useContext } from "react";
 import { IMessage } from "../api/engine/types";
 import { GameContext } from "./App";
-import { mainScreenState } from "./Main";
 import { CloseButton } from "./PopUp";
 import { TopMenu } from "./TopMenu";
 
@@ -23,11 +22,7 @@ export const Message = ({ message }: { message: IMessage }) => {
   );
 };
 
-export const Messages = ({
-  setScreen,
-}: {
-  setScreen: (n: mainScreenState) => void;
-}) => {
+export const Messages = () => {
   const context = useContext(GameContext);
   if (!context || !context.player) {
     throw new Error("No data in context");
@@ -37,7 +32,7 @@ export const Messages = ({
     <div className="MessagesContainer" data-testid="messages-screen">
       <TopMenu />
       <h3>Messages</h3>
-      <CloseButton close={() => setScreen("main")} />
+      <CloseButton close={() => context.setScreen({ screen: "main" })} />
       <div className="Messages" data-testid="messages-list">
         {messages.map((i: IMessage, n: number) => (
           <Message key={n} message={i} />

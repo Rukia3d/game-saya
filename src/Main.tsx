@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import useSWR from "swr";
 import { fetcher } from "./utils/helpers";
 import "./Main.scss";
@@ -6,7 +6,7 @@ import { GameContextType, GameContext } from "./App";
 
 import { PopUp } from "./PopUp";
 import { TopMenu } from "./TopMenu";
-import { IChapter } from "../api/engine/types";
+import { IAdventure, IChapter, IGame } from "../api/engine/types";
 import { Home } from "./Home";
 import { Weapons } from "./Weapons";
 import { Inventory } from "./Inventory";
@@ -14,38 +14,37 @@ import { Goals } from "./Goals";
 import { Arena } from "./Arena";
 import { Collections } from "./Collections";
 import { Messages } from "./Messages";
-import { Adventures } from "./Adventures";
+import { Adventure } from "./Adventure";
 import { Game } from "./Game";
 
 export type mainScreenState =
-  | "main"
-  | "game"
-  | "weapons"
-  | "inventory"
-  | "goals"
-  | "collections"
-  | "messages"
-  | "adventure"
-  | "arena"
-  | "market"
-  | "aliance"
-  | "studio";
+  | { screen: "main" }
+  | { screen: "game"; game: IChapter | null }
+  | { screen: "weapons" }
+  | { screen: "inventory" }
+  | { screen: "goals" }
+  | { screen: "collections" }
+  | { screen: "messages" }
+  | { screen: "adventure"; adventure: IAdventure | null }
+  | { screen: "arena" }
+  | { screen: "market" }
+  | { screen: "aliance" }
+  | { screen: "studio" };
 
+type screens = mainScreenState["screen"];
 type MainScreensType = {
-  [key in mainScreenState]: React.FC<{
-    setScreen: (n: mainScreenState) => void;
-  }>;
+  [K in screens]: React.FC;
 };
 
-export const ComingSoon = ({
-  setScreen,
-}: {
-  setScreen: (n: mainScreenState) => void;
-}) => {
+export const ComingSoon = () => {
+  const context = useContext(GameContext);
+  if (!context || !context.player) {
+    throw new Error("No data in context");
+  }
   return (
     <div className="ComingSoon">
       <TopMenu />
-      <PopUp close={() => setScreen("main")}>
+      <PopUp close={() => context.setScreen({ screen: "main" })}>
         <div>
           <h1>Coming Soon</h1>
         </div>
@@ -61,7 +60,7 @@ const mainScreens: MainScreensType = {
   goals: Goals,
   collections: Collections,
   messages: Messages,
-  adventure: Adventures,
+  adventure: Adventure,
   arena: Arena,
   market: ComingSoon,
   aliance: ComingSoon,
@@ -74,10 +73,10 @@ export const Main = ({ playerId }: { playerId: string }) => {
   // const error = null;
   // const data = { server: testServer, player: testPlayer };
   // const mutate = async () => {};
-  const [screen, setScreen] = useState<mainScreenState>("main");
+  const [screen, setScreen] = useState<mainScreenState>({ screen: "main" });
   const [game, setGame] = useState<IChapter | null>(null);
 
-  const CurrentScreen = mainScreens[screen];
+  const CurrentScreen = mainScreens[screen.screen];
 
   if (error || !data) {
     return (
@@ -89,14 +88,14 @@ export const Main = ({ playerId }: { playerId: string }) => {
   const context: GameContextType = {
     player: data.player,
     server: data.server,
-    game: game,
     mutate: mutate,
-    setGame: setGame,
+    screen: { screen: "main" },
+    setScreen: setScreen,
   };
 
   return (
     <GameContext.Provider value={context}>
-      <CurrentScreen setScreen={setScreen} />
+      <CurrentScreen />
     </GameContext.Provider>
   );
 };

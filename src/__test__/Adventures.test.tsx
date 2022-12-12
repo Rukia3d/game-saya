@@ -2,7 +2,7 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import { GameContext, GameContextType } from "../App";
 import userEvent from "@testing-library/user-event";
-import { Adventures } from "../Adventures";
+import { Adventures } from "../Adventure";
 import { testPlayer, testServer } from "../utils/helpers";
 
 const context: GameContextType = {

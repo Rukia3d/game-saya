@@ -150,15 +150,12 @@ export const findStartLevel = (
   story: number,
   chapter: number
 ) => {
-  console.log("player.currentState.story", player.currentState.story);
   if (player.currentState.story) {
     const adventureId = player.currentState.story.adventureId;
     const storyId = player.currentState.story.storyId;
     const chapterId = player.currentState.story.chapterId;
     const level =
       player.adventures[adventureId].stories[storyId].chapters[chapterId];
-    console.log(adventureId, storyId, chapterId);
-    console.log(level);
     if (
       level &&
       adventureId === adventure &&

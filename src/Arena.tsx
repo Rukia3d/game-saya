@@ -152,11 +152,7 @@ export const ArenaEvent = ({
   );
 };
 
-export const Arena = ({
-  setScreen,
-}: {
-  setScreen: (n: mainScreenState) => void;
-}) => {
+export const Arena = () => {
   const context = useContext(GameContext);
   if (!context || !context.player) {
     throw new Error("No data in context");
@@ -181,7 +177,7 @@ export const Arena = ({
 
   const cancelArena = () => {
     setArena(null);
-    setScreen("main");
+    context.setScreen({ screen: "main" });
   };
 
   const events = [context.server.arenaRun, context.server.arenaFight];
@@ -199,7 +195,7 @@ export const Arena = ({
         </PopUp>
       ) : null}
       <TopMenu />
-      <PopUp close={() => setScreen("main")}>
+      <PopUp close={() => context.setScreen({ screen: "main" })}>
         <div className="ArenaEvents">
           {events.map((a: IArena, n: number) => (
             <div className="ArenaType" key={n}>

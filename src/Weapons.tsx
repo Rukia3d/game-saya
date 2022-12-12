@@ -89,11 +89,7 @@ export const WeaponList = ({
   );
 };
 
-export const Weapons = ({
-  setScreen,
-}: {
-  setScreen: (n: mainScreenState) => void;
-}) => {
+export const Weapons = () => {
   const context = useContext(GameContext);
   if (!context || !context.player) {
     throw new Error("No data in context");
@@ -107,7 +103,7 @@ export const Weapons = ({
   const close = () => {
     setWeaponElement(null);
     setWeapon(null);
-    setScreen("main");
+    context.setScreen({ screen: "main" });
   };
   console.log("weapons", weapons);
 
@@ -126,7 +122,7 @@ export const Weapons = ({
       ) : (
         <>
           <h3>Weapons</h3>
-          <CloseButton close={() => setScreen("main")} />
+          <CloseButton close={() => context.setScreen({ screen: "main" })} />
           <div className="Weapons" data-testid="weapons-list">
             {weapons.map((w: WeaponById, n: number) => (
               <div

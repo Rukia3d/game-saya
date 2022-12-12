@@ -2,18 +2,18 @@ import axios from "axios";
 import React, { useState } from "react";
 import { KeyedMutator } from "swr";
 // Types
-import { IPlayer, IServer, IChapter } from "../api/engine/types";
+import { IPlayer, IServer } from "../api/engine/types";
 // Utils
 import "./App.scss";
 // Components
-import { Main } from "./Main";
+import { Main, mainScreenState } from "./Main";
 
 export interface GameContextType {
   player: IPlayer;
   server: IServer;
   mutate: KeyedMutator<any>;
-  game: IChapter | null;
-  setGame: (g: IChapter | null) => void;
+  screen: mainScreenState;
+  setScreen: (m: mainScreenState) => void;
 }
 
 export const GameContext = React.createContext<undefined | GameContextType>(

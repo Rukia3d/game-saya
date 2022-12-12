@@ -26,7 +26,6 @@ export const playerEvents = async (db: Database): Promise<IGameEvent[]> => {
   // Find events for a player
   const events = await readGameEvents(db);
   const newEvents: IGameEvent[] = [];
-  console.log("events", events);
   for (let e of events) {
     switch (e.type) {
       case "CREATEPLAYER":

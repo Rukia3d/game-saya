@@ -3,7 +3,6 @@ import React, { useContext, useState } from "react";
 
 import { ICell, IEnemyCell, IReel, ITriggerCell } from "../api/levelgen";
 import { GameContext } from "./App";
-import { mainScreenState } from "./Main";
 import { CloseButton } from "./PopUp";
 import { Reel } from "./Reel";
 import { Gameplay, initGameplay, updateGameplay } from "./gameplay";
@@ -77,7 +76,12 @@ export const Controls = ({ gameplay }: { gameplay: Gameplay }) => {
 
 export const Level = ({ gameplay }: { gameplay: Gameplay }) => {
   const context = useContext(GameContext);
-  if (!context || !context.player || !context.game) {
+  if (
+    !context ||
+    !context.player ||
+    context.screen.screen !== "game" ||
+    !context.screen.game
+  ) {
     throw new Error("No data in context");
   }
 
@@ -110,16 +114,23 @@ export const Level = ({ gameplay }: { gameplay: Gameplay }) => {
 };
 
 export const GamePlay = ({
-  setScreen,
+  winLevel,
+  looseLevel,
   setReel,
   gameplay: levelGameplay,
 }: {
-  setScreen: (n: mainScreenState) => void;
+  winLevel: () => void;
+  looseLevel: () => void;
   setReel: (r: undefined | IReel[]) => void;
   gameplay: Gameplay;
 }) => {
   const context = useContext(GameContext);
-  if (!context || !context.player || !context.game) {
+  if (
+    !context ||
+    !context.player ||
+    context.screen.screen !== "game" ||
+    !context.screen.game
+  ) {
     throw new Error("No data in context");
   }
 
@@ -131,30 +142,16 @@ export const GamePlay = ({
       setTimeout(tick, 25);
   }
 
-  const winLevel = async () => {
-    console.log("WinLevel");
-    if (context.game && "id" in context.game) {
-      await axios.post(`/api/players/${context.player.id}/winLevel`, {
-        storyId: context.game.id,
-      });
-
-      await context.mutate();
-      setScreen("adventure");
-      context.setGame(null);
-    }
-  };
-
-  const looseLevel = () => {
-    setScreen("adventure");
-    context.setGame(null);
-  };
-
   // LEVEL MOVES
 
   return (
     <div className="GameContainer" data-testid="game-screen">
       <div className="GameUI">
-        <CloseButton close={() => setScreen("adventure")} />
+        <CloseButton
+          close={() =>
+            context.setScreen({ screen: "adventure", adventure: null })
+          }
+        />
         <button onClick={winLevel}>Win</button>
         <button onClick={looseLevel}>Loose</button>
         <div>Lives: {lives}</div>
@@ -165,23 +162,49 @@ export const GamePlay = ({
   );
 };
 
-export const Game = ({
-  setScreen,
-}: {
-  setScreen: (n: mainScreenState) => void;
-}) => {
+export const Game = () => {
   const context = useContext(GameContext);
-  if (!context || !context.player || !context.game) {
+  if (
+    !context ||
+    !context.player ||
+    context.screen.screen !== "game" ||
+    !context.screen.game
+  ) {
     throw new Error("No data in context");
   }
-  const [reel, setReel] = useState(context.game.level.opening);
+  const game = context.screen.game;
+  const adventures = context.player.adventures;
+  const currentAdventure = adventures[game.adventureId];
+
+  const winLevel = async () => {
+    console.log("WinLevel");
+    await axios.post(`/api/players/${context.player.id}/winLevel`, {
+      adventureId: game.adventureId,
+      storyId: game.storyId,
+      chapterId: game.id,
+    });
+
+    await context.mutate();
+    context.setScreen({ screen: "adventure", adventure: currentAdventure });
+  };
+
+  const looseLevel = () => {
+    context.setScreen({ screen: "adventure", adventure: currentAdventure });
+  };
+
+  const [reel, setReel] = useState(game.level.opening);
 
   if (reel === undefined) {
-    const level = context.game.level.levels[0];
+    const level = game.level.levels[0];
     const gameplay = initGameplay(level);
 
     return (
-      <GamePlay gameplay={gameplay} setScreen={setScreen} setReel={setReel} />
+      <GamePlay
+        gameplay={gameplay}
+        setReel={setReel}
+        winLevel={winLevel}
+        looseLevel={looseLevel}
+      />
     );
   }
   return (

@@ -20,23 +20,27 @@ const INDEXOFJADE = 5;
 
 const Chapter = ({ chapter }: { chapter: IChapter }) => {
   const context = useContext(GameContext);
-  if (!context || !context.player) {
+  if (
+    !context ||
+    !context.player ||
+    context.screen.screen !== "adventure" ||
+    !context.screen.adventure
+  ) {
     throw new Error("No data in context");
   }
+  const adventure = context.screen.adventure;
   const canPlay =
     context.player.materials[INDEXOFENERGY].quantity >= chapter.energy;
 
   const startLevel = async () => {
     console.log("StartLevel");
     await axios.post(`/api/players/${context.player.id}/startLevel`, {
-      adventureId: 0,
-      storyId: 0,
-      chapterId: 0,
+      adventureId: adventure.id,
+      storyId: chapter.storyId,
+      chapterId: chapter.id,
     });
 
-    context.setGame(chapter);
-    //setScreen("game");
-
+    context.setScreen({ screen: "game", game: chapter });
     await context.mutate();
   };
 
@@ -65,36 +69,31 @@ const Chapter = ({ chapter }: { chapter: IChapter }) => {
   );
 };
 
-const Story = ({
-  story,
-  setStory,
-}: {
-  story: IStory;
-  setStory: (a: IStory | null) => void;
-}) => {
+const Story = ({ story }: { story: IStory }) => {
   return (
-    <div className="Story" onClick={() => {}}>
+    <div className="Story">
       {story.name}
       <div className="Chapters">
-        {story.chapters.map((c: IChapter) => (
-          <Chapter chapter={c} />
+        {story.chapters.map((c: IChapter, n: number) => (
+          <Chapter chapter={c} key={n} />
         ))}
       </div>
     </div>
   );
 };
 
-export const Adventures = ({
-  setScreen,
-}: {
-  setScreen: (n: mainScreenState) => void;
-}) => {
+export const Adventure = () => {
   const context = useContext(GameContext);
-  if (!context || !context.player) {
+  console.log("context.screen", context?.screen);
+  if (
+    !context ||
+    !context.player ||
+    context.screen.screen !== "adventure" ||
+    !context.screen.adventure
+  ) {
     throw new Error("No data in context");
   }
-  const adventures = context.player.adventures;
-  const [adventure, setAdventure] = useState<null | IAdventure>(adventures[0]);
+  const adventure = context.screen.adventure;
   const [story, setStory] = useState<null | IStory>(null);
 
   if (adventure == null) throw new Error("No adventure");
@@ -103,12 +102,12 @@ export const Adventures = ({
       <TopMenu />
       {story ? (
         <PopUp close={() => setStory(null)}>
-          <Story story={story} setStory={setStory} />
+          <Story story={story} />
         </PopUp>
       ) : (
         <>
           <h3>Adventure - {adventure.character.name}</h3>
-          <CloseButton close={() => setScreen("main")} />
+          <CloseButton close={() => context.setScreen({ screen: "main" })} />
           <div className="Adventures" data-testid="adventures-list">
             <div className="AdventuresStories">
               <h4>Stories</h4>

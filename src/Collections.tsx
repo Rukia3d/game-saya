@@ -48,11 +48,7 @@ export const Collection = ({
   );
 };
 
-export const Collections = ({
-  setScreen,
-}: {
-  setScreen: (n: mainScreenState) => void;
-}) => {
+export const Collections = () => {
   const context = useContext(GameContext);
   if (!context || !context.player) {
     throw new Error("No data in context");
@@ -63,14 +59,13 @@ export const Collections = ({
   const collections = context.player.collections;
 
   const selectCollection = (c: ICollection | null) => {
-    console.log("selectCollection", c);
     if (c) {
       setCollection(c);
       setPage(c.pages[0]);
     } else {
       setPage(null);
       setCollection(null);
-      setScreen("main");
+      context.setScreen({ screen: "main" });
     }
   };
 
@@ -89,7 +84,7 @@ export const Collections = ({
       ) : (
         <>
           <h3>Collections</h3>
-          <CloseButton close={() => setScreen("main")} />
+          <CloseButton close={() => context.setScreen({ screen: "main" })} />
           <div className="Collections" data-testid="collections-list">
             {collections.map((i: ICollection, n: number) => (
               <Collection
