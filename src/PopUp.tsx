@@ -28,7 +28,7 @@ export const SmallPopUp = ({
   );
 };
 
-export const CloseButton = ({ close }: { close: any }) => {
+export const CloseButton = ({ close }: { close: (s: any) => void }) => {
   return (
     <div className="CloseButton" onClick={close}>
       X

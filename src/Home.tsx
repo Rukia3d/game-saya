@@ -35,8 +35,7 @@ export const Adventures = () => {
   const adventures = context.player.adventures;
 
   const selectAdventure = (a: IAdventure) => {
-    console.log("selectAdventure", a);
-    context.setScreen({ screen: "adventure", adventure: a });
+    context.setScreen({ screen: "adventure", adventure: a, story: null });
   };
 
   return (

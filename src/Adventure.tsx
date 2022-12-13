@@ -94,15 +94,31 @@ export const Adventure = () => {
     throw new Error("No data in context");
   }
   const adventure = context.screen.adventure;
-  const [story, setStory] = useState<null | IStory>(null);
 
-  if (adventure == null) throw new Error("No adventure");
+  const selectStory = (s: IStory | null) => {
+    console.log("selectStory", s);
+    context.setScreen({
+      screen: "adventure",
+      adventure: adventure,
+      story: s,
+    });
+  };
+
+  const closeStory = () => {
+    console.log("closeStory");
+    context.setScreen({
+      screen: "adventure",
+      adventure: adventure,
+      story: null,
+    });
+  };
+
   return (
     <div className="AdventuresContainer" data-testid="adventures-screen">
       <TopMenu />
-      {story ? (
-        <PopUp close={() => setStory(null)}>
-          <Story story={story} />
+      {context.screen.story ? (
+        <PopUp close={closeStory}>
+          <Story story={context.screen.story} />
         </PopUp>
       ) : (
         <>
@@ -115,7 +131,7 @@ export const Adventure = () => {
                 {adventure.stories.map((s: IStory, n: number) => (
                   <div
                     className="AdventuresStory"
-                    onClick={() => setStory(s)}
+                    onClick={() => selectStory(s)}
                     key={n}
                   >
                     {s.name}

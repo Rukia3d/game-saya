@@ -8,16 +8,18 @@ export interface ICharacter {
   material: { id: number; name: string };
 }
 
+export interface IWeaponMaterial {
+  id: number;
+  name: string;
+  charge: number;
+  maxCharge: number;
+  state: boolState;
+}
+
 export interface IWeapon {
   id: number;
   name: string;
-  materials: {
-    id: number;
-    name: string;
-    charge: number;
-    maxCharge: number;
-    state: "open" | "closed";
-  }[];
+  materials: IWeaponMaterial[];
 }
 
 export interface IInventory {
@@ -650,6 +652,7 @@ export type spellState = "closed" | "open" | "listed";
 export type questState = "owned" | "rented" | "new";
 export type gameMode = "story" | "quest" | "run" | "fight";
 export type levelState = "open" | "closed" | "complete";
+export type boolState = "open" | "closed";
 export type arenaType = "run" | "fight";
 export type currentState =
   | "MAIN"

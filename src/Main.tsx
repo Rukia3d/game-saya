@@ -6,7 +6,14 @@ import { GameContextType, GameContext } from "./App";
 
 import { PopUp } from "./PopUp";
 import { TopMenu } from "./TopMenu";
-import { IAdventure, IChapter, IGame } from "../api/engine/types";
+import {
+  IAdventure,
+  IChapter,
+  IGame,
+  IStory,
+  IWeapon,
+  IWeaponMaterial,
+} from "../api/engine/types";
 import { Home } from "./Home";
 import { Weapons } from "./Weapons";
 import { Inventory } from "./Inventory";
@@ -20,12 +27,16 @@ import { Game } from "./Game";
 export type mainScreenState =
   | { screen: "main" }
   | { screen: "game"; game: IChapter | null }
-  | { screen: "weapons" }
+  | {
+      screen: "weapons";
+      weapon: IWeapon | null;
+      material: IWeaponMaterial | null;
+    }
   | { screen: "inventory" }
   | { screen: "goals" }
   | { screen: "collections" }
   | { screen: "messages" }
-  | { screen: "adventure"; adventure: IAdventure | null }
+  | { screen: "adventure"; adventure: IAdventure | null; story: IStory | null }
   | { screen: "arena" }
   | { screen: "market" }
   | { screen: "aliance" }
@@ -74,7 +85,6 @@ export const Main = ({ playerId }: { playerId: string }) => {
   // const data = { server: testServer, player: testPlayer };
   // const mutate = async () => {};
   const [screen, setScreen] = useState<mainScreenState>({ screen: "main" });
-  const [game, setGame] = useState<IChapter | null>(null);
 
   const CurrentScreen = mainScreens[screen.screen];
 
@@ -89,7 +99,7 @@ export const Main = ({ playerId }: { playerId: string }) => {
     player: data.player,
     server: data.server,
     mutate: mutate,
-    screen: { screen: "main" },
+    screen: screen,
     setScreen: setScreen,
   };
 

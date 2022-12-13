@@ -6,6 +6,7 @@ import { GameContext } from "./App";
 import { CloseButton } from "./PopUp";
 import { Reel } from "./Reel";
 import { Gameplay, initGameplay, updateGameplay } from "./gameplay";
+import { IStory } from "../api/engine/types";
 
 export const useGameplay = (gameplay: Gameplay): [Gameplay, () => void] => {
   const [, setTime] = useState(0);
@@ -149,7 +150,11 @@ export const GamePlay = ({
       <div className="GameUI">
         <CloseButton
           close={() =>
-            context.setScreen({ screen: "adventure", adventure: null })
+            context.setScreen({
+              screen: "adventure",
+              adventure: null,
+              story: null,
+            })
           }
         />
         <button onClick={winLevel}>Win</button>
@@ -185,11 +190,27 @@ export const Game = () => {
     });
 
     await context.mutate();
-    context.setScreen({ screen: "adventure", adventure: currentAdventure });
+    //TODO doesn't load the chapters in a new state
+    const currentStory =
+      currentAdventure.stories.find((s: IStory) => s.id === game.storyId) ||
+      null;
+
+    context.setScreen({
+      screen: "adventure",
+      adventure: currentAdventure,
+      story: currentStory,
+    });
   };
 
   const looseLevel = () => {
-    context.setScreen({ screen: "adventure", adventure: currentAdventure });
+    const currentStory =
+      currentAdventure.stories.find((s: IStory) => s.id === game.storyId) ||
+      null;
+    context.setScreen({
+      screen: "adventure",
+      adventure: currentAdventure,
+      story: currentStory,
+    });
   };
 
   const [reel, setReel] = useState(game.level.opening);

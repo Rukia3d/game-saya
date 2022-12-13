@@ -86,42 +86,12 @@
     }
   }
 
-  .WeaponList {
+  .Weapon {
     background-color: #b92999;
     height: 100%;
     width: 100%;
     display: flex;
     flex-direction: column;
-
-    .WeaponItem {
-      border: 1px solid black;
-      min-height: 3em;
-    }
-
-    .WeaponDetail {
-      border: 1px solid black;
-      min-height: 8em;
-
-      .Weapon {
-        display: flex;
-        flex-direction: row;
-
-        .WeaponImage {
-          background-color: #f394de;
-          margin: 1em;
-          width: 40%;
-          height: 100%;
-          min-height: 8em;
-          min-width: 5em;
-        }
-
-        .WeaponText {
-          width: 60%;
-          height: 100%;
-          margin: 1em;
-        }
-      }
-    }
   }
 }
 
@@ -626,4 +596,5 @@
   right: 0;
   font-size: 300%;
   z-index: 1000;
+  background-color: red;
 }

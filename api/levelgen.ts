@@ -1,4 +1,4 @@
-type setting = "lake" | "forest" | "village" | "city" | "castle";
+import { gameMode } from "./engine/types";
 
 export interface IReel {
   layout: string;
@@ -13,10 +13,10 @@ export interface IReelPanel {
 
 export interface IRun {
   settingName: string;
-  setting: setting;
+  setting: string;
   map: ICell[][];
   enemies: { enemy: IEnemyCell; x: number; y: number }[];
-  type: "run";
+  type: gameMode;
   musicAddress: string;
   triggers: {
     trigger: ITriggerCell;
@@ -27,10 +27,9 @@ export interface IRun {
 }
 export interface IFight {
   settingName: string;
-  setting: setting;
+  setting: string;
   map: ICell[][];
-  type: "fight";
-  enemyType: { id: number; name: string }[];
+  type: gameMode;
   enemies: { enemy: IEnemyCell; x: number; y: number }[];
   musicAddress: string;
   triggers: {
@@ -43,6 +42,8 @@ export interface IFight {
 
 export type ILayout = IRun | IFight;
 
+export type cellType = "space" | "trigger" | "obstacle" | "enemy";
+
 export interface ILevel {
   levels: ILayout[];
   element: { id: number; name: string }[];
@@ -51,20 +52,20 @@ export interface ILevel {
 }
 
 interface IEmptyCell {
-  type: "space";
+  type: cellType;
 }
 
 export interface ITriggerCell {
-  type: "trigger";
+  type: cellType;
 }
 
 interface IObstacleCell {
-  type: "obstacle";
+  type: cellType;
   //   image: string;
 }
 
 export interface IEnemyCell {
-  type: "enemy";
+  type: cellType;
   id: number;
   //   image: string;
   //   sound: string;

@@ -1,26 +1,5 @@
-import { IInventoryQuant, IPlayer, IServer } from "../../api/engine/types";
+import { IInventoryQuant } from "../../api/engine/types";
 import { ICell } from "../../api/levelgen";
-
-export const testPlayer: IPlayer = {
-  id: 0,
-  name: "BASEPLAYER",
-  loungeId: null,
-  materials: [],
-  adventures: [],
-  weapons: [],
-  goals: [],
-  collections: [],
-  messages: [],
-  currentState: { state: "MAIN" },
-  claims: [],
-};
-
-export const testServer: IServer = {
-  arenaRun: { events: [], resultTime: 1654347193, mode: "run" },
-  arenaFight: { events: [], resultTime: 1654347193, mode: "fight" },
-  arenaRunHistory: [],
-  arenaFightHistory: [],
-};
 
 //@ts-ignore
 export const fetcher = (...args) => fetch(...args).then((res) => res.json());

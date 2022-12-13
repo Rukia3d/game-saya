@@ -1,148 +1,69 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import "./Main.scss";
 import { GameContext } from "./App";
-import { mainScreenState } from "./Main";
-import { IWeapon, weaponName } from "../api/engine/types";
+import { IWeapon } from "../api/engine/types";
 import { TopMenu } from "./TopMenu";
 import { CloseButton, PopUp } from "./PopUp";
-
-interface WeaponById {
-  id: number;
-  name: weaponName;
-  elements: IWeapon[];
-}
-const weaponsById = (weapons: IWeapon[]): WeaponById[] => {
-  let newWepons: WeaponById[] = [];
-  // weapons.forEach((w: IWeapon) => {
-  //   if (!newWepons[w.id]) {
-  //     newWepons[w.id] = { id: w.id, name: w.name, elements: [w] };
-  //   } else {
-  //     newWepons[w.id].elements.push(w);
-  //   }
-  // });
-  return newWepons;
-};
-
-const elementState = (e: IWeapon) => {
-  console.log("elementState", e);
-  // if (e.state === "open" && e.charge >= e.maxCharge / 2) {
-  //   return "Open";
-  // }
-
-  // if (e.state === "open" && e.charge < e.maxCharge / 2 && e.charge > 0) {
-  //   return "Charge";
-  // }
-
-  // if (e.state === "open" && e.charge <= 0) {
-  //   return "NoCharge";
-  // }
-
-  // return "Closed";
-};
-
-export const WeaponList = ({
-  weapon,
-  setWeapon,
-  element,
-  setElement,
-}: {
-  weapon: WeaponById;
-  setWeapon: (w: null | WeaponById) => void;
-  element: null | IWeapon;
-  setElement: (w: null | IWeapon) => void;
-}) => {
-  const [selected, setSelected] = useState(element);
-
-  const changeElement = (w: IWeapon) => {
-    setSelected(w);
-    setElement(w);
-  };
-
-  const close = () => {
-    setElement(null);
-    setWeapon(null);
-  };
-
+const Weapon = ({ weapon }: { weapon: IWeapon }) => {
   return (
-    <div className="WeaponList" data-testid="weapon-popup">
-      <CloseButton close={close} />
-      {weapon.elements.map((w: IWeapon, n: number) => (
-        <div>
-          {/* {w.name} : {w.element.name}
-          {selected?.element.id === w.element.id ? (
-            <div className="Weapon">
-              <div className="WeaponImage"></div>
-              <div className="WeaponText">
-                {w.state === "open" ? (
-                  <span>
-                    {w.charge} out of {w.maxCharge}
-                  </span>
-                ) : (
-                  <span>Closed</span>
-                )}
-              </div>
-            </div>
-        ) : null} */}
-        </div>
-      ))}
+    <div className="Weapon" data-testid="weapon-popup">
+      <CloseButton close={() => {}} />
+      <div>Weapon</div>
     </div>
   );
 };
 
 export const Weapons = () => {
   const context = useContext(GameContext);
-  if (!context || !context.player) {
+  if (
+    !context ||
+    !context.player ||
+    context.screen.screen !== "weapons" ||
+    !context.screen.weapon
+  ) {
     throw new Error("No data in context");
   }
 
-  const weapons = weaponsById(context.player.weapons);
-  const [weapon, setWeapon] = useState<null | WeaponById>(null);
-  const [weponElement, setWeaponElement] = useState<null | IWeapon>(null);
-  const elements = ["Jade", "Garnet", "Obsidian", "Moonstone", "Amber"];
+  const weapon = context.screen.weapon;
 
-  const close = () => {
-    setWeaponElement(null);
-    setWeapon(null);
-    context.setScreen({ screen: "main" });
+  const selectWeapon = (w: IWeapon | null) => {
+    console.log("selectWeapon", w);
+    context.setScreen({
+      screen: "weapons",
+      weapon: weapon,
+      material: null,
+    });
   };
-  console.log("weapons", weapons);
+
+  const closeWeapon = () => {
+    console.log("closeWeapon");
+    context.setScreen({
+      screen: "weapons",
+      weapon: null,
+      material: null,
+    });
+  };
 
   return (
     <div className="WeaponsContainer" data-testid="weapons-screen">
       <TopMenu />
-      {weapon ? (
-        <PopUp close={close}>
-          <WeaponList
-            weapon={weapon}
-            setWeapon={setWeapon}
-            element={weponElement}
-            setElement={setWeaponElement}
-          />
+      {context.screen.weapon ? (
+        <PopUp close={closeWeapon}>
+          <Weapon weapon={weapon} />
         </PopUp>
       ) : (
         <>
           <h3>Weapons</h3>
           <CloseButton close={() => context.setScreen({ screen: "main" })} />
           <div className="Weapons" data-testid="weapons-list">
-            {weapons.map((w: WeaponById, n: number) => (
+            {context.player.weapons.map((w: IWeapon, n: number) => (
               <div
                 className="Weapon"
                 key={n}
-                onClick={() => setWeapon(w)}
+                onClick={() => selectWeapon(w)}
                 data-testid="weapon-selection"
               >
-                <div onClick={() => setWeapon(w)}>{w.name}</div>
-                <div className="WeaponElements">
-                  {elements.map((e: string, i: number) => (
-                    <button
-                      key={i}
-                      onClick={() => setWeaponElement(w.elements[i])}
-                      //className={elementState(w.elements[i])}
-                    >
-                      {e}
-                    </button>
-                  ))}
-                </div>
+                <div>{w.name}</div>
               </div>
             ))}
           </div>
