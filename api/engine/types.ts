@@ -240,7 +240,8 @@ export type IGameEvent =
   | IServerArenaStartEvent
   | IServerArenaEndEvent
   | IArenaStartEvent
-  | IArenaEndEvent;
+  | IArenaEndEvent
+  | IClaimRewardEvent;
 
 // CREATEPLAYER
 export type ICreatePlayerData = {
@@ -543,11 +544,35 @@ export type IMissCheckpointEvent = {
   mode: gameMode;
 };
 
+// CLAIM REWARD
+export type IClaimRewardDB = {
+  eventId: number;
+  playerId: number;
+  claimId: number;
+};
+
+export type IClaimRewardData = {
+  playerId: number;
+  created: number;
+  type: "CLAIMREWARD";
+  data: {
+    claimId: number;
+  };
+};
+
+export type IClaimRewardEvent = {
+  playerId: number;
+  eventId: number;
+  created: number;
+  type: "CLAIMREWARD";
+  claimId: number;
+};
+
 // PLAYER ARENA
 export type IArenaStartDB = {
   eventId: number;
   playerId: number;
-  mode: gameMode;
+  mode: arenaMode;
   index: number;
 };
 
@@ -556,7 +581,7 @@ export type IArenaStartData = {
   created: number;
   type: "ARENASTART";
   data: {
-    mode: gameMode;
+    mode: arenaMode;
     index: number;
   };
 };
@@ -566,14 +591,14 @@ export type IArenaStartEvent = {
   eventId: number;
   created: number;
   type: "ARENASTART";
-  mode: gameMode;
+  mode: arenaMode;
   index: number;
 };
 
 export type IArenaEndDB = {
   eventId: number;
   playerId: number;
-  mode: gameMode;
+  mode: arenaMode;
   index: number;
 };
 
@@ -582,7 +607,7 @@ export type IArenaEndData = {
   created: number;
   type: "ARENAEND";
   data: {
-    mode: gameMode;
+    mode: arenaMode;
     index: number;
   };
 };
@@ -592,7 +617,7 @@ export type IArenaEndEvent = {
   eventId: number;
   created: number;
   type: "ARENAEND";
-  mode: gameMode;
+  mode: arenaMode;
   index: number;
 };
 
@@ -607,6 +632,7 @@ export type IServerArenaStartDB = {
 export type IServerArenaStartData = {
   startDate: number;
   endDate: number;
+  created: number;
 };
 
 export type IServerArenaStartEvent = {
@@ -653,7 +679,7 @@ export type questState = "owned" | "rented" | "new";
 export type gameMode = "story" | "quest" | "run" | "fight";
 export type levelState = "open" | "closed" | "complete";
 export type boolState = "open" | "closed";
-export type arenaType = "run" | "fight";
+export type arenaMode = "run" | "fight";
 export type currentState =
   | "MAIN"
   | "PLAY"

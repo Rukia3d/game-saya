@@ -18,8 +18,13 @@ import {
   IEndless,
   IAdventure,
   IInventoryQuant,
+  arenaMode,
 } from "./types";
-import { INDEXOFENERGY } from "../config";
+import {
+  INDEXOFENERGY,
+  AWARDABLEARENAINDEXSTART,
+  AWARDABLEARENAINDEXEND,
+} from "../config";
 dayjs.extend(relativeTime);
 
 export const generateSeed = (
@@ -56,7 +61,10 @@ export const generateArenaRandom = (
   const seed = seedrandom(
     event.eventId + mode + event.start + event.end + index
   );
-  const res = Math.round(seed() * upTo);
+  let res = Math.round(seed() * upTo);
+  while (res < AWARDABLEARENAINDEXSTART || res > AWARDABLEARENAINDEXEND) {
+    res = Math.round(seed() * upTo);
+  }
   return res;
 };
 
@@ -101,7 +109,8 @@ export const rewardArenaPlayers = (
   reward: IArenaResultPool[]
 ): IPlayer[] => {
   let newPlayers: IPlayer[] = JSON.parse(JSON.stringify(game.players));
-  for (let i = 0; i < 3; i++) {
+  const upTo = result.length > 3 ? 3 : result.length;
+  for (let i = 0; i < upTo; i++) {
     result[i].forEach((r: IArenaResult) => {
       const player = findPlayer(game, r.playerId);
       const newPlayer = rewardArenaPlayer(player, reward[i].reward, i);
@@ -144,6 +153,22 @@ export const enoughEnergyToPlay = (
   return player.materials[INDEXOFENERGY].quantity - chapter.energy >= 0;
 };
 
+export const enoughToPay = (
+  materials: IInventoryQuant[],
+  price: IInventoryQuant[]
+) => {
+  let can = true;
+  price.forEach((p: IInventoryQuant) => {
+    const material = materials.find((m: IInventoryQuant) => m.id === p.id);
+    if (!material)
+      throw new Error("Price of an item contains non-existant material");
+    if (p.quantity > material.quantity) {
+      can = false;
+    }
+  });
+  return can;
+};
+
 export const findStartLevel = (
   player: IPlayer,
   adventure: number,
@@ -165,6 +190,62 @@ export const findStartLevel = (
       return player.currentState.story;
     else throw new Error("Can't find start level");
   } else throw new Error("Can't find start level");
+};
+
+export const allowParticipation = (created: number, resultTime: number) => {
+  let diffDate = dayjs(created).diff(resultTime, "second");
+  let diffMins = Math.floor((diffDate / 60) % 60);
+  let diffHrs = Math.floor(diffDate / 3600);
+  let block = true;
+  if (diffHrs > 0) block = false;
+  if (diffMins >= 5) block = false;
+  return block;
+};
+
+const correctStateForArena = (
+  arena: {
+    mode: gameMode;
+    index: number;
+  },
+  currentState: ICurrentState
+) => {
+  return (
+    arena.mode === currentState.arena?.mode &&
+    arena.index === currentState.arena?.index
+  );
+};
+
+export const foundArenaStartEvent = (
+  currentState: ICurrentState,
+  event: {
+    mode: gameMode;
+    index: number;
+  }
+) => {
+  if ("arena" in currentState) {
+    return correctStateForArena(event, currentState);
+  } else {
+    throw new Error("Incorrect state: can't finish level you haven't started");
+  }
+};
+
+export const findEventArena = (
+  game: IGame,
+  mode: arenaMode,
+  index: number
+): [IArena, IArenaEvent] => {
+  const newArena: IArena =
+    mode === "run" ? game.server.arenaRun : game.server.arenaFight;
+  const arenaEvent: IArenaEvent =
+    mode === "run"
+      ? game.server.arenaRun.events[index]
+      : game.server.arenaFight.events[index];
+  return [newArena, arenaEvent];
+};
+
+export const calculateResult = (created: number, resultTime: number) => {
+  let diffDate = dayjs(resultTime).diff(dayjs(created), "milliseconds");
+  return diffDate;
 };
 
 /*
@@ -254,35 +335,6 @@ export const findLevelForEndless = (
 };
 
 
-const correctStateForArena = (
-  arena: {
-    mode: gameMode;
-    index: number;
-  },
-  currentState: ICurrentState
-) => {
-  return (
-    arena.mode === currentState.arena?.mode &&
-    arena.index === currentState.arena?.index
-  );
-};
-
-
-export const foundArenaStartEvent = (
-  currentState: ICurrentState,
-  event: {
-    mode: gameMode;
-    index: number;
-  }
-) => {
-  if ("arena" in currentState) {
-    return correctStateForArena(event, currentState);
-  } else {
-    throw new Error("Incorrect state: can't finish level you haven't started");
-  }
-};
-
-
 export const correctCheckpoint = (
   player: IPlayer,
   data: {
@@ -296,37 +348,6 @@ export const correctCheckpoint = (
 };
 
 
-export const enoughToPay = (
-  materials: IMaterialQuant[],
-  price: IMaterialQuant[]
-) => {
-  let canBuy = true;
-  price.forEach((p: IMaterialQuant) => {
-    const material = materials.find((m: IMaterialQuant) => m.id === p.id);
-    if (!material)
-      throw new Error("Price of an item contains non-existant material");
-    if (p.quantity > material.quantity) {
-      canBuy = false;
-    }
-  });
-  return canBuy;
-};
-
-export const calculateResult = (created: number, resultTime: number) => {
-  let diffDate = dayjs(resultTime).diff(dayjs(created), "milliseconds");
-  return diffDate;
-};
-
-export const allowParticipation = (created: number, resultTime: number) => {
-  let diffDate = dayjs(created).diff(resultTime, "second");
-  let diffMins = Math.floor((diffDate / 60) % 60);
-  let diffHrs = Math.floor(diffDate / 3600);
-  let block = true;
-  if (diffHrs > 0) block = false;
-  if (diffMins >= 5) block = false;
-  return block;
-};
-
 export const canUpdateSpell = (
   requiredStrength: number,
   strength: number
@@ -334,19 +355,6 @@ export const canUpdateSpell = (
   return requiredStrength === strength;
 };
 
-export const findEventArena = (
-  game: IGame,
-  mode: gameMode,
-  index: number
-): [IArena, IArenaEvent] => {
-  const newArena: IArena =
-    mode === "run" ? game.server.arenaRun : game.server.arenaFight;
-  const arenaEvent: IArenaEvent =
-    mode === "run"
-      ? game.server.arenaRun.events[index]
-      : game.server.arenaFight.events[index];
-  return [newArena, arenaEvent];
-};
 
 export const findListing = (listings: ISpellListing[], listingId: number) => {
   const listing = listings.find(

@@ -2,14 +2,24 @@ import { Database } from "sqlite";
 import { detectWinners, splitPool } from "../cronjobs";
 import { basePlayer } from "../storage/testDB";
 import { testLevel } from "../storage/testDBLevelMaps";
-import { openNextLevel, rewardPlayer } from "./actions";
+import {
+  claimPlayerReward,
+  completeClaim,
+  openNextLevel,
+  removeMaterials,
+  rewardPlayer,
+  updateArenaResults,
+  updateRewardPool,
+} from "./actions";
 import {
   readAdventuresData,
   readWeaponsData,
   readMaterialsData,
 } from "./combiners";
 import {
+  calculateResult,
   energyPriceForStory,
+  findEventArena,
   findPlayer,
   generateArenaRandom,
   replacePlayer,
@@ -19,7 +29,10 @@ import {
 import {
   currentState,
   IAdventure,
+  IArenaEndEvent,
   IArenaEvent,
+  IArenaStartEvent,
+  IClaimRewardEvent,
   ICreatePlayerEvent,
   ICurrentState,
   IGame,
@@ -73,7 +86,7 @@ export const serverArenaStart = async (
     return {
       index: n,
       stake: [
-        { id: 0, element: null, name: "Gold", quantity: 25 * (n + 1) },
+        { id: 1, name: "gold", quantity: 25 * (n + 1) },
         { ...randResource, quantity: 5 * (n + 1) },
       ],
       level: testLevel,
@@ -88,7 +101,7 @@ export const serverArenaStart = async (
     return {
       index: n,
       stake: [
-        { id: 0, element: null, name: "Gold", quantity: 25 * (n + 1) },
+        { id: 0, element: null, name: "gold", quantity: 25 * (n + 1) },
         { ...randResource, quantity: 5 * (n + 1) },
       ],
       level: testLevel,
@@ -179,8 +192,100 @@ export const winLevel = async (
   return { ...game, players: replacePlayer(game.players, newPlayer) };
 };
 
-/*
+export const claimReward = async (
+  db: Database,
+  event: IClaimRewardEvent,
+  game: IGame
+): Promise<IGame> => {
+  const player = findPlayer(game, event.playerId);
+  const newMaterials = claimPlayerReward(event, player);
+  const newClaims = completeClaim(event, player);
+  const newState = {
+    state: "WINMATERIAL" as currentState,
+    materials: newMaterials.new,
+  };
+  const newPlayer: IPlayer = {
+    ...player,
+    materials: newMaterials.all,
+    currentState: newState,
+    claims: newClaims,
+  };
+  return { ...game, players: replacePlayer(game.players, newPlayer) };
+};
 
+export const startArena = (
+  db: Database,
+  event: IArenaStartEvent,
+  game: IGame
+): IGame => {
+  const player = findPlayer(game, event.playerId);
+  const [newArena, arenaEvent] = findEventArena(game, event.mode, event.index);
+  const newMaterials = removeMaterials(player.materials, arenaEvent.stake);
+  const newArenaEvent = updateRewardPool(arenaEvent, arenaEvent.stake);
+  const newState = {
+    state: "ARENAPLAY" as currentState,
+    arena: { mode: event.mode, index: event.index, startTime: event.created },
+  };
+  const newPlayer = {
+    ...player,
+    materials: newMaterials,
+    currentState: newState,
+  };
+  newArena.events[event.index] = newArenaEvent;
+  const newServer: IServer = {
+    arenaFight: event.mode === "fight" ? newArena : game.server.arenaFight,
+    arenaRun: event.mode === "run" ? newArena : game.server.arenaRun,
+    arenaFightHistory: game.server.arenaFightHistory,
+    arenaRunHistory: game.server.arenaRunHistory,
+  };
+  return {
+    players: replacePlayer(game.players, newPlayer),
+    server: newServer,
+  };
+};
+
+export const endArena = (
+  db: Database,
+  event: IArenaEndEvent,
+  game: IGame
+): IGame => {
+  const player = findPlayer(game, event.playerId);
+  if (!player.currentState.arena?.startTime) {
+    throw new Error("Can't end arena event withouth the starting time");
+  }
+  const [newArena, arenaEvent] = findEventArena(game, event.mode, event.index);
+  const resultTime = calculateResult(
+    player.currentState.arena?.startTime,
+    event.created
+  );
+  const newArenaEvent = updateArenaResults(arenaEvent, resultTime, player);
+  const newState: ICurrentState = {
+    state: "ARENAEND" as currentState,
+    arena: undefined,
+    arenaResult: {
+      results: newArenaEvent.results,
+      result: resultTime,
+    },
+  };
+  newArena.events[event.index] = newArenaEvent;
+  const newPlayer = {
+    ...player,
+    currentState: newState,
+  };
+  newArena.events[event.index] = newArenaEvent;
+  const newServer: IServer = {
+    arenaFight: event.mode === "fight" ? newArena : game.server.arenaFight,
+    arenaRun: event.mode === "run" ? newArena : game.server.arenaRun,
+    arenaFightHistory: game.server.arenaFightHistory,
+    arenaRunHistory: game.server.arenaRunHistory,
+  };
+  return {
+    players: replacePlayer(game.players, newPlayer),
+    server: newServer,
+  };
+};
+
+/*
 export const startEndless = (event: IStartEndlessEvent, game: IGame): IGame => {
   const player = findPlayer(game, event.playerId);
   let energyPrice = findEnergyPrice(event.elementId, event.mode);
@@ -411,69 +516,4 @@ export const buySpell = (event: IBuySpellEvent, game: IGame): IGame => {
   return { server: newServer, players: replacePlayer(game.players, newPlayer) };
 };
 
-export const startArena = (event: IArenaStartEvent, game: IGame): IGame => {
-  const player = findPlayer(game, event.playerId);
-  const [newArena, arenaEvent] = findEventArena(game, event.mode, event.index);
-  const newMaterials = removeMaterials(player.materials, arenaEvent.stake);
-  const newArenaEvent = updateRewardPool(arenaEvent, arenaEvent.stake);
-  const newState = {
-    state: "ARENAPLAY" as currentState,
-    arena: { mode: event.mode, index: event.index, startTime: event.created },
-  };
-  const newPlayer = {
-    ...player,
-    materials: newMaterials,
-    currentState: newState,
-  };
-  newArena.events[event.index] = newArenaEvent;
-  const newServer: IServer = {
-    arenaFight: event.mode === "fight" ? newArena : game.server.arenaFight,
-    arenaRun: event.mode === "run" ? newArena : game.server.arenaRun,
-    arenaFightHistory: game.server.arenaFightHistory,
-    arenaRunHistory: game.server.arenaRunHistory,
-    listings: game.server.listings,
-  };
-  return {
-    players: replacePlayer(game.players, newPlayer),
-    server: newServer,
-  };
-};
-
-export const endArena = (event: IArenaEndEvent, game: IGame): IGame => {
-  const player = findPlayer(game, event.playerId);
-  if (!player.currentState.arena?.startTime) {
-    throw new Error("Can't end arena event withouth the starting time");
-  }
-  const [newArena, arenaEvent] = findEventArena(game, event.mode, event.index);
-  const resultTime = calculateResult(
-    player.currentState.arena?.startTime,
-    event.created
-  );
-  const newArenaEvent = updateArenaResults(arenaEvent, resultTime, player);
-  const newState: ICurrentState = {
-    state: "ARENAEND" as currentState,
-    arena: undefined,
-    arenaResult: {
-      results: newArenaEvent.results,
-      result: resultTime,
-    },
-  };
-  newArena.events[event.index] = newArenaEvent;
-  const newPlayer = {
-    ...player,
-    currentState: newState,
-  };
-  newArena.events[event.index] = newArenaEvent;
-  const newServer: IServer = {
-    arenaFight: event.mode === "fight" ? newArena : game.server.arenaFight,
-    arenaRun: event.mode === "run" ? newArena : game.server.arenaRun,
-    arenaFightHistory: game.server.arenaFightHistory,
-    arenaRunHistory: game.server.arenaRunHistory,
-    listings: game.server.listings,
-  };
-  return {
-    players: replacePlayer(game.players, newPlayer),
-    server: newServer,
-  };
-};
 */

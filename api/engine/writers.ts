@@ -1,7 +1,16 @@
 import {
+  IArenaEndData,
+  IArenaEndEvent,
+  IArenaStartData,
+  IArenaStartEvent,
+  IClaimRewardData,
+  IClaimRewardEvent,
   ICreatePlayerData,
   ICreatePlayerEvent,
   IGame,
+  IServerArenaEndEvent,
+  IServerArenaStartData,
+  IServerArenaStartEvent,
   IStartLevelData,
   IStartLevelEvent,
   IWinLevelData,
@@ -10,11 +19,19 @@ import {
 import { Database } from "sqlite";
 import { readCreatePlayerEventsData } from "../engine/combiners";
 import {
+  allowParticipation,
   enoughEnergyToPlay,
+  enoughToPay,
   findPlayer,
   findStartLevel,
+  foundArenaStartEvent,
 } from "../engine/helpers";
 import {
+  writeArenaEnd,
+  writeArenaEndEvent,
+  writeArenaStart,
+  writeArenaStartEvent,
+  writeClaimRewardEvent,
   writeCreatePlayer,
   writeStartLevelEvent,
   writeWinLevelEvent,
@@ -109,6 +126,123 @@ export const winLevelEvent = async (
     };
   } else {
     throw new Error("Can't generate winLevelEvent");
+  }
+};
+
+export const claimRewardEvent = async (
+  db: Database,
+  game: IGame,
+  event: IClaimRewardData
+): Promise<IClaimRewardEvent> => {
+  const player = findPlayer(game, event.playerId);
+  if (player) {
+    const claimRewardId = await writeClaimRewardEvent(
+      event.playerId,
+      event.data.claimId,
+      event.created,
+      db
+    );
+    return {
+      playerId: event.playerId,
+      eventId: claimRewardId,
+      created: event.created,
+      type: "CLAIMREWARD",
+      claimId: event.data.claimId,
+    };
+  } else {
+    throw new Error("Can't generate claimRewardEvent");
+  }
+};
+
+export const serverStartArena = async (
+  db: Database,
+  dates: IServerArenaStartData
+): Promise<IServerArenaStartEvent> => {
+  const nextArenaStartId = await writeArenaStart(
+    dates.startDate,
+    dates.endDate,
+    dates.created,
+    db
+  );
+  return {
+    eventId: nextArenaStartId,
+    type: "SERVERARENASTART",
+    start: dates.startDate,
+    created: dates.created,
+    end: dates.endDate,
+  };
+};
+
+export const serverEndArena = async (
+  db: Database,
+  created: number
+): Promise<IServerArenaEndEvent> => {
+  const nextArenaEndId = await writeArenaEnd(created, db);
+  return {
+    eventId: nextArenaEndId,
+    type: "SERVERARENAEND",
+    created: created,
+  };
+};
+
+export const startArenaEvent = async (
+  db: Database,
+  game: IGame,
+  event: IArenaStartData
+): Promise<IArenaStartEvent> => {
+  const arenaEvent =
+    event.data.mode === "run" ? game.server.arenaRun : game.server.arenaFight;
+  const player = findPlayer(game, event.playerId);
+  if (
+    enoughToPay(player.materials, arenaEvent.events[event.data.index].stake) &&
+    allowParticipation(event.created, arenaEvent.resultTime)
+  ) {
+    const nextArenaStartEventId = await writeArenaStartEvent(
+      event.playerId,
+      event.data.mode,
+      event.data.index,
+      event.created,
+      db
+    );
+
+    return {
+      playerId: event.playerId,
+      eventId: nextArenaStartEventId,
+      created: event.created,
+      type: "ARENASTART",
+      mode: event.data.mode,
+      index: event.data.index,
+    };
+  } else {
+    throw new Error("Can't generate startArenaEvent");
+  }
+};
+
+export const endArenaEvent = async (
+  db: Database,
+  game: IGame,
+  event: IArenaEndData
+): Promise<IArenaEndEvent> => {
+  const player = findPlayer(game, event.playerId);
+  if (foundArenaStartEvent(player.currentState, event.data)) {
+    const nextArenaStartEventId = await writeArenaEndEvent(
+      event.playerId,
+      event.data.mode,
+      event.data.index,
+      event.created,
+      db
+    );
+
+    return {
+      playerId: event.playerId,
+      eventId: nextArenaStartEventId,
+      created: event.created,
+      type: "ARENAEND",
+      mode: event.data.mode,
+      index: event.data.index,
+    };
+  } else {
+    throw new Error("Can't generate endArenaEvent");
   }
 };
 
@@ -404,122 +538,5 @@ export const buySpellEvent = (
   } else {
     throw new Error("Can't generate listSpellEvent");
   }
-};
-
-
-export const startArenaEvent = (
-  game: IGame,
-  event: IArenaStartData
-): IArenaStartEvent => {
-  const arenaEvent =
-    event.data.mode === "run" ? game.server.arenaRun : game.server.arenaFight;
-  const player = findPlayer(game, event.playerId);
-  if (
-    enoughToPay(player.materials, arenaEvent.events[event.data.index].stake) &&
-    allowParticipation(event.created, arenaEvent.resultTime)
-  ) {
-    const nextArenaStartEventId = getNextEventId();
-    const newEvent: IEventDB = {
-      eventId: nextArenaStartEventId,
-      type: "ARENASTART" as eventType,
-      created: new Date().valueOf(),
-    };
-    const newArenaStartEvent: IArenaStartDB = {
-      eventId: nextArenaStartEventId,
-      playerId: event.playerId,
-      mode: event.data.mode,
-      index: event.data.index,
-    };
-    allGameEvents.push(newEvent);
-    startArenaEvents.push(newArenaStartEvent);
-
-    return {
-      playerId: event.playerId,
-      eventId: newEvent.eventId,
-      created: newEvent.created,
-      type: "ARENASTART",
-      mode: newArenaStartEvent.mode,
-      index: newArenaStartEvent.index,
-    };
-  } else {
-    throw new Error("Can't generate startArenaEvent");
-  }
-};
-
-export const endArenaEvent = (
-  game: IGame,
-  event: IArenaEndData
-): IArenaEndEvent => {
-  const player = findPlayer(game, event.playerId);
-  if (foundArenaStartEvent(player.currentState, event.data)) {
-    const nextArenaEndEventId = getNextEventId();
-    const newEvent: IEventDB = {
-      eventId: nextArenaEndEventId,
-      type: "ARENAEND" as eventType,
-      created: new Date().valueOf(),
-    };
-    const newArenaEndEvent: IArenaEndDB = {
-      eventId: nextArenaEndEventId,
-      playerId: event.playerId,
-      mode: event.data.mode,
-      index: event.data.index,
-    };
-    allGameEvents.push(newEvent);
-    endArenaEvents.push(newArenaEndEvent);
-
-    return {
-      playerId: event.playerId,
-      eventId: newEvent.eventId,
-      created: newEvent.created,
-      type: "ARENAEND",
-      mode: newArenaEndEvent.mode,
-      index: newArenaEndEvent.index,
-    };
-  } else {
-    throw new Error("Can't generate endArenaEvent");
-  }
-};
-
-export const serverStartArena = (
-  game: IGame,
-  dates: IServerArenaStartData
-): IServerArenaStartEvent => {
-  const nextServerStartArena = getNextEventId();
-  const now = new Date().valueOf();
-  const newEvent = {
-    playerId: null,
-    eventId: nextServerStartArena,
-    type: "SERVERARENASTART" as eventType,
-    created: now,
-  };
-  const newServerStartArenaEvent: IServerArenaStartEvent = {
-    eventId: nextServerStartArena,
-    type: "SERVERARENASTART",
-    start: dates.startDate,
-    created: now,
-    end: dates.endDate,
-  };
-  allGameEvents.push(newEvent);
-  serverArenaStartEvents.push(newServerStartArenaEvent);
-  return newServerStartArenaEvent;
-};
-
-export const serverEndArena = (game: IGame): IServerArenaEndEvent => {
-  const nextServerEndArena = getNextEventId();
-  const now = new Date().valueOf();
-  const newEvent = {
-    playerId: null,
-    eventId: nextServerEndArena,
-    type: "SERVERARENAEND" as eventType,
-    created: now,
-  };
-  const newServerEndArenaEvent: IServerArenaEndEvent = {
-    eventId: nextServerEndArena,
-    type: "SERVERARENAEND",
-    created: now,
-  };
-  allGameEvents.push(newEvent);
-  serverArenaEndEvents.push(newServerEndArenaEvent);
-  return newServerEndArenaEvent;
 };
 */

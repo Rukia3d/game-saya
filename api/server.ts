@@ -3,6 +3,9 @@ import * as writers from "./engine/writers";
 import * as engine from "./engine/engine";
 import { Database } from "sqlite";
 import {
+  IArenaEndData,
+  IArenaStartData,
+  IClaimRewardData,
   ICreatePlayerData,
   IStartLevelData,
   IWinLevelData,
@@ -67,7 +70,6 @@ const appWithDB = (db: Database) => {
 
   app.post("/api/players/:id/winLevel", async (req: any, res: any) => {
     console.log("WINLEVEL", req.params.id, req.body);
-
     const playerId = parseInt(req.params.id);
     const game = await eventsApplication(db);
     const event: IWinLevelData = {
@@ -85,6 +87,63 @@ const appWithDB = (db: Database) => {
     const player = findPlayer(game, playerId);
     res.send({ server: newGame.server, player: player });
   });
+
+  app.post("/api/players/:id/startArena", async (req: any, res: any) => {
+    console.log("ARENA START", req.body);
+    const playerId = parseInt(req.params.id);
+    const game = await eventsApplication(db);
+    const event: IArenaStartData = {
+      playerId: playerId,
+      created: new Date().valueOf(),
+      type: "ARENASTART",
+      data: {
+        mode: req.body.eventMode,
+        index: req.body.eventIndx,
+      },
+    };
+    const newEvent = writers.startArenaEvent(db, game, event);
+    const newGame = await eventsApplication(db);
+    const player = findPlayer(game, playerId);
+    res.send({ server: newGame.server, player: player });
+  });
+
+  app.post("/api/players/:id/endArena", async (req: any, res: any) => {
+    console.log("ARENA END", req.body);
+    const playerId = parseInt(req.params.id);
+    const game = await eventsApplication(db);
+    const event: IArenaEndData = {
+      playerId: playerId,
+      created: new Date().valueOf(),
+      type: "ARENAEND",
+      data: {
+        mode: req.body.eventMode,
+        index: req.body.eventIndx,
+      },
+    };
+    const newEvent = writers.endArenaEvent(db, game, event);
+    const newGame = await eventsApplication(db);
+    const player = findPlayer(game, playerId);
+    res.send({ server: newGame.server, player: player });
+  });
+
+  app.post("/api/players/:id/claim", async (req: any, res: any) => {
+    console.log("CLAIMREWARD", req.body);
+    const playerId = parseInt(req.params.id);
+    const game = await eventsApplication(db);
+    const event: IClaimRewardData = {
+      playerId: playerId,
+      created: new Date().valueOf(),
+      type: "CLAIMREWARD",
+      data: {
+        claimId: req.body.claimId,
+      },
+    };
+    const newEvent = writers.claimRewardEvent(db, game, event);
+    const newGame = await eventsApplication(db);
+    const player = findPlayer(game, playerId);
+    res.send({ server: newGame.server, player: player });
+  });
+
   /*
 app.post("/api/players/:id/openSpell", async (req: any, res: any) => {
   console.log("OPENSPELL", req.params.id, req.body);
@@ -236,44 +295,6 @@ app.post("/api/players/:id/missCheckpoint", async (req: any, res: any) => {
     },
   };
   const newEvent = writers.missCheckpointEvent(game, event);
-  const newGame = eventsApplication();
-  const player = findPlayer(game, playerId);
-  res.send({ server: newGame.server, player: player });
-});
-
-app.post("/api/players/:id/startArena", async (req: any, res: any) => {
-  console.log("ARENA START", req.body);
-  const playerId = parseInt(req.params.id);
-  const game = eventsApplication();
-  const event: IArenaStartData = {
-    playerId: playerId,
-    created: new Date().valueOf(),
-    type: "ARENASTART",
-    data: {
-      mode: req.body.eventMode,
-      index: req.body.eventIndx,
-    },
-  };
-  const newEvent = writers.startArenaEvent(game, event);
-  const newGame = eventsApplication();
-  const player = findPlayer(game, playerId);
-  res.send({ server: newGame.server, player: player });
-});
-
-app.post("/api/players/:id/endArena", async (req: any, res: any) => {
-  console.log("ARENA END", req.body);
-  const playerId = parseInt(req.params.id);
-  const game = eventsApplication();
-  const event: IArenaEndData = {
-    playerId: playerId,
-    created: new Date().valueOf(),
-    type: "ARENAEND",
-    data: {
-      mode: req.body.eventMode,
-      index: req.body.eventIndx,
-    },
-  };
-  const newEvent = writers.endArenaEvent(game, event);
   const newGame = eventsApplication();
   const player = findPlayer(game, playerId);
   res.send({ server: newGame.server, player: player });

@@ -35,22 +35,31 @@ export const applyEvent = async (
     case "WINLEVEL":
       newGame = await events.winLevel(db, event, newGame);
       break;
+    case "ARENASTART":
+      newGame = await events.startArena(db, event, newGame);
+      break;
+    case "ARENAEND":
+      newGame = await events.endArena(db, event, newGame);
+      break;
+    case "CLAIMREWARD":
+      newGame = await events.claimReward(db, event, newGame);
+      break;
     /*
-    // case "OPENSPELL":
-    //   newGame = events.openSpell(event, newGame);
-    //   break;
-    // case "UPDATESPELL":
-    //   newGame = events.updateSpell(event, newGame);
-    //   break;
-    // case "LISTSPELL":
-    //   newGame = events.listSpell(event, newGame);
-    //   break;
-    // case "DELISTSPELL":
-    //   newGame = events.delistSpell(event, newGame);
-    //   break;
-    // case "BUYSPELL":
-    //   newGame = events.buySpell(event, newGame);
-    //   break;
+    case "OPENSPELL":
+      newGame = events.openSpell(event, newGame);
+      break;
+    case "UPDATESPELL":
+      newGame = events.updateSpell(event, newGame);
+      break;
+    case "LISTSPELL":
+      newGame = events.listSpell(event, newGame);
+      break;
+    case "DELISTSPELL":
+      newGame = events.delistSpell(event, newGame);
+      break;
+    case "BUYSPELL":
+      newGame = events.buySpell(event, newGame);
+      break;
     case "STARTENDLESS":
       newGame = events.startEndless(event, newGame);
       break;
@@ -59,12 +68,6 @@ export const applyEvent = async (
       break;
     case "MISSCHECKPOINT":
       newGame = events.missCheckpoint(event, newGame);
-      break;
-    case "ARENASTART":
-      newGame = events.startArena(event, newGame);
-      break;
-    case "ARENAEND":
-      newGame = events.endArena(event, newGame);
       break;
       */
     default:

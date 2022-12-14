@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import { basePlayer, baseServer } from "./storage/testDB";
+import { Database } from "sqlite";
 import * as writers from "./engine/writers";
 import {
   IArenaResult,
@@ -46,8 +46,9 @@ export const splitPool = (
   pool: IInventoryQuant[]
 ): IArenaResultPool[] => {
   let reward: IArenaResultPool[] = [];
-  for (let i = 0; i < 3; i++) {
-    const results = groups[i];
+  const upTo = pool.length > 3 ? 3 : pool.length;
+  for (let i = 0; i < upTo; i++) {
+    const results = groups[i] || [];
     const n = results.length;
     let percent = 0.2;
     if (i === 0) percent = 0.5;
@@ -60,19 +61,11 @@ export const splitPool = (
   return reward;
 };
 
-/*
-export const startArena = () => {
+export const startArena = (db: Database) => {
   const now = new Date().valueOf();
-  const game = {
-    players: [
-      {
-        ...basePlayer,
-      },
-    ],
-    server: { ...baseServer },
-  };
-  writers.serverStartArena(game, {
+  writers.serverStartArena(db, {
     startDate: now,
+    created: now,
     endDate: now + ARENAEVENTINTERVAL,
   });
   console.log("StartArena");
@@ -80,26 +73,18 @@ export const startArena = () => {
   console.log("enddate", dayjs(now + ARENAEVENTINTERVAL).format("DD/MM/YYYY"));
 };
 
-export const endArena = () => {
+export const endArena = (db: Database) => {
   console.log("EndArena");
-  const game = {
-    players: [
-      {
-        ...basePlayer,
-      },
-    ],
-    server: { ...baseServer },
-  };
-  writers.serverEndArena(game);
+  const now = new Date().valueOf();
+  writers.serverEndArena(db, now);
 };
 
 let n = 0;
-export const run = () => {
+export const run = async (db: Database) => {
   if (n === 0) {
-    startArena();
+    await startArena(db);
   }
-  setInterval(endArena, ARENAEVENTINTERVAL);
-  setInterval(startArena, ARENAEVENTINTERVAL);
+  setInterval(async () => await endArena(db), ARENAEVENTINTERVAL);
+  setInterval(async () => await startArena(db), ARENAEVENTINTERVAL);
   n++;
 };
-*/

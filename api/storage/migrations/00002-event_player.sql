@@ -36,6 +36,39 @@ CREATE TABLE event_player_winlevel(
                 ON DELETE CASCADE
                 ON UPDATE NO ACTION);
 
+CREATE TABLE event_player_startArena(
+        eventId INTEGER PRIMARY KEY AUTOINCREMENT,
+        playerId INTEGER,
+        mode INTEGER,
+        id INTEGER,         
+        UNIQUE (eventId),
+        FOREIGN KEY (eventId)
+            REFERENCES event (id)
+                ON DELETE CASCADE
+                ON UPDATE NO ACTION);
+
+CREATE TABLE event_player_endArena(
+        eventId INTEGER PRIMARY KEY AUTOINCREMENT,
+        playerId INTEGER,
+        mode INTEGER,
+        id INTEGER,         
+        UNIQUE (eventId),
+        FOREIGN KEY (eventId)
+            REFERENCES event (id)
+                ON DELETE CASCADE
+                ON UPDATE NO ACTION);
+
+CREATE TABLE event_player_claimreward(
+        eventId INTEGER PRIMARY KEY AUTOINCREMENT,
+        playerId INTEGER,
+        claimId INTEGER,         
+        UNIQUE (eventId),
+        FOREIGN KEY (eventId)
+            REFERENCES event (id)
+                ON DELETE CASCADE
+                ON UPDATE NO ACTION);
+
+
 INSERT INTO event_player_createplayer (eventId, playerId, playerName) VALUES
     ('0', '0', 'Test Player');
 

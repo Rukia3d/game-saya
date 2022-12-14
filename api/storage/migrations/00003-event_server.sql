@@ -17,7 +17,9 @@ CREATE TABLE event_server_arenastart(
 
 CREATE TABLE event_server_arenaend(
     eventId INTEGER PRIMARY KEY AUTOINCREMENT,
-    created DATETIME,       
+    created DATETIME,
+    updated DATETIME,
+    deleted DATETIME,        
     UNIQUE (eventId),
     FOREIGN KEY (eventId)
         REFERENCES event (id)

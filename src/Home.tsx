@@ -10,7 +10,7 @@ export const Items = () => {
     throw new Error("No data in context");
   }
   const items: mainScreenState[] = [
-    { screen: "weapons" },
+    { screen: "weapons", weapon: null, material: null },
     { screen: "inventory" },
     { screen: "goals" },
     { screen: "collections" },
