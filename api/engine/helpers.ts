@@ -24,6 +24,12 @@ import {
   INDEXOFENERGY,
   AWARDABLEARENAINDEXSTART,
   AWARDABLEARENAINDEXEND,
+  INDEXOFGOLD,
+  NAMEOFTOKEN1,
+  INDEXOFTOKEN1,
+  INDEXOFTOKEN2,
+  NAMEOFTOKEN2,
+  NAMEOFGOLD,
 } from "../config";
 dayjs.extend(relativeTime);
 
@@ -66,6 +72,29 @@ export const generateArenaRandom = (
     res = Math.round(seed() * upTo);
   }
   return res;
+};
+
+export const generateStake = (
+  index: number,
+  randResource: IInventoryQuant
+): IInventoryQuant[] => {
+  const base = [
+    { id: INDEXOFGOLD, name: NAMEOFGOLD, quantity: 25 * (index + 1) },
+    { ...randResource, quantity: 5 * (index + 1) },
+  ];
+  if (index === 1)
+    base.push({
+      id: INDEXOFTOKEN1,
+      name: NAMEOFTOKEN1,
+      quantity: 3 * (index + 1),
+    });
+  if (index === 2)
+    base.push({
+      id: INDEXOFTOKEN2,
+      name: NAMEOFTOKEN2,
+      quantity: 3 * (index + 1),
+    });
+  return base;
 };
 
 export const rewardArenaPlayer = (
@@ -161,7 +190,9 @@ export const enoughToPay = (
   price.forEach((p: IInventoryQuant) => {
     const material = materials.find((m: IInventoryQuant) => m.id === p.id);
     if (!material)
-      throw new Error("Price of an item contains non-existant material");
+      throw new Error(
+        `Price of an item contains non-existant material ${p.id} - ${p.name}`
+      );
     if (p.quantity > material.quantity) {
       can = false;
     }

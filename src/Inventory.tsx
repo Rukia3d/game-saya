@@ -1,7 +1,6 @@
 import { useContext } from "react";
 import { IInventoryQuant } from "../api/engine/types";
 import { GameContext } from "./App";
-import { mainScreenState } from "./Main";
 import { CloseButton } from "./PopUp";
 
 export const Inventory = () => {
@@ -20,8 +19,6 @@ export const Inventory = () => {
             <div className="InventoryItemText">
               <h4>{i.name}</h4>
               Quantity: {i.quantity}
-              <br />
-              {n === 0 ? <button>Generate</button> : <div> </div>}
             </div>
           </div>
         ))}

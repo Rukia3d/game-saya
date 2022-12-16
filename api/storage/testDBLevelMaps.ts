@@ -792,21 +792,30 @@ export const triggersMap: {
   y: number;
   triggerId: number;
 }[] = [
-  { y: 0, triggerId: 0 },
-  { y: 80, triggerId: 1 },
-  { y: 100, triggerId: 2 },
-]
-  .map((trigger) =>
-    [0, 1, 2, 3, 4].map((n) => {
-      const s = mapToScreen({ x: n, y: trigger.y }, testCells);
-      return {
-        trigger: { type: "trigger" as const },
-        triggerId: trigger.triggerId,
-        ...s,
-      };
-    })
-  )
-  .flat();
+  { x: 0, y: 0, triggerId: 0 },
+  { x: 1, y: 0, triggerId: 0 },
+  { x: 2, y: 0, triggerId: 0 },
+  { x: 3, y: 0, triggerId: 0 },
+  { x: 4, y: 0, triggerId: 0 },
+  { x: 0, y: 80, triggerId: 1 },
+  { x: 1, y: 80, triggerId: 1 },
+  { x: 2, y: 80, triggerId: 1 },
+  { x: 3, y: 80, triggerId: 1 },
+  { x: 4, y: 80, triggerId: 1 },
+  { x: 0, y: 100, triggerId: 2 },
+  { x: 1, y: 100, triggerId: 2 },
+  { x: 2, y: 100, triggerId: 2 },
+  { x: 3, y: 100, triggerId: 2 },
+  { x: 4, y: 100, triggerId: 2 },
+].map((trigger) => {
+  const s = mapToScreen({ x: trigger.x, y: trigger.y }, testCells);
+  return {
+    trigger: { type: "trigger" as const },
+    triggerId: trigger.triggerId,
+    ...s,
+  };
+});
+
 export const enemiesMap: { enemy: IEnemyCell; x: number; y: number }[] = [
   { x: 2, y: 2 },
   { x: 3, y: 5 },

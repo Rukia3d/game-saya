@@ -36,7 +36,7 @@ CREATE TABLE event_player_winlevel(
                 ON DELETE CASCADE
                 ON UPDATE NO ACTION);
 
-CREATE TABLE event_player_startArena(
+CREATE TABLE event_player_arenastart(
         eventId INTEGER PRIMARY KEY AUTOINCREMENT,
         playerId INTEGER,
         mode INTEGER,
@@ -47,7 +47,7 @@ CREATE TABLE event_player_startArena(
                 ON DELETE CASCADE
                 ON UPDATE NO ACTION);
 
-CREATE TABLE event_player_endArena(
+CREATE TABLE event_player_arenaend(
         eventId INTEGER PRIMARY KEY AUTOINCREMENT,
         playerId INTEGER,
         mode INTEGER,

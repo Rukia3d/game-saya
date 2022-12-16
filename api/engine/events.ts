@@ -22,6 +22,7 @@ import {
   findEventArena,
   findPlayer,
   generateArenaRandom,
+  generateStake,
   replacePlayer,
   rewardArenaPlayers,
   updatePlayerEnergy,
@@ -36,6 +37,7 @@ import {
   ICreatePlayerEvent,
   ICurrentState,
   IGame,
+  IInventoryQuant,
   IPlayer,
   IServer,
   IServerArenaEndEvent,
@@ -55,7 +57,9 @@ export const createPlayer = async (
   const allWeapons: IWeapon[] = await readWeaponsData(db);
   allWeapons[0].materials[0].state = "open";
   const allMaterials = await readMaterialsData(db);
-  allMaterials[0].quantity = 50;
+  allMaterials.map((m: IInventoryQuant) => {
+    return { ...m, quantity: 50 };
+  });
   const newPlayer: IPlayer = {
     ...basePlayer,
     id: event.playerId,
@@ -83,12 +87,10 @@ export const serverArenaStart = async (
   const eventsRun: IArenaEvent[] = [0, 1, 2].map((n: number) => {
     const reward = generateArenaRandom(event, "run", allMaterials.length, n);
     const randResource = allMaterials[reward];
+    const stake = generateStake(n, randResource);
     return {
       index: n,
-      stake: [
-        { id: 1, name: "gold", quantity: 25 * (n + 1) },
-        { ...randResource, quantity: 5 * (n + 1) },
-      ],
+      stake: stake,
       level: testLevel,
       rewardPool: [],
       results: [],
@@ -98,12 +100,10 @@ export const serverArenaStart = async (
   const eventsFight: IArenaEvent[] = [0, 1, 2].map((n: number) => {
     const reward = generateArenaRandom(event, "fight", allMaterials.length, n);
     const randResource = allMaterials[reward];
+    const stake = generateStake(n, randResource);
     return {
       index: n,
-      stake: [
-        { id: 0, element: null, name: "gold", quantity: 25 * (n + 1) },
-        { ...randResource, quantity: 5 * (n + 1) },
-      ],
+      stake: stake,
       level: testLevel,
       rewardPool: [],
       results: [],

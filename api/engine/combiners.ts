@@ -1,4 +1,9 @@
 import { Database } from "sqlite";
+import {
+  AWARDABLEARENAINDEXEND,
+  AWARDABLEARENAINDEXSTART,
+  INDEXOFJADE,
+} from "../config";
 import { ILevel } from "../levelgen";
 import {
   ICharacterDB,
@@ -198,9 +203,11 @@ export const readWeaponsData = async (db: Database): Promise<IWeapon[]> => {
     return {
       id: w.id,
       name: w.name,
-      materials: inventory.slice(4).map((i: IInventoryDB) => {
-        return { ...i, charge: 100, maxCharge: 100, state: "closed" };
-      }),
+      materials: inventory
+        .slice(AWARDABLEARENAINDEXSTART, AWARDABLEARENAINDEXEND + 1)
+        .map((i: IInventoryDB) => {
+          return { ...i, charge: 100, maxCharge: 100, state: "closed" };
+        }),
     };
   });
   return weaponsElement;

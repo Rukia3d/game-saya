@@ -58,25 +58,31 @@
     height: 100%;
     width: 100%;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+    flex-wrap: wrap;
 
     .Weapon {
-      flex-grow: 1;
       align-items: stretch;
       border: 1px solid black;
       max-height: 15em;
+      background-color: #b92999;
+      height: 100%;
+      width: 50%;
 
       .WeaponElements {
         display: flex;
         flex-direction: column;
-        margin-top: 3em;
 
-        .Open {
+        .Full {
           background-color: turquoise;
         }
 
-        .Charge {
+        .Charged {
           background-color: yellow;
+        }
+
+        .Drained {
+          background-color: red;
         }
 
         .Closed {
@@ -84,14 +90,6 @@
         }
       }
     }
-  }
-
-  .Weapon {
-    background-color: #b92999;
-    height: 100%;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
   }
 }
 

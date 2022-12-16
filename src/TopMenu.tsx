@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+import { IInventoryQuant } from "../api/engine/types";
 import { GameContext } from "./App";
 
 export const TopMenu = () => {
@@ -9,11 +10,9 @@ export const TopMenu = () => {
 
   return (
     <div className="TopMenu" data-testid="top-menu">
-      {context.player.materials.map((m: any, n: number) => (
+      {context.player.materials.map((m: IInventoryQuant, n: number) => (
         <div className="Material" key={n}>
-          {m[0]}
-          <br />
-          {m[1]}
+          {m.name.substring(0, 4)} {m.quantity}
         </div>
       ))}
     </div>

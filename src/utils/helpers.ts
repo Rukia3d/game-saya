@@ -30,7 +30,9 @@ export const enoughToPay = (
   price.forEach((p: IInventoryQuant) => {
     const material = materials.find((m: IInventoryQuant) => m.id === p.id);
     if (!material) {
-      throw new Error("Price of an item contains non-existant material");
+      throw new Error(
+        `Price of an item contains non-existant material ${p.id} - ${p.name}`
+      );
     }
     if (p.quantity > material.quantity) {
       canBuy = false;

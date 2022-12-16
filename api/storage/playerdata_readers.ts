@@ -42,6 +42,22 @@ export type IEventServerArenaEndDB = {
   created: number;
 };
 
+export type IEventArenaStartDB = {
+  eventId: number;
+  playerId: number;
+  created: number;
+  mode: string;
+  id: number;
+};
+
+export type IEventArenaEndDB = {
+  eventId: number;
+  playerId: number;
+  created: number;
+  mode: string;
+  id: number;
+};
+
 export const readGameEvents = async (db: Database): Promise<IEventDB[]> => {
   const events: IEventDB[] = [];
   const sql = `SELECT id as eventId, type, created from event WHERE deleted is NULL`;
@@ -86,6 +102,22 @@ export const readServerEndArena = async (
   const events: IEventServerArenaEndDB[] = [];
   const sql = `SELECT * from event_server_arenaend`;
   return readAllLnes(events, sql, db) as unknown as IEventServerArenaEndDB[];
+};
+
+export const readStartArena = async (
+  db: Database
+): Promise<IEventArenaStartDB[]> => {
+  const events: IEventArenaStartDB[] = [];
+  const sql = `SELECT * from event_player_arenastart`;
+  return readAllLnes(events, sql, db) as unknown as IEventArenaStartDB[];
+};
+
+export const readEndArena = async (
+  db: Database
+): Promise<IEventArenaEndDB[]> => {
+  const events: IEventArenaEndDB[] = [];
+  const sql = `SELECT * from event_player_arenaend`;
+  return readAllLnes(events, sql, db) as unknown as IEventArenaEndDB[];
 };
 
 /*

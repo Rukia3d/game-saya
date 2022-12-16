@@ -1,9 +1,17 @@
 import React, { useContext } from "react";
 import "./Main.scss";
 import { GameContext } from "./App";
-import { IWeapon } from "../api/engine/types";
+import { IWeapon, IWeaponMaterial } from "../api/engine/types";
 import { TopMenu } from "./TopMenu";
 import { CloseButton, PopUp } from "./PopUp";
+
+const materialState = (m: IWeaponMaterial): string => {
+  if (m.state == "closed") return "Closed";
+  if (m.charge < m.maxCharge * 0.3) return "Drained";
+  if (m.charge > m.maxCharge * 0.7) return "Full";
+  return "Charged";
+};
+
 const Weapon = ({ weapon }: { weapon: IWeapon }) => {
   return (
     <div className="Weapon" data-testid="weapon-popup">
@@ -15,23 +23,16 @@ const Weapon = ({ weapon }: { weapon: IWeapon }) => {
 
 export const Weapons = () => {
   const context = useContext(GameContext);
-  if (
-    !context ||
-    !context.player ||
-    context.screen.screen !== "weapons" ||
-    !context.screen.weapon
-  ) {
+  if (!context || !context.player || context.screen.screen !== "weapons") {
     throw new Error("No data in context");
   }
 
-  const weapon = context.screen.weapon;
-
-  const selectWeapon = (w: IWeapon | null) => {
+  const selectWeapon = (w: IWeapon, m: IWeaponMaterial) => {
     console.log("selectWeapon", w);
     context.setScreen({
       screen: "weapons",
-      weapon: weapon,
-      material: null,
+      weapon: w,
+      material: m,
     });
   };
 
@@ -49,7 +50,7 @@ export const Weapons = () => {
       <TopMenu />
       {context.screen.weapon ? (
         <PopUp close={closeWeapon}>
-          <Weapon weapon={weapon} />
+          <Weapon weapon={context.screen.weapon} />
         </PopUp>
       ) : (
         <>
@@ -57,13 +58,19 @@ export const Weapons = () => {
           <CloseButton close={() => context.setScreen({ screen: "main" })} />
           <div className="Weapons" data-testid="weapons-list">
             {context.player.weapons.map((w: IWeapon, n: number) => (
-              <div
-                className="Weapon"
-                key={n}
-                onClick={() => selectWeapon(w)}
-                data-testid="weapon-selection"
-              >
+              <div className="Weapon" key={n}>
                 <div>{w.name}</div>
+                <div className="WeaponElements">
+                  {w.materials.map((m: IWeaponMaterial) => (
+                    <div
+                      onClick={() => selectWeapon(w, m)}
+                      data-testid="weapon-selection"
+                      className={`${materialState(m)}`}
+                    >
+                      {m.name}
+                    </div>
+                  ))}
+                </div>
               </div>
             ))}
           </div>

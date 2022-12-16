@@ -6,8 +6,13 @@ import {
   IWinLevelEvent,
   IServerArenaStartEvent,
   IServerArenaEndEvent,
+  IArenaStartEvent,
+  arenaMode,
+  IArenaEndEvent,
 } from "./types";
 import {
+  IEventArenaEndDB,
+  IEventArenaStartDB,
   IEventCreatePlayerDB,
   IEventDB,
   IEventServerArenaEndDB,
@@ -15,9 +20,11 @@ import {
   IEventStartLevelDB,
   IEventWinLevelDB,
   readCreatePlayerEvents,
+  readEndArena,
   readGameEvents,
   readServerEndArena,
   readServerStartArena,
+  readStartArena,
   readStartLevelEvents,
   readWinLevelEvents,
 } from "../storage/playerdata_readers";
@@ -43,6 +50,12 @@ export const playerEvents = async (db: Database): Promise<IGameEvent[]> => {
       case "SERVERARENAEND":
         newEvents.push(await serverArenaEndEvent(db, e));
         break;
+      case "ARENASTART":
+        newEvents.push(await startArenaEvent(db, e));
+        break;
+      case "ARENAEND":
+        newEvents.push(await endArenaEvent(db, e));
+        break;
       /*
       // case "OPENSPELL":
       //   newEvents.push(openSpellEvent(e));
@@ -67,12 +80,6 @@ export const playerEvents = async (db: Database): Promise<IGameEvent[]> => {
         break;
       case "MISSCHECKPOINT":
         newEvents.push(missCheckpointEvent(e));
-        break;
-      case "ARENASTART":
-        newEvents.push(startArenaEvent(e));
-        break;
-      case "ARENAEND":
-        newEvents.push(endArenaEvent(e));
         break;
         */
       default:
@@ -182,6 +189,49 @@ export const serverArenaEndEvent = async (
     eventId: endArena.eventId,
     type: "SERVERARENAEND",
     created: event.created,
+  };
+};
+
+export const startArenaEvent = async (
+  db: Database,
+  event: IEventDB
+): Promise<IArenaStartEvent> => {
+  const allPlayerEvents = await readStartArena(db);
+  const startArena = allPlayerEvents.find(
+    (p: IEventArenaStartDB) => p.eventId === event.eventId
+  );
+  if (!startArena) {
+    throw new Error("No start level event found");
+  }
+  return {
+    playerId: startArena.playerId,
+    eventId: event.eventId,
+    created: event.created,
+    type: "ARENASTART",
+    index: startArena.id,
+    mode: startArena.mode as arenaMode,
+  };
+};
+
+export const endArenaEvent = async (
+  db: Database,
+  event: IEventDB
+): Promise<IArenaEndEvent> => {
+  const allPlayerEvents = await readEndArena(db);
+  const startArena = allPlayerEvents.find(
+    (p: IEventArenaEndDB) => p.eventId === event.eventId
+  );
+  if (!startArena) {
+    throw new Error("No end level event found");
+  }
+
+  return {
+    playerId: startArena.playerId,
+    eventId: event.eventId,
+    created: event.created,
+    type: "ARENAEND",
+    index: startArena.id,
+    mode: startArena.mode as arenaMode,
   };
 };
 
@@ -325,35 +375,4 @@ export const missCheckpointEvent = (event: IEventDB): IMissCheckpointEvent => {
   };
 };
 
-export const startArenaEvent = (event: IEventDB): IArenaStartEvent => {
-  const startArena = ensure(
-    allStartArena().find((e: IArenaStartDB) => e.eventId == event.eventId),
-    "No player start arena event"
-  );
-
-  return {
-    playerId: startArena.playerId,
-    eventId: event.eventId,
-    created: event.created,
-    type: "ARENASTART",
-    index: startArena.index,
-    mode: startArena.mode,
-  };
-};
-
-export const endArenaEvent = (event: IEventDB): IArenaEndEvent => {
-  const startArena = ensure(
-    allEndArena().find((e: IArenaEndDB) => e.eventId == event.eventId),
-    "No player end arena event"
-  );
-
-  return {
-    playerId: startArena.playerId,
-    eventId: event.eventId,
-    created: event.created,
-    type: "ARENAEND",
-    index: startArena.index,
-    mode: startArena.mode,
-  };
-};
 */
