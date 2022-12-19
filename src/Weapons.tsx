@@ -12,7 +12,18 @@ const materialState = (m: IWeaponMaterial): string => {
   return "Charged";
 };
 
-const Weapon = ({ weapon }: { weapon: IWeapon }) => {
+const Weapon = () => {
+  const context = useContext(GameContext);
+  if (
+    !context ||
+    !context.player ||
+    context.screen.screen !== "weapons" ||
+    context.screen.weaponId == null
+  ) {
+    throw new Error("No data in context");
+  }
+  const weapon = context.player.weapons[context.screen.weaponId];
+
   return (
     <div className="Weapon" data-testid="weapon-popup">
       <CloseButton close={() => {}} />
@@ -31,8 +42,8 @@ export const Weapons = () => {
     console.log("selectWeapon", w);
     context.setScreen({
       screen: "weapons",
-      weapon: w,
-      material: m,
+      weaponId: w.id,
+      materialId: m.id,
     });
   };
 
@@ -40,17 +51,17 @@ export const Weapons = () => {
     console.log("closeWeapon");
     context.setScreen({
       screen: "weapons",
-      weapon: null,
-      material: null,
+      weaponId: null,
+      materialId: null,
     });
   };
 
   return (
     <div className="WeaponsContainer" data-testid="weapons-screen">
       <TopMenu />
-      {context.screen.weapon ? (
+      {context.screen.weaponId !== null ? (
         <PopUp close={closeWeapon}>
-          <Weapon weapon={context.screen.weapon} />
+          <Weapon />
         </PopUp>
       ) : (
         <>

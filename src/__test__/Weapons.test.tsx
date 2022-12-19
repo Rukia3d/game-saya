@@ -11,8 +11,8 @@ const context: GameContextType = {
   mutate: jest.fn(),
   screen: {
     screen: "weapons",
-    weapon: testPlayer.weapons[0],
-    material: null,
+    weaponId: 0,
+    materialId: null,
   },
   setScreen: jest.fn(),
 };

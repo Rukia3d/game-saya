@@ -24,11 +24,15 @@ const Chapter = ({ chapter }: { chapter: IChapter }) => {
     !context ||
     !context.player ||
     context.screen.screen !== "adventure" ||
-    !context.screen.adventure
+    context.screen.adventureId == null ||
+    context.screen.storyId == null
   ) {
     throw new Error("No data in context");
   }
-  const adventure = context.screen.adventure;
+  const adventure: IAdventure =
+    context.player.adventures[context.screen.adventureId];
+  const story: IStory = adventure.stories[context.screen.storyId];
+
   const canPlay =
     context.player.materials[INDEXOFENERGY].quantity >= chapter.energy;
 
@@ -39,8 +43,12 @@ const Chapter = ({ chapter }: { chapter: IChapter }) => {
       storyId: chapter.storyId,
       chapterId: chapter.id,
     });
-
-    context.setScreen({ screen: "game", game: chapter });
+    context.setScreen({
+      screen: "game",
+      adventureId: adventure.id,
+      storyId: story.id,
+      gameId: chapter.id,
+    });
     await context.mutate();
   };
 
@@ -69,7 +77,20 @@ const Chapter = ({ chapter }: { chapter: IChapter }) => {
   );
 };
 
-const Story = ({ story }: { story: IStory }) => {
+const Story = () => {
+  const context = useContext(GameContext);
+  if (
+    !context ||
+    !context.player ||
+    context.screen.screen !== "adventure" ||
+    context.screen.adventureId == null ||
+    context.screen.storyId == null
+  ) {
+    throw new Error("No data in context");
+  }
+  const adventure = context.player.adventures[context.screen.adventureId];
+  const story = adventure.stories[context.screen.storyId];
+  console.log("story", story);
   return (
     <div className="Story">
       {story.name}
@@ -89,18 +110,18 @@ export const Adventure = () => {
     !context ||
     !context.player ||
     context.screen.screen !== "adventure" ||
-    !context.screen.adventure
+    context.screen.adventureId == null
   ) {
     throw new Error("No data in context");
   }
-  const adventure = context.screen.adventure;
+  const adventure = context.player.adventures[context.screen.adventureId];
 
-  const selectStory = (s: IStory | null) => {
+  const selectStory = (s: IStory) => {
     console.log("selectStory", s);
     context.setScreen({
       screen: "adventure",
-      adventure: adventure,
-      story: s,
+      adventureId: adventure.id,
+      storyId: s.id,
     });
   };
 
@@ -108,17 +129,17 @@ export const Adventure = () => {
     console.log("closeStory");
     context.setScreen({
       screen: "adventure",
-      adventure: adventure,
-      story: null,
+      adventureId: adventure.id,
+      storyId: null,
     });
   };
-
+  console.log("context.screen.storyId", context.screen.storyId);
   return (
     <div className="AdventuresContainer" data-testid="adventures-screen">
       <TopMenu />
-      {context.screen.story ? (
+      {context.screen.storyId !== null ? (
         <PopUp close={closeStory}>
-          <Story story={context.screen.story} />
+          <Story />
         </PopUp>
       ) : (
         <>

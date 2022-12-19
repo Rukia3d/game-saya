@@ -26,17 +26,22 @@ import { Game } from "./Game";
 
 export type mainScreenState =
   | { screen: "main" }
-  | { screen: "game"; game: IChapter | null }
+  | {
+      screen: "game";
+      adventureId: number | null;
+      storyId: number | null;
+      gameId: number | null;
+    }
   | {
       screen: "weapons";
-      weapon: IWeapon | null;
-      material: IWeaponMaterial | null;
+      weaponId: number | null;
+      materialId: number | null;
     }
   | { screen: "inventory" }
   | { screen: "goals" }
   | { screen: "collections" }
   | { screen: "messages" }
-  | { screen: "adventure"; adventure: IAdventure | null; story: IStory | null }
+  | { screen: "adventure"; adventureId: number | null; storyId: number | null }
   | { screen: "arena" }
   | { screen: "market" }
   | { screen: "aliance" }

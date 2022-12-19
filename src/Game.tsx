@@ -81,7 +81,9 @@ export const Level = ({ gameplay }: { gameplay: Gameplay }) => {
     !context ||
     !context.player ||
     context.screen.screen !== "game" ||
-    !context.screen.game
+    context.screen.adventureId == null ||
+    context.screen.storyId == null ||
+    context.screen.gameId == null
   ) {
     throw new Error("No data in context");
   }
@@ -130,7 +132,9 @@ export const GamePlay = ({
     !context ||
     !context.player ||
     context.screen.screen !== "game" ||
-    !context.screen.game
+    context.screen.adventureId == null ||
+    context.screen.storyId == null ||
+    context.screen.gameId == null
   ) {
     throw new Error("No data in context");
   }
@@ -152,8 +156,8 @@ export const GamePlay = ({
           close={() =>
             context.setScreen({
               screen: "adventure",
-              adventure: null,
-              story: null,
+              adventureId: null,
+              storyId: null,
             })
           }
         />
@@ -173,43 +177,39 @@ export const Game = () => {
     !context ||
     !context.player ||
     context.screen.screen !== "game" ||
-    !context.screen.game
+    context.screen.adventureId == null ||
+    context.screen.storyId == null ||
+    context.screen.gameId == null
   ) {
     throw new Error("No data in context");
   }
-  const game = context.screen.game;
-  const adventures = context.player.adventures;
-  const currentAdventure = adventures[game.adventureId];
+  const adventure = context.player.adventures[context.screen.adventureId];
+  const story = adventure.stories[context.screen.storyId];
+  const game = story.chapters[context.screen.storyId];
 
   const winLevel = async () => {
     console.log("WinLevel");
     await axios.post(`/api/players/${context.player.id}/winLevel`, {
-      adventureId: game.adventureId,
-      storyId: game.storyId,
+      adventureId: adventure.id,
+      storyId: story.id,
       chapterId: game.id,
     });
 
     await context.mutate();
     //TODO doesn't load the chapters in a new state
-    const currentStory =
-      currentAdventure.stories.find((s: IStory) => s.id === game.storyId) ||
-      null;
 
     context.setScreen({
       screen: "adventure",
-      adventure: currentAdventure,
-      story: currentStory,
+      adventureId: adventure.id,
+      storyId: story.id,
     });
   };
 
   const looseLevel = () => {
-    const currentStory =
-      currentAdventure.stories.find((s: IStory) => s.id === game.storyId) ||
-      null;
     context.setScreen({
       screen: "adventure",
-      adventure: currentAdventure,
-      story: currentStory,
+      adventureId: adventure.id,
+      storyId: story.id,
     });
   };
 

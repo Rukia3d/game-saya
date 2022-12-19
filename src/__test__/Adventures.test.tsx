@@ -11,8 +11,8 @@ const context: GameContextType = {
   mutate: jest.fn(),
   screen: {
     screen: "adventure",
-    adventure: testPlayer.adventures[0],
-    story: null,
+    adventureId: 0,
+    storyId: null,
   },
   setScreen: jest.fn(),
 };

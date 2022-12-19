@@ -212,6 +212,17 @@ export const findStartLevel = (
     const chapterId = player.currentState.story.chapterId;
     const level =
       player.adventures[adventureId].stories[storyId].chapters[chapterId];
+    console.log("findStartLevel", adventure, story, chapter);
+    console.log(
+      "adventureId",
+      adventureId,
+      "storyId",
+      storyId,
+      "chapterId",
+      chapterId
+    );
+    console.log("player.currentState", player.currentState);
+    console.log("level", level);
     if (
       level &&
       adventureId === adventure &&

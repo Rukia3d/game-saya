@@ -10,7 +10,7 @@ export const Items = () => {
     throw new Error("No data in context");
   }
   const items: mainScreenState[] = [
-    { screen: "weapons", weapon: null, material: null },
+    { screen: "weapons", weaponId: null, materialId: null },
     { screen: "inventory" },
     { screen: "goals" },
     { screen: "collections" },
@@ -35,7 +35,12 @@ export const Adventures = () => {
   const adventures = context.player.adventures;
 
   const selectAdventure = (a: IAdventure) => {
-    context.setScreen({ screen: "adventure", adventure: a, story: null });
+    console.log("selectAdventure", a);
+    context.setScreen({
+      screen: "adventure",
+      adventureId: a.id,
+      storyId: null,
+    });
   };
 
   return (

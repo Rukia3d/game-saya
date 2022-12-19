@@ -1,3 +1,4 @@
+import { Console } from "console";
 import { Database } from "sqlite";
 import { detectWinners, splitPool } from "../cronjobs";
 import { basePlayer } from "../storage/testDB";
@@ -56,8 +57,8 @@ export const createPlayer = async (
   allAdventures[0].stories[0].chapters[0].state = "open";
   const allWeapons: IWeapon[] = await readWeaponsData(db);
   allWeapons[0].materials[0].state = "open";
-  const allMaterials = await readMaterialsData(db);
-  allMaterials.map((m: IInventoryQuant) => {
+  let allMaterials = await readMaterialsData(db);
+  allMaterials = allMaterials.map((m: IInventoryQuant) => {
     return { ...m, quantity: 50 };
   });
   const newPlayer: IPlayer = {
