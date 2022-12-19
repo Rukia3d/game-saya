@@ -58,9 +58,11 @@ export const createPlayer = async (
   const allWeapons: IWeapon[] = await readWeaponsData(db);
   allWeapons[0].materials[0].state = "open";
   let allMaterials = await readMaterialsData(db);
-  allMaterials = allMaterials.map((m: IInventoryQuant) => {
-    return { ...m, quantity: 50 };
-  });
+  allMaterials[0].quantity = 50;
+  // DEBUG
+  // allMaterials = allMaterials.map((m: IInventoryQuant) => {
+  //   return { ...m, quantity: 50 };
+  // });
   const newPlayer: IPlayer = {
     ...basePlayer,
     id: event.playerId,
