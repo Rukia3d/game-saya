@@ -7,8 +7,8 @@ import {
   IChapterRewardDB,
   ICharacterDB,
   IInventoryDB,
-  IStoryDB,
   IWeaponDB,
+  IChapterDB,
 } from "./gamedata_readers";
 import migrateDB from "./migrate";
 import {
@@ -29,8 +29,8 @@ type dbDataType =
   | IInventoryDB
   | IAdventureDB
   | IWeaponDB
-  | IStoryDB
   | ICharacterDB
+  | IChapterDB
   | IChapterRewardDB
   | IEventCreatePlayerDB
   | IEventStartLevelDB

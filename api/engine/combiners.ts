@@ -11,9 +11,7 @@ import {
   IWeaponDB,
   IChapterDB,
   IChapterRewardDB,
-  IStoryDB,
   readAllAdventures,
-  readAllStories,
   readAllChapters,
   readAllCharacters,
   readAllWeapons,
@@ -31,12 +29,10 @@ import { testLevel } from "../storage/testDBLevelMaps";
 import {
   ICharacter,
   IInventoryQuant,
-  IChapter,
   IStory,
   IAdventure,
   IWeapon,
   ICreatePlayerEvent,
-  levelState,
 } from "./types";
 
 const findCharForAdventure = (
@@ -79,86 +75,72 @@ const findReward = (
 
 type IRewardInitial = IInventoryQuant & { initial: boolean };
 
-type IChapterCut = {
-  id: number;
-  mode: string;
-  name: string;
-  state: levelState;
-  level: ILevel;
-  firstTimeRewards: IInventoryQuant[];
-  staticRewards: IInventoryQuant[];
-  energy: number;
-};
-
-const findChapter = (
-  dbChapters: IChapterDB[],
-  dbRewards: IChapterRewardDB[],
-  dbInventory: IInventoryDB[],
-  id: number
-): IChapterCut => {
-  const chapDb = dbChapters.find((c: IChapterDB) => c.id === id);
-  if (!chapDb) throw new Error(`Can't find a chapter with id ${id}`);
-  const rewardDb = dbRewards.filter(
-    (r: IChapterRewardDB) => r.chapterId === chapDb.id
-  );
-  if (!rewardDb) throw new Error(`Can't find rewards for chapter ${chapDb.id}`);
-  const rewards: IRewardInitial[] = rewardDb.map((a: IChapterRewardDB) => {
-    return {
-      ...findReward(dbInventory, a.inventoryId, a.quantity),
-      initial: a.initial === "true" ? true : false,
-    };
-  });
-  return {
-    id: chapDb.id,
-    mode: chapDb.mode,
-    name: chapDb.name,
-    state: "closed",
-    level: testLevel,
-    firstTimeRewards: rewards.filter((r: IRewardInitial) => r.initial),
-    staticRewards: rewards.filter((r: IRewardInitial) => !r.initial),
-    energy: chapDb.energy,
-  };
-};
-
-const findChaptersForStory = (
-  dbChapters: IChapterDB[],
-  dbRewards: IChapterRewardDB[],
-  dbInventory: IInventoryDB[],
-  adventureId: number,
-  storyId: number
-): IChapter[] => {
-  const chaptersDb = dbChapters.filter(
-    (c: IChapterDB) => c.storyId === storyId
-  );
-  return chaptersDb.map((c: IChapterDB) => {
-    return {
-      ...findChapter(dbChapters, dbRewards, dbInventory, c.id),
-      storyId: storyId,
-      adventureId: adventureId,
-    };
-  });
-};
-
+type IStoryTemType = { origId: number; chapters: IChapterDB[] };
 const findStoriesForAdventure = (
-  dbStories: IStoryDB[],
   dbChapters: IChapterDB[],
   dbRewards: IChapterRewardDB[],
   dbInventory: IInventoryDB[],
-  id: number
+  adventureId: number
 ): IStory[] => {
-  const storiesDB = dbStories.filter((s: IStoryDB) => s.adventureId === id);
-  if (!storiesDB)
-    throw new Error(`Can't find stories for adventure with id ${id}`);
-  const stories: IStory[] = storiesDB.map((s: IStoryDB) => {
-    const chapters: IChapter[] = findChaptersForStory(
-      dbChapters,
-      dbRewards,
-      dbInventory,
-      s.adventureId,
-      s.storyId
+  const chaptersDb = dbChapters.filter(
+    (s: IChapterDB) => s.adventureId === adventureId
+  );
+  if (!chaptersDb)
+    throw new Error(`Can't find stories for adventure with id ${adventureId}`);
+  const storiesTemp: IStoryTemType[] = [];
+  for (let i = 0; i < chaptersDb.length; i++) {
+    const storyTemp = storiesTemp.findIndex(
+      (t: IStoryTemType) => t.origId === chaptersDb[i].storyId
     );
-    return { name: s.name, id: s.storyId, chapters: chapters };
+    console.log("storyTemp", storyTemp);
+    console.log("storiesTemp", storiesTemp);
+    if (storyTemp === -1) {
+      storiesTemp.push({
+        origId: chaptersDb[i].storyId,
+        chapters: [{ ...chaptersDb[i] }],
+      });
+    } else {
+      storiesTemp[storyTemp].chapters.push(chaptersDb[i]);
+    }
+  }
+
+  const stories: IStory[] = storiesTemp.map((s: IStoryTemType, n: number) => {
+    return {
+      name: s.chapters[0].storyName,
+      id: n,
+      chapters: s.chapters.map((c: IChapterDB, j: number) => {
+        const rewardDb = dbRewards.filter(
+          (r: IChapterRewardDB) =>
+            r.chapterId === c.id &&
+            r.adventureId === c.adventureId &&
+            r.storyId === c.storyId
+        );
+        if (!rewardDb)
+          throw new Error(`Can't find rewards for chapter ${c.id}`);
+        const rewards: IRewardInitial[] = rewardDb.map(
+          (a: IChapterRewardDB) => {
+            return {
+              ...findReward(dbInventory, a.inventoryId, a.quantity),
+              initial: a.initial === "true" ? true : false,
+            };
+          }
+        );
+        return {
+          id: j,
+          mode: c.mode,
+          name: c.chapterName,
+          state: "closed",
+          level: testLevel,
+          firstTimeRewards: rewards.filter((r: IRewardInitial) => r.initial),
+          staticRewards: rewards.filter((r: IRewardInitial) => !r.initial),
+          energy: c.energy,
+          storyId: j,
+          adventureId: c.adventureId,
+        };
+      }),
+    };
   });
+
   return stories;
 };
 
@@ -166,7 +148,6 @@ export const readAdventuresData = async (
   db: Database
 ): Promise<IAdventure[]> => {
   const adventures = await readAllAdventures(db);
-  const stories = await readAllStories(db);
   const chapters = await readAllChapters(db);
   const characters = await readAllCharacters(db);
   const weapons = await readAllWeapons(db);
@@ -182,13 +163,7 @@ export const readAdventuresData = async (
         a.characterId
       ),
       id: a.id,
-      stories: findStoriesForAdventure(
-        stories,
-        chapters,
-        rewards,
-        inventory,
-        a.id
-      ),
+      stories: findStoriesForAdventure(chapters, rewards, inventory, a.id),
       endless: [],
       quests: [],
     };
