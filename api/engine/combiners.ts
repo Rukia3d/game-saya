@@ -4,7 +4,6 @@ import {
   AWARDABLEARENAINDEXSTART,
   INDEXOFJADE,
 } from "../config";
-import { ILevel } from "../levelgen";
 import {
   ICharacterDB,
   IInventoryDB,
@@ -33,6 +32,7 @@ import {
   IAdventure,
   IWeapon,
   ICreatePlayerEvent,
+  ILevel,
 } from "./types";
 
 const findCharForAdventure = (
@@ -92,8 +92,6 @@ const findStoriesForAdventure = (
     const storyTemp = storiesTemp.findIndex(
       (t: IStoryTemType) => t.origId === chaptersDb[i].storyId
     );
-    console.log("storyTemp", storyTemp);
-    console.log("storiesTemp", storiesTemp);
     if (storyTemp === -1) {
       storiesTemp.push({
         origId: chaptersDb[i].storyId,

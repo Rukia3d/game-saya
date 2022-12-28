@@ -1,12 +1,13 @@
+import { mapToScreen } from "../../src/utils/helpers";
 import {
   ICell,
-  IEnemyCell,
   ILevel,
   IReel,
   IRun,
-  ITriggerCell,
-} from "../levelgen";
-import { mapToScreen } from "../../src/utils/helpers";
+  IMapEnemyCell,
+  IMapTriggerCell,
+  IDialogue,
+} from "../engine/types";
 
 export const testReelsPanel: IReel[] = [
   {
@@ -76,11 +77,11 @@ export const testReelsDial: IReel[] = [];
 
 export const testCells: ICell[][] = [
   [
-    { type: "trigger" },
-    { type: "trigger" },
-    { type: "trigger" },
-    { type: "trigger" },
-    { type: "trigger" },
+    { type: "space" },
+    { type: "space" },
+    { type: "space" },
+    { type: "space" },
+    { type: "space" },
   ],
   [
     { type: "obstacle" },
@@ -786,12 +787,25 @@ export const testCells: ICell[][] = [
   ],
 ];
 
-export const triggersMap: {
-  trigger: ITriggerCell;
-  x: number;
-  y: number;
-  triggerId: number;
-}[] = [
+const testDialogue: IDialogue[] = [
+  {
+    id: 0,
+    lines: [{ id: 0, text: ["Hello", "World"], image: "address" }],
+    background: "address",
+  },
+  {
+    id: 1,
+    lines: [{ id: 1, text: ["Hello1", "World1"], image: "address" }],
+    background: "address",
+  },
+  {
+    id: 2,
+    lines: [{ id: 2, text: ["Hello2", "World2"], image: "address" }],
+    background: "address",
+  },
+];
+
+export const triggersMap: IMapTriggerCell[] = [
   { x: 0, y: 0, triggerId: 0 },
   { x: 1, y: 0, triggerId: 0 },
   { x: 2, y: 0, triggerId: 0 },
@@ -810,55 +824,67 @@ export const triggersMap: {
 ].map((trigger) => {
   const s = mapToScreen({ x: trigger.x, y: trigger.y }, testCells);
   return {
-    trigger: { type: "trigger" as const },
+    type: "trigger",
     triggerId: trigger.triggerId,
     ...s,
   };
 });
 
-export const enemiesMap: { enemy: IEnemyCell; x: number; y: number }[] = [
-  { x: 2, y: 2 },
-  { x: 3, y: 5 },
-  { x: 4, y: 9 },
-  { x: 2, y: 12 },
-  { x: 1, y: 15 },
-  { x: 3, y: 21 },
-  { x: 4, y: 23 },
-  { x: 3, y: 26 },
-  { x: 0, y: 31 },
-  { x: 1, y: 34 },
-  { x: 2, y: 35 },
-  { x: 4, y: 40 },
-  { x: 4, y: 42 },
-  { x: 1, y: 46 },
-  { x: 4, y: 49 },
-  { x: 1, y: 52 },
-  { x: 0, y: 53 },
-  { x: 2, y: 58 },
-  { x: 4, y: 61 },
-  { x: 3, y: 64 },
-  { x: 0, y: 66 },
-  { x: 1, y: 70 },
-  { x: 0, y: 72 },
-  { x: 1, y: 74 },
-  { x: 0, y: 77 },
-  { x: 2, y: 81 },
-  { x: 0, y: 85 },
-  { x: 1, y: 89 },
-  { x: 3, y: 97 },
+export const enemiesMap: IMapEnemyCell[] = [
+  { x: 2, y: 2, enemyId: 0 },
+  { x: 3, y: 5, enemyId: 1 },
+  { x: 4, y: 9, enemyId: 0 },
+  { x: 2, y: 12, enemyId: 0 },
+  { x: 1, y: 15, enemyId: 1 },
+  { x: 3, y: 21, enemyId: 1 },
+  { x: 4, y: 23, enemyId: 0 },
+  { x: 3, y: 26, enemyId: 1 },
+  { x: 0, y: 31, enemyId: 1 },
+  { x: 1, y: 34, enemyId: 0 },
+  { x: 2, y: 35, enemyId: 0 },
+  { x: 4, y: 40, enemyId: 1 },
+  { x: 4, y: 42, enemyId: 0 },
+  { x: 1, y: 46, enemyId: 1 },
+  { x: 4, y: 49, enemyId: 0 },
+  { x: 1, y: 52, enemyId: 0 },
+  { x: 0, y: 53, enemyId: 1 },
+  { x: 2, y: 58, enemyId: 0 },
+  { x: 4, y: 61, enemyId: 0 },
+  { x: 3, y: 64, enemyId: 1 },
+  { x: 0, y: 66, enemyId: 0 },
+  { x: 1, y: 70, enemyId: 1 },
+  { x: 0, y: 72, enemyId: 0 },
+  { x: 1, y: 74, enemyId: 1 },
+  { x: 0, y: 77, enemyId: 0 },
+  { x: 2, y: 81, enemyId: 0 },
+  { x: 0, y: 85, enemyId: 1 },
+  { x: 1, y: 89, enemyId: 1 },
+  { x: 3, y: 97, enemyId: 1 },
 ].map((enemy, n) => {
   const s = mapToScreen(enemy, testCells);
-  return { enemy: { type: "enemy", id: n }, ...s };
+  return { type: "enemy", id: n, ...s, enemyId: enemy.enemyId };
 });
 
 export const testRun: IRun = {
   settingName: "Wood",
   setting: "forest",
   map: testCells,
-  enemies: enemiesMap,
-  triggers: triggersMap,
+  enemies: {
+    coordinates: enemiesMap,
+    content: [{ id: 0 }, { id: 1 }],
+  },
+  triggers: {
+    coordinates: triggersMap,
+    content: [
+      { id: 0, type: "dialogue", data: { dialogueId: 0 } },
+      { id: 1, type: "dialogue", data: { dialogueId: 1 } },
+      { id: 2, type: "dialogue", data: { dialogueId: 2 } },
+    ],
+  },
   type: "run",
   musicAddress: "testmusic",
+  dialogues: testDialogue,
+  collections: [],
 };
 
 export const testLevel: ILevel = {

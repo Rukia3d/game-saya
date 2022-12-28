@@ -10,11 +10,15 @@ export const TopMenu = () => {
 
   return (
     <div className="TopMenu" data-testid="top-menu">
-      {context.player.materials.map((m: IInventoryQuant, n: number) => (
-        <div className="Material" key={n}>
-          {m.name.substring(0, 4)} {m.quantity}
-        </div>
-      ))}
+      <div className="Player">Hello, {context.player.name}</div>
+      <div className="Materials">
+        {context.player.materials.map((m: IInventoryQuant, n: number) => (
+          <div className="Material" key={n}>
+            <img src={`../pics/icons/${m.name}.png`} alt={m.name} />
+            <div>{m.quantity}</div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

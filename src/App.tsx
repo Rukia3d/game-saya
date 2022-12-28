@@ -22,17 +22,34 @@ export const GameContext = React.createContext<undefined | GameContextType>(
 
 function App() {
   //window.localStorage.getItem("playerId") || short.generate();
-  const [playerId, setPlayerId] = useState<string | null>("1");
+  let savedId: string | null = window.localStorage.getItem("playerId") || null;
+  console.log("savedId", savedId);
+  const [playerId, setPlayerId] = useState<string | null>(savedId);
+  const [name, setName] = useState("");
 
-  const createplayer = async () => {
-    const res = await axios.post(`api/players/new?name=PlayerNew`);
+  const createplayer = async (event: any) => {
+    event.preventDefault();
+    const res = await axios.post(`api/players/new?name=${name}`);
     setPlayerId(res.data.player.id);
+    window.localStorage.setItem("playerId", res.data.player.id);
   };
 
   return (
     <div className="App">
       {playerId == null ? (
-        <button onClick={createplayer}>create player</button>
+        <div className="NewPlayerContainer">
+          <form onSubmit={createplayer}>
+            <label>
+              Enter your name: <br />
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+            </label>
+            <input type="submit" />
+          </form>
+        </div>
       ) : (
         <Main playerId={playerId} />
       )}

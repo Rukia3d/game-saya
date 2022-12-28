@@ -6,14 +6,6 @@ import { GameContextType, GameContext } from "./App";
 
 import { PopUp } from "./PopUp";
 import { TopMenu } from "./TopMenu";
-import {
-  IAdventure,
-  IChapter,
-  IGame,
-  IStory,
-  IWeapon,
-  IWeaponMaterial,
-} from "../api/engine/types";
 import { Home } from "./Home";
 import { Weapons } from "./Weapons";
 import { Inventory } from "./Inventory";

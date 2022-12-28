@@ -1,4 +1,78 @@
-import { ILevel } from "../levelgen";
+// GAME
+
+export interface IReel {
+  layout: string;
+  panels: IReelPanel[];
+}
+
+export interface IReelPanel {
+  imageAddress: string;
+  text?: string;
+  name?: string;
+}
+
+export interface IRun {
+  settingName: string;
+  setting: string;
+  map: ICell[][];
+  enemies: {
+    coordinates: IMapEnemyCell[];
+    content: IMapEnemy[];
+  };
+  type: gameMode;
+  musicAddress: string;
+  triggers: {
+    coordinates: IMapTriggerCell[];
+    content: IMapTrigger[];
+  };
+  dialogues: IDialogue[];
+  collections: { id: number }[];
+}
+
+export interface ILine {
+  id: number;
+  text: string[];
+  image: string;
+}
+
+export interface IDialogue {
+  id: number;
+  lines: ILine[];
+  background: string;
+}
+
+export interface IFight {
+  settingName: string;
+  setting: string;
+  map: ICell[][];
+  type: gameMode;
+  enemies: {
+    map: { type: "enemy"; x: number; y: number }[];
+    content: { id: number }[];
+  };
+  musicAddress: string;
+  triggers: {
+    type: "trigger";
+    x: number;
+    y: number;
+    triggerId: number;
+  }[];
+  dialogues: { id: number }[];
+  collections: { id: number }[];
+}
+
+export type ILayout = IRun;
+
+export type cellType = "space" | "trigger" | "obstacle" | "enemy";
+
+export interface ILevel {
+  levels: ILayout[];
+  element: { id: number; name: string }[];
+  opening?: IReel[];
+  ending?: IReel[];
+}
+
+export type ICell = { type: cellType };
 
 //-//-//-//-//
 export interface ICharacter {
@@ -660,6 +734,27 @@ export type IPlayerArenaStartDB = {
   index: number;
   mode: gameMode;
 };
+
+export type IMapEnemy = { id: number };
+export type IMapTrigger = {
+  id: number;
+  type: triggerType;
+  data?: { dialogueId: number };
+};
+export type IMapDialogue = { id: number };
+export type IMapEnemyCell = {
+  type: "enemy";
+  x: number;
+  y: number;
+  enemyId: number;
+};
+export type IMapTriggerCell = {
+  type: "trigger";
+  x: number;
+  y: number;
+  triggerId: number;
+};
+
 export type materialName =
   | "jade"
   | "garnet"
@@ -680,6 +775,7 @@ export type gameMode = "story" | "quest" | "run" | "fight";
 export type levelState = "open" | "closed" | "complete";
 export type boolState = "open" | "closed";
 export type arenaMode = "run" | "fight";
+export type triggerType = "dialogue" | "win" | "coin";
 export type currentState =
   | "MAIN"
   | "PLAY"

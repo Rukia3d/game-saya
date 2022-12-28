@@ -1,79 +1,11 @@
-import { gameMode } from "./engine/types";
-
-export interface IReel {
-  layout: string;
-  panels: IReelPanel[];
-}
-
-export interface IReelPanel {
-  imageAddress: string;
-  text?: string;
-  name?: string;
-}
-
-export interface IRun {
-  settingName: string;
-  setting: string;
-  map: ICell[][];
-  enemies: { enemy: IEnemyCell; x: number; y: number }[];
-  type: gameMode;
-  musicAddress: string;
-  triggers: {
-    trigger: ITriggerCell;
-    x: number;
-    y: number;
-    triggerId: number;
-  }[];
-}
-export interface IFight {
-  settingName: string;
-  setting: string;
-  map: ICell[][];
-  type: gameMode;
-  enemies: { enemy: IEnemyCell; x: number; y: number }[];
-  musicAddress: string;
-  triggers: {
-    trigger: ITriggerCell;
-    x: number;
-    y: number;
-    triggerId: number;
-  }[];
-}
-
-export type ILayout = IRun | IFight;
-
-export type cellType = "space" | "trigger" | "obstacle" | "enemy";
-
-export interface ILevel {
-  levels: ILayout[];
-  element: { id: number; name: string }[];
-  opening?: IReel[];
-  ending?: IReel[];
-}
-
-interface IEmptyCell {
-  type: cellType;
-}
-
-export interface ITriggerCell {
-  type: cellType;
-}
-
-interface IObstacleCell {
-  type: cellType;
-  //   image: string;
-}
-
-export interface IEnemyCell {
-  type: cellType;
-  id: number;
-  //   image: string;
-  //   sound: string;
-  //   strength: number;
-  //   reward: string;
-  //   element: element;
-}
-export type ICell = IEmptyCell | IObstacleCell | ITriggerCell;
+import {
+  gameMode,
+  ICell,
+  IMapEnemy,
+  IMapEnemyCell,
+  IMapTrigger,
+  IMapTriggerCell,
+} from "./engine/types";
 
 // generate the gated sections of the level
 const generatePath = (length: number, width: number) => {

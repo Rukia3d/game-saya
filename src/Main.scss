@@ -1,51 +1,108 @@
-.HomeContainer {
-  display: flex;
-  flex-direction: row;
+.NewPlayerContainer {
   height: 100%;
   width: 100%;
-
-  .Items {
-    background-color: #b4fcfc;
-    width: 30%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-
-    .Item {
-      width: 100%;
-      flex-grow: 1;
-      border: 1px solid black;
-    }
+  background-color: #466cf5;
+  form {
+    padding: 3em;
   }
+}
 
-  .Adventures {
-    background-color: #52ffff;
-    width: 40%;
-    height: 100%;
+.HomeContainer {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  .Home {
     display: flex;
-    flex-direction: column;
-    align-items: stretch;
+    flex-direction: row;
+    height: 100%;
+    width: 100%;
 
-    .Adventure {
-      width: 100%;
-      flex-grow: 1;
-      border: 1px solid black;
+    .Items {
+      background-color: #b4fcfc;
+      width: 30%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+
+      .Item {
+        height: 100%;
+        width: 100%;
+        border: 1px solid black;
+        position: relative;
+        flex-grow: 1;
+
+        img {
+          width: 100%;
+        }
+
+        div {
+          position: absolute;
+          bottom: 0;
+          right: 0;
+          font-size: 1.5em;
+          color: black;
+        }
+      }
     }
-  }
 
-  .Menues {
-    background-color: #00bbbb;
-    width: 30%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
+    .Adventures {
+      background-color: #52ffff;
+      width: 40%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
 
-    .Menu {
-      width: 100%;
-      flex-grow: 1;
-      border: 1px solid black;
+      .Adventure {
+        width: 100%;
+        flex-grow: 1;
+        border: 1px solid black;
+        text-align: center;
+        margin: 0 auto;
+        position: relative;
+
+        img {
+          width: 100%;
+          height: 100%;
+        }
+        div {
+          position: absolute;
+          top: 0;
+          right: 10px;
+          font-size: 1.5em;
+          color: black;
+        }
+      }
+    }
+
+    .Menues {
+      background-color: #00bbbb;
+      width: 30%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+
+      .Menu {
+        height: 100%;
+        width: 100%;
+        border: 1px solid black;
+        position: relative;
+        flex-grow: 1;
+
+        img {
+          width: 100%;
+        }
+
+        div {
+          position: absolute;
+          bottom: 0;
+          right: 0;
+          font-size: 1.5em;
+          color: black;
+        }
+      }
     }
   }
 }
@@ -306,13 +363,17 @@
     .Chapters {
       display: flex;
       flex-direction: row;
+      flex-wrap: wrap;
+      gap: 5px;
+      align-items: flex-start;
+      justify-content: center;
     }
 
     .Chapter {
       background-color: #00bbbb;
       border: 1px solid black;
-      max-width: 30%;
-      margin: 0.5em;
+      width: 30%;
+      height: 30%;
       padding: 0.5em;
     }
   }
@@ -344,16 +405,45 @@
 }
 
 .TopMenu {
+  z-index: 100;
   width: 100%;
   height: 7%;
-  background-color: palevioletred;
   display: flex;
-  flex-direction: row;
-  align-items: stretch;
+  flex-direction: column;
 
-  .Material {
-    border: 1px solid black;
-    flex-grow: 1;
+  .Player {
+    width: 100%;
+    height: 30%;
+    background-color: violet;
+  }
+
+  .Materials {
+    width: 100%;
+    height: 70%;
+    background-color: palevioletred;
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+
+    .Material {
+      position: relative;
+      border: 1px solid black;
+      flex-grow: 1;
+      text-align: center;
+      margin: 0 auto;
+
+      img {
+        width: 100%;
+        height: 100%;
+      }
+      div {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        font-size: 1.5em;
+        color: black;
+      }
+    }
   }
 }
 
@@ -361,6 +451,23 @@
   position: relative;
   width: 100%;
   height: 100%;
+  .DialogueUI {
+    background-color: #52ffff;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+
+    .DialogueImage {
+      width: 100%;
+      height: 50%;
+    }
+
+    .DialogueText {
+      width: 100%;
+      height: 50%;
+    }
+  }
   .GameUI {
     position: absolute;
     width: 100%;
@@ -372,8 +479,26 @@
 
     .Control {
       position: absolute;
-      bottom: 0;
+      top: 0;
       right: 0;
+      width: 100%;
+      height: 80%;
+      opacity: 1;
+      display: flex;
+      flex-direction: row;
+      opacity: 0.2;
+
+      .Left {
+        width: 50%;
+        height: 100%;
+        background-color: #8952ff;
+      }
+
+      .Right {
+        background-color: #52ffff;
+        width: 50%;
+        height: 100%;
+      }
     }
   }
   .GameLevelMap {

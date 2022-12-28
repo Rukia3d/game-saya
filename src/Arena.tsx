@@ -183,7 +183,7 @@ export const Arena = () => {
   const events = [context.server.arenaRun, context.server.arenaFight];
   const canCompete: boolean =
     arena !== null && enoughToPay(context.player.materials, arena.stake);
-  console.log("canCompete", canCompete);
+  // console.log("canCompete", canCompete);
   return (
     <div className="ArenaContainer">
       {arena ? (

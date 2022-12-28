@@ -1,12 +1,18 @@
 import axios from "axios";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
-import { ICell, IEnemyCell, IReel, ITriggerCell } from "../api/levelgen";
 import { GameContext } from "./App";
 import { CloseButton } from "./PopUp";
 import { Reel } from "./Reel";
 import { Gameplay, initGameplay, updateGameplay } from "./gameplay";
-import { IStory } from "../api/engine/types";
+import {
+  ICell,
+  IReel,
+  IRun,
+  IDialogue,
+  IMapEnemyCell,
+  IMapTriggerCell,
+} from "../api/engine/types";
 
 export const useGameplay = (gameplay: Gameplay): [Gameplay, () => void] => {
   const [, setTime] = useState(0);
@@ -32,13 +38,7 @@ export const Player = ({ gameplay }: { gameplay: Gameplay }) => {
   );
 };
 
-type ITrigger = {
-  trigger: ITriggerCell;
-  triggerId: number;
-  x: number;
-  y: number;
-};
-const Trigger = ({ trigger }: { trigger: ITrigger }) => {
+const Trigger = ({ trigger }: { trigger: IMapTriggerCell }) => {
   return (
     <div
       className="trigger"
@@ -47,8 +47,7 @@ const Trigger = ({ trigger }: { trigger: ITrigger }) => {
   );
 };
 
-type IEnemy = { enemy: IEnemyCell; x: number; y: number };
-const Enemy = ({ enemy }: { enemy: IEnemy }) => {
+const Enemy = ({ enemy }: { enemy: IMapEnemyCell }) => {
   return (
     <div
       className="enemy"
@@ -69,8 +68,8 @@ export const Controls = ({ gameplay }: { gameplay: Gameplay }) => {
 
   return (
     <div className="Control">
-      <button onClick={moveLeft}>Left</button>
-      <button onClick={moveRight}>Right</button>
+      <div className="Left" onClick={moveLeft}></div>
+      <div className="Right" onClick={moveRight}></div>
     </div>
   );
 };
@@ -90,8 +89,8 @@ export const Level = ({ gameplay }: { gameplay: Gameplay }) => {
 
   const { level, player } = gameplay;
   const staticCells = level.map;
-  const enemies = level.enemies;
-  const triggers = level.triggers;
+  const enemies = level.enemies.coordinates;
+  const triggers = level.triggers.coordinates;
 
   return (
     <div className="GameLevelMap">
@@ -103,14 +102,69 @@ export const Level = ({ gameplay }: { gameplay: Gameplay }) => {
             ))}
           </div>
         ))}
-        {enemies.map((enemy) => (
-          <Enemy key={enemy.enemy.id} enemy={enemy} />
+        {enemies.map((enemy, n) => (
+          <Enemy key={n} enemy={enemy} />
         ))}
         {triggers.map((trigger, n) => (
           <Trigger key={n} trigger={trigger} />
         ))}
 
         <Player gameplay={gameplay} />
+      </div>
+    </div>
+  );
+};
+
+export const GameDialogue = ({
+  dialogue,
+  setDialogue,
+  gameplay,
+}: {
+  dialogue: IDialogue;
+  setDialogue: (d: IDialogue | null) => void;
+  gameplay: Gameplay;
+}) => {
+  const [line, setLine] = useState(0);
+  const [text, setText] = useState(0);
+
+  const nextLine = () => {
+    const lastLine = dialogue.lines.length - 1;
+    const lastText = dialogue.lines[line].text.length - 1;
+    // More text - switch text
+    if (text < lastText) {
+      console.log("switch text");
+      setText(text + 1);
+    }
+    // Last text - switch line
+    else if (line < lastLine) {
+      console.log("switch line");
+      setLine(line + 1);
+    }
+    // Last line - turn off dialogue
+    else {
+      console.log("dialogue off");
+      setDialogue(null);
+      gameplay.dialogue = null;
+      gameplay.state = "run";
+    }
+  };
+
+  return (
+    <div className="DialogueUI">
+      <div className="DialogueImage">
+        <img
+          className="DialogueBackground"
+          src={`../pics/dialogues/backgrounds/${dialogue.background}.png`}
+          alt={dialogue.background}
+        />
+        <img
+          className="DialogueCharacter"
+          src={`../pics/dialogues/characters/${dialogue.lines[line].image}.png`}
+          alt={dialogue.background}
+        />
+      </div>
+      <div className="DialogueText" onClick={nextLine}>
+        {dialogue.lines[line].text[text]}
       </div>
     </div>
   );
@@ -140,14 +194,40 @@ export const GamePlay = ({
   }
 
   const [gameplay, tick] = useGameplay(levelGameplay);
+  const [dialogue, setDialogue] = useState<IDialogue | null>(null);
   const { lives } = gameplay;
+  console.log("gameplay.state", gameplay.state);
 
-  switch (gameplay.state) {
-    case "run":
-      setTimeout(tick, 25);
+  useEffect(() => {
+    let myTimeout: any = null;
+    switch (gameplay.state) {
+      case "run":
+        myTimeout = setTimeout(tick, 25);
+        break;
+      case "stop":
+        setDialogue(gameplay.dialogue);
+        break;
+    }
+
+    return () => {
+      if (myTimeout) {
+        clearTimeout(myTimeout);
+      }
+    };
+  }, [gameplay.dialogue, gameplay.state, tick]);
+  console.log("GamePlay dialogue", dialogue);
+
+  if (dialogue) {
+    return (
+      <div className="GameContainer" data-testid="game-screen">
+        <GameDialogue
+          dialogue={dialogue}
+          setDialogue={setDialogue}
+          gameplay={gameplay}
+        />
+      </div>
+    );
   }
-
-  // LEVEL MOVES
 
   return (
     <div className="GameContainer" data-testid="game-screen">
@@ -196,7 +276,6 @@ export const Game = () => {
     });
 
     await context.mutate();
-    //TODO doesn't load the chapters in a new state
 
     context.setScreen({
       screen: "adventure",
@@ -217,7 +296,7 @@ export const Game = () => {
 
   if (reel === undefined) {
     const level = game.level.levels[0];
-    const gameplay = initGameplay(level);
+    const gameplay = initGameplay(level as IRun);
 
     return (
       <GamePlay

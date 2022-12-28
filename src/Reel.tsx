@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { IReel, IReelPanel } from "../api/levelgen";
+import { IReelPanel, IReel } from "../api/engine/types";
 
 export const Reel = ({
   reel,

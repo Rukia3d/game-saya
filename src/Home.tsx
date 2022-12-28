@@ -3,6 +3,7 @@ import "./Main.scss";
 import { GameContext } from "./App";
 import { mainScreenState } from "./Main";
 import { IAdventure } from "../api/engine/types";
+import { TopMenu } from "./TopMenu";
 
 export const Items = () => {
   const context = useContext(GameContext);
@@ -20,7 +21,8 @@ export const Items = () => {
     <div className="Items" data-testid="home-items">
       {items.map((i: mainScreenState, n: number) => (
         <div className="Item" key={n} onClick={() => context.setScreen(i)}>
-          {i.screen}
+          <img src={`../pics/cards/${i.screen}.png`} alt={i.screen} />
+          <div>{i.screen}</div>
         </div>
       ))}
     </div>
@@ -47,7 +49,11 @@ export const Adventures = () => {
     <div className="Adventures" data-testid="home-adventures">
       {adventures.map((e: IAdventure, n: number) => (
         <div className="Adventure" key={n} onClick={() => selectAdventure(e)}>
-          {e.character.name}
+          <img
+            src={`../pics/cards/${e.character.material.name}.png`}
+            alt={e.character.material.name}
+          />
+          <div>{e.character.name}</div>
         </div>
       ))}
     </div>
@@ -69,7 +75,8 @@ export const Menues = () => {
     <div className="Menues" data-testid="home-menues">
       {menues.map((i: mainScreenState, n: number) => (
         <div className="Menu" key={n} onClick={() => context.setScreen(i)}>
-          {i.screen}
+          <img src={`../pics/cards/${i.screen}.png`} alt={i.screen} />
+          <div>{i.screen}</div>
         </div>
       ))}
     </div>
@@ -83,9 +90,12 @@ export const Home = () => {
   }
   return (
     <div className="HomeContainer" data-testid="home-screen">
-      <Items />
-      <Adventures />
-      <Menues />
+      <TopMenu />
+      <div className="Home">
+        <Items />
+        <Adventures />
+        <Menues />
+      </div>
     </div>
   );
 };

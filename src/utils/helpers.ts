@@ -1,5 +1,4 @@
-import { IInventoryQuant } from "../../api/engine/types";
-import { ICell } from "../../api/levelgen";
+import { IInventoryQuant, ICell } from "../../api/engine/types";
 
 //@ts-ignore
 export const fetcher = (...args) => fetch(...args).then((res) => res.json());
