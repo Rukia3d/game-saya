@@ -165,6 +165,9 @@ export const GameDialogue = ({
       </div>
       <div className="DialogueText" onClick={nextLine}>
         {dialogue.lines[line].text[text]}
+        {text < dialogue.lines[line].text.length - 1 ? (
+          <div>{`>>>`} </div>
+        ) : null}
       </div>
     </div>
   );

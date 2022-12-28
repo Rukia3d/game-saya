@@ -459,13 +459,27 @@
     flex-direction: row;
 
     .DialogueImage {
+      position: absolute;
+      top: 0;
       width: 100%;
       height: 50%;
+
+      .DialogueCharacter {
+        width: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
     }
 
     .DialogueText {
       width: 100%;
       height: 50%;
+      position: absolute;
+      bottom: 0;
+      margin: 1em;
+      padding: 1em;
+      background-color: #52ffff;
     }
   }
   .GameUI {

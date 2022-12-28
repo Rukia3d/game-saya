@@ -790,18 +790,25 @@ export const testCells: ICell[][] = [
 const testDialogue: IDialogue[] = [
   {
     id: 0,
-    lines: [{ id: 0, text: ["Hello", "World"], image: "address" }],
-    background: "address",
+    lines: [
+      { id: 0, text: ["Hello", "World"], image: "saya1" },
+      { id: 1, text: ["Hello", "World"], image: "enemy1" },
+      { id: 2, text: ["Hello", "World"], image: "saya1" },
+    ],
+    background: "dialogue1",
   },
   {
     id: 1,
-    lines: [{ id: 1, text: ["Hello1", "World1"], image: "address" }],
-    background: "address",
+    lines: [
+      { id: 0, text: ["Hello1", "World1"], image: "saya1" },
+      { id: 1, text: ["Hello1", "World1"], image: "enemy2" },
+    ],
+    background: "dialogue2",
   },
   {
     id: 2,
-    lines: [{ id: 2, text: ["Hello2", "World2"], image: "address" }],
-    background: "address",
+    lines: [{ id: 0, text: ["Hello2", "World2"], image: "saya1" }],
+    background: "dialogue3",
   },
 ];
 
