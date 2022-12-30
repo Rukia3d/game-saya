@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 
 import { GameContext } from "./App";
-import { CloseButton } from "./PopUp";
+import { CloseButton, SmallPopUp } from "./PopUp";
 import { Reel } from "./Reel";
 import { Gameplay, initGameplay, updateGameplay } from "./gameplay";
 import {
@@ -12,7 +12,9 @@ import {
   IDialogue,
   IMapEnemyCell,
   IMapTriggerCell,
+  IInventoryQuant,
 } from "../api/engine/types";
+const INDEXOFENERGY = 0;
 
 export const useGameplay = (gameplay: Gameplay): [Gameplay, () => void] => {
   const [, setTime] = useState(0);
@@ -98,7 +100,9 @@ export const Level = ({ gameplay }: { gameplay: Gameplay }) => {
         {staticCells.map((m: ICell[], n: number) => (
           <div className="MapRow" key={n}>
             {m.map((c: ICell, j: number) => (
-              <div className={`MapCell ${c.type}`} key={j}></div>
+              <div className={`MapCell ${c.type}`} key={j}>
+                {n}x{j}
+              </div>
             ))}
           </div>
         ))}
@@ -175,12 +179,12 @@ export const GameDialogue = ({
 
 export const GamePlay = ({
   winLevel,
-  looseLevel,
+  startLevel,
   setReel,
   gameplay: levelGameplay,
 }: {
   winLevel: () => void;
-  looseLevel: () => void;
+  startLevel: () => void;
   setReel: (r: undefined | IReel[]) => void;
   gameplay: Gameplay;
 }) => {
@@ -199,7 +203,14 @@ export const GamePlay = ({
   const [gameplay, tick] = useGameplay(levelGameplay);
   const [dialogue, setDialogue] = useState<IDialogue | null>(null);
   const { lives } = gameplay;
-  console.log("gameplay.state", gameplay.state);
+
+  const adventure = context.player.adventures[context.screen.adventureId];
+  const story = adventure.stories[context.screen.storyId];
+  const game = story.chapters[context.screen.storyId];
+  const canPlay =
+    context.player.materials[INDEXOFENERGY].quantity >= game.energy;
+
+  console.log("GamePlay gameplay.state", gameplay.state);
 
   useEffect(() => {
     let myTimeout: any = null;
@@ -210,6 +221,9 @@ export const GamePlay = ({
       case "stop":
         setDialogue(gameplay.dialogue);
         break;
+      case "win":
+        winLevel();
+        break;
     }
 
     return () => {
@@ -217,8 +231,16 @@ export const GamePlay = ({
         clearTimeout(myTimeout);
       }
     };
-  }, [gameplay.dialogue, gameplay.state, tick]);
-  console.log("GamePlay dialogue", dialogue);
+  }, [gameplay.dialogue, gameplay.state, tick, winLevel]);
+
+  const close = async () => {
+    await context.mutate();
+    context.setScreen({
+      screen: "adventure",
+      adventureId: adventure.id,
+      storyId: story.id,
+    });
+  };
 
   if (dialogue) {
     return (
@@ -234,18 +256,33 @@ export const GamePlay = ({
 
   return (
     <div className="GameContainer" data-testid="game-screen">
+      {gameplay.state === "lost" ? (
+        <SmallPopUp close={close}>
+          <div>
+            <h1>LOST</h1>
+            {canPlay ? <button onClick={startLevel}>Replay</button> : null}
+            <button onClick={close}>Cancel</button>
+          </div>
+        </SmallPopUp>
+      ) : null}
+      {gameplay.state === "win" ? (
+        <SmallPopUp close={close}>
+          <div>
+            <h1>WIN</h1>
+            {context.player.currentState.materials?.map(
+              (m: IInventoryQuant) => (
+                <div>
+                  {m.name}: {m.quantity}
+                </div>
+              )
+            )}
+            <button onClick={close}>Got it!</button>
+          </div>
+        </SmallPopUp>
+      ) : null}
       <div className="GameUI">
-        <CloseButton
-          close={() =>
-            context.setScreen({
-              screen: "adventure",
-              adventureId: null,
-              storyId: null,
-            })
-          }
-        />
         <button onClick={winLevel}>Win</button>
-        <button onClick={looseLevel}>Loose</button>
+        <button onClick={close}>Loose</button>
         <div>Lives: {lives}</div>
         <Controls gameplay={gameplay} />
       </div>
@@ -270,29 +307,14 @@ export const Game = () => {
   const story = adventure.stories[context.screen.storyId];
   const game = story.chapters[context.screen.storyId];
 
-  const winLevel = async () => {
-    console.log("WinLevel");
-    await axios.post(`/api/players/${context.player.id}/winLevel`, {
+  const startLevel = async () => {
+    console.log("StartLevel");
+    await axios.post(`/api/players/${context.player.id}/startLevel`, {
       adventureId: adventure.id,
       storyId: story.id,
       chapterId: game.id,
     });
-
     await context.mutate();
-
-    context.setScreen({
-      screen: "adventure",
-      adventureId: adventure.id,
-      storyId: story.id,
-    });
-  };
-
-  const looseLevel = () => {
-    context.setScreen({
-      screen: "adventure",
-      adventureId: adventure.id,
-      storyId: story.id,
-    });
   };
 
   const [reel, setReel] = useState(game.level.opening);
@@ -301,12 +323,22 @@ export const Game = () => {
     const level = game.level.levels[0];
     const gameplay = initGameplay(level as IRun);
 
+    const winLevel = async () => {
+      console.log("WinLevel");
+      await axios.post(`/api/players/${context.player.id}/winLevel`, {
+        adventureId: adventure.id,
+        storyId: story.id,
+        chapterId: game.id,
+        triggered: gameplay.triggered,
+      });
+    };
+
     return (
       <GamePlay
+        startLevel={startLevel}
         gameplay={gameplay}
         setReel={setReel}
         winLevel={winLevel}
-        looseLevel={looseLevel}
       />
     );
   }

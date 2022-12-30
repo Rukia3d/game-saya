@@ -739,7 +739,8 @@ export type IMapEnemy = { id: number };
 export type IMapTrigger = {
   id: number;
   type: triggerType;
-  data?: { dialogueId: number };
+  active: boolean;
+  data?: { dialogueId?: number; x?: number; value?: number };
 };
 export type IMapDialogue = { id: number };
 export type IMapEnemyCell = {
@@ -775,7 +776,7 @@ export type gameMode = "story" | "quest" | "run" | "fight";
 export type levelState = "open" | "closed" | "complete";
 export type boolState = "open" | "closed";
 export type arenaMode = "run" | "fight";
-export type triggerType = "dialogue" | "win" | "coin";
+export type triggerType = "dialogue" | "win" | "coin" | "restart";
 export type currentState =
   | "MAIN"
   | "PLAY"

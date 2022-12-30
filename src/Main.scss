@@ -121,14 +121,27 @@
     .Weapon {
       align-items: stretch;
       border: 1px solid black;
-      max-height: 15em;
       background-color: #b92999;
-      height: 100%;
+      height: 30%;
       width: 50%;
+
+      .WeaponImage {
+        width: 100%;
+      }
+
+      .WeaponName {
+        font-size: 1em;
+        color: black;
+      }
 
       .WeaponElements {
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
+        height: 100%;
+
+        img {
+          width: 100%;
+        }
 
         .Full {
           background-color: turquoise;
@@ -453,7 +466,6 @@
   height: 100%;
   .DialogueUI {
     background-color: #52ffff;
-    width: 100%;
     height: 100%;
     display: flex;
     flex-direction: row;
@@ -463,6 +475,10 @@
       top: 0;
       width: 100%;
       height: 50%;
+
+      .DialogueBackground {
+        height: 100%;
+      }
 
       .DialogueCharacter {
         width: 100%;

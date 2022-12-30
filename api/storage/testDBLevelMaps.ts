@@ -7,6 +7,7 @@ import {
   IMapEnemyCell,
   IMapTriggerCell,
   IDialogue,
+  IMapTrigger,
 } from "../engine/types";
 
 export const testReelsPanel: IReel[] = [
@@ -812,17 +813,31 @@ const testDialogue: IDialogue[] = [
   },
 ];
 
+const triggersContent: IMapTrigger[] = [
+  { id: 0, type: "win", active: true },
+  { id: 1, type: "restart", active: true, data: { x: 96 } },
+  { id: 2, type: "dialogue", active: true, data: { dialogueId: 0 } },
+  { id: 3, type: "coin", active: true, data: { value: 3 } },
+];
+
 export const triggersMap: IMapTriggerCell[] = [
   { x: 0, y: 0, triggerId: 0 },
   { x: 1, y: 0, triggerId: 0 },
   { x: 2, y: 0, triggerId: 0 },
   { x: 3, y: 0, triggerId: 0 },
   { x: 4, y: 0, triggerId: 0 },
-  { x: 0, y: 80, triggerId: 1 },
-  { x: 1, y: 80, triggerId: 1 },
-  { x: 2, y: 80, triggerId: 1 },
-  { x: 3, y: 80, triggerId: 1 },
-  { x: 4, y: 80, triggerId: 1 },
+  { x: 0, y: 80, triggerId: 0 },
+  { x: 1, y: 80, triggerId: 0 },
+  { x: 2, y: 80, triggerId: 0 },
+  { x: 3, y: 80, triggerId: 0 },
+  { x: 4, y: 80, triggerId: 0 },
+  { x: 0, y: 96, triggerId: 1 },
+  { x: 1, y: 96, triggerId: 1 },
+  { x: 2, y: 96, triggerId: 1 },
+  { x: 3, y: 96, triggerId: 1 },
+  { x: 4, y: 96, triggerId: 1 },
+  { x: 2, y: 88, triggerId: 3 },
+  { x: 3, y: 90, triggerId: 3 },
   { x: 0, y: 100, triggerId: 2 },
   { x: 1, y: 100, triggerId: 2 },
   { x: 2, y: 100, triggerId: 2 },
@@ -863,7 +878,6 @@ export const enemiesMap: IMapEnemyCell[] = [
   { x: 0, y: 72, enemyId: 0 },
   { x: 1, y: 74, enemyId: 1 },
   { x: 0, y: 77, enemyId: 0 },
-  { x: 2, y: 81, enemyId: 0 },
   { x: 0, y: 85, enemyId: 1 },
   { x: 1, y: 89, enemyId: 1 },
   { x: 3, y: 97, enemyId: 1 },
@@ -882,11 +896,7 @@ export const testRun: IRun = {
   },
   triggers: {
     coordinates: triggersMap,
-    content: [
-      { id: 0, type: "dialogue", data: { dialogueId: 0 } },
-      { id: 1, type: "dialogue", data: { dialogueId: 1 } },
-      { id: 2, type: "dialogue", data: { dialogueId: 2 } },
-    ],
+    content: triggersContent,
   },
   type: "run",
   musicAddress: "testmusic",

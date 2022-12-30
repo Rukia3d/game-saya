@@ -111,7 +111,7 @@ const triggers: {
       y: 7999,
     },
   ],
-  content: [{ id: 0, type: "dialogue" }],
+  content: [{ id: 0, type: "dialogue", active: true, data: { dialogueId: 0 } }],
 };
 
 const opening = [

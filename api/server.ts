@@ -72,6 +72,7 @@ const appWithDB = (db: Database) => {
     console.log("WINLEVEL", req.params.id, req.body);
     const playerId = parseInt(req.params.id);
     const game = await eventsApplication(db);
+    // TODO - add level triggered rewards, they are under triggered key
     const event: IWinLevelData = {
       playerId: playerId,
       created: new Date().valueOf(),

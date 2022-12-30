@@ -28,6 +28,7 @@ const Weapon = () => {
     <div className="Weapon" data-testid="weapon-popup">
       <CloseButton close={() => {}} />
       <div>Weapon</div>
+      <h3>{weapon.name}</h3>
     </div>
   );
 };
@@ -70,15 +71,24 @@ export const Weapons = () => {
           <div className="Weapons" data-testid="weapons-list">
             {context.player.weapons.map((w: IWeapon, n: number) => (
               <div className="Weapon" key={n}>
-                <div>{w.name}</div>
+                <div className="WeaponName">{w.name}</div>
+                <img
+                  className="WeaponImage"
+                  src={`../pics/weapons/${w.name}.png`}
+                  alt={w.name}
+                />
                 <div className="WeaponElements">
-                  {w.materials.map((m: IWeaponMaterial) => (
+                  {w.materials.map((m: IWeaponMaterial, j: number) => (
                     <div
                       onClick={() => selectWeapon(w, m)}
                       data-testid="weapon-selection"
                       className={`${materialState(m)}`}
+                      key={n + j}
                     >
-                      {m.name}
+                      <img
+                        src={`../pics/weapons/${w.name}-${m.name}.png`}
+                        alt={m.name}
+                      />
                     </div>
                   ))}
                 </div>

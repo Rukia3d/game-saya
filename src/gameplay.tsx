@@ -1,4 +1,4 @@
-import { screenToMap } from "./utils/helpers";
+import { mapToScreen, screenToMap } from "./utils/helpers";
 import {
   ICell,
   IDialogue,
@@ -37,9 +37,10 @@ export type Gameplay = {
   player: Point;
   playerTargetX: number;
   lives: number;
-  state: "run" | "stop" | "lost" | "dead";
+  state: "run" | "stop" | "hit" | "lost" | "win";
   time: number;
   level: IRun;
+  triggered: Point[];
   dialogue: IDialogue | null;
   moveLeft: () => void;
   moveRight: () => void;
@@ -138,6 +139,33 @@ const boxesCollided = (box1: Box, box2: Box): Point | undefined => {
   return boxCorners(box1).find((point) => pointInsideBox(point, box2));
 };
 
+const makeInactive = (collision: Collision, gameplay: Gameplay): Gameplay => {
+  const triggerIndex = gameplay.level.triggers.content.findIndex(
+    (t: IMapTrigger) =>
+      collision.type === "trigger" && t.id === collision.trigger.id
+  );
+  gameplay.level.triggers.content[triggerIndex] = {
+    ...gameplay.level.triggers.content[triggerIndex],
+    active: false,
+  };
+  return gameplay;
+};
+
+const findLastRestart = (collision: Collision, gameplay: Gameplay): Point => {
+  const currentPosition = collision.point.y;
+  const restarts: number[] = gameplay.level.triggers.content.map(
+    (t: IMapTrigger) =>
+      t.type === "restart" && t.data?.x && t.data.x > currentPosition
+        ? t.data.x
+        : gameplay.level.map.length - 1
+  );
+  const res = mapToScreen(
+    { x: 2, y: Math.min(...restarts) },
+    gameplay.level.map
+  );
+  return res;
+};
+
 const initialPlayer = {
   x: 160,
   y: 0,
@@ -166,26 +194,47 @@ export const updateGameplay = (gameplay: Gameplay) => {
     triggerCollision(level, playerS);
 
   if (collision && gameplay.state === "run") {
-    // ignore triggers - will need a switch on collision.type
     console.log("collision detected", collision);
     switch (collision.type) {
-      case "enemy" || "obstacle":
+      case "obstacle":
+      case "enemy":
         if (gameplay.lives > 0) {
+          gameplay.state = "hit";
           gameplay.lives = gameplay.lives - 1;
-          gameplay.player = { ...initialPlayer };
-          gameplay.state = "dead";
+          const restartPoint = findLastRestart(collision, gameplay);
+          console.log("restartPoint", restartPoint);
+          gameplay.player = {
+            ...initialPlayer,
+            y: restartPoint.y,
+            x: restartPoint.x,
+          };
+          gameplay.state = "run";
         } else {
           gameplay.state = "lost";
         }
-        return;
+        break;
       case "trigger":
         console.log("trigger", collision.trigger.id);
-        gameplay.state = "stop";
-        if (collision.dialogue) {
-          console.log("Setting dialogue", collision.dialogue);
-          gameplay.dialogue = collision.dialogue;
+        if (collision.trigger.active) {
+          if (collision.trigger.type === "dialogue" && collision.dialogue) {
+            gameplay.state = "stop";
+            gameplay.dialogue = collision.dialogue;
+            gameplay = makeInactive(collision, gameplay);
+          }
+          if (
+            collision.trigger.type === "coin" &&
+            collision.trigger.data?.value
+          ) {
+            gameplay.state = "stop";
+            gameplay.triggered.push(collision.point);
+            gameplay = makeInactive(collision, gameplay);
+            gameplay.state = "run";
+          }
+          if (collision.trigger.type === "win") {
+            gameplay.state = "win";
+          }
         }
-        return;
+        break;
     }
   }
 };
@@ -212,6 +261,7 @@ export const initGameplay = (level: IRun): Gameplay => {
     playerTargetX: initialPlayer.x,
     lives: 3,
     state: "run",
+    triggered: [],
     dialogue: null,
     time: 0,
     level,
