@@ -6,9 +6,7 @@ import {
   IArenaResultPool,
   IInventoryQuant,
 } from "./engine/types";
-
-export const ARENAEVENTINTERVAL = 60000000;
-export const LIVESINTERVAL = 30000;
+import { ARENAEVENTINTERVAL, LIVESINTERVAL } from "./config";
 
 export const detectWinners = (winners: IArenaResult[]) => {
   let res: { [time: number]: IArenaResult[] } = {};

@@ -1,5 +1,5 @@
 import { Database } from "sqlite";
-import { INDEXOFENERGY } from "../config";
+import { ARENAEVENTINTERVAL, INDEXOFENERGY } from "../config";
 import { detectWinners, splitPool } from "../cronjobs";
 import { basePlayer } from "../storage/testDB";
 import { testLevel } from "../storage/testDBLevelMaps";
@@ -161,6 +161,7 @@ export const serverDistributeLives = async (
         n.materials[INDEXOFENERGY].quantity + 10;
     }
   });
+  newServer.nextLiveDistribution = event.created + ARENAEVENTINTERVAL;
   return { players: newPlayers, server: newServer };
 };
 
