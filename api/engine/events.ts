@@ -1,5 +1,5 @@
-import { Console } from "console";
 import { Database } from "sqlite";
+import { INDEXOFENERGY } from "../config";
 import { detectWinners, splitPool } from "../cronjobs";
 import { basePlayer } from "../storage/testDB";
 import { testLevel } from "../storage/testDBLevelMaps";
@@ -38,11 +38,11 @@ import {
   ICreatePlayerEvent,
   ICurrentState,
   IGame,
-  IInventoryQuant,
   IPlayer,
   IServer,
   IServerArenaEndEvent,
   IServerArenaStartEvent,
+  IServerDistributeLivesEvent,
   IStartLevelEvent,
   IWeapon,
   IWinLevelEvent,
@@ -144,6 +144,26 @@ export const serverArenaEnd = async (
   return { players: newPlayers, server: newServer };
 };
 
+export const serverDistributeLives = async (
+  db: Database,
+  event: IServerDistributeLivesEvent,
+  game: IGame
+): Promise<IGame> => {
+  const newServer: IServer = JSON.parse(JSON.stringify(game.server));
+  let newPlayers: IPlayer[] = JSON.parse(JSON.stringify(game.players));
+  console.log("newPlayers", newPlayers);
+  newPlayers.forEach((n: IPlayer) => {
+    const canDistribute =
+      n.materials.length > 0 &&
+      n.materials[INDEXOFENERGY].quantity + 10 < n.maxEnergy;
+    if (canDistribute && n.materials[INDEXOFENERGY].quantity < n.maxEnergy) {
+      n.materials[INDEXOFENERGY].quantity =
+        n.materials[INDEXOFENERGY].quantity + 10;
+    }
+  });
+  return { players: newPlayers, server: newServer };
+};
+
 export const startLevel = async (
   db: Database,
   event: IStartLevelEvent,
@@ -240,6 +260,7 @@ export const startArena = (
     arenaRun: event.mode === "run" ? newArena : game.server.arenaRun,
     arenaFightHistory: game.server.arenaFightHistory,
     arenaRunHistory: game.server.arenaRunHistory,
+    nextLiveDistribution: game.server.nextLiveDistribution,
   };
   return {
     players: replacePlayer(game.players, newPlayer),
@@ -281,6 +302,7 @@ export const endArena = (
     arenaRun: event.mode === "run" ? newArena : game.server.arenaRun,
     arenaFightHistory: game.server.arenaFightHistory,
     arenaRunHistory: game.server.arenaRunHistory,
+    nextLiveDistribution: game.server.nextLiveDistribution,
   };
   return {
     players: replacePlayer(game.players, newPlayer),

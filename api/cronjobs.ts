@@ -8,6 +8,7 @@ import {
 } from "./engine/types";
 
 export const ARENAEVENTINTERVAL = 60000000;
+export const LIVESINTERVAL = 30000;
 
 export const detectWinners = (winners: IArenaResult[]) => {
   let res: { [time: number]: IArenaResult[] } = {};
@@ -79,12 +80,20 @@ export const endArena = (db: Database) => {
   writers.serverEndArena(db, now);
 };
 
+export const distributeLives = (db: Database) => {
+  console.log("Distribute lives");
+  const now = new Date().valueOf();
+  writers.serverDistributeLives(db, now);
+};
+
 let n = 0;
 export const run = async (db: Database) => {
   if (n === 0) {
     await startArena(db);
+    await distributeLives(db);
   }
   setInterval(async () => await endArena(db), ARENAEVENTINTERVAL);
   setInterval(async () => await startArena(db), ARENAEVENTINTERVAL);
+  setInterval(async () => await distributeLives(db), LIVESINTERVAL);
   n++;
 };

@@ -29,6 +29,9 @@ export const applyEvent = async (
     case "SERVERARENAEND":
       newGame = await events.serverArenaEnd(db, event, newGame);
       break;
+    case "DISTRIBUTELIVES":
+      newGame = await events.serverDistributeLives(db, event, newGame);
+      break;
     case "STARTLEVEL":
       newGame = await events.startLevel(db, event, newGame);
       break;
@@ -88,6 +91,7 @@ export const applyEvents = async (
         name: "",
         loungeId: null,
         materials: [],
+        maxEnergy: 100,
         adventures: [],
         weapons: [],
         goals: [],
@@ -95,6 +99,7 @@ export const applyEvents = async (
         claims: [],
         collections: [],
         currentState: { state: "MAIN" },
+        lastActive: new Date().valueOf(),
       },
     ],
     server: {
@@ -102,6 +107,7 @@ export const applyEvents = async (
       arenaFight: { events: [], resultTime: 0, mode: "fight" },
       arenaRunHistory: [],
       arenaFightHistory: [],
+      nextLiveDistribution: 0,
     },
   };
   for (let i = 0; i < events.length; i++) {

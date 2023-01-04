@@ -9,6 +9,7 @@ import {
   IArenaStartEvent,
   arenaMode,
   IArenaEndEvent,
+  IServerDistributeLivesEvent,
 } from "./types";
 import {
   IEventArenaEndDB,
@@ -17,11 +18,13 @@ import {
   IEventDB,
   IEventServerArenaEndDB,
   IEventServerArenaStartDB,
+  IEventServerDistributeLivesDB,
   IEventStartLevelDB,
   IEventWinLevelDB,
   readCreatePlayerEvents,
   readEndArena,
   readGameEvents,
+  readServerDistributeLives,
   readServerEndArena,
   readServerStartArena,
   readStartArena,
@@ -49,6 +52,9 @@ export const playerEvents = async (db: Database): Promise<IGameEvent[]> => {
         break;
       case "SERVERARENAEND":
         newEvents.push(await serverArenaEndEvent(db, e));
+        break;
+      case "DISTRIBUTELIVES":
+        newEvents.push(await serverDistributelivesEvent(db, e));
         break;
       case "ARENASTART":
         newEvents.push(await startArenaEvent(db, e));
@@ -163,7 +169,7 @@ export const serverArenaStartEvent = async (
     (p: IEventServerArenaStartDB) => p.eventId === event.eventId
   );
   if (!startArena) {
-    throw new Error("No win level event found");
+    throw new Error("No server startArena event found");
   }
   return {
     eventId: startArena.eventId,
@@ -183,11 +189,29 @@ export const serverArenaEndEvent = async (
     (p: IEventServerArenaEndDB) => p.eventId === event.eventId
   );
   if (!endArena) {
-    throw new Error("No win level event found");
+    throw new Error("No server endArena event found");
   }
   return {
     eventId: endArena.eventId,
     type: "SERVERARENAEND",
+    created: event.created,
+  };
+};
+
+export const serverDistributelivesEvent = async (
+  db: Database,
+  event: IEventDB
+): Promise<IServerDistributeLivesEvent> => {
+  const allPlayerEvents = await readServerDistributeLives(db);
+  const distributeLives = allPlayerEvents.find(
+    (p: IEventServerDistributeLivesDB) => p.eventId === event.eventId
+  );
+  if (!distributeLives) {
+    throw new Error("No server distributeLives event found");
+  }
+  return {
+    eventId: distributeLives.eventId,
+    type: "DISTRIBUTELIVES",
     created: event.created,
   };
 };

@@ -17,6 +17,7 @@ export const writeArenaStart = async (
   await writeOneLine(event_arenaStart, newEvent, db);
   return event_id;
 };
+
 export const writeArenaEnd = async (
   created: number,
   db: Database
@@ -28,6 +29,20 @@ export const writeArenaEnd = async (
     "event_server_arenaend(eventId, created, updated, deleted)";
   const newEvent = [event_id, created, created, null];
   await writeOneLine(event_arenaEnd, newEvent, db);
+  return event_id;
+};
+
+export const writeDistributeLives = async (
+  created: number,
+  db: Database
+): Promise<number> => {
+  const distribute_event = "event(type, created, updated, deleted)";
+  const newArena = ["DISTRIBUTELIVES", created, created, null];
+  const event_id = await writeOneLine(distribute_event, newArena, db);
+  const event_distributeLives =
+    "event_server_distributelives(eventId, created, updated, deleted)";
+  const newEvent = [event_id, created, created, null];
+  await writeOneLine(event_distributeLives, newEvent, db);
   return event_id;
 };
 

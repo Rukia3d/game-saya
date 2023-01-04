@@ -223,6 +223,7 @@ export interface IServer {
   arenaFight: IArena;
   arenaRunHistory: IArena[];
   arenaFightHistory: IArena[];
+  nextLiveDistribution: number;
 }
 
 export interface IGame {
@@ -239,6 +240,7 @@ export interface IPlayer {
   id: number;
   name: string;
   loungeId: number | null;
+  maxEnergy: number;
   materials: IInventoryQuant[];
   adventures: IAdventure[];
   weapons: IWeapon[];
@@ -247,6 +249,7 @@ export interface IPlayer {
   messages: IMessage[];
   currentState: ICurrentState;
   claims: IClaimReward[];
+  lastActive: number;
 }
 
 export interface IPage {
@@ -313,6 +316,7 @@ export type IGameEvent =
   | IMissCheckpointEvent
   | IServerArenaStartEvent
   | IServerArenaEndEvent
+  | IServerDistributeLivesEvent
   | IArenaStartEvent
   | IArenaEndEvent
   | IClaimRewardEvent;
@@ -735,6 +739,21 @@ export type IPlayerArenaStartDB = {
   mode: gameMode;
 };
 
+export type IServerDistributeLivesDB = {
+  eventId: number;
+  created: number;
+};
+
+export type IServerDistributeLivesData = {
+  created: number;
+};
+
+export type IServerDistributeLivesEvent = {
+  eventId: number;
+  type: "DISTRIBUTELIVES";
+  created: number;
+};
+
 export type IMapEnemy = { id: number };
 export type IMapTrigger = {
   id: number;
@@ -798,7 +817,8 @@ export type eventType =
   | "ARENASTART"
   | "ARENAEND"
   | "SERVERARENASTART"
-  | "SERVERARENAEND";
+  | "SERVERARENAEND"
+  | "DISTRIBUTELIVES";
 
 export type goalType =
   | "any_story_levels"

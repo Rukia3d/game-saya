@@ -1,5 +1,5 @@
 import { Database } from "sqlite";
-import { eventType } from "../engine/types";
+import { eventType, IServerDistributeLivesDB } from "../engine/types";
 import { readAllLnes } from "./db";
 
 export type IEventDB = {
@@ -38,6 +38,11 @@ export type IEventServerArenaStartDB = {
 };
 
 export type IEventServerArenaEndDB = {
+  eventId: number;
+  created: number;
+};
+
+export type IEventServerDistributeLivesDB = {
   eventId: number;
   created: number;
 };
@@ -102,6 +107,14 @@ export const readServerEndArena = async (
   const events: IEventServerArenaEndDB[] = [];
   const sql = `SELECT * from event_server_arenaend`;
   return readAllLnes(events, sql, db) as unknown as IEventServerArenaEndDB[];
+};
+
+export const readServerDistributeLives = async (
+  db: Database
+): Promise<IServerDistributeLivesDB[]> => {
+  const events: IServerDistributeLivesDB[] = [];
+  const sql = `SELECT * from event_server_distributelives`;
+  return readAllLnes(events, sql, db) as unknown as IServerDistributeLivesDB[];
 };
 
 export const readStartArena = async (

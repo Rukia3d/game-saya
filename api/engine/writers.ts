@@ -11,6 +11,7 @@ import {
   IServerArenaEndEvent,
   IServerArenaStartData,
   IServerArenaStartEvent,
+  IServerDistributeLivesEvent,
   IStartLevelData,
   IStartLevelEvent,
   IWinLevelData,
@@ -33,6 +34,7 @@ import {
   writeArenaStartEvent,
   writeClaimRewardEvent,
   writeCreatePlayer,
+  writeDistributeLives,
   writeStartLevelEvent,
   writeWinLevelEvent,
 } from "../storage/playerdata_writers";
@@ -181,6 +183,18 @@ export const serverEndArena = async (
   return {
     eventId: nextArenaEndId,
     type: "SERVERARENAEND",
+    created: created,
+  };
+};
+
+export const serverDistributeLives = async (
+  db: Database,
+  created: number
+): Promise<IServerDistributeLivesEvent> => {
+  const nextDistributeLiveId = await writeDistributeLives(created, db);
+  return {
+    eventId: nextDistributeLiveId,
+    type: "DISTRIBUTELIVES",
     created: created,
   };
 };

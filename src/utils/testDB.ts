@@ -582,6 +582,7 @@ export const testPlayer: IPlayer = {
   id: 0,
   name: "BASEPLAYER",
   loungeId: null,
+  maxEnergy: 100,
   materials: materials,
   adventures: adventures,
   weapons: weapons,
@@ -590,6 +591,7 @@ export const testPlayer: IPlayer = {
   messages: [],
   currentState: { state: "MAIN" },
   claims: [],
+  lastActive: new Date().valueOf(),
 };
 
 export const testServer: IServer = {
@@ -597,4 +599,5 @@ export const testServer: IServer = {
   arenaFight: { events: [], resultTime: 1654347193, mode: "fight" },
   arenaRunHistory: [],
   arenaFightHistory: [],
+  nextLiveDistribution: (Date.now() + 5000).valueOf(),
 };

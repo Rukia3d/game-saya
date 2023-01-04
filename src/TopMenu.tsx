@@ -14,7 +14,7 @@ export const TopMenu = () => {
       <div className="Materials">
         {context.player.materials.map((m: IInventoryQuant, n: number) => (
           <div className="Material" key={n}>
-            <img src={`../pics/icons/${m.name}.png`} alt={m.name} />
+            <img src={`../pics/icons/${m.name}_black.png`} alt={m.name} />
             <div>{m.quantity}</div>
           </div>
         ))}

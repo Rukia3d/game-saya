@@ -6,7 +6,6 @@ import {
   IArenaStartEvent,
   IClaimRewardEvent,
   ICreatePlayerEvent,
-  IServerArenaEndDB,
   IServerArenaEndEvent,
   IServerArenaStartEvent,
   IStartLevelEvent,

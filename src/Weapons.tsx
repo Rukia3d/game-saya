@@ -86,7 +86,7 @@ export const Weapons = () => {
                       key={n + j}
                     >
                       <img
-                        src={`../pics/weapons/${w.name}-${m.name}.png`}
+                        src={`../pics/weapons/${w.name}_${m.name}.png`}
                         alt={m.name}
                       />
                     </div>

@@ -4,6 +4,7 @@ export const basePlayer: IPlayer = {
   id: 0,
   name: "BASEPLAYER",
   loungeId: null,
+  maxEnergy: 100,
   materials: [],
   adventures: [],
   weapons: [],
@@ -12,6 +13,7 @@ export const basePlayer: IPlayer = {
   messages: [],
   currentState: { state: "MAIN" },
   claims: [],
+  lastActive: new Date().valueOf(),
 };
 
 export const baseServer: IServer = {
@@ -19,4 +21,5 @@ export const baseServer: IServer = {
   arenaFight: { events: [], resultTime: 1654347193, mode: "fight" },
   arenaRunHistory: [],
   arenaFightHistory: [],
+  nextLiveDistribution: (Date.now() + 5000).valueOf(),
 };
