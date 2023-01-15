@@ -7,10 +7,9 @@ export const applyEvent = async (
   game: IGame,
   event: IGameEvent
 ): Promise<IGame> => {
-  let newPlayers: IPlayer[] = JSON.parse(JSON.stringify(game.players));
-  let newServer: IServer = JSON.parse(JSON.stringify(game.server));
-  let newGame: IGame = { players: newPlayers, server: newServer };
-  console.log("Apply Event", event.type);
+  let newGame = game;
+  const startAt = new Date().valueOf();
+  console.log("Apply Event start", event.type, startAt);
   switch (event.type) {
     case "CREATEPLAYER":
       newGame = await events.createPlayer(
@@ -74,8 +73,11 @@ export const applyEvent = async (
       break;
       */
     default:
-      throw new Error("Unknown event type");
+      throw new Error("Unknown event type " + event.type);
   }
+
+  const endAt = new Date().valueOf();
+  console.log("Apply Event end", event.type, endAt, endAt - startAt);
   return newGame;
 };
 
@@ -112,7 +114,12 @@ export const applyEvents = async (
   };
   for (let i = 0; i < events.length; i++) {
     const event = events[i];
+
+    const startAt = new Date().valueOf();
+    console.log("EVENT START", new Date());
     game = await applyEvent(db, game, event);
+    const endAt = new Date().valueOf();
+    console.log("EVENT END", new Date(), endAt - startAt);
   }
   return game;
 };

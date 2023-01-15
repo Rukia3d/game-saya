@@ -27,9 +27,12 @@ const appWithDB = (db: Database) => {
   };
 
   app.get("/api/players/:id", async (req: any, res: any) => {
+    console.log("GETPLAYER", req.params.id, new Date());
     const playerId = parseInt(req.params.id);
     const game = await eventsApplication(db);
     const player = findPlayer(game, playerId);
+
+    console.log("GETPLAYER END", new Date());
     res.send({ server: game.server, player: player });
   });
 

@@ -83,7 +83,7 @@ export const serverArenaStart = async (
   event: IServerArenaStartEvent,
   game: IGame
 ): Promise<IGame> => {
-  const newServer: IServer = JSON.parse(JSON.stringify(game.server));
+  const newServer: IServer = game.server;
   newServer.arenaFightHistory.push(game.server.arenaFight);
   newServer.arenaRunHistory.push(game.server.arenaRun);
   const allMaterials = await readMaterialsData(db);
@@ -149,9 +149,9 @@ export const serverDistributeLives = async (
   event: IServerDistributeLivesEvent,
   game: IGame
 ): Promise<IGame> => {
-  const newServer: IServer = JSON.parse(JSON.stringify(game.server));
-  let newPlayers: IPlayer[] = JSON.parse(JSON.stringify(game.players));
-  console.log("newPlayers", newPlayers);
+  const newServer: IServer = game.server;
+  let newPlayers: IPlayer[] = game.players;
+  // console.log("newPlayers", newPlayers);
   newPlayers.forEach((n: IPlayer) => {
     const canDistribute =
       n.materials.length > 0 &&
