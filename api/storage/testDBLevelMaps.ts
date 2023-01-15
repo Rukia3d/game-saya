@@ -762,7 +762,7 @@ export const testCells: ICell[][] = [
     { type: "obstacle" },
     { type: "space" },
     { type: "space" },
-    { type: "obstacle" },
+    { type: "space" },
     { type: "obstacle" },
   ],
   [

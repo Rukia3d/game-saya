@@ -9,11 +9,13 @@ import {
   IRun,
   IPoint,
   ISizedPoint,
+  IMapEnemyCell,
 } from "../api/engine/types";
 
 const BULLETSPEED = 5;
 const BULLETLIFEINCELLS = 4;
 const CELLSIZE: IPoint = { x: 80, y: 80 };
+const BULLETSIZE: IPoint = { x: 10, y: 10 };
 
 type Box = {
   bottomLeft: IPoint;
@@ -27,6 +29,7 @@ type Collision =
       point: IPoint;
       type: "enemy";
       enemy: IMapEnemy;
+      enemyCell: IMapEnemyCell;
     }
   | {
       point: IPoint;
@@ -69,6 +72,7 @@ const enemyCollision = (
         point: collision,
         type: "enemy",
         enemy: enemy,
+        enemyCell: e,
       };
     }
   }
@@ -171,7 +175,7 @@ const boxesCollided = (box1: Box, box2: Box): IPoint | undefined => {
   return boxCorners(box1).find((point) => pointInsideBox(point, box2));
 };
 
-const makeInactive = (collision: Collision, gameplay: Gameplay): Gameplay => {
+const makeInactive = (collision: Collision, gameplay: Gameplay) => {
   const triggerIndex = gameplay.level.triggers.content.findIndex(
     (t: IMapTrigger) =>
       collision.type === "trigger" && t.id === collision.trigger.id
@@ -180,7 +184,6 @@ const makeInactive = (collision: Collision, gameplay: Gameplay): Gameplay => {
     ...gameplay.level.triggers.content[triggerIndex],
     active: false,
   };
-  return gameplay;
 };
 
 const findLastRestart = (collision: Collision, gameplay: Gameplay): IPoint => {
@@ -223,7 +226,7 @@ const updateEntities = (entities: IEntity[]) => {
 
     if (entity.lifetime === 0) {
       // delete the entity if it reached lifetime 0
-      entities.splice(i, 1);
+      removeEntity(entities, i);
       continue;
     }
 
@@ -234,19 +237,101 @@ const updateEntities = (entities: IEntity[]) => {
   }
 };
 
-const collideEntities = (level: IRun) => {
-  for (let i = 0; i < level.entities.length; i++) {
-    const entity = level.entities[i];
+const collidePlayer = (gameplay: Gameplay) => {
+  const { level, player } = gameplay;
+
+  const collision =
+    mapCollision(level, player) ||
+    enemyCollision(level, player) ||
+    triggerCollision(level, player);
+
+  if (!collision) return;
+
+  // console.log("collision detected", collision);
+  switch (collision.type) {
+    case "obstacle":
+    case "enemy":
+      if (gameplay.lives > 0) {
+        gameplay.state = "hit";
+        gameplay.lives = gameplay.lives - 1;
+        const restartPoint = findLastRestart(collision, gameplay);
+        console.log("restartPoint", restartPoint);
+        gameplay.player = {
+          ...initialPlayer,
+          point: restartPoint,
+        };
+        gameplay.state = "run";
+      } else {
+        gameplay.state = "lost";
+      }
+      break;
+    case "trigger":
+      // console.log("trigger", collision.trigger.id);
+      if (collision.trigger.active) {
+        if (collision.trigger.type === "dialogue" && collision.dialogue) {
+          gameplay.state = "stop";
+          gameplay.dialogue = collision.dialogue;
+          makeInactive(collision, gameplay);
+        }
+        if (
+          collision.trigger.type === "coin" &&
+          collision.trigger.data?.value
+        ) {
+          gameplay.state = "stop";
+          gameplay.triggered.push(collision.point);
+          makeInactive(collision, gameplay);
+          gameplay.state = "run";
+        }
+        if (collision.trigger.type === "win") {
+          gameplay.state = "win";
+        }
+      }
+      break;
+  }
+};
+
+const removeEntity = (entities: IEntity[], i: number) => entities.splice(i, 1);
+
+const killEnemy = (gameplay: Gameplay, enemyCell: IMapEnemyCell) => {
+  const n = gameplay.level.enemies.coordinates.findIndex(
+    (e) =>
+      e.point.x === enemyCell.point.x &&
+      e.point.y === enemyCell.point.y &&
+      e.enemyId === enemyCell.enemyId
+  );
+  gameplay.level.enemies.coordinates.splice(n, 1);
+};
+
+const collideEntities = (gameplay: Gameplay) => {
+  const { level } = gameplay;
+  const { entities } = level;
+
+  for (let i = 0; i < entities.length; i++) {
+    const entity = entities[i];
     if (!entity.initiateCollisions) continue;
 
-    // const collision =
-    // mapCollision(level, playerM) ||
-    // enemyCollision(level, playerS);
+    const collision =
+      mapCollision(level, entity) || enemyCollision(level, entity);
+
+    if (!collision) continue;
+    switch (collision.type) {
+      case "obstacle":
+        removeEntity(entities, i);
+        break;
+      case "enemy":
+        killEnemy(gameplay, collision.enemyCell);
+        removeEntity(entities, i);
+        break;
+    }
   }
 };
 
 export const updateGameplay = (gameplay: Gameplay) => {
-  const { level, player } = gameplay;
+  if (gameplay.state !== "run") {
+    return;
+  }
+
+  const { player } = gameplay;
 
   player.point.y = player.point.y + 1;
   if (player.point.x !== gameplay.playerTargetX) {
@@ -255,56 +340,9 @@ export const updateGameplay = (gameplay: Gameplay) => {
   }
 
   updateEntities(gameplay.level.entities);
-  // collideEntities(gameplay.level);
 
-  const collision =
-    mapCollision(level, player) ||
-    enemyCollision(level, player) ||
-    triggerCollision(level, player);
-
-  if (collision && gameplay.state === "run") {
-    // console.log("collision detected", collision);
-    switch (collision.type) {
-      case "obstacle":
-      case "enemy":
-        if (gameplay.lives > 0) {
-          gameplay.state = "hit";
-          gameplay.lives = gameplay.lives - 1;
-          const restartPoint = findLastRestart(collision, gameplay);
-          console.log("restartPoint", restartPoint);
-          gameplay.player = {
-            ...initialPlayer,
-            point: restartPoint,
-          };
-          gameplay.state = "run";
-        } else {
-          gameplay.state = "lost";
-        }
-        break;
-      case "trigger":
-        // console.log("trigger", collision.trigger.id);
-        if (collision.trigger.active) {
-          if (collision.trigger.type === "dialogue" && collision.dialogue) {
-            gameplay.state = "stop";
-            gameplay.dialogue = collision.dialogue;
-            gameplay = makeInactive(collision, gameplay);
-          }
-          if (
-            collision.trigger.type === "coin" &&
-            collision.trigger.data?.value
-          ) {
-            gameplay.state = "stop";
-            gameplay.triggered.push(collision.point);
-            gameplay = makeInactive(collision, gameplay);
-            gameplay.state = "run";
-          }
-          if (collision.trigger.type === "win") {
-            gameplay.state = "win";
-          }
-        }
-        break;
-    }
-  }
+  collideEntities(gameplay);
+  collidePlayer(gameplay);
 };
 
 const moveLeft = (gameplay: Gameplay) => {
@@ -333,6 +371,7 @@ const fire = (gameplay: Gameplay) => {
       x: CELLSIZE.x / 2 - 5,
       y: CELLSIZE.y,
     }),
+    size: BULLETSIZE,
     movement: {
       type: "line",
     },

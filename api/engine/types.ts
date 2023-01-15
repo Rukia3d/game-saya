@@ -18,10 +18,9 @@ export interface IReelPanel {
   name?: string;
 }
 
-export interface IEntity {
+export interface IEntity extends ISizedPoint {
   type: "bullet" | "enemy" | "coin";
   id: number;
-  point: IPoint;
   lifetime: number | null;
   initiateCollisions: boolean;
   movement: {
