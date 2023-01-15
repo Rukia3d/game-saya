@@ -848,7 +848,8 @@ export const triggersMap: IMapTriggerCell[] = [
   return {
     type: "trigger",
     triggerId: trigger.triggerId,
-    ...s,
+    point: s,
+    size: { x: 80, y: 80 },
   };
 });
 
@@ -881,9 +882,14 @@ export const enemiesMap: IMapEnemyCell[] = [
   { x: 0, y: 85, enemyId: 1 },
   { x: 1, y: 89, enemyId: 1 },
   { x: 3, y: 97, enemyId: 1 },
-].map((enemy, n) => {
+].map((enemy, n): IMapEnemyCell => {
   const s = mapToScreen(enemy, testCells);
-  return { type: "enemy", id: n, ...s, enemyId: enemy.enemyId };
+  return {
+    type: "enemy",
+    point: s,
+    size: { x: 80, y: 80 },
+    enemyId: enemy.enemyId,
+  };
 });
 
 export const testRun: IRun = {

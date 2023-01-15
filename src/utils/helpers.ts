@@ -1,4 +1,4 @@
-import { IInventoryQuant, ICell, Point } from "../../api/engine/types";
+import { IInventoryQuant, ICell, IPoint } from "../../api/engine/types";
 
 //@ts-ignore
 export const fetcher = (...args) => fetch(...args).then((res) => res.json());
@@ -45,7 +45,7 @@ export const shuffle = (array: any) => array.sort(() => Math.random() - 0.5);
 
 // TODO: replace { x: number, y: number } with Point type
 export const screenToMap = (
-  s: Point,
+  s: IPoint,
   map: ICell[][]
 ): { x: number; y: number } => {
   const xP = Math.floor(s.x / 80);
@@ -54,7 +54,7 @@ export const screenToMap = (
 };
 
 export const mapToScreen = (
-  m: Point,
+  m: IPoint,
   map: ICell[][]
 ): { x: number; y: number } => {
   const xS = m.x * 80; // left
@@ -62,7 +62,8 @@ export const mapToScreen = (
   return { x: xS, y: yS };
 };
 
-export const addPoints = (p1: Point, p2: Point): Point => ({
-  x: p1.x + p2.x,
-  y: p1.y + p2.y,
+export const addPoints = (p1: IPoint, p2: IPoint, name?: string): IPoint => ({
+  x: Math.floor(p1.x + p2.x),
+  y: Math.floor(p1.y + p2.y),
+  name: name || p1.name || p2.name,
 });

@@ -1,4 +1,9 @@
-export type Point = { x: number; y: number; name?: string };
+export type IPoint = { x: number; y: number; name?: string };
+
+export type ISizedPoint = {
+  point: IPoint;
+  size: IPoint;
+};
 
 // GAME
 
@@ -16,7 +21,7 @@ export interface IReelPanel {
 export interface IEntity {
   type: "bullet" | "enemy" | "coin";
   id: number;
-  point: Point;
+  point: IPoint;
   lifetime: number | null;
   initiateCollisions: boolean;
   movement: {
@@ -776,16 +781,12 @@ export type IMapTrigger = {
   data?: { dialogueId?: number; x?: number; value?: number };
 };
 export type IMapDialogue = { id: number };
-export type IMapEnemyCell = {
+export type IMapEnemyCell = ISizedPoint & {
   type: "enemy";
-  x: number;
-  y: number;
   enemyId: number;
 };
-export type IMapTriggerCell = {
+export type IMapTriggerCell = ISizedPoint & {
   type: "trigger";
-  x: number;
-  y: number;
   triggerId: number;
 };
 

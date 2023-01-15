@@ -34,8 +34,8 @@ export const Player = ({ gameplay }: { gameplay: Gameplay }) => {
     <div
       className="Player"
       style={{
-        left: `${gameplay.player.x}px`,
-        bottom: `${gameplay.player.y}px`,
+        left: `${gameplay.player.point.x}px`,
+        bottom: `${gameplay.player.point.y}px`,
       }}
     ></div>
   );
@@ -45,7 +45,7 @@ const Trigger = ({ trigger }: { trigger: IMapTriggerCell }) => {
   return (
     <div
       className="trigger"
-      style={{ left: `${trigger.x}px`, bottom: `${trigger.y}px` }}
+      style={{ left: `${trigger.point.x}px`, bottom: `${trigger.point.y}px` }}
     />
   );
 };
@@ -54,7 +54,7 @@ const Enemy = ({ enemy }: { enemy: IMapEnemyCell }) => {
   return (
     <div
       className="enemy"
-      style={{ left: `${enemy.x}px`, bottom: `${enemy.y}px` }}
+      style={{ left: `${enemy.point.x}px`, bottom: `${enemy.point.y}px` }}
     />
   );
 };
@@ -113,7 +113,7 @@ export const Level = ({ gameplay }: { gameplay: Gameplay }) => {
 
   return (
     <div className="GameLevelMap">
-      <div className="GameLevel" style={{ bottom: `-${player.y}px` }}>
+      <div className="GameLevel" style={{ bottom: `-${player.point.y}px` }}>
         {staticCells.map((m: ICell[], n: number) => (
           <div className="MapRow" key={n}>
             {m.map((c: ICell, j: number) => (

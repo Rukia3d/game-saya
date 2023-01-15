@@ -7,54 +7,60 @@ import {
   IMapEnemy,
   IMapTrigger,
   IRun,
-  Point,
+  IPoint,
+  ISizedPoint,
 } from "../api/engine/types";
 
 const BULLETSPEED = 5;
 const BULLETLIFEINCELLS = 4;
+const CELLSIZE: IPoint = { x: 80, y: 80 };
 
 type Box = {
-  bottomLeft: Point;
-  topLeft: Point;
-  topRight: Point;
-  bottomRight: Point;
+  bottomLeft: IPoint;
+  topLeft: IPoint;
+  topRight: IPoint;
+  bottomRight: IPoint;
 };
 
 type Collision =
   | {
-      point: Point;
+      point: IPoint;
       type: "enemy";
       enemy: IMapEnemy;
     }
   | {
-      point: Point;
+      point: IPoint;
       type: "obstacle";
     }
   | {
-      point: Point;
+      point: IPoint;
       type: "trigger";
       trigger: IMapTrigger;
       dialogue?: IDialogue;
     };
 
 export type Gameplay = {
-  player: Point;
+  player: ISizedPoint;
   playerTargetX: number;
   lives: number;
   state: "run" | "stop" | "hit" | "lost" | "win";
   time: number;
   level: IRun;
-  triggered: Point[];
+  triggered: IPoint[];
   dialogue: IDialogue | null;
   moveLeft: () => void;
   moveRight: () => void;
   fire: () => void;
 };
 
-const enemyCollision = (current: IRun, player: Box): Collision | void => {
+const enemyCollision = (
+  current: IRun,
+  source: ISizedPoint
+): Collision | void => {
   const enemies = current.enemies;
+  const sourceBox = pointToBox(source);
   for (const e of enemies.coordinates) {
-    const collision = boxesCollided(player, pointToBox(e));
+    const collision = boxesCollided(sourceBox, pointToBox(e));
     if (collision) {
       const enemy =
         enemies.content.find((f: IMapEnemy) => f.id === e.enemyId) || null;
@@ -68,11 +74,15 @@ const enemyCollision = (current: IRun, player: Box): Collision | void => {
   }
 };
 
-const triggerCollision = (current: IRun, player: Box): Collision | void => {
+const triggerCollision = (
+  current: IRun,
+  source: ISizedPoint
+): Collision | void => {
   const triggers = current.triggers;
   const dialogues = current.dialogues;
+  const sourceBox = pointToBox(source);
   for (const t of triggers.coordinates) {
-    const collision = boxesCollided(player, pointToBox(t));
+    const collision = boxesCollided(sourceBox, pointToBox(t));
     if (collision) {
       const trigger =
         triggers.content.find((f: IMapTrigger) => f.id === t.triggerId) || null;
@@ -95,9 +105,16 @@ const triggerCollision = (current: IRun, player: Box): Collision | void => {
 
 const mapCollision = (
   current: IRun | IFight,
-  player: Box
+  source: ISizedPoint
 ): Collision | void => {
-  const collision = boxCorners(player).find((point) =>
+  const box = pointToBox(source);
+  const mapBox: Box = {
+    bottomLeft: screenToMap(box.bottomLeft, current.map),
+    topLeft: screenToMap(box.topLeft, current.map),
+    topRight: screenToMap(box.topRight, current.map),
+    bottomRight: screenToMap(box.bottomRight, current.map),
+  };
+  const collision = boxCorners(mapBox).find((point) =>
     isDangerous(current.map, point)
   );
 
@@ -114,33 +131,43 @@ const mapCollision = (
   };
 };
 
-const isDangerous = (level: ICell[][], coord: Point) => {
+const isDangerous = (level: ICell[][], coord: IPoint) => {
   return level[coord.y][coord.x].type !== "space";
 };
 
-const pointToBox = (point: Point): Box => {
+const pointToBox = (source: ISizedPoint): Box => {
+  const { point, size } = source;
   const prefix = point.name ? `${point.name}-` : "";
   return {
-    bottomLeft: { x: point.x, y: point.y, name: `${prefix}bottomLeft` },
-    topLeft: { x: point.x, y: point.y + 79, name: `${prefix}topLeft` },
-    topRight: { x: point.x + 79, y: point.y + 79, name: `${prefix}topRight` },
-    bottomRight: { x: point.x + 79, y: point.y, name: `${prefix}bottomRight` },
+    bottomLeft: addPoints({ x: 0, y: 0, name: `${prefix}bottomLeft` }, point),
+    topLeft: addPoints(
+      { x: 0, y: size.y - 1, name: `${prefix}topLeft` },
+      point
+    ),
+    topRight: addPoints(
+      { x: size.x - 1, y: size.y - 1, name: `${prefix}topRight` },
+      point
+    ),
+    bottomRight: addPoints(
+      { x: size.x - 1, y: 0, name: `${prefix}bottomRight` },
+      point
+    ),
   };
 };
 
-const boxCorners = (box: Box): Point[] => [
+const boxCorners = (box: Box): IPoint[] => [
   box.bottomLeft,
   box.bottomRight,
   box.topLeft,
   box.topRight,
 ];
 
-const pointInsideBox = (point: Point, box: Box): boolean => {
+const pointInsideBox = (point: IPoint, box: Box): boolean => {
   const xInsideBox = point.x >= box.bottomLeft.x && point.x <= box.topRight.x;
   const yInsideBox = point.y >= box.bottomLeft.y && point.y <= box.topRight.y;
   return xInsideBox && yInsideBox;
 };
-const boxesCollided = (box1: Box, box2: Box): Point | undefined => {
+const boxesCollided = (box1: Box, box2: Box): IPoint | undefined => {
   return boxCorners(box1).find((point) => pointInsideBox(point, box2));
 };
 
@@ -156,7 +183,7 @@ const makeInactive = (collision: Collision, gameplay: Gameplay): Gameplay => {
   return gameplay;
 };
 
-const findLastRestart = (collision: Collision, gameplay: Gameplay): Point => {
+const findLastRestart = (collision: Collision, gameplay: Gameplay): IPoint => {
   const currentPosition = collision.point.y;
   const restarts: number[] = gameplay.level.triggers.content.map(
     (t: IMapTrigger) =>
@@ -172,8 +199,8 @@ const findLastRestart = (collision: Collision, gameplay: Gameplay): Point => {
 };
 
 const initialPlayer = {
-  x: 160,
-  y: 0,
+  point: { x: 160, y: 0 },
+  size: CELLSIZE,
   name: "player",
 };
 
@@ -196,7 +223,6 @@ const updateEntities = (entities: IEntity[]) => {
 
     if (entity.lifetime === 0) {
       // delete the entity if it reached lifetime 0
-      console.log("entity is dead", entity.id);
       entities.splice(i, 1);
       continue;
     }
@@ -204,34 +230,37 @@ const updateEntities = (entities: IEntity[]) => {
     if (entity.lifetime) {
       entity.lifetime -= 1;
     }
-    console.log("entity aged", entity.id, entity.lifetime);
     moveEntity(entity);
+  }
+};
+
+const collideEntities = (level: IRun) => {
+  for (let i = 0; i < level.entities.length; i++) {
+    const entity = level.entities[i];
+    if (!entity.initiateCollisions) continue;
+
+    // const collision =
+    // mapCollision(level, playerM) ||
+    // enemyCollision(level, playerS);
   }
 };
 
 export const updateGameplay = (gameplay: Gameplay) => {
   const { level, player } = gameplay;
 
-  player.y = player.y + 1;
-  if (player.x !== gameplay.playerTargetX) {
-    const step = player.x < gameplay.playerTargetX ? 10 : -10;
-    player.x = player.x + step;
+  player.point.y = player.point.y + 1;
+  if (player.point.x !== gameplay.playerTargetX) {
+    const step = player.point.x < gameplay.playerTargetX ? 10 : -10;
+    player.point.x = player.point.x + step;
   }
 
-  const playerS = pointToBox(player);
-  const playerM: Box = {
-    bottomLeft: screenToMap(playerS.bottomLeft, level.map),
-    topLeft: screenToMap(playerS.topLeft, level.map),
-    topRight: screenToMap(playerS.topRight, level.map),
-    bottomRight: screenToMap(playerS.bottomRight, level.map),
-  };
-
   updateEntities(gameplay.level.entities);
+  // collideEntities(gameplay.level);
 
   const collision =
-    mapCollision(level, playerM) ||
-    enemyCollision(level, playerS) ||
-    triggerCollision(level, playerS);
+    mapCollision(level, player) ||
+    enemyCollision(level, player) ||
+    triggerCollision(level, player);
 
   if (collision && gameplay.state === "run") {
     // console.log("collision detected", collision);
@@ -245,8 +274,7 @@ export const updateGameplay = (gameplay: Gameplay) => {
           console.log("restartPoint", restartPoint);
           gameplay.player = {
             ...initialPlayer,
-            y: restartPoint.y,
-            x: restartPoint.x,
+            point: restartPoint,
           };
           gameplay.state = "run";
         } else {
@@ -282,7 +310,7 @@ export const updateGameplay = (gameplay: Gameplay) => {
 const moveLeft = (gameplay: Gameplay) => {
   console.log("gameplay move left");
   gameplay.playerTargetX = Math.max(
-    Math.floor((gameplay.player.x - 1) / 80) * 80,
+    Math.floor((gameplay.player.point.x - 1) / CELLSIZE.x) * 80,
     0
   );
 };
@@ -290,7 +318,7 @@ const moveLeft = (gameplay: Gameplay) => {
 const moveRight = (gameplay: Gameplay) => {
   console.log("gameplay move right");
   gameplay.playerTargetX = Math.min(
-    Math.ceil((gameplay.player.x + 1) / 80) * 80,
+    Math.ceil((gameplay.player.point.x + 1) / CELLSIZE.x) * 80,
     80 * 4
   );
 };
@@ -300,10 +328,11 @@ const fire = (gameplay: Gameplay) => {
     type: "bullet",
     id: new Date().valueOf(),
     lifetime: Math.floor((80 * BULLETLIFEINCELLS) / BULLETSPEED),
-    point: {
-      x: gameplay.player.x + 40 - 5,
-      y: gameplay.player.y + 80,
-    },
+    initiateCollisions: true,
+    point: addPoints(gameplay.player.point, {
+      x: CELLSIZE.x / 2 - 5,
+      y: CELLSIZE.y,
+    }),
     movement: {
       type: "line",
     },
@@ -314,7 +343,7 @@ const fire = (gameplay: Gameplay) => {
 export const initGameplay = (level: IRun): Gameplay => {
   const gp: Gameplay = {
     player: { ...initialPlayer },
-    playerTargetX: initialPlayer.x,
+    playerTargetX: initialPlayer.point.x,
     lives: 3,
     state: "run",
     triggered: [],

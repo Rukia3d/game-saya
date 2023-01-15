@@ -92,8 +92,8 @@ const enemies: {
     {
       type: "enemy",
       enemyId: 0,
-      x: 160,
-      y: 7839,
+      point: { x: 160, y: 7839 },
+      size: { x: 80, y: 80 },
     },
   ],
   content: [{ id: 0 }],
@@ -107,8 +107,8 @@ const triggers: {
     {
       type: "trigger",
       triggerId: 0,
-      x: 0,
-      y: 7999,
+      point: { x: 0, y: 7999 },
+      size: { x: 80, y: 80 },
     },
   ],
   content: [{ id: 0, type: "dialogue", active: true, data: { dialogueId: 0 } }],
