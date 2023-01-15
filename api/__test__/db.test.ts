@@ -13,13 +13,13 @@ import {
 } from "../engine/types";
 import { baseServer } from "../storage/testDB";
 import {
+  ARENAEVENTINTERVAL,
   INDEXOFENERGY,
   INDEXOFEXPERIENCE,
   INDEXOFGOLD,
   INDEXOFJADE,
 } from "../config";
 import dayjs from "dayjs";
-import { ARENAEVENTINTERVAL } from "../cronjobs";
 
 //jest.mock("../storage/db");
 
