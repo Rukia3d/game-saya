@@ -890,6 +890,7 @@ export const testRun: IRun = {
   settingName: "Wood",
   setting: "forest",
   map: testCells,
+  entities: [],
   enemies: {
     coordinates: enemiesMap,
     content: [{ id: 0 }, { id: 1 }],

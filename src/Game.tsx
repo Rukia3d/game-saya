@@ -13,6 +13,7 @@ import {
   IMapEnemyCell,
   IMapTriggerCell,
   IInventoryQuant,
+  IEntity,
 } from "../api/engine/types";
 const INDEXOFENERGY = 0;
 
@@ -58,6 +59,15 @@ const Enemy = ({ enemy }: { enemy: IMapEnemyCell }) => {
   );
 };
 
+const Entity = ({ entity }: { entity: IEntity }) => {
+  return (
+    <div
+      className="bullet"
+      style={{ left: `${entity.point.x}px`, bottom: `${entity.point.y}px` }}
+    />
+  );
+};
+
 export const Controls = ({ gameplay }: { gameplay: Gameplay }) => {
   const moveLeft = () => {
     console.log("moveLeft");
@@ -68,10 +78,16 @@ export const Controls = ({ gameplay }: { gameplay: Gameplay }) => {
     gameplay.moveRight();
   };
 
+  const fire = () => {
+    console.log("fire");
+    gameplay.fire();
+  };
+
   return (
     <div className="Control">
       <div className="Left" onClick={moveLeft}></div>
       <div className="Right" onClick={moveRight}></div>
+      <div className="Fire" onClick={fire}></div>
     </div>
   );
 };
@@ -93,6 +109,7 @@ export const Level = ({ gameplay }: { gameplay: Gameplay }) => {
   const staticCells = level.map;
   const enemies = level.enemies.coordinates;
   const triggers = level.triggers.coordinates;
+  const entities = level.entities;
 
   return (
     <div className="GameLevelMap">
@@ -108,6 +125,9 @@ export const Level = ({ gameplay }: { gameplay: Gameplay }) => {
         ))}
         {enemies.map((enemy, n) => (
           <Enemy key={n} enemy={enemy} />
+        ))}
+        {entities.map((entity, n) => (
+          <Entity key={n} entity={entity} />
         ))}
         {triggers.map((trigger, n) => (
           <Trigger key={n} trigger={trigger} />
@@ -210,7 +230,7 @@ export const GamePlay = ({
   const canPlay =
     context.player.materials[INDEXOFENERGY].quantity >= game.energy;
 
-  console.log("GamePlay gameplay.state", gameplay.state);
+  // console.log("GamePlay gameplay.state", gameplay.state);
 
   useEffect(() => {
     let myTimeout: any = null;

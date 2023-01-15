@@ -227,6 +227,7 @@ const chapters: IChapter[] = [
           settingName: "Wood",
           setting: "forest",
           map: map,
+          entities: [],
           enemies: enemies,
           triggers: triggers,
           type: "run" as gameMode,

@@ -1,3 +1,5 @@
+export type Point = { x: number; y: number; name?: string };
+
 // GAME
 
 export interface IReel {
@@ -11,6 +13,17 @@ export interface IReelPanel {
   name?: string;
 }
 
+export interface IEntity {
+  type: "bullet" | "enemy" | "coin";
+  id: number;
+  point: Point;
+  lifetime: number | null;
+  initiateCollisions: boolean;
+  movement: {
+    type: null | "line";
+  };
+}
+
 export interface IRun {
   settingName: string;
   setting: string;
@@ -19,6 +32,7 @@ export interface IRun {
     coordinates: IMapEnemyCell[];
     content: IMapEnemy[];
   };
+  entities: IEntity[];
   type: gameMode;
   musicAddress: string;
   triggers: {

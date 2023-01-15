@@ -1,14 +1,18 @@
-import { mapToScreen, screenToMap } from "./utils/helpers";
+import { addPoints, mapToScreen, screenToMap } from "./utils/helpers";
 import {
   ICell,
   IDialogue,
+  IEntity,
   IFight,
   IMapEnemy,
   IMapTrigger,
   IRun,
+  Point,
 } from "../api/engine/types";
 
-type Point = { x: number; y: number; name?: string };
+const BULLETSPEED = 5;
+const BULLETLIFEINCELLS = 4;
+
 type Box = {
   bottomLeft: Point;
   topLeft: Point;
@@ -44,6 +48,7 @@ export type Gameplay = {
   dialogue: IDialogue | null;
   moveLeft: () => void;
   moveRight: () => void;
+  fire: () => void;
 };
 
 const enemyCollision = (current: IRun, player: Box): Collision | void => {
@@ -172,6 +177,38 @@ const initialPlayer = {
   name: "player",
 };
 
+const trajectories = {
+  line: () => ({ change: { x: 0, y: BULLETSPEED } }), // constant vertical movement
+};
+
+const moveEntity = (entity: IEntity) => {
+  if (entity.movement.type === null) {
+    return;
+  }
+
+  const move = trajectories[entity.movement.type]();
+  entity.point = addPoints(entity.point, move.change);
+};
+
+const updateEntities = (entities: IEntity[]) => {
+  for (let i = 0; i < entities.length; i++) {
+    const entity = entities[i];
+
+    if (entity.lifetime === 0) {
+      // delete the entity if it reached lifetime 0
+      console.log("entity is dead", entity.id);
+      entities.splice(i, 1);
+      continue;
+    }
+
+    if (entity.lifetime) {
+      entity.lifetime -= 1;
+    }
+    console.log("entity aged", entity.id, entity.lifetime);
+    moveEntity(entity);
+  }
+};
+
 export const updateGameplay = (gameplay: Gameplay) => {
   const { level, player } = gameplay;
 
@@ -188,13 +225,16 @@ export const updateGameplay = (gameplay: Gameplay) => {
     topRight: screenToMap(playerS.topRight, level.map),
     bottomRight: screenToMap(playerS.bottomRight, level.map),
   };
+
+  updateEntities(gameplay.level.entities);
+
   const collision =
     mapCollision(level, playerM) ||
     enemyCollision(level, playerS) ||
     triggerCollision(level, playerS);
 
   if (collision && gameplay.state === "run") {
-    console.log("collision detected", collision);
+    // console.log("collision detected", collision);
     switch (collision.type) {
       case "obstacle":
       case "enemy":
@@ -214,7 +254,7 @@ export const updateGameplay = (gameplay: Gameplay) => {
         }
         break;
       case "trigger":
-        console.log("trigger", collision.trigger.id);
+        // console.log("trigger", collision.trigger.id);
         if (collision.trigger.active) {
           if (collision.trigger.type === "dialogue" && collision.dialogue) {
             gameplay.state = "stop";
@@ -255,6 +295,22 @@ const moveRight = (gameplay: Gameplay) => {
   );
 };
 
+const fire = (gameplay: Gameplay) => {
+  const bullet: IEntity = {
+    type: "bullet",
+    id: new Date().valueOf(),
+    lifetime: Math.floor((80 * BULLETLIFEINCELLS) / BULLETSPEED),
+    point: {
+      x: gameplay.player.x + 40 - 5,
+      y: gameplay.player.y + 80,
+    },
+    movement: {
+      type: "line",
+    },
+  };
+  gameplay.level.entities.push(bullet);
+};
+
 export const initGameplay = (level: IRun): Gameplay => {
   const gp: Gameplay = {
     player: { ...initialPlayer },
@@ -267,6 +323,7 @@ export const initGameplay = (level: IRun): Gameplay => {
     level,
     moveLeft: () => moveLeft(gp),
     moveRight: () => moveRight(gp),
+    fire: () => fire(gp),
   };
 
   return gp;
