@@ -84,35 +84,29 @@ const map = [
   ],
 ];
 
-const enemies: {
-  coordinates: IMapEnemyCell[];
-  content: IMapEnemy[];
-} = {
-  coordinates: [
-    {
-      type: "enemy",
-      enemyId: 0,
-      point: { x: 160, y: 7839 },
-      size: { x: 80, y: 80 },
-    },
-  ],
-  content: [{ id: 0 }],
-};
+const enemiesCoordinates = [
+  {
+    type: "enemy" as const,
+    enemyId: 0,
+    point: { x: 160, y: 7839 },
+    size: { x: 80, y: 80 },
+  },
+];
 
-const triggers: {
-  coordinates: IMapTriggerCell[];
-  content: IMapTrigger[];
-} = {
-  coordinates: [
-    {
-      type: "trigger",
-      triggerId: 0,
-      point: { x: 0, y: 7999 },
-      size: { x: 80, y: 80 },
-    },
-  ],
-  content: [{ id: 0, type: "dialogue", active: true, data: { dialogueId: 0 } }],
-};
+const enemiesContent = [{ id: 0 }];
+
+const triggersContent = [
+  { id: 0, type: "dialogue" as const, active: true, data: { dialogueId: 0 } },
+];
+
+const triggersCoordinates = [
+  {
+    type: "trigger" as const,
+    triggerId: 0,
+    point: { x: 0, y: 7999 },
+    size: { x: 80, y: 80 },
+  },
+];
 
 const opening = [
   {
@@ -228,8 +222,10 @@ const chapters: IChapter[] = [
           setting: "forest",
           map: map,
           entities: [],
-          enemies: enemies,
-          triggers: triggers,
+          enemiesContent: enemiesContent,
+          triggersContent: triggersContent,
+          enemies: enemiesCoordinates,
+          triggers: triggersCoordinates,
           type: "run" as gameMode,
           musicAddress: "testmusic",
           dialogues: [

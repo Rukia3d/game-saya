@@ -132,8 +132,8 @@ export const serverArenaEnd = async (
   event: IServerArenaEndEvent,
   game: IGame
 ): Promise<IGame> => {
-  const newServer: IServer = JSON.parse(JSON.stringify(game.server));
-  let newPlayers: IPlayer[] = JSON.parse(JSON.stringify(game.players));
+  const newServer: IServer = game.server;
+  let newPlayers: IPlayer[] = game.players;
   newServer.arenaRun.events.map((e: IArenaEvent) => {
     if (e.results.length > 0) {
       const result = detectWinners(e.results);

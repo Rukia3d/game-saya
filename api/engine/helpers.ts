@@ -102,7 +102,7 @@ export const rewardArenaPlayer = (
   reward: IInventoryQuant[],
   place: number
 ) => {
-  const newPlayer: IPlayer = JSON.parse(JSON.stringify(player));
+  const newPlayer: IPlayer = player;
   const newId = newPlayer.claims.length;
   newPlayer.claims.push({
     id: newId,
@@ -121,7 +121,7 @@ export const replacePlayer = (
   allPlayers: IPlayer[],
   newPlayer: IPlayer
 ): IPlayer[] => {
-  const newPlayers: IPlayer[] = JSON.parse(JSON.stringify(allPlayers));
+  const newPlayers: IPlayer[] = allPlayers;
   const indexOfNewPlayer = allPlayers.findIndex(
     (p: IPlayer) => p.id === newPlayer.id
   );
@@ -137,7 +137,7 @@ export const rewardArenaPlayers = (
   result: IArenaResult[][],
   reward: IArenaResultPool[]
 ): IPlayer[] => {
-  let newPlayers: IPlayer[] = JSON.parse(JSON.stringify(game.players));
+  let newPlayers: IPlayer[] = game.players;
   const upTo = result.length > 3 ? 3 : result.length;
   for (let i = 0; i < upTo; i++) {
     result[i].forEach((r: IArenaResult) => {

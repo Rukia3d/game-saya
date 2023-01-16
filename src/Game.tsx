@@ -4,7 +4,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { GameContext } from "./App";
 import { CloseButton, SmallPopUp } from "./PopUp";
 import { Reel } from "./Reel";
-import { Gameplay, initGameplay, updateGameplay } from "./gameplay";
+import { Gameplay, initGameplay, updateGameplay } from "./gameplay/gameplay";
 import {
   ICell,
   IReel,
@@ -106,10 +106,8 @@ export const Level = ({ gameplay }: { gameplay: Gameplay }) => {
   }
 
   const { level, player } = gameplay;
+  const { enemies, triggers, entities } = level;
   const staticCells = level.map;
-  const enemies = level.enemies.coordinates;
-  const triggers = level.triggers.coordinates;
-  const entities = level.entities;
 
   return (
     <div className="GameLevelMap">

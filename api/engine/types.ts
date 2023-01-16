@@ -7,18 +7,18 @@ export type ISizedPoint = {
 
 // GAME
 
-export interface IReel {
+export type IReel = {
   layout: string;
   panels: IReelPanel[];
-}
+};
 
-export interface IReelPanel {
+export type IReelPanel = {
   imageAddress: string;
   text?: string;
   name?: string;
-}
+};
 
-export interface IEntity extends ISizedPoint {
+export type IEntity = ISizedPoint & {
   type: "bullet" | "enemy" | "coin";
   id: number;
   lifetime: number | null;
@@ -26,40 +26,36 @@ export interface IEntity extends ISizedPoint {
   movement: {
     type: null | "line";
   };
-}
+};
 
-export interface IRun {
+export type IRun = {
   settingName: string;
   setting: string;
   map: ICell[][];
-  enemies: {
-    coordinates: IMapEnemyCell[];
-    content: IMapEnemy[];
-  };
+  enemiesContent: IMapEnemy[];
+  triggersContent: IMapTrigger[];
+  enemies: IMapEnemyCell[];
   entities: IEntity[];
   type: gameMode;
   musicAddress: string;
-  triggers: {
-    coordinates: IMapTriggerCell[];
-    content: IMapTrigger[];
-  };
+  triggers: IMapTriggerCell[];
   dialogues: IDialogue[];
   collections: { id: number }[];
-}
+};
 
-export interface ILine {
+export type ILine = {
   id: number;
   text: string[];
   image: string;
-}
+};
 
-export interface IDialogue {
+export type IDialogue = {
   id: number;
   lines: ILine[];
   background: string;
-}
+};
 
-export interface IFight {
+export type IFight = {
   settingName: string;
   setting: string;
   map: ICell[][];
@@ -77,62 +73,62 @@ export interface IFight {
   }[];
   dialogues: { id: number }[];
   collections: { id: number }[];
-}
+};
 
 export type ILayout = IRun;
 
 export type cellType = "space" | "trigger" | "obstacle" | "enemy";
 
-export interface ILevel {
+export type ILevel = {
   levels: ILayout[];
   element: { id: number; name: string }[];
   opening?: IReel[];
   ending?: IReel[];
-}
+};
 
 export type ICell = { type: cellType };
 
 //-//-//-//-//
-export interface ICharacter {
+export type ICharacter = {
   id: number;
   name: string;
   weapon: string;
   material: { id: number; name: string };
-}
+};
 
-export interface IWeaponMaterial {
+export type IWeaponMaterial = {
   id: number;
   name: string;
   charge: number;
   maxCharge: number;
   state: boolState;
-}
+};
 
-export interface IWeapon {
+export type IWeapon = {
   id: number;
   name: string;
   materials: IWeaponMaterial[];
-}
+};
 
-export interface IInventory {
+export type IInventory = {
   id: number;
   name: string;
-}
+};
 
 export type IInventoryQuant = IInventory & { quantity: number };
 
-export interface IQuest {
+export type IQuest = {
   id: number;
   state: questState;
   name: string;
   description: string;
   element: { id: number; name: string };
   stories: IStory[];
-}
+};
 
 export type IQuestListing = IQuest & { price: number; owner: number };
 
-export interface IEndless {
+export type IEndless = {
   id: number;
   element: { id: number; name: string };
   mode: gameMode;
@@ -140,28 +136,28 @@ export interface IEndless {
   checkpoint: number | null;
   level: ILevel;
   allowedRewards: IInventoryQuant[];
-}
+};
 
-export interface IStoryReward {
+export type IStoryReward = {
   id: number;
   elementId: number;
   storyId: number;
   reward: IInventoryQuant[];
-}
+};
 
-export interface IEventReward {
+export type IEventReward = {
   id: number;
   elementId: number;
   reward: IInventoryQuant[];
-}
+};
 
-export interface IStory {
+export type IStory = {
   name: string;
   id: number;
   chapters: IChapter[];
-}
+};
 
-export interface IChapter {
+export type IChapter = {
   id: number;
   mode: string;
   name: string;
@@ -172,52 +168,52 @@ export interface IChapter {
   energy: number;
   storyId: number;
   adventureId: number;
-}
+};
 
-export interface IAdventure {
+export type IAdventure = {
   character: ICharacter;
   id: number;
   stories: IStory[];
   endless: IEndless[];
   quests: IQuest[];
-}
+};
 
-export interface IArena {
+export type IArena = {
   events: IArenaEvent[];
   resultTime: number;
   mode: gameMode;
-}
+};
 
-export interface IArenaEvent {
+export type IArenaEvent = {
   index: number;
   stake: IInventoryQuant[];
   mode: gameMode;
   level: ILevel;
   rewardPool: IInventoryQuant[];
   results: IArenaResult[];
-}
+};
 
-export interface IArenaResultPool {
+export type IArenaResultPool = {
   place: number;
   reward: IInventoryQuant[];
-}
+};
 
 export type IArenaEventWithTime = IArenaEvent & { resultTime: number };
 
-export interface IArenaResult {
+export type IArenaResult = {
   playerName: string;
   playerId: number;
   time: number;
-}
+};
 
-export interface IMission {
+export type IMission = {
   name: string;
   reward: IInventory;
   completed: boolean;
   progress: number;
-}
+};
 
-export interface ICurrentState {
+export type ICurrentState = {
   state: currentState;
   story?: {
     storyId: number;
@@ -234,27 +230,27 @@ export interface ICurrentState {
     results: IArenaResult[];
     result: number;
   };
-}
+};
 
-export interface IServer {
+export type IServer = {
   arenaRun: IArena;
   arenaFight: IArena;
   arenaRunHistory: IArena[];
   arenaFightHistory: IArena[];
   nextLiveDistribution: number;
-}
+};
 
-export interface IGame {
+export type IGame = {
   server: IServer;
   players: IPlayer[];
-}
+};
 
-export interface IGamePlayer {
+export type IGamePlayer = {
   server: IServer;
   player: IPlayer;
-}
+};
 
-export interface IPlayer {
+export type IPlayer = {
   id: number;
   name: string;
   loungeId: number | null;
@@ -268,23 +264,23 @@ export interface IPlayer {
   currentState: ICurrentState;
   claims: IClaimReward[];
   lastActive: number;
-}
+};
 
-export interface IPage {
+export type IPage = {
   id: number;
   title: string;
   text: string;
   image?: string;
-}
+};
 
-export interface ICollection {
+export type ICollection = {
   id: number;
   title: string;
   pages: IPage[];
   maxPages: number;
-}
+};
 
-export interface IGoal {
+export type IGoal = {
   id: number;
   title: string;
   description: string;
@@ -293,25 +289,25 @@ export interface IGoal {
   reward: IInventoryQuant[];
   condition: IGoalCondition;
   claimId?: number;
-}
+};
 
-export interface IGoalCondition {
+export type IGoalCondition = {
   type: goalType;
   goal: number;
   current: number;
-}
+};
 
-export interface IMessage {
+export type IMessage = {
   text: string;
   read: boolean;
   claimId?: number;
-}
+};
 
-export interface IClaimReward {
+export type IClaimReward = {
   id: number;
   prize: IInventoryQuant[];
   claimed: boolean;
-}
+};
 
 export type IServerEvent = {
   id: number;

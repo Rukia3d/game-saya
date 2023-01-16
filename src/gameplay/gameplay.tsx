@@ -1,4 +1,4 @@
-import { addPoints, mapToScreen, screenToMap } from "./utils/helpers";
+import { addPoints, mapToScreen, screenToMap } from "../utils/helpers";
 import {
   ICell,
   IDialogue,
@@ -10,7 +10,8 @@ import {
   IPoint,
   ISizedPoint,
   IMapEnemyCell,
-} from "../api/engine/types";
+  IMapTriggerCell,
+} from "../../api/engine/types";
 
 const BULLETSPEED = 5;
 const BULLETLIFEINCELLS = 4;
@@ -51,6 +52,7 @@ export type Gameplay = {
   level: IRun;
   triggered: IPoint[];
   dialogue: IDialogue | null;
+  history: string[];
   moveLeft: () => void;
   moveRight: () => void;
   fire: () => void;
@@ -60,13 +62,13 @@ const enemyCollision = (
   current: IRun,
   source: ISizedPoint
 ): Collision | void => {
-  const enemies = current.enemies;
   const sourceBox = pointToBox(source);
-  for (const e of enemies.coordinates) {
+  for (const e of current.enemies) {
     const collision = boxesCollided(sourceBox, pointToBox(e));
     if (collision) {
       const enemy =
-        enemies.content.find((f: IMapEnemy) => f.id === e.enemyId) || null;
+        current.enemiesContent.find((f: IMapEnemy) => f.id === e.enemyId) ||
+        null;
       if (!enemy) throw new Error(`Can't find enemy ${e.enemyId}`);
       return {
         point: collision,
@@ -82,14 +84,15 @@ const triggerCollision = (
   current: IRun,
   source: ISizedPoint
 ): Collision | void => {
-  const triggers = current.triggers;
   const dialogues = current.dialogues;
   const sourceBox = pointToBox(source);
-  for (const t of triggers.coordinates) {
+  for (const t of current.triggers) {
     const collision = boxesCollided(sourceBox, pointToBox(t));
     if (collision) {
       const trigger =
-        triggers.content.find((f: IMapTrigger) => f.id === t.triggerId) || null;
+        current.triggersContent.find(
+          (f: IMapTrigger) => f.id === t.triggerId
+        ) || null;
       if (!trigger) throw new Error(`Can't find trigger ${t.triggerId}`);
       const dialogue =
         trigger.type === "dialogue"
@@ -176,19 +179,23 @@ const boxesCollided = (box1: Box, box2: Box): IPoint | undefined => {
 };
 
 const makeInactive = (collision: Collision, gameplay: Gameplay) => {
-  const triggerIndex = gameplay.level.triggers.content.findIndex(
-    (t: IMapTrigger) =>
-      collision.type === "trigger" && t.id === collision.trigger.id
+  /*      point: IPoint;
+      type: "trigger";
+      trigger: IMapTrigger;
+      dialogue?: IDialogue;*/
+  const triggerIndex = gameplay.level.triggers.findIndex(
+    (t: IMapTriggerCell) =>
+      collision.type === "trigger" && t.triggerId === collision.trigger.id
   );
-  gameplay.level.triggers.content[triggerIndex] = {
-    ...gameplay.level.triggers.content[triggerIndex],
+  gameplay.level.triggersContent[triggerIndex] = {
+    ...gameplay.level.triggersContent[triggerIndex],
     active: false,
   };
 };
 
 const findLastRestart = (collision: Collision, gameplay: Gameplay): IPoint => {
   const currentPosition = collision.point.y;
-  const restarts: number[] = gameplay.level.triggers.content.map(
+  const restarts: number[] = gameplay.level.triggersContent.map(
     (t: IMapTrigger) =>
       t.type === "restart" && t.data?.x && t.data.x > currentPosition
         ? t.data.x
@@ -293,13 +300,13 @@ const collidePlayer = (gameplay: Gameplay) => {
 const removeEntity = (entities: IEntity[], i: number) => entities.splice(i, 1);
 
 const killEnemy = (gameplay: Gameplay, enemyCell: IMapEnemyCell) => {
-  const n = gameplay.level.enemies.coordinates.findIndex(
+  const n = gameplay.level.enemies.findIndex(
     (e) =>
       e.point.x === enemyCell.point.x &&
       e.point.y === enemyCell.point.y &&
       e.enemyId === enemyCell.enemyId
   );
-  gameplay.level.enemies.coordinates.splice(n, 1);
+  gameplay.level.enemies.splice(n, 1);
 };
 
 const collideEntities = (gameplay: Gameplay) => {
@@ -351,6 +358,7 @@ const moveLeft = (gameplay: Gameplay) => {
     Math.floor((gameplay.player.point.x - 1) / CELLSIZE.x) * 80,
     0
   );
+  gameplay.history.push("left");
 };
 
 const moveRight = (gameplay: Gameplay) => {
@@ -359,6 +367,7 @@ const moveRight = (gameplay: Gameplay) => {
     Math.ceil((gameplay.player.point.x + 1) / CELLSIZE.x) * 80,
     80 * 4
   );
+  gameplay.history.push("fire");
 };
 
 const fire = (gameplay: Gameplay) => {
@@ -377,6 +386,7 @@ const fire = (gameplay: Gameplay) => {
     },
   };
   gameplay.level.entities.push(bullet);
+  gameplay.history.push("fire");
 };
 
 export const initGameplay = (level: IRun): Gameplay => {
@@ -388,6 +398,7 @@ export const initGameplay = (level: IRun): Gameplay => {
     triggered: [],
     dialogue: null,
     time: 0,
+    history: [],
     level,
     moveLeft: () => moveLeft(gp),
     moveRight: () => moveRight(gp),
@@ -396,3 +407,5 @@ export const initGameplay = (level: IRun): Gameplay => {
 
   return gp;
 };
+
+export { moveLeft, moveRight, fire };

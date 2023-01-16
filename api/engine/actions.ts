@@ -61,7 +61,7 @@ export const completeClaim = (
   event: IClaimRewardEvent,
   player: IPlayer
 ): IClaimReward[] => {
-  const oldRewards: IClaimReward[] = JSON.parse(JSON.stringify(player.claims));
+  const oldRewards: IClaimReward[] = player.claims;
   const index = player.claims.findIndex(
     (c: IClaimReward) => c.id === event.claimId
   );
@@ -75,7 +75,7 @@ export const openNextLevel = (
   event: IWinLevelEvent,
   adventures: IAdventure[]
 ): IAdventure[] => {
-  const newAdventures = JSON.parse(JSON.stringify(adventures));
+  const newAdventures = adventures;
   const currentChapters =
     newAdventures[event.adventureId].stories[event.storyId].chapters;
 
@@ -114,7 +114,7 @@ export const updateRewardPool = (
   event: IArenaEvent,
   stake: IInventoryQuant[]
 ): IArenaEvent => {
-  const newEvent = JSON.parse(JSON.stringify(event));
+  const newEvent = event;
   stake.forEach((s: IInventoryQuant) => {
     const materialIndex = newEvent.rewardPool.findIndex(
       (m: IInventoryQuant) => m.id === s.id
@@ -134,7 +134,7 @@ export const updateArenaResults = (
   timeInSec: number,
   player: IPlayer
 ) => {
-  const newEvent: IArenaEvent = JSON.parse(JSON.stringify(event));
+  const newEvent: IArenaEvent = event;
   const previousResult = newEvent.results.find(
     (r: IArenaResult) =>
       r.playerId === player.id && r.playerName === player.name

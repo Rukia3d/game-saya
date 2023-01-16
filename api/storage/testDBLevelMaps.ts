@@ -897,14 +897,10 @@ export const testRun: IRun = {
   setting: "forest",
   map: testCells,
   entities: [],
-  enemies: {
-    coordinates: enemiesMap,
-    content: [{ id: 0 }, { id: 1 }],
-  },
-  triggers: {
-    coordinates: triggersMap,
-    content: triggersContent,
-  },
+  enemiesContent: [{ id: 0 }, { id: 1 }],
+  triggersContent: triggersContent,
+  enemies: enemiesMap,
+  triggers: triggersMap,
   type: "run",
   musicAddress: "testmusic",
   dialogues: testDialogue,
