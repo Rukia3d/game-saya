@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 
 import { GameContext } from "./App";
 import { CloseButton, SmallPopUp } from "./PopUp";
@@ -14,15 +14,20 @@ import {
   IMapTriggerCell,
   IInventoryQuant,
   IEntity,
+  Command,
 } from "../api/engine/types";
-const INDEXOFENERGY = 0;
 
-export const useGameplay = (gameplay: Gameplay): [Gameplay, () => void] => {
+const INDEXOFENERGY = 0;
+const TICK_DELAY_MS = 25;
+
+export const useGameplay = (
+  gameplay: Gameplay
+): [Gameplay, (command: Command) => void] => {
   const [, setTime] = useState(0);
 
-  const tick = () => {
+  const tick = (command: Command) => {
     setTime((prevTime) => {
-      updateGameplay(gameplay);
+      updateGameplay(gameplay, command);
       return prevTime + 1;
     });
   };
@@ -68,19 +73,28 @@ const Entity = ({ entity }: { entity: IEntity }) => {
   );
 };
 
-export const Controls = ({ gameplay }: { gameplay: Gameplay }) => {
+export const Controls = ({
+  gameplay,
+  setCommand,
+}: {
+  gameplay: Gameplay;
+  setCommand: (cmd: Command) => void;
+}) => {
   const moveLeft = () => {
     console.log("moveLeft");
-    gameplay.moveLeft();
+    // gameplay.moveLeft();
+    setCommand("left");
   };
   const moveRight = () => {
     console.log("moveRight");
-    gameplay.moveRight();
+    // gameplay.moveRight();
+    setCommand("right");
   };
 
   const fire = () => {
     console.log("fire");
-    gameplay.fire();
+    // gameplay.fire();
+    setCommand("fire");
   };
 
   return (
@@ -219,6 +233,11 @@ export const GamePlay = ({
   }
 
   const [gameplay, tick] = useGameplay(levelGameplay);
+  const command = useRef<Command>(undefined);
+  const setCommand = (newcmd: Command) => {
+    command.current = newcmd;
+  };
+
   const [dialogue, setDialogue] = useState<IDialogue | null>(null);
   const { lives } = gameplay;
 
@@ -234,7 +253,10 @@ export const GamePlay = ({
     let myTimeout: any = null;
     switch (gameplay.state) {
       case "run":
-        myTimeout = setTimeout(tick, 25);
+        myTimeout = setTimeout(() => {
+          tick(command.current);
+          setCommand(undefined);
+        }, TICK_DELAY_MS);
         break;
       case "stop":
         setDialogue(gameplay.dialogue);
@@ -302,7 +324,7 @@ export const GamePlay = ({
         <button onClick={winLevel}>Win</button>
         <button onClick={close}>Loose</button>
         <div>Lives: {lives}</div>
-        <Controls gameplay={gameplay} />
+        <Controls gameplay={gameplay} setCommand={setCommand} />
       </div>
       <Level gameplay={gameplay} />
     </div>

@@ -28,6 +28,8 @@ export type IEntity = ISizedPoint & {
   };
 };
 
+export type Command = "left" | "right" | "fire" | undefined;
+
 export type IRun = {
   settingName: string;
   setting: string;

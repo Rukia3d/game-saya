@@ -10,7 +10,7 @@ import {
   IPoint,
   ISizedPoint,
   IMapEnemyCell,
-  IMapTriggerCell,
+  Command,
 } from "../../api/engine/types";
 
 const BULLETSPEED = 5;
@@ -43,6 +43,7 @@ type Collision =
       dialogue?: IDialogue;
     };
 
+type History = { y: number; command: Command };
 export type Gameplay = {
   player: ISizedPoint;
   playerTargetX: number;
@@ -52,10 +53,7 @@ export type Gameplay = {
   level: IRun;
   triggered: IPoint[];
   dialogue: IDialogue | null;
-  history: string[];
-  moveLeft: () => void;
-  moveRight: () => void;
-  fire: () => void;
+  history: History[];
 };
 
 const enemyCollision = (
@@ -183,9 +181,10 @@ const makeInactive = (collision: Collision, gameplay: Gameplay) => {
       type: "trigger";
       trigger: IMapTrigger;
       dialogue?: IDialogue;*/
-  const triggerIndex = gameplay.level.triggers.findIndex(
-    (t: IMapTriggerCell) =>
-      collision.type === "trigger" && t.triggerId === collision.trigger.id
+  if (collision.type !== "trigger") return;
+
+  const triggerIndex = gameplay.level.triggersContent.findIndex(
+    (t: IMapTrigger) => t.id === collision.trigger.id
   );
   gameplay.level.triggersContent[triggerIndex] = {
     ...gameplay.level.triggersContent[triggerIndex],
@@ -333,12 +332,65 @@ const collideEntities = (gameplay: Gameplay) => {
   }
 };
 
-export const updateGameplay = (gameplay: Gameplay) => {
+// test
+//
+// const history = [{ y: 9, command: "left" }, { y: 85, command: "fire" }, { y: 98, command: "right" }];
+//
+// const gameplay = new Gameplay(....);
+// for/while/???? {
+//    const command = findCommand(history, gameplay.player.y);
+//    updateGameplay(gameplay, command);
+// }
+
+export const updateGameplay = (gameplay: Gameplay, command: Command) => {
   if (gameplay.state !== "run") {
     return;
   }
 
   const { player } = gameplay;
+
+  if (command !== undefined) {
+    const histcmd = { y: player.point.y, command };
+    console.log("player command", histcmd);
+    gameplay.history.push(histcmd);
+  }
+
+  // moveLeft
+  if (command === "left") {
+    gameplay.playerTargetX = Math.max(
+      Math.floor((gameplay.player.point.x - 1) / CELLSIZE.x) * 80,
+      0
+    );
+  }
+
+  // moveRight
+  if (command === "right") {
+    gameplay.playerTargetX = Math.min(
+      Math.ceil((gameplay.player.point.x + 1) / CELLSIZE.x) * 80,
+      80 * 4
+    );
+  }
+
+  // fire
+  if (command === "fire") {
+    const bullet: IEntity = {
+      type: "bullet",
+      id: new Date().valueOf(),
+      lifetime: Math.floor((80 * BULLETLIFEINCELLS) / BULLETSPEED),
+      initiateCollisions: true,
+      point: addPoints(gameplay.player.point, {
+        x: CELLSIZE.x / 2 - 5,
+        y: CELLSIZE.y,
+      }),
+      size: BULLETSIZE,
+      movement: {
+        type: "line",
+      },
+    };
+    gameplay.level.entities.push(bullet);
+  }
+
+  // *****
 
   player.point.y = player.point.y + 1;
   if (player.point.x !== gameplay.playerTargetX) {
@@ -352,43 +404,6 @@ export const updateGameplay = (gameplay: Gameplay) => {
   collidePlayer(gameplay);
 };
 
-const moveLeft = (gameplay: Gameplay) => {
-  console.log("gameplay move left");
-  gameplay.playerTargetX = Math.max(
-    Math.floor((gameplay.player.point.x - 1) / CELLSIZE.x) * 80,
-    0
-  );
-  gameplay.history.push("left");
-};
-
-const moveRight = (gameplay: Gameplay) => {
-  console.log("gameplay move right");
-  gameplay.playerTargetX = Math.min(
-    Math.ceil((gameplay.player.point.x + 1) / CELLSIZE.x) * 80,
-    80 * 4
-  );
-  gameplay.history.push("fire");
-};
-
-const fire = (gameplay: Gameplay) => {
-  const bullet: IEntity = {
-    type: "bullet",
-    id: new Date().valueOf(),
-    lifetime: Math.floor((80 * BULLETLIFEINCELLS) / BULLETSPEED),
-    initiateCollisions: true,
-    point: addPoints(gameplay.player.point, {
-      x: CELLSIZE.x / 2 - 5,
-      y: CELLSIZE.y,
-    }),
-    size: BULLETSIZE,
-    movement: {
-      type: "line",
-    },
-  };
-  gameplay.level.entities.push(bullet);
-  gameplay.history.push("fire");
-};
-
 export const initGameplay = (level: IRun): Gameplay => {
   const gp: Gameplay = {
     player: { ...initialPlayer },
@@ -400,12 +415,7 @@ export const initGameplay = (level: IRun): Gameplay => {
     time: 0,
     history: [],
     level,
-    moveLeft: () => moveLeft(gp),
-    moveRight: () => moveRight(gp),
-    fire: () => fire(gp),
   };
 
   return gp;
 };
-
-export { moveLeft, moveRight, fire };
