@@ -32,6 +32,7 @@ export type IRun = {
   settingName: string;
   setting: string;
   map: ICell[][];
+  obstacles: ICell[];
   enemiesContent: IMapEnemy[];
   triggersContent: IMapTrigger[];
   enemies: IMapEnemyCell[];

@@ -222,6 +222,7 @@ const chapters: IChapter[] = [
           setting: "forest",
           map: map,
           entities: [],
+          obstacles: [],
           enemiesContent: enemiesContent,
           triggersContent: triggersContent,
           enemies: enemiesCoordinates,
