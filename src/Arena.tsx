@@ -125,7 +125,6 @@ export const ArenaEvent = ({
     throw new Error("No data in context");
   }
 
-  console.log("arena.resultTime", dayjs(arena.resultTime).format("DD/MM/YYYY"));
   setTimeout(() => {
     setNow(stillInFuture(arena.resultTime));
   }, 1000);
@@ -183,7 +182,7 @@ export const Arena = () => {
   const events = [context.server.arenaRun, context.server.arenaFight];
   const canCompete: boolean =
     arena !== null && enoughToPay(context.player.materials, arena.stake);
-  // console.log("canCompete", canCompete);
+
   return (
     <div className="ArenaContainer">
       {arena ? (

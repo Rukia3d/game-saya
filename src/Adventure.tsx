@@ -90,7 +90,6 @@ const Story = () => {
   }
   const adventure = context.player.adventures[context.screen.adventureId];
   const story = adventure.stories[context.screen.storyId];
-  console.log("story", story);
   return (
     <div className="Story">
       {story.name}
@@ -105,7 +104,6 @@ const Story = () => {
 
 export const Adventure = () => {
   const context = useContext(GameContext);
-  console.log("context.screen", context?.screen);
   if (
     !context ||
     !context.player ||
@@ -117,7 +115,6 @@ export const Adventure = () => {
   const adventure = context.player.adventures[context.screen.adventureId];
 
   const selectStory = (s: IStory) => {
-    console.log("selectStory", s);
     context.setScreen({
       screen: "adventure",
       adventureId: adventure.id,
@@ -126,14 +123,12 @@ export const Adventure = () => {
   };
 
   const closeStory = () => {
-    console.log("closeStory");
     context.setScreen({
       screen: "adventure",
       adventureId: adventure.id,
       storyId: null,
     });
   };
-  console.log("context.screen.storyId", context.screen.storyId);
   return (
     <div className="AdventuresContainer" data-testid="adventures-screen">
       <TopMenu />

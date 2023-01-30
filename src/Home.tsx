@@ -17,12 +17,14 @@ export const Items = () => {
     { screen: "collections" },
     { screen: "messages" },
   ];
+
+  const menuR = ["оружие", "инвентарь", "цели", "коллекция", "сообщения"];
   return (
     <div className="Items" data-testid="home-items">
       {items.map((i: mainScreenState, n: number) => (
         <div className="Item" key={n} onClick={() => context.setScreen(i)}>
-          <img src={`../pics/cards/${i.screen}_black.png`} alt={i.screen} />
-          <div>{i.screen}</div>
+          <img src={`../pics/main/left_${n}_black.png`} alt={i.screen} />
+          <div>{menuR[n]}</div>
         </div>
       ))}
     </div>
@@ -50,7 +52,7 @@ export const Adventures = () => {
       {adventures.map((e: IAdventure, n: number) => (
         <div className="Adventure" key={n} onClick={() => selectAdventure(e)}>
           <img
-            src={`../pics/cards/${e.character.material.name}_black.png`}
+            src={`../pics/main/hero_${n}_black.png`}
             alt={e.character.material.name}
           />
           <div>{e.character.name}</div>
@@ -71,12 +73,14 @@ export const Menues = () => {
     { screen: "aliance" },
     { screen: "studio" },
   ];
+
+  const menuR = ["арена", "маркет", "альянс", "студио"];
   return (
     <div className="Menues" data-testid="home-menues">
       {menues.map((i: mainScreenState, n: number) => (
         <div className="Menu" key={n} onClick={() => context.setScreen(i)}>
-          <img src={`../pics/cards/${i.screen}_black.png`} alt={i.screen} />
-          <div>{i.screen}</div>
+          <img src={`../pics/main/right_${n}_black.png`} alt={i.screen} />
+          <div>{menuR[n]}</div>
         </div>
       ))}
     </div>

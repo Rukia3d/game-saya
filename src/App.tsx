@@ -23,7 +23,6 @@ export const GameContext = React.createContext<undefined | GameContextType>(
 function App() {
   //window.localStorage.getItem("playerId") || short.generate();
   let savedId: string | null = window.localStorage.getItem("playerId") || null;
-  console.log("savedId", savedId);
   const [playerId, setPlayerId] = useState<string | null>(savedId);
   const [name, setName] = useState("");
 

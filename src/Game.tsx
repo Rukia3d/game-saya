@@ -27,7 +27,7 @@ export const useGameplay = (
 
   const tick = (command: Command) => {
     setTime((prevTime) => {
-      updateGameplay(gameplay, command);
+      updateGameplay(gameplay, command, true);
       return prevTime + 1;
     });
   };

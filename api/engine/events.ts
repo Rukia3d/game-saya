@@ -151,7 +151,6 @@ export const serverDistributeLives = async (
 ): Promise<IGame> => {
   const newServer: IServer = game.server;
   let newPlayers: IPlayer[] = game.players;
-  // console.log("newPlayers", newPlayers);
   newPlayers.forEach((n: IPlayer) => {
     const canDistribute =
       n.materials.length > 0 &&

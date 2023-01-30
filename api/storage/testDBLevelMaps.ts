@@ -815,7 +815,7 @@ const testDialogue: IDialogue[] = [
 
 const triggersContent: IMapTrigger[] = [
   { id: 0, type: "win", active: true },
-  { id: 1, type: "restart", active: true, data: { x: 96 } },
+  { id: 1, type: "restart", active: true, data: { y: 96 } },
   { id: 2, type: "dialogue", active: true, data: { dialogueId: 0 } },
   { id: 3, type: "coin", active: true, data: { value: 3 } },
 ];

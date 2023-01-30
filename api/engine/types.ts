@@ -776,7 +776,7 @@ export type IMapTrigger = {
   id: number;
   type: triggerType;
   active: boolean;
-  data?: { dialogueId?: number; x?: number; value?: number };
+  data?: { dialogueId?: number; y?: number; value?: number };
 };
 export type IMapDialogue = { id: number };
 export type IMapEnemyCell = ISizedPoint & {

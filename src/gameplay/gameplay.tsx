@@ -43,9 +43,9 @@ type Collision =
       dialogue?: IDialogue;
     };
 
-type History = { y: number; command: Command };
+export type History = { y: number; command: Command }; // y is in screen coordinates
 export type Gameplay = {
-  player: ISizedPoint;
+  player: ISizedPoint; // In screen pixels
   playerTargetX: number;
   lives: number;
   state: "run" | "stop" | "hit" | "lost" | "win";
@@ -194,16 +194,15 @@ const makeInactive = (collision: Collision, gameplay: Gameplay) => {
 
 const findLastRestart = (collision: Collision, gameplay: Gameplay): IPoint => {
   const currentPosition = collision.point.y;
-  const restarts: number[] = gameplay.level.triggersContent.map(
-    (t: IMapTrigger) =>
-      t.type === "restart" && t.data?.x && t.data.x > currentPosition
-        ? t.data.x
-        : gameplay.level.map.length - 1
-  );
-  const res = mapToScreen(
-    { x: 2, y: Math.min(...restarts) },
-    gameplay.level.map
-  );
+  const restarts = gameplay.level.triggersContent
+    .filter(
+      (t: IMapTrigger) =>
+        t.type === "restart" && t.data?.y && t.data?.y < currentPosition
+    )
+    .map((t: IMapTrigger) => t.data?.y as number);
+  const smallest =
+    restarts.length > 0 ? Math.min(...restarts) : gameplay.level.map.length - 1;
+  const res = mapToScreen({ x: 2, y: smallest }, gameplay.level.map);
   return res;
 };
 
@@ -253,7 +252,7 @@ const collidePlayer = (gameplay: Gameplay) => {
 
   if (!collision) return;
 
-  // console.log("collision detected", collision);
+  console.log("collision detected", collision);
   switch (collision.type) {
     case "obstacle":
     case "enemy":
@@ -332,24 +331,18 @@ const collideEntities = (gameplay: Gameplay) => {
   }
 };
 
-// test
-//
-// const history = [{ y: 9, command: "left" }, { y: 85, command: "fire" }, { y: 98, command: "right" }];
-//
-// const gameplay = new Gameplay(....);
-// for/while/???? {
-//    const command = findCommand(history, gameplay.player.y);
-//    updateGameplay(gameplay, command);
-// }
-
-export const updateGameplay = (gameplay: Gameplay, command: Command) => {
+export const updateGameplay = (
+  gameplay: Gameplay,
+  command: Command,
+  saveHistory: boolean
+) => {
   if (gameplay.state !== "run") {
     return;
   }
 
   const { player } = gameplay;
 
-  if (command !== undefined) {
+  if (command !== undefined && saveHistory) {
     const histcmd = { y: player.point.y, command };
     console.log("player command", histcmd);
     gameplay.history.push(histcmd);
